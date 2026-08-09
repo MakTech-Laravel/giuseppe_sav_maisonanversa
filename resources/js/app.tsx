@@ -26,6 +26,9 @@ createInertiaApp({
         switch (true) {
             case name === 'welcome':
                 return null;
+            // The public site brings its own shell; see frontend-layout.tsx.
+            case name.startsWith('maison/'):
+                return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
