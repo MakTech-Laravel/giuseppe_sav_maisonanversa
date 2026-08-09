@@ -9,6 +9,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
+import FrontendLayout from '@/layouts/frontend-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { createI18nForLocale } from '@/lib/i18n';
 
@@ -26,9 +27,8 @@ createInertiaApp({
         switch (true) {
             case name === 'welcome':
                 return null;
-            // The public site brings its own shell; see frontend-layout.tsx.
             case name.startsWith('maison/'):
-                return null;
+                return FrontendLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):

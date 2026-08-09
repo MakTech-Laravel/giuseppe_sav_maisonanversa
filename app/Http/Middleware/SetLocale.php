@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
@@ -21,6 +22,13 @@ class SetLocale
 
         if (is_string($locale) && in_array($locale, config('maison.locales'), true)) {
             app()->setLocale($locale);
+
+            /*
+             * So `route('maison.product')` resolves without every caller having
+             * to repeat the current locale. Canonical and hreflang generation
+             * still passes one explicitly, because those need the other locales.
+             */
+            URL::defaults(['locale' => $locale]);
         }
 
         return $next($request);

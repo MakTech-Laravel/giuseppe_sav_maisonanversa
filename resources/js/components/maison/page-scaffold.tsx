@@ -5,7 +5,7 @@
  */
 export function PageScaffold({ title }: { title: string }) {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center bg-cream px-6 text-center text-choc">
+        <section className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
             <p className="font-sans text-[11px] font-light tracking-[0.3em] text-gold uppercase">
                 Maison Anversa
             </p>
@@ -20,6 +20,6 @@ export function PageScaffold({ title }: { title: string }) {
             <p className="mt-4 max-w-md font-sans text-sm font-light text-stone">
                 This page is still being built.
             </p>
-        </main>
+        </section>
     );
 }

@@ -23,3 +23,21 @@ The remaining 1646 translations are complete.
 
 - **Dutch source:** Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek 
   - **Cut off:** Envoyez-nous un message et nous vous contacterons personnellement sous 48 heures. Pas de réponses automatiques — une vraie discussion
+
+## Keys added outside the prototype dictionary (4)
+
+The prototype gave its icon-only controls no accessible names, so screen readers
+announced them as bare "button". Adding those names meant adding four keys the
+prototype dictionary never had. They are interface affordances rather than brand
+copy, so they are translated here directly — flagged for review in case the house
+prefers different wording.
+
+| Key | EN | FR |
+| --- | --- | --- |
+| `Menu` | Menu | Menu |
+| `Sluiten` | Close | Fermer |
+| `Taal` | Language | Langue |
+| `Maison Anversa — hulp` | Maison Anversa — help | Maison Anversa — aide |
+
+Because `convert-i18n.mjs` writes `lang/en.json` and `lang/fr.json` from the
+prototype alone, rerunning it drops these four keys. Re-add them if that happens.
