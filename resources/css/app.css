@@ -150,4 +150,196 @@
         font-size: 17px;
         line-height: 1.7;
     }
+
+    /*
+     * The prototype left smooth scrolling on under reduced motion. Programmatic
+     * jumps are part of the motion a visitor asked to avoid, so it goes here.
+     */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+}
+
+/*
+ * The cinematic layer. Two of the ten effects stay pure CSS because they are
+ * infinite and non-interactive, so a compositor-only animation beats driving
+ * them from JavaScript: the film grain's discrete jitter and the marquee loop.
+ * Everything else is GSAP; see resources/js/lib/gsap.ts.
+ */
+@layer components {
+    /*
+     * A 200x200 fractal-noise tile nudged in six discrete steps. `steps(1)` is
+     * deliberate — the stutter between positions is the effect, and easing
+     * between them would read as a blur.
+     */
+    .cine-grain {
+        position: fixed;
+        inset: -10%;
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        animation: cine-grain 0.5s steps(1) infinite;
+    }
+
+    @keyframes cine-grain {
+        0% {
+            transform: translate(0, 0);
+        }
+        20% {
+            transform: translate(-3%, 2%);
+        }
+        40% {
+            transform: translate(2%, -3%);
+        }
+        60% {
+            transform: translate(-2%, -2%);
+        }
+        80% {
+            transform: translate(3%, 1%);
+        }
+        100% {
+            transform: translate(-1%, 3%);
+        }
+    }
+
+    .cine-vignette {
+        position: fixed;
+        inset: 0;
+        z-index: 9997;
+        pointer-events: none;
+        background: radial-gradient(
+            ellipse at center,
+            transparent 55%,
+            rgba(41, 28, 24, 0.35) 100%
+        );
+    }
+
+    /*
+     * The cursor ring and dot are positioned by GSAP. `mix-blend-mode` only
+     * reads through to the page while no ancestor forms a stacking context,
+     * which is why both are portalled to the body rather than nested in a
+     * transformed wrapper.
+     */
+    .cine-cursor,
+    .cine-cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        pointer-events: none;
+        border-radius: 50%;
+        mix-blend-mode: difference;
+        opacity: 0;
+    }
+
+    .cine-cursor {
+        width: 28px;
+        height: 28px;
+        border: 1px solid rgba(243, 235, 227, 0.6);
+        transition:
+            width 0.35s ease,
+            height 0.35s ease,
+            border-color 0.35s ease;
+    }
+
+    .cine-cursor[data-grow='true'] {
+        width: 56px;
+        height: 56px;
+        border-color: rgba(243, 235, 227, 0.9);
+    }
+
+    .cine-cursor-dot {
+        width: 4px;
+        height: 4px;
+        background: rgba(243, 235, 227, 0.8);
+    }
+
+    .cine-transition {
+        position: fixed;
+        inset: 0;
+        z-index: 9996;
+        pointer-events: none;
+        background: var(--color-choc);
+        opacity: 0;
+    }
+
+    /*
+     * Seamless only because the track is rendered twice and travels exactly
+     * half its width, so the second copy lands where the first started.
+     */
+    .marquee-track {
+        display: inline-flex;
+        animation: marquee 30s linear infinite;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    .gold-rule {
+        animation: gold-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes gold-pulse {
+        0%,
+        100% {
+            opacity: 0.6;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .cine-grain {
+            opacity: 0.025;
+        }
+
+        .cine-vignette {
+            background: radial-gradient(
+                ellipse at center,
+                transparent 50%,
+                rgba(41, 28, 24, 0.3) 100%
+            );
+        }
+    }
+
+    /* Pointer-driven effects have nothing to say on a touch screen. */
+    @media (pointer: coarse) {
+        .cine-cursor,
+        .cine-cursor-dot {
+            display: none;
+        }
+    }
+
+    /*
+     * The prototype neutralised only the grain, reveals, cursor and magnetic
+     * transition here; the marquee and the gold-rule pulse kept running. Both
+     * are covered now, and the GSAP contexts register nothing at all under
+     * this query, which takes care of the reveals and the Ken Burns zoom.
+     */
+    @media (prefers-reduced-motion: reduce) {
+        .cine-grain,
+        .marquee-track,
+        .gold-rule {
+            animation: none;
+        }
+
+        .cine-cursor,
+        .cine-cursor-dot {
+            display: none;
+        }
+
+        .gold-rule {
+            opacity: 0.8;
+        }
+    }
 }
