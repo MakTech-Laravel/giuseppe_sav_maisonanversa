@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import inertia from '@inertiajs/vite';
 import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 import tailwindcss from '@tailwindcss/vite';
@@ -9,6 +10,10 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     resolve: {
         dedupe: ['react', 'react-dom'],
+        alias: {
+            // Laravel's JSON translation files, imported lazily per locale.
+            '@lang': resolve(import.meta.dirname, 'lang'),
+        },
     },
     plugins: [
         laravel({

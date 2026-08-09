@@ -10,9 +10,22 @@ use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
-Route::inertia('/', 'welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+/*
+ * The public site is locale-prefixed, so the bare root sends visitors to the
+ * Dutch source language. `home` stays the canonical name for the site root.
+ */
+Route::redirect('/', '/'.config('maison.default_locale'))->name('home');
+
+Route::pattern('locale', implode('|', config('maison.locales')));
+
+Route::prefix('{locale}')
+    ->middleware('locale')
+    ->name('maison.')
+    ->group(function () {
+        Route::inertia('/', 'welcome', [
+            'canRegister' => Features::enabled(Features::registration()),
+        ])->name('home');
+    });
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');

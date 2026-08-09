@@ -51,6 +51,13 @@ class HandleInertiaRequests extends Middleware
                 ]) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            /*
+             * Resolved lazily: Inertia collects shared data before route
+             * middleware runs, so reading the locale eagerly would capture the
+             * application default rather than the one SetLocale applies.
+             */
+            'locale' => fn () => app()->getLocale(),
+            'availableLocales' => config('maison.locales'),
         ];
     }
 }
