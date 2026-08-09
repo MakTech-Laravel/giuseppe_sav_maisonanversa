@@ -33,6 +33,11 @@ const maisonButtonVariants = cva(
                     'border border-choc/30 px-6 py-3.75 text-[9px] font-light tracking-[0.2em] text-choc3 hover:border-choc hover:text-choc',
                 /** Underlined text, the lightest affordance of the set. */
                 ghost: 'border-b border-cream/20 pb-1 text-[9px] font-light tracking-[0.25em] text-cream/60 hover:border-gold hover:text-gold',
+                /**
+                 * Over the intro's photography, where gold alone is not always
+                 * legible: cream on a scrim on a phone, gold outline above it.
+                 */
+                intro: 'border border-cream/60 bg-choc/50 px-7 py-3.5 text-[11px] tracking-[0.24em] text-cream hover:border-cream hover:bg-cream hover:text-choc ma-sm:border-gold ma-sm:bg-transparent ma-sm:px-7.5 ma-sm:py-3 ma-sm:text-[10px] ma-sm:text-gold ma-sm:hover:border-gold ma-sm:hover:bg-gold ma-sm:hover:text-choc',
             },
             /** Fills its column, for a form or a narrow card. */
             block: {

@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { gsap, MAISON_EASE, MEDIA, useGSAP } from '@/lib/gsap';
 
 type PreloaderProps = {
@@ -18,6 +19,7 @@ type PreloaderProps = {
  * which is what the reduced-motion path and an early exit both need.
  */
 export function Preloader({ progress, done, onFinished }: PreloaderProps) {
+    const { t } = useTranslation();
     const root = useRef<HTMLDivElement>(null);
     const wordmark = useRef<HTMLSpanElement>(null);
     const subtitle = useRef<HTMLParagraphElement>(null);
@@ -96,7 +98,7 @@ export function Preloader({ progress, done, onFinished }: PreloaderProps) {
             <span className="block overflow-hidden">
                 <span
                     ref={wordmark}
-                    className="block font-serif text-[clamp(28px,5vw,52px)] tracking-[0.18em] text-cream"
+                    className="block font-serif text-[24px] tracking-[0.16em] text-gold ma-sm:text-[30px]"
                 >
                     MAISON ANVERSA
                 </span>
@@ -104,14 +106,14 @@ export function Preloader({ progress, done, onFinished }: PreloaderProps) {
 
             <p
                 ref={subtitle}
-                className="font-sans text-[10px] font-light tracking-[0.35em] text-gold uppercase opacity-0"
+                className="font-sans text-[9px] font-light tracking-[0.32em] text-sand uppercase opacity-0"
             >
-                Antwerpen · MMXXVI
+                {t('Het huis ontwaakt')}
             </p>
 
             <div
                 ref={bar}
-                className="mt-2 h-px w-40 overflow-hidden bg-gold/25 opacity-0"
+                className="mt-2 h-px w-40 overflow-hidden bg-gold/18 opacity-0"
             >
                 <div
                     ref={fill}

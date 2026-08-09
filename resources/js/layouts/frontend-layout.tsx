@@ -1,13 +1,17 @@
+import { usePage } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
+import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
 import { ContactDock } from '@/components/maison/shell/contact-dock';
 import { EtchingBand } from '@/components/maison/shell/etching-band';
 import { SiteFooter } from '@/components/maison/shell/site-footer';
 import { SiteNav } from '@/components/maison/shell/site-nav';
 import { SiteTopbar } from '@/components/maison/shell/site-topbar';
+import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
+import { activePage } from '@/lib/maison-navigation';
 
 /**
  * The public site shell: the fixed topbar and header, the cinematic overlays,
@@ -22,6 +26,8 @@ import { useReveal } from '@/hooks/use-reveal';
  */
 export default function FrontendLayout({ children }: { children: ReactNode }) {
     const main = useRef<HTMLElement>(null);
+    const { url } = usePage();
+    const { locale } = useLocale();
     const [newsletterOpen, setNewsletterOpen] = useState(false);
 
     useReveal(main);
@@ -45,6 +51,13 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 <EtchingBand />
                 <SiteFooter onNewsletter={() => setNewsletterOpen(true)} />
                 <ContactDock />
+
+                {/*
+                 * The arrival sequence belongs to the front door, so it is only
+                 * mounted there — and it decides for itself whether this visitor
+                 * has already been shown in.
+                 */}
+                {activePage(url, locale) === 'home' && <ImmersiveIntro />}
 
                 {/*
                  * The newsletter modal itself arrives with the modals step; the
