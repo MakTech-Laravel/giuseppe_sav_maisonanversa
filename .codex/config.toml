@@ -1,0 +1,4 @@
+[mcp_servers.laravel-boost]
+command = "php"
+args = ["artisan", "boost:mcp"]
+cwd = "D:\\MTS Organization\\May - 2026\\laravel_13_inertia_template"
