@@ -9,9 +9,28 @@
 
 @theme {
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+        'Montserrat', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: 'Baskervville', Georgia, serif;
+
+    /* Maison Anversa brand palette. */
+    --color-choc: #291c18;
+    --color-choc2: #352722;
+    --color-choc3: #41332d;
+    --color-gold: #8d705a;
+    --color-gold2: #745a48;
+    --color-cream: #f3ebe3;
+    --color-cream2: #e8e0d5;
+    --color-sand: #b8a898;
+    --color-stone: #8a7d72;
+
+    /*
+     * The prototype styles against 560px, 900px and 1100px in addition to
+     * Tailwind's own scale, which already covers 640/768/1024.
+     */
+    --breakpoint-ma-sm: 560px;
+    --breakpoint-ma-md: 900px;
+    --breakpoint-ma-lg: 1100px;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -62,6 +81,14 @@
 }
 
 :root {
+    /*
+     * Fixed-header heights, so every downstream offset derives from one source.
+     * These live outside @theme because they are consumed through var() rather
+     * than a utility, and Tailwind drops theme variables it sees no usage for.
+     */
+    --topbar-h: 40px;
+    --nav-h: 90px;
+
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -137,7 +164,19 @@
         @apply border-border;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /*
+     * The prototype sets the serif as the body face, not the sans. Admin and
+     * auth screens opt back into the sans via their layout wrappers.
+     */
     body {
         @apply bg-background text-foreground;
+
+        font-family: var(--font-serif);
+        font-size: 17px;
+        line-height: 1.7;
     }
 }

@@ -15,8 +15,17 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
             refresh: true,
             fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
+                // Baskervville ships weight 400 only; headings asking for 500+
+                // are synthesised, matching the prototype. Italic carries the
+                // <em> emphasis used throughout the headings.
+                bunny('Baskervville', {
+                    weights: [400],
+                    styles: ['normal', 'italic'],
+                    fallbacks: ['Georgia', 'serif'],
+                }),
+                bunny('Montserrat', {
+                    weights: [200, 300, 400, 500, 600],
+                    fallbacks: ['sans-serif'],
                 }),
             ],
         }),

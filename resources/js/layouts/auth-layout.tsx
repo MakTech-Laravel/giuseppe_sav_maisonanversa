@@ -10,8 +10,10 @@ export default function AuthLayout({
     children: React.ReactNode;
 }) {
     return (
-        <AuthLayoutTemplate title={title} description={description}>
-            {children}
-        </AuthLayoutTemplate>
+        <div className="contents font-sans text-base/normal">
+            <AuthLayoutTemplate title={title} description={description}>
+                {children}
+            </AuthLayoutTemplate>
+        </div>
     );
 }
