@@ -100,7 +100,13 @@ test('the cursor is hidden where there is no pointer to follow', function () {
 test('reduced motion silences every looping effect', function (string $selector) {
     // The prototype stopped only the grain here; the other two kept running.
     expect(mediaBlocks('(prefers-reduced-motion: reduce)'))->toContain($selector);
-})->with(['.cine-grain', '.marquee-track', '.gold-rule']);
+})->with([
+    '.cine-grain',
+    '.marquee-track',
+    '.gold-rule',
+    "[data-slot='accordion-content']",
+    "[data-slot='accordion-trigger'] > svg",
+]);
 
 test('reduced motion stops animation rather than merely slowing it', function () {
     expect(mediaBlocks('(prefers-reduced-motion: reduce)'))

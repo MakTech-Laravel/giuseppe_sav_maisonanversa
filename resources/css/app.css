@@ -329,8 +329,14 @@
     @media (prefers-reduced-motion: reduce) {
         .cine-grain,
         .marquee-track,
-        .gold-rule {
+        .gold-rule,
+        [data-slot='accordion-content'] {
             animation: none;
+        }
+
+        /* The plus still becomes a cross, it just does so at once. */
+        [data-slot='accordion-trigger'] > svg {
+            transition: none;
         }
 
         .cine-cursor,
