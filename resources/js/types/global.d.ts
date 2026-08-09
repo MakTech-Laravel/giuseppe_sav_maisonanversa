@@ -16,6 +16,7 @@ declare module '@inertiajs/core' {
             sidebarOpen: boolean;
             locale: Locale;
             availableLocales: Locale[];
+            availableImages: string[];
             [key: string]: unknown;
         };
     }

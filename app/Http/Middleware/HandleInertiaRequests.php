@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Imagery;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -58,6 +59,12 @@ class HandleInertiaRequests extends Middleware
              */
             'locale' => fn () => app()->getLocale(),
             'availableLocales' => config('maison.locales'),
+
+            /*
+             * Which of the site's photographs exist yet. Everything else falls
+             * back to a placeholder rather than requesting a missing file.
+             */
+            'availableImages' => fn () => Imagery::existingPaths(),
         ];
     }
 }
