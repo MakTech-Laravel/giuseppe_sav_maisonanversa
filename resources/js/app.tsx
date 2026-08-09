@@ -5,7 +5,6 @@ import { ErrorBoundaryFallback } from '@/components/error-boundary/error-boundar
 import { pushError } from '@/components/error-boundary/error-store';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { initializeTheme } from '@/hooks/use-appearance';
 import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
@@ -65,6 +64,3 @@ createInertiaApp({
         color: 'var(--primary)',
     },
 });
-
-// This will set light / dark mode on load...
-initializeTheme();

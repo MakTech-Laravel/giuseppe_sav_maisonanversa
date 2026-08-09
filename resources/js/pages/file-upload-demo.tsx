@@ -449,12 +449,11 @@ function CustomStyleDemo() {
                 accept="image/*"
                 classNames={{
                     wrapper: 'rounded-2xl border p-4 bg-muted/30',
-                    dropzone:
-                        'border-blue-400 bg-blue-50 dark:bg-blue-950/30 py-14',
-                    dropzoneContent: 'text-blue-700 dark:text-blue-300',
+                    dropzone: 'border-blue-400 bg-blue-50 py-14',
+                    dropzoneContent: 'text-blue-700',
                     card: 'rounded-2xl ring-2 ring-blue-200',
                     cardMedia: 'aspect-square', // square thumbnail
-                    cardInfo: 'bg-blue-50/60 dark:bg-blue-950/40',
+                    cardInfo: 'bg-blue-50/60',
                     removeButton: 'h-7 w-7',
                     progressOverlay: 'bg-black/70',
                 }}
