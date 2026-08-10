@@ -51,3 +51,18 @@ test('the content grid uses crawlable links rather than click handlers on divs',
         ->toContain('MaisonLink')
         ->not->toContain('onClick={() =>');
 });
+
+test('the document paints a boot cover before React so the home page cannot flash under the loader', function () {
+    $this->get('/nl')
+        ->assertOk()
+        ->assertSee('maison-boot-cover', false)
+        ->assertSee('maison.intro.seen', false);
+});
+
+test('the intro holds room photography back until the preloader curtain has lifted', function () {
+    $source = file_get_contents(resource_path('js/components/maison/intro/immersive-intro.tsx'));
+
+    expect($source)
+        ->toContain('panel={curtainLifted ? introPanel(slide) : -1}')
+        ->not->toContain('panel={loaderDone ? introPanel(slide) : -1}');
+});

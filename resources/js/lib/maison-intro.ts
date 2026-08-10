@@ -205,6 +205,9 @@ export const INTRO_SLIDES: readonly IntroSlide[] = [
     },
 ];
 
+/** Matches the inline boot cover painted in `app.blade.php` before React mounts. */
+export const BOOT_COVER_ID = 'maison-boot-cover';
+
 /** The rooms, excluding the closing card, which the counter numbers against. */
 export const ROOM_COUNT = INTRO_SLIDES.length - 1;
 
