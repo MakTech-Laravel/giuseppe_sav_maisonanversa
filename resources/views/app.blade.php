@@ -23,6 +23,44 @@
         <x-inertia::head>
             <title>{{ config('app.name', 'Laravel') }}</title>
         </x-inertia::head>
+
+        {{--
+            Paint the arrival curtain before React boots so the home page never
+            flashes underneath the preloader. ImmersiveIntro / Preloader remove
+            #maison-boot-cover once they own the screen.
+        --}}
+        <script>
+            (function () {
+                try {
+                    if (sessionStorage.getItem('maison.intro.seen')) {
+                        return;
+                    }
+
+                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                        return;
+                    }
+
+                    var locales = @json(config('maison.locales'));
+                    var path = location.pathname.replace(/\/+$/, '') || '/';
+                    var home = locales.some(function (locale) {
+                        return path === '/' + locale;
+                    });
+
+                    if (!home && path !== '/') {
+                        return;
+                    }
+
+                    var cover = document.createElement('div');
+                    cover.id = 'maison-boot-cover';
+                    cover.setAttribute('aria-hidden', 'true');
+                    cover.style.cssText =
+                        'position:fixed;inset:0;z-index:100000;background:#291c18;';
+                    document.documentElement.appendChild(cover);
+                } catch (e) {
+                    // Storage or matchMedia can fail; React will still mount the loader.
+                }
+            })();
+        </script>
     </head>
     <body class="antialiased">
         <x-inertia::app />

@@ -39,8 +39,8 @@ test('every manifest path is a public image under a directory that exists', func
     }
 });
 
-test('no photography ships yet, so every image renders as a placeholder', function () {
-    expect(Imagery::existingPaths())->toBeEmpty();
+test('a dropped-in room photograph is reported as available', function () {
+    expect(Imagery::existingPaths())->toContain('images/rooms/room-entrance.png');
 });
 
 test('a file copied into public/images is reported as available', function () {
@@ -59,6 +59,7 @@ test('the available images are shared with the front end', function () {
     File::put(public_path('images/brand/__test-facade.png'), 'not really a png');
 
     $this->get('/nl')->assertInertia(fn ($page) => $page
-        ->where('availableImages', ['images/brand/__test-facade.png'])
+        ->where('availableImages', fn ($images) => collect($images)->contains('images/brand/__test-facade.png')
+            && collect($images)->contains('images/rooms/room-entrance.png'))
     );
 });
