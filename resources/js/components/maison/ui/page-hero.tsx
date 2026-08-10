@@ -1,8 +1,12 @@
 import type { ReactNode } from 'react';
+import { Eyebrow } from '@/components/maison/ui/eyebrow';
+import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Wrap } from '@/components/maison/ui/section';
 import { cn } from '@/lib/utils';
 
 type PageHeroProps = {
+    /** Small tracked label above the gold rule. */
+    eyebrow?: ReactNode;
     /** Rendered as the `h1`. Pass a fragment to italicise part of it in gold. */
     title: ReactNode;
     subtitle?: ReactNode;
@@ -15,6 +19,7 @@ type PageHeroProps = {
  * drafting grid and a glow bleeding down from the top edge.
  */
 export function PageHero({
+    eyebrow,
     title,
     subtitle,
     children,
@@ -38,6 +43,12 @@ export function PageHero({
             />
 
             <Wrap className="relative">
+                {eyebrow && (
+                    <Eyebrow className="mb-0 text-center">{eyebrow}</Eyebrow>
+                )}
+
+                {eyebrow && <GoldRule center className="mx-auto" />}
+
                 <h1 className="font-serif text-[clamp(36px,5vw,68px)] leading-[1.1] font-normal [&_em]:text-gold [&_em]:italic">
                     {title}
                 </h1>
