@@ -39,8 +39,10 @@ test('every manifest path is a public image under a directory that exists', func
     }
 });
 
-test('a dropped-in room photograph is reported as available', function () {
-    expect(Imagery::existingPaths())->toContain('images/rooms/room-entrance.png');
+test('dropped-in photographs are reported as available', function () {
+    expect(Imagery::existingPaths())
+        ->toContain('images/rooms/room-entrance.png')
+        ->toContain('images/brand/hero-mansion.png');
 });
 
 test('a file copied into public/images is reported as available', function () {

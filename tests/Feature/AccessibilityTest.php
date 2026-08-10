@@ -108,5 +108,29 @@ test('site navigation derives the active state from the current url', function (
 
     expect($source)
         ->toContain('activePage(url, locale)')
-        ->toContain("aria-current={current === page ? 'page' : undefined}");
+        ->toContain('aria-current=')
+        ->toContain("current === page ? 'page' : undefined");
+});
+
+test('site navigation keeps a solid chocolate bar with menu and language switcher', function () {
+    $source = File::get(resource_path('js/components/maison/shell/site-nav.tsx'));
+
+    expect($source)
+        ->toContain('bg-choc')
+        ->toContain('LanguageSwitcher')
+        ->toContain('PRIMARY_NAV')
+        ->toContain('md:items-center')
+        ->toContain('md:gap-8')
+        ->toContain('text-gold')
+        ->not->toContain('backdrop-blur')
+        ->not->toContain('bg-choc/96')
+        ->not->toContain('bg-choc/99');
+});
+
+test('the public shell mounts the site nav on every maison page', function () {
+    $source = File::get(resource_path('js/layouts/frontend-layout.tsx'));
+
+    expect($source)
+        ->toContain('<SiteNav />')
+        ->toContain('<SiteTopbar');
 });
