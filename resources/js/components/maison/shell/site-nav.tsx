@@ -117,7 +117,7 @@ export function SiteNav() {
                             // dismiss the menu, and that fires no navigation.
                             onClick={() => setOpenedOn(null)}
                             className={cn(
-                                'block border-b border-gold/10 py-4 font-sans text-xs tracking-[0.25em] uppercase transition-colors',
+                                'flex min-h-11 w-full items-center border-b border-gold/10 py-4 font-sans text-xs tracking-[0.25em] uppercase transition-colors',
                                 'md:border-b md:pb-0.5 md:text-[9px]',
                                 current === page
                                     ? 'border-b-gold text-gold md:border-b-gold'

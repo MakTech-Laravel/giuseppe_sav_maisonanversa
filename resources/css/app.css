@@ -160,6 +160,25 @@
             scroll-behavior: auto;
         }
     }
+
+    /*
+     * Brand-palette focus rings on every interactive control. `:focus-visible`
+     * keeps mouse clicks quiet while keyboard and assistive-tech users get a
+     * consistent gold outline across the public site.
+     */
+    :where(
+        a,
+        button,
+        input,
+        textarea,
+        select,
+        summary,
+        [role='button'],
+        [tabindex]:not([tabindex='-1'])
+    ):focus-visible {
+        outline: 2px solid var(--color-gold);
+        outline-offset: 2px;
+    }
 }
 
 /*

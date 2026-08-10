@@ -93,7 +93,7 @@ export function ContactDock() {
                     <div className="flex flex-col gap-1.75">
                         {ITEMS.map((item) => {
                             const className =
-                                'flex w-full items-center gap-3 rounded-[10px] border border-gold/20 px-3.25 py-2.75 text-left font-sans text-[13px] text-cream transition-colors hover:border-gold/40 hover:bg-gold/12';
+                                'flex min-h-11 w-full items-center gap-3 rounded-[10px] border border-gold/20 px-3.25 py-2.75 text-left font-sans text-[13px] text-cream transition-colors hover:border-gold/40 hover:bg-gold/12';
 
                             if ('href' in item) {
                                 return (

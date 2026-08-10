@@ -22,7 +22,7 @@ export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
                 <button
                     type="button"
                     onClick={onNewsletter}
-                    className="font-sans text-[10px] font-light tracking-[0.2em] text-cream uppercase transition-colors hover:text-gold"
+                    className="inline-flex min-h-11 items-center font-sans text-[10px] font-light tracking-[0.2em] text-cream uppercase transition-colors hover:text-gold"
                 >
                     {t('Heritage Letter')}
                 </button>
@@ -30,7 +30,7 @@ export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
                 <MaisonLink
                     to="product"
                     aria-label={t('Heritage No.001')}
-                    className="flex size-7 items-center justify-center rounded-full border border-gold/35 font-serif text-[11px] text-gold"
+                    className="flex size-11 items-center justify-center rounded-full border border-gold/35 font-serif text-[11px] text-gold"
                 >
                     0
                 </MaisonLink>
