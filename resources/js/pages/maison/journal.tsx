@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Reveal } from '@/components/maison/ui/reveal';
@@ -70,7 +69,7 @@ export default function Journal() {
 
     return (
         <>
-            <Head title="Journal" />
+            <MaisonSeoHead page="journal" />
 
             <PageHero
                 eyebrow="Maison Anversa"

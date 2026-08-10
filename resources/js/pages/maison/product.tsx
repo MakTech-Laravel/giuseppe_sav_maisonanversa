@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { ProductCraft } from '@/components/maison/product/product-craft';
 import { ProductDetail } from '@/components/maison/product/product-detail';
 import { ProductFaq } from '@/components/maison/product/product-faq';
@@ -15,7 +14,7 @@ export default function Product({ edition }: { edition: Edition }) {
 
     return (
         <>
-            <Head title="Heritage No.001" />
+            <MaisonSeoHead page="product" />
 
             <PageHero
                 eyebrow={t('Founding Edition · 100 Stuks Wereldwijd')}

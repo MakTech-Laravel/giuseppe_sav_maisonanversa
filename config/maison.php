@@ -19,6 +19,43 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Public pages
+    |--------------------------------------------------------------------------
+    |
+    | Slugs are canonical rather than translated, so the same path resolves
+    | under every locale prefix. Route names are `maison.{page}`.
+    |
+    */
+
+    'pages' => [
+        'home' => '',
+        'house' => 'huis',
+        'product' => 'product',
+        'story' => 'story',
+        'circle' => 'circle',
+        'dressing' => 'dressing',
+        'journal' => 'journal',
+        'community' => 'community',
+        'corner' => 'corner',
+        'contact' => 'contact',
+        'privacy' => 'privacy',
+        'terms' => 'terms',
+        'shipping' => 'shipping',
+        'care' => 'care',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | SEO defaults
+    |--------------------------------------------------------------------------
+    */
+
+    'seo' => [
+        'image' => '/images/rooms/room-entrance.png',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Edition stock
     |--------------------------------------------------------------------------
     |

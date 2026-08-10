@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { ContactBureau } from '@/components/maison/contact/contact-bureau';
 import { PageHero } from '@/components/maison/ui/page-hero';
 
@@ -8,7 +7,7 @@ export default function Contact() {
 
     return (
         <>
-            <Head title={t('Contact')} />
+            <MaisonSeoHead page="contact" />
 
             <PageHero
                 eyebrow={t('Bureau')}

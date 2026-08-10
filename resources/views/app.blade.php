@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#291c18">
 
         {{-- The site is light-mode only; cream matches the brand palette in app.css. --}}
         <style>

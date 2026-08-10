@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Head } from '@inertiajs/react';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { useTranslation } from 'react-i18next';
 import { CommunityLayout } from '@/components/maison/community/community-layout';
 import { CommunityLoginGate } from '@/components/maison/community/community-login-gate';
@@ -21,7 +21,7 @@ export default function Community() {
 
     return (
         <>
-            <Head title="Community" />
+            <MaisonSeoHead page="community" />
 
             <PageHero
                 eyebrow={t('Founding Circle & Club Corner')}

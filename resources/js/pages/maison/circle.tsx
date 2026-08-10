@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { CirclePortal } from '@/components/maison/circle/circle-portal';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
@@ -47,7 +46,7 @@ export default function Circle() {
 
     return (
         <>
-            <Head title="Founding Circle" />
+            <MaisonSeoHead page="circle" />
 
             <PageHero
                 eyebrow={t('De eerste 100')}

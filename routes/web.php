@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\PostAttachmentController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
  * Dutch source language. `home` stays the canonical name for the site root.
  */
 Route::redirect('/', '/'.config('maison.default_locale'))->name('home');
+
+Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::pattern('locale', implode('|', config('maison.locales')));
 

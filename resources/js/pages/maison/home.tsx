@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { HomeAntwerp } from '@/components/maison/home/home-antwerp';
 import { HomeCircle } from '@/components/maison/home/home-circle';
 import { HomeContentGrid } from '@/components/maison/home/home-content-grid';
@@ -16,7 +16,7 @@ import type { Edition } from '@/types/edition';
 export default function Home({ edition }: { edition: Edition }) {
     return (
         <>
-            <Head title="Maison Anversa" />
+            <MaisonSeoHead page="home" />
             <HomeHero edition={edition} />
             <HomeMarquee />
             <HomeIntro />

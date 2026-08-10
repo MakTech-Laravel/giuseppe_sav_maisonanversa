@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
@@ -13,7 +12,7 @@ export default function Story() {
 
     return (
         <>
-            <Head title={t('Ons Verhaal')} />
+            <MaisonSeoHead page="story" />
 
             <PageHero
                 eyebrow="Maison Anversa"

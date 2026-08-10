@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import {
     LegalHeading,
     LegalList,
@@ -13,7 +12,7 @@ export default function Shipping() {
 
     return (
         <>
-            <Head title={t('Verzending & Retour')} />
+            <MaisonSeoHead page="shipping" />
 
             <LegalPageLayout
                 titleKey="Verzending & Retour"

@@ -59,6 +59,8 @@ class HandleInertiaRequests extends Middleware
              */
             'locale' => fn () => app()->getLocale(),
             'availableLocales' => config('maison.locales'),
+            'appUrl' => config('app.url'),
+            'seoImage' => config('maison.seo.image'),
 
             /*
              * Which of the site's photographs exist yet. Everything else falls

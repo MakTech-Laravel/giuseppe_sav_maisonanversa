@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
@@ -67,7 +66,7 @@ export default function Dressing() {
 
     return (
         <>
-            <Head title={t('Kleedkamer')} />
+            <MaisonSeoHead page="dressing" />
 
             <PageHero
                 eyebrow={t('Kamer III · Maison Anversa')}

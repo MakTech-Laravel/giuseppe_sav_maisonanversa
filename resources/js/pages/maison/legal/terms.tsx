@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import {
     LegalHeading,
     LegalPageLayout,
@@ -12,7 +11,7 @@ export default function Terms() {
 
     return (
         <>
-            <Head title={t('Algemene voorwaarden')} />
+            <MaisonSeoHead page="terms" />
 
             <LegalPageLayout
                 titleKey="Algemene voorwaarden"

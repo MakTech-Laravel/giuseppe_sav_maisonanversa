@@ -1,5 +1,4 @@
-import { Head } from '@inertiajs/react';
-import { useRef, useState } from 'react';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
@@ -154,7 +153,7 @@ export default function Corner() {
 
     return (
         <>
-            <Head title="Club Corner" />
+            <MaisonSeoHead page="corner" />
 
             <PageHero
                 eyebrow="Maison Anversa"
