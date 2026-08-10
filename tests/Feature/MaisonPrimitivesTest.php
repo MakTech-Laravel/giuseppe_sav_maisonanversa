@@ -133,5 +133,6 @@ test('every primitive is reachable under one directory', function () {
         'section.tsx',
         'stat.tsx',
         'success-panel.tsx',
+        'text-link.tsx',
     ]);
 });
