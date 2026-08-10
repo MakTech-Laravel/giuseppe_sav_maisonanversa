@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { gsap, MAISON_EASE, MEDIA, useGSAP } from '@/lib/gsap';
+import { BOOT_COVER_ID } from '@/lib/maison-intro';
 
 type PreloaderProps = {
     /** 0 to 1. The bar tracks real loading rather than a fixed timer. */
@@ -25,6 +26,14 @@ export function Preloader({ progress, done, onFinished }: PreloaderProps) {
     const subtitle = useRef<HTMLParagraphElement>(null);
     const bar = useRef<HTMLDivElement>(null);
     const fill = useRef<HTMLDivElement>(null);
+
+    /*
+     * The blade boot cover is the same chocolate as this curtain. Drop it once
+     * this layer is in the tree so the home page never peeks through.
+     */
+    useLayoutEffect(() => {
+        document.getElementById(BOOT_COVER_ID)?.remove();
+    }, []);
 
     useGSAP(() => {
         const media = gsap.matchMedia();

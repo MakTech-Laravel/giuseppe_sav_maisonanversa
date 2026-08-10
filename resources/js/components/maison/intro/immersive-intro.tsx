@@ -1,5 +1,12 @@
 import { usePage } from '@inertiajs/react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Preloader } from '@/components/maison/cinematic/preloader';
 import { RoomPanels } from '@/components/maison/intro/room-panels';
@@ -11,6 +18,7 @@ import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { gsap, MAISON_EASE, useGSAP } from '@/lib/gsap';
 import { imageAsset } from '@/lib/imagery';
 import {
+    BOOT_COVER_ID,
     CLOSING_SLIDE,
     INTRO_ROOMS,
     INTRO_SLIDES,
@@ -123,6 +131,12 @@ function openingSlide(): number {
  */
 export function ImmersiveIntro() {
     const [running, setRunning] = useState(shouldRun);
+
+    useLayoutEffect(() => {
+        if (!running) {
+            document.getElementById(BOOT_COVER_ID)?.remove();
+        }
+    }, [running]);
 
     if (!running) {
         return null;
@@ -404,151 +418,163 @@ function IntroStage({ onDismissed }: { onDismissed: () => void }) {
             className="fixed inset-0 z-9999 overflow-hidden bg-choc outline-none"
         >
             {/*
-             * Held back until the loader is finished with, so the first room's
-             * eight-second zoom is not spent behind a curtain — in the prototype
-             * it started on load and was three-quarters over by the time anyone
-             * saw the room. It now fades up as the curtain lifts.
+             * Held back until the curtain has fully lifted — not merely until
+             * the loader *starts* exiting — so the doorway never blinks through
+             * the fading chocolate wash.
              */}
-            <RoomPanels panel={loaderDone ? introPanel(slide) : -1} />
+            <RoomPanels panel={curtainLifted ? introPanel(slide) : -1} />
 
-            {/* The prototype's `.overlay::after`: clear in the middle, dark at the edges. */}
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_15%,rgba(41,28,24,0.65)_55%,rgba(41,28,24,0.96)_100%)] ma-sm:bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(41,28,24,0.5)_70%,rgba(41,28,24,0.9)_100%)]"
-            />
-
-            <p className="absolute inset-x-0 top-5.5 text-center font-sans text-[12px] tracking-[0.42em] text-cream uppercase ma-sm:top-8.5 ma-sm:text-[13px] ma-sm:text-gold ma-sm:opacity-92">
-                Maison Anversa
-                <small className="mt-1.5 block font-sans text-[10px] tracking-[0.22em] text-cream/85 italic ma-sm:text-[9px] ma-sm:text-sand/70">
-                    {t('Antwerpen · MMXXVI')}
-                </small>
-            </p>
-
-            {!isClosing && (
-                <div
-                    ref={label}
-                    className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-16 text-center opacity-0 ma-sm:px-7"
-                >
-                    <span className="block font-sans text-[11px] tracking-[0.34em] text-cream/85 uppercase ma-sm:text-[10px] ma-sm:text-gold ma-sm:opacity-90">
-                        {copy.eyebrow}
-                    </span>
-                    <span className="mt-3.5 block font-serif text-[clamp(28px,8vw,48px)] leading-[1.06] tracking-[0.01em] text-cream [text-shadow:0_2px_40px_rgba(0,0,0,0.7)] ma-sm:text-[clamp(34px,6vw,64px)]">
-                        {copy.opening}
-                        <em className="text-gold italic">{copy.emphasis}</em>
-                    </span>
-                    <span className="mt-3.5 block font-sans text-[12px] tracking-[0.16em] text-cream/90 uppercase ma-sm:text-[13px] ma-sm:text-sand/82">
-                        {copy.subtitle}
-                    </span>
-                </div>
-            )}
-
-            {destination && !isClosing && (
-                <div
-                    /* Remounted per room so the delayed entrance replays. */
-                    key={slide}
-                    ref={doorway}
-                    className="absolute bottom-[18%] left-1/2 -translate-x-1/2 opacity-0 ma-sm:bottom-[22%]"
-                >
-                    <MaisonButton
-                        as={MaisonLink}
-                        variant="intro"
-                        to={destination}
-                        onClick={markSeen}
-                    >
-                        {t('Betreed kamer →')}
-                    </MaisonButton>
-                </div>
-            )}
-
-            {isClosing && (
-                <div
-                    ref={closingCard}
-                    className="absolute inset-x-0 bottom-[10%] px-6 text-center opacity-0 ma-sm:bottom-[14%]"
-                >
-                    <span className="block font-sans text-[11px] tracking-[0.32em] text-cream uppercase ma-sm:text-[10px] ma-sm:text-gold">
-                        {t('U heeft het huis doorlopen')}
-                    </span>
-                    <span className="mt-4 mb-6.5 block font-serif text-[clamp(26px,7vw,42px)] text-cream ma-sm:text-[clamp(30px,5vw,52px)]">
-                        {copy.opening}
-                        <em className="text-gold italic">{copy.emphasis}</em>
-                    </span>
-                    <MaisonButton
-                        variant="intro"
-                        onClick={dismiss}
-                        className="px-8 py-3.5 text-[12px] ma-sm:px-9.5 ma-sm:py-4 ma-sm:text-[11px] ma-sm:tracking-[0.28em]"
-                    >
-                        {t('Betreed het Huis')}
-                    </MaisonButton>
-                </div>
-            )}
-
-            <IntroArrow
-                direction="prev"
-                label={t('Vorige kamer')}
-                hidden={slide === 0}
-                onClick={() => goTo(slide - 1)}
-            />
-            <IntroArrow
-                direction="next"
-                label={t('Volgende kamer')}
-                hidden={isClosing}
-                onClick={() => goTo(slide + 1)}
-            />
-
-            {/*
-             * Faded rather than removed, so it leaves quietly — and hidden from
-             * assistive technology at the same time, because a transparent
-             * instruction is still read out loud.
-             */}
-            <p
-                aria-hidden={slide !== 0}
-                className={cn(
-                    'pointer-events-none absolute inset-x-0 bottom-11 text-center font-sans text-[11px] tracking-[0.24em] text-cream uppercase transition-opacity duration-800 ma-sm:bottom-15 ma-sm:text-[10px] ma-sm:text-gold',
-                    slide === 0 ? 'opacity-60' : 'opacity-0',
-                )}
-            >
-                {t('Swipe of tik › om te beginnen')}
-            </p>
-
-            {/* Counts the rooms; the closing card is not one of them. */}
-            <p
-                aria-hidden={isClosing}
-                className={cn(
-                    'absolute bottom-5.5 left-1/2 -translate-x-1/2 font-sans text-[11px] tracking-[0.3em] text-cream transition-opacity duration-500 ma-sm:bottom-8.5 ma-sm:text-sand',
-                    isClosing ? 'opacity-0' : 'opacity-90 ma-sm:opacity-70',
-                )}
-            >
-                {String(Math.min(slide + 1, ROOM_COUNT)).padStart(2, '0')} /{' '}
-                {String(ROOM_COUNT).padStart(2, '0')}
-            </p>
-
-            {/* Decorative: the counter beside it already states the position. */}
-            <div
-                aria-hidden="true"
-                className="absolute bottom-7.5 left-1/2 hidden -translate-x-1/2 items-center gap-3.5 ma-sm:flex"
-            >
-                {INTRO_SLIDES.map((entry, index) => (
-                    <i
-                        key={entry.copy.nl.eyebrow}
-                        className={cn(
-                            'block h-px transition-all duration-500',
-                            index <= slide
-                                ? 'w-10.5 bg-gold'
-                                : 'w-6.5 bg-cream/22',
-                        )}
+            {curtainLifted && (
+                <>
+                    {/* The prototype's `.overlay::after`: clear in the middle, dark at the edges. */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_15%,rgba(41,28,24,0.65)_55%,rgba(41,28,24,0.96)_100%)] ma-sm:bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(41,28,24,0.5)_70%,rgba(41,28,24,0.9)_100%)]"
                     />
-                ))}
-            </div>
 
-            <LanguageSwitcher className="absolute right-6 bottom-15 z-20" />
+                    <p className="absolute inset-x-0 top-5.5 text-center font-sans text-[12px] tracking-[0.42em] text-cream uppercase ma-sm:top-8.5 ma-sm:text-[13px] ma-sm:text-gold ma-sm:opacity-92">
+                        Maison Anversa
+                        <small className="mt-1.5 block font-sans text-[10px] tracking-[0.22em] text-cream/85 italic ma-sm:text-[9px] ma-sm:text-sand/70">
+                            {t('Antwerpen · MMXXVI')}
+                        </small>
+                    </p>
 
-            <button
-                type="button"
-                onClick={dismiss}
-                className="absolute top-1.5 right-1.5 z-20 p-4 font-sans text-[11px] tracking-[0.24em] text-cream/80 uppercase transition-colors hover:text-gold ma-sm:top-3.5 ma-sm:right-3.5 ma-sm:p-2 ma-sm:text-[9px] ma-sm:text-sand/50"
-            >
-                {t('Overslaan →')}
-            </button>
+                    {!isClosing && (
+                        <div
+                            ref={label}
+                            className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-16 text-center opacity-0 ma-sm:px-7"
+                        >
+                            <span className="block font-sans text-[11px] tracking-[0.34em] text-cream/85 uppercase ma-sm:text-[10px] ma-sm:text-gold ma-sm:opacity-90">
+                                {copy.eyebrow}
+                            </span>
+                            <span className="mt-3.5 block font-serif text-[clamp(28px,8vw,48px)] leading-[1.06] tracking-[0.01em] text-cream [text-shadow:0_2px_40px_rgba(0,0,0,0.7)] ma-sm:text-[clamp(34px,6vw,64px)]">
+                                {copy.opening}
+                                <em className="text-gold italic">
+                                    {copy.emphasis}
+                                </em>
+                            </span>
+                            <span className="mt-3.5 block font-sans text-[12px] tracking-[0.16em] text-cream/90 uppercase ma-sm:text-[13px] ma-sm:text-sand/82">
+                                {copy.subtitle}
+                            </span>
+                        </div>
+                    )}
+
+                    {destination && !isClosing && (
+                        <div
+                            /* Remounted per room so the delayed entrance replays. */
+                            key={slide}
+                            ref={doorway}
+                            className="absolute bottom-[18%] left-1/2 -translate-x-1/2 opacity-0 ma-sm:bottom-[22%]"
+                        >
+                            <MaisonButton
+                                as={MaisonLink}
+                                variant="intro"
+                                to={destination}
+                                onClick={markSeen}
+                            >
+                                {t('Betreed kamer →')}
+                            </MaisonButton>
+                        </div>
+                    )}
+
+                    {isClosing && (
+                        <div
+                            ref={closingCard}
+                            className="absolute inset-x-0 bottom-[10%] px-6 text-center opacity-0 ma-sm:bottom-[14%]"
+                        >
+                            <span className="block font-sans text-[11px] tracking-[0.32em] text-cream uppercase ma-sm:text-[10px] ma-sm:text-gold">
+                                {t('U heeft het huis doorlopen')}
+                            </span>
+                            <span className="mt-4 mb-6.5 block font-serif text-[clamp(26px,7vw,42px)] text-cream ma-sm:text-[clamp(30px,5vw,52px)]">
+                                {copy.opening}
+                                <em className="text-gold italic">
+                                    {copy.emphasis}
+                                </em>
+                            </span>
+                            <MaisonButton
+                                variant="intro"
+                                onClick={dismiss}
+                                className="px-8 py-3.5 text-[12px] ma-sm:px-9.5 ma-sm:py-4 ma-sm:text-[11px] ma-sm:tracking-[0.28em]"
+                            >
+                                {t('Betreed het Huis')}
+                            </MaisonButton>
+                        </div>
+                    )}
+
+                    <IntroArrow
+                        direction="prev"
+                        label={t('Vorige kamer')}
+                        hidden={slide === 0}
+                        onClick={() => goTo(slide - 1)}
+                    />
+                    <IntroArrow
+                        direction="next"
+                        label={t('Volgende kamer')}
+                        hidden={isClosing}
+                        onClick={() => goTo(slide + 1)}
+                    />
+
+                    {/*
+                     * Faded rather than removed, so it leaves quietly — and hidden from
+                     * assistive technology at the same time, because a transparent
+                     * instruction is still read out loud.
+                     */}
+                    <p
+                        aria-hidden={slide !== 0}
+                        className={cn(
+                            'pointer-events-none absolute inset-x-0 bottom-11 text-center font-sans text-[11px] tracking-[0.24em] text-cream uppercase transition-opacity duration-800 ma-sm:bottom-15 ma-sm:text-[10px] ma-sm:text-gold',
+                            slide === 0 ? 'opacity-60' : 'opacity-0',
+                        )}
+                    >
+                        {t('Swipe of tik › om te beginnen')}
+                    </p>
+
+                    {/* Counts the rooms; the closing card is not one of them. */}
+                    <p
+                        aria-hidden={isClosing}
+                        className={cn(
+                            'absolute bottom-5.5 left-1/2 -translate-x-1/2 font-sans text-[11px] tracking-[0.3em] text-cream transition-opacity duration-500 ma-sm:bottom-8.5 ma-sm:text-sand',
+                            isClosing
+                                ? 'opacity-0'
+                                : 'opacity-90 ma-sm:opacity-70',
+                        )}
+                    >
+                        {String(Math.min(slide + 1, ROOM_COUNT)).padStart(
+                            2,
+                            '0',
+                        )}{' '}
+                        / {String(ROOM_COUNT).padStart(2, '0')}
+                    </p>
+
+                    {/* Decorative: the counter beside it already states the position. */}
+                    <div
+                        aria-hidden="true"
+                        className="absolute bottom-7.5 left-1/2 hidden -translate-x-1/2 items-center gap-3.5 ma-sm:flex"
+                    >
+                        {INTRO_SLIDES.map((entry, index) => (
+                            <i
+                                key={entry.copy.nl.eyebrow}
+                                className={cn(
+                                    'block h-px transition-all duration-500',
+                                    index <= slide
+                                        ? 'w-10.5 bg-gold'
+                                        : 'w-6.5 bg-cream/22',
+                                )}
+                            />
+                        ))}
+                    </div>
+
+                    <LanguageSwitcher className="absolute right-6 bottom-15 z-20" />
+
+                    <button
+                        type="button"
+                        onClick={dismiss}
+                        className="absolute top-1.5 right-1.5 z-20 p-4 font-sans text-[11px] tracking-[0.24em] text-cream/80 uppercase transition-colors hover:text-gold ma-sm:top-3.5 ma-sm:right-3.5 ma-sm:p-2 ma-sm:text-[9px] ma-sm:text-sand/50"
+                    >
+                        {t('Overslaan →')}
+                    </button>
+                </>
+            )}
 
             {!curtainLifted && (
                 <Preloader
