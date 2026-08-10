@@ -349,3 +349,100 @@
         }
     }
 }
+
+/*
+ * The house elevation drawing. Stroke and fill colours live here rather than
+ * as Tailwind utilities because SVG presentation attributes need the exact
+ * prototype values, and a hover fill on `.room` cannot be expressed as a
+ * utility without repeating them on every shape.
+ */
+.maison-svg .room {
+    cursor: pointer;
+}
+
+.maison-svg .room-fill {
+    fill: rgba(141, 112, 90, 0.035);
+    transition: fill 0.28s ease;
+}
+
+.maison-svg .room:hover .room-fill,
+.maison-svg .room:focus-visible .room-fill {
+    fill: rgba(141, 112, 90, 0.17);
+}
+
+.maison-svg .room-label-name {
+    font-family: var(--font-serif), Baskervville, serif;
+    font-size: 24px;
+    letter-spacing: 0.04em;
+    fill: var(--color-cream);
+    transition: fill 0.28s ease;
+}
+
+.maison-svg .room:hover .room-label-name,
+.maison-svg .room:focus-visible .room-label-name {
+    fill: var(--color-gold);
+}
+
+.maison-svg .room-label-sub {
+    font-family: var(--font-sans), Montserrat, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    fill: var(--color-gold);
+    opacity: 0.8;
+}
+
+.maison-svg .wall {
+    stroke: rgba(141, 112, 90, 0.55);
+    stroke-width: 2.4;
+    fill: none;
+    stroke-linejoin: round;
+}
+
+.maison-svg .furn {
+    stroke: rgba(141, 112, 90, 0.5);
+    stroke-width: 1.6;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.maison-svg .structure {
+    stroke: rgba(141, 112, 90, 0.6);
+    stroke-width: 2.6;
+    fill: none;
+    stroke-linejoin: round;
+}
+
+.maison-svg .ground {
+    stroke: rgba(141, 112, 90, 0.4);
+    stroke-width: 2;
+    fill: none;
+}
+
+.maison-svg .lamp {
+    stroke: rgba(141, 112, 90, 0.5);
+    stroke-width: 1.4;
+    fill: none;
+    stroke-linecap: round;
+}
+
+.maison-svg .lamp-bulb {
+    fill: rgba(141, 112, 90, 0.55);
+}
+
+.maison-svg .window {
+    stroke: rgba(141, 112, 90, 0.42);
+    stroke-width: 1.4;
+    fill: rgba(243, 235, 227, 0.05);
+}
+
+.maison-svg .rug {
+    stroke: rgba(141, 112, 90, 0.28);
+    stroke-width: 1.2;
+    fill: none;
+}
+
+.maison-svg .room-tint {
+    pointer-events: none;
+}
