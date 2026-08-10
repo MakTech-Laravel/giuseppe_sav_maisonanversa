@@ -1,0 +1,105 @@
+import * as maison from '@/routes/maison';
+import type { Locale } from '@/types/locale';
+
+/**
+ * The fourteen public pages, named as their routes are. Labels are the Dutch
+ * source copy, so `t(label)` resolves the translation and falls back to this
+ * exact text when there is none.
+ */
+export const MAISON_PAGES = [
+    'home',
+    'house',
+    'product',
+    'story',
+    'circle',
+    'dressing',
+    'journal',
+    'community',
+    'corner',
+    'contact',
+    'privacy',
+    'terms',
+    'shipping',
+    'care',
+] as const;
+
+export type MaisonPage = (typeof MAISON_PAGES)[number];
+
+export function maisonUrl(page: MaisonPage, locale: Locale): string {
+    return maison[page].url(locale);
+}
+
+export type NavItem = { page: MaisonPage; label: string };
+
+/** The nine links in the header, in the prototype's order. */
+export const PRIMARY_NAV: readonly NavItem[] = [
+    { page: 'house', label: 'Het Huis' },
+    { page: 'product', label: 'Heritage No.001' },
+    { page: 'story', label: 'Ons Verhaal' },
+    { page: 'circle', label: 'Founding Circle' },
+    { page: 'dressing', label: 'Kleedkamer' },
+    { page: 'journal', label: 'Journal' },
+    { page: 'community', label: 'Community' },
+    { page: 'corner', label: 'Club Corner' },
+    { page: 'contact', label: 'Contact' },
+];
+
+export type FooterColumn = {
+    heading: string;
+    items: readonly (NavItem | { href: string; label: string })[];
+};
+
+export const FOOTER_COLUMNS: readonly FooterColumn[] = [
+    {
+        heading: 'Verkennen',
+        items: [
+            { page: 'product', label: 'Heritage No.001' },
+            { page: 'story', label: 'Ons Verhaal' },
+            { page: 'circle', label: 'Founding Circle' },
+            { page: 'dressing', label: 'Kleedkamer' },
+            { page: 'journal', label: 'Journal' },
+            { page: 'community', label: 'Community' },
+            { page: 'corner', label: 'Club Corner' },
+        ],
+    },
+    {
+        heading: 'Support',
+        items: [
+            { page: 'contact', label: 'Contact' },
+            { page: 'shipping', label: 'Verzending & Retour' },
+            { page: 'care', label: 'Zorg & Garantie' },
+            { page: 'privacy', label: 'Privacybeleid' },
+            { page: 'terms', label: 'Algemene voorwaarden' },
+        ],
+    },
+    {
+        heading: 'Volg Ons',
+        items: [
+            { href: 'https://www.instagram.com/', label: 'Instagram' },
+            { href: 'mailto:press@maisonanversa.com', label: 'Pers' },
+        ],
+    },
+];
+
+export function isNavItem(
+    item: NavItem | { href: string; label: string },
+): item is NavItem {
+    return 'page' in item;
+}
+
+/**
+ * Which nav entry a URL belongs to, used for the active state.
+ *
+ * Derived from the path rather than tracked in state, which is how the
+ * prototype's `#nav-dressing` came to have no active state at all: its
+ * `showPage()` simply forgot to list it.
+ */
+export function activePage(url: string, locale: Locale): MaisonPage | null {
+    const path = url.split(/[?#]/)[0].replace(/\/+$/, '');
+
+    return (
+        MAISON_PAGES.find(
+            (page) => maisonUrl(page, locale).replace(/\/+$/, '') === path,
+        ) ?? null
+    );
+}

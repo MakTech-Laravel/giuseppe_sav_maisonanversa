@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Imagery;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -51,6 +52,21 @@ class HandleInertiaRequests extends Middleware
                 ]) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            /*
+             * Resolved lazily: Inertia collects shared data before route
+             * middleware runs, so reading the locale eagerly would capture the
+             * application default rather than the one SetLocale applies.
+             */
+            'locale' => fn () => app()->getLocale(),
+            'availableLocales' => config('maison.locales'),
+            'appUrl' => config('app.url'),
+            'seoImage' => config('maison.seo.image'),
+
+            /*
+             * Which of the site's photographs exist yet. Everything else falls
+             * back to a placeholder rather than requesting a missing file.
+             */
+            'availableImages' => fn () => Imagery::existingPaths(),
         ];
     }
 }

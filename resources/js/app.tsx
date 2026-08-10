@@ -3,15 +3,23 @@ import { AlertTriangle, CheckCircle, Info, XCircle } from 'lucide-react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorBoundaryFallback } from '@/components/error-boundary/error-boundary-fallback';
 import { pushError } from '@/components/error-boundary/error-store';
+import { I18nProvider, readInitialLocale } from '@/components/i18n-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { initializeTheme } from '@/hooks/use-appearance';
 import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
+import FrontendLayout from '@/layouts/frontend-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { createI18nForLocale } from '@/lib/i18n';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+/*
+ * The dictionary is fetched before the app mounts so the first paint is already
+ * in the visitor's language instead of flashing the Dutch source copy.
+ */
+const i18n = await createI18nForLocale(readInitialLocale());
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
@@ -19,6 +27,8 @@ createInertiaApp({
         switch (true) {
             case name === 'welcome':
                 return null;
+            case name.startsWith('maison/'):
+                return FrontendLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
@@ -43,7 +53,7 @@ createInertiaApp({
                         }
                     }}
                 >
-                    {app}
+                    <I18nProvider i18n={i18n}>{app}</I18nProvider>
                 </ErrorBoundary>
                 <Toaster
                     position="bottom-right"
@@ -65,6 +75,3 @@ createInertiaApp({
         color: 'var(--primary)',
     },
 });
-
-// This will set light / dark mode on load...
-initializeTheme();

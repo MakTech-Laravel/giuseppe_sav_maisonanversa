@@ -1,4 +1,5 @@
 import type { Auth } from '@/types/auth';
+import type { Locale } from '@/types/locale';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,6 +14,9 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            locale: Locale;
+            availableLocales: Locale[];
+            availableImages: string[];
             [key: string]: unknown;
         };
     }

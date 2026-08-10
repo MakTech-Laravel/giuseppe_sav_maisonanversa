@@ -2,8 +2,8 @@ packages:
   - '.'
 
 allowBuilds:
-  msw: set this to true or false
-  unrs-resolver: set this to true or false
+  msw: false
+  unrs-resolver: false
 
 publicHoistPattern:
   - '@inertiajs/core'

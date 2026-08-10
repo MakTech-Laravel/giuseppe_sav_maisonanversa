@@ -5,13 +5,38 @@
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
+/*
+ * The site is light-mode only. This override must stay: Tailwind's built-in
+ * `dark` variant is a prefers-color-scheme media query, so deleting this line
+ * would make any stray `dark:` utility activate on an OS dark preference.
+ * Gating on `.dark`, a class nothing ever sets, keeps such utilities inert.
+ */
 @custom-variant dark (&:is(.dark *));
 
 @theme {
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+        'Montserrat', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: 'Baskervville', Georgia, serif;
+
+    /* Maison Anversa brand palette. */
+    --color-choc: #291c18;
+    --color-choc2: #352722;
+    --color-choc3: #41332d;
+    --color-gold: #8d705a;
+    --color-gold2: #745a48;
+    --color-cream: #f3ebe3;
+    --color-cream2: #e8e0d5;
+    --color-sand: #b8a898;
+    --color-stone: #8a7d72;
+
+    /*
+     * The prototype styles against 560px, 900px and 1100px in addition to
+     * Tailwind's own scale, which already covers 640/768/1024.
+     */
+    --breakpoint-ma-sm: 560px;
+    --breakpoint-ma-md: 900px;
+    --breakpoint-ma-lg: 1100px;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -62,6 +87,14 @@
 }
 
 :root {
+    /*
+     * Fixed-header heights, so every downstream offset derives from one source.
+     * These live outside @theme because they are consumed through var() rather
+     * than a utility, and Tailwind drops theme variables it sees no usage for.
+     */
+    --topbar-h: 40px;
+    --nav-h: 90px;
+
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -97,47 +130,338 @@
     --sidebar-ring: oklch(0.87 0 0);
 }
 
-.dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.145 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.145 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.985 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.396 0.141 25.723);
-    --destructive-foreground: oklch(0.637 0.237 25.331);
-    --border: oklch(0.269 0 0);
-    --input: oklch(0.269 0 0);
-    --ring: oklch(0.439 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.985 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(0.269 0 0);
-    --sidebar-ring: oklch(0.439 0 0);
-}
-
 @layer base {
     * {
         @apply border-border;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /*
+     * The prototype sets the serif as the body face, not the sans. Admin and
+     * auth screens opt back into the sans via their layout wrappers.
+     */
     body {
         @apply bg-background text-foreground;
+
+        font-family: var(--font-serif);
+        font-size: 17px;
+        line-height: 1.7;
     }
+
+    /*
+     * The prototype left smooth scrolling on under reduced motion. Programmatic
+     * jumps are part of the motion a visitor asked to avoid, so it goes here.
+     */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+
+    /*
+     * Brand-palette focus rings on every interactive control. `:focus-visible`
+     * keeps mouse clicks quiet while keyboard and assistive-tech users get a
+     * consistent gold outline across the public site.
+     */
+    :where(
+        a,
+        button,
+        input,
+        textarea,
+        select,
+        summary,
+        [role='button'],
+        [tabindex]:not([tabindex='-1'])
+    ):focus-visible {
+        outline: 2px solid var(--color-gold);
+        outline-offset: 2px;
+    }
+}
+
+/*
+ * The cinematic layer. Two of the ten effects stay pure CSS because they are
+ * infinite and non-interactive, so a compositor-only animation beats driving
+ * them from JavaScript: the film grain's discrete jitter and the marquee loop.
+ * Everything else is GSAP; see resources/js/lib/gsap.ts.
+ */
+@layer components {
+    /*
+     * A 200x200 fractal-noise tile nudged in six discrete steps. `steps(1)` is
+     * deliberate — the stutter between positions is the effect, and easing
+     * between them would read as a blur.
+     */
+    .cine-grain {
+        position: fixed;
+        inset: -10%;
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        animation: cine-grain 0.5s steps(1) infinite;
+    }
+
+    @keyframes cine-grain {
+        0% {
+            transform: translate(0, 0);
+        }
+        20% {
+            transform: translate(-3%, 2%);
+        }
+        40% {
+            transform: translate(2%, -3%);
+        }
+        60% {
+            transform: translate(-2%, -2%);
+        }
+        80% {
+            transform: translate(3%, 1%);
+        }
+        100% {
+            transform: translate(-1%, 3%);
+        }
+    }
+
+    .cine-vignette {
+        position: fixed;
+        inset: 0;
+        z-index: 9997;
+        pointer-events: none;
+        background: radial-gradient(
+            ellipse at center,
+            transparent 55%,
+            rgba(41, 28, 24, 0.35) 100%
+        );
+    }
+
+    /*
+     * The cursor ring and dot are positioned by GSAP. `mix-blend-mode` only
+     * reads through to the page while no ancestor forms a stacking context,
+     * which is why both are portalled to the body rather than nested in a
+     * transformed wrapper.
+     */
+    .cine-cursor,
+    .cine-cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        pointer-events: none;
+        border-radius: 50%;
+        mix-blend-mode: difference;
+        opacity: 0;
+    }
+
+    .cine-cursor {
+        width: 28px;
+        height: 28px;
+        border: 1px solid rgba(243, 235, 227, 0.6);
+        transition:
+            width 0.35s ease,
+            height 0.35s ease,
+            border-color 0.35s ease;
+    }
+
+    .cine-cursor[data-grow='true'] {
+        width: 56px;
+        height: 56px;
+        border-color: rgba(243, 235, 227, 0.9);
+    }
+
+    .cine-cursor-dot {
+        width: 4px;
+        height: 4px;
+        background: rgba(243, 235, 227, 0.8);
+    }
+
+    .cine-transition {
+        position: fixed;
+        inset: 0;
+        z-index: 9996;
+        pointer-events: none;
+        background: var(--color-choc);
+        opacity: 0;
+    }
+
+    /*
+     * Seamless only because the track is rendered twice and travels exactly
+     * half its width, so the second copy lands where the first started.
+     */
+    .marquee-track {
+        display: inline-flex;
+        animation: marquee 30s linear infinite;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    .gold-rule {
+        animation: gold-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes gold-pulse {
+        0%,
+        100% {
+            opacity: 0.6;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .cine-grain {
+            opacity: 0.025;
+        }
+
+        .cine-vignette {
+            background: radial-gradient(
+                ellipse at center,
+                transparent 50%,
+                rgba(41, 28, 24, 0.3) 100%
+            );
+        }
+    }
+
+    /* Pointer-driven effects have nothing to say on a touch screen. */
+    @media (pointer: coarse) {
+        .cine-cursor,
+        .cine-cursor-dot {
+            display: none;
+        }
+    }
+
+    /*
+     * The prototype neutralised only the grain, reveals, cursor and magnetic
+     * transition here; the marquee and the gold-rule pulse kept running. Both
+     * are covered now, and the GSAP contexts register nothing at all under
+     * this query, which takes care of the reveals and the Ken Burns zoom.
+     */
+    @media (prefers-reduced-motion: reduce) {
+        .cine-grain,
+        .marquee-track,
+        .gold-rule,
+        [data-slot='accordion-content'] {
+            animation: none;
+        }
+
+        /* The plus still becomes a cross, it just does so at once. */
+        [data-slot='accordion-trigger'] > svg {
+            transition: none;
+        }
+
+        .cine-cursor,
+        .cine-cursor-dot {
+            display: none;
+        }
+
+        .gold-rule {
+            opacity: 0.8;
+        }
+    }
+}
+
+/*
+ * The house elevation drawing. Stroke and fill colours live here rather than
+ * as Tailwind utilities because SVG presentation attributes need the exact
+ * prototype values, and a hover fill on `.room` cannot be expressed as a
+ * utility without repeating them on every shape.
+ */
+.maison-svg .room {
+    cursor: pointer;
+}
+
+.maison-svg .room-fill {
+    fill: rgba(141, 112, 90, 0.035);
+    transition: fill 0.28s ease;
+}
+
+.maison-svg .room:hover .room-fill,
+.maison-svg .room:focus-visible .room-fill {
+    fill: rgba(141, 112, 90, 0.17);
+}
+
+.maison-svg .room-label-name {
+    font-family: var(--font-serif), Baskervville, serif;
+    font-size: 24px;
+    letter-spacing: 0.04em;
+    fill: var(--color-cream);
+    transition: fill 0.28s ease;
+}
+
+.maison-svg .room:hover .room-label-name,
+.maison-svg .room:focus-visible .room-label-name {
+    fill: var(--color-gold);
+}
+
+.maison-svg .room-label-sub {
+    font-family: var(--font-sans), Montserrat, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    fill: var(--color-gold);
+    opacity: 0.8;
+}
+
+.maison-svg .wall {
+    stroke: rgba(141, 112, 90, 0.55);
+    stroke-width: 2.4;
+    fill: none;
+    stroke-linejoin: round;
+}
+
+.maison-svg .furn {
+    stroke: rgba(141, 112, 90, 0.5);
+    stroke-width: 1.6;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.maison-svg .structure {
+    stroke: rgba(141, 112, 90, 0.6);
+    stroke-width: 2.6;
+    fill: none;
+    stroke-linejoin: round;
+}
+
+.maison-svg .ground {
+    stroke: rgba(141, 112, 90, 0.4);
+    stroke-width: 2;
+    fill: none;
+}
+
+.maison-svg .lamp {
+    stroke: rgba(141, 112, 90, 0.5);
+    stroke-width: 1.4;
+    fill: none;
+    stroke-linecap: round;
+}
+
+.maison-svg .lamp-bulb {
+    fill: rgba(141, 112, 90, 0.55);
+}
+
+.maison-svg .window {
+    stroke: rgba(141, 112, 90, 0.42);
+    stroke-width: 1.4;
+    fill: rgba(243, 235, 227, 0.05);
+}
+
+.maison-svg .rug {
+    stroke: rgba(141, 112, 90, 0.28);
+    stroke-width: 1.2;
+    fill: none;
+}
+
+.maison-svg .room-tint {
+    pointer-events: none;
 }
