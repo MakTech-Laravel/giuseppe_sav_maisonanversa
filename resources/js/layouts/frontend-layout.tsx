@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
 import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
+import { MaisonModals } from '@/components/maison/modals/maison-modals';
 import { ContactDock } from '@/components/maison/shell/contact-dock';
 import { EtchingBand } from '@/components/maison/shell/etching-band';
 import { ShellActionsProvider } from '@/components/maison/shell/shell-actions';
@@ -78,7 +79,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                      * owns the openers so every page can call them.
                      */}
                     {modal && (
-                        <ModalPlaceholder
+                        <MaisonModals
                             kind={modal}
                             onClose={() => setModal(null)}
                         />
@@ -86,33 +87,5 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 </div>
             </PageTransition>
         </ShellActionsProvider>
-    );
-}
-
-function ModalPlaceholder({
-    kind,
-    onClose,
-}: {
-    kind: Exclude<ModalKind, null>;
-    onClose: () => void;
-}) {
-    const labels = {
-        newsletter: 'Heritage Letter',
-        order: 'Reserveer Uw Nummer',
-        certificate: 'Heritage Certificaat',
-    } as const;
-
-    return (
-        <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={labels[kind]}
-            className="fixed inset-0 z-9990 flex items-center justify-center bg-choc/80 px-6"
-            onClick={onClose}
-        >
-            <p className="font-sans text-[11px] tracking-[0.3em] text-cream uppercase">
-                {labels[kind]}
-            </p>
-        </div>
     );
 }
