@@ -5,14 +5,46 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FileUploadDemoController;
+use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\PostAttachmentController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 
-Route::inertia('/', 'welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+/*
+ * The public site is locale-prefixed, so the bare root sends visitors to the
+ * Dutch source language. `home` stays the canonical name for the site root.
+ */
+Route::redirect('/', '/'.config('maison.default_locale'))->name('home');
+
+Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
+
+Route::pattern('locale', implode('|', config('maison.locales')));
+
+/*
+ * The 14 public pages. Slugs are canonical rather than translated, so the same
+ * path resolves under every locale prefix.
+ */
+Route::prefix('{locale}')
+    ->middleware('locale')
+    ->name('maison.')
+    ->controller(MaisonController::class)
+    ->group(function () {
+        Route::get('/', 'home')->name('home');
+        Route::get('huis', 'house')->name('house');
+        Route::get('product', 'product')->name('product');
+        Route::get('story', 'story')->name('story');
+        Route::get('circle', 'circle')->name('circle');
+        Route::get('dressing', 'dressing')->name('dressing');
+        Route::get('journal', 'journal')->name('journal');
+        Route::get('community', 'community')->name('community');
+        Route::get('corner', 'corner')->name('corner');
+        Route::get('contact', 'contact')->name('contact');
+        Route::get('privacy', 'privacy')->name('privacy');
+        Route::get('terms', 'terms')->name('terms');
+        Route::get('shipping', 'shipping')->name('shipping');
+        Route::get('care', 'care')->name('care');
+    });
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');

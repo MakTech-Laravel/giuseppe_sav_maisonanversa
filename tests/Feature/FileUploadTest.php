@@ -1,8 +1,11 @@
 <?php
 
+use App\Enums\RoleEnum;
 use App\Models\Attachment;
 use App\Models\Post;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +14,16 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Storage::fake('public');
-    $this->actingAs(User::factory()->create());
+
+    /*
+     * The upload routes sit behind permission middleware, so the uploader needs
+     * a role that carries those permissions rather than a bare user.
+     */
+    $this->seed([PermissionSeeder::class, RoleSeeder::class]);
+
+    $this->actingAs(
+        User::factory()->create()->assignRole(RoleEnum::SUPER_ADMIN->value)
+    );
 });
 
 // ── upload.store (demos §1 & §2) ────────────────────────────────────────────

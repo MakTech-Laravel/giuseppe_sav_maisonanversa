@@ -1,11 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import type {
-    Variants} from 'motion/react';
-import {
-    motion,
-    useMotionTemplate,
-    useMotionValue
-} from 'motion/react';
+import type { Variants } from 'motion/react';
+import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
 import type { ReactNode, MouseEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
@@ -41,7 +36,7 @@ function SpotlightCard({ title, desc, badge, icon }: FeatureCardProps) {
     return (
         <div
             onMouseMove={handleMouseMove}
-            className="group relative flex max-w-full flex-col gap-4 overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-colors duration-300 sm:flex-row dark:border-zinc-800/80 dark:bg-zinc-900/30"
+            className="group relative flex max-w-full flex-col gap-4 overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-colors duration-300 sm:flex-row"
         >
             {/* Spotlight Mask Effect following cursor */}
             <motion.div
@@ -59,7 +54,7 @@ function SpotlightCard({ title, desc, badge, icon }: FeatureCardProps) {
 
             {/* Glowing Corner border flash on hover */}
             <motion.div
-                className="pointer-events-none absolute -inset-px rounded-2xl border border-indigo-500/30 opacity-0 transition duration-300 group-hover:opacity-100 dark:border-indigo-500/20"
+                className="pointer-events-none absolute -inset-px rounded-2xl border border-indigo-500/30 opacity-0 transition duration-300 group-hover:opacity-100"
                 style={{
                     maskImage: useMotionTemplate`
                         radial-gradient(
@@ -78,19 +73,19 @@ function SpotlightCard({ title, desc, badge, icon }: FeatureCardProps) {
                 }}
             />
 
-            <div className="z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-slate-50 dark:border-zinc-700/50 dark:bg-zinc-800/60">
+            <div className="z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-slate-50">
                 {cardIconWrapper(icon)}
             </div>
             <div className="z-10 space-y-1.5">
-                <div className="flex items-center gap-2 font-semibold text-slate-900 dark:text-zinc-100">
+                <div className="flex items-center gap-2 font-semibold text-slate-900">
                     <h3>{title}</h3>
                     {badge && (
-                        <span className="rounded-full border border-indigo-100 bg-indigo-50 px-2.5 py-0.5 text-[10px] font-medium text-indigo-600 dark:border-indigo-900/20 dark:bg-indigo-950/40 dark:text-indigo-400">
+                        <span className="rounded-full border border-indigo-100 bg-indigo-50 px-2.5 py-0.5 text-[10px] font-medium text-indigo-600">
                             {badge}
                         </span>
                     )}
                 </div>
-                <p className="text-xs leading-relaxed text-slate-500 sm:text-sm dark:text-zinc-400">
+                <p className="text-xs leading-relaxed text-slate-500 sm:text-sm">
                     {desc}
                 </p>
             </div>
@@ -201,11 +196,11 @@ export default function Welcome({
             </Head>
 
             {/* Main Wrapper Container */}
-            <div className="relative min-h-screen w-full overflow-hidden bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-50">
+            <div className="relative min-h-screen w-full overflow-hidden bg-slate-50 text-slate-900 transition-colors duration-300">
                 {/* 2. Aceternity Inline High-Fidelity Grid Line Background */}
-                <div className="absolute inset-0 z-0 opacity-40 dark:opacity-70">
+                <div className="absolute inset-0 z-0 opacity-40">
                     <svg
-                        className="h-full w-full [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black_80%)] stroke-slate-200 dark:stroke-zinc-800/60"
+                        className="h-full w-full [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black_80%)] stroke-slate-200"
                         aria-hidden="true"
                     >
                         <defs>
@@ -230,10 +225,10 @@ export default function Welcome({
                 </div>
 
                 {/* Ambient colorful underlying blur element */}
-                <div className="pointer-events-none absolute top-1/4 left-1/2 z-0 h-[450px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-[140px] dark:bg-indigo-500/5" />
+                <div className="pointer-events-none absolute top-1/4 left-1/2 z-0 h-[450px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-[140px]" />
 
                 {/* Premium Navigation Header */}
-                <header className="relative z-50 w-full border-b border-slate-200/50 bg-slate-50/60 backdrop-blur-md dark:border-zinc-900/50 dark:bg-zinc-950/60">
+                <header className="relative z-50 w-full border-b border-slate-200/50 bg-slate-50/60 backdrop-blur-md">
                     <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
                         <div className="flex items-center gap-2.5 text-xl font-bold tracking-tight">
                             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md shadow-indigo-500/10">
@@ -251,7 +246,7 @@ export default function Welcome({
                                     />
                                 </svg>
                             </span>
-                            <span className="bg-gradient-to-r from-slate-950 to-slate-700 bg-clip-text text-transparent dark:from-zinc-50 dark:to-zinc-300">
+                            <span className="bg-gradient-to-r from-slate-950 to-slate-700 bg-clip-text text-transparent">
                                 Nexus
                             </span>
                         </div>
@@ -261,7 +256,7 @@ export default function Welcome({
                                 <>
                                     <Link
                                         href={dashboard()}
-                                        className="rounded-full bg-slate-900 px-5 py-2 text-sm font-medium text-white transition-all hover:bg-slate-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
+                                        className="rounded-full bg-slate-900 px-5 py-2 text-sm font-medium text-white transition-all hover:bg-slate-800"
                                     >
                                         Dashboard
                                     </Link>
@@ -270,14 +265,14 @@ export default function Welcome({
                                 <>
                                     <Link
                                         href={login()}
-                                        className="rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition-all hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                                        className="rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition-all hover:text-slate-900"
                                     >
                                         Sign in
                                     </Link>
                                     {canRegister && (
                                         <Link
                                             href={register()}
-                                            className="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                                            className="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50"
                                         >
                                             Get Started
                                         </Link>
@@ -315,7 +310,7 @@ export default function Welcome({
                         <div className="flex flex-col justify-center lg:col-span-7">
                             <motion.div
                                 variants={itemVariants}
-                                className="mb-6 inline-flex w-fit items-center gap-1.5 rounded-full border border-indigo-200/80 bg-indigo-50/50 px-3 py-1 text-xs font-medium text-indigo-600 dark:border-indigo-900/30 dark:bg-indigo-950/30 dark:text-indigo-400"
+                                className="mb-6 inline-flex w-fit items-center gap-1.5 rounded-full border border-indigo-200/80 bg-indigo-50/50 px-3 py-1 text-xs font-medium text-indigo-600"
                             >
                                 <span className="flex h-1.5 w-1.5 animate-pulse rounded-full bg-indigo-500" />
                                 Premium Interface Matrix Ready
@@ -333,7 +328,7 @@ export default function Welcome({
 
                             <motion.p
                                 variants={itemVariants}
-                                className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 sm:text-xl dark:text-zinc-400"
+                                className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 sm:text-xl"
                             >
                                 Experience a complete workspace architecture
                                 optimized for performance, wrapped seamlessly in
@@ -377,7 +372,7 @@ export default function Welcome({
                     </motion.div>
                 </main>
 
-                <footer className="relative z-10 py-10 text-center text-xs tracking-wide text-slate-400 dark:text-zinc-600">
+                <footer className="relative z-10 py-10 text-center text-xs tracking-wide text-slate-400">
                     &copy; {new Date().getFullYear()} Nexus Inc. All rights
                     reserved.
                 </footer>

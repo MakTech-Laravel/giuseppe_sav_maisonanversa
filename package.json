@@ -30,6 +30,7 @@
         "typescript-eslint": "^8.23.0"
     },
     "dependencies": {
+        "@gsap/react": "^2.1.2",
         "@headlessui/react": "^2.2.0",
         "@inertiajs/react": "^3.0.0",
         "@inertiajs/vite": "^3.0.0",
@@ -55,6 +56,8 @@
         "clsx": "^2.1.1",
         "concurrently": "^9.0.1",
         "globals": "^15.14.0",
+        "gsap": "^3.15.0",
+        "i18next": "^26.3.6",
         "input-otp": "^1.4.2",
         "laravel-precognition-react": "^2.0.0",
         "laravel-vite-plugin": "^3.1",
@@ -64,6 +67,7 @@
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
         "react-error-boundary": "^6.1.1",
+        "react-i18next": "^17.0.11",
         "sonner": "^2.0.0",
         "tailwind-merge": "^3.0.1",
         "tailwindcss": "^4.0.0",
