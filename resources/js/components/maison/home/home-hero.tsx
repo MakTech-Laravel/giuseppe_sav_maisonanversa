@@ -16,43 +16,34 @@ export function HomeHero({ edition }: { edition: Edition }) {
 
     return (
         <section className="relative flex min-h-[calc(100vh-var(--topbar-h)-var(--nav-h))] items-end overflow-hidden bg-choc">
+            {/*
+             * The photograph must sit above the section's solid fill — a negative
+             * z-index drops it behind `bg-choc` and the mansion never appears.
+             */}
+            <PlaceholderImage
+                asset="hero-mansion"
+                ratio={null}
+                alt=""
+                captioned={false}
+                loading="eager"
+                className="absolute inset-0 h-full w-full"
+            />
+
             <div
                 aria-hidden="true"
                 className="absolute inset-0"
                 style={{
                     backgroundImage: [
-                        'linear-gradient(158deg, rgba(41,28,24,0.45) 0%, rgba(41,28,24,0.25) 35%, rgba(41,28,24,0.75) 70%, rgba(10,7,4,0.95) 100%)',
-                        'radial-gradient(ellipse at 68% 28%, rgba(100,68,40,0.30) 0%, transparent 42%)',
-                        'radial-gradient(ellipse at 20% 70%, rgba(35,22,12,0.55) 0%, transparent 50%)',
+                        'linear-gradient(158deg, rgba(41,28,24,0.35) 0%, rgba(41,28,24,0.15) 35%, rgba(41,28,24,0.55) 70%, rgba(10,7,4,0.88) 100%)',
+                        'radial-gradient(ellipse at 68% 28%, rgba(100,68,40,0.22) 0%, transparent 42%)',
+                        'radial-gradient(ellipse at 20% 70%, rgba(35,22,12,0.4) 0%, transparent 50%)',
                     ].join(', '),
                 }}
-            >
-                <PlaceholderImage
-                    asset="hero-mansion"
-                    ratio={null}
-                    alt=""
-                    captioned={false}
-                    loading="eager"
-                    className="absolute inset-0 -z-10 h-full w-full opacity-70"
-                />
-            </div>
+            />
 
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.13]"
-            >
-                <PlaceholderImage
-                    asset="maison-facade-house"
-                    ratio={null}
-                    alt=""
-                    captioned={false}
-                    className="w-[min(620px,86vw)] mix-blend-screen"
-                />
-            </div>
-
-            <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-linear-to-b from-choc/20 via-choc/5 via-30% to-choc/95"
+                className="absolute inset-0 bg-linear-to-b from-choc/25 via-transparent via-45% to-choc/85"
             />
 
             <div className="relative z-2 mx-auto w-full max-w-320 px-8 pb-16 md:px-20 md:pb-20">

@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
@@ -9,8 +9,8 @@ import { activePage, PRIMARY_NAV } from '@/lib/maison-navigation';
 import { cn } from '@/lib/utils';
 
 /**
- * The 90px header: stacked wordmark above the links on a wide screen, a single
- * row with a hamburger below 768px.
+ * The 90px header: wordmark centred above a single centred row of links and
+ * the language switcher — matching the brand bar the design shows on every page.
  *
  * The active link is derived from the current URL rather than set by whatever
  * triggered the navigation, so it cannot disagree with the page on screen.
@@ -19,7 +19,6 @@ export function SiteNav() {
     const { url } = usePage();
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const [scrolled, setScrolled] = useState(false);
 
     /*
      * The menu belongs to the page it was opened on, so remembering which page
@@ -31,32 +30,18 @@ export function SiteNav() {
 
     const current = activePage(url, locale);
 
-    /*
-     * The header sits over the page rather than above it, so it deepens slightly
-     * once content has begun to slide underneath.
-     */
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
-
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
-
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
-
     return (
         <nav
             className={cn(
-                'fixed inset-x-0 top-(--topbar-h) z-199 border-b border-gold/12 backdrop-blur-xl transition-colors duration-300',
-                scrolled ? 'bg-choc/99' : 'bg-choc/96',
-                'flex h-(--nav-h) items-center justify-between gap-3 px-6',
-                'md:h-(--nav-h) md:flex-col md:justify-center md:gap-2 md:px-12',
+                'fixed inset-x-0 top-(--topbar-h) z-199 h-(--nav-h) border-b border-gold/15 bg-choc',
+                'flex items-center justify-between gap-3 px-6',
+                'md:flex-col md:items-center md:justify-center md:gap-2 md:px-8',
             )}
         >
             <MaisonLink
                 to="home"
                 data-magnetic
-                className="flex items-center gap-2.5 md:flex-col md:gap-0.5"
+                className="flex items-center gap-2.5 md:flex-col md:items-center md:gap-0.5"
             >
                 <PlaceholderImage
                     asset="logo-icon"
@@ -80,7 +65,7 @@ export function SiteNav() {
                 aria-expanded={open}
                 aria-controls="maison-nav-links"
                 onClick={() => setOpenedOn(open ? null : url)}
-                className="flex size-11 flex-col items-center justify-center gap-1.25 md:hidden"
+                className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25 md:hidden"
             >
                 {[0, 1, 2].map((bar) => (
                     <span
@@ -100,39 +85,43 @@ export function SiteNav() {
                 ))}
             </button>
 
-            <ul
+            <div
                 id="maison-nav-links"
                 className={cn(
-                    'absolute top-full left-0 w-full flex-col border-b border-gold/20 bg-choc/99 px-6 pt-1.5 pb-3.5',
-                    open ? 'flex' : 'hidden',
-                    'md:static md:w-auto md:flex-row md:gap-8 md:border-0 md:bg-transparent md:p-0',
+                    'absolute top-full left-0 z-10 w-full border-b border-gold/20 bg-choc px-6 pt-1.5 pb-3.5',
+                    open ? 'flex flex-col' : 'hidden',
+                    'md:static md:flex md:w-auto md:flex-row md:items-center md:gap-8 md:border-0 md:bg-transparent md:p-0',
                 )}
             >
-                {PRIMARY_NAV.map(({ page, label }) => (
-                    <li key={page} className="w-full md:w-auto">
-                        <MaisonLink
-                            to={page}
-                            aria-current={current === page ? 'page' : undefined}
-                            // Tapping the page you are already on should still
-                            // dismiss the menu, and that fires no navigation.
-                            onClick={() => setOpenedOn(null)}
-                            className={cn(
-                                'flex min-h-11 w-full items-center border-b border-gold/10 py-4 font-sans text-xs tracking-[0.25em] uppercase transition-colors',
-                                'md:border-b md:pb-0.5 md:text-[9px]',
-                                current === page
-                                    ? 'border-b-gold text-gold md:border-b-gold'
-                                    : 'text-cream/65 hover:text-gold md:border-b-transparent md:hover:border-b-gold',
-                            )}
-                        >
-                            {t(label)}
-                        </MaisonLink>
-                    </li>
-                ))}
+                <ul className="flex w-full flex-col md:w-auto md:flex-row md:flex-nowrap md:items-center md:gap-8">
+                    {PRIMARY_NAV.map(({ page, label }) => (
+                        <li key={page} className="w-full md:w-auto">
+                            <MaisonLink
+                                to={page}
+                                aria-current={
+                                    current === page ? 'page' : undefined
+                                }
+                                // Tapping the page you are already on should still
+                                // dismiss the menu, and that fires no navigation.
+                                onClick={() => setOpenedOn(null)}
+                                className={cn(
+                                    'flex min-h-11 w-full items-center border-b border-gold/10 py-4 font-sans text-xs tracking-[0.25em] uppercase transition-colors',
+                                    'md:min-h-0 md:w-auto md:border-b md:py-0 md:pb-0.5 md:text-[9px]',
+                                    current === page
+                                        ? 'border-b-gold text-gold md:border-b-gold'
+                                        : 'text-cream/65 hover:text-gold md:border-b-transparent md:hover:border-b-gold',
+                                )}
+                            >
+                                {t(label)}
+                            </MaisonLink>
+                        </li>
+                    ))}
+                </ul>
 
-                <li className="mt-3 md:mt-0 md:ml-4">
-                    <LanguageSwitcher />
-                </li>
-            </ul>
+                <div className="mt-3 border-t border-gold/15 pt-3 md:mt-0 md:border-0 md:pt-0">
+                    <LanguageSwitcher className="md:gap-1 [&_button]:md:min-h-0 [&_button]:md:min-w-0 [&_button]:md:rounded-sm [&_button]:md:px-1.5 [&_button]:md:py-1 [&_button]:md:text-[9px]" />
+                </div>
+            </div>
         </nav>
     );
 }

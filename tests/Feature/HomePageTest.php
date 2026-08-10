@@ -1,5 +1,7 @@
 <?php
 
+use App\Support\Imagery;
+
 test('the home page receives the edition figures from config', function () {
     config([
         'maison.edition.reserved' => 73,
@@ -42,6 +44,35 @@ test('the hero stock counter reads available, not a hardcoded remainder', functi
         ->toContain('edition.available')
         ->not->toContain('>27<')
         ->not->toContain("'27'");
+});
+
+test('the home marquee sits on chocolate with cream type', function () {
+    $source = file_get_contents(resource_path('js/components/maison/home/home-marquee.tsx'));
+
+    expect($source)
+        ->toContain('bg-choc')
+        ->toContain('text-cream/85')
+        ->toContain('border-gold/20')
+        ->toContain('Gebouwd voor generaties')
+        ->not->toContain('bg-cream')
+        ->not->toContain('bg-gold/8')
+        ->not->toContain('mask-image');
+});
+
+test('the home hero uses the mansion photograph as its full-bleed backdrop', function () {
+    $source = file_get_contents(resource_path('js/components/maison/home/home-hero.tsx'));
+
+    expect($source)
+        ->toContain('asset="hero-mansion"')
+        ->toContain('className="absolute inset-0 h-full w-full"')
+        ->not->toContain('-z-10');
+
+    expect(Imagery::existingPaths())
+        ->toContain('images/brand/hero-mansion.png');
+});
+
+test('the mansion photograph is on disk under the public brand path', function () {
+    expect(public_path('images/brand/hero-mansion.png'))->toBeFile();
 });
 
 test('the content grid uses crawlable links rather than click handlers on divs', function () {
