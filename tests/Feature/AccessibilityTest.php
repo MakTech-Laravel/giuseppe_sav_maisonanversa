@@ -13,7 +13,7 @@ test('the public stylesheet publishes brand-palette focus rings', function () {
 test('the site keeps Tailwind dark utilities inert on OS dark preference', function () {
     $css = File::get(resource_path('css/app.css'));
 
-    expect($css)->toContain("@custom-variant dark (&:is(.dark *))");
+    expect($css)->toContain('@custom-variant dark (&:is(.dark *))');
 });
 
 test('maison components do not opt into Tailwind dark mode utilities', function () {
@@ -32,6 +32,34 @@ test('maison components do not opt into Tailwind dark mode utilities', function 
     }
 
     expect($withDarkUtilities)->toBe([]);
+});
+
+test('the root template stays light mode only', function () {
+    $html = File::get(resource_path('views/app.blade.php'));
+
+    expect($html)
+        ->toContain('light-mode only')
+        ->not->toMatch('/class=["\'][^"\']*\bdark\b/');
+});
+
+test('maison source does not mount a document-level dark class', function () {
+    $withDocumentDark = [];
+
+    foreach (File::allFiles(resource_path('js')) as $file) {
+        $path = str_replace('\\', '/', $file->getPathname());
+
+        if (! str_contains($path, '/maison') || ! in_array($file->getExtension(), ['ts', 'tsx'], true)) {
+            continue;
+        }
+
+        $source = $file->getContents();
+
+        if (preg_match('/(?:className=["\'][^"\']*\bdark\b|classList\.(?:add|toggle)\(["\']dark["\']\))/', $source) === 1) {
+            $withDocumentDark[] = $file->getFilename();
+        }
+    }
+
+    expect($withDocumentDark)->toBe([]);
 });
 
 test('dressing is part of the navigation manifest and page registry', function () {
@@ -65,7 +93,7 @@ test('primary shell controls meet the forty-four pixel touch target', function (
     ];
 
     foreach ($targets as $file => $needles) {
-        $source = File::get(resource_path("js/components/maison/".(
+        $source = File::get(resource_path('js/components/maison/'.(
             str_contains($file, 'maison-button') ? "ui/{$file}" : "shell/{$file}"
         )));
 

@@ -68,8 +68,32 @@ test('every page renders its component in every locale', function (
         ->assertInertia(fn ($page) => $page
             ->component($component)
             ->where('locale', $locale)
+            ->where('availableLocales', MAISON_LOCALES)
         );
 })->with(maisonPagesAcrossLocales());
+
+test('the bare root redirects to the dutch locale', function () {
+    $this->get('/')->assertRedirect('/nl');
+});
+
+test('every public page passes a feature smoke check in every locale', function (
+    string $locale,
+    string $slug,
+    string $component,
+) {
+    $response = $this->get(rtrim("/{$locale}/{$slug}", '/'));
+
+    $response
+        ->assertOk()
+        ->assertHeader('content-type', 'text/html; charset=utf-8')
+        ->assertInertia(fn ($page) => $page->component($component));
+})->with(maisonPagesAcrossLocales());
+
+/*
+ * Pest browser testing (`pest-plugin-browser`) is not installed in this
+ * project, so console-error smoke is covered by the HTTP feature checks above
+ * instead of `visit()` / `assertNoJavaScriptErrors()`.
+ */
 
 test('every page is registered under a locale-prefixed named route', function (
     string $name,
