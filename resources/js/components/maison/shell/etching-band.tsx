@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 
 /**
- * The full-width Antwerp etching above the footer, faded into the chocolate at
+ * The full-width Antwerp etching below the footer, faded into the chocolate at
  * both edges so it reads as an impression rather than a photograph.
  */
 export function EtchingBand() {
