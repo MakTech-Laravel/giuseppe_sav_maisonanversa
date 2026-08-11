@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { MaisonFloorplan } from '@/components/maison/house/maison-floorplan';
 import { MaisonRoomList } from '@/components/maison/house/maison-room-list';
