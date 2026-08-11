@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { CirclePortal } from '@/components/maison/circle/circle-portal';
 import { MaisonLink } from '@/components/maison/maison-link';
