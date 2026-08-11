@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { PageHero } from '@/components/maison/ui/page-hero';
