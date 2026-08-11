@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { ProductCraft } from '@/components/maison/product/product-craft';
 import { ProductDetail } from '@/components/maison/product/product-detail';
