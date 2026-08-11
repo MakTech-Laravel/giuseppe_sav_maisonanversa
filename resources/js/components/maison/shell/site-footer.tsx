@@ -16,14 +16,22 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
 
     return (
         <footer className="relative overflow-hidden border-t border-gold/12 bg-choc px-6 pt-12 pb-25 md:px-20 md:pt-15 md:pb-9">
-            <div className="mb-7 grid gap-9 border-b border-gold/8 pb-11 ma-lg:grid-cols-[2fr_1fr_1fr_1fr] ma-lg:gap-12 md:grid-cols-2">
-                <div className="flex flex-col items-start gap-1.5">
-                    <PlaceholderImage
-                        asset="logo-icon"
-                        alt=""
-                        captioned={false}
-                        className="mb-1 size-9"
-                    />
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-50 bg-[radial-gradient(ellipse_at_50%_100%,rgba(141,112,90,0.03)_0%,transparent_60%)]"
+            />
+
+            <div className="relative mb-7 grid grid-cols-1 gap-9 border-b border-gold/8 pb-11 ma-md:grid-cols-2 ma-md:gap-8 ma-lg:grid-cols-[2fr_1fr_1fr_1fr] ma-lg:gap-12">
+                <div className="flex flex-col items-start gap-1.5 ma-md:col-span-2 ma-lg:col-span-1">
+                    <div className="mb-1 size-8 overflow-hidden">
+                        <PlaceholderImage
+                            asset="logo-icon"
+                            ratio={null}
+                            alt="Maison Anversa"
+                            captioned={false}
+                            className="size-full [&_img]:object-cover"
+                        />
+                    </div>
 
                     <span className="font-serif text-base font-medium tracking-[0.2em] text-cream uppercase">
                         Maison Anversa
@@ -56,6 +64,14 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                                         >
                                             {t(item.label)}
                                         </MaisonLink>
+                                    ) : item.label === 'Heritage Letter' ? (
+                                        <button
+                                            type="button"
+                                            onClick={onNewsletter}
+                                            className="flex min-h-11 items-center py-1.5 font-sans text-[11px] font-light tracking-[0.08em] text-stone transition-colors hover:text-cream md:min-h-0 md:py-0"
+                                        >
+                                            {t('Heritage Letter')}
+                                        </button>
                                     ) : (
                                         <a
                                             href={item.href}
@@ -76,24 +92,12 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                                     )}
                                 </li>
                             ))}
-
-                            {column.heading === 'Volg Ons' && (
-                                <li>
-                                    <button
-                                        type="button"
-                                        onClick={onNewsletter}
-                                        className="flex min-h-11 items-center py-1.5 font-sans text-[11px] font-light tracking-[0.08em] text-stone transition-colors hover:text-cream md:min-h-0 md:py-0"
-                                    >
-                                        {t('Heritage Letter')}
-                                    </button>
-                                </li>
-                            )}
                         </ul>
                     </div>
                 ))}
             </div>
 
-            <div className="flex flex-col items-start justify-between gap-2 pt-6 md:flex-row md:items-center md:pt-0">
+            <div className="relative flex flex-col items-start justify-between gap-2 pt-6 md:flex-row md:items-center md:pt-0">
                 <p className="font-sans text-[10px] font-light tracking-[0.12em] text-stone/50 md:text-[9px]">
                     {t('© 2026 Maison Anversa. Alle rechten voorbehouden.')}
                 </p>

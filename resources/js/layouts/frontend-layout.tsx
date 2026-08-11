@@ -20,7 +20,7 @@ type ModalKind = 'newsletter' | 'order' | 'certificate' | null;
 
 /**
  * The public site shell: the fixed topbar and header, the cinematic overlays,
- * the etching band, the footer and the contact dock.
+ * the footer, the etching band and the contact dock.
  *
  * Everything here is rendered exactly once and survives navigation, so the
  * header keeps its state and the scroll reveals rebind per page rather than
@@ -63,8 +63,8 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                         {children}
                     </main>
 
-                    <EtchingBand />
                     <SiteFooter onNewsletter={actions.openNewsletter} />
+                    <EtchingBand />
                     <ContactDock />
 
                     {/*

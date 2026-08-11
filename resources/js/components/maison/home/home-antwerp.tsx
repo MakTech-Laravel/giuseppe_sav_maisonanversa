@@ -52,14 +52,14 @@ export function HomeAntwerp() {
                     </div>
                 </Reveal>
 
-                <Reveal className="relative aspect-4/5 overflow-hidden">
+                <Reveal className="relative aspect-4/5 w-full overflow-hidden">
                     <PlaceholderImage
                         asset="antwerp-cityscape"
                         ratio={null}
-                        alt="Antwerpen"
+                        alt="Antwerpen bij gouden uur"
                         captioned={false}
                         overlay="linear-gradient(to top, rgba(41,28,24,0.5) 0%, transparent 50%)"
-                        className="absolute inset-0 h-full w-full"
+                        className="absolute inset-0 h-full w-full [&_img]:object-cover [&_img]:object-center"
                     />
                     <div className="absolute bottom-6 left-6 font-sans text-[9px] font-light tracking-[0.3em] text-gold uppercase">
                         Antwerp · Belgium · Est. 2026
