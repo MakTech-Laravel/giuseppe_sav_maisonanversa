@@ -7,22 +7,18 @@ import { TextLink } from '@/components/maison/ui/text-link';
 
 const VALUES = [
     {
-        icon: '◈',
         title: 'Europees Erfgoed',
         desc: 'Geïnspireerd door eeuwen Europese cultuur en klassieke waarden.',
     },
     {
-        icon: '✦',
         title: 'Vakmanschap',
         desc: 'De meest verfijnde materialen. Minutieuze aandacht voor elk detail.',
     },
     {
-        icon: '◎',
         title: 'Gemeenschap',
         desc: 'Mensen samenbrengen die dezelfde waarden delen.',
     },
     {
-        icon: '⬡',
         title: 'Gebouwd om te Blijven',
         desc: 'Producten en ervaringen die de tand des tijds doorstaan.',
     },
@@ -32,17 +28,13 @@ export function HomeStory() {
     const { t } = useTranslation();
 
     return (
-        <div className="grid min-h-120 bg-cream ma-lg:grid-cols-[1fr_1.1fr_1fr] md:grid-cols-2">
-            <Reveal className="flex flex-col justify-center border-gold/15 px-8 py-16 md:border-r md:px-13">
+        <div className="grid min-h-120 grid-cols-1 bg-cream ma-md:grid-cols-2 ma-lg:grid-cols-[1fr_1.1fr_1fr]">
+            <Reveal className="flex flex-col justify-center border-gold/15 px-8 py-16 ma-md:border-r ma-md:px-13">
                 <Eyebrow tone="gold2">{t('Ons Verhaal')}</Eyebrow>
                 <h2 className="mt-3 mb-5 font-serif text-[clamp(26px,3vw,38px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
-                    {t('Geworteld in')}
+                    {t('Geworteld in')} {t('Antwerpen.')}
                     <br />
-                    {t('Antwerpen.')}
-                    <br />
-                    {t('Gebouwd voor')}
-                    <br />
-                    {t('generaties.')}
+                    {t('Gebouwd voor')} {t('generaties.')}
                 </h2>
                 <p className="mb-4 text-[15px] leading-[1.85] text-choc3">
                     {t(
@@ -59,31 +51,25 @@ export function HomeStory() {
                 </TextLink>
             </Reveal>
 
-            <div className="relative flex min-h-60 items-center justify-center overflow-hidden bg-choc2 md:min-h-120">
-                <PlaceholderImage
-                    asset="atelier-workshop"
-                    ratio={null}
-                    alt=""
-                    captioned={false}
-                    overlay="linear-gradient(145deg, rgba(53,39,34,0.82) 0%, rgba(41,28,24,0.92) 100%)"
-                    className="absolute inset-0 h-full w-full"
+            <div className="relative flex min-h-60 flex-col overflow-hidden bg-choc2 ma-md:min-h-120">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(141,112,90,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(141,112,90,0.04)_1px,transparent_1px)] bg-[size:48px_48px]"
                 />
-                <div className="relative z-1 flex flex-col items-center gap-1.5">
-                    <div className="opacity-[0.08]">
-                        <PlaceholderImage
-                            asset="logo-icon"
-                            ratio="1 / 1"
-                            alt="Maison Anversa"
-                            captioned={false}
-                            className="size-10 mix-blend-screen"
-                        />
-                    </div>
-                    <div className="font-serif text-[14px] tracking-[0.25em] text-cream/35 uppercase">
+                <div className="relative z-1 flex flex-1 flex-col items-center justify-center gap-2 px-6">
+                    <PlaceholderImage
+                        asset="logo-icon"
+                        ratio="1 / 1"
+                        alt="Maison Anversa"
+                        captioned={false}
+                        className="size-11 opacity-70"
+                    />
+                    <div className="font-serif text-[14px] tracking-[0.28em] text-sand uppercase">
                         Maison Anversa
                     </div>
                 </div>
-                <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 border-t border-gold/15 bg-gold/8 px-6 py-3">
-                    <div className="size-7.5 shrink-0 overflow-hidden rounded-full border border-gold">
+                <div className="relative z-1 flex items-center gap-3 border-t border-gold/20 px-6 py-3.5">
+                    <div className="flex size-7.5 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gold/50">
                         <PlaceholderImage
                             asset="logo-icon"
                             ratio="1 / 1"
@@ -100,7 +86,7 @@ export function HomeStory() {
                 </div>
             </div>
 
-            <div className="hidden flex-col justify-center gap-6 border-l border-gold/15 px-10 py-10 ma-lg:flex">
+            <div className="flex flex-col justify-center gap-6 border-gold/15 px-8 py-12 ma-md:col-span-2 ma-md:grid ma-md:grid-cols-2 ma-md:gap-x-10 ma-md:gap-y-6 ma-md:border-t ma-md:px-13 ma-lg:col-span-1 ma-lg:flex ma-lg:border-t-0 ma-lg:border-l ma-lg:px-10 ma-lg:py-10">
                 {VALUES.map((value) => (
                     <Reveal
                         key={value.title}
@@ -109,9 +95,9 @@ export function HomeStory() {
                     >
                         <span
                             aria-hidden="true"
-                            className="mt-0.5 flex size-6.5 shrink-0 items-center justify-center rounded-full border border-gold/35 text-[11px] text-gold2"
+                            className="mt-0.5 flex size-6.5 shrink-0 items-center justify-center rounded-full border border-gold/35 text-[12px] leading-none text-gold2"
                         >
-                            {value.icon}
+                            +
                         </span>
                         <div>
                             <div className="mb-0.75 font-sans text-[9px] font-medium tracking-[0.22em] text-choc uppercase">

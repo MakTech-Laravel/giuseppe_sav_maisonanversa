@@ -195,6 +195,29 @@ test('the six panels are the prototype\'s six room photographs, in order', funct
     expect($paths)->toBe($prototype[1]);
 });
 
+test('every intro room photograph is on disk under public/images/rooms', function () {
+    $rooms = [
+        'room-entrance',
+        'room-library',
+        'room-atelier',
+        'room-dressing',
+        'room-coffee',
+        'room-courtyard',
+    ];
+
+    foreach ($rooms as $room) {
+        expect(public_path("images/rooms/{$room}.png"))->toBeFile();
+    }
+
+    expect(\App\Support\Imagery::existingPaths())
+        ->toContain('images/rooms/room-entrance.png')
+        ->toContain('images/rooms/room-library.png')
+        ->toContain('images/rooms/room-atelier.png')
+        ->toContain('images/rooms/room-dressing.png')
+        ->toContain('images/rooms/room-coffee.png')
+        ->toContain('images/rooms/room-courtyard.png');
+});
+
 test('the closing card stands in the courtyard, so its panel never re-zooms', function () {
     $rooms = quotedValues(introSource(), 'room');
 

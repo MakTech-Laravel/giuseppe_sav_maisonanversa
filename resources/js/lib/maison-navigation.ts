@@ -68,6 +68,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
             { page: 'contact', label: 'Contact' },
             { page: 'shipping', label: 'Verzending & Retour' },
             { page: 'care', label: 'Zorg & Garantie' },
+            { page: 'contact', label: 'FAQ' },
             { page: 'privacy', label: 'Privacybeleid' },
             { page: 'terms', label: 'Algemene voorwaarden' },
         ],
@@ -76,6 +77,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
         heading: 'Volg Ons',
         items: [
             { href: 'https://www.instagram.com/', label: 'Instagram' },
+            { href: '#heritage-letter', label: 'Heritage Letter' },
             { href: 'mailto:press@maisonanversa.com', label: 'Pers' },
         ],
     },

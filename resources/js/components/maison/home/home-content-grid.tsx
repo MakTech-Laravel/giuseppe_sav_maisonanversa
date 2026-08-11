@@ -49,21 +49,21 @@ export function HomeContentGrid() {
     const { t } = useTranslation();
 
     return (
-        <div className="grid bg-choc text-cream ma-lg:grid-cols-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 bg-choc text-cream ma-md:grid-cols-2 ma-lg:grid-cols-4">
             {CARDS.map((card) => (
                 <Reveal key={card.link} as="div">
                     <MaisonLink
                         to={card.to}
-                        className="flex min-h-80 flex-col border-r border-gold/8 px-9 py-12 transition-colors last:border-r-0 hover:bg-gold/4"
+                        className="group flex min-h-80 flex-col border-b border-gold/8 px-9 py-12 transition-colors hover:bg-gold/4 ma-md:border-r ma-lg:border-b-0 ma-lg:last:border-r-0"
                     >
-                        <div className="-mx-9 -mt-12 mb-6 min-h-40 overflow-hidden">
+                        <div className="-mx-9 -mt-12 mb-6 h-40 overflow-hidden">
                             <PlaceholderImage
                                 asset={card.asset}
                                 ratio={null}
                                 alt=""
                                 captioned={false}
                                 overlay="linear-gradient(to top, rgba(41,28,24,0.55) 0%, rgba(41,28,24,0.15) 100%)"
-                                className="h-40 w-full"
+                                className="h-full w-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:object-center"
                             />
                         </div>
                         <div className="mb-1.5 font-sans text-[9px] font-medium tracking-[0.28em] text-gold uppercase">
