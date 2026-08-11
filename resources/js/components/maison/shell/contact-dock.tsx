@@ -153,7 +153,7 @@ export function ContactDock() {
                     alt=""
                     captioned={false}
                     ratio={null}
-                    className="pointer-events-none size-7 opacity-96 ma-sm:size-9"
+                    className="pointer-events-none size-7 opacity-96 ma-sm:size-9 [&_img]:object-contain"
                 />
             </button>
         </div>

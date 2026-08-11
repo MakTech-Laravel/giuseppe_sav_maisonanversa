@@ -96,7 +96,7 @@ export const IMAGE_ASSETS = {
     },
     'antwerp-cityscape': {
         path: 'images/brand/antwerp-cityscape.png',
-        ratio: '3 / 2',
+        ratio: '4 / 5',
         label: 'Antwerpen',
         gradient: `linear-gradient(200deg, ${GOLD} 0%, ${CHOC2} 65%, ${CHOC} 100%)`,
     },
@@ -104,7 +104,7 @@ export const IMAGE_ASSETS = {
     /* The product photography. */
     'heritage-001-front': {
         path: 'images/product/heritage-001-front.png',
-        ratio: '4 / 5',
+        ratio: '3 / 4',
         label: 'Heritage No.001',
         gradient: `linear-gradient(140deg, ${CHOC2} 0%, ${CHOC} 100%)`,
     },

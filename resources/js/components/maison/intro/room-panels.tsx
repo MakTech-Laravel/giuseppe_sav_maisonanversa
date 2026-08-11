@@ -88,7 +88,7 @@ export function RoomPanels({ panel }: { panel: number }) {
                         alt=""
                         captioned={false}
                         loading="eager"
-                        className="h-full w-full"
+                        className="h-full w-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:object-center"
                     />
                 </div>
             ))}
