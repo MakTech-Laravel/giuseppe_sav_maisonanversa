@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Journal;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,9 @@ test('the sitemap lists every public page in every locale', function () {
         }
     }
 
-    expect(substr_count($body, '<loc>'))->toBe(14 * count($locales));
+    expect(substr_count($body, '<loc>'))->toBe(
+        (14 + count(Journal::slugs())) * count($locales),
+    );
 });
 
 test('every public page mounts the shared SEO head component', function (string $componentPath) {
@@ -44,6 +47,7 @@ test('every public page mounts the shared SEO head component', function (string 
     'circle',
     'dressing',
     'journal',
+    'journal/show',
     'community',
     'corner',
     'contact',

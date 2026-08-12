@@ -37,6 +37,9 @@ Route::prefix('{locale}')
         Route::get('circle', 'circle')->name('circle');
         Route::get('dressing', 'dressing')->name('dressing');
         Route::get('journal', 'journal')->name('journal');
+        Route::get('journal/{slug}', 'journalShow')
+            ->where('slug', '[a-z0-9-]+')
+            ->name('journal.show');
         Route::get('community', 'community')->name('community');
         Route::get('corner', 'corner')->name('corner');
         Route::get('contact', 'contact')->name('contact');

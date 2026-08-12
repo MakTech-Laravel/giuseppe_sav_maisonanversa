@@ -5,10 +5,12 @@ import { maisonUrl } from '@/lib/maison-navigation';
 import type { MaisonPage } from '@/lib/maison-navigation';
 
 type MaisonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
-    to: MaisonPage;
     /** Fragment to append, for deep links into a section of the target page. */
     hash?: string;
-};
+} & (
+        | { to: MaisonPage; href?: undefined }
+        | { to?: undefined; href: string }
+    );
 
 /**
  * An internal link that navigates through the cinematic page transition.
@@ -19,10 +21,17 @@ type MaisonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
  * links were all `href="#"` with the destination hidden in an onclick handler,
  * so none of that worked.
  */
-export function MaisonLink({ to, hash, onClick, ...props }: MaisonLinkProps) {
+export function MaisonLink({
+    to,
+    href: hrefProp,
+    hash,
+    onClick,
+    ...props
+}: MaisonLinkProps) {
     const { locale } = useLocale();
     const navigate = usePageTransition();
-    const href = maisonUrl(to, locale) + (hash ? `#${hash}` : '');
+    const href =
+        hrefProp ?? maisonUrl(to as MaisonPage, locale) + (hash ? `#${hash}` : '');
 
     function handleClick(event: MouseEvent<HTMLAnchorElement>) {
         onClick?.(event);
