@@ -9,10 +9,11 @@ beforeEach(function () {
     $this->skipUnlessFortifyHas(Features::resetPasswords());
 });
 
-test('reset password link screen can be rendered', function () {
+test('reset password link screen redirects to the auth modal', function () {
     $response = $this->get(route('password.request'));
 
-    $response->assertOk();
+    $response->assertRedirect(localized('maison.home', absolute: false));
+    $response->assertSessionHas('open_auth_modal', 'forgot');
 });
 
 test('reset password link can be requested', function () {
@@ -32,8 +33,11 @@ test('reset password screen can be rendered', function () {
 
     $this->post(route('password.email'), ['email' => $user->email]);
 
-    Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-        $response = $this->get(route('password.reset', $notification->token));
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        $response = $this->get(route('password.reset', [
+            'token' => $notification->token,
+            'email' => $user->email,
+        ]));
 
         $response->assertOk();
 
@@ -58,7 +62,7 @@ test('password can be reset with valid token', function () {
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect(route('login'));
+            ->assertRedirect(localized('dashboard', absolute: false));
 
         return true;
     });

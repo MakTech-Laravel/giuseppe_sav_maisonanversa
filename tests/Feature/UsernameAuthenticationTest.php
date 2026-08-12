@@ -9,7 +9,7 @@ test('registration creates an auto-generated username', function () {
         'email' => 'yusuf@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
-    ])->assertRedirect(route('member.dashboard', absolute: false));
+    ])->assertRedirect(localized('member.dashboard', absolute: false));
 
     $user = User::where('email', 'yusuf@example.com')->sole();
 
@@ -27,7 +27,7 @@ test('users can authenticate with their email', function () {
     $this->post(route('login.store'), [
         'email' => $user->email,
         'password' => 'password',
-    ])->assertRedirect(route('member.dashboard', absolute: false));
+    ])->assertRedirect(localized('member.dashboard', absolute: false));
 
     $this->assertAuthenticatedAs($user);
 });
@@ -42,7 +42,7 @@ test('users can authenticate with their username', function () {
     $this->post(route('login.store'), [
         'email' => 'maison_member',
         'password' => 'password',
-    ])->assertRedirect(route('member.dashboard', absolute: false));
+    ])->assertRedirect(localized('member.dashboard', absolute: false));
 
     $this->assertAuthenticatedAs($user);
 });
@@ -52,7 +52,7 @@ test('profile username updates must stay unique', function () {
     User::factory()->create(['username' => 'taken_name']);
 
     $this->actingAs($owner)
-        ->patch(route('profile.update'), [
+        ->patch(localized('profile.update'), [
             'name' => $owner->name,
             'email' => $owner->email,
             'username' => 'taken_name',
@@ -60,12 +60,12 @@ test('profile username updates must stay unique', function () {
         ->assertSessionHasErrors('username');
 
     $this->actingAs($owner)
-        ->patch(route('profile.update'), [
+        ->patch(localized('profile.update'), [
             'name' => $owner->name,
             'email' => $owner->email,
             'username' => 'owner_two',
         ])
-        ->assertRedirect(route('profile.edit'));
+        ->assertRedirect(localized('profile.edit', absolute: false));
 
     expect($owner->fresh()->username)->toBe('owner_two');
 });

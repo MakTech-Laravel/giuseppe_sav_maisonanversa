@@ -17,7 +17,7 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, string $locale): Response
     {
         $search = trim((string) $request->query('search', ''));
 
@@ -34,14 +34,14 @@ class RoleController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(string $locale): Response
     {
         return Inertia::render('admin/roles/create', [
             'permissions' => $this->permissions(),
         ]);
     }
 
-    public function store(StoreRoleRequest $request): RedirectResponse
+    public function store(StoreRoleRequest $request, string $locale): RedirectResponse
     {
         $role = Role::create([
             'name' => $request->validated('name'),
@@ -55,7 +55,7 @@ class RoleController extends Controller
         return redirect()->route('admin.roles.index');
     }
 
-    public function edit(Role $role): Response
+    public function edit(string $locale, Role $role): Response
     {
         $role->load('permissions:id,name');
 
@@ -70,7 +70,7 @@ class RoleController extends Controller
         ]);
     }
 
-    public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
+    public function update(UpdateRoleRequest $request, string $locale, Role $role): RedirectResponse
     {
         $role->update(['name' => $request->validated('name')]);
         $role->syncPermissions($request->validated('permissions', []));
@@ -80,7 +80,7 @@ class RoleController extends Controller
         return redirect()->route('admin.roles.index');
     }
 
-    public function destroy(Role $role): RedirectResponse
+    public function destroy(string $locale, Role $role): RedirectResponse
     {
         if ($role->name === RoleEnum::SUPER_ADMIN->value) {
             Inertia::flash('toast', ['type' => 'error', 'message' => 'The super-admin role cannot be deleted.']);

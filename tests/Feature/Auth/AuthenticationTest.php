@@ -6,10 +6,11 @@ use Database\Seeders\RoleSeeder;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
 
-test('login screen can be rendered', function () {
+test('login redirects to the localized home with auth modal flash', function () {
     $response = $this->get(route('login'));
 
-    $response->assertOk();
+    $response->assertRedirect(localized('maison.home', absolute: false));
+    $response->assertSessionHas('open_auth_modal', 'login');
 });
 
 test('users can authenticate using the login screen', function () {
@@ -21,7 +22,7 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('member.dashboard', absolute: false));
+    $response->assertRedirect(localized('member.dashboard', absolute: false));
 });
 
 test('staff users authenticate to the admin dashboard', function () {
@@ -29,6 +30,7 @@ test('staff users authenticate to the admin dashboard', function () {
 
     $user = User::factory()->create();
     $user->assignRole('admin');
+    $user->syncTypeFromRoles();
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,
@@ -36,10 +38,10 @@ test('staff users authenticate to the admin dashboard', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(localized('dashboard', absolute: false));
 });
 
-test('users with two factor enabled are redirected to two factor challenge', function () {
+test('users with two factor enabled are redirected to the auth modal', function () {
     $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
 
     Features::twoFactorAuthentication([
@@ -54,7 +56,8 @@ test('users with two factor enabled are redirected to two factor challenge', fun
         'password' => 'password',
     ]);
 
-    $response->assertRedirect(route('two-factor.login'));
+    $response->assertRedirect(localized('maison.home', absolute: false));
+    $response->assertSessionHas('open_auth_modal', 'two-factor');
     $response->assertSessionHas('login.id', $user->id);
     $this->assertGuest();
 });
@@ -75,7 +78,7 @@ test('users can logout', function () {
 
     $response = $this->actingAs($user)->post(route('logout'));
 
-    $response->assertRedirect(route('home'));
+    $response->assertRedirect(localized('maison.home', absolute: false));
 
     $this->assertGuest();
 });

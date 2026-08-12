@@ -1,16 +1,16 @@
 import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
+import type { AuthView } from '@/components/maison/modals/auth-modal';
 
 /**
  * The shell owns the modals, so any page that needs to open one reaches through
- * here rather than inventing its own overlay. Until the modals step lands, the
- * order and certificate openers still exist — they just raise the same kind of
- * placeholder the newsletter already uses.
+ * here rather than inventing its own overlay.
  */
 export type ShellActions = {
     openNewsletter: () => void;
     openOrder: () => void;
     openCertificate: () => void;
+    openAuth: (view?: AuthView) => void;
 };
 
 const ShellActionsContext = createContext<ShellActions | null>(null);

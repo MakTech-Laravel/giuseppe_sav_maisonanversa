@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
  */
 class PostAttachmentController extends Controller
 {
-    public function update(Request $request, Post $post): RedirectResponse
+    public function update(Request $request, string $locale, Post $post): RedirectResponse
     {
         // $this->authorize('update', $post);  // uncomment when using policies
 

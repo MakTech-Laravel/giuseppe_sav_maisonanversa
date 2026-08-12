@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
+import { AuthMenu } from '@/components/maison/shell/auth-menu';
 import { LanguageSwitcher } from '@/components/maison/shell/language-switcher';
 import { useLocale } from '@/hooks/use-locale';
 import { activePage, PRIMARY_NAV } from '@/lib/maison-navigation';
@@ -118,8 +119,9 @@ export function SiteNav() {
                     ))}
                 </ul>
 
-                <div className="mt-3 border-t border-gold/15 pt-3 md:mt-0 md:border-0 md:pt-0">
+                <div className="mt-3 flex items-center gap-4 border-t border-gold/15 pt-3 md:mt-0 md:ml-2 md:border-t-0 md:border-l md:pl-4 md:pt-0">
                     <LanguageSwitcher className="md:gap-1 [&_button]:md:min-h-0 [&_button]:md:min-w-0 [&_button]:md:rounded-sm [&_button]:md:px-1.5 [&_button]:md:py-1 [&_button]:md:text-[9px]" />
+                    <AuthMenu compact />
                 </div>
             </div>
         </nav>

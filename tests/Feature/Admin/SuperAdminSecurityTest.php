@@ -60,13 +60,13 @@ test('a super-admin can assign the super-admin role', function () {
 
 test('a non super-admin cannot open the edit page of a super-admin', function () {
     $this->actingAs($this->admin)
-        ->get(route('admin.users.edit', $this->superAdmin))
+        ->get(route('admin.users.edit', ['user' => $this->superAdmin]))
         ->assertForbidden();
 });
 
 test('a non super-admin cannot update a super-admin', function () {
     $this->actingAs($this->admin)
-        ->put(route('admin.users.update', $this->superAdmin), [
+        ->put(route('admin.users.update', ['user' => $this->superAdmin]), [
             'name' => 'Hijacked',
             'email' => $this->superAdmin->email,
         ])
@@ -77,7 +77,7 @@ test('a non super-admin cannot update a super-admin', function () {
 
 test('a non super-admin cannot delete a super-admin', function () {
     $this->actingAs($this->admin)
-        ->delete(route('admin.users.destroy', $this->superAdmin))
+        ->delete(route('admin.users.destroy', ['user' => $this->superAdmin]))
         ->assertForbidden();
 
     expect(User::find($this->superAdmin->id))->not->toBeNull();
@@ -87,7 +87,7 @@ test('a super-admin can delete another super-admin', function () {
     $other = makeSuperAdmin();
 
     $this->actingAs($this->superAdmin)
-        ->delete(route('admin.users.destroy', $other))
+        ->delete(route('admin.users.destroy', ['user' => $other]))
         ->assertRedirect();
 
     expect(User::find($other->id))->toBeNull();
@@ -98,7 +98,7 @@ test('a super-admin can delete another super-admin', function () {
 test('the last super-admin cannot remove their own super-admin role', function () {
     // Only $this->superAdmin holds the role.
     $this->actingAs($this->superAdmin)
-        ->put(route('admin.users.update', $this->superAdmin), [
+        ->put(route('admin.users.update', ['user' => $this->superAdmin]), [
             'name' => $this->superAdmin->name,
             'email' => $this->superAdmin->email,
             'roles' => [RoleEnum::ADMIN->value],
@@ -112,7 +112,7 @@ test('a super-admin role can be removed once another super-admin exists', functi
     makeSuperAdmin(); // now there are two
 
     $this->actingAs($this->superAdmin)
-        ->put(route('admin.users.update', $this->superAdmin), [
+        ->put(route('admin.users.update', ['user' => $this->superAdmin]), [
             'name' => $this->superAdmin->name,
             'email' => $this->superAdmin->email,
             'roles' => [RoleEnum::ADMIN->value],
@@ -124,7 +124,7 @@ test('a super-admin role can be removed once another super-admin exists', functi
 
 test('the last super-admin cannot be deleted', function () {
     $this->actingAs($this->superAdmin)
-        ->delete(route('admin.users.destroy', $this->superAdmin))
+        ->delete(route('admin.users.destroy', ['user' => $this->superAdmin]))
         ->assertRedirect();
 
     expect(User::find($this->superAdmin->id))->not->toBeNull();

@@ -1,9 +1,10 @@
 import { usePage } from '@inertiajs/react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
 import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
+import type { AuthView } from '@/components/maison/modals/auth-modal';
 import { MaisonModals } from '@/components/maison/modals/maison-modals';
 import { ContactDock } from '@/components/maison/shell/contact-dock';
 import { EtchingBand } from '@/components/maison/shell/etching-band';
@@ -16,24 +17,35 @@ import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
 import { activePage } from '@/lib/maison-navigation';
 
-type ModalKind = 'newsletter' | 'order' | 'certificate' | null;
+type ModalKind = 'newsletter' | 'order' | 'certificate' | 'auth' | null;
 
-/**
- * The public site shell: the fixed topbar and header, the cinematic overlays,
- * the footer, the etching band and the contact dock.
- *
- * Everything here is rendered exactly once and survives navigation, so the
- * header keeps its state and the scroll reveals rebind per page rather than
- * accumulating observers. Page content is offset by the two header heights
- * through `--topbar-h` and `--nav-h`, which is the only place those numbers
- * appear — the prototype hardcoded the sum as `padding-top: 130px` in one file
- * and `top: 150px` in another, and they had already drifted.
- */
+type PageProps = {
+    flash?: {
+        open_auth_modal?: AuthView;
+    };
+};
+
+function parseAuthQuery(): AuthView | null {
+    const value = new URLSearchParams(window.location.search).get('auth');
+
+    if (
+        value === 'login' ||
+        value === 'register' ||
+        value === 'forgot' ||
+        value === 'two-factor'
+    ) {
+        return value;
+    }
+
+    return null;
+}
+
 export default function FrontendLayout({ children }: { children: ReactNode }) {
     const main = useRef<HTMLElement>(null);
-    const { url } = usePage();
+    const { url, props } = usePage<PageProps>();
     const { locale } = useLocale();
     const [modal, setModal] = useState<ModalKind>(null);
+    const [authView, setAuthView] = useState<AuthView>('login');
 
     useReveal(main);
 
@@ -42,9 +54,24 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
             openNewsletter: () => setModal('newsletter'),
             openOrder: () => setModal('order'),
             openCertificate: () => setModal('certificate'),
+            openAuth: (view: AuthView = 'login') => {
+                setAuthView(view);
+                setModal('auth');
+            },
         }),
         [],
     );
+
+    useEffect(() => {
+        const flashView = props.flash?.open_auth_modal;
+        const queryView = parseAuthQuery();
+        const nextView = flashView ?? queryView;
+
+        if (nextView) {
+            setAuthView(nextView);
+            setModal('auth');
+        }
+    }, [props.flash?.open_auth_modal, url]);
 
     return (
         <ShellActionsProvider value={actions}>
@@ -67,20 +94,13 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                     <EtchingBand />
                     <ContactDock />
 
-                    {/*
-                     * The arrival sequence belongs to the front door, so it is
-                     * only mounted there — and it decides for itself whether
-                     * this visitor has already been shown in.
-                     */}
                     {activePage(url, locale) === 'home' && <ImmersiveIntro />}
 
-                    {/*
-                     * Real modals arrive with the modals step; the shell already
-                     * owns the openers so every page can call them.
-                     */}
                     {modal && (
                         <MaisonModals
                             kind={modal}
+                            authView={authView}
+                            onAuthViewChange={setAuthView}
                             onClose={() => setModal(null)}
                         />
                     )}

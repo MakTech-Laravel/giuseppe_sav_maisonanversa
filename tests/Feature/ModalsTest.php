@@ -53,5 +53,13 @@ test('the modal shell is accessible and dismissible with Escape', function () {
 test('the layout wires real modals instead of placeholders', function () {
     expect(File::get(resource_path('js/layouts/frontend-layout.tsx')))
         ->toContain('MaisonModals')
+        ->toContain("'auth'")
         ->not->toContain('ModalPlaceholder');
+});
+
+test('the auth modal uses the shared maison modal shell', function () {
+    expect(modalSource('auth-modal.tsx'))
+        ->toContain('MaisonModal')
+        ->toContain('loginStore.form()')
+        ->toContain('registerStore.form()');
 });

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { switchInstanceLocale } from '@/lib/i18n';
+import { syncWayfinderLocale } from '@/lib/wayfinder-defaults';
 import { isLocale, SOURCE_LOCALE } from '@/types/locale';
 import type { Locale } from '@/types/locale';
 
@@ -42,6 +43,7 @@ export function I18nProvider({
 
                 if (isLocale(next)) {
                     setLocale(next);
+                    syncWayfinderLocale(next);
                 }
             }),
         [],
@@ -49,6 +51,7 @@ export function I18nProvider({
 
     useEffect(() => {
         document.documentElement.lang = locale;
+        syncWayfinderLocale(locale);
 
         if (locale !== i18n.language) {
             void switchInstanceLocale(i18n, locale);

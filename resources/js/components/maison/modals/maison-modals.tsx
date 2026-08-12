@@ -1,15 +1,23 @@
+import { AuthModal, type AuthView } from '@/components/maison/modals/auth-modal';
 import { CertificateModal } from '@/components/maison/modals/certificate-modal';
 import { NewsletterModal } from '@/components/maison/modals/newsletter-modal';
 import { OrderModal } from '@/components/maison/modals/order-modal';
 
-export type MaisonModalKind = 'newsletter' | 'order' | 'certificate';
+export type MaisonModalKind = 'newsletter' | 'order' | 'certificate' | 'auth';
 
 type MaisonModalsProps = {
     kind: MaisonModalKind;
+    authView?: AuthView;
     onClose: () => void;
+    onAuthViewChange?: (view: AuthView) => void;
 };
 
-export function MaisonModals({ kind, onClose }: MaisonModalsProps) {
+export function MaisonModals({
+    kind,
+    authView = 'login',
+    onClose,
+    onAuthViewChange = () => undefined,
+}: MaisonModalsProps) {
     switch (kind) {
         case 'newsletter':
             return <NewsletterModal onClose={onClose} />;
@@ -17,5 +25,13 @@ export function MaisonModals({ kind, onClose }: MaisonModalsProps) {
             return <OrderModal onClose={onClose} />;
         case 'certificate':
             return <CertificateModal onClose={onClose} />;
+        case 'auth':
+            return (
+                <AuthModal
+                    initialView={authView}
+                    onClose={onClose}
+                    onSwitchView={onAuthViewChange}
+                />
+            );
     }
 }

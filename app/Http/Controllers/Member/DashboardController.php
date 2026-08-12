@@ -15,7 +15,7 @@ use Laravel\Fortify\Features;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, string $locale): Response
     {
         $user = $request->user();
 
@@ -25,42 +25,42 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function heritage(Request $request): Response
+    public function heritage(Request $request, string $locale): Response
     {
         return Inertia::render('member/heritage', [
             'heritage' => MemberDemo::heritage($request->user()),
         ]);
     }
 
-    public function orders(): Response
+    public function orders(string $locale): Response
     {
         return Inertia::render('member/orders', [
             'orders' => MemberDemo::orders(),
         ]);
     }
 
-    public function passport(Request $request): Response
+    public function passport(Request $request, string $locale): Response
     {
         return Inertia::render('member/passport', [
             'passport' => MemberDemo::passport($request->user()),
         ]);
     }
 
-    public function circle(Request $request): Response
+    public function circle(Request $request, string $locale): Response
     {
         return Inertia::render('member/circle', [
             'card' => MemberDemo::circleCard($request->user()),
         ]);
     }
 
-    public function letter(): Response
+    public function letter(string $locale): Response
     {
         return Inertia::render('member/letter', [
             'preferences' => MemberDemo::letterPreferences(),
         ]);
     }
 
-    public function profile(Request $request): Response
+    public function profile(Request $request, string $locale): Response
     {
         return Inertia::render('member/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
@@ -68,7 +68,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function updateProfile(ProfileUpdateRequest $request): RedirectResponse
+    public function updateProfile(ProfileUpdateRequest $request, string $locale): RedirectResponse
     {
         $request->user()->fill($request->validated());
 
@@ -83,7 +83,7 @@ class DashboardController extends Controller
         return to_route('member.profile');
     }
 
-    public function security(Request $request): Response
+    public function security(Request $request, string $locale): Response
     {
         return Inertia::render('member/security', [
             'canManageTwoFactor' => Features::canManageTwoFactorAuthentication(),
@@ -93,7 +93,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, string $locale): RedirectResponse
     {
         $request->validate([
             'password' => ['required', 'current_password'],

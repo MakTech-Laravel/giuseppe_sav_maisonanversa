@@ -16,7 +16,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, string $locale): Response
     {
         $search = trim((string) $request->query('search', ''));
         $role = trim((string) $request->query('role', ''));
@@ -55,14 +55,14 @@ class UserController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(string $locale): Response
     {
         return Inertia::render('admin/users/create', [
             'roles' => Role::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
-    public function store(StoreUserRequest $request): RedirectResponse
+    public function store(StoreUserRequest $request, string $locale): RedirectResponse
     {
         $data = $request->validated();
 
@@ -74,13 +74,14 @@ class UserController extends Controller
         $user = User::create(collect($data)->except(['roles', 'remove_avatar'])->all());
 
         $user->syncRoles($request->validated('roles', []));
+        $user->syncTypeFromRoles();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'User created successfully.']);
 
         return redirect()->route('admin.users.index');
     }
 
-    public function show(User $user): Response
+    public function show(string $locale, User $user): Response
     {
         $user->load('roles:id,name', 'permissions:id,name');
 
@@ -89,7 +90,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit(User $user): Response
+    public function edit(string $locale, User $user): Response
     {
         $this->authorize('update', $user);
 
@@ -104,7 +105,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, string $locale, User $user): RedirectResponse
     {
         $this->authorize('update', $user);
 
@@ -126,13 +127,14 @@ class UserController extends Controller
 
         $user->update(collect($data)->except(['roles', 'remove_avatar'])->all());
         $user->syncRoles($request->validated('roles', []));
+        $user->syncTypeFromRoles();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'User updated successfully.']);
 
         return redirect()->route('admin.users.index');
     }
 
-    public function destroy(User $user): RedirectResponse
+    public function destroy(string $locale, User $user): RedirectResponse
     {
         $this->authorize('delete', $user);
 
