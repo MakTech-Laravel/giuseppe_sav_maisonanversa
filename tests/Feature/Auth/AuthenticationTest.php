@@ -38,7 +38,7 @@ test('staff users authenticate to the admin dashboard', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(localized('dashboard', absolute: false));
+    $response->assertRedirect(localized('admin.dashboard', absolute: false));
 });
 
 test('users with two factor enabled are redirected to the auth modal', function () {

@@ -12,6 +12,7 @@ use App\Http\Controllers\PostAttachmentController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\SitemapController;
+use App\Services\Auth\PostLoginRedirectService;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -73,9 +74,10 @@ Route::prefix('{locale}')
 
         Route::get('email/verify', function (Request $request) {
             if ($request->user()?->hasVerifiedEmail()) {
-                return redirect()->intended(
-                    route('dashboard', ['locale' => $request->route('locale')])
-                );
+                $home = app(PostLoginRedirectService::class)
+                    ->urlFor($request->user(), $request);
+
+                return redirect()->intended($home);
             }
 
             return Inertia::render('auth/verify-email', [
@@ -91,7 +93,9 @@ Route::prefix('{locale}')
 Route::prefix('{locale}')
     ->middleware(['locale', 'auth', 'verified'])
     ->group(function () {
-        Route::inertia('dashboard', 'dashboard')->name('dashboard');
+        Route::get('dashboard', function (string $locale) {
+            return redirect()->route('admin.dashboard', ['locale' => $locale]);
+        });
 
         Route::prefix('member')
             ->name('member.')
@@ -123,6 +127,8 @@ Route::prefix('{locale}')
 
         // ── Admin: access management ──────────────────────────────────────────────
         Route::prefix('admin')->name('admin.')->group(function () {
+            Route::inertia('dashboard', 'dashboard')->name('dashboard');
+
             // Users — full CRUD with Precognition on write routes.
             Route::controller(UserController::class)->group(function () {
                 Route::get('users', 'index')->name('users.index')

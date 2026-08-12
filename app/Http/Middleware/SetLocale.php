@@ -10,29 +10,43 @@ use Symfony\Component\HttpFoundation\Response;
 class SetLocale
 {
     /**
-     * Apply the `{locale}` route segment as the application locale.
+     * Apply the active Maison locale for the request.
      *
-     * The route pattern already restricts the segment to the supported locales,
-     * so an unsupported one 404s before reaching here. The guard below is kept
-     * so the middleware is still safe if applied to an unconstrained route.
+     * Locale-prefixed routes set (and persist) the locale from `{locale}`.
+     * Fortify and other non-prefixed endpoints fall back to the session value
+     * written on the last localized visit, so auth errors match the UI language.
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = $request->route('locale');
+        $locale = $this->resolveLocale($request);
 
-        if (is_string($locale) && in_array($locale, config('maison.locales'), true)) {
-            app()->setLocale($locale);
-
-            $request->session()->put('locale', $locale);
-
-            /*
-             * So `route('maison.product')` resolves without every caller having
-             * to repeat the current locale. Canonical and hreflang generation
-             * still passes one explicitly, because those need the other locales.
-             */
-            URL::defaults(['locale' => $locale]);
-        }
+        app()->setLocale($locale);
+        URL::defaults(['locale' => $locale]);
 
         return $next($request);
+    }
+
+    private function resolveLocale(Request $request): string
+    {
+        $supported = config('maison.locales');
+        $routeLocale = $request->route('locale');
+
+        if (is_string($routeLocale) && in_array($routeLocale, $supported, true)) {
+            if ($request->hasSession()) {
+                $request->session()->put('locale', $routeLocale);
+            }
+
+            return $routeLocale;
+        }
+
+        $sessionLocale = $request->hasSession()
+            ? $request->session()->get('locale')
+            : null;
+
+        if (is_string($sessionLocale) && in_array($sessionLocale, $supported, true)) {
+            return $sessionLocale;
+        }
+
+        return config('maison.default_locale');
     }
 }

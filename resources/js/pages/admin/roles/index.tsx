@@ -25,7 +25,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { usePermission } from '@/hooks/use-permissions';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import roles from '@/routes/admin/roles';
 import type { AdminRoleListItem, Paginated } from '@/types/admin';
 import { PERMISSIONS } from '@/types/permissions';
