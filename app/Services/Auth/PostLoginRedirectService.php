@@ -3,10 +3,13 @@
 namespace App\Services\Auth;
 
 use App\Models\User;
+use App\Services\Locale\LocalePreferenceService;
 use Illuminate\Http\Request;
 
 class PostLoginRedirectService
 {
+    public function __construct(public LocalePreferenceService $locales) {}
+
     /**
      * Resolve the post-authentication redirect URL for the given user.
      */
@@ -30,26 +33,10 @@ class PostLoginRedirectService
     }
 
     /**
-     * Resolve locale from route param, session, or application default.
+     * Resolve locale from route, cookie, session, Accept-Language, or default.
      */
     public function resolveLocale(?Request $request = null): string
     {
-        $request ??= request();
-
-        $routeLocale = $request->route('locale');
-
-        if (is_string($routeLocale) && in_array($routeLocale, config('maison.locales'), true)) {
-            return $routeLocale;
-        }
-
-        $sessionLocale = $request->hasSession()
-            ? $request->session()->get('locale')
-            : null;
-
-        if (is_string($sessionLocale) && in_array($sessionLocale, config('maison.locales'), true)) {
-            return $sessionLocale;
-        }
-
-        return config('maison.default_locale');
+        return $this->locales->preferred($request ?? request());
     }
 }

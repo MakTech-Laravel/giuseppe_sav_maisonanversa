@@ -13,17 +13,23 @@ use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\SitemapController;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Services\Locale\LocalePreferenceService;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 /*
- * The public site is locale-prefixed, so the bare root sends visitors to the
- * Dutch source language. `home` stays the canonical name for the site root.
+ * The public site is locale-prefixed. Bare `/` negotiates cookie → session →
+ * Accept-Language → default so returning visitors keep their language choice.
  */
 
-Route::redirect('/', '/'.config('maison.default_locale'))->name('home');
+Route::get('/', function (Request $request, LocalePreferenceService $locales) {
+    $locale = $locales->preferred($request);
+    $locales->remember($request, $locale);
+
+    return redirect('/'.$locale);
+})->name('home');
 
 Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 

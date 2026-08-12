@@ -72,7 +72,7 @@ test('every page renders its component in every locale', function (
         );
 })->with(maisonPagesAcrossLocales());
 
-test('the bare root redirects to the dutch locale', function () {
+test('the bare root redirects to the dutch locale without a preference', function () {
     $this->get('/')->assertRedirect('/nl');
 });
 

@@ -19,6 +19,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Locale preference cookie
+    |--------------------------------------------------------------------------
+    |
+    | Survives logout and bare `/` visits. Unencrypted so preference can be
+    | read without the app key. Resolution: cookie → session → Accept-Language.
+    |
+    */
+
+    'locale_cookie' => 'maison_locale',
+
+    'locale_cookie_minutes' => (int) env('MAISON_LOCALE_COOKIE_MINUTES', 60 * 24 * 365),
+
+    /*
+    |--------------------------------------------------------------------------
     | Public pages
     |--------------------------------------------------------------------------
     |

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\Auth\PostLoginRedirectService;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
+use Illuminate\Http\Request;
 
 test('new users default to the customer type', function () {
     $user = User::factory()->create();
@@ -47,15 +48,21 @@ test('syncTypeFromRoles demotes users without staff roles to customer type', fun
 test('post login redirect sends customers to the member dashboard', function () {
     $user = User::factory()->customer()->create();
     $redirects = app(PostLoginRedirectService::class);
+    $request = Request::create('/', 'GET', server: [
+        'HTTP_ACCEPT_LANGUAGE' => config('maison.default_locale'),
+    ]);
 
-    expect($redirects->urlFor($user))->toBe(route('member.dashboard', ['locale' => config('maison.default_locale')]));
+    expect($redirects->urlFor($user, $request))->toBe(route('member.dashboard', ['locale' => config('maison.default_locale')]));
 });
 
 test('post login redirect sends admin users to the admin dashboard', function () {
     $user = User::factory()->admin()->create();
     $redirects = app(PostLoginRedirectService::class);
+    $request = Request::create('/', 'GET', server: [
+        'HTTP_ACCEPT_LANGUAGE' => config('maison.default_locale'),
+    ]);
 
-    expect($redirects->urlFor($user))->toBe(route('admin.dashboard', ['locale' => config('maison.default_locale')]));
+    expect($redirects->urlFor($user, $request))->toBe(route('admin.dashboard', ['locale' => config('maison.default_locale')]));
 });
 
 test('registration creates a customer account', function () {
