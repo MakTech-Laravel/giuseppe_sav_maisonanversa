@@ -3,7 +3,7 @@ import { ArrowLeft, ShieldPlus } from 'lucide-react';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { RoleForm } from '@/components/admin/role-form';
 import { Button } from '@/components/ui/button';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import roles from '@/routes/admin/roles';
 import type { PermissionOption } from '@/types/admin';
 

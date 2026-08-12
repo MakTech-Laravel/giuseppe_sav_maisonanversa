@@ -55,7 +55,7 @@ test('post login redirect sends admin users to the admin dashboard', function ()
     $user = User::factory()->admin()->create();
     $redirects = app(PostLoginRedirectService::class);
 
-    expect($redirects->urlFor($user))->toBe(route('dashboard', ['locale' => config('maison.default_locale')]));
+    expect($redirects->urlFor($user))->toBe(route('admin.dashboard', ['locale' => config('maison.default_locale')]));
 });
 
 test('registration creates a customer account', function () {

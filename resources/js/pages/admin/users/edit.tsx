@@ -3,7 +3,7 @@ import { ArrowLeft, Pencil } from 'lucide-react';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { UserForm } from '@/components/admin/user-form';
 import { Button } from '@/components/ui/button';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import users from '@/routes/admin/users';
 import type { AdminUser, RoleRef } from '@/types/admin';
 

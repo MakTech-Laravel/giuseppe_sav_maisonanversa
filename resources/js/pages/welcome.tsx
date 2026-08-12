@@ -4,7 +4,8 @@ import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
 import type { ReactNode, MouseEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
-import { dashboard, login, register } from '@/routes';
+import { login, register } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import { PERMISSIONS } from '@/types/permissions';
 
 // Strict TypeScript Interfaces

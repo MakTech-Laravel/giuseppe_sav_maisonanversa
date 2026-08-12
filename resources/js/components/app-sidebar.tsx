@@ -28,7 +28,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useLocale } from '@/hooks/use-locale';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import adminPermissions from '@/routes/admin/permissions';
 import adminRoles from '@/routes/admin/roles';
 import adminUsers from '@/routes/admin/users';

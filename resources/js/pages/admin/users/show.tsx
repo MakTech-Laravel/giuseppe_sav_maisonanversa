@@ -13,7 +13,7 @@ import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import users from '@/routes/admin/users';
 import { avatarUrl } from '@/types/admin';
 import type { AdminUserDetail } from '@/types/admin';

@@ -15,7 +15,7 @@ class PostLoginRedirectService
         $locale = $this->resolveLocale($request);
 
         if ($user->isAdmin()) {
-            return route('dashboard', ['locale' => $locale]);
+            return route('admin.dashboard', ['locale' => $locale]);
         }
 
         return route('member.dashboard', ['locale' => $locale]);

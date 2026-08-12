@@ -12,16 +12,20 @@ test('auth.failed is translated for every maison locale', function (string $loca
     ['fr', 'Ces identifiants ne correspondent pas à nos enregistrements.'],
 ]);
 
-test('failed login returns a translated error instead of the auth.failed key', function () {
+test('failed login returns a translated error for the session locale', function (string $locale, string $expected) {
     $user = User::factory()->create();
 
-    $this->withSession(['locale' => 'nl'])
-        ->from(localized('maison.home'))
+    $this->withSession(['locale' => $locale])
+        ->from(route('maison.home', ['locale' => $locale]))
         ->post(route('login.store'), [
             'email' => $user->email,
             'password' => 'wrong-password',
         ])
         ->assertSessionHasErrors([
-            'email' => 'Deze gegevens komen niet overeen met onze records.',
+            'email' => $expected,
         ]);
-});
+})->with([
+    ['nl', 'Deze gegevens komen niet overeen met onze records.'],
+    ['en', 'These credentials do not match our records.'],
+    ['fr', 'Ces identifiants ne correspondent pas à nos enregistrements.'],
+]);

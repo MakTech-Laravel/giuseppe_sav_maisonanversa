@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePermission } from '@/hooks/use-permissions';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import permissions from '@/routes/admin/permissions';
 import { groupByGroup } from '@/types/admin';
 import type { PermissionListItem } from '@/types/admin';

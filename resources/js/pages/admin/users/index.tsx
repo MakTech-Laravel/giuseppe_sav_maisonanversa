@@ -37,7 +37,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { usePermission } from '@/hooks/use-permissions';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import users from '@/routes/admin/users';
 import { avatarUrl, SUPER_ADMIN_ROLE } from '@/types/admin';
 import type { AdminUser, Paginated } from '@/types/admin';
