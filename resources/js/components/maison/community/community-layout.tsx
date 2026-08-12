@@ -21,14 +21,19 @@ export function CommunityLayout({ toast, posts }: CommunityLayoutProps) {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<CommunityTab>('feed');
 
+    function handleTabChange(tab: CommunityTab): void {
+        setActiveTab(tab);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     return (
         <div className="min-h-150 bg-cream">
-            <CommunityTabs activeTab={activeTab} onTabChange={setActiveTab} />
+            <CommunityTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
             {activeTab === 'feed' && (
                 <CommunityFeed
                     posts={posts}
-                    onViewEvents={() => setActiveTab('events')}
+                    onViewEvents={() => handleTabChange('events')}
                     onPostPublished={() =>
                         toast.show(t('Post geplaatst in de Community.'))
                     }
