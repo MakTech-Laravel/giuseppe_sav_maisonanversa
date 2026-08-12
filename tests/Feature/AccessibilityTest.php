@@ -84,12 +84,13 @@ test('the dressing page resolves under every locale prefix', function () {
 
 test('primary shell controls meet the forty-four pixel touch target', function () {
     $targets = [
-        'site-topbar.tsx' => ['min-h-11', 'size-11'],
+        'site-topbar.tsx' => ['min-h-11'],
         'language-switcher.tsx' => ['min-h-11', 'min-w-11'],
         'site-nav.tsx' => ['min-h-11'],
         'contact-dock.tsx' => ['min-h-11'],
         'site-footer.tsx' => ['min-h-11'],
         'maison-button.tsx' => ['min-h-11'],
+        'auth-menu.tsx' => ['min-h-11'],
     ];
 
     foreach ($targets as $file => $needles) {

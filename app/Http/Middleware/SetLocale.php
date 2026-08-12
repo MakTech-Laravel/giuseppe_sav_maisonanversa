@@ -23,6 +23,8 @@ class SetLocale
         if (is_string($locale) && in_array($locale, config('maison.locales'), true)) {
             app()->setLocale($locale);
 
+            $request->session()->put('locale', $locale);
+
             /*
              * So `route('maison.product')` resolves without every caller having
              * to repeat the current locale. Canonical and hreflang generation

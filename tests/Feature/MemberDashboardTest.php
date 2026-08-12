@@ -3,14 +3,15 @@
 use App\Models\User;
 
 test('guests are redirected from the member dashboard', function () {
-    $this->get(route('member.dashboard'))->assertRedirect(route('login'));
+    $this->get(localized('member.dashboard'))
+        ->assertRedirect(localized('maison.home', absolute: false));
 });
 
 test('members can view the dashboard shell', function () {
     $user = User::factory()->create(['name' => 'Circle Member']);
 
     $this->actingAs($user)
-        ->get(route('member.dashboard'))
+        ->get(localized('member.dashboard'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('member/dashboard')
@@ -20,6 +21,15 @@ test('members can view the dashboard shell', function () {
         );
 });
 
+test('members can view heritage under a locale prefix', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('member.heritage', ['locale' => 'en']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('member/heritage'));
+});
+
 test('members can view heritage, orders, passport, circle and letter shells', function (
     string $route,
     string $component,
@@ -27,7 +37,7 @@ test('members can view heritage, orders, passport, circle and letter shells', fu
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->get(route($route))
+        ->get(localized($route))
         ->assertOk()
         ->assertInertia(fn ($page) => $page->component($component));
 })->with([
@@ -44,12 +54,12 @@ test('members can update their profile and username from the member area', funct
     $user = User::factory()->create(['username' => 'old_handle']);
 
     $this->actingAs($user)
-        ->patch(route('member.profile.update'), [
+        ->patch(localized('member.profile.update'), [
             'name' => 'Updated Name',
             'email' => $user->email,
             'username' => 'new_handle',
         ])
-        ->assertRedirect(route('member.profile'));
+        ->assertRedirect(localized('member.profile', absolute: false));
 
     expect($user->fresh()->username)->toBe('new_handle')
         ->and($user->fresh()->name)->toBe('Updated Name');

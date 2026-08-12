@@ -83,7 +83,7 @@ test('a role permissions can be updated', function () {
     $role->givePermissionTo(PermissionEnum::POSTS_VIEW->value);
 
     $this->actingAs($this->admin)
-        ->put(route('admin.roles.update', $role), [
+        ->put(route('admin.roles.update', ['role' => $role]), [
             'name' => 'temp',
             'permissions' => [
                 PermissionEnum::POSTS_CREATE->value,
@@ -103,7 +103,7 @@ test('the super admin role cannot be deleted', function () {
     $role = Role::findByName(RoleEnum::SUPER_ADMIN->value);
 
     $this->actingAs($this->admin)
-        ->delete(route('admin.roles.destroy', $role))
+        ->delete(route('admin.roles.destroy', ['role' => $role]))
         ->assertRedirect();
 
     expect(Role::find($role->id))->not->toBeNull();
@@ -113,7 +113,7 @@ test('a non-system role can be deleted', function () {
     $role = Role::create(['name' => 'disposable', 'guard_name' => 'web']);
 
     $this->actingAs($this->admin)
-        ->delete(route('admin.roles.destroy', $role))
+        ->delete(route('admin.roles.destroy', ['role' => $role]))
         ->assertRedirect();
 
     expect(Role::find($role->id))->toBeNull();

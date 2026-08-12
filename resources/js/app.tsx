@@ -1,3 +1,5 @@
+import '@/lib/wayfinder-defaults';
+
 import { createInertiaApp, router } from '@inertiajs/react';
 import { AlertTriangle, CheckCircle, Info, XCircle } from 'lucide-react';
 import { ErrorBoundary } from 'react-error-boundary';

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\PostLoginRedirectService;
 use App\Support\Imagery;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -40,6 +41,8 @@ class HandleInertiaRequests extends Middleware
 
         $user?->load('roles', 'permissions');
 
+        $redirects = app(PostLoginRedirectService::class);
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -49,6 +52,9 @@ class HandleInertiaRequests extends Middleware
                     'permissions' => $user->getAllPermissions()
                         ->pluck('name'),
                     'is_super_admin' => $user->hasRole('super-admin'),
+                    'type' => $user->type->value,
+                    'is_admin' => $user->isAdmin(),
+                    'dashboard_url' => $redirects->dashboardUrlFor($user, $request),
                 ]) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
@@ -67,6 +73,9 @@ class HandleInertiaRequests extends Middleware
              * back to a placeholder rather than requesting a missing file.
              */
             'availableImages' => fn () => Imagery::existingPaths(),
+            'flash' => [
+                'open_auth_modal' => fn () => $request->session()->get('open_auth_modal'),
+            ],
         ];
     }
 }

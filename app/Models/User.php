@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\GuardEnum;
 use App\Enums\RoleEnum;
+use App\Enums\UserType;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -15,7 +16,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'username', 'password', 'avatar'])]
+#[Fillable(['name', 'email', 'username', 'type', 'password', 'avatar'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -33,6 +34,34 @@ class User extends Authenticatable
     public function isSuperAdmin(): bool
     {
         return $this->hasRole(RoleEnum::SUPER_ADMIN->value);
+    }
+
+    /**
+     * Whether this account is a customer (member dashboard).
+     */
+    public function isCustomer(): bool
+    {
+        return $this->type === UserType::Customer;
+    }
+
+    /**
+     * Whether this account is an admin-type user (admin dashboard).
+     */
+    public function isAdmin(): bool
+    {
+        return $this->type === UserType::Admin;
+    }
+
+    /**
+     * Align the stored type with the user's Spatie roles.
+     */
+    public function syncTypeFromRoles(): void
+    {
+        $hasStaffRole = $this->hasAnyRole(UserType::staffRoleValues());
+
+        $this->forceFill([
+            'type' => $hasStaffRole ? UserType::Admin : UserType::Customer,
+        ])->save();
     }
 
     /**
@@ -71,6 +100,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'type' => UserType::class,
         ];
     }
 }

@@ -19,7 +19,7 @@ class FileUploadDemoController extends Controller
 {
     // ── Demo landing page ─────────────────────────────────────────────────────
 
-    public function index(): Response
+    public function index(string $locale): Response
     {
         $demoPost = Post::with('attachments')
             ->latest()
@@ -59,7 +59,7 @@ class FileUploadDemoController extends Controller
      *   label   — optional human label
      *   post_id — optional; links the attachment to an existing post
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, string $locale): RedirectResponse
     {
         $request->validate([
             'label' => ['nullable', 'string', 'max:255'],

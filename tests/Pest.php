@@ -44,7 +44,12 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function defaultLocale(): string
 {
-    // ..
+    return config('maison.default_locale');
+}
+
+function localized(string $name, array $parameters = [], bool $absolute = true): string
+{
+    return route($name, ['locale' => defaultLocale(), ...$parameters], $absolute);
 }

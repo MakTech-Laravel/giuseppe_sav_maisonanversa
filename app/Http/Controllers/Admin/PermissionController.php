@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PermissionController extends Controller
 {
-    public function index(): Response
+    public function index(string $locale): Response
     {
         return Inertia::render('admin/permissions/index', [
             'permissions' => Permission::query()
@@ -24,7 +24,7 @@ class PermissionController extends Controller
         ]);
     }
 
-    public function export(Request $request): BinaryFileResponse
+    public function export(Request $request, string $locale): BinaryFileResponse
     {
         $format = $request->query('format') === 'csv' ? 'csv' : 'xlsx';
 

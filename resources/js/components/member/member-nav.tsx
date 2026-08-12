@@ -8,31 +8,28 @@ type NavItem = {
     exact?: boolean;
 };
 
-const ITEMS: NavItem[] = [
-    { label: 'Dashboard', href: '/member', exact: true },
-    { label: 'My Heritage', href: '/member/heritage' },
-    { label: 'Orders', href: '/member/orders' },
-    { label: 'Passport', href: '/member/passport' },
-    { label: 'Founding Circle', href: '/member/circle' },
-    { label: 'Community', href: 'community' },
-    { label: 'Heritage Letter', href: '/member/letter' },
-    { label: 'Profile & Account', href: '/member/profile' },
-    { label: 'Security', href: '/member/security' },
-];
-
 export function MemberNav() {
     const { locale } = usePage().props;
     const { url } = usePage();
     const path = url.split('?')[0].replace(/\/+$/, '') || '/';
 
+    const items: NavItem[] = [
+        { label: 'Dashboard', href: `/${locale}/member`, exact: true },
+        { label: 'My Heritage', href: `/${locale}/member/heritage` },
+        { label: 'Orders', href: `/${locale}/member/orders` },
+        { label: 'Passport', href: `/${locale}/member/passport` },
+        { label: 'Founding Circle', href: `/${locale}/member/circle` },
+        { label: 'Community', href: `/${locale}/community` },
+        { label: 'Heritage Letter', href: `/${locale}/member/letter` },
+        { label: 'Profile & Account', href: `/${locale}/member/profile` },
+        { label: 'Security', href: `/${locale}/member/security` },
+    ];
+
     return (
         <nav aria-label="Member" className="w-full shrink-0 md:w-56">
             <ul className="flex gap-1 overflow-x-auto border border-gold/20 bg-cream2 p-2 md:flex-col md:overflow-visible">
-                {ITEMS.map((item) => {
-                    const href =
-                        item.href === 'community'
-                            ? `/${locale}/community`
-                            : item.href;
+                {items.map((item) => {
+                    const href = item.href;
                     const active = item.exact
                         ? path === href
                         : path === href || path.startsWith(`${href}/`);

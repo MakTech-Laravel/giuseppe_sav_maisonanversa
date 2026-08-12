@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 test('guests cannot access user management', function () {
-    $this->get(route('admin.users.index'))->assertRedirect(route('login'));
+    $this->get(route('admin.users.index'))->assertRedirect(localized('maison.home', absolute: false));
 });
 
 test('users without permission are forbidden', function () {
@@ -86,7 +86,7 @@ test('a user can be updated and roles re-synced', function () {
     $user->assignRole(RoleEnum::USER->value);
 
     $this->actingAs($this->admin)
-        ->put(route('admin.users.update', $user), [
+        ->put(route('admin.users.update', ['user' => $user]), [
             'name' => 'Renamed',
             'email' => $user->email,
             'password' => '',
@@ -105,7 +105,7 @@ test('updating without a password keeps the current one', function () {
     $user = User::factory()->create(['password' => 'secret-pass']);
 
     $this->actingAs($this->admin)
-        ->put(route('admin.users.update', $user), [
+        ->put(route('admin.users.update', ['user' => $user]), [
             'name' => $user->name,
             'email' => $user->email,
             'password' => '',
@@ -119,7 +119,7 @@ test('a user can be deleted', function () {
     $user = User::factory()->create();
 
     $this->actingAs($this->admin)
-        ->delete(route('admin.users.destroy', $user))
+        ->delete(route('admin.users.destroy', ['user' => $user]))
         ->assertRedirect();
 
     expect(User::find($user->id))->toBeNull();

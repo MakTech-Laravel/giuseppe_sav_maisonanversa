@@ -6,10 +6,11 @@ beforeEach(function () {
     $this->skipUnlessFortifyHas(Features::registration());
 });
 
-test('registration screen can be rendered', function () {
+test('registration redirects to the localized home with auth modal flash', function () {
     $response = $this->get(route('register'));
 
-    $response->assertOk();
+    $response->assertRedirect(localized('maison.home', absolute: false));
+    $response->assertSessionHas('open_auth_modal', 'register');
 });
 
 test('new users can register', function () {
@@ -21,5 +22,5 @@ test('new users can register', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('member.dashboard', absolute: false));
+    $response->assertRedirect(localized('member.dashboard', absolute: false));
 });

@@ -33,7 +33,7 @@ test('guests cannot upload files', function () {
 
     $this->post(route('upload.store'), [
         'file' => UploadedFile::fake()->image('photo.jpg'),
-    ])->assertRedirect(route('login'));
+    ])->assertRedirect(localized('maison.home', absolute: false));
 });
 
 test('a standalone file is stored on disk and persisted', function () {
@@ -96,7 +96,7 @@ test('disallowed mime types are rejected', function () {
 test('a post update can attach new files', function () {
     $post = Post::factory()->create(['title' => 'Original']);
 
-    $this->post(route('posts.update', $post), [
+    $this->post(route('posts.update', ['post' => $post]), [
         'title' => 'Updated title',
         'files' => [
             UploadedFile::fake()->image('a.jpg'),
@@ -123,7 +123,7 @@ test('removing an attachment deletes the record and the physical file', function
     $keep = Attachment::factory()->for($post)->create(['path' => 'posts/keep.jpg']);
     $drop = Attachment::factory()->for($post)->create(['path' => 'posts/drop.jpg']);
 
-    $this->post(route('posts.update', $post), [
+    $this->post(route('posts.update', ['post' => $post]), [
         'title' => $post->title,
         'remove_attachments' => [$drop->id],
     ])->assertRedirect();
@@ -142,7 +142,7 @@ test('a post can only remove its own attachments', function () {
     Storage::disk('public')->put('posts/other.jpg', 'x');
     $foreign = Attachment::factory()->for($other)->create(['path' => 'posts/other.jpg']);
 
-    $this->post(route('posts.update', $post), [
+    $this->post(route('posts.update', ['post' => $post]), [
         'title' => $post->title,
         'remove_attachments' => [$foreign->id],
     ])->assertRedirect();
@@ -155,6 +155,6 @@ test('a post can only remove its own attachments', function () {
 test('the title is required when updating a post', function () {
     $post = Post::factory()->create();
 
-    $this->post(route('posts.update', $post), ['title' => ''])
+    $this->post(route('posts.update', ['post' => $post]), ['title' => ''])
         ->assertSessionHasErrors('title');
 });
