@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Support\Imagery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -55,6 +56,9 @@ class HandleInertiaRequests extends Middleware
                     'type' => $user->type->value,
                     'is_admin' => $user->isAdmin(),
                     'dashboard_url' => $redirects->dashboardUrlFor($user, $request),
+                    'avatar_url' => $user->avatar
+                        ? Storage::disk('public')->url($user->avatar)
+                        : null,
                 ]) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

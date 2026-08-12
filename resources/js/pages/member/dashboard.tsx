@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 
 type Member = {
@@ -12,15 +12,6 @@ type Member = {
 
 type Stat = { label: string; value: string; hint: string };
 
-const LINKS = [
-    { href: '/member/heritage', label: 'My Heritage', hint: 'Edition & delivery' },
-    { href: '/member/passport', label: 'Passport', hint: 'Digital Heritage Passport' },
-    { href: '/member/circle', label: 'Founding Circle', hint: 'Your membership card' },
-    { href: '/member/orders', label: 'Orders', hint: 'Payment history' },
-    { href: '/member/profile', label: 'Profile', hint: 'Name, username, email' },
-    { href: '/member/letter', label: 'Heritage Letter', hint: 'Preferences' },
-] as const;
-
 export default function MemberDashboard({
     member,
     stats,
@@ -28,13 +19,38 @@ export default function MemberDashboard({
     member: Member;
     stats: Stat[];
 }) {
+    const { locale } = usePage().props;
+
+    const links = [
+        {
+            href: `/${locale}/member/orders`,
+            label: 'Orders',
+            hint: 'Payment history',
+        },
+        {
+            href: `/${locale}/member/circle`,
+            label: 'Founding Circle',
+            hint: 'Your membership card',
+        },
+        {
+            href: `/${locale}/member/profile`,
+            label: 'Profile',
+            hint: 'Name, photo, email',
+        },
+        {
+            href: `/${locale}/member/letter`,
+            label: 'Heritage Letter',
+            hint: 'Preferences',
+        },
+    ] as const;
+
     return (
         <>
             <Head title="Member Dashboard" />
             <MemberPageHeader
                 eyebrow="Founding Circle"
                 title={`Welcome, ${member.name}`}
-                description="Your rooms in the house — Heritage No.001, the passport, and the Circle."
+                description="Your rooms in the house — orders, the Circle, and account settings."
             />
 
             <div className="mb-10 grid gap-4 md:grid-cols-3">
@@ -43,22 +59,22 @@ export default function MemberDashboard({
                         <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
                             {stat.label}
                         </p>
-                        <p className="mt-2 font-serif text-[28px] text-choc">
+                        <p className="mt-2 font-serif text-[28px] text-cream">
                             {stat.value}
                         </p>
-                        <p className="mt-1 text-[13px] text-choc3">{stat.hint}</p>
+                        <p className="mt-1 text-[13px] text-sand">{stat.hint}</p>
                     </MemberPanel>
                 ))}
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-                {LINKS.map((link) => (
+                {links.map((link) => (
                     <Link
                         key={link.href}
                         href={link.href}
-                        className="border border-gold/20 bg-cream2 p-6 no-underline transition-colors hover:border-gold"
+                        className="border border-gold/25 bg-choc3 p-6 no-underline transition-colors hover:border-gold"
                     >
-                        <p className="font-serif text-[22px] text-choc">
+                        <p className="font-serif text-[22px] text-cream">
                             {link.label}
                         </p>
                         <p className="mt-1 font-sans text-[11px] tracking-[0.12em] text-stone uppercase">

@@ -1,11 +1,23 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import {
+    destroy,
+    updateProfile,
+} from '@/actions/App/Http/Controllers/Member/DashboardController';
 import InputError from '@/components/input-error';
-import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
+import {
+    MemberPageHeader,
+    MemberPanel,
+    MemberSectionTitle,
+    memberFieldClassName,
+} from '@/components/member/member-ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useInitials } from '@/hooks/use-initials';
 import { send } from '@/routes/verification';
+import { cn } from '@/lib/utils';
 
 export default function MemberProfile({
     mustVerifyEmail,
@@ -14,7 +26,7 @@ export default function MemberProfile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
-    const { auth } = usePage().props;
+    const { auth, locale } = usePage().props;
 
     return (
         <>
@@ -22,62 +34,99 @@ export default function MemberProfile({
             <MemberPageHeader
                 eyebrow="Account"
                 title="Profile & account"
-                description="Your name, username and email. Username is how you can sign in."
+                description="Manage how you appear in the house — photo, name, and how you sign in."
             />
 
-            <MemberPanel className="max-w-xl space-y-8">
-                <Form
-                    action="/member/profile"
-                    method="patch"
-                    options={{ preserveScroll: true }}
-                    className="space-y-5"
-                >
-                    {({ processing, errors }) => (
-                        <>
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    defaultValue={auth.user.name}
-                                    required
-                                    autoComplete="name"
-                                />
-                                <InputError message={errors.name} />
-                            </div>
+            <Form
+                {...updateProfile.form(locale)}
+                options={{ preserveScroll: true }}
+                encType="multipart/form-data"
+                className="space-y-6"
+            >
+                {({ processing, errors }) => (
+                    <>
+                        <MemberPanel>
+                            <MemberSectionTitle
+                                title="Identity"
+                                description="Your photo appears in the member header and community surfaces."
+                            />
+                            <ProfileAvatarField
+                                name={auth.user.name}
+                                email={auth.user.email}
+                                avatarUrl={auth.user.avatar_url}
+                                error={errors.avatar}
+                            />
+                        </MemberPanel>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="username">Username</Label>
-                                <Input
-                                    id="username"
-                                    name="username"
-                                    defaultValue={auth.user.username}
-                                    required
-                                    autoComplete="username"
-                                />
-                                <InputError message={errors.username} />
-                            </div>
+                        <MemberPanel>
+                            <MemberSectionTitle
+                                title="Account details"
+                                description="Username is an alternate way to sign in alongside email."
+                            />
+                            <div className="grid gap-5 md:grid-cols-2">
+                                <div className="grid gap-2">
+                                    <Label
+                                        htmlFor="name"
+                                        className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                    >
+                                        Name
+                                    </Label>
+                                    <Input
+                                        id="name"
+                                        name="name"
+                                        defaultValue={auth.user.name}
+                                        required
+                                        autoComplete="name"
+                                        className={memberFieldClassName}
+                                    />
+                                    <InputError message={errors.name} />
+                                </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
-                                    defaultValue={auth.user.email}
-                                    required
-                                    autoComplete="email"
-                                />
-                                <InputError message={errors.email} />
+                                <div className="grid gap-2">
+                                    <Label
+                                        htmlFor="username"
+                                        className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                    >
+                                        Username
+                                    </Label>
+                                    <Input
+                                        id="username"
+                                        name="username"
+                                        defaultValue={auth.user.username}
+                                        required
+                                        autoComplete="username"
+                                        className={memberFieldClassName}
+                                    />
+                                    <InputError message={errors.username} />
+                                </div>
+
+                                <div className="grid gap-2 md:col-span-2">
+                                    <Label
+                                        htmlFor="email"
+                                        className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                    >
+                                        Email
+                                    </Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        defaultValue={auth.user.email}
+                                        required
+                                        autoComplete="email"
+                                        className={memberFieldClassName}
+                                    />
+                                    <InputError message={errors.email} />
+                                </div>
                             </div>
 
                             {mustVerifyEmail &&
                                 auth.user.email_verified_at === null && (
-                                    <p className="text-sm text-choc3">
+                                    <p className="mt-4 text-sm text-sand">
                                         Your email is unverified.{' '}
                                         <Link
                                             href={send()}
-                                            className="text-gold2 underline"
+                                            className="text-gold underline"
                                         >
                                             Resend verification
                                         </Link>
@@ -85,51 +134,150 @@ export default function MemberProfile({
                                 )}
 
                             {status === 'verification-link-sent' && (
-                                <p className="text-sm text-gold2">
+                                <p className="mt-4 text-sm text-gold">
                                     A new verification link has been sent.
                                 </p>
                             )}
 
-                            <Button disabled={processing}>Save profile</Button>
-                        </>
-                    )}
-                </Form>
+                            <div className="mt-8 flex justify-end border-t border-gold/20 pt-5">
+                                <Button
+                                    disabled={processing}
+                                    className="min-w-40 rounded-none"
+                                >
+                                    Save profile
+                                </Button>
+                            </div>
+                        </MemberPanel>
+                    </>
+                )}
+            </Form>
 
-                <DeleteMemberAccount />
-            </MemberPanel>
+            <DeleteMemberAccount locale={locale} />
         </>
     );
 }
 
-function DeleteMemberAccount() {
+function ProfileAvatarField({
+    name,
+    email,
+    avatarUrl,
+    error,
+}: {
+    name: string;
+    email: string;
+    avatarUrl?: string | null;
+    error?: string;
+}) {
+    const getInitials = useInitials();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+    const [removeAvatar, setRemoveAvatar] = useState(false);
+
+    const displayUrl = removeAvatar ? null : (preview ?? avatarUrl ?? null);
+
+    return (
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+            <Avatar className="size-24 overflow-hidden rounded-full border border-gold/40">
+                {displayUrl ? (
+                    <AvatarImage src={displayUrl} alt={name} />
+                ) : null}
+                <AvatarFallback className="rounded-full bg-choc font-sans text-[22px] tracking-[0.08em] text-cream">
+                    {getInitials(name)}
+                </AvatarFallback>
+            </Avatar>
+
+            <div className="min-w-0 flex-1 space-y-3">
+                <div>
+                    <p className="truncate font-serif text-[22px] text-cream">
+                        {name}
+                    </p>
+                    <p className="truncate font-sans text-[12px] text-sand">
+                        {email}
+                    </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    <Button
+                        type="button"
+                        className="rounded-none"
+                        onClick={() => inputRef.current?.click()}
+                    >
+                        {displayUrl ? 'Change photo' : 'Upload photo'}
+                    </Button>
+                    {displayUrl && (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="rounded-none border-gold/40 bg-transparent text-sand hover:bg-choc hover:text-cream"
+                            onClick={() => {
+                                setRemoveAvatar(true);
+                                setPreview(null);
+                                if (inputRef.current) {
+                                    inputRef.current.value = '';
+                                }
+                            }}
+                        >
+                            Remove
+                        </Button>
+                    )}
+                </div>
+                <p className="font-sans text-[11px] text-stone">
+                    PNG, JPG or WEBP · max 2 MB
+                </p>
+                <InputError message={error} />
+            </div>
+
+            <input
+                ref={inputRef}
+                type="file"
+                name="avatar"
+                accept="image/*"
+                className="sr-only"
+                onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    setRemoveAvatar(false);
+                    setPreview(file ? URL.createObjectURL(file) : null);
+                }}
+            />
+            {removeAvatar && (
+                <input type="hidden" name="remove_avatar" value="1" />
+            )}
+        </div>
+    );
+}
+
+function DeleteMemberAccount({ locale }: { locale: string }) {
     const [confirming, setConfirming] = useState(false);
 
     return (
-        <div className="border-t border-gold/20 pt-8">
-            <h2 className="font-serif text-[22px] text-choc">Delete account</h2>
-            <p className="mt-2 text-[14px] text-choc3">
-                Permanently remove your account and data from Maison Anversa.
-            </p>
+        <MemberPanel
+            className={cn(
+                'mt-6 border-red-900/40 bg-[#2a1816]',
+                confirming && 'border-red-800/60',
+            )}
+        >
+            <MemberSectionTitle
+                title="Delete account"
+                description="Permanently remove your account and data from Maison Anversa. This cannot be undone."
+            />
 
             {!confirming ? (
                 <Button
                     type="button"
                     variant="destructive"
-                    className="mt-4"
+                    className="rounded-none"
                     onClick={() => setConfirming(true)}
                 >
                     Delete account
                 </Button>
             ) : (
-                <Form
-                    action="/member/profile"
-                    method="delete"
-                    className="mt-4 space-y-4"
-                >
+                <Form {...destroy.form(locale)} className="max-w-md space-y-4">
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="password">
+                                <Label
+                                    htmlFor="password"
+                                    className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                >
                                     Confirm with password
                                 </Label>
                                 <Input
@@ -138,19 +286,22 @@ function DeleteMemberAccount() {
                                     name="password"
                                     required
                                     autoComplete="current-password"
+                                    className={memberFieldClassName}
                                 />
                                 <InputError message={errors.password} />
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 <Button
                                     type="button"
-                                    variant="secondary"
+                                    variant="outline"
+                                    className="rounded-none border-gold/40 bg-transparent text-sand hover:bg-choc hover:text-cream"
                                     onClick={() => setConfirming(false)}
                                 >
                                     Cancel
                                 </Button>
                                 <Button
                                     variant="destructive"
+                                    className="rounded-none"
                                     disabled={processing}
                                 >
                                     Confirm delete
@@ -160,6 +311,6 @@ function DeleteMemberAccount() {
                     )}
                 </Form>
             )}
-        </div>
+        </MemberPanel>
     );
 }

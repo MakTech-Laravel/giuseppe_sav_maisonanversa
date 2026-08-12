@@ -56,7 +56,7 @@ export default function MemberLetter({
                                 }}
                                 className="size-4 accent-gold"
                             />
-                            <span className="font-sans text-[12px] tracking-[0.14em] text-choc uppercase">
+                            <span className="font-sans text-[12px] tracking-[0.14em] text-cream uppercase">
                                 {label}
                             </span>
                         </label>

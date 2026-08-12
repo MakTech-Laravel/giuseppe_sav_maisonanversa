@@ -83,7 +83,15 @@ class FortifyServiceProvider extends ServiceProvider
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::confirmPasswordView(fn () => Inertia::render('auth/confirm-password'));
+        Fortify::confirmPasswordView(function (Request $request) {
+            $intended = $request->session()->get('url.intended', '');
+
+            if (is_string($intended) && str_contains($intended, '/member')) {
+                return Inertia::render('member/confirm-password');
+            }
+
+            return Inertia::render('auth/confirm-password');
+        });
     }
 
     /**

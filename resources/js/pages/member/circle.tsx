@@ -13,7 +13,7 @@ export default function MemberCircle({ card }: { card: Card }) {
                 description="Your digital card — the number that will not be reissued."
             />
 
-            <MemberPanel className="mx-auto max-w-md bg-choc2 p-10 text-center text-cream">
+            <MemberPanel className="mx-auto max-w-md bg-choc p-10 text-center">
                 <p className="font-sans text-[9px] tracking-[0.35em] text-gold uppercase">
                     Maison Anversa
                 </p>

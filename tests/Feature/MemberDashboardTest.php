@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Fortify\Features;
 
 test('guests are redirected from the member dashboard', function () {
     $this->get(localized('member.dashboard'))
@@ -37,6 +40,7 @@ test('members can view heritage, orders, passport, circle and letter shells', fu
     $user = User::factory()->create();
 
     $this->actingAs($user)
+        ->withSession(['auth.password_confirmed_at' => time()])
         ->get(localized($route))
         ->assertOk()
         ->assertInertia(fn ($page) => $page->component($component));
@@ -65,6 +69,78 @@ test('members can update their profile and username from the member area', funct
         ->and($user->fresh()->name)->toBe('Updated Name');
 });
 
+test('members can upload and remove a profile avatar', function () {
+    Storage::fake('public');
+
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->patch(localized('member.profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'username' => $user->username,
+            'avatar' => UploadedFile::fake()->image('avatar.jpg'),
+        ])
+        ->assertRedirect(localized('member.profile', absolute: false));
+
+    $user->refresh();
+
+    expect($user->avatar)->not->toBeNull();
+    Storage::disk('public')->assertExists($user->avatar);
+
+    $this->actingAs($user)
+        ->patch(localized('member.profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'username' => $user->username,
+            'remove_avatar' => true,
+        ])
+        ->assertRedirect(localized('member.profile', absolute: false));
+
+    expect($user->fresh()->avatar)->toBeNull();
+});
+
+test('members can view an order detail page', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(localized('member.orders.show', ['order' => 'MA-2026-0047']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('member/order-show')
+            ->where('order.id', 'MA-2026-0047')
+            ->has('order.items')
+            ->has('order.timeline')
+        );
+});
+
+test('unknown member orders return not found', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(localized('member.orders.show', ['order' => 'MISSING']))
+        ->assertNotFound();
+});
+
+test('password confirmation for member security uses the member layout page', function () {
+    $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
+
+    Features::twoFactorAuthentication([
+        'confirm' => true,
+        'confirmPassword' => true,
+    ]);
+
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(localized('member.security'))
+        ->assertRedirect(route('password.confirm'));
+
+    $this->get(route('password.confirm'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('member/confirm-password'));
+});
+
 test('the member layout is wired for member pages', function () {
     $source = file_get_contents(resource_path('js/app.tsx'));
 
@@ -78,15 +154,18 @@ test('the member nav includes the client feedback sections', function () {
 
     foreach ([
         'Dashboard',
-        'My Heritage',
         'Orders',
-        'Passport',
         'Founding Circle',
         'Community',
         'Heritage Letter',
         'Profile & Account',
+        'Security',
         'Logout',
     ] as $label) {
         expect($source)->toContain($label);
     }
+
+    expect($source)
+        ->not->toContain('My Heritage')
+        ->not->toContain('Passport');
 });
