@@ -77,7 +77,7 @@ export function CommunitySessions({ onJoin }: CommunitySessionsProps) {
                     </h2>
                     <p className="max-w-md text-sm text-choc3 md:hidden">
                         {t(
-                            'Gebruik Plan een sessie rechtsonder om een nieuwe afspraak te maken.',
+                            'Gebruik Plan een sessie linksonder om een nieuwe afspraak te maken.',
                         )}
                     </p>
                 </div>
@@ -95,7 +95,7 @@ export function CommunitySessions({ onJoin }: CommunitySessionsProps) {
                 <SheetTrigger asChild>
                     <button
                         type="button"
-                        className="fixed right-5 bottom-6 z-40 border border-gold/35 bg-choc px-5 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase shadow-[0_12px_40px_rgba(41,28,24,0.35)] transition-colors hover:border-gold hover:bg-gold2 md:right-8 md:bottom-8"
+                        className="fixed bottom-6 left-5 z-40 border border-gold/35 bg-choc px-5 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase shadow-[0_12px_40px_rgba(41,28,24,0.35)] transition-colors hover:border-gold hover:bg-gold2 md:bottom-8 md:left-8"
                     >
                         {t('Plan een sessie')}
                     </button>
