@@ -36,21 +36,20 @@ export default function JournalShow({
                 subtitle={article.meta}
             />
 
-            <Section tone="cream" padded={false}>
-                <div className="relative aspect-21/9 max-h-125 overflow-hidden bg-choc2">
-                    <PlaceholderImage
-                        asset={article.asset}
-                        ratio={null}
-                        alt={article.title}
-                        captioned={false}
-                        overlay="linear-gradient(to top, rgba(41,28,24,0.35), rgba(41,28,24,0.05))"
-                        className="absolute inset-0 h-full w-full"
-                        loading="eager"
-                    />
-                </div>
-
+            <Section tone="cream">
                 <Wrap>
-                    <article className="mx-auto max-w-180 py-24">
+                    <figure className="mx-auto mb-16 max-w-180">
+                        <PlaceholderImage
+                            asset={article.asset}
+                            ratio={null}
+                            alt={article.title}
+                            captioned={false}
+                            className="w-full bg-choc2 [&_img]:h-auto [&_img]:w-full [&_img]:object-contain"
+                            loading="eager"
+                        />
+                    </figure>
+
+                    <article className="mx-auto max-w-180">
                         <Reveal>
                             {article.body.map((paragraph) => (
                                 <p

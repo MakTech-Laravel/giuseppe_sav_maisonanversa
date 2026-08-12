@@ -84,6 +84,17 @@ test('an unknown journal slug is not found', function () {
     $this->get('/nl/journal/niet-bestaand')->assertNotFound();
 });
 
+test('the journal article image keeps its natural proportions in the reading column', function () {
+    $source = file_get_contents(resource_path('js/pages/maison/journal/show.tsx'));
+
+    expect($source)
+        ->toContain('max-w-180')
+        ->toContain('[&_img]:h-auto')
+        ->toContain('[&_img]:object-contain')
+        ->not->toContain('aspect-21/9')
+        ->not->toContain('h-72 w-full overflow-hidden');
+});
+
 test('the sitemap lists every journal article in every locale', function () {
     $locales = config('maison.locales');
     $body = $this->get('/sitemap.xml')->assertOk()->getContent();
