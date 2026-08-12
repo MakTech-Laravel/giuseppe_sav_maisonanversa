@@ -22,6 +22,19 @@ trait ProfileValidationRules
     }
 
     /**
+     * Rules for the authenticated profile form, including editable username.
+     *
+     * @return array<string, array<int, ValidationRule|array<mixed>|string>>
+     */
+    protected function profileUpdateRules(?int $userId = null): array
+    {
+        return [
+            ...$this->profileRules($userId),
+            'username' => $this->usernameRules($userId),
+        ];
+    }
+
+    /**
      * Get the validation rules used to validate user names.
      *
      * @return array<int, ValidationRule|array<mixed>|string>
@@ -29,6 +42,26 @@ trait ProfileValidationRules
     protected function nameRules(): array
     {
         return ['required', 'string', 'max:255'];
+    }
+
+    /**
+     * Get the validation rules used to validate login usernames.
+     *
+     * @return array<int, ValidationRule|array<mixed>|string>
+     */
+    protected function usernameRules(?int $userId = null): array
+    {
+        return [
+            'required',
+            'string',
+            'min:3',
+            'max:30',
+            'alpha_dash',
+            'lowercase',
+            $userId === null
+                ? Rule::unique(User::class)
+                : Rule::unique(User::class)->ignore($userId),
+        ];
     }
 
     /**

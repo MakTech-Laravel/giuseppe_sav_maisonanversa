@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\MaisonController;
+use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\PostAttachmentController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
@@ -51,6 +52,22 @@ Route::prefix('{locale}')
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
+
+    Route::prefix('member')
+        ->name('member.')
+        ->controller(DashboardController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('dashboard');
+            Route::get('heritage', 'heritage')->name('heritage');
+            Route::get('orders', 'orders')->name('orders');
+            Route::get('passport', 'passport')->name('passport');
+            Route::get('circle', 'circle')->name('circle');
+            Route::get('letter', 'letter')->name('letter');
+            Route::get('profile', 'profile')->name('profile');
+            Route::patch('profile', 'updateProfile')->name('profile.update');
+            Route::get('security', 'security')->name('security');
+            Route::delete('profile', 'destroy')->name('profile.destroy');
+        });
 
     // ── Demo landing page ─────────────────────────────────────────────────────
     Route::get('/file-upload-demo', [FileUploadDemoController::class, 'index'])
