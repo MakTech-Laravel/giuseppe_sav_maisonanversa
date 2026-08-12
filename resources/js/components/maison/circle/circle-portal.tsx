@@ -110,14 +110,17 @@ export function CirclePortal() {
 
     if (!ready) {
         return (
-            <div className="mx-auto max-w-190 py-8" aria-hidden="true">
-                <div className="h-40 animate-pulse bg-white/5" />
+            <div
+                className="mx-auto max-w-190 bg-choc2 px-8 py-16 text-cream md:px-16"
+                aria-hidden="true"
+            >
+                <div className="mx-auto h-40 max-w-110 animate-pulse bg-white/5" />
             </div>
         );
     }
 
     return (
-        <Reveal className="mx-auto max-w-190">
+        <Reveal className="mx-auto max-w-190 bg-choc2 px-8 py-14 text-cream md:px-16 md:py-18">
             <Eyebrow className="text-center text-gold">
                 {t('Ledenportaal · Prototype')}
             </Eyebrow>
@@ -270,7 +273,7 @@ export function CirclePortal() {
                             value={num}
                             onChange={(event) => setNum(event.target.value)}
                             placeholder={t('Editienummer (bijv. 7)')}
-                            className="min-w-0 flex-1 border border-gold/30 bg-white/6 px-3.5 py-3 font-sans text-sm text-cream outline-none placeholder:text-sand focus:border-gold"
+                            className="min-w-0 flex-1 border border-gold/30 bg-white/6 px-3.5 py-3.5 font-sans text-sm text-cream outline-none placeholder:text-sand focus:border-gold"
                         />
                         <label className="sr-only" htmlFor="fc-email">
                             {t('E-mailadres')}
@@ -281,7 +284,7 @@ export function CirclePortal() {
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                             placeholder={t('E-mailadres')}
-                            className="min-w-0 flex-1 border border-gold/30 bg-white/6 px-3.5 py-3 font-sans text-sm text-cream outline-none placeholder:text-sand focus:border-gold"
+                            className="min-w-0 flex-1 border border-gold/30 bg-white/6 px-3.5 py-3.5 font-sans text-sm text-cream outline-none placeholder:text-sand focus:border-gold"
                         />
                     </div>
                     {error && (
@@ -292,7 +295,7 @@ export function CirclePortal() {
                     <MaisonButton variant="gold" type="submit" block>
                         {t('Toegang tot mijn ruimte')}
                     </MaisonButton>
-                    <p className="mt-4 font-sans text-[9px] tracking-[0.14em] text-stone uppercase">
+                    <p className="mt-4 text-center font-sans text-[9px] tracking-[0.14em] text-stone uppercase">
                         {t(
                             'Prototype — bij lancering gekoppeld aan een beveiligd ledensysteem. Gegevens blijven lokaal in uw browser.',
                         )}

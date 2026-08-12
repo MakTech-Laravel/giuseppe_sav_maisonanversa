@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { CirclePortal } from '@/components/maison/circle/circle-portal';
-import { MaisonLink } from '@/components/maison/maison-link';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { PageHero } from '@/components/maison/ui/page-hero';
@@ -63,8 +62,8 @@ export default function Circle() {
 
             <Section tone="cream">
                 <Wrap>
-                    <Reveal className="mx-auto mb-14 max-w-160 text-center">
-                        <h2 className="mb-5 font-serif text-[clamp(28px,3.5vw,42px)] font-medium [&_em]:text-gold2 [&_em]:italic">
+                    <Reveal className="mx-auto mb-16 max-w-160 text-center">
+                        <h2 className="mb-5 font-serif text-[clamp(30px,4vw,52px)] leading-[1.1] font-medium [&_em]:text-gold2 [&_em]:italic">
                             {t('Jij was er bij het')} <em>{t('begin')}</em>
                         </h2>
                         <p className="text-base leading-[1.85] text-choc3">
@@ -74,48 +73,45 @@ export default function Circle() {
                         </p>
                     </Reveal>
 
-                    <div className="mb-16 grid gap-0.5 md:grid-cols-2">
+                    {/*
+                     * Prototype `.fc-full-benefits`: 2px sand gutters read as
+                     * hairlines between cream cells, with a faint watermark
+                     * number behind each benefit.
+                     */}
+                    <div className="mb-16 grid grid-cols-1 gap-0.5 bg-sand md:grid-cols-2">
                         {BENEFITS.map((benefit) => (
                             <Reveal
                                 key={benefit.num}
-                                className="border border-gold/15 bg-cream2 px-7 py-8"
+                                className="relative overflow-hidden bg-cream p-10"
                             >
-                                <div className="mb-3 font-serif text-[13px] tracking-[0.2em] text-gold2">
+                                <span
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute -top-2.5 -right-2.5 font-serif text-[80px] leading-none font-bold text-gold/4"
+                                >
+                                    {benefit.num}
+                                </span>
+                                <div className="relative mb-3.5 font-serif text-[36px] leading-none font-light text-gold/25">
                                     {benefit.num}
                                 </div>
-                                <h3 className="mb-2 font-serif text-xl font-medium text-choc">
+                                <h3 className="relative mb-2 font-serif text-[22px] font-medium text-choc">
                                     {benefit.title === 'Behind the Scenes'
                                         ? benefit.title
                                         : t(benefit.title)}
                                 </h3>
-                                <p className="text-[14px] leading-[1.7] text-choc3">
+                                <p className="relative text-[15px] leading-[1.7] text-choc3">
                                     {t(benefit.desc)}
                                 </p>
                             </Reveal>
                         ))}
                     </div>
-                </Wrap>
-            </Section>
 
-            <Section tone="choc2" className="text-cream">
-                <Wrap>
                     <CirclePortal />
-                </Wrap>
-            </Section>
 
-            <Section tone="cream">
-                <Wrap className="text-center">
-                    <MaisonButton variant="choc" onClick={openOrder}>
-                        {t('Word Founding Member — Bekijk Heritage No.001')}
-                    </MaisonButton>
-                    <p className="mt-4 font-sans text-sm text-choc3">
-                        <MaisonLink
-                            to="product"
-                            className="underline underline-offset-2 hover:text-choc"
-                        >
-                            Heritage No.001
-                        </MaisonLink>
-                    </p>
+                    <div className="mt-10 text-center">
+                        <MaisonButton variant="choc" onClick={openOrder}>
+                            {t('Word Founding Member — Bekijk Heritage No.001')}
+                        </MaisonButton>
+                    </div>
                 </Wrap>
             </Section>
         </>
