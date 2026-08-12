@@ -10,6 +10,7 @@ import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import FrontendLayout from '@/layouts/frontend-layout';
+import MemberLayout from '@/layouts/member-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { createI18nForLocale } from '@/lib/i18n';
 
@@ -29,6 +30,8 @@ createInertiaApp({
                 return null;
             case name.startsWith('maison/'):
                 return FrontendLayout;
+            case name.startsWith('member/'):
+                return MemberLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):

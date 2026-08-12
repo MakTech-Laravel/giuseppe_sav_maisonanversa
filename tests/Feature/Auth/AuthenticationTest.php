@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
 
@@ -12,6 +14,21 @@ test('login screen can be rendered', function () {
 
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
+
+    $response = $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('member.dashboard', absolute: false));
+});
+
+test('staff users authenticate to the admin dashboard', function () {
+    $this->seed([PermissionSeeder::class, RoleSeeder::class]);
+
+    $user = User::factory()->create();
+    $user->assignRole('admin');
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,

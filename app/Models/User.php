@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'avatar'])]
+#[Fillable(['name', 'email', 'username', 'password', 'avatar'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -32,6 +33,31 @@ class User extends Authenticatable
     public function isSuperAdmin(): bool
     {
         return $this->hasRole(RoleEnum::SUPER_ADMIN->value);
+    }
+
+    /**
+     * Build a unique login handle from a display name.
+     */
+    public static function generateUsername(string $name, ?int $ignoreId = null): string
+    {
+        $base = Str::slug(Str::lower($name), '_');
+        $base = preg_replace('/[^a-z0-9_]/', '', $base) ?: 'member';
+        $base = Str::limit($base, 20, '');
+
+        $candidate = $base;
+        $suffix = 1;
+
+        while (
+            static::query()
+                ->where('username', $candidate)
+                ->when($ignoreId !== null, fn ($query) => $query->whereKeyNot($ignoreId))
+                ->exists()
+        ) {
+            $candidate = $base.'_'.$suffix;
+            $suffix++;
+        }
+
+        return $candidate;
     }
 
     /**
