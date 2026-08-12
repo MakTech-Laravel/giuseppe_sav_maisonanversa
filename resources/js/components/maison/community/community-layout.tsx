@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { FeedPostData } from '@/components/maison/community/community-data';
 import { CommunityCourts } from '@/components/maison/community/community-courts';
 import { CommunityEvents } from '@/components/maison/community/community-events';
 import { CommunityFeed } from '@/components/maison/community/community-feed';
@@ -9,12 +10,14 @@ import {
     type CommunityTab,
 } from '@/components/maison/community/community-tabs';
 import type { useCommunityToast } from '@/components/maison/community/community-toast';
+import type { Paginated } from '@/types/admin';
 
 type CommunityLayoutProps = {
     toast: ReturnType<typeof useCommunityToast>;
+    posts: Paginated<FeedPostData>;
 };
 
-export function CommunityLayout({ toast }: CommunityLayoutProps) {
+export function CommunityLayout({ toast, posts }: CommunityLayoutProps) {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<CommunityTab>('feed');
 
@@ -24,6 +27,7 @@ export function CommunityLayout({ toast }: CommunityLayoutProps) {
 
             {activeTab === 'feed' && (
                 <CommunityFeed
+                    posts={posts}
                     onViewEvents={() => setActiveTab('events')}
                     onPostPublished={() =>
                         toast.show(t('Post geplaatst in de Community.'))

@@ -22,14 +22,14 @@ export function CommunityTabs({ activeTab, onTabChange }: CommunityTabsProps) {
     return (
         <div className="sticky top-[130px] z-50 border-b-2 border-gold/15 bg-cream">
             <Wrap className="px-6 md:px-10 lg:px-20">
-                <div className="flex overflow-x-auto">
+                <div className="flex overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                     {TABS.map((tab) => (
                         <button
                             key={tab.id}
                             type="button"
                             onClick={() => onTabChange(tab.id)}
                             className={cn(
-                                '-mb-0.5 cursor-pointer border-b-2 border-transparent bg-transparent px-7 py-4.5 font-sans text-[10px] tracking-[0.22em] text-stone uppercase transition-colors',
+                                '-mb-0.5 shrink-0 cursor-pointer border-b-2 border-transparent bg-transparent px-7 py-4.5 font-sans text-[10px] tracking-[0.22em] text-stone uppercase transition-colors',
                                 activeTab === tab.id
                                     ? 'border-gold2 text-gold2'
                                     : 'hover:text-choc',

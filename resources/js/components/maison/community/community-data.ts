@@ -1,5 +1,13 @@
 import type { CommunityTab } from '@/components/maison/community/community-tabs';
 
+export type FeedComment = {
+    id: string;
+    name: string;
+    initials: string;
+    body: string;
+    info: string;
+};
+
 export type FeedPostData = {
     id: string;
     /** User-authored posts render content as escaped React text, not via t(). */
@@ -14,7 +22,7 @@ export type FeedPostData = {
     content: string;
     imageLabel?: string;
     likes: number;
-    comments: number;
+    comments: FeedComment[];
 };
 
 export type CourtPin = {
@@ -56,58 +64,6 @@ export type EventCardData = {
     attendeeCount: string;
     cta: string;
 };
-
-export const INITIAL_FEED_POSTS: FeedPostData[] = [
-    {
-        id: 'official-1',
-        official: true,
-        name: 'Maison Anversa',
-        info: 'Officieel · 1 dag geleden · Antwerpen',
-        badge: 'Officieel',
-        badgeOfficial: true,
-        content:
-            'Productie update Heritage No.001 — De eerste batch frames zijn afgewerkt. De lederen grepen worden deze week aangebracht. De planning voor Q1 2027 ligt volledig op schema.\n\nWe houden u op de hoogte via de Heritage Letter en hier in de Community.',
-        likes: 67,
-        comments: 14,
-    },
-    {
-        id: 'post-tj',
-        initials: 'TJ',
-        avatarBg: '#2A1810',
-        name: 'Thomas Janssen',
-        info: 'Nr. 007 · Padel Club Antwerpen · 2 uur geleden',
-        badge: 'FC Lid',
-        content:
-            'Eerste sessie vandaag met Heritage No.001. Het verschil in gevoel met een standaard racket is onmiddellijk merkbaar. De lederen greep in het bijzonder — het warmt op in je hand en voelt na een uur aan alsof het altijd van jou is geweest.\n\nNummer 007. Trots lid van de Founding Circle.',
-        imageLabel: 'Padel Court Session',
-        likes: 12,
-        comments: 3,
-    },
-    {
-        id: 'post-av',
-        initials: 'AV',
-        avatarBg: '#1A2010',
-        name: 'Amelie Verschueren',
-        info: 'Nr. 023 · Padel One Brussels · 5 uur geleden',
-        badge: 'FC Lid',
-        content:
-            'De Heritage doos is aangekomen. De unboxing is een ervaring op zich. De welkomstkaart, het paspoort, het certificaat — alles ademt kwaliteit. Het racket heb ik nog niet gespeeld maar ik ben al verliefd.\n\nDit is wat luxe aanvoelt.',
-        likes: 28,
-        comments: 7,
-    },
-    {
-        id: 'post-mk',
-        initials: 'MK',
-        avatarBg: '#201520',
-        name: 'Marc Kessels',
-        info: 'Nr. 041 · Padel Club Rotterdam · Gisteren',
-        badge: 'FC Lid',
-        content:
-            'Wie speelt er volgende zaterdag in Amsterdam? Ik zoek nog twee spelers voor een 4-set sessie. Niveau intermediair tot gevorderd. DM me of reageer hieronder.',
-        likes: 5,
-        comments: 8,
-    },
-];
 
 export const SIDEBAR_MEMBERS = [
     { initials: 'TJ', name: 'Thomas J.', meta: 'Antwerpen', num: '007' },

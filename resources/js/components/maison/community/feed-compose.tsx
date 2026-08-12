@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Monogram } from '@/components/maison/ui/monogram';
 
 type FeedComposeProps = {
+    initials: string;
     onPublish: (text: string) => void;
 };
 
-export function FeedCompose({ onPublish }: FeedComposeProps) {
+export function FeedCompose({ initials, onPublish }: FeedComposeProps) {
     const { t } = useTranslation();
     const [text, setText] = useState('');
 
@@ -24,7 +25,7 @@ export function FeedCompose({ onPublish }: FeedComposeProps) {
     return (
         <div className="mb-6 border border-gold/20 bg-cream2 p-6">
             <div className="mb-3.5 flex items-center gap-3.5">
-                <Monogram initials="YS" emphasis />
+                <Monogram initials={initials} emphasis />
                 <textarea
                     value={text}
                     onChange={(event) => setText(event.target.value)}

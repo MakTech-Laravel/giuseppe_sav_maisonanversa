@@ -1,3 +1,4 @@
+import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { SIDEBAR_MEMBERS } from '@/components/maison/community/community-data';
 import { Monogram } from '@/components/maison/ui/monogram';
@@ -6,8 +7,25 @@ type FeedSidebarProps = {
     onViewEvents: () => void;
 };
 
+function initialsFromName(name: string): string {
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+
+    if (parts.length === 0) {
+        return 'MA';
+    }
+
+    if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`.toUpperCase();
+}
+
 export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
     const { t } = useTranslation();
+    const { auth } = usePage().props;
+    const name = auth.user?.name ?? t('Yusuf Savran');
+    const initials = initialsFromName(name);
 
     return (
         <aside className="space-y-5">
@@ -18,13 +36,13 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
 
                 <div className="flex items-center gap-3.5 border-b border-gold/10 pb-4">
                     <Monogram
-                        initials="YS"
+                        initials={initials}
                         emphasis
                         className="size-12 text-lg"
                     />
                     <div>
                         <div className="font-serif text-base font-medium text-choc">
-                            {t('Yusuf Savran')}
+                            {name}
                         </div>
                         <div className="font-sans text-[9px] tracking-[0.15em] text-gold uppercase">
                             {t('Founding Member · Nr. 001')}

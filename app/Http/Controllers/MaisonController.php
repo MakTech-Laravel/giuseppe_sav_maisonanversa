@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\CommunityFeed;
 use App\Support\Journal;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -90,9 +91,17 @@ class MaisonController extends Controller
         ]);
     }
 
-    public function community(): Response
+    public function community(Request $request): Response
     {
-        return $this->page('community');
+        $props = [];
+
+        if ($request->user() !== null) {
+            $props['posts'] = Inertia::scroll(
+                fn () => CommunityFeed::paginate($request),
+            );
+        }
+
+        return $this->page('community', $props);
     }
 
     public function corner(): Response

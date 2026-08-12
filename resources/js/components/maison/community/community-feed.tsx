@@ -1,53 +1,80 @@
+import { InfiniteScroll, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import {
-    INITIAL_FEED_POSTS,
-    type FeedPostData,
-} from '@/components/maison/community/community-data';
+import type { FeedPostData } from '@/components/maison/community/community-data';
+import { CommunityCirclePanel } from '@/components/maison/community/community-circle-panel';
 import { FeedCompose } from '@/components/maison/community/feed-compose';
 import { FeedPostCard } from '@/components/maison/community/feed-post-card';
-import { FeedSidebar } from '@/components/maison/community/feed-sidebar';
 import { Wrap } from '@/components/maison/ui/section';
+import type { Paginated } from '@/types/admin';
 
 type CommunityFeedProps = {
+    posts: Paginated<FeedPostData>;
     onViewEvents: () => void;
     onPostPublished: () => void;
 };
 
+function initialsFromName(name: string): string {
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+
+    if (parts.length === 0) {
+        return 'MA';
+    }
+
+    if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`.toUpperCase();
+}
+
 export function CommunityFeed({
+    posts,
     onViewEvents,
     onPostPublished,
 }: CommunityFeedProps) {
-    const [posts, setPosts] = useState<FeedPostData[]>(INITIAL_FEED_POSTS);
+    const { auth } = usePage().props;
+    const userName = auth.user?.name ?? 'Member';
+    const userInitials = initialsFromName(userName);
+    const [localPosts, setLocalPosts] = useState<FeedPostData[]>([]);
 
     function handlePublish(text: string) {
         const newPost: FeedPostData = {
             id: `user-${Date.now()}`,
             userAuthored: true,
-            initials: 'YS',
+            initials: userInitials,
             avatarBg: '#291c18',
-            name: 'Yusuf Savran',
-            info: 'Nr. 001 · Zojuist',
+            name: userName,
+            info: 'Zojuist',
             badge: 'FC Lid',
             content: text,
             likes: 0,
-            comments: 0,
+            comments: [],
         };
 
-        setPosts((current) => [newPost, ...current]);
+        setLocalPosts((current) => [newPost, ...current]);
         onPostPublished();
     }
 
     return (
-        <Wrap className="grid items-start gap-12 px-6 py-12 md:px-10 lg:grid-cols-[1fr_360px] lg:px-20">
-            <div>
-                <FeedCompose onPublish={handlePublish} />
+        <>
+            <Wrap className="mx-auto max-w-3xl px-6 py-12 md:px-10 lg:px-20">
+                <FeedCompose
+                    initials={userInitials}
+                    onPublish={handlePublish}
+                />
 
-                {posts.map((post) => (
+                {localPosts.map((post) => (
                     <FeedPostCard key={post.id} post={post} />
                 ))}
-            </div>
 
-            <FeedSidebar onViewEvents={onViewEvents} />
-        </Wrap>
+                <InfiniteScroll data="posts" buffer={400}>
+                    {posts.data.map((post) => (
+                        <FeedPostCard key={post.id} post={post} />
+                    ))}
+                </InfiniteScroll>
+            </Wrap>
+
+            <CommunityCirclePanel onViewEvents={onViewEvents} />
+        </>
     );
 }
