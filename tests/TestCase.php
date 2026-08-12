@@ -13,6 +13,12 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         URL::defaults(['locale' => config('maison.default_locale')]);
+
+        /*
+         * Keep auth/locale redirects deterministic. Preference tests override
+         * Accept-Language explicitly when negotiating browser language.
+         */
+        $this->withHeader('Accept-Language', config('maison.default_locale'));
     }
 
     protected function skipUnlessFortifyHas(string $feature, ?string $message = null): void

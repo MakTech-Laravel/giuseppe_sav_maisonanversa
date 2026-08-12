@@ -1,6 +1,6 @@
 <?php
 
-test('the site root redirects to the default locale', function () {
+test('the site root redirects to the default locale without a preference', function () {
     $this->get(route('home'))
         ->assertRedirect('/'.config('maison.default_locale'));
 });

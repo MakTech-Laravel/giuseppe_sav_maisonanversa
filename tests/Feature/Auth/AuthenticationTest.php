@@ -76,9 +76,11 @@ test('users can not authenticate with invalid password', function () {
 test('users can logout', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user)->post(route('logout'));
+    $response = $this->actingAs($user)
+        ->withUnencryptedCookie(config('maison.locale_cookie'), 'en')
+        ->post(route('logout'));
 
-    $response->assertRedirect(localized('maison.home', absolute: false));
+    $response->assertRedirect(route('maison.home', ['locale' => 'en'], absolute: false));
 
     $this->assertGuest();
 });
