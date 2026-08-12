@@ -10,10 +10,8 @@ sentence. These need a human translation before launch.
 
 The remaining 1646 translations are complete.
 
-## EN (3)
+## EN (2)
 
-- **Dutch source:** ziet
-  - **Missing:** _(empty)_
 - **Dutch source:** Eerste sessie vandaag met Heritage No.001. Het verschil in gevoel met een standaard racket is onmiddellijk merkbaar. De 
   - **Cut off:** First session today with Heritage No.001. The difference in feel with a standard racket is immediately noticeable. The
 - **Dutch source:** Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek 

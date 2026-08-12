@@ -51,8 +51,34 @@ test('dressing CTAs use shell actions or maison links', function () {
     expect($dressing)
         ->toContain('openNewsletter')
         ->toContain('MaisonLink')
-        ->toContain("to=\"product\"")
+        ->toContain('to="product"')
         ->not->toContain('onclick=');
+});
+
+test('the dressing page keeps the philosophy values and six collection pieces visible', function () {
+    $source = file_get_contents(resource_path('js/pages/maison/dressing.tsx'));
+
+    expect($source)
+        ->toContain('Technische stoffen')
+        ->toContain('Beperkte productie')
+        ->toContain('Tijdloze palet')
+        ->toContain('Padel Polo')
+        ->toContain('Court Short')
+        ->toContain('Warm-up Jacket')
+        ->toContain('Court Cap')
+        ->toContain('Sport Handdoek')
+        ->toContain('Padel Grip')
+        ->toContain('ma-lg:grid-cols-6')
+        ->toContain('min-h-120')
+        ->not->toContain('ma-lg:grid-cols-[1fr_1.1fr_1fr]');
+});
+
+test('the dressing founding-circle heading translates ziet into English', function () {
+    $english = json_decode((string) file_get_contents(lang_path('en.json')), true);
+
+    expect($english['die het'])->toBe('to')
+        ->and($english['ziet'])->toBe('see it')
+        ->and($english['Wees de eerste'])->toBe('Be the first');
 });
 
 test('the circle benefits grid matches the prototype hairline layout', function () {

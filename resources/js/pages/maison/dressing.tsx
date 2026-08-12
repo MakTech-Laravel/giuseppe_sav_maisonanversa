@@ -99,16 +99,21 @@ export default function Dressing() {
                         variant="filled"
                         block
                         onClick={openNewsletter}
-                        className="mx-auto max-w-100"
                     >
                         {t('Schrijf in voor Heritage Letter')}
                     </MaisonButton>
                 </Wrap>
             </Section>
 
-            <Section tone="cream" padded={false} className="py-0">
-                <div className="grid min-h-120 bg-cream ma-lg:grid-cols-[1fr_1.1fr_1fr] md:grid-cols-2">
-                    <Reveal className="flex flex-col justify-center border-gold/15 px-8 py-16 md:border-r md:px-13">
+            {/*
+             * The prototype marks this block `story-grid`, which has no CSS —
+             * so philosophy, the dressing photograph and the three values
+             * stack in source order rather than sitting in the home page's
+             * three columns.
+             */}
+            <Section tone="cream">
+                <Wrap>
+                    <Reveal className="max-w-160 py-4 ma-md:py-8">
                         <Eyebrow tone="gold2">{t('De Filosofie')}</Eyebrow>
                         <GoldRule />
                         <h2 className="mt-3 mb-5 font-serif text-[clamp(26px,3vw,38px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
@@ -123,7 +128,7 @@ export default function Dressing() {
                         </p>
                     </Reveal>
 
-                    <div className="relative flex min-h-60 items-center justify-center overflow-hidden bg-choc2 md:min-h-120">
+                    <div className="relative flex min-h-120 flex-col overflow-hidden bg-choc2">
                         <PlaceholderImage
                             asset="room-dressing"
                             ratio={null}
@@ -132,20 +137,26 @@ export default function Dressing() {
                             overlay="linear-gradient(145deg, rgba(53,39,34,0.82) 0%, rgba(41,28,24,0.92) 100%)"
                             className="absolute inset-0 h-full w-full"
                         />
-                        <div className="relative z-1 flex flex-col items-center gap-1.5">
-                            <PlaceholderImage
-                                asset="logo-icon"
-                                ratio="1 / 1"
-                                alt="Maison Anversa"
-                                captioned={false}
-                                className="size-10 opacity-80"
-                            />
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(141,112,90,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(141,112,90,0.03)_1px,transparent_1px)] bg-size-[40px_40px]"
+                        />
+                        <div className="relative z-1 flex flex-1 flex-col items-center justify-center gap-1.5">
+                            <div className="opacity-[0.08]">
+                                <PlaceholderImage
+                                    asset="logo-icon"
+                                    ratio="1 / 1"
+                                    alt="Maison Anversa"
+                                    captioned={false}
+                                    className="size-10 mix-blend-screen"
+                                />
+                            </div>
                             <div className="font-serif text-[14px] tracking-[0.25em] text-cream/35 uppercase">
                                 Maison Anversa
                             </div>
                         </div>
-                        <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 border-t border-gold/15 bg-gold/8 px-6 py-3">
-                            <div className="size-7.5 shrink-0 overflow-hidden border border-gold">
+                        <div className="relative z-1 flex items-center gap-3 border-t border-gold/15 bg-gold/8 px-6 py-3">
+                            <div className="flex size-7.5 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gold">
                                 <PlaceholderImage
                                     asset="logo-icon"
                                     ratio="1 / 1"
@@ -162,7 +173,7 @@ export default function Dressing() {
                         </div>
                     </div>
 
-                    <div className="hidden flex-col justify-center gap-6 border-l border-gold/15 px-10 py-10 ma-lg:flex">
+                    <div className="flex max-w-160 flex-col gap-6 py-10">
                         {VALUES.map((value) => (
                             <Reveal
                                 key={value.title}
@@ -171,7 +182,7 @@ export default function Dressing() {
                             >
                                 <span
                                     aria-hidden="true"
-                                    className="mt-0.5 flex size-6.5 shrink-0 items-center justify-center rounded-full border border-gold/35 text-[11px] text-gold2"
+                                    className="mt-0.5 flex size-6.5 shrink-0 items-center justify-center rounded-full border border-gold/35 text-[11px] leading-none text-gold2"
                                 >
                                     {value.icon}
                                 </span>
@@ -186,7 +197,7 @@ export default function Dressing() {
                             </Reveal>
                         ))}
                     </div>
-                </div>
+                </Wrap>
             </Section>
 
             <Section tone="dark">
@@ -200,11 +211,11 @@ export default function Dressing() {
                         </h2>
                     </Reveal>
 
-                    <div className="grid grid-cols-2 gap-0.5 ma-lg:grid-cols-6 md:grid-cols-3">
+                    <div className="grid grid-cols-2 gap-0.5 md:grid-cols-3 ma-lg:grid-cols-6">
                         {PREVIEW.map((item) => (
                             <Reveal
                                 key={item.num}
-                                className="border border-gold/10 bg-white/3 px-5 pt-7 pb-6"
+                                className="border border-gold/10 bg-white/3 px-5 pt-7 pb-6 transition-colors hover:border-gold/25 hover:bg-gold/5"
                             >
                                 <div className="mb-3.5 font-serif text-[44px] leading-none font-light text-gold/18">
                                     {item.num}
