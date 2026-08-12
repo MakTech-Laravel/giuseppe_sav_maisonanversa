@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\File;
 test('the auth menu is wired into the public shell', function () {
     expect(File::get(resource_path('js/components/maison/shell/site-topbar.tsx')))
         ->toContain('AuthMenu')
-        ->toContain('isAuthenticated')
+        ->toContain('Heritage Letter')
+        ->toContain('onNewsletter')
+        ->not->toContain('isAuthenticated')
         ->not->toContain('MaisonLink');
 
     expect(File::get(resource_path('js/components/maison/shell/site-nav.tsx')))
