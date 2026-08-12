@@ -14,6 +14,8 @@ test('the member layout uses maison brand surfaces', function () {
         ->toContain('sticky')
         ->toContain('Avatar')
         ->toContain('Maison Anversa')
+        ->toContain('LanguageSwitcher')
+        ->toContain('`/${locale}`')
         ->and($nav)
         ->toContain('md:sticky');
 });
