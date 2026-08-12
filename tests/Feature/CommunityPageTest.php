@@ -90,12 +90,30 @@ test('a community toast helper exists for member feedback', function () {
         ->toContain('CommunityToast');
 });
 
-test('community tabs hide overflow scrollbars', function () {
+test('community tabs mark the active tab clearly', function () {
     $source = File::get(resource_path('js/components/maison/community/community-tabs.tsx'));
 
     expect($source)
-        ->toContain('overflow-y-hidden')
-        ->toContain('[&::-webkit-scrollbar]:hidden');
+        ->toContain('aria-selected')
+        ->toContain('after:bg-choc')
+        ->toContain('role="tablist"');
+});
+
+test('community courts use a stacked layout without a side column', function () {
+    $source = File::get(resource_path('js/components/maison/community/community-courts.tsx'));
+
+    expect($source)
+        ->toContain('md:grid-cols-2')
+        ->not->toContain('lg:grid-cols-[1fr_420px]');
+});
+
+test('community sessions open the planner in a sheet', function () {
+    $source = File::get(resource_path('js/components/maison/community/community-sessions.tsx'));
+
+    expect($source)
+        ->toContain('Sheet')
+        ->toContain('Plan een sessie')
+        ->not->toContain('lg:grid-cols-[1fr_380px]');
 });
 
 test('the community feed uses a circle sheet instead of an inline sidebar column', function () {
