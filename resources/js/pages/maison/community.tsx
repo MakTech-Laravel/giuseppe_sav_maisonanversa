@@ -1,23 +1,25 @@
-import { useState } from 'react';
-import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
+import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { CommunityLayout } from '@/components/maison/community/community-layout';
 import { CommunityLoginGate } from '@/components/maison/community/community-login-gate';
 import {
     CommunityToast,
     useCommunityToast,
 } from '@/components/maison/community/community-toast';
+import type { FeedPostData } from '@/components/maison/community/community-data';
 import { PageHero } from '@/components/maison/ui/page-hero';
+import type { Paginated } from '@/types/admin';
 
-export default function Community() {
+type CommunityPageProps = {
+    posts?: Paginated<FeedPostData>;
+};
+
+export default function Community({ posts }: CommunityPageProps) {
     const { t } = useTranslation();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { auth } = usePage().props;
     const toast = useCommunityToast();
-
-    function handleLogin() {
-        setIsLoggedIn(true);
-        toast.show(t('Welkom terug bij de Community.'));
-    }
+    const isAuthenticated = auth.user !== null;
 
     return (
         <>
@@ -35,10 +37,10 @@ export default function Community() {
                 )}
             />
 
-            {!isLoggedIn ? (
-                <CommunityLoginGate onLogin={handleLogin} />
+            {isAuthenticated && posts ? (
+                <CommunityLayout toast={toast} posts={posts} />
             ) : (
-                <CommunityLayout toast={toast} />
+                <CommunityLoginGate />
             )}
 
             <CommunityToast message={toast.message} visible={toast.visible} />

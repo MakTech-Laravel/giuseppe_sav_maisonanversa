@@ -1,27 +1,17 @@
-import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
+import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
 
-type CommunityLoginGateProps = {
-    onLogin: () => void;
-};
-
-export function CommunityLoginGate({ onLogin }: CommunityLoginGateProps) {
+/**
+ * Gate for guests. Opens the real Maison auth modal — Community access
+ * requires a signed-in account (customer or staff).
+ */
+export function CommunityLoginGate() {
     const { t } = useTranslation();
-    const [email, setEmail] = useState('');
-
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (!email.trim()) {
-            return;
-        }
-
-        onLogin();
-    }
+    const { openAuth } = useShellActions();
 
     return (
         <Section tone="cream" padded className="py-30 text-center">
@@ -48,28 +38,16 @@ export function CommunityLoginGate({ onLogin }: CommunityLoginGateProps) {
                     )}
                 </p>
 
-                <form
-                    onSubmit={handleSubmit}
-                    className="mb-5 flex flex-col gap-3.5"
+                <MaisonButton
+                    variant="filled"
+                    block
+                    type="button"
+                    onClick={() => openAuth('login')}
                 >
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        placeholder={t('Uw e-mailadres')}
-                        className="border border-gold/25 bg-cream2 px-4.5 py-3.5 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
-                    />
-                    <input
-                        type="password"
-                        placeholder={t('Wachtwoord')}
-                        className="border border-gold/25 bg-cream2 px-4.5 py-3.5 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
-                    />
-                    <MaisonButton variant="filled" block type="submit">
-                        {t('Inloggen')}
-                    </MaisonButton>
-                </form>
+                    {t('Inloggen')}
+                </MaisonButton>
 
-                <div className="my-2 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
+                <div className="my-5 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
                     {t('of')}
                 </div>
 
