@@ -11,6 +11,9 @@ test('the partnership form uses react submit instead of onclick handlers', funct
 
     expect($source)
         ->toContain('onSubmit={onSubmit}')
+        ->toContain('useRef')
+        ->toContain('useState')
+        ->toContain("from 'react'")
         ->not->toContain('onclick=');
 });
 
