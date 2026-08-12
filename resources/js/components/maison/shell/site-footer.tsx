@@ -60,6 +60,7 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                                     {isNavItem(item) ? (
                                         <MaisonLink
                                             to={item.page}
+                                            hash={item.hash}
                                             className="flex min-h-11 items-center py-1.5 font-sans text-[11px] font-light tracking-[0.08em] text-stone transition-colors hover:text-cream md:min-h-0 md:py-0"
                                         >
                                             {t(item.label)}
