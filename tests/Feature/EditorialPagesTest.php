@@ -31,18 +31,43 @@ test('the circle portal builds crawlable referral links rather than hash navigat
         ->not->toContain('alert(');
 });
 
-test('dressing and circle CTAs use shell actions or maison links', function () {
+test('the circle portal sits as a dark card on the cream section', function () {
+    $page = file_get_contents(resource_path('js/pages/maison/circle.tsx'));
+    $portal = file_get_contents(resource_path('js/components/maison/circle/circle-portal.tsx'));
+
+    expect($page)
+        ->toContain('<CirclePortal />')
+        ->toContain('openOrder')
+        ->not->toContain('tone="choc2"')
+        ->and($portal)
+        ->toContain('bg-choc2')
+        ->toContain('max-w-190')
+        ->toContain('max-w-110');
+});
+
+test('dressing CTAs use shell actions or maison links', function () {
     $dressing = file_get_contents(resource_path('js/pages/maison/dressing.tsx'));
-    $circle = file_get_contents(resource_path('js/pages/maison/circle.tsx'));
 
     expect($dressing)
         ->toContain('openNewsletter')
         ->toContain('MaisonLink')
         ->toContain("to=\"product\"")
-        ->not->toContain('onclick=')
-        ->and($circle)
-        ->toContain('openOrder')
         ->not->toContain('onclick=');
+});
+
+test('the circle benefits grid matches the prototype hairline layout', function () {
+    $source = file_get_contents(resource_path('js/pages/maison/circle.tsx'));
+
+    expect($source)
+        ->toContain('bg-sand')
+        ->toContain('gap-0.5')
+        ->toContain('bg-cream p-10')
+        ->toContain('text-[80px]')
+        ->toContain('text-gold/4')
+        ->toContain('text-[36px]')
+        ->toContain('text-gold/25')
+        ->not->toContain('bg-cream2')
+        ->not->toContain('border border-gold/15');
 });
 
 test('the journal cards cover the six prototype articles', function () {
