@@ -1,3 +1,4 @@
+import { usePage } from '@inertiajs/react';
 import {
     CalendarDays,
     Heart,
@@ -5,6 +6,7 @@ import {
     Mail,
     MapPin,
     MessageCircle,
+    MessageSquare,
     Package,
     Phone,
     Video,
@@ -14,6 +16,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
+import { useLocale } from '@/hooks/use-locale';
+import { activePage } from '@/lib/maison-navigation';
 
 /** The panel the eight items live in. `panel` targets a bureau on /contact. */
 const ITEMS = [
@@ -30,6 +34,7 @@ const ITEMS = [
     { icon: Video, label: 'Privé consult', panel: 'concierge' },
     { icon: MapPin, label: 'Vind uw Boutique', panel: 'boutique' },
     { icon: HelpCircle, label: 'Veelgestelde vragen', panel: 'faq' },
+    { icon: MessageSquare, label: 'Uw mening', panel: 'feedback' },
 ] as const;
 
 /**
@@ -42,8 +47,27 @@ const ITEMS = [
  */
 export function ContactDock() {
     const { t } = useTranslation();
+    const { url } = usePage();
+    const { locale } = useLocale();
+    const onContact = activePage(url, locale) === 'contact';
     const [open, setOpen] = useState(false);
     const panel = useRef<HTMLDivElement>(null);
+
+    function openBureau(id: string) {
+        setOpen(false);
+
+        if (!onContact) {
+            return;
+        }
+
+        if (window.location.hash === `#${id}`) {
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
+
+            return;
+        }
+
+        window.location.hash = id;
+    }
 
     useEffect(() => {
         if (!open) {
@@ -115,6 +139,20 @@ export function ContactDock() {
                                         <item.icon className="size-4.5 shrink-0 text-gold" />
                                         {t(item.label)}
                                     </a>
+                                );
+                            }
+
+                            if (onContact) {
+                                return (
+                                    <button
+                                        key={item.label}
+                                        type="button"
+                                        onClick={() => openBureau(item.panel)}
+                                        className={className}
+                                    >
+                                        <item.icon className="size-4.5 shrink-0 text-gold" />
+                                        {t(item.label)}
+                                    </button>
                                 );
                             }
 

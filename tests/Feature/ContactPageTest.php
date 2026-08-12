@@ -11,8 +11,20 @@ test('the contact bureau uses react state instead of toggleBureau onclick string
 
     expect($source)
         ->toContain('useState')
-        ->toContain('openPanels')
+        ->toContain('openPanel')
+        ->toContain('togglePanel')
+        ->toContain('aria-expanded')
         ->not->toContain('toggleBureau');
+});
+
+test('the contact bureau opens one panel under the chosen bubble rather than stacking every section', function () {
+    $source = file_get_contents(resource_path('js/components/maison/contact/contact-bureau.tsx'));
+
+    expect($source)
+        ->toContain('BureauPanelBody')
+        ->toContain('scrollIntoView')
+        ->toContain('openPanel === bubble.panel')
+        ->not->toContain('openPanels');
 });
 
 test('the contact bureau exposes seven collapsible panels including a map embed', function () {

@@ -29,7 +29,7 @@ export function maisonUrl(page: MaisonPage, locale: Locale): string {
     return maison[page].url(locale);
 }
 
-export type NavItem = { page: MaisonPage; label: string };
+export type NavItem = { page: MaisonPage; label: string; hash?: string };
 
 /** The nine links in the header, in the prototype's order. */
 export const PRIMARY_NAV: readonly NavItem[] = [
@@ -68,7 +68,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
             { page: 'contact', label: 'Contact' },
             { page: 'shipping', label: 'Verzending & Retour' },
             { page: 'care', label: 'Zorg & Garantie' },
-            { page: 'contact', label: 'FAQ' },
+            { page: 'contact', label: 'FAQ', hash: 'faq' },
             { page: 'privacy', label: 'Privacybeleid' },
             { page: 'terms', label: 'Algemene voorwaarden' },
         ],
