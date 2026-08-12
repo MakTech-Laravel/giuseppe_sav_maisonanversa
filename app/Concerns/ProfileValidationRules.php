@@ -31,6 +31,8 @@ trait ProfileValidationRules
         return [
             ...$this->profileRules($userId),
             'username' => $this->usernameRules($userId),
+            'avatar' => ['nullable', 'image', 'max:2048'],
+            'remove_avatar' => ['nullable', 'boolean'],
         ];
     }
 

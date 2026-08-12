@@ -24,10 +24,10 @@ export default function MemberHeritage({ heritage }: { heritage: Heritage }) {
                     <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
                         Status
                     </p>
-                    <p className="mt-2 font-serif text-[28px] text-choc">
+                    <p className="mt-2 font-serif text-[28px] text-cream">
                         {heritage.status}
                     </p>
-                    <p className="mt-3 text-[14px] text-choc3">
+                    <p className="mt-3 text-[14px] text-sand">
                         Delivery window · {heritage.deliveryWindow}
                     </p>
                 </MemberPanel>
@@ -35,7 +35,7 @@ export default function MemberHeritage({ heritage }: { heritage: Heritage }) {
                     <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
                         Artefacts
                     </p>
-                    <ul className="mt-4 space-y-3 text-[15px] text-choc3">
+                    <ul className="mt-4 space-y-3 text-[15px] text-sand">
                         <li>Certificate · {heritage.certificate}</li>
                         <li>Passport · {heritage.passport}</li>
                     </ul>

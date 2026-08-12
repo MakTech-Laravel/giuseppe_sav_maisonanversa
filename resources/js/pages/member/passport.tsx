@@ -19,7 +19,7 @@ export default function MemberPassport({
 
             <div className="grid gap-4 md:grid-cols-2">
                 {passport.pages.map((page, index) => (
-                    <MemberPanel key={page.title} className="min-h-48 bg-choc2 text-cream">
+                    <MemberPanel key={page.title} className="min-h-48 bg-choc">
                         <p className="font-sans text-[9px] tracking-[0.25em] text-gold uppercase">
                             Page {String(index + 1).padStart(2, '0')}
                         </p>

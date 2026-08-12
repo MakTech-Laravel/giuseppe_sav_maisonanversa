@@ -94,6 +94,80 @@ final class MemberDemo
     }
 
     /**
+     * @return array{
+     *     id: string,
+     *     label: string,
+     *     date: string,
+     *     amount: string,
+     *     status: string,
+     *     method: string,
+     *     summary: string,
+     *     items: list<array{name: string, qty: int, price: string}>,
+     *     billing: array{name: string, email: string, address: string},
+     *     timeline: list<array{label: string, at: string, done: bool}>
+     * }|null
+     */
+    public static function order(string $orderId): ?array
+    {
+        $order = collect(self::orders())->firstWhere('id', $orderId);
+
+        if ($order === null) {
+            return null;
+        }
+
+        $isDeposit = str_contains($orderId, 'DEP');
+
+        return [
+            ...$order,
+            'summary' => $isDeposit
+                ? 'Deposit held against your Founding Edition reservation. Applied to the balance when production opens.'
+                : 'Founding Edition reservation — balance due before shipment. Figures are prototype until Stripe is connected.',
+            'items' => $isDeposit
+                ? [
+                    [
+                        'name' => 'Reservation deposit',
+                        'qty' => 1,
+                        'price' => '€50.00',
+                    ],
+                ]
+                : [
+                    [
+                        'name' => 'Heritage No.001 — Founding Edition',
+                        'qty' => 1,
+                        'price' => '€249.00',
+                    ],
+                ],
+            'billing' => [
+                'name' => 'Founding Circle member',
+                'email' => 'on file with Maison Anversa',
+                'address' => 'Antwerp · Belgium (prototype)',
+            ],
+            'timeline' => [
+                [
+                    'label' => 'Order placed',
+                    'at' => $order['date'],
+                    'done' => true,
+                ],
+                [
+                    'label' => $isDeposit ? 'Deposit captured' : 'Reservation held',
+                    'at' => $order['date'],
+                    'done' => true,
+                ],
+                [
+                    'label' => 'Production',
+                    'at' => 'Expected Q4 2026',
+                    'done' => false,
+                ],
+                [
+                    'label' => 'Shipment',
+                    'at' => 'Expected Q1 2027',
+                    'done' => false,
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @return array{editionNumber: string, pages: list<array{title: string, body: string}>}
      */
     public static function passport(User $user): array

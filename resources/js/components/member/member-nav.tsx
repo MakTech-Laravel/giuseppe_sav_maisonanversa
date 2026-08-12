@@ -15,9 +15,7 @@ export function MemberNav() {
 
     const items: NavItem[] = [
         { label: 'Dashboard', href: `/${locale}/member`, exact: true },
-        { label: 'My Heritage', href: `/${locale}/member/heritage` },
         { label: 'Orders', href: `/${locale}/member/orders` },
-        { label: 'Passport', href: `/${locale}/member/passport` },
         { label: 'Founding Circle', href: `/${locale}/member/circle` },
         { label: 'Community', href: `/${locale}/community` },
         { label: 'Heritage Letter', href: `/${locale}/member/letter` },
@@ -26,8 +24,11 @@ export function MemberNav() {
     ];
 
     return (
-        <nav aria-label="Member" className="w-full shrink-0 md:w-56">
-            <ul className="flex gap-1 overflow-x-auto border border-gold/20 bg-cream2 p-2 md:flex-col md:overflow-visible">
+        <nav
+            aria-label="Member"
+            className="w-full shrink-0 md:sticky md:top-20 md:w-56 md:self-start"
+        >
+            <ul className="flex gap-1 overflow-x-auto border border-gold/25 bg-choc3 p-2 md:max-h-[calc(100vh-6rem)] md:flex-col md:overflow-y-auto">
                 {items.map((item) => {
                     const href = item.href;
                     const active = item.exact
@@ -41,8 +42,8 @@ export function MemberNav() {
                                 className={cn(
                                     'block min-h-11 px-3 py-2.5 font-sans text-[10px] tracking-[0.18em] uppercase transition-colors md:min-h-0',
                                     active
-                                        ? 'bg-choc text-cream'
-                                        : 'text-choc3 hover:bg-gold/10 hover:text-choc',
+                                        ? 'bg-gold text-choc'
+                                        : 'text-sand hover:bg-choc2 hover:text-cream',
                                 )}
                             >
                                 {item.label}
@@ -57,7 +58,7 @@ export function MemberNav() {
                             router.flushAll();
                             router.post(logout.url());
                         }}
-                        className="block min-h-11 w-full px-3 py-2.5 text-left font-sans text-[10px] tracking-[0.18em] text-gold2 uppercase transition-colors hover:bg-gold/10 hover:text-choc md:min-h-0"
+                        className="block min-h-11 w-full px-3 py-2.5 text-left font-sans text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:bg-choc2 hover:text-cream md:min-h-0"
                     >
                         Logout
                     </button>

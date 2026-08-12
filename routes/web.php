@@ -91,7 +91,15 @@ Route::prefix('{locale}')
             ]);
         })->middleware('auth')->name('verification.notice');
 
-        Route::get('user/confirm-password', fn () => Inertia::render('auth/confirm-password'))
+        Route::get('user/confirm-password', function (Request $request) {
+            $intended = $request->session()->get('url.intended', '');
+
+            if (is_string($intended) && str_contains($intended, '/member')) {
+                return Inertia::render('member/confirm-password');
+            }
+
+            return Inertia::render('auth/confirm-password');
+        })
             ->middleware('auth')
             ->name('password.confirm');
     });
@@ -110,6 +118,7 @@ Route::prefix('{locale}')
                 Route::get('/', 'index')->name('dashboard');
                 Route::get('heritage', 'heritage')->name('heritage');
                 Route::get('orders', 'orders')->name('orders');
+                Route::get('orders/{order}', 'orderShow')->name('orders.show');
                 Route::get('passport', 'passport')->name('passport');
                 Route::get('circle', 'circle')->name('circle');
                 Route::get('letter', 'letter')->name('letter');
