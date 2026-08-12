@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\Journal;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
 
 /**
- * The public Maison Anversa site. Every page is presentational in this phase,
- * so each action only names its Inertia component; the edition figures are the
- * one piece of shared state and come from config/maison.php.
+ * The public Maison Anversa site. Most pages are presentational in this phase;
+ * the Journal is the exception, paging a static catalog. Edition figures are
+ * the one piece of shared state and come from config/maison.php.
  */
 class MaisonController extends Controller
 {
@@ -42,9 +45,49 @@ class MaisonController extends Controller
         return $this->page('dressing');
     }
 
-    public function journal(): Response
+    public function journal(Request $request): Response
     {
-        return $this->page('journal');
+        $locale = app()->getLocale();
+        $articles = Journal::articles();
+        $total = count($articles);
+        $perPage = Journal::PER_PAGE;
+        $lastPage = max(1, (int) ceil($total / $perPage));
+        $page = max(1, $request->integer('page', 1));
+
+        if ($page > $lastPage) {
+            abort(404);
+        }
+
+        $slice = array_slice($articles, ($page - 1) * $perPage, $perPage);
+
+        $paginator = new LengthAwarePaginator(
+            array_map(fn (array $article): array => Journal::card($article, $locale), $slice),
+            $total,
+            $perPage,
+            $page,
+            [
+                'path' => route('maison.journal', ['locale' => $locale]),
+                'pageName' => 'page',
+            ],
+        );
+
+        return $this->page('journal', [
+            'articles' => $paginator,
+        ]);
+    }
+
+    public function journalShow(string $locale, string $slug): Response
+    {
+        $article = Journal::find($slug);
+
+        if ($article === null) {
+            abort(404);
+        }
+
+        return $this->page('journal/show', [
+            'article' => Journal::localize($article, $locale),
+            'related' => Journal::related($slug, $locale),
+        ]);
     }
 
     public function community(): Response

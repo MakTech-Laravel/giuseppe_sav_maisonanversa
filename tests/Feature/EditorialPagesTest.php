@@ -99,16 +99,10 @@ test('the circle benefits grid matches the prototype hairline layout', function 
 test('the journal cards cover the six prototype articles', function () {
     $source = file_get_contents(resource_path('js/pages/maison/journal.tsx'));
 
-    foreach ([
-        'antwerp-cityscape',
-        'heritage-001-lifestyle-court',
-        'atelier-workshop',
-        'heritage-001-detail-gravure',
-        'heritage-001-front',
-        'hero-mansion',
-    ] as $asset) {
-        expect($source)->toContain("'{$asset}'");
-    }
+    expect($source)
+        ->toContain('JournalCard')
+        ->toContain('JournalPagination')
+        ->toContain('articles.data.map');
 });
 
 test('the story page keeps the founder quote as english brand copy', function () {

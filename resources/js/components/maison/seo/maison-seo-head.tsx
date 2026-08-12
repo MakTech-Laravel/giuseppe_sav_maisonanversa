@@ -1,6 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
+import { imageAsset, type ImageAssetName } from '@/lib/imagery';
 import { maisonUrl, type MaisonPage } from '@/lib/maison-navigation';
 import type { Locale } from '@/types/locale';
 
@@ -14,6 +15,17 @@ const OG_LOCALE: Record<Locale, string> = {
     en: 'en_GB',
     fr: 'fr_BE',
 };
+
+function pageHref(
+    origin: string,
+    page: MaisonPage,
+    locale: Locale,
+    articleSlug?: string,
+): string {
+    const base = `${origin}${maisonUrl(page, locale)}`;
+
+    return articleSlug ? `${base}/${articleSlug}` : base;
+}
 
 function useMaisonSeo(page: MaisonPage): { title: string; description: string } {
     const { t } = useTranslation();
@@ -122,20 +134,42 @@ function useMaisonSeo(page: MaisonPage): { title: string; description: string } 
     }
 }
 
+type MaisonSeoHeadProps = {
+    page: MaisonPage;
+    /** Overrides the page title, used by Journal pieces. */
+    title?: string;
+    /** Overrides the meta description. */
+    description?: string;
+    /** Appended to the journal path so article URLs stay canonical. */
+    articleSlug?: string;
+    /** Social image for a Journal piece; falls back to the house default. */
+    image?: ImageAssetName;
+};
+
 /**
  * Canonical URL, hreflang alternates, and social cards for a public page.
  *
  * Titles bypass the global `title - AppName` suffix so search and social
  * previews receive the full Maison Anversa copy.
  */
-export function MaisonSeoHead({ page }: { page: MaisonPage }) {
+export function MaisonSeoHead({
+    page,
+    title: titleOverride,
+    description: descriptionOverride,
+    articleSlug,
+    image: imageOverride,
+}: MaisonSeoHeadProps) {
     const { locale, availableLocales } = useLocale();
     const { appUrl, seoImage } = usePage<SharedProps>().props;
-    const { title, description } = useMaisonSeo(page);
+    const defaults = useMaisonSeo(page);
+    const title = titleOverride ?? defaults.title;
+    const description = descriptionOverride ?? defaults.description;
 
     const origin = appUrl.replace(/\/+$/, '');
-    const canonical = `${origin}${maisonUrl(page, locale)}`;
-    const image = `${origin}${seoImage}`;
+    const canonical = pageHref(origin, page, locale, articleSlug);
+    const image = imageOverride
+        ? `${origin}/${imageAsset(imageOverride).path}`
+        : `${origin}${seoImage}`;
 
     return (
         <Head title={title} titleTemplate="%s">
@@ -147,16 +181,20 @@ export function MaisonSeoHead({ page }: { page: MaisonPage }) {
                     head-key={`hreflang-${alternateLocale}`}
                     rel="alternate"
                     hrefLang={alternateLocale}
-                    href={`${origin}${maisonUrl(page, alternateLocale)}`}
+                    href={pageHref(origin, page, alternateLocale, articleSlug)}
                 />
             ))}
             <link
                 head-key="hreflang-x-default"
                 rel="alternate"
                 hrefLang="x-default"
-                href={`${origin}${maisonUrl(page, 'nl')}`}
+                href={pageHref(origin, page, 'nl', articleSlug)}
             />
-            <meta head-key="og:type" property="og:type" content="website" />
+            <meta
+                head-key="og:type"
+                property="og:type"
+                content={articleSlug ? 'article' : 'website'}
+            />
             <meta head-key="og:url" property="og:url" content={canonical} />
             <meta head-key="og:title" property="og:title" content={title} />
             <meta

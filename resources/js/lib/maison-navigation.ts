@@ -99,9 +99,20 @@ export function isNavItem(
 export function activePage(url: string, locale: Locale): MaisonPage | null {
     const path = url.split(/[?#]/)[0].replace(/\/+$/, '');
 
+    const ranked = [...MAISON_PAGES].sort(
+        (a, b) =>
+            maisonUrl(b, locale).length - maisonUrl(a, locale).length,
+    );
+
     return (
-        MAISON_PAGES.find(
-            (page) => maisonUrl(page, locale).replace(/\/+$/, '') === path,
-        ) ?? null
+        ranked.find((page) => {
+            const pagePath = maisonUrl(page, locale).replace(/\/+$/, '');
+
+            if (page === 'home') {
+                return path === pagePath;
+            }
+
+            return path === pagePath || path.startsWith(`${pagePath}/`);
+        }) ?? null
     );
 }
