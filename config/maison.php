@@ -87,16 +87,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Integration seams
+    | Checkout (Cashier / Stripe)
     |--------------------------------------------------------------------------
     |
-    | Deliberately empty until the client supplies them, matching the
-    | prototype. Checkout and newsletter buttons fall back to their success
-    | panels while these are blank.
+    | Founding Edition is charged in EUR only via a pre-created Stripe Price.
+    | Amount (cents) is for display / local Order records; Checkout charges
+    | the Price ID. Adaptive pricing is disabled so buyers always pay euros.
     |
     */
 
-    'stripe_payment_link' => env('MAISON_STRIPE_PAYMENT_LINK', ''),
+    'checkout' => [
+        'currency' => 'eur',
+        'amount' => (int) env('MAISON_CHECKOUT_AMOUNT', 24900),
+        'product_name' => env('MAISON_CHECKOUT_PRODUCT_NAME', 'Heritage No.001 — Founding Edition'),
+        'price_id' => env('MAISON_STRIPE_PRICE_ID', ''),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Integration seams
+    |--------------------------------------------------------------------------
+    */
 
     'mailchimp_form_url' => env('MAISON_MAILCHIMP_FORM_URL', ''),
 

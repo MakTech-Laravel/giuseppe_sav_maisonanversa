@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
 use App\Http\Controllers\FileUploadDemoController;
+use App\Http\Controllers\Maison\CheckoutController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\PostAttachmentController;
@@ -53,27 +54,40 @@ Route::pattern('locale', implode('|', config('maison.locales')));
 Route::prefix('{locale}')
     ->middleware('locale')
     ->name('maison.')
-    ->controller(MaisonController::class)
     ->group(function () {
-        Route::get('/', 'home')->name('home');
-        Route::get('huis', 'house')->name('house');
-        Route::get('product', 'product')->name('product');
-        Route::get('story', 'story')->name('story');
-        Route::get('circle', 'circle')->name('circle');
-        Route::get('dressing', 'dressing')->name('dressing');
-        Route::get('journal', 'journal')->name('journal');
-        Route::get('journal/{slug}', 'journalShow')
-            ->where('slug', '[a-z0-9-]+')
-            ->name('journal.show');
-        Route::get('community', 'community')->name('community');
-        Route::get('corner', 'corner')->name('corner');
-        Route::get('contact', 'contact')->name('contact');
-        Route::get('privacy', 'privacy')->name('privacy');
-        Route::get('terms', 'terms')->name('terms');
-        Route::get('shipping', 'shipping')->name('shipping');
-        Route::get('care', 'care')->name('care');
+        Route::controller(MaisonController::class)->group(function () {
+            Route::get('/', 'home')->name('home');
+            Route::get('huis', 'house')->name('house');
+            Route::get('product', 'product')->name('product');
+            Route::get('story', 'story')->name('story');
+            Route::get('circle', 'circle')->name('circle');
+            Route::get('dressing', 'dressing')->name('dressing');
+            Route::get('journal', 'journal')->name('journal');
+            Route::get('journal/{slug}', 'journalShow')
+                ->where('slug', '[a-z0-9-]+')
+                ->name('journal.show');
+            Route::get('community', 'community')->name('community');
+            Route::get('corner', 'corner')->name('corner');
+            Route::get('contact', 'contact')->name('contact');
+            Route::get('privacy', 'privacy')->name('privacy');
+            Route::get('terms', 'terms')->name('terms');
+            Route::get('shipping', 'shipping')->name('shipping');
+            Route::get('care', 'care')->name('care');
+        });
+
+        Route::controller(CheckoutController::class)->group(function () {
+            Route::post('checkout', 'store')
+                ->middleware('throttle:10,1')
+                ->name('checkout.store');
+            Route::get('checkout/success', 'success')->name('checkout.success');
+            Route::get('checkout/cancel', 'cancel')->name('checkout.cancel');
+        });
     });
 
+/*
+ * Auth pages that need a locale prefix (password reset, verify, confirm).
+ * Public Maison pages live in the group above.
+ */
 Route::prefix('{locale}')
     ->middleware('locale')
     ->group(function () {

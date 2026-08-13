@@ -23,6 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'maison_locale',
         ]);
 
+        $middleware->preventRequestForgery(except: [
+            'stripe/*',
+        ]);
+
         $middleware->web(append: [
             SetLocale::class,
             HandleInertiaRequests::class,

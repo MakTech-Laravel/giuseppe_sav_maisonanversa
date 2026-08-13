@@ -76,6 +76,12 @@ class HandleInertiaRequests extends Middleware
             'availableLocales' => config('maison.locales'),
             'appUrl' => config('app.url'),
             'seoImage' => config('maison.seo.image'),
+            'checkout' => [
+                'currency' => config('maison.checkout.currency'),
+                'amount' => (int) config('maison.checkout.amount'),
+                'displayAmount' => number_format(((int) config('maison.checkout.amount')) / 100, 0, ',', '.'),
+                'productName' => config('maison.checkout.product_name'),
+            ],
 
             /*
              * Which of the site's photographs exist yet. Everything else falls

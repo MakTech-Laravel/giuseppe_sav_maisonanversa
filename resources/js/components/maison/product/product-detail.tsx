@@ -3,6 +3,7 @@ import { ProductGallery } from '@/components/maison/product/product-gallery';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
+import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import type { Edition } from '@/types/edition';
 
 const SPECS = [
@@ -27,6 +28,7 @@ const GUARANTEES = [
 export function ProductDetail({ edition }: { edition: Edition }) {
     const { t } = useTranslation();
     const { openOrder, openNewsletter } = useShellActions();
+    const { priceLabel } = useCheckoutDisplay();
 
     return (
         <Section tone="cream" className="py-18">
@@ -42,7 +44,7 @@ export function ProductDetail({ edition }: { edition: Edition }) {
                             Heritage <em>No.001</em>
                         </h2>
                         <div className="mb-1 font-serif text-[40px] leading-none font-light text-choc">
-                            € 249
+                            {priceLabel}
                         </div>
                         <div className="mb-7 flex items-center gap-3">
                             <span
@@ -86,7 +88,7 @@ export function ProductDetail({ edition }: { edition: Edition }) {
                             onClick={openOrder}
                             className="mb-3"
                         >
-                            {t('Reserveer Uw Nummer — € 249')}
+                            {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
                         </MaisonButton>
                         <MaisonButton
                             variant="outlineChoc"

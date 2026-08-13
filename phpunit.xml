@@ -32,5 +32,12 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="CASHIER_CURRENCY" value="eur"/>
+        <env name="CASHIER_CURRENCY_LOCALE" value="nl_BE"/>
+        <env name="MAISON_CHECKOUT_AMOUNT" value="24900"/>
+        <env name="MAISON_STRIPE_PRICE_ID" value="price_test_founding_edition"/>
+        <env name="STRIPE_KEY" value="pk_test_cashier"/>
+        <env name="STRIPE_SECRET" value=""/>
+        <env name="STRIPE_WEBHOOK_SECRET" value=""/>
     </php>
 </phpunit>
