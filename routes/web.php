@@ -186,6 +186,16 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('orders/{order}', 'orderShow')->name('orders.show')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('events', 'events')->name('events.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('events/{event}', 'eventShow')->name('events.show')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('circle', 'circle')->name('circle.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('circle/{member}', 'circleShow')->name('circle.show')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('heritage', 'heritage')->name('heritage.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('community', 'community')->name('community.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('letter', 'letter')->name('letter.index')
