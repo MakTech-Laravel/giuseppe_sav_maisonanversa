@@ -49,7 +49,20 @@ return Application::configure(basePath: dirname(__DIR__))
                 $request->session()->flash('open_auth_modal', 'login');
             }
 
-            return route('maison.home', ['locale' => $locale]);
+            return route('maison.home', ['locale' => $locale], absolute: false);
+        });
+
+        $middleware->redirectUsersTo(function ($request) {
+            $redirects = app(PostLoginRedirectService::class);
+            $user = $request->user();
+
+            if ($user === null) {
+                return route('maison.home', [
+                    'locale' => $redirects->resolveLocale($request),
+                ], absolute: false);
+            }
+
+            return $redirects->urlFor($user, $request);
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {

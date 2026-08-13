@@ -52,7 +52,7 @@ test('post login redirect sends customers to the member dashboard', function () 
         'HTTP_ACCEPT_LANGUAGE' => config('maison.default_locale'),
     ]);
 
-    expect($redirects->urlFor($user, $request))->toBe(route('member.dashboard', ['locale' => config('maison.default_locale')]));
+    expect($redirects->urlFor($user, $request))->toBe(route('member.dashboard', ['locale' => config('maison.default_locale')], absolute: false));
 });
 
 test('post login redirect sends admin users to the admin dashboard', function () {
@@ -62,7 +62,7 @@ test('post login redirect sends admin users to the admin dashboard', function ()
         'HTTP_ACCEPT_LANGUAGE' => config('maison.default_locale'),
     ]);
 
-    expect($redirects->urlFor($user, $request))->toBe(route('admin.dashboard', ['locale' => config('maison.default_locale')]));
+    expect($redirects->urlFor($user, $request))->toBe(route('admin.dashboard', ['locale' => config('maison.default_locale')], absolute: false));
 });
 
 test('registration creates a customer account', function () {

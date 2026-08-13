@@ -12,16 +12,19 @@ class PostLoginRedirectService
 
     /**
      * Resolve the post-authentication redirect URL for the given user.
+     *
+     * Relative paths keep Inertia XHR redirects on the current origin even when
+     * APP_URL does not match the browser host (e.g. localhost vs 127.0.0.1).
      */
     public function urlFor(User $user, ?Request $request = null): string
     {
         $locale = $this->resolveLocale($request);
 
         if ($user->isAdmin()) {
-            return route('admin.dashboard', ['locale' => $locale]);
+            return route('admin.dashboard', ['locale' => $locale], absolute: false);
         }
 
-        return route('member.dashboard', ['locale' => $locale]);
+        return route('member.dashboard', ['locale' => $locale], absolute: false);
     }
 
     /**

@@ -25,7 +25,7 @@ class RedirectIfTwoFactorAuthenticatable extends FortifyRedirect
 
         TwoFactorAuthenticationChallenged::dispatch($user);
 
-        if ($request->wantsJson()) {
+        if ($request->wantsJson() && ! $request->header('X-Inertia')) {
             return response()->json(['two_factor' => true]);
         }
 
