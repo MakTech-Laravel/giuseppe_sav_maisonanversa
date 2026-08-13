@@ -4,8 +4,24 @@ import { isLocale, SOURCE_LOCALE } from '@/types/locale';
 import type { Locale } from '@/types/locale';
 import { setUrlDefaults } from '@/wayfinder';
 
+let activeLocale: Locale = SOURCE_LOCALE;
+
 function resolveLocale(candidate: unknown): Locale {
     return isLocale(candidate) ? candidate : SOURCE_LOCALE;
+}
+
+/**
+ * Return an explicit locale for generated routes. This avoids relying on
+ * module-scoped URL defaults when Vite hot-reloads Wayfinder modules.
+ */
+export function wayfinderLocale(): Locale {
+    if (typeof window !== 'undefined') {
+        const segment = window.location.pathname.split('/').filter(Boolean)[0];
+
+        return resolveLocale(segment);
+    }
+
+    return activeLocale;
 }
 
 /**
@@ -14,12 +30,15 @@ function resolveLocale(candidate: unknown): Locale {
  * so callers can omit it (or rely on URL::defaults from the server).
  */
 export function syncWayfinderLocale(locale: unknown): void {
-    setUrlDefaults({ locale: resolveLocale(locale) });
+    activeLocale = resolveLocale(locale);
+    setUrlDefaults({ locale: activeLocale });
 }
 
 function readBootLocale(): Locale {
     try {
-        const page = getInitialPageFromDOM<{ props?: { locale?: unknown } }>('app');
+        const page = getInitialPageFromDOM<{ props?: { locale?: unknown } }>(
+            'app',
+        );
 
         return resolveLocale(page?.props?.locale);
     } catch {

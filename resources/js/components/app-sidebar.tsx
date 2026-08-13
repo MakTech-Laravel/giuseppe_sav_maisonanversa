@@ -1,20 +1,20 @@
 import { Link } from '@inertiajs/react';
 import {
-    BookOpen,
-    FolderGit2,
+    FileText,
     KeyRound,
     LayoutGrid,
     LockKeyhole,
-    Settings,
+    Mail,
+    MessageCircle,
+    ShoppingBag,
     Shield,
     ShieldCheck,
-    Upload,
     User,
+    UserRoundCog,
     Users,
 } from 'lucide-react';
 import { useMemo } from 'react';
 import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
 import { NavUser } from '@/components/nav-user';
 import { SidebarNav } from '@/components/navigation';
 import type { NavNode } from '@/components/navigation';
@@ -29,25 +29,17 @@ import {
 } from '@/components/ui/sidebar';
 import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
+import adminAdmins from '@/routes/admin/admins';
+import adminCommunity from '@/routes/admin/community';
+import adminCustomers from '@/routes/admin/customers';
+import adminLetter from '@/routes/admin/letter';
+import adminOrders from '@/routes/admin/orders';
 import adminPermissions from '@/routes/admin/permissions';
+import adminPosts from '@/routes/admin/posts';
 import adminRoles from '@/routes/admin/roles';
-import adminUsers from '@/routes/admin/users';
-import { index as fileUploadDemo } from '@/routes/file-upload-demo';
-import type { NavItem } from '@/types';
+import profile from '@/routes/profile';
+import security from '@/routes/security';
 import { PERMISSIONS } from '@/types/permissions';
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
 
 function buildMainNav(locale: string): NavNode[] {
     return [
@@ -58,10 +50,34 @@ function buildMainNav(locale: string): NavNode[] {
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
-            title: 'File Upload Demo',
-            href: fileUploadDemo(locale),
-            icon: Upload,
-            permissions: [PERMISSIONS.FILE_UPLOAD.INDEX],
+            title: 'Customers',
+            href: adminCustomers.index(locale),
+            icon: Users,
+            permissions: [PERMISSIONS.USERS.INDEX],
+        },
+        {
+            title: 'Orders',
+            href: adminOrders.index(locale),
+            icon: ShoppingBag,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: 'Community',
+            href: adminCommunity.index(locale),
+            icon: MessageCircle,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: 'Heritage Letter',
+            href: adminLetter.index(locale),
+            icon: Mail,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: 'Posts',
+            href: adminPosts.index(locale),
+            icon: FileText,
+            permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
         },
         {
             title: 'Access Control',
@@ -73,9 +89,9 @@ function buildMainNav(locale: string): NavNode[] {
             ],
             items: [
                 {
-                    title: 'Users',
-                    href: adminUsers.index(locale),
-                    icon: Users,
+                    title: 'Admins',
+                    href: adminAdmins.index(locale),
+                    icon: UserRoundCog,
                     permissions: [PERMISSIONS.USERS.INDEX],
                 },
                 {
@@ -90,36 +106,17 @@ function buildMainNav(locale: string): NavNode[] {
                     icon: KeyRound,
                     permissions: [PERMISSIONS.PERMISSIONS.INDEX],
                 },
-                {
-                    title: 'Settings',
-                    icon: Settings,
-                    permissions: [PERMISSIONS.SETTINGS.INDEX],
-                    classNames: {
-                        icon: 'size-5',
-                    },
-                    items: [
-                        {
-                            title: 'Profile',
-                            href: '#',
-                            icon: User,
-                            permissions: [PERMISSIONS.SETTINGS.INDEX],
-                        },
-                        {
-                            title: 'Security',
-                            icon: Shield,
-                            permissions: [PERMISSIONS.SETTINGS.INDEX],
-                            items: [
-                                {
-                                    title: 'Password',
-                                    href: '#',
-                                    icon: LockKeyhole,
-                                    permissions: [PERMISSIONS.SETTINGS.INDEX],
-                                },
-                            ],
-                        },
-                    ],
-                },
             ],
+        },
+        {
+            title: 'Profile',
+            href: profile.edit(locale),
+            icon: User,
+        },
+        {
+            title: 'Security',
+            href: security.edit(locale),
+            icon: LockKeyhole,
         },
     ];
 }
@@ -147,7 +144,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

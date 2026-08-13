@@ -24,6 +24,8 @@ interface UserFormDefaults {
 interface UserFormProps {
     action: UrlMethodPair;
     roles: RoleRef[];
+    showRoles?: boolean;
+    submitLabel?: string;
     isEdit?: boolean;
     currentAvatar?: string | null;
     /** The target is the only remaining super-admin — its role is locked. */
@@ -35,6 +37,8 @@ interface UserFormProps {
 export function UserForm({
     action,
     roles,
+    showRoles = true,
+    submitLabel,
     isEdit = false,
     currentAvatar = null,
     isLastSuperAdmin = false,
@@ -64,7 +68,7 @@ export function UserForm({
         // Block removing the super-admin role from the last super-admin.
         if (name === SUPER_ADMIN_ROLE && hasRole && isLastSuperAdmin) {
             toast.error(
-                'Assign the super-admin role to another user before removing it from the last super administrator.',
+                'Assign the super-admin role to another administrator before removing it from the last super administrator.',
             );
 
             return;
@@ -117,7 +121,7 @@ export function UserForm({
                     <AlertDescription>
                         This is the only account with the super-admin role. To
                         change it, first assign the super-admin role to another
-                        user.
+                        administrator.
                     </AlertDescription>
                 </Alert>
             )}
@@ -195,53 +199,54 @@ export function UserForm({
                 <InputError message={form.errors.password} />
             </div>
 
-            {/* Roles */}
-            <div className="grid gap-2">
-                <Label>Roles</Label>
-                <p className="text-xs text-muted-foreground">
-                    Assign one or more roles. Permissions are inherited from the
-                    selected roles.
-                </p>
-                <div className="mt-1 flex flex-wrap gap-2">
-                    {selectableRoles.length === 0 && (
-                        <span className="text-sm text-muted-foreground">
-                            No roles available.
-                        </span>
-                    )}
-                    {selectableRoles.map((role) => {
-                        const checked = form.data.roles.includes(role.name);
-                        const isProtected = role.name === SUPER_ADMIN_ROLE;
-                        const locked =
-                            isProtected && isLastSuperAdmin && checked;
+            {showRoles && (
+                <div className="grid gap-2">
+                    <Label>Roles</Label>
+                    <p className="text-xs text-muted-foreground">
+                        Assign one or more roles. Permissions are inherited from
+                        the selected roles.
+                    </p>
+                    <div className="mt-1 flex flex-wrap gap-2">
+                        {selectableRoles.length === 0 && (
+                            <span className="text-sm text-muted-foreground">
+                                No roles available.
+                            </span>
+                        )}
+                        {selectableRoles.map((role) => {
+                            const checked = form.data.roles.includes(role.name);
+                            const isProtected = role.name === SUPER_ADMIN_ROLE;
+                            const locked =
+                                isProtected && isLastSuperAdmin && checked;
 
-                        return (
-                            <Label
-                                key={role.id}
-                                className={cn(
-                                    'flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium capitalize transition-colors',
-                                    checked
-                                        ? 'border-primary bg-primary/10 text-primary'
-                                        : 'hover:bg-muted',
-                                    locked && 'cursor-not-allowed',
-                                )}
-                            >
-                                <Checkbox
-                                    checked={checked}
-                                    onCheckedChange={() =>
-                                        toggleRole(role.name)
-                                    }
-                                    className="size-3.5"
-                                />
-                                {role.name}
-                                {locked && (
-                                    <Lock className="h-3 w-3 opacity-70" />
-                                )}
-                            </Label>
-                        );
-                    })}
+                            return (
+                                <Label
+                                    key={role.id}
+                                    className={cn(
+                                        'flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium capitalize transition-colors',
+                                        checked
+                                            ? 'border-primary bg-primary/10 text-primary'
+                                            : 'hover:bg-muted',
+                                        locked && 'cursor-not-allowed',
+                                    )}
+                                >
+                                    <Checkbox
+                                        checked={checked}
+                                        onCheckedChange={() =>
+                                            toggleRole(role.name)
+                                        }
+                                        className="size-3.5"
+                                    />
+                                    {role.name}
+                                    {locked && (
+                                        <Lock className="h-3 w-3 opacity-70" />
+                                    )}
+                                </Label>
+                            );
+                        })}
+                    </div>
+                    <InputError message={form.errors.roles} />
                 </div>
-                <InputError message={form.errors.roles} />
-            </div>
+            )}
 
             <div className="flex items-center gap-3 border-t pt-5">
                 <Button type="submit" disabled={form.processing}>
@@ -250,7 +255,7 @@ export function UserForm({
                     ) : (
                         <UserPlus className="h-4 w-4" />
                     )}
-                    {isEdit ? 'Save changes' : 'Create user'}
+                    {submitLabel ?? (isEdit ? 'Save changes' : 'Create user')}
                 </Button>
                 {onCancel && (
                     <Button
