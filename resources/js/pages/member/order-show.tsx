@@ -1,4 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import {
     MemberPageHeader,
     MemberPanel,
@@ -12,6 +13,7 @@ type OrderDetail = {
     date: string;
     amount: string;
     status: string;
+    status_key: string;
     method: string;
     summary: string;
     items: { name: string; qty: number; price: string }[];
@@ -20,22 +22,23 @@ type OrderDetail = {
 };
 
 export default function MemberOrderShow({ order }: { order: OrderDetail }) {
+    const { t } = useTranslation();
     const { locale } = usePage().props;
 
     return (
         <>
-            <Head title={`Order ${order.id}`} />
+            <Head title={`${t('Bestelling')} ${order.id}`} />
             <div className="mb-6">
                 <Link
                     href={`/${locale}/member/orders`}
                     className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase no-underline hover:text-cream"
                 >
-                    ← Back to orders
+                    ← {t('Terug naar bestellingen')}
                 </Link>
             </div>
 
             <MemberPageHeader
-                eyebrow="Order detail"
+                eyebrow={t('Besteldetail')}
                 title={order.label}
                 description={order.summary}
             />
@@ -43,9 +46,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
             <div className="mb-6 flex flex-wrap items-center gap-3">
                 <MemberStatusPill
                     tone={
-                        order.status.toLowerCase() === 'paid'
-                            ? 'success'
-                            : 'neutral'
+                        order.status_key === 'paid' ? 'success' : 'neutral'
                     }
                 >
                     {order.status}
@@ -60,7 +61,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
 
             <div className="grid gap-6 lg:grid-cols-5">
                 <MemberPanel className="lg:col-span-3">
-                    <MemberSectionTitle title="Line items" />
+                    <MemberSectionTitle title={t('Regels')} />
                     <ul className="space-y-4">
                         {order.items.map((item) => (
                             <li
@@ -72,7 +73,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                                         {item.name}
                                     </p>
                                     <p className="mt-1 font-sans text-[11px] text-stone uppercase">
-                                        Qty {item.qty}
+                                        {t('Aantal')} {item.qty}
                                     </p>
                                 </div>
                                 <p className="font-serif text-[20px] text-cream">
@@ -83,7 +84,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                     </ul>
                     <div className="mt-6 flex items-center justify-between border-t border-gold/20 pt-4">
                         <p className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase">
-                            Total
+                            {t('Totaal')}
                         </p>
                         <p className="font-serif text-[28px] text-cream">
                             {order.amount}
@@ -93,11 +94,11 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
 
                 <div className="space-y-6 lg:col-span-2">
                     <MemberPanel>
-                        <MemberSectionTitle title="Payment" />
+                        <MemberSectionTitle title={t('Betaling')} />
                         <dl className="space-y-3 text-[14px]">
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    Method
+                                    {t('Methode')}
                                 </dt>
                                 <dd className="mt-1 text-cream">
                                     {order.method}
@@ -105,7 +106,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                             </div>
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    Amount
+                                    {t('Bedrag')}
                                 </dt>
                                 <dd className="mt-1 font-serif text-[22px] text-cream">
                                     {order.amount}
@@ -115,11 +116,11 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                     </MemberPanel>
 
                     <MemberPanel>
-                        <MemberSectionTitle title="Billing" />
+                        <MemberSectionTitle title={t('Facturatie')} />
                         <dl className="space-y-3 text-[14px] text-sand">
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    Name
+                                    {t('Naam')}
                                 </dt>
                                 <dd className="mt-1 text-cream">
                                     {order.billing.name}
@@ -127,13 +128,13 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                             </div>
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    Email
+                                    {t('E-mail')}
                                 </dt>
                                 <dd className="mt-1">{order.billing.email}</dd>
                             </div>
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    Address
+                                    {t('Adres')}
                                 </dt>
                                 <dd className="mt-1">
                                     {order.billing.address}
@@ -146,8 +147,10 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
 
             <MemberPanel className="mt-6">
                 <MemberSectionTitle
-                    title="Timeline"
-                    description="Prototype milestones until fulfilment is connected."
+                    title={t('Tijdlijn')}
+                    description={t(
+                        'Prototype mijlpalen tot de fulfilment is aangesloten.',
+                    )}
                 />
                 <ol className="space-y-4">
                     {order.timeline.map((step) => (

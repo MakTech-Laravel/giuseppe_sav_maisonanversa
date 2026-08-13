@@ -1,5 +1,6 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     destroy,
     updateProfile,
@@ -26,15 +27,18 @@ export default function MemberProfile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
+    const { t } = useTranslation();
     const { auth, locale } = usePage().props;
 
     return (
         <>
-            <Head title="Profile & Account" />
+            <Head title={t('Profiel & account')} />
             <MemberPageHeader
-                eyebrow="Account"
-                title="Profile & account"
-                description="Manage how you appear in the house — photo, name, and how you sign in."
+                eyebrow={t('Account')}
+                title={t('Profiel & account')}
+                description={t(
+                    'Beheer hoe u in het huis verschijnt — foto, naam en hoe u inlogt.',
+                )}
             />
 
             <Form
@@ -47,8 +51,10 @@ export default function MemberProfile({
                     <>
                         <MemberPanel>
                             <MemberSectionTitle
-                                title="Identity"
-                                description="Your photo appears in the member header and community surfaces."
+                                title={t('Identiteit')}
+                                description={t(
+                                    'Uw foto verschijnt in de lidheader en op community-oppervlakken.',
+                                )}
                             />
                             <ProfileAvatarField
                                 name={auth.user.name}
@@ -60,8 +66,10 @@ export default function MemberProfile({
 
                         <MemberPanel>
                             <MemberSectionTitle
-                                title="Account details"
-                                description="Username is an alternate way to sign in alongside email."
+                                title={t('Accountgegevens')}
+                                description={t(
+                                    'Gebruikersnaam is een alternatieve manier om in te loggen naast e-mail.',
+                                )}
                             />
                             <div className="grid gap-5 md:grid-cols-2">
                                 <div className="grid gap-2">
@@ -69,7 +77,7 @@ export default function MemberProfile({
                                         htmlFor="name"
                                         className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                     >
-                                        Name
+                                        {t('Naam')}
                                     </Label>
                                     <Input
                                         id="name"
@@ -87,7 +95,7 @@ export default function MemberProfile({
                                         htmlFor="username"
                                         className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                     >
-                                        Username
+                                        {t('Gebruikersnaam')}
                                     </Label>
                                     <Input
                                         id="username"
@@ -105,7 +113,7 @@ export default function MemberProfile({
                                         htmlFor="email"
                                         className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                     >
-                                        Email
+                                        {t('E-mail')}
                                     </Label>
                                     <Input
                                         id="email"
@@ -123,19 +131,21 @@ export default function MemberProfile({
                             {mustVerifyEmail &&
                                 auth.user.email_verified_at === null && (
                                     <p className="mt-4 text-sm text-sand">
-                                        Your email is unverified.{' '}
+                                        {t('Uw e-mail is niet geverifieerd.')}{' '}
                                         <Link
                                             href={send()}
                                             className="text-gold underline"
                                         >
-                                            Resend verification
+                                            {t('Verificatie opnieuw versturen')}
                                         </Link>
                                     </p>
                                 )}
 
                             {status === 'verification-link-sent' && (
                                 <p className="mt-4 text-sm text-gold">
-                                    A new verification link has been sent.
+                                    {t(
+                                        'Er is een nieuwe verificatielink verstuurd.',
+                                    )}
                                 </p>
                             )}
 
@@ -144,7 +154,7 @@ export default function MemberProfile({
                                     disabled={processing}
                                     className="min-w-40 rounded-none"
                                 >
-                                    Save profile
+                                    {t('Profiel opslaan')}
                                 </Button>
                             </div>
                         </MemberPanel>
@@ -168,6 +178,7 @@ function ProfileAvatarField({
     avatarUrl?: string | null;
     error?: string;
 }) {
+    const { t } = useTranslation();
     const getInitials = useInitials();
     const inputRef = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -201,7 +212,9 @@ function ProfileAvatarField({
                         className="rounded-none"
                         onClick={() => inputRef.current?.click()}
                     >
-                        {displayUrl ? 'Change photo' : 'Upload photo'}
+                        {displayUrl
+                            ? t('Foto wijzigen')
+                            : t('Foto uploaden')}
                     </Button>
                     {displayUrl && (
                         <Button
@@ -216,12 +229,12 @@ function ProfileAvatarField({
                                 }
                             }}
                         >
-                            Remove
+                            {t('Verwijderen')}
                         </Button>
                     )}
                 </div>
                 <p className="font-sans text-[11px] text-stone">
-                    PNG, JPG or WEBP · max 2 MB
+                    {t('PNG, JPG of WEBP · max 2 MB')}
                 </p>
                 <InputError message={error} />
             </div>
@@ -246,6 +259,7 @@ function ProfileAvatarField({
 }
 
 function DeleteMemberAccount({ locale }: { locale: string }) {
+    const { t } = useTranslation();
     const [confirming, setConfirming] = useState(false);
 
     return (
@@ -256,8 +270,10 @@ function DeleteMemberAccount({ locale }: { locale: string }) {
             )}
         >
             <MemberSectionTitle
-                title="Delete account"
-                description="Permanently remove your account and data from Maison Anversa. This cannot be undone."
+                title={t('Account verwijderen')}
+                description={t(
+                    'Verwijder uw account en gegevens permanent van Maison Anversa. Dit kan niet ongedaan worden gemaakt.',
+                )}
             />
 
             {!confirming ? (
@@ -267,7 +283,7 @@ function DeleteMemberAccount({ locale }: { locale: string }) {
                     className="rounded-none"
                     onClick={() => setConfirming(true)}
                 >
-                    Delete account
+                    {t('Account verwijderen')}
                 </Button>
             ) : (
                 <Form {...destroy.form(locale)} className="max-w-md space-y-4">
@@ -278,7 +294,7 @@ function DeleteMemberAccount({ locale }: { locale: string }) {
                                     htmlFor="password"
                                     className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                 >
-                                    Confirm with password
+                                    {t('Bevestig met wachtwoord')}
                                 </Label>
                                 <Input
                                     id="password"
@@ -297,14 +313,14 @@ function DeleteMemberAccount({ locale }: { locale: string }) {
                                     className="rounded-none border-gold/40 bg-transparent text-sand hover:bg-choc hover:text-cream"
                                     onClick={() => setConfirming(false)}
                                 >
-                                    Cancel
+                                    {t('Annuleren')}
                                 </Button>
                                 <Button
                                     variant="destructive"
                                     className="rounded-none"
                                     disabled={processing}
                                 >
-                                    Confirm delete
+                                    {t('Verwijderen bevestigen')}
                                 </Button>
                             </div>
                         </>

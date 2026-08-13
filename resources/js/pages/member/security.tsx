@@ -1,6 +1,7 @@
 import { Form, Head } from '@inertiajs/react';
 import { ShieldCheck } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import InputError from '@/components/input-error';
 import {
@@ -29,6 +30,7 @@ export default function MemberSecurity({
     twoFactorEnabled?: boolean;
     passwordRules?: string;
 }) {
+    const { t } = useTranslation();
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
@@ -56,18 +58,22 @@ export default function MemberSecurity({
 
     return (
         <>
-            <Head title="Security" />
+            <Head title={t('Beveiliging')} />
             <MemberPageHeader
-                eyebrow="Account"
-                title="Security"
-                description="Keep your Maison Anversa account protected with a strong password and optional two-factor authentication."
+                eyebrow={t('Account')}
+                title={t('Beveiliging')}
+                description={t(
+                    'Bescherm uw Maison Anversa-account met een sterk wachtwoord en optionele tweestapsverificatie.',
+                )}
             />
 
             <div className="space-y-6">
                 <MemberPanel>
                     <MemberSectionTitle
-                        title="Password"
-                        description="Use a long, unique password. You will need your current password to change it."
+                        title={t('Wachtwoord')}
+                        description={t(
+                            'Gebruik een lang, uniek wachtwoord. U hebt uw huidige wachtwoord nodig om het te wijzigen.',
+                        )}
                     />
                     <Form
                         {...SecurityController.update.form()}
@@ -96,7 +102,7 @@ export default function MemberSecurity({
                                         htmlFor="current_password"
                                         className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                     >
-                                        Current password
+                                        {t('Huidig wachtwoord')}
                                     </Label>
                                     <PasswordInput
                                         id="current_password"
@@ -116,7 +122,7 @@ export default function MemberSecurity({
                                             htmlFor="password"
                                             className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                         >
-                                            New password
+                                            {t('Nieuw wachtwoord')}
                                         </Label>
                                         <PasswordInput
                                             id="password"
@@ -134,7 +140,7 @@ export default function MemberSecurity({
                                             htmlFor="password_confirmation"
                                             className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                         >
-                                            Confirm password
+                                            {t('Bevestig wachtwoord')}
                                         </Label>
                                         <PasswordInput
                                             id="password_confirmation"
@@ -156,7 +162,7 @@ export default function MemberSecurity({
                                         disabled={processing}
                                         className="min-w-40 rounded-none"
                                     >
-                                        Update password
+                                        {t('Wachtwoord bijwerken')}
                                     </Button>
                                 </div>
                             </>
@@ -169,11 +175,12 @@ export default function MemberSecurity({
                         <div className="mb-6 flex flex-wrap items-start justify-between gap-3 border-b border-gold/20 pb-4">
                             <div>
                                 <h2 className="font-serif text-[22px] text-cream">
-                                    Two-factor authentication
+                                    {t('Tweestapsverificatie')}
                                 </h2>
                                 <p className="mt-1.5 max-w-xl text-[13px] leading-relaxed text-sand">
-                                    Add a second step at login with a code from
-                                    an authenticator app on your phone.
+                                    {t(
+                                        'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op uw telefoon.',
+                                    )}
                                 </p>
                             </div>
                             <MemberStatusPill
@@ -181,16 +188,18 @@ export default function MemberSecurity({
                                     twoFactorEnabled ? 'success' : 'warn'
                                 }
                             >
-                                {twoFactorEnabled ? 'Enabled' : 'Not enabled'}
+                                {twoFactorEnabled
+                                    ? t('Ingeschakeld')
+                                    : t('Niet ingeschakeld')}
                             </MemberStatusPill>
                         </div>
 
                         {twoFactorEnabled ? (
                             <div className="max-w-xl space-y-5">
                                 <p className="text-[14px] leading-[1.7] text-sand">
-                                    You will be prompted for a secure pin during
-                                    login, which you can retrieve from a
-                                    TOTP-supported application on your phone.
+                                    {t(
+                                        'U wordt bij het inloggen gevraagd om een beveiligingscode, die u uit een TOTP-ondersteunde app op uw telefoon haalt.',
+                                    )}
                                 </p>
 
                                 <Form {...disable.form()}>
@@ -201,7 +210,7 @@ export default function MemberSecurity({
                                             className="rounded-none"
                                             disabled={processing}
                                         >
-                                            Disable 2FA
+                                            {t('2FA uitschakelen')}
                                         </Button>
                                     )}
                                 </Form>
@@ -215,9 +224,9 @@ export default function MemberSecurity({
                         ) : (
                             <div className="max-w-xl space-y-5">
                                 <p className="text-[14px] leading-[1.7] text-sand">
-                                    When enabled, you will be prompted for a
-                                    secure pin during login. This pin comes from
-                                    a TOTP-supported application on your phone.
+                                    {t(
+                                        'Wanneer ingeschakeld, wordt u bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op uw telefoon.',
+                                    )}
                                 </p>
 
                                 {hasSetupData ? (
@@ -227,7 +236,7 @@ export default function MemberSecurity({
                                         onClick={() => setShowSetupModal(true)}
                                     >
                                         <ShieldCheck />
-                                        Continue setup
+                                        {t('Setup voortzetten')}
                                     </Button>
                                 ) : (
                                     <Form
@@ -242,7 +251,7 @@ export default function MemberSecurity({
                                                 className="rounded-none"
                                                 disabled={processing}
                                             >
-                                                Enable 2FA
+                                                {t('2FA inschakelen')}
                                             </Button>
                                         )}
                                     </Form>

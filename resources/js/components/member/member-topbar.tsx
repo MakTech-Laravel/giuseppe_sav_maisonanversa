@@ -1,4 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/maison/shell/language-switcher';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,6 +12,7 @@ export function MemberTopbar({
     name: string;
     avatarUrl?: string | null;
 }) {
+    const { t } = useTranslation();
     const { locale } = usePage().props;
     const getInitials = useInitials();
 
@@ -33,7 +35,7 @@ export function MemberTopbar({
                             Maison Anversa
                         </p>
                         <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                            Member
+                            {t('Lid')}
                         </p>
                     </div>
                 </Link>

@@ -1,4 +1,5 @@
 import { Link, router, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { logout } from '@/routes';
 import { cn } from '@/lib/utils';
 
@@ -9,23 +10,33 @@ type NavItem = {
 };
 
 export function MemberNav() {
+    const { t } = useTranslation();
     const { locale } = usePage().props;
     const { url } = usePage();
     const path = url.split('?')[0].replace(/\/+$/, '') || '/';
 
     const items: NavItem[] = [
-        { label: 'Dashboard', href: `/${locale}/member`, exact: true },
-        { label: 'Orders', href: `/${locale}/member/orders` },
-        { label: 'Founding Circle', href: `/${locale}/member/circle` },
-        { label: 'Community', href: `/${locale}/community` },
-        { label: 'Heritage Letter', href: `/${locale}/member/letter` },
-        { label: 'Profile & Account', href: `/${locale}/member/profile` },
-        { label: 'Security', href: `/${locale}/member/security` },
+        { label: t('Dashboard'), href: `/${locale}/member`, exact: true },
+        { label: t('Bestellingen'), href: `/${locale}/member/orders` },
+        {
+            label: t('Founding Circle'),
+            href: `/${locale}/member/circle`,
+        },
+        { label: t('Gemeenschap'), href: `/${locale}/community` },
+        {
+            label: t('Heritage Letter'),
+            href: `/${locale}/member/letter`,
+        },
+        {
+            label: t('Profiel & account'),
+            href: `/${locale}/member/profile`,
+        },
+        { label: t('Beveiliging'), href: `/${locale}/member/security` },
     ];
 
     return (
         <nav
-            aria-label="Member"
+            aria-label={t('Lid')}
             className="w-full shrink-0 md:sticky md:top-20 md:w-56 md:self-start"
         >
             <ul className="flex gap-1 overflow-x-auto border border-gold/25 bg-choc3 p-2 md:max-h-[calc(100vh-6rem)] md:flex-col md:overflow-y-auto">
@@ -36,7 +47,7 @@ export function MemberNav() {
                         : path === href || path.startsWith(`${href}/`);
 
                     return (
-                        <li key={item.label} className="shrink-0">
+                        <li key={item.href} className="shrink-0">
                             <Link
                                 href={href}
                                 className={cn(
@@ -60,7 +71,7 @@ export function MemberNav() {
                         }}
                         className="block min-h-11 w-full px-3 py-2.5 text-left font-sans text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:bg-choc2 hover:text-cream md:min-h-0"
                     >
-                        Logout
+                        {t('Uitloggen')}
                     </button>
                 </li>
             </ul>

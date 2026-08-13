@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 
 type Heritage = {
@@ -10,34 +11,50 @@ type Heritage = {
 };
 
 export default function MemberHeritage({ heritage }: { heritage: Heritage }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="My Heritage" />
+            <Head title={t('Mijn Heritage')} />
             <MemberPageHeader
-                eyebrow="Heritage No.001"
-                title={`Edition No.${heritage.editionNumber}`}
-                description="Your Founding Edition piece — status, delivery window, and the artefacts that travel with it."
+                eyebrow={t('Heritage No.001')}
+                title={t('Editie No.{{number}}', {
+                    number: heritage.editionNumber,
+                })}
+                description={t(
+                    'Uw Founding Edition-stuk — status, leveringsvenster en de artefacten die ermee meegaan.',
+                )}
             />
 
             <div className="grid gap-4 md:grid-cols-2">
                 <MemberPanel>
                     <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                        Status
+                        {t('Status')}
                     </p>
                     <p className="mt-2 font-serif text-[28px] text-cream">
                         {heritage.status}
                     </p>
                     <p className="mt-3 text-[14px] text-sand">
-                        Delivery window · {heritage.deliveryWindow}
+                        {t('Leveringsvenster · {{window}}', {
+                            window: heritage.deliveryWindow,
+                        })}
                     </p>
                 </MemberPanel>
                 <MemberPanel>
                     <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                        Artefacts
+                        {t('Artefacten')}
                     </p>
                     <ul className="mt-4 space-y-3 text-[15px] text-sand">
-                        <li>Certificate · {heritage.certificate}</li>
-                        <li>Passport · {heritage.passport}</li>
+                        <li>
+                            {t('Certificaat · {{value}}', {
+                                value: heritage.certificate,
+                            })}
+                        </li>
+                        <li>
+                            {t('Passport · {{value}}', {
+                                value: heritage.passport,
+                            })}
+                        </li>
                     </ul>
                 </MemberPanel>
             </div>
