@@ -17,6 +17,7 @@ import TwoFactorSetupModal from '@/components/two-factor-setup-modal';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { disable, enable } from '@/routes/two-factor';
 
 export default function MemberSecurity({
@@ -76,7 +77,7 @@ export default function MemberSecurity({
                         )}
                     />
                     <Form
-                        {...SecurityController.update.form()}
+                        {...SecurityController.update.form(wayfinderLocale())}
                         options={{ preserveScroll: true }}
                         resetOnError={[
                             'password',

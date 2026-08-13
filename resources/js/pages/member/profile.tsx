@@ -17,8 +17,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useInitials } from '@/hooks/use-initials';
-import { send } from '@/routes/verification';
 import { cn } from '@/lib/utils';
+import { send } from '@/routes/verification';
 
 export default function MemberProfile({
     mustVerifyEmail,
@@ -224,6 +224,7 @@ function ProfileAvatarField({
                             onClick={() => {
                                 setRemoveAvatar(true);
                                 setPreview(null);
+
                                 if (inputRef.current) {
                                     inputRef.current.value = '';
                                 }

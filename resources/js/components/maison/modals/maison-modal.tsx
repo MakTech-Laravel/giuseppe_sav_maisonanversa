@@ -1,4 +1,5 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef  } from 'react';
+import type {ReactNode} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { gsap, MAISON_EASE, MEDIA, TRANSITION_EASE, useGSAP } from '@/lib/gsap';

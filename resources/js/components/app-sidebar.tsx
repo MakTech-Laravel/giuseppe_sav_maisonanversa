@@ -11,6 +11,7 @@ import {
     Users,
 } from 'lucide-react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import AppLogo from '@/components/app-logo';
 import { NavUser } from '@/components/nav-user';
 import { SidebarNav } from '@/components/navigation';
@@ -36,58 +37,60 @@ import profile from '@/routes/profile';
 import security from '@/routes/security';
 import { PERMISSIONS } from '@/types/permissions';
 
-function buildMainNav(locale: string): NavNode[] {
+function buildMainNav(
+    locale: string,
+    t: (key: string) => string,
+): NavNode[] {
     return [
         {
-            title: 'Dashboard',
+            title: t('Dashboard'),
             href: dashboard(locale),
             icon: LayoutGrid,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
-            title: 'Administrator',
+            title: t('Beheerder'),
             href: adminAdmins.index(locale),
             icon: UserRoundCog,
             permissions: [PERMISSIONS.USERS.INDEX],
         },
         {
-            title: 'Customers',
+            title: t('Klanten'),
             href: adminCustomers.index(locale),
             icon: Users,
             permissions: [PERMISSIONS.USERS.INDEX],
         },
         {
-            title: 'Orders',
+            title: t('Bestellingen'),
             href: adminOrders.index(locale),
             icon: ShoppingBag,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
-            title: 'Community',
+            title: t('Gemeenschap'),
             href: adminCommunity.index(locale),
             icon: MessageCircle,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
-            title: 'Heritage Letter',
+            title: t('Heritage Letter'),
             href: adminLetter.index(locale),
             icon: Mail,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
-            title: 'Posts',
+            title: t('Posts'),
             href: adminPosts.index(locale),
             icon: FileText,
             permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
         },
-        // Access Control (roles / permissions UI) disabled — out of product scope.
         {
-            title: 'Profile',
+            title: t('Profiel'),
             href: profile.edit(locale),
             icon: User,
         },
         {
-            title: 'Security',
+            title: t('Beveiliging'),
             href: security.edit(locale),
             icon: LockKeyhole,
         },
@@ -96,7 +99,8 @@ function buildMainNav(locale: string): NavNode[] {
 
 export function AppSidebar() {
     const { locale } = useLocale();
-    const mainNav = useMemo(() => buildMainNav(locale), [locale]);
+    const { t } = useTranslation();
+    const mainNav = useMemo(() => buildMainNav(locale, t), [locale, t]);
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -113,7 +117,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <SidebarNav items={mainNav} label="Platform" />
+                <SidebarNav items={mainNav} label={t('Platform')} />
             </SidebarContent>
 
             <SidebarFooter>

@@ -118,7 +118,7 @@ function Row({
 ShowAdmin.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Administrator', href: admins.index(wayfinderLocale()) },
-        { title: 'Profile', href: admins.index(wayfinderLocale()) },
+        { title: 'Beheerder', href: admins.index(wayfinderLocale()) },
+        { title: 'Profiel', href: admins.index(wayfinderLocale()) },
     ],
 };

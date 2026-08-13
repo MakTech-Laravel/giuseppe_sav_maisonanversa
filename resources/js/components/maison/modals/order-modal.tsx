@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useState } from 'react';
+import type {FormEvent} from 'react';
 import { useTranslation } from 'react-i18next';
 import { store as checkoutStore } from '@/actions/App/Http/Controllers/Maison/CheckoutController';
 import { MaisonLink } from '@/components/maison/maison-link';
@@ -39,19 +40,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
     const [giftMessage, setGiftMessage] = useState('');
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        setStep(1);
-        setName('');
-        setEmail('');
-        setPhone('');
-        setSelectedNumber(null);
-        setMonogram('');
-        setGiftWrap(false);
-        setGiftMessage('');
-        setProcessing(false);
-        setError(null);
-    }, []);
 
     const steps = useMemo(
         () =>

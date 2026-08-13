@@ -1,7 +1,7 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { logout } from '@/routes';
 import { cn } from '@/lib/utils';
+import { logout } from '@/routes';
 
 type NavItem = {
     label: string;

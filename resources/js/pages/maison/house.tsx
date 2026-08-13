@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { MaisonFloorplan } from '@/components/maison/house/maison-floorplan';
 import { MaisonRoomList } from '@/components/maison/house/maison-room-list';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Section, Wrap } from '@/components/maison/ui/section';

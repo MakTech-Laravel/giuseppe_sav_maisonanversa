@@ -53,7 +53,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
 EditCustomer.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Customers', href: customers.index(wayfinderLocale()) },
-        { title: 'Edit', href: customers.index(wayfinderLocale()) },
+        { title: 'Klanten', href: customers.index(wayfinderLocale()) },
+        { title: 'Bewerken', href: customers.index(wayfinderLocale()) },
     ],
 };

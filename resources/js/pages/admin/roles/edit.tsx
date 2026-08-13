@@ -3,6 +3,7 @@ import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { RoleForm } from '@/components/admin/role-form';
 import { Button } from '@/components/ui/button';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import roles from '@/routes/admin/roles';
 import type { AdminRoleDetail, PermissionOption } from '@/types/admin';
@@ -24,7 +25,7 @@ export default function EditRole({ role, permissions }: EditRoleProps) {
                     icon={ShieldCheck}
                 >
                     <Button variant="outline" asChild>
-                        <Link href={roles.index().url}>
+                        <Link href={roles.index(wayfinderLocale()).url}>
                             <ArrowLeft className="h-4 w-4" /> Back to roles
                         </Link>
                     </Button>
@@ -32,7 +33,10 @@ export default function EditRole({ role, permissions }: EditRoleProps) {
 
                 <div className="rounded-xl border bg-card p-6 shadow-sm">
                     <RoleForm
-                        action={roles.update(role.id)}
+                        action={roles.update({
+                            locale: wayfinderLocale(),
+                            role: role.id,
+                        })}
                         permissions={permissions}
                         isEdit
                         locked={role.is_super_admin}
@@ -40,7 +44,9 @@ export default function EditRole({ role, permissions }: EditRoleProps) {
                             name: role.name,
                             permissions: role.permissions,
                         }}
-                        onCancel={() => router.visit(roles.index().url)}
+                        onCancel={() =>
+                            router.visit(roles.index(wayfinderLocale()).url)
+                        }
                     />
                 </div>
             </div>
@@ -50,8 +56,8 @@ export default function EditRole({ role, permissions }: EditRoleProps) {
 
 EditRole.layout = {
     breadcrumbs: [
-        { title: 'Dashboard', href: dashboard() },
-        { title: 'Roles', href: roles.index() },
-        { title: 'Edit', href: roles.index() },
+        { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
+        { title: 'Rollen', href: roles.index(wayfinderLocale()) },
+        { title: 'Bewerken', href: roles.index(wayfinderLocale()) },
     ],
 };

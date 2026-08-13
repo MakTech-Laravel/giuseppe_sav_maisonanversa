@@ -25,8 +25,10 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { usePermission } from '@/hooks/use-permissions';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import roles from '@/routes/admin/roles';
+import { SUPER_ADMIN_ROLE } from '@/types/admin';
 import type { AdminRoleListItem, Paginated } from '@/types/admin';
 import { PERMISSIONS } from '@/types/permissions';
 
@@ -52,7 +54,7 @@ export default function RolesIndex({
 
         const timeout = setTimeout(() => {
             router.get(
-                roles.index().url,
+                roles.index(wayfinderLocale()).url,
                 { search: search || undefined },
                 { preserveState: true, preserveScroll: true, replace: true },
             );
@@ -73,7 +75,7 @@ export default function RolesIndex({
                 >
                     {can(PERMISSIONS.ROLES.CREATE) && (
                         <Button asChild>
-                            <Link href={roles.create().url}>
+                            <Link href={roles.create(wayfinderLocale()).url}>
                                 <Plus className="h-4 w-4" /> Add role
                             </Link>
                         </Button>
@@ -91,163 +93,139 @@ export default function RolesIndex({
                 </div>
 
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
-                    <div className="overflow-x-auto">
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                    <TableHead>Role</TableHead>
-                                    <TableHead className="hidden sm:table-cell">
-                                        Permissions
-                                    </TableHead>
-                                    <TableHead className="hidden sm:table-cell">
-                                        Users
-                                    </TableHead>
-                                    <TableHead className="text-right">
-                                        Actions
-                                    </TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                <AnimatePresence mode="popLayout">
-                                    {paginated.data.map((role) => {
-                                        const isSuper =
-                                            role.name === 'super-admin';
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Role</TableHead>
+                                <TableHead className="hidden sm:table-cell">
+                                    Permissions
+                                </TableHead>
+                                <TableHead className="hidden md:table-cell">
+                                    Users
+                                </TableHead>
+                                <TableHead className="text-right">
+                                    Actions
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <AnimatePresence initial={false}>
+                                {paginated.data.map((role) => {
+                                    const isSuper =
+                                        role.name === SUPER_ADMIN_ROLE;
 
-                                        return (
-                                            <motion.tr
-                                                key={role.id}
-                                                layout
-                                                initial={{ opacity: 0, y: 6 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0 }}
-                                                transition={{
-                                                    type: 'spring',
-                                                    stiffness: 350,
-                                                    damping: 28,
-                                                }}
-                                                className="border-b transition-colors hover:bg-muted/30"
-                                            >
-                                                <TableCell>
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                                                            <Shield className="h-4 w-4" />
-                                                        </div>
-                                                        <span className="font-medium capitalize">
-                                                            {role.name}
-                                                        </span>
-                                                        {isSuper && (
-                                                            <Badge variant="outline">
-                                                                system
-                                                            </Badge>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="hidden sm:table-cell">
-                                                    <Badge
-                                                        variant="secondary"
-                                                        className="gap-1"
-                                                    >
-                                                        <KeyRound className="h-3 w-3" />
-                                                        {isSuper
-                                                            ? 'All'
-                                                            : role.permissions_count}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell className="hidden sm:table-cell">
-                                                    <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                                                        <UsersIcon className="h-3.5 w-3.5" />
-                                                        {role.users_count}
+                                    return (
+                                        <motion.tr
+                                            key={role.id}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="border-b transition-colors hover:bg-muted/40"
+                                        >
+                                            <TableCell>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-medium capitalize">
+                                                        {role.name}
                                                     </span>
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <div className="flex items-center justify-end gap-1">
-                                                        {can(
-                                                            PERMISSIONS.ROLES
-                                                                .EDIT,
-                                                        ) && (
-                                                            <Button
-                                                                asChild
-                                                                variant="ghost"
-                                                                size="icon"
+                                                    {isSuper && (
+                                                        <Badge variant="secondary">
+                                                            System
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="hidden sm:table-cell">
+                                                <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                                                    <KeyRound className="h-3.5 w-3.5" />
+                                                    {role.permissions_count}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="hidden md:table-cell">
+                                                <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                                                    <UsersIcon className="h-3.5 w-3.5" />
+                                                    {role.users_count}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    {can(
+                                                        PERMISSIONS.ROLES.EDIT,
+                                                    ) && (
+                                                        <Button
+                                                            asChild
+                                                            variant="ghost"
+                                                            size="icon"
+                                                        >
+                                                            <Link
+                                                                href={roles.edit(
+                                                                    {
+                                                                        locale: wayfinderLocale(),
+                                                                        role: role.id,
+                                                                    },
+                                                                ).url}
+                                                                title="Edit"
                                                             >
-                                                                <Link
-                                                                    href={
-                                                                        roles.edit(
-                                                                            role.id,
-                                                                        ).url
-                                                                    }
-                                                                    title="Edit"
-                                                                >
-                                                                    <Pencil className="h-4 w-4" />
-                                                                </Link>
-                                                            </Button>
-                                                        )}
-                                                        {can(
-                                                            PERMISSIONS.ROLES
-                                                                .DELETE,
-                                                        ) &&
-                                                            !isSuper && (
-                                                                <ConfirmDeleteDialog
-                                                                    description={
-                                                                        <>
-                                                                            Delete
-                                                                            the{' '}
-                                                                            <strong className="capitalize">
-                                                                                {
-                                                                                    role.name
-                                                                                }
-                                                                            </strong>{' '}
-                                                                            role?
-                                                                            Users
-                                                                            with
-                                                                            this
-                                                                            role
-                                                                            will
-                                                                            lose
-                                                                            its
-                                                                            permissions.
-                                                                        </>
-                                                                    }
-                                                                    onConfirm={() =>
-                                                                        router.delete(
-                                                                            roles.destroy(
-                                                                                role.id,
-                                                                            )
-                                                                                .url,
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Link>
+                                                        </Button>
+                                                    )}
+                                                    {can(
+                                                        PERMISSIONS.ROLES
+                                                            .DELETE,
+                                                    ) &&
+                                                        !isSuper && (
+                                                            <ConfirmDeleteDialog
+                                                                description={
+                                                                    <>
+                                                                        Delete
+                                                                        the{' '}
+                                                                        <strong className="capitalize">
                                                                             {
-                                                                                preserveScroll: true,
+                                                                                role.name
+                                                                            }
+                                                                        </strong>{' '}
+                                                                        role?
+                                                                        Users
+                                                                        with
+                                                                        this
+                                                                        role
+                                                                        will
+                                                                        lose its
+                                                                        permissions.
+                                                                    </>
+                                                                }
+                                                                onConfirm={() =>
+                                                                    router.delete(
+                                                                        roles.destroy(
+                                                                            {
+                                                                                locale: wayfinderLocale(),
+                                                                                role: role.id,
                                                                             },
-                                                                        )
-                                                                    }
+                                                                        ).url,
+                                                                        {
+                                                                            preserveScroll: true,
+                                                                        },
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    className="text-muted-foreground hover:text-destructive"
+                                                                    title="Delete"
                                                                 >
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="icon"
-                                                                        className="text-muted-foreground hover:text-destructive"
-                                                                        title="Delete"
-                                                                    >
-                                                                        <Trash2 className="h-4 w-4" />
-                                                                    </Button>
-                                                                </ConfirmDeleteDialog>
-                                                            )}
-                                                    </div>
-                                                </TableCell>
-                                            </motion.tr>
-                                        );
-                                    })}
-                                </AnimatePresence>
-                            </TableBody>
-                        </Table>
-
-                        {paginated.data.length === 0 && (
-                            <div className="px-4 py-16 text-center">
-                                <Shield className="mx-auto h-10 w-10 text-muted-foreground/40" />
-                                <h3 className="mt-4 text-sm font-semibold">
-                                    No roles found
-                                </h3>
-                            </div>
-                        )}
-                    </div>
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </ConfirmDeleteDialog>
+                                                        )}
+                                                </div>
+                                            </TableCell>
+                                        </motion.tr>
+                                    );
+                                })}
+                            </AnimatePresence>
+                        </TableBody>
+                    </Table>
 
                     <DataPagination meta={paginated} />
                 </div>
@@ -258,7 +236,7 @@ export default function RolesIndex({
 
 RolesIndex.layout = {
     breadcrumbs: [
-        { title: 'Dashboard', href: dashboard() },
-        { title: 'Roles', href: roles.index() },
+        { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
+        { title: 'Rollen', href: roles.index(wayfinderLocale()) },
     ],
 };

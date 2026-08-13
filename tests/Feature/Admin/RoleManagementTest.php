@@ -12,12 +12,11 @@ use Spatie\Permission\Models\Role;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->markTestSkipped('Access Control roles routes are commented out of the admin area.');
-
     $this->seed([PermissionSeeder::class, RoleSeeder::class]);
 
-    $this->admin = User::factory()->create();
+    $this->admin = User::factory()->admin()->create();
     $this->admin->assignRole(RoleEnum::SUPER_ADMIN->value);
+    $this->admin->syncTypeFromRoles();
 });
 
 test('super admin can view the roles list', function () {

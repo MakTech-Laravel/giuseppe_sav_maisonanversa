@@ -28,3 +28,15 @@ test('admin theme tokens use the maison palette', function () {
         ->toContain('--sidebar-primary: #8d705a')
         ->toContain('--background: #f3ebe3');
 });
+
+test('the admin shell exposes a language switcher', function () {
+    $header = file_get_contents(resource_path('js/components/app-sidebar-header.tsx'));
+    $sidebar = file_get_contents(resource_path('js/components/app-sidebar.tsx'));
+
+    expect($header)
+        ->toContain('LanguageSwitcher')
+        ->and($sidebar)
+        ->toContain('useTranslation')
+        ->toContain("t('Dashboard')")
+        ->toContain("t('Klanten')");
+});

@@ -78,6 +78,6 @@ EditPost.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         { title: 'Posts', href: posts.index(wayfinderLocale()) },
-        { title: 'Edit', href: posts.index(wayfinderLocale()) },
+        { title: 'Bewerken', href: posts.index(wayfinderLocale()) },
     ],
 };

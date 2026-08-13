@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
@@ -25,8 +25,14 @@ type PageProps = {
     };
 };
 
-function parseAuthQuery(): AuthView | null {
-    const value = new URLSearchParams(window.location.search).get('auth');
+function parseAuthFromUrl(pageUrl: string): AuthView | null {
+    const queryIndex = pageUrl.indexOf('?');
+
+    if (queryIndex === -1) {
+        return null;
+    }
+
+    const value = new URLSearchParams(pageUrl.slice(queryIndex)).get('auth');
 
     if (
         value === 'login' ||
@@ -40,38 +46,60 @@ function parseAuthQuery(): AuthView | null {
     return null;
 }
 
+function authPromptKey(
+    flashView: AuthView | undefined,
+    pageUrl: string,
+): string {
+    return `${flashView ?? ''}|${pageUrl}`;
+}
+
 export default function FrontendLayout({ children }: { children: ReactNode }) {
     const main = useRef<HTMLElement>(null);
     const { url, props } = usePage<PageProps>();
     const { locale } = useLocale();
-    const [modal, setModal] = useState<ModalKind>(null);
-    const [authView, setAuthView] = useState<AuthView>('login');
+    const [userModal, setUserModal] = useState<ModalKind>(null);
+    const [userAuthView, setUserAuthView] = useState<AuthView>('login');
+    const [dismissedAuthPromptKey, setDismissedAuthPromptKey] = useState<
+        string | null
+    >(null);
+
+    const promptedAuthView =
+        props.flash?.open_auth_modal ?? parseAuthFromUrl(url);
+    const currentAuthPromptKey = authPromptKey(
+        props.flash?.open_auth_modal,
+        url,
+    );
+    const autoOpenAuth =
+        promptedAuthView !== null &&
+        dismissedAuthPromptKey !== currentAuthPromptKey;
+    const modal = userModal ?? (autoOpenAuth ? 'auth' : null);
+    const authView =
+        userModal === 'auth'
+            ? userAuthView
+            : (promptedAuthView ?? 'login');
 
     useReveal(main);
 
     const actions = useMemo<ShellActions>(
         () => ({
-            openNewsletter: () => setModal('newsletter'),
-            openOrder: () => setModal('order'),
-            openCertificate: () => setModal('certificate'),
+            openNewsletter: () => setUserModal('newsletter'),
+            openOrder: () => setUserModal('order'),
+            openCertificate: () => setUserModal('certificate'),
             openAuth: (view: AuthView = 'login') => {
-                setAuthView(view);
-                setModal('auth');
+                setUserAuthView(view);
+                setUserModal('auth');
             },
         }),
         [],
     );
 
-    useEffect(() => {
-        const flashView = props.flash?.open_auth_modal;
-        const queryView = parseAuthQuery();
-        const nextView = flashView ?? queryView;
-
-        if (nextView) {
-            setAuthView(nextView);
-            setModal('auth');
+    function closeModal(): void {
+        if (autoOpenAuth && userModal === null) {
+            setDismissedAuthPromptKey(currentAuthPromptKey);
         }
-    }, [props.flash?.open_auth_modal, url]);
+
+        setUserModal(null);
+    }
 
     return (
         <ShellActionsProvider value={actions}>
@@ -100,8 +128,8 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                         <MaisonModals
                             kind={modal}
                             authView={authView}
-                            onAuthViewChange={setAuthView}
-                            onClose={() => setModal(null)}
+                            onAuthViewChange={setUserAuthView}
+                            onClose={closeModal}
                         />
                     )}
                 </div>

@@ -309,6 +309,6 @@ function StatCard({
 CustomersIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Customers', href: customers.index(wayfinderLocale()) },
+        { title: 'Klanten', href: customers.index(wayfinderLocale()) },
     ],
 };

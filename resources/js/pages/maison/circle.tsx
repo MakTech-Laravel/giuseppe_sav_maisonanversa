@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { CirclePortal } from '@/components/maison/circle/circle-portal';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { PageHero } from '@/components/maison/ui/page-hero';

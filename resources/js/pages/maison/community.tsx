@@ -1,13 +1,13 @@
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
+import type { FeedPostData } from '@/components/maison/community/community-data';
 import { CommunityLayout } from '@/components/maison/community/community-layout';
 import { CommunityLoginGate } from '@/components/maison/community/community-login-gate';
 import {
     CommunityToast,
     useCommunityToast,
 } from '@/components/maison/community/community-toast';
-import type { FeedPostData } from '@/components/maison/community/community-data';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import type { Paginated } from '@/types/admin';
 

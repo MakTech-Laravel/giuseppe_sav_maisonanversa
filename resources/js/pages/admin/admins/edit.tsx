@@ -60,7 +60,7 @@ export default function EditAdmin({
 EditAdmin.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Administrator', href: admins.index(wayfinderLocale()) },
-        { title: 'Edit', href: admins.index(wayfinderLocale()) },
+        { title: 'Beheerder', href: admins.index(wayfinderLocale()) },
+        { title: 'Bewerken', href: admins.index(wayfinderLocale()) },
     ],
 };

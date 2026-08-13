@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { MemberNav } from '@/components/member/member-nav';
 import { MemberTopbar } from '@/components/member/member-topbar';

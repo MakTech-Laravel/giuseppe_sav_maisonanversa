@@ -1,7 +1,7 @@
 import { InfiniteScroll, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { FeedPostData } from '@/components/maison/community/community-data';
 import { CommunityCirclePanel } from '@/components/maison/community/community-circle-panel';
+import type { FeedPostData } from '@/components/maison/community/community-data';
 import { FeedCompose } from '@/components/maison/community/feed-compose';
 import { FeedPostCard } from '@/components/maison/community/feed-post-card';
 import { Wrap } from '@/components/maison/ui/section';

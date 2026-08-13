@@ -103,7 +103,7 @@ function Detail({ label, value }: { label: string; value: string }) {
 ShowOrder.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Orders', href: orders.index(wayfinderLocale()) },
+        { title: 'Bestellingen', href: orders.index(wayfinderLocale()) },
         { title: 'Details', href: orders.index(wayfinderLocale()) },
     ],
 };

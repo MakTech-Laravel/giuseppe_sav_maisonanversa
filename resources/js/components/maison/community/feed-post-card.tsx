@@ -1,5 +1,6 @@
-import { useState, type FormEvent } from 'react';
 import { usePage } from '@inertiajs/react';
+import { useState  } from 'react';
+import type {FormEvent} from 'react';
 import { useTranslation } from 'react-i18next';
 import type {
     FeedComment,

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { MaisonAccordion } from '@/components/maison/ui/maison-accordion';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
+import { MaisonAccordion } from '@/components/maison/ui/maison-accordion';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 

@@ -1,7 +1,8 @@
-import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
-import { useState, type FormEvent } from 'react';
+import { useState  } from 'react';
+import type {FormEvent} from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Section, Wrap } from '@/components/maison/ui/section';

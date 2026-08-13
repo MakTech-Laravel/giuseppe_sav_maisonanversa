@@ -17,19 +17,19 @@ class DashboardController extends Controller
         return Inertia::render('dashboard', [
             'stats' => [
                 [
-                    'label' => 'Customers',
+                    'key' => 'Klanten',
                     'value' => (string) User::query()->where('type', UserType::Customer)->count(),
-                    'hint' => 'Member accounts',
+                    'hintKey' => 'Lid-accounts',
                 ],
                 [
-                    'label' => 'Administrators',
+                    'key' => 'Beheerders',
                     'value' => (string) User::query()->where('type', UserType::Admin)->count(),
-                    'hint' => 'Staff accounts',
+                    'hintKey' => 'Personeelsaccounts',
                 ],
                 [
-                    'label' => 'Posts',
+                    'key' => 'Posts',
                     'value' => (string) Post::query()->count(),
-                    'hint' => 'Content entries',
+                    'hintKey' => 'Contentitems',
                 ],
             ],
             'recentCustomers' => User::query()

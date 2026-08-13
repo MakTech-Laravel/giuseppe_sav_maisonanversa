@@ -4,6 +4,7 @@ import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
 import type { ReactNode, MouseEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { login, register } from '@/routes';
 import { dashboard } from '@/routes/admin';
 import { PERMISSIONS } from '@/types/permissions';
@@ -256,7 +257,7 @@ export default function Welcome({
                             {auth.user ? (
                                 <>
                                     <Link
-                                        href={dashboard()}
+                                        href={dashboard(wayfinderLocale())}
                                         className="rounded-full bg-slate-900 px-5 py-2 text-sm font-medium text-white transition-all hover:bg-slate-800"
                                     >
                                         Dashboard
@@ -341,7 +342,11 @@ export default function Welcome({
                                 className="mt-10 flex flex-wrap gap-4"
                             >
                                 <Link
-                                    href={auth.user ? dashboard() : register()}
+                                    href={
+                                        auth.user
+                                            ? dashboard(wayfinderLocale())
+                                            : register()
+                                    }
                                     className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/10 transition-all hover:opacity-95"
                                 >
                                     Launch Application

@@ -2,8 +2,6 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonModal, modalInputClassName } from '@/components/maison/modals/maison-modal';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
-import { cn } from '@/lib/utils';
-
 type CertificateModalProps = {
     onClose: () => void;
 };
