@@ -27,7 +27,7 @@ class DashboardController extends Controller
                     'hintKey' => 'Personeelsaccounts',
                 ],
                 [
-                    'key' => 'Posts',
+                    'key' => 'Berichten',
                     'value' => (string) Post::query()->count(),
                     'hintKey' => 'Contentitems',
                 ],

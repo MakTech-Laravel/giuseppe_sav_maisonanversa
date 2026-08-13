@@ -2,6 +2,7 @@ import type { UrlMethodPair } from '@inertiajs/core';
 import { useForm } from '@inertiajs/react';
 import { Loader2, ShieldAlert, Save } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { PermissionSelector } from '@/components/admin/permission-selector';
 import InputError from '@/components/input-error';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -28,6 +29,8 @@ export function RoleForm({
     defaults,
     onCancel,
 }: RoleFormProps) {
+    const { t } = useTranslation();
+
     const form = useForm(action, {
         name: defaults?.name ?? '',
         permissions: defaults?.permissions ?? [],
@@ -56,26 +59,24 @@ export function RoleForm({
             {locked && (
                 <Alert>
                     <ShieldAlert className="h-4 w-4" />
-                    <AlertTitle>Super Admin role</AlertTitle>
+                    <AlertTitle>{t('Superbeheerderrol')}</AlertTitle>
                     <AlertDescription>
-                        This role implicitly receives every permission via
-                        <code className="mx-1 rounded bg-muted px-1 py-0.5 text-xs">
-                            Gate::before
-                        </code>
-                        , so it cannot be renamed or edited.
+                        {t(
+                            'Deze rol ontvangt impliciet alle rechten via Gate::before en kan niet worden hernoemd of bewerkt.',
+                        )}
                     </AlertDescription>
                 </Alert>
             )}
 
             <div className="grid gap-2 sm:max-w-md">
-                <Label htmlFor="name">Role name</Label>
+                <Label htmlFor="name">{t('Rolnaam')}</Label>
                 <Input
                     id="name"
                     value={form.data.name}
                     onChange={(e) => form.setData('name', e.target.value)}
                     onBlur={() => form.validate('name')}
                     aria-invalid={form.invalid('name')}
-                    placeholder="e.g. content-manager"
+                    placeholder={t('bijv. content-manager')}
                     disabled={locked}
                 />
                 <InputError message={form.errors.name} />
@@ -84,16 +85,17 @@ export function RoleForm({
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
                     <div>
-                        <Label>Permissions</Label>
+                        <Label>{t('Rechten')}</Label>
                         <p className="text-xs text-muted-foreground">
-                            Toggle individual permissions or whole groups at
-                            once.
+                            {t(
+                                'Schakel individuele rechten of hele groepen in één keer in.',
+                            )}
                         </p>
                     </div>
                     {form.validating && (
                         <Badge variant="secondary" className="gap-1.5">
                             <Loader2 className="h-3 w-3 animate-spin" />{' '}
-                            Validating…
+                            {t('Valideren…')}
                         </Badge>
                     )}
                 </div>
@@ -114,7 +116,7 @@ export function RoleForm({
                     ) : (
                         <Save className="h-4 w-4" />
                     )}
-                    {isEdit ? 'Save changes' : 'Create role'}
+                    {isEdit ? t('Wijzigingen opslaan') : t('Rol aanmaken')}
                 </Button>
                 {onCancel && (
                     <Button
@@ -123,7 +125,7 @@ export function RoleForm({
                         onClick={onCancel}
                         disabled={form.processing}
                     >
-                        Cancel
+                        {t('Annuleren')}
                     </Button>
                 )}
             </div>

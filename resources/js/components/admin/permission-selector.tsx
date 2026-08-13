@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -40,6 +41,7 @@ export function PermissionSelector({
     onChange,
     disabled = false,
 }: PermissionSelectorProps) {
+    const { t } = useTranslation();
     const [query, setQuery] = useState('');
     const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
@@ -127,7 +129,7 @@ export function PermissionSelector({
                     <Input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Filter permissions…"
+                        placeholder={t('Filter rechten…')}
                         className="pl-9"
                         disabled={disabled}
                     />
@@ -135,7 +137,10 @@ export function PermissionSelector({
                 <div className="flex items-center gap-2">
                     <Badge variant="secondary" className="gap-1.5">
                         <ShieldCheck className="h-3.5 w-3.5" />
-                        {selected.length} / {permissions.length} selected
+                        {t('{{selected}} / {{total}} geselecteerd', {
+                            selected: selected.length,
+                            total: permissions.length,
+                        })}
                     </Badge>
                     <Button
                         type="button"
@@ -146,7 +151,7 @@ export function PermissionSelector({
                             disabled || selected.length === permissions.length
                         }
                     >
-                        Select all
+                        {t('Alles selecteren')}
                     </Button>
                     <Button
                         type="button"
@@ -155,7 +160,7 @@ export function PermissionSelector({
                         onClick={() => setAll(false)}
                         disabled={disabled || selected.length === 0}
                     >
-                        Clear
+                        {t('Wissen')}
                     </Button>
                 </div>
             </div>
@@ -212,7 +217,7 @@ export function PermissionSelector({
 
                                 {/* Group-level tri-state checkbox */}
                                 <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-muted-foreground select-none">
-                                    Select group
+                                    {t('Groep selecteren')}
                                     <TriStateCheckbox
                                         state={state}
                                         disabled={disabled}
@@ -271,7 +276,9 @@ export function PermissionSelector({
 
                 {groups.length === 0 && (
                     <div className="rounded-lg border border-dashed py-10 text-center text-sm text-muted-foreground">
-                        No permissions match “{query}”.
+                        {t('Geen rechten gevonden voor "{{query}}".', {
+                            query,
+                        })}
                     </div>
                 )}
             </div>

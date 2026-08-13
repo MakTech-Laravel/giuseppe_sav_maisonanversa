@@ -1,6 +1,7 @@
 import { Form, Head } from '@inertiajs/react';
 import { ShieldCheck } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
@@ -27,6 +28,7 @@ export default function Security({
     twoFactorEnabled = false,
     passwordRules,
 }: Props) {
+    const { t } = useTranslation();
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
@@ -54,15 +56,17 @@ export default function Security({
 
     return (
         <>
-            <Head title="Security settings" />
+            <Head title={t('Beveiligingsinstellingen')} />
 
-            <h1 className="sr-only">Security settings</h1>
+            <h1 className="sr-only">{t('Beveiligingsinstellingen')}</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Update password"
-                    description="Ensure your account is using a long, random password to stay secure"
+                    title={t('Wachtwoord bijwerken')}
+                    description={t(
+                        'Gebruik een lang, uniek wachtwoord. U hebt uw huidige wachtwoord nodig om het te wijzigen.',
+                    )}
                 />
 
                 <Form
@@ -91,7 +95,7 @@ export default function Security({
                         <>
                             <div className="grid gap-2">
                                 <Label htmlFor="current_password">
-                                    Current password
+                                    {t('Huidig wachtwoord')}
                                 </Label>
 
                                 <PasswordInput
@@ -100,14 +104,16 @@ export default function Security({
                                     name="current_password"
                                     className="mt-1 block w-full"
                                     autoComplete="current-password"
-                                    placeholder="Current password"
+                                    placeholder={t('Huidig wachtwoord')}
                                 />
 
                                 <InputError message={errors.current_password} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">New password</Label>
+                                <Label htmlFor="password">
+                                    {t('Nieuw wachtwoord')}
+                                </Label>
 
                                 <PasswordInput
                                     id="password"
@@ -115,7 +121,7 @@ export default function Security({
                                     name="password"
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
-                                    placeholder="New password"
+                                    placeholder={t('Nieuw wachtwoord')}
                                     passwordrules={passwordRules}
                                 />
 
@@ -124,7 +130,7 @@ export default function Security({
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                    {t('Bevestig wachtwoord')}
                                 </Label>
 
                                 <PasswordInput
@@ -132,7 +138,7 @@ export default function Security({
                                     name="password_confirmation"
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
-                                    placeholder="Confirm password"
+                                    placeholder={t('Bevestig wachtwoord')}
                                     passwordrules={passwordRules}
                                 />
 
@@ -146,7 +152,7 @@ export default function Security({
                                     disabled={processing}
                                     data-test="update-password-button"
                                 >
-                                    Save password
+                                    {t('Wachtwoord bijwerken')}
                                 </Button>
                             </div>
                         </>
@@ -158,15 +164,17 @@ export default function Security({
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Two-factor authentication"
-                        description="Manage your two-factor authentication settings"
+                        title={t('Tweestapsverificatie')}
+                        description={t(
+                            'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op uw telefoon.',
+                        )}
                     />
                     {twoFactorEnabled ? (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
-                                You will be prompted for a secure, random pin
-                                during login, which you can retrieve from the
-                                TOTP-supported application on your phone.
+                                {t(
+                                    'U wordt bij het inloggen gevraagd om een beveiligingscode, die u uit een TOTP-ondersteunde app op uw telefoon haalt.',
+                                )}
                             </p>
 
                             <div className="relative inline">
@@ -177,7 +185,7 @@ export default function Security({
                                             type="submit"
                                             disabled={processing}
                                         >
-                                            Disable 2FA
+                                            {t('2FA uitschakelen')}
                                         </Button>
                                     )}
                                 </Form>
@@ -192,10 +200,9 @@ export default function Security({
                     ) : (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
-                                When you enable two-factor authentication, you
-                                will be prompted for a secure pin during login.
-                                This pin can be retrieved from a TOTP-supported
-                                application on your phone.
+                                {t(
+                                    'Wanneer ingeschakeld, wordt u bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op uw telefoon.',
+                                )}
                             </p>
 
                             <div>
@@ -204,7 +211,7 @@ export default function Security({
                                         onClick={() => setShowSetupModal(true)}
                                     >
                                         <ShieldCheck />
-                                        Continue setup
+                                        {t('Setup voortzetten')}
                                     </Button>
                                 ) : (
                                     <Form
@@ -218,7 +225,7 @@ export default function Security({
                                                 type="submit"
                                                 disabled={processing}
                                             >
-                                                Enable 2FA
+                                                {t('2FA inschakelen')}
                                             </Button>
                                         )}
                                     </Form>

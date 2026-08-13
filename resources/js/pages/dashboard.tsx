@@ -67,7 +67,7 @@ export default function Dashboard({
             permission: PERMISSIONS.USERS.INDEX,
         },
         {
-            label: t('Posts'),
+            label: t('Berichten'),
             description: t('Beheer contentitems'),
             href: posts.index(wayfinderLocale()),
             icon: FileText,

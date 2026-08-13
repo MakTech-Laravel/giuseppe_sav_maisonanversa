@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import { DataPagination } from '@/components/admin/data-pagination';
@@ -46,6 +47,7 @@ export default function CustomersIndex({
     filters,
     stats,
 }: CustomersIndexProps) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const [search, setSearch] = useState(filters.search ?? '');
     const firstRender = useRef(true);
@@ -70,17 +72,18 @@ export default function CustomersIndex({
 
     return (
         <>
-            <Head title="Customers" />
+            <Head title={t('Klanten')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Customers"
-                    description="Manage member accounts and customer access."
+                    title={t('Klanten')}
+                    description={t('Beheer ledenaccounts.')}
                     icon={Users}
                 >
                     {can(PERMISSIONS.USERS.CREATE) && (
                         <Button asChild>
                             <Link href={customers.create(wayfinderLocale())}>
-                                <Plus className="h-4 w-4" /> Add customer
+                                <Plus className="h-4 w-4" />{' '}
+                                {t('Klant toevoegen')}
                             </Link>
                         </Button>
                     )}
@@ -106,12 +109,12 @@ export default function CustomersIndex({
                             className="grid gap-4 sm:grid-cols-2"
                         >
                             <StatCard
-                                label="Total customers"
+                                label={t('Totaal klanten')}
                                 value={stats.total}
                                 icon={UsersRound}
                             />
                             <StatCard
-                                label="Verified"
+                                label={t('Geverifieerd')}
                                 value={stats.verified}
                                 icon={UserCheck}
                             />
@@ -124,7 +127,7 @@ export default function CustomersIndex({
                     <Input
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder="Search customers…"
+                        placeholder={t('Zoek klanten…')}
                         className="pl-9"
                     />
                 </div>
@@ -134,15 +137,15 @@ export default function CustomersIndex({
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                    <TableHead>Customer</TableHead>
+                                    <TableHead>{t('Klant')}</TableHead>
                                     <TableHead className="hidden md:table-cell">
-                                        Status
+                                        {t('Status')}
                                     </TableHead>
                                     <TableHead className="hidden lg:table-cell">
-                                        Joined
+                                        {t('Lid sinds')}
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        Actions
+                                        {t('Acties')}
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -182,8 +185,8 @@ export default function CustomersIndex({
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell">
                                                 {customer.email_verified_at
-                                                    ? 'Verified'
-                                                    : 'Pending'}
+                                                    ? t('Geverifieerd')
+                                                    : t('In afwachting')}
                                             </TableCell>
                                             <TableCell className="hidden lg:table-cell">
                                                 <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -210,7 +213,9 @@ export default function CustomersIndex({
                                                                         user: customer.id,
                                                                     },
                                                                 )}
-                                                                title="View"
+                                                                title={t(
+                                                                    'Bekijken',
+                                                                )}
                                                             >
                                                                 <Eye className="h-4 w-4" />
                                                             </Link>
@@ -231,7 +236,9 @@ export default function CustomersIndex({
                                                                         user: customer.id,
                                                                     },
                                                                 )}
-                                                                title="Edit"
+                                                                title={t(
+                                                                    'Bewerken',
+                                                                )}
                                                             >
                                                                 <Pencil className="h-4 w-4" />
                                                             </Link>
@@ -242,7 +249,12 @@ export default function CustomersIndex({
                                                             .DELETE,
                                                     ) && (
                                                         <ConfirmDeleteDialog
-                                                            description={`Permanently delete ${customer.name} and all associated data?`}
+                                                            description={t(
+                                                                '{{name}} en alle bijbehorende gegevens permanent verwijderen?',
+                                                                {
+                                                                    name: customer.name,
+                                                                },
+                                                            )}
                                                             onConfirm={() =>
                                                                 router.delete(
                                                                     customers.destroy(
@@ -258,7 +270,9 @@ export default function CustomersIndex({
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="text-muted-foreground hover:text-destructive"
-                                                                title="Delete"
+                                                                title={t(
+                                                                    'Verwijderen',
+                                                                )}
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
                                                             </Button>
@@ -273,7 +287,7 @@ export default function CustomersIndex({
                         </Table>
                         {paginated.data.length === 0 && (
                             <div className="px-4 py-16 text-center text-sm text-muted-foreground">
-                                No customers found.
+                                {t('Geen klanten gevonden.')}
                             </div>
                         )}
                     </div>

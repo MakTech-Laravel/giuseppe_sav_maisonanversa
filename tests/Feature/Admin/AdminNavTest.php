@@ -4,24 +4,25 @@ test('the admin sidebar includes administrator and hides access control', functi
     $source = file_get_contents(resource_path('js/components/app-sidebar.tsx'));
 
     foreach ([
-        "title: 'Dashboard'",
-        "title: 'Customers'",
-        "title: 'Orders'",
-        "title: 'Community'",
-        "title: 'Heritage Letter'",
-        "title: 'Posts'",
-        "title: 'Administrator'",
-        "title: 'Profile'",
-        "title: 'Security'",
+        "t('Dashboard')",
+        "t('Klanten')",
+        "t('Bestellingen')",
+        "t('Gemeenschap')",
+        "t('Heritage Letter')",
+        "t('Berichten')",
+        "t('Beheerder')",
+        "t('Profiel')",
+        "t('Beveiliging')",
+        "t('Platform')",
     ] as $needle) {
         expect($source)->toContain($needle);
     }
 
     expect($source)
-        ->not->toContain("title: 'Access Control'")
-        ->not->toContain("title: 'Roles'")
-        ->not->toContain("title: 'Permissions'")
-        ->not->toContain("title: 'Admins'")
+        ->not->toContain("t('Access Control')")
+        ->not->toContain("t('Roles')")
+        ->not->toContain("t('Permissions')")
+        ->not->toContain("t('Admins')")
         ->not->toContain('File Upload Demo')
         ->not->toContain("href: '#'");
 });

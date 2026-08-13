@@ -1,5 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, UserPlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { UserForm } from '@/components/admin/user-form';
 import { Button } from '@/components/ui/button';
@@ -8,18 +9,20 @@ import { dashboard } from '@/routes/admin';
 import admins from '@/routes/admin/admins';
 
 export default function CreateAdmin() {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="Create administrator" />
+            <Head title={t('Beheerder aanmaken')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Create administrator"
-                    description="Add a staff administrator account."
+                    title={t('Beheerder aanmaken')}
+                    description={t('Voeg een personeelsaccount toe.')}
                     icon={UserPlus}
                 >
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> Back
+                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -28,7 +31,7 @@ export default function CreateAdmin() {
                         action={admins.store(wayfinderLocale())}
                         roles={[]}
                         showRoles={false}
-                        submitLabel="Create administrator"
+                        submitLabel={t('Beheerder aanmaken')}
                         onCancel={() =>
                             router.visit(admins.index(wayfinderLocale()))
                         }

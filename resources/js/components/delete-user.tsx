@@ -1,5 +1,6 @@
 import { Form } from '@inertiajs/react';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
@@ -17,24 +18,30 @@ import { Label } from '@/components/ui/label';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 
 export default function DeleteUser() {
+    const { t } = useTranslation();
     const passwordInput = useRef<HTMLInputElement>(null);
 
     return (
         <section className="rounded-lg border border-destructive/35 bg-destructive/10 p-5 sm:p-6">
             <header className="mb-4 space-y-1">
                 <h2 className="text-base font-medium tracking-tight text-foreground">
-                    Delete account
+                    {t('Account verwijderen')}
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                    Permanently delete your account and all of its resources.
-                    This cannot be undone.
+                    {t(
+                        'Verwijder uw account en al zijn gegevens permanent. Dit kan niet ongedaan worden gemaakt.',
+                    )}
                 </p>
             </header>
 
             <div className="rounded-md border border-destructive/30 bg-background/40 px-4 py-3 text-sm">
-                <p className="font-medium text-destructive">Warning</p>
+                <p className="font-medium text-destructive">
+                    {t('Waarschuwing')}
+                </p>
                 <p className="mt-0.5 text-muted-foreground">
-                    Please proceed with caution — this action is permanent.
+                    {t(
+                        'Ga voorzichtig te werk — deze actie is permanent.',
+                    )}
                 </p>
             </div>
 
@@ -45,18 +52,19 @@ export default function DeleteUser() {
                             variant="destructive"
                             data-test="delete-user-button"
                         >
-                            Delete account
+                            {t('Account verwijderen')}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogTitle>
-                            Are you sure you want to delete your account?
+                            {t(
+                                'Weet u zeker dat u uw account wilt verwijderen?',
+                            )}
                         </DialogTitle>
                         <DialogDescription>
-                            Once your account is deleted, all of its resources
-                            and data will also be permanently deleted. Please
-                            enter your password to confirm you would like to
-                            permanently delete your account.
+                            {t(
+                                'Zodra uw account is verwijderd, worden al zijn gegevens permanent gewist. Voer uw wachtwoord in om te bevestigen dat u uw account definitief wilt verwijderen.',
+                            )}
                         </DialogDescription>
 
                         <Form
@@ -75,14 +83,14 @@ export default function DeleteUser() {
                                             htmlFor="password"
                                             className="sr-only"
                                         >
-                                            Password
+                                            {t('Wachtwoord')}
                                         </Label>
 
                                         <PasswordInput
                                             id="password"
                                             name="password"
                                             ref={passwordInput}
-                                            placeholder="Password"
+                                            placeholder={t('Wachtwoord')}
                                             autoComplete="current-password"
                                         />
 
@@ -97,7 +105,7 @@ export default function DeleteUser() {
                                                     resetAndClearErrors()
                                                 }
                                             >
-                                                Cancel
+                                                {t('Annuleren')}
                                             </Button>
                                         </DialogClose>
 
@@ -110,7 +118,7 @@ export default function DeleteUser() {
                                                 type="submit"
                                                 data-test="confirm-delete-user-button"
                                             >
-                                                Delete account
+                                                {t('Account verwijderen')}
                                             </button>
                                         </Button>
                                     </DialogFooter>

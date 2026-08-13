@@ -1,5 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Pencil } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { UserForm } from '@/components/admin/user-form';
 import { Button } from '@/components/ui/button';
@@ -9,18 +10,23 @@ import customers from '@/routes/admin/customers';
 import type { AdminUser } from '@/types/admin';
 
 export default function EditCustomer({ customer }: { customer: AdminUser }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title={`Edit ${customer.name}`} />
+            <Head title={t('Klant bewerken')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Edit customer"
-                    description={`Update ${customer.name}'s account.`}
+                    title={t('Klant bewerken')}
+                    description={t('Werk het account van {{name}} bij.', {
+                        name: customer.name,
+                    })}
                     icon={Pencil}
                 >
                     <Button variant="outline" asChild>
                         <Link href={customers.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> Back to customers
+                            <ArrowLeft className="h-4 w-4" />{' '}
+                            {t('Terug naar klanten')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -34,7 +40,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                         showRoles={false}
                         isEdit
                         currentAvatar={customer.avatar}
-                        submitLabel="Save customer"
+                        submitLabel={t('Klant opslaan')}
                         defaults={{
                             name: customer.name,
                             email: customer.email,

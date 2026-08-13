@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ export default function PermissionsIndex({
 }: {
     permissions: PermissionListItem[];
 }) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const [query, setQuery] = useState('');
 
@@ -43,12 +45,14 @@ export default function PermissionsIndex({
 
     return (
         <>
-            <Head title="Permissions" />
+            <Head title={t('Rechten')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Permissions"
-                    description="Developer-defined permissions, grouped by domain. Read-only."
+                    title={t('Rechten')}
+                    description={t(
+                        'Door ontwikkelaars gedefinieerde rechten, gegroepeerd per domein. Alleen-lezen.',
+                    )}
                     icon={KeyRound}
                 >
                     {can(PERMISSIONS.PERMISSIONS.EXPORT) && (
@@ -92,17 +96,17 @@ export default function PermissionsIndex({
                         <Input
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Search permissions…"
+                            placeholder={t('Zoek rechten…')}
                             className="pl-9"
                         />
                     </div>
                     <Badge variant="secondary" className="gap-1.5">
                         <Layers className="h-3.5 w-3.5" />
-                        {groups.length} groups
+                        {t('{{count}} groepen', { count: groups.length })}
                     </Badge>
                     <Badge variant="secondary" className="gap-1.5">
                         <KeyRound className="h-3.5 w-3.5" />
-                        {items.length} permissions
+                        {t('{{count}} rechten', { count: items.length })}
                     </Badge>
                 </div>
 
@@ -134,7 +138,10 @@ export default function PermissionsIndex({
                                         <Badge
                                             variant="secondary"
                                             className="shrink-0 gap-1 text-xs"
-                                            title={`Assigned to ${perm.roles_count} role(s)`}
+                                            title={t(
+                                                'Toegewezen aan {{count}} rol(len)',
+                                                { count: perm.roles_count },
+                                            )}
                                         >
                                             {perm.roles_count}
                                         </Badge>
@@ -148,7 +155,9 @@ export default function PermissionsIndex({
                         <div className="col-span-full rounded-xl border border-dashed py-16 text-center">
                             <KeyRound className="mx-auto h-10 w-10 text-muted-foreground/40" />
                             <p className="mt-3 text-sm text-muted-foreground">
-                                No permissions match “{query}”.
+                                {t('Geen rechten gevonden voor "{{query}}".', {
+                                    query,
+                                })}
                             </p>
                         </div>
                     )}

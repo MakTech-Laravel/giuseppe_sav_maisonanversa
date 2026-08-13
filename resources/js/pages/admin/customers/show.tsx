@@ -8,6 +8,7 @@ import {
     ShieldCheck,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
@@ -19,6 +20,7 @@ import type { AdminUser } from '@/types/admin';
 import { PERMISSIONS } from '@/types/permissions';
 
 export default function ShowCustomer({ customer }: { customer: AdminUser }) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const url = avatarUrl(customer.avatar);
 
@@ -26,10 +28,10 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
         <>
             <Head title={customer.name} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-                <AdminPageHeader title="Customer profile" icon={IdCard}>
+                <AdminPageHeader title={t('Klantenprofiel')} icon={IdCard}>
                     <Button variant="outline" asChild>
                         <Link href={customers.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> Back
+                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
                         </Link>
                     </Button>
                     {can(PERMISSIONS.USERS.EDIT) && (
@@ -40,7 +42,8 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
                                     user: customer.id,
                                 })}
                             >
-                                <Pencil className="h-4 w-4" /> Edit customer
+                                <Pencil className="h-4 w-4" />{' '}
+                                {t('Klant bewerken')}
                             </Link>
                         </Button>
                     )}
@@ -74,20 +77,26 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
                     <dl className="divide-y text-sm">
                         <Row
                             icon={IdCard}
-                            label="Customer ID"
+                            label={t('Klant-ID')}
                             value={`#${customer.id}`}
                         />
-                        <Row icon={Mail} label="Email" value={customer.email} />
+                        <Row
+                            icon={Mail}
+                            label={t('E-mail')}
+                            value={customer.email}
+                        />
                         <Row
                             icon={ShieldCheck}
-                            label="Verified"
+                            label={t('Geverifieerd')}
                             value={
-                                customer.email_verified_at ? 'Yes' : 'Pending'
+                                customer.email_verified_at
+                                    ? t('Ja')
+                                    : t('In afwachting')
                             }
                         />
                         <Row
                             icon={Calendar}
-                            label="Joined"
+                            label={t('Lid sinds')}
                             value={new Date(
                                 customer.created_at,
                             ).toLocaleDateString(undefined, {

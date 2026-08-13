@@ -79,7 +79,7 @@ function buildMainNav(
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
-            title: t('Posts'),
+            title: t('Berichten'),
             href: adminPosts.index(locale),
             icon: FileText,
             permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],

@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { Eye, ShoppingBag, TriangleAlert } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +27,21 @@ interface Order {
     status_key: string;
 }
 
+function translateOrderStatus(
+    status: string,
+    t: (key: string) => string,
+): string {
+    const statusMap: Record<string, string> = {
+        Active: 'Actief',
+        Reserved: 'Gereserveerd',
+        Paid: 'Betaald',
+        Cancelled: 'Geannuleerd',
+        Pending: 'In behandeling',
+    };
+
+    return t(statusMap[status] ?? status);
+}
+
 export default function OrdersIndex({
     orders,
     commerceConnected,
@@ -33,22 +49,29 @@ export default function OrdersIndex({
     orders: Order[];
     commerceConnected: boolean;
 }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="Orders" />
+            <Head title={t('Bestellingen')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Orders"
-                    description="Review reservations, deposits, and purchases."
+                    title={t('Bestellingen')}
+                    description={t(
+                        'Bekijk reserveringen, aanbetalingen en aankopen.',
+                    )}
                     icon={ShoppingBag}
                 />
                 {!commerceConnected && (
                     <Alert>
                         <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>Commerce is not connected</AlertTitle>
+                        <AlertTitle>
+                            {t('Commerce is niet gekoppeld')}
+                        </AlertTitle>
                         <AlertDescription>
-                            These orders are demonstration data until the
-                            commerce provider is configured.
+                            {t(
+                                'Deze bestellingen zijn demogegevens totdat de commerceprovider is geconfigureerd.',
+                            )}
                         </AlertDescription>
                     </Alert>
                 )}
@@ -56,15 +79,15 @@ export default function OrdersIndex({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>Order</TableHead>
-                                <TableHead>Customer</TableHead>
+                                <TableHead>{t('Bestelling')}</TableHead>
+                                <TableHead>{t('Klant')}</TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    Date
+                                    {t('Datum')}
                                 </TableHead>
-                                <TableHead>Amount</TableHead>
-                                <TableHead>Status</TableHead>
+                                <TableHead>{t('Bedrag')}</TableHead>
+                                <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="text-right">
-                                    Actions
+                                    {t('Acties')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -86,7 +109,10 @@ export default function OrdersIndex({
                                     <TableCell>{order.amount}</TableCell>
                                     <TableCell>
                                         <Badge variant="secondary">
-                                            {order.status}
+                                            {translateOrderStatus(
+                                                order.status,
+                                                t,
+                                            )}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
@@ -100,7 +126,7 @@ export default function OrdersIndex({
                                                     locale: wayfinderLocale(),
                                                     order: order.id,
                                                 })}
-                                                title="View order"
+                                                title={t('Bestelling bekijken')}
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
