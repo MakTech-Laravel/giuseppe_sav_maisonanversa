@@ -1,13 +1,16 @@
 import { Link } from '@inertiajs/react';
 import {
+    CalendarDays,
     FileText,
     LayoutGrid,
     Mail,
     MessageCircle,
+    Package,
     Settings2,
     ShoppingBag,
     UserRoundCog,
     Users,
+    UsersRound,
 } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,8 +30,11 @@ import {
 import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
+import adminCircle from '@/routes/admin/circle';
 import adminCommunity from '@/routes/admin/community';
 import adminCustomers from '@/routes/admin/customers';
+import adminEvents from '@/routes/admin/events';
+import adminHeritage from '@/routes/admin/heritage';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
 import adminPosts from '@/routes/admin/posts';
@@ -61,6 +67,24 @@ function buildMainNav(
             title: t('Bestellingen'),
             href: adminOrders.index(locale),
             icon: ShoppingBag,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Evenementen'),
+            href: adminEvents.index(locale),
+            icon: CalendarDays,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Founding Circle'),
+            href: adminCircle.index(locale),
+            icon: UsersRound,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Heritage-product'),
+            href: adminHeritage.index(locale),
+            icon: Package,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
