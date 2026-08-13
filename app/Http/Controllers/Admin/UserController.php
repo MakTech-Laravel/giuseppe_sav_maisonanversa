@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
@@ -20,8 +21,10 @@ class UserController extends Controller
     {
         $search = trim((string) $request->query('search', ''));
         $role = trim((string) $request->query('role', ''));
+        $staffRoles = UserType::staffRoleValues();
 
         $users = User::query()
+            ->where('type', UserType::Admin)
             ->with('roles:id,name')
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($query) use ($search): void {
@@ -29,90 +32,117 @@ class UserController extends Controller
                         ->orWhere('email', 'like', "%{$search}%");
                 });
             })
-            ->when($role !== '', function ($query) use ($role): void {
+            ->when($role !== '', function ($query) use ($role, $staffRoles): void {
+                if (! in_array($role, $staffRoles, true)) {
+                    return;
+                }
+
                 $query->whereHas('roles', fn ($query) => $query->where('name', $role));
             })
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('admin/users/index', [
+        return Inertia::render('admin/admins/index', [
             'users' => $users,
-            'roles' => Role::orderBy('name')->pluck('name'),
+            'roles' => Role::query()
+                ->whereIn('name', $staffRoles)
+                ->orderBy('name')
+                ->pluck('name'),
             'filters' => [
                 'search' => $search,
                 'role' => $role,
             ],
-            // Lets the client disable destructive actions on the last super-admin.
             'superAdminCount' => SuperAdmin::count(),
-            // Optional so the table renders instantly; fetched on scroll-into-view
-            // by the <WhenVisible> wrapper on the client.
             'stats' => Inertia::optional(fn (): array => [
-                'total' => User::count(),
-                'verified' => User::whereNotNull('email_verified_at')->count(),
-                'roles' => Role::count(),
+                'total' => User::query()->where('type', UserType::Admin)->count(),
+                'verified' => User::query()
+                    ->where('type', UserType::Admin)
+                    ->whereNotNull('email_verified_at')
+                    ->count(),
+                'roles' => Role::query()->whereIn('name', $staffRoles)->count(),
             ]),
         ]);
     }
 
     public function create(string $locale): Response
     {
-        return Inertia::render('admin/users/create', [
-            'roles' => Role::orderBy('name')->get(['id', 'name']),
+        return Inertia::render('admin/admins/create', [
+            'roles' => Role::query()
+                ->whereIn('name', UserType::staffRoleValues())
+                ->orderBy('name')
+                ->get(['id', 'name']),
         ]);
     }
 
     public function store(StoreUserRequest $request, string $locale): RedirectResponse
     {
         $data = $request->validated();
+        $roles = $this->staffRolesOnly($request->validated('roles', []));
 
-        // The User model casts `password` as `hashed`, so we pass it as-is.
+        if ($roles === []) {
+            return back()->withErrors(['roles' => 'Assign at least one staff role.'])->withInput();
+        }
+
         if ($request->hasFile('avatar')) {
             $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
-        $user = User::create(collect($data)->except(['roles', 'remove_avatar'])->all());
+        $data['type'] = UserType::Admin;
+        $data['username'] = User::generateUsername($data['name']);
 
-        $user->syncRoles($request->validated('roles', []));
+        $user = User::create(collect($data)->except(['roles', 'remove_avatar'])->all());
+        $user->syncRoles($roles);
         $user->syncTypeFromRoles();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'User created successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Admin created successfully.']);
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.admins.index');
     }
 
     public function show(string $locale, User $user): Response
     {
+        $this->ensureAdmin($user);
+
         $user->load('roles:id,name', 'permissions:id,name');
 
-        return Inertia::render('admin/users/show', [
+        return Inertia::render('admin/admins/show', [
             'user' => $user,
         ]);
     }
 
     public function edit(string $locale, User $user): Response
     {
+        $this->ensureAdmin($user);
         $this->authorize('update', $user);
 
         $user->load('roles:id,name');
 
-        return Inertia::render('admin/users/edit', [
+        return Inertia::render('admin/admins/edit', [
             'user' => $user,
-            'roles' => Role::orderBy('name')->get(['id', 'name']),
+            'roles' => Role::query()
+                ->whereIn('name', UserType::staffRoleValues())
+                ->orderBy('name')
+                ->get(['id', 'name']),
             'userRoles' => $user->roles->pluck('name'),
-            // The last super-admin cannot have the role removed from the UI.
             'isLastSuperAdmin' => SuperAdmin::isLast($user),
         ]);
     }
 
     public function update(UpdateUserRequest $request, string $locale, User $user): RedirectResponse
     {
+        $this->ensureAdmin($user);
         $this->authorize('update', $user);
 
         $data = $request->validated();
+        $roles = $request->exists('roles')
+            ? $this->staffRolesOnly($request->validated('roles', []))
+            : $user->getRoleNames()->all();
 
-        // Keep the current password when the field is left blank; the model's
-        // `hashed` cast handles hashing when a new password is provided.
+        if ($roles === []) {
+            return back()->withErrors(['roles' => 'Assign at least one staff role.'])->withInput();
+        }
+
         if (empty($data['password'])) {
             unset($data['password']);
         }
@@ -126,19 +156,19 @@ class UserController extends Controller
         }
 
         $user->update(collect($data)->except(['roles', 'remove_avatar'])->all());
-        $user->syncRoles($request->validated('roles', []));
+        $user->syncRoles($roles);
         $user->syncTypeFromRoles();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'User updated successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Admin updated successfully.']);
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.admins.index');
     }
 
     public function destroy(string $locale, User $user): RedirectResponse
     {
+        $this->ensureAdmin($user);
         $this->authorize('delete', $user);
 
-        // Never allow the system to be left without a super-admin.
         if (SuperAdmin::isLast($user)) {
             Inertia::flash('toast', [
                 'type' => 'error',
@@ -151,9 +181,23 @@ class UserController extends Controller
         $this->deleteAvatar($user);
         $user->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'User deleted successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Admin deleted successfully.']);
 
         return redirect()->back();
+    }
+
+    private function ensureAdmin(User $user): void
+    {
+        abort_unless($user->isAdmin(), 404);
+    }
+
+    /**
+     * @param  list<string>|array<int, string>  $roles
+     * @return list<string>
+     */
+    private function staffRolesOnly(array $roles): array
+    {
+        return array_values(array_intersect($roles, UserType::staffRoleValues()));
     }
 
     private function deleteAvatar(User $user): void

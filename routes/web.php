@@ -1,7 +1,11 @@
 <?php
 
 use App\Enums\PermissionEnum;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
@@ -142,23 +146,70 @@ Route::prefix('{locale}')
 
         // ── Admin: access management ──────────────────────────────────────────────
         Route::prefix('admin')->name('admin.')->group(function () {
-            Route::inertia('dashboard', 'dashboard')->name('dashboard');
+            Route::get('dashboard', AdminDashboardController::class)
+                ->name('dashboard')
+                ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
 
-            // Users — full CRUD with Precognition on write routes.
-            Route::controller(UserController::class)->group(function () {
-                Route::get('users', 'index')->name('users.index')
+            Route::controller(CustomerController::class)->group(function () {
+                Route::get('customers', 'index')->name('customers.index')
                     ->middleware('permission:'.PermissionEnum::USERS_INDEX->value);
-                Route::get('users/create', 'create')->name('users.create')
+                Route::get('customers/create', 'create')->name('customers.create')
                     ->middleware('permission:'.PermissionEnum::USERS_CREATE->value);
-                Route::post('users', 'store')->name('users.store')
+                Route::post('customers', 'store')->name('customers.store')
                     ->middleware(['permission:'.PermissionEnum::USERS_CREATE->value, HandlePrecognitiveRequests::class]);
-                Route::get('users/{user}', 'show')->name('users.show')
+                Route::get('customers/{user}', 'show')->name('customers.show')
                     ->middleware('permission:'.PermissionEnum::USERS_VIEW->value);
-                Route::get('users/{user}/edit', 'edit')->name('users.edit')
+                Route::get('customers/{user}/edit', 'edit')->name('customers.edit')
                     ->middleware('permission:'.PermissionEnum::USERS_EDIT->value);
-                Route::put('users/{user}', 'update')->name('users.update')
+                Route::put('customers/{user}', 'update')->name('customers.update')
                     ->middleware(['permission:'.PermissionEnum::USERS_EDIT->value, HandlePrecognitiveRequests::class]);
-                Route::delete('users/{user}', 'destroy')->name('users.destroy')
+                Route::delete('customers/{user}', 'destroy')->name('customers.destroy')
+                    ->middleware('permission:'.PermissionEnum::USERS_DELETE->value);
+            });
+
+            Route::controller(OpsController::class)->group(function () {
+                Route::get('orders', 'orders')->name('orders.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('orders/{order}', 'orderShow')->name('orders.show')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('community', 'community')->name('community.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('letter', 'letter')->name('letter.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+            });
+
+            Route::controller(AdminPostController::class)->group(function () {
+                Route::get('posts', 'index')->name('posts.index')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
+                Route::get('posts/create', 'create')->name('posts.create')
+                    ->middleware('permission:'.PermissionEnum::POSTS_CREATE->value);
+                Route::post('posts', 'store')->name('posts.store')
+                    ->middleware(['permission:'.PermissionEnum::POSTS_CREATE->value, HandlePrecognitiveRequests::class]);
+                Route::get('posts/{post}', 'show')->name('posts.show')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
+                Route::get('posts/{post}/edit', 'edit')->name('posts.edit')
+                    ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
+                Route::put('posts/{post}', 'update')->name('posts.update')
+                    ->middleware(['permission:'.PermissionEnum::POSTS_EDIT->value, HandlePrecognitiveRequests::class]);
+                Route::delete('posts/{post}', 'destroy')->name('posts.destroy')
+                    ->middleware('permission:'.PermissionEnum::POSTS_DELETE->value);
+            });
+
+            // Admins — staff accounts (Access Control).
+            Route::controller(UserController::class)->group(function () {
+                Route::get('admins', 'index')->name('admins.index')
+                    ->middleware('permission:'.PermissionEnum::USERS_INDEX->value);
+                Route::get('admins/create', 'create')->name('admins.create')
+                    ->middleware('permission:'.PermissionEnum::USERS_CREATE->value);
+                Route::post('admins', 'store')->name('admins.store')
+                    ->middleware(['permission:'.PermissionEnum::USERS_CREATE->value, HandlePrecognitiveRequests::class]);
+                Route::get('admins/{user}', 'show')->name('admins.show')
+                    ->middleware('permission:'.PermissionEnum::USERS_VIEW->value);
+                Route::get('admins/{user}/edit', 'edit')->name('admins.edit')
+                    ->middleware('permission:'.PermissionEnum::USERS_EDIT->value);
+                Route::put('admins/{user}', 'update')->name('admins.update')
+                    ->middleware(['permission:'.PermissionEnum::USERS_EDIT->value, HandlePrecognitiveRequests::class]);
+                Route::delete('admins/{user}', 'destroy')->name('admins.destroy')
                     ->middleware('permission:'.PermissionEnum::USERS_DELETE->value);
             });
 

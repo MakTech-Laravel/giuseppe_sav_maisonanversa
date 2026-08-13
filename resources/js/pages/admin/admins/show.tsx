@@ -13,43 +13,46 @@ import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
-import users from '@/routes/admin/users';
+import admins from '@/routes/admin/admins';
 import { avatarUrl } from '@/types/admin';
 import type { AdminUserDetail } from '@/types/admin';
 import { PERMISSIONS } from '@/types/permissions';
 
-export default function ShowUser({ user }: { user: AdminUserDetail }) {
+export default function ShowAdmin({ user }: { user: AdminUserDetail }) {
     const { can } = usePermission();
     const url = avatarUrl(user.avatar);
 
     return (
         <>
             <Head title={user.name} />
-
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-                <AdminPageHeader title="User profile" icon={IdCard}>
+                <AdminPageHeader title="Admin profile" icon={IdCard}>
                     <Button variant="outline" asChild>
-                        <Link href={users.index().url}>
+                        <Link href={admins.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" /> Back
                         </Link>
                     </Button>
                     {can(PERMISSIONS.USERS.EDIT) && (
                         <Button asChild>
-                            <Link href={users.edit(user.id).url}>
-                                <Pencil className="h-4 w-4" /> Edit
+                            <Link
+                                href={admins.edit({
+                                    locale: wayfinderLocale(),
+                                    user: user.id,
+                                })}
+                            >
+                                <Pencil className="h-4 w-4" /> Edit admin
                             </Link>
                         </Button>
                     )}
                 </AdminPageHeader>
-
                 <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="grid gap-6 lg:grid-cols-3"
                 >
-                    {/* Identity card */}
-                    <div className="overflow-hidden rounded-xl border bg-card shadow-sm lg:col-span-1">
+                    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                         <div className="flex flex-col items-center gap-3 border-b bg-muted/40 p-6 text-center">
                             <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-2 border-primary/20 bg-primary/10 text-2xl font-bold text-primary">
                                 {url ? (
@@ -71,13 +74,13 @@ export default function ShowUser({ user }: { user: AdminUserDetail }) {
                                 </p>
                             </div>
                             <div className="flex flex-wrap justify-center gap-1">
-                                {user.roles.map((r) => (
+                                {user.roles.map((role) => (
                                     <Badge
-                                        key={r.id}
+                                        key={role.id}
                                         variant="secondary"
                                         className="capitalize"
                                     >
-                                        {r.name}
+                                        {role.name}
                                     </Badge>
                                 ))}
                             </div>
@@ -85,7 +88,7 @@ export default function ShowUser({ user }: { user: AdminUserDetail }) {
                         <dl className="divide-y text-sm">
                             <Row
                                 icon={IdCard}
-                                label="User ID"
+                                label="Admin ID"
                                 value={`#${user.id}`}
                             />
                             <Row icon={Mail} label="Email" value={user.email} />
@@ -101,14 +104,10 @@ export default function ShowUser({ user }: { user: AdminUserDetail }) {
                                 label="Joined"
                                 value={new Date(
                                     user.created_at,
-                                ).toLocaleDateString(undefined, {
-                                    dateStyle: 'long',
-                                })}
+                                ).toLocaleDateString()}
                             />
                         </dl>
                     </div>
-
-                    {/* Effective permissions */}
                     <div className="rounded-xl border bg-card p-6 shadow-sm lg:col-span-2">
                         <div className="mb-4 flex items-center gap-2">
                             <KeyRound className="h-4 w-4 text-primary" />
@@ -119,24 +118,17 @@ export default function ShowUser({ user }: { user: AdminUserDetail }) {
                                 {user.permissions.length}
                             </Badge>
                         </div>
-                        {user.permissions.length === 0 ? (
-                            <p className="text-sm text-muted-foreground">
-                                This user has no direct permissions. Access is
-                                granted through assigned roles.
-                            </p>
-                        ) : (
-                            <div className="flex flex-wrap gap-1.5">
-                                {user.permissions.map((p) => (
-                                    <Badge
-                                        key={p.id}
-                                        variant="secondary"
-                                        className="font-mono text-xs font-normal"
-                                    >
-                                        {p.name}
-                                    </Badge>
-                                ))}
-                            </div>
-                        )}
+                        <div className="flex flex-wrap gap-1.5">
+                            {user.permissions.map((permission) => (
+                                <Badge
+                                    key={permission.id}
+                                    variant="secondary"
+                                    className="font-mono text-xs font-normal"
+                                >
+                                    {permission.name}
+                                </Badge>
+                            ))}
+                        </div>
                     </div>
                 </motion.div>
             </div>
@@ -158,15 +150,15 @@ function Row({
             <dt className="flex items-center gap-2 text-muted-foreground">
                 <Icon className="h-4 w-4 opacity-70" /> {label}
             </dt>
-            <dd className="font-medium text-foreground">{value}</dd>
+            <dd className="font-medium">{value}</dd>
         </div>
     );
 }
 
-ShowUser.layout = {
+ShowAdmin.layout = {
     breadcrumbs: [
-        { title: 'Dashboard', href: dashboard() },
-        { title: 'Users', href: users.index() },
-        { title: 'Profile', href: users.index() },
+        { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
+        { title: 'Admins', href: admins.index(wayfinderLocale()) },
+        { title: 'Profile', href: admins.index(wayfinderLocale()) },
     ],
 };
