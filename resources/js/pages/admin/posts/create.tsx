@@ -35,7 +35,7 @@ export default function CreatePost() {
                 </AdminPageHeader>
                 <form
                     onSubmit={submit}
-                    className="max-w-2xl space-y-5 rounded-xl border bg-card p-6 shadow-sm"
+                    className="w-full space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
                 >
                     <div className="grid gap-2">
                         <Label htmlFor="title">Title</Label>
