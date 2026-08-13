@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -23,14 +22,9 @@ class DashboardController extends Controller
                     'hint' => 'Member accounts',
                 ],
                 [
-                    'label' => 'Admins',
+                    'label' => 'Administrators',
                     'value' => (string) User::query()->where('type', UserType::Admin)->count(),
                     'hint' => 'Staff accounts',
-                ],
-                [
-                    'label' => 'Roles',
-                    'value' => (string) Role::query()->count(),
-                    'hint' => 'Access roles',
                 ],
                 [
                     'label' => 'Posts',

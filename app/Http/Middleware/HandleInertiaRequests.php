@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\PermissionEnum;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -50,8 +52,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames(),
-                    'permissions' => $user->getAllPermissions()
-                        ->pluck('name'),
+                    // TEMPORARY — AdminTypePermissionBypass shares every permission
+                    // name so the sidebar/usePermission hooks match Gate::before.
+                    'permissions' => AdminTypePermissionBypass::grantsAll($user)
+                        ? collect(PermissionEnum::cases())->map->value->values()
+                        : $user->getAllPermissions()->pluck('name'),
                     'is_super_admin' => $user->hasRole('super-admin'),
                     'type' => $user->type->value,
                     'is_admin' => $user->isAdmin(),

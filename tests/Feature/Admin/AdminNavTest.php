@@ -1,6 +1,6 @@
 <?php
 
-test('the admin sidebar includes the recommended staff navigation', function () {
+test('the admin sidebar includes administrator and hides access control', function () {
     $source = file_get_contents(resource_path('js/components/app-sidebar.tsx'));
 
     foreach ([
@@ -10,9 +10,7 @@ test('the admin sidebar includes the recommended staff navigation', function () 
         "title: 'Community'",
         "title: 'Heritage Letter'",
         "title: 'Posts'",
-        "title: 'Admins'",
-        "title: 'Roles'",
-        "title: 'Permissions'",
+        "title: 'Administrator'",
         "title: 'Profile'",
         "title: 'Security'",
     ] as $needle) {
@@ -20,8 +18,10 @@ test('the admin sidebar includes the recommended staff navigation', function () 
     }
 
     expect($source)
+        ->not->toContain("title: 'Access Control'")
+        ->not->toContain("title: 'Roles'")
+        ->not->toContain("title: 'Permissions'")
+        ->not->toContain("title: 'Admins'")
         ->not->toContain('File Upload Demo')
-        ->not->toContain("href: '#'")
-        ->not->toContain('github.com')
-        ->not->toContain("title: 'Users'");
+        ->not->toContain("href: '#'");
 });

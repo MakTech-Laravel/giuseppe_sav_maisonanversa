@@ -2,8 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import {
     ArrowRight,
     FileText,
-    KeyRound,
-    Shield,
+    LayoutGrid,
     UserRoundCog,
     Users,
 } from 'lucide-react';
@@ -29,9 +28,7 @@ import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import admins from '@/routes/admin/admins';
 import customers from '@/routes/admin/customers';
-import permissions from '@/routes/admin/permissions';
 import posts from '@/routes/admin/posts';
-import roles from '@/routes/admin/roles';
 import { PERMISSIONS } from '@/types/permissions';
 
 interface DashboardProps {
@@ -61,32 +58,18 @@ export default function Dashboard({
             permission: PERMISSIONS.USERS.INDEX,
         },
         {
-            label: 'Admins',
-            description: 'Manage staff access',
+            label: 'Administrator',
+            description: 'Manage staff accounts',
             href: admins.index(wayfinderLocale()),
             icon: UserRoundCog,
             permission: PERMISSIONS.USERS.INDEX,
-        },
-        {
-            label: 'Roles',
-            description: 'Configure access roles',
-            href: roles.index(wayfinderLocale()),
-            icon: Shield,
-            permission: PERMISSIONS.ROLES.INDEX,
-        },
-        {
-            label: 'Permissions',
-            description: 'Review permission keys',
-            href: permissions.index(wayfinderLocale()),
-            icon: KeyRound,
-            permission: PERMISSIONS.PERMISSIONS.INDEX,
         },
         {
             label: 'Posts',
             description: 'Manage content entries',
             href: posts.index(wayfinderLocale()),
             icon: FileText,
-            permission: PERMISSIONS.POSTS.INDEX,
+            permission: PERMISSIONS.POSTS.VIEW,
         },
     ];
 
@@ -97,10 +80,10 @@ export default function Dashboard({
                 <AdminPageHeader
                     title={`Welcome${staffName ? `, ${staffName}` : ''}`}
                     description="An overview of Maison Anversa operations."
-                    icon={Shield}
+                    icon={LayoutGrid}
                 />
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {stats.map((stat) => (
                         <Card key={stat.label}>
                             <CardHeader className="pb-2">

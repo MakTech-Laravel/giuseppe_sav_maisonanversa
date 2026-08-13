@@ -6,29 +6,29 @@ import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import admins from '@/routes/admin/admins';
-import type { RoleRef } from '@/types/admin';
 
-export default function CreateAdmin({ roles }: { roles: RoleRef[] }) {
+export default function CreateAdmin() {
     return (
         <>
-            <Head title="Create admin" />
+            <Head title="Create administrator" />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Create admin"
-                    description="Add a staff account and assign roles."
+                    title="Create administrator"
+                    description="Add a staff administrator account."
                     icon={UserPlus}
                 >
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> Back to admins
+                            <ArrowLeft className="h-4 w-4" /> Back
                         </Link>
                     </Button>
                 </AdminPageHeader>
                 <div className="max-w-3xl rounded-xl border bg-card p-6 shadow-sm">
                     <UserForm
                         action={admins.store(wayfinderLocale())}
-                        roles={roles}
-                        submitLabel="Create admin"
+                        roles={[]}
+                        showRoles={false}
+                        submitLabel="Create administrator"
                         onCancel={() =>
                             router.visit(admins.index(wayfinderLocale()))
                         }
@@ -42,7 +42,7 @@ export default function CreateAdmin({ roles }: { roles: RoleRef[] }) {
 CreateAdmin.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Admins', href: admins.index(wayfinderLocale()) },
+        { title: 'Administrator', href: admins.index(wayfinderLocale()) },
         { title: 'Create', href: admins.create(wayfinderLocale()) },
     ],
 };
