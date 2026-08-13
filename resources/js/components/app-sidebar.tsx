@@ -2,11 +2,10 @@ import { Link } from '@inertiajs/react';
 import {
     FileText,
     LayoutGrid,
-    LockKeyhole,
     Mail,
     MessageCircle,
+    Settings2,
     ShoppingBag,
-    User,
     UserRoundCog,
     Users,
 } from 'lucide-react';
@@ -33,8 +32,6 @@ import adminCustomers from '@/routes/admin/customers';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
 import adminPosts from '@/routes/admin/posts';
-import profile from '@/routes/profile';
-import security from '@/routes/security';
 import { PERMISSIONS } from '@/types/permissions';
 
 function buildMainNav(
@@ -85,14 +82,10 @@ function buildMainNav(
             permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
         },
         {
-            title: t('Profiel'),
-            href: profile.edit(locale),
-            icon: User,
-        },
-        {
-            title: t('Beveiliging'),
-            href: security.edit(locale),
-            icon: LockKeyhole,
+            // Parent `/settings` keeps this active on both profile and security.
+            title: t('Profiel & Beveiliging'),
+            href: `/${locale}/settings`,
+            icon: Settings2,
         },
     ];
 }

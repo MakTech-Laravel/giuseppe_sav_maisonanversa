@@ -11,14 +11,15 @@ test('the admin sidebar includes administrator and hides access control', functi
         "t('Heritage Letter')",
         "t('Berichten')",
         "t('Beheerder')",
-        "t('Profiel')",
-        "t('Beveiliging')",
+        "t('Profiel & Beveiliging')",
         "t('Platform')",
     ] as $needle) {
         expect($source)->toContain($needle);
     }
 
     expect($source)
+        ->not->toContain("t('Profiel')")
+        ->not->toContain("t('Beveiliging')")
         ->not->toContain("t('Access Control')")
         ->not->toContain("t('Roles')")
         ->not->toContain("t('Permissions')")
