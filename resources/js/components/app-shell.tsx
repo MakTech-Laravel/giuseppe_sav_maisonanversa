@@ -17,5 +17,5 @@ export function AppShell({ children, variant = 'sidebar' }: Props) {
         );
     }
 
-    return <SidebarProvider defaultOpen={isOpen}>{children}</SidebarProvider>;
+    return <SidebarProvider defaultOpen={isOpen} className="admin-kit">{children}</SidebarProvider>;
 }

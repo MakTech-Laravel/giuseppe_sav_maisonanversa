@@ -53,7 +53,7 @@ export default function ShowPost({ post }: { post: Post }) {
                         </Button>
                     )}
                 </AdminPageHeader>
-                <div className="max-w-3xl rounded-xl border bg-card p-6 shadow-sm">
+                <div className="w-full rounded-xl border bg-card p-6 shadow-sm md:p-8">
                     <h2 className="mb-4 text-sm font-semibold">Attachments</h2>
                     {post.attachments.length === 0 ? (
                         <p className="text-sm text-muted-foreground">

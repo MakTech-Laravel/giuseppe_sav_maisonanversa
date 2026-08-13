@@ -1,7 +1,6 @@
 import { Form } from '@inertiajs/react';
 import { useRef } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
@@ -20,20 +19,25 @@ export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="space-y-6">
-            <Heading
-                variant="small"
-                title="Delete account"
-                description="Delete your account and all of its resources"
-            />
-            <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4">
-                <div className="relative space-y-0.5 text-red-600">
-                    <p className="font-medium">Warning</p>
-                    <p className="text-sm">
-                        Please proceed with caution, this cannot be undone.
-                    </p>
-                </div>
+        <section className="rounded-lg border border-destructive/35 bg-destructive/10 p-5 sm:p-6">
+            <header className="mb-4 space-y-1">
+                <h2 className="text-base font-medium tracking-tight text-foreground">
+                    Delete account
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                    Permanently delete your account and all of its resources.
+                    This cannot be undone.
+                </p>
+            </header>
 
+            <div className="rounded-md border border-destructive/30 bg-background/40 px-4 py-3 text-sm">
+                <p className="font-medium text-destructive">Warning</p>
+                <p className="mt-0.5 text-muted-foreground">
+                    Please proceed with caution — this action is permanent.
+                </p>
+            </div>
+
+            <div className="mt-4">
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button
@@ -115,6 +119,6 @@ export default function DeleteUser() {
                     </DialogContent>
                 </Dialog>
             </div>
-        </div>
+        </section>
     );
 }
