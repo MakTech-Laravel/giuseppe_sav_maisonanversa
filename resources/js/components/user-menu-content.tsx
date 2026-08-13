@@ -34,9 +34,12 @@ export function UserMenuContent({ user }: Props) {
                     <UserInfo user={user} showEmail={true} />
                 </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-sidebar-border" />
             <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem
+                    asChild
+                    className="text-sidebar-foreground focus:bg-sidebar-accent focus:text-sidebar-accent-foreground [&_svg]:text-sidebar-primary"
+                >
                     <Link
                         className="block w-full cursor-pointer"
                         href={edit(wayfinderLocale())}
@@ -48,8 +51,11 @@ export function UserMenuContent({ user }: Props) {
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuSeparator className="bg-sidebar-border" />
+            <DropdownMenuItem
+                asChild
+                className="text-sidebar-foreground focus:bg-sidebar-accent focus:text-sidebar-accent-foreground [&_svg]:text-sidebar-primary"
+            >
                 <Link
                     className="block w-full cursor-pointer"
                     href={logout()}

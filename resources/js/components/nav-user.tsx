@@ -39,7 +39,7 @@ export function NavUser() {
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                        className="admin-kit w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg border-sidebar-border bg-sidebar font-sans text-sidebar-foreground shadow-[0_12px_40px_rgba(41,28,24,0.55)]"
                         align="end"
                         side={
                             isMobile

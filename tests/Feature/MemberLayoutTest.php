@@ -40,3 +40,18 @@ test('the admin shell exposes a language switcher', function () {
         ->toContain("t('Dashboard')")
         ->toContain("t('Klanten')");
 });
+
+test('the admin user menu uses the chocolate shell palette', function () {
+    $navUser = file_get_contents(resource_path('js/components/nav-user.tsx'));
+    $menu = file_get_contents(resource_path('js/components/user-menu-content.tsx'));
+    $info = file_get_contents(resource_path('js/components/user-info.tsx'));
+
+    expect($navUser)
+        ->toContain('admin-kit')
+        ->toContain('bg-sidebar')
+        ->and($menu)
+        ->toContain('focus:bg-sidebar-accent')
+        ->and($info)
+        ->toContain('bg-sidebar-accent')
+        ->toContain('text-sidebar-foreground');
+});
