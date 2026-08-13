@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import type { PropsWithChildren } from 'react';
+import { type PropsWithChildren, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
@@ -9,38 +10,40 @@ import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
 
-function sidebarNavItems(): NavItem[] {
-    const locale = wayfinderLocale();
-
-    return [
-        {
-            title: 'Profile',
-            href: edit(locale),
-            icon: null,
-        },
-        {
-            title: 'Security',
-            href: editSecurity(locale),
-            icon: null,
-        },
-    ];
-}
-
 export default function SettingsLayout({ children }: PropsWithChildren) {
+    const { t } = useTranslation();
     const { isCurrentOrParentUrl } = useCurrentUrl();
-    const navItems = sidebarNavItems();
+
+    const navItems = useMemo((): NavItem[] => {
+        const locale = wayfinderLocale();
+
+        return [
+            {
+                title: t('Profiel'),
+                href: edit(locale),
+                icon: null,
+            },
+            {
+                title: t('Beveiliging'),
+                href: editSecurity(locale),
+                icon: null,
+            },
+        ];
+    }, [t]);
 
     return (
         <div className="px-4 py-8 sm:px-6 lg:px-8">
             <header className="mb-8 space-y-2 border-b border-border pb-6">
                 <p className="text-[11px] font-medium tracking-[0.18em] text-muted-foreground uppercase">
-                    Account
+                    {t('Account')}
                 </p>
                 <h1 className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
-                    Settings
+                    {t('Instellingen')}
                 </h1>
                 <p className="max-w-2xl text-sm text-muted-foreground">
-                    Manage your profile photo, account details, and security.
+                    {t(
+                        'Beheer uw profielfoto, accountgegevens en beveiliging.',
+                    )}
                 </p>
             </header>
 
@@ -48,7 +51,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 <aside className="w-full shrink-0 lg:w-52">
                     <nav
                         className="flex gap-1 overflow-x-auto lg:flex-col lg:space-y-1 lg:overflow-visible"
-                        aria-label="Settings"
+                        aria-label={t('Instellingen')}
                     >
                         {navItems.map((item, index) => (
                             <Button

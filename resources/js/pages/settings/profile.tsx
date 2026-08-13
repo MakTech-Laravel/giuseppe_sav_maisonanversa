@@ -1,6 +1,7 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
-import { useRef, useState  } from 'react';
-import type {ReactNode} from 'react';
+import { useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import InputError from '@/components/input-error';
@@ -21,11 +22,12 @@ export default function Profile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
+    const { t } = useTranslation();
     const { auth } = usePage().props;
 
     return (
         <>
-            <Head title="Profile settings" />
+            <Head title={t('Profielinstellingen')} />
 
             <Form
                 {...ProfileController.update.form(wayfinderLocale())}
@@ -38,8 +40,10 @@ export default function Profile({
                 {({ processing, errors }) => (
                     <>
                         <SettingsPanel
-                            title="Profile photo"
-                            description="This image appears in the sidebar and across the admin area."
+                            title={t('Profielfoto')}
+                            description={t(
+                                'Deze afbeelding verschijnt in de zijbalk en in het beheergebied.',
+                            )}
                         >
                             <ProfileAvatarField
                                 name={auth.user.name}
@@ -50,12 +54,14 @@ export default function Profile({
                         </SettingsPanel>
 
                         <SettingsPanel
-                            title="Profile information"
-                            description="Update your name, username, and email address."
+                            title={t('Profielgegevens')}
+                            description={t(
+                                'Werk uw naam, gebruikersnaam en e-mailadres bij.',
+                            )}
                         >
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="grid gap-2 sm:col-span-2">
-                                    <Label htmlFor="name">Name</Label>
+                                    <Label htmlFor="name">{t('Naam')}</Label>
                                     <Input
                                         id="name"
                                         className="w-full"
@@ -63,13 +69,15 @@ export default function Profile({
                                         name="name"
                                         required
                                         autoComplete="name"
-                                        placeholder="Full name"
+                                        placeholder={t('Volledige naam')}
                                     />
                                     <InputError message={errors.name} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="username">Username</Label>
+                                    <Label htmlFor="username">
+                                        {t('Gebruikersnaam')}
+                                    </Label>
                                     <Input
                                         id="username"
                                         className="w-full"
@@ -77,13 +85,15 @@ export default function Profile({
                                         name="username"
                                         required
                                         autoComplete="username"
-                                        placeholder="username"
+                                        placeholder={t('gebruikersnaam')}
                                     />
                                     <InputError message={errors.username} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Email address</Label>
+                                    <Label htmlFor="email">
+                                        {t('E-mailadres')}
+                                    </Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -92,7 +102,7 @@ export default function Profile({
                                         name="email"
                                         required
                                         autoComplete="email"
-                                        placeholder="Email address"
+                                        placeholder={t('E-mailadres')}
                                     />
                                     <InputError message={errors.email} />
                                 </div>
@@ -101,19 +111,24 @@ export default function Profile({
                             {mustVerifyEmail &&
                                 auth.user.email_verified_at === null && (
                                     <div className="mt-5 rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
-                                        Your email address is unverified.{' '}
+                                        {t(
+                                            'Uw e-mailadres is niet geverifieerd.',
+                                        )}{' '}
                                         <Link
                                             href={send()}
                                             as="button"
                                             className="font-medium text-primary underline underline-offset-4"
                                         >
-                                            Resend verification email
+                                            {t(
+                                                'Verificatie-e-mail opnieuw versturen',
+                                            )}
                                         </Link>
                                         {status ===
                                             'verification-link-sent' && (
                                             <p className="mt-2 font-medium text-primary">
-                                                A new verification link has been
-                                                sent to your email address.
+                                                {t(
+                                                    'Er is een nieuwe verificatielink naar uw e-mailadres gestuurd.',
+                                                )}
                                             </p>
                                         )}
                                     </div>
@@ -125,7 +140,7 @@ export default function Profile({
                                     data-test="update-profile-button"
                                     className="min-w-28"
                                 >
-                                    Save changes
+                                    {t('Wijzigingen opslaan')}
                                 </Button>
                             </div>
                         </SettingsPanel>
@@ -178,6 +193,7 @@ function ProfileAvatarField({
     avatarUrl?: string | null;
     error?: string;
 }) {
+    const { t } = useTranslation();
     const getInitials = useInitials();
     const inputRef = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -210,7 +226,9 @@ function ProfileAvatarField({
                         type="button"
                         onClick={() => inputRef.current?.click()}
                     >
-                        {displayUrl ? 'Change photo' : 'Upload photo'}
+                        {displayUrl
+                            ? t('Foto wijzigen')
+                            : t('Foto uploaden')}
                     </Button>
                     {displayUrl && (
                         <Button
@@ -225,12 +243,12 @@ function ProfileAvatarField({
                                 }
                             }}
                         >
-                            Remove
+                            {t('Verwijderen')}
                         </Button>
                     )}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                    PNG, JPG, or WEBP · max 2 MB
+                    {t('PNG, JPG of WEBP · max. 2 MB')}
                 </p>
                 <InputError message={error} />
             </div>

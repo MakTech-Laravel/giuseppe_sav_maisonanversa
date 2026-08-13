@@ -1,5 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { RoleForm } from '@/components/admin/role-form';
 import { Button } from '@/components/ui/button';
@@ -14,19 +15,25 @@ interface EditRoleProps {
 }
 
 export default function EditRole({ role, permissions }: EditRoleProps) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title={`Edit ${role.name}`} />
+            <Head title={t('Rol bewerken')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Edit role"
-                    description={`Update the ${role.name} role and its permissions.`}
+                    title={t('Rol bewerken')}
+                    description={t(
+                        'Werk de rol {{name}} en de bijbehorende rechten bij.',
+                        { name: role.name },
+                    )}
                     icon={ShieldCheck}
                 >
                     <Button variant="outline" asChild>
                         <Link href={roles.index(wayfinderLocale()).url}>
-                            <ArrowLeft className="h-4 w-4" /> Back to roles
+                            <ArrowLeft className="h-4 w-4" />{' '}
+                            {t('Terug naar rollen')}
                         </Link>
                     </Button>
                 </AdminPageHeader>

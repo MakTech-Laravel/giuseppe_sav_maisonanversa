@@ -29,7 +29,7 @@ test('authenticated staff can visit the admin dashboard', function () {
             ->where('stats.0.key', 'Klanten')
             ->where('stats.0.hintKey', 'Lid-accounts')
             ->where('stats.1.key', 'Beheerders')
-            ->where('stats.2.key', 'Posts')
+            ->where('stats.2.key', 'Berichten')
             ->has('recentCustomers')
             ->where('staffName', $user->name)
             ->where('locale', defaultLocale())

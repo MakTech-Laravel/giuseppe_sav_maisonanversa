@@ -8,6 +8,7 @@ import {
     ShieldCheck,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
@@ -19,6 +20,7 @@ import type { AdminUser } from '@/types/admin';
 import { PERMISSIONS } from '@/types/permissions';
 
 export default function ShowAdmin({ user }: { user: AdminUser }) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const url = avatarUrl(user.avatar);
 
@@ -26,10 +28,13 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
         <>
             <Head title={user.name} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-                <AdminPageHeader title="Administrator profile" icon={IdCard}>
+                <AdminPageHeader
+                    title={t('Beheerdersprofiel')}
+                    icon={IdCard}
+                >
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> Back
+                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
                         </Link>
                     </Button>
                     {can(PERMISSIONS.USERS.EDIT) && (
@@ -40,7 +45,7 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                                     user: user.id,
                                 })}
                             >
-                                <Pencil className="h-4 w-4" /> Edit
+                                <Pencil className="h-4 w-4" /> {t('Bewerken')}
                             </Link>
                         </Button>
                     )}
@@ -72,18 +77,22 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                     <dl className="divide-y text-sm">
                         <Row
                             icon={IdCard}
-                            label="Administrator ID"
+                            label={t('Beheerder-ID')}
                             value={`#${user.id}`}
                         />
-                        <Row icon={Mail} label="Email" value={user.email} />
+                        <Row icon={Mail} label={t('E-mail')} value={user.email} />
                         <Row
                             icon={ShieldCheck}
-                            label="Verified"
-                            value={user.email_verified_at ? 'Yes' : 'Pending'}
+                            label={t('Geverifieerd')}
+                            value={
+                                user.email_verified_at
+                                    ? t('Ja')
+                                    : t('In afwachting')
+                            }
                         />
                         <Row
                             icon={Calendar}
-                            label="Joined"
+                            label={t('Lid sinds')}
                             value={new Date(user.created_at).toLocaleDateString(
                                 undefined,
                                 { dateStyle: 'long' },

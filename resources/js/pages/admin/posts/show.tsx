@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, File, FileText, Pencil } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
@@ -24,6 +25,7 @@ interface Post {
 }
 
 export default function ShowPost({ post }: { post: Post }) {
+    const { t } = useTranslation();
     const { can } = usePermission();
 
     return (
@@ -32,12 +34,12 @@ export default function ShowPost({ post }: { post: Post }) {
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={post.title}
-                    description="Post details and attached files."
+                    description={t('Berichtdetails en bijgevoegde bestanden.')}
                     icon={FileText}
                 >
                     <Button variant="outline" asChild>
                         <Link href={posts.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> Back to posts
+                            <ArrowLeft className="h-4 w-4" /> {t('Terug naar berichten')}
                         </Link>
                     </Button>
                     {can(PERMISSIONS.POSTS.EDIT) && (
@@ -48,16 +50,16 @@ export default function ShowPost({ post }: { post: Post }) {
                                     post: post.id,
                                 })}
                             >
-                                <Pencil className="h-4 w-4" /> Edit post
+                                <Pencil className="h-4 w-4" /> {t('Bericht bewerken')}
                             </Link>
                         </Button>
                     )}
                 </AdminPageHeader>
                 <div className="w-full rounded-xl border bg-card p-6 shadow-sm md:p-8">
-                    <h2 className="mb-4 text-sm font-semibold">Attachments</h2>
+                    <h2 className="mb-4 text-sm font-semibold">{t('Bijlagen')}</h2>
                     {post.attachments.length === 0 ? (
                         <p className="text-sm text-muted-foreground">
-                            No attachments.
+                            {t('Geen bijlagen.')}
                         </p>
                     ) : (
                         <div className="divide-y">
@@ -90,7 +92,7 @@ export default function ShowPost({ post }: { post: Post }) {
 ShowPost.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Posts', href: posts.index(wayfinderLocale()) },
-        { title: 'Details', href: posts.index(wayfinderLocale()) },
+        { title: 'Berichten', href: posts.index(wayfinderLocale()) },
+        { title: 'Gegevens', href: posts.index(wayfinderLocale()) },
     ],
 };

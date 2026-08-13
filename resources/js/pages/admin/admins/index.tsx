@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import { DataPagination } from '@/components/admin/data-pagination';
@@ -48,6 +49,7 @@ export default function AdminsIndex({
     superAdminCount,
     stats,
 }: AdminsIndexProps) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const actorIsSuperAdmin =
         usePage().props.auth.user?.is_super_admin ?? false;
@@ -74,17 +76,18 @@ export default function AdminsIndex({
 
     return (
         <>
-            <Head title="Administrator" />
+            <Head title={t('Beheerder')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Administrator"
-                    description="Manage staff administrator accounts."
+                    title={t('Beheerder')}
+                    description={t('Beheer personeelsaccounts.')}
                     icon={UserRoundCog}
                 >
                     {can(PERMISSIONS.USERS.CREATE) && (
                         <Button asChild>
                             <Link href={admins.create(wayfinderLocale())}>
-                                <Plus className="h-4 w-4" /> Add administrator
+                                <Plus className="h-4 w-4" />{' '}
+                                {t('Beheerder toevoegen')}
                             </Link>
                         </Button>
                     )}
@@ -110,12 +113,12 @@ export default function AdminsIndex({
                             className="grid gap-4 sm:grid-cols-2"
                         >
                             <StatCard
-                                label="Total administrators"
+                                label={t('Totaal beheerders')}
                                 value={stats.total}
                                 icon={UsersRound}
                             />
                             <StatCard
-                                label="Verified"
+                                label={t('Geverifieerd')}
                                 value={stats.verified}
                                 icon={UserCheck}
                             />
@@ -128,7 +131,7 @@ export default function AdminsIndex({
                     <Input
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder="Search administrators…"
+                        placeholder={t('Zoek beheerders…')}
                         className="pl-9"
                     />
                 </div>
@@ -138,15 +141,15 @@ export default function AdminsIndex({
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                    <TableHead>Administrator</TableHead>
+                                    <TableHead>{t('Beheerder')}</TableHead>
                                     <TableHead className="hidden md:table-cell">
-                                        Status
+                                        {t('Status')}
                                     </TableHead>
                                     <TableHead className="hidden lg:table-cell">
-                                        Joined
+                                        {t('Lid sinds')}
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        Actions
+                                        {t('Acties')}
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -193,8 +196,8 @@ export default function AdminsIndex({
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell">
                                                 {user.email_verified_at
-                                                    ? 'Verified'
-                                                    : 'Pending'}
+                                                    ? t('Geverifieerd')
+                                                    : t('In afwachting')}
                                             </TableCell>
                                             <TableCell className="hidden lg:table-cell">
                                                 <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -221,7 +224,9 @@ export default function AdminsIndex({
                                                                         user: user.id,
                                                                     },
                                                                 )}
-                                                                title="View"
+                                                                title={t(
+                                                                    'Bekijken',
+                                                                )}
                                                             >
                                                                 <Eye className="h-4 w-4" />
                                                             </Link>
@@ -244,7 +249,9 @@ export default function AdminsIndex({
                                                                             user: user.id,
                                                                         },
                                                                     )}
-                                                                    title="Edit"
+                                                                    title={t(
+                                                                        'Bewerken',
+                                                                    )}
                                                                 >
                                                                     <Pencil className="h-4 w-4" />
                                                                 </Link>
@@ -252,7 +259,12 @@ export default function AdminsIndex({
                                                         )}
                                                     {canDelete && (
                                                         <ConfirmDeleteDialog
-                                                            description={`Permanently delete ${user.name}?`}
+                                                            description={t(
+                                                                '{{name}} permanent verwijderen?',
+                                                                {
+                                                                    name: user.name,
+                                                                },
+                                                            )}
                                                             onConfirm={() =>
                                                                 router.delete(
                                                                     admins.destroy(
@@ -268,7 +280,9 @@ export default function AdminsIndex({
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="text-muted-foreground hover:text-destructive"
-                                                                title="Delete"
+                                                                title={t(
+                                                                    'Verwijderen',
+                                                                )}
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
                                                             </Button>
@@ -283,7 +297,7 @@ export default function AdminsIndex({
                         </Table>
                         {paginated.data.length === 0 && (
                             <div className="px-4 py-16 text-center text-sm text-muted-foreground">
-                                No administrators found.
+                                {t('Geen beheerders gevonden.')}
                             </div>
                         )}
                     </div>

@@ -1,5 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Pencil } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { UserForm } from '@/components/admin/user-form';
 import { Button } from '@/components/ui/button';
@@ -15,18 +16,22 @@ export default function EditAdmin({
     user: AdminUser;
     isLastSuperAdmin?: boolean;
 }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title={`Edit ${user.name}`} />
+            <Head title={t('Beheerder bewerken')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Edit administrator"
-                    description={`Update ${user.name}'s account.`}
+                    title={t('Beheerder bewerken')}
+                    description={t('Werk het account van {{name}} bij.', {
+                        name: user.name,
+                    })}
                     icon={Pencil}
                 >
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> Back
+                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -41,7 +46,7 @@ export default function EditAdmin({
                         isEdit
                         currentAvatar={user.avatar}
                         isLastSuperAdmin={isLastSuperAdmin}
-                        submitLabel="Save administrator"
+                        submitLabel={t('Beheerder opslaan')}
                         defaults={{
                             name: user.name,
                             email: user.email,

@@ -2,6 +2,7 @@ import type { UrlMethodPair } from '@inertiajs/core';
 import { useForm, usePage } from '@inertiajs/react';
 import { Loader2, Lock, UserPlus } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import FileUpload from '@/components/file-upload';
 import InputError from '@/components/input-error';
@@ -45,6 +46,7 @@ export function UserForm({
     defaults,
     onCancel,
 }: UserFormProps) {
+    const { t } = useTranslation();
     const actorIsSuperAdmin =
         usePage().props.auth.user?.is_super_admin ?? false;
 
@@ -68,7 +70,9 @@ export function UserForm({
         // Block removing the super-admin role from the last super-admin.
         if (name === SUPER_ADMIN_ROLE && hasRole && isLastSuperAdmin) {
             toast.error(
-                'Assign the super-admin role to another administrator before removing it from the last super administrator.',
+                t(
+                    'Ken de superbeheerderrol toe aan een andere beheerder voordat u deze verwijdert van de laatste superbeheerder.',
+                ),
             );
 
             return;
@@ -117,18 +121,18 @@ export function UserForm({
             {isLastSuperAdmin && (
                 <Alert>
                     <Lock className="h-4 w-4" />
-                    <AlertTitle>Last super administrator</AlertTitle>
+                    <AlertTitle>{t('Laatste superbeheerder')}</AlertTitle>
                     <AlertDescription>
-                        This is the only account with the super-admin role. To
-                        change it, first assign the super-admin role to another
-                        administrator.
+                        {t(
+                            'Dit is het enige account met de superbeheerderrol. Ken de superbeheerderrol eerst toe aan een andere beheerder om wijzigingen door te voeren.',
+                        )}
                     </AlertDescription>
                 </Alert>
             )}
 
             {/* Avatar — powered by the shared FileUpload component */}
             <div className="grid gap-2">
-                <Label>Profile photo</Label>
+                <Label>{t('Profielfoto')}</Label>
                 <FileUpload
                     accept="image/*"
                     maxSize={2}
@@ -139,8 +143,10 @@ export function UserForm({
                     }}
                     existingFiles={existingAvatar}
                     onRemoveExisting={() => form.setData('remove_avatar', true)}
-                    placeholder="Drag & drop an avatar, or click to browse"
-                    hint="PNG, JPG or WEBP"
+                    placeholder={t(
+                        'Sleep een avatar hierheen of klik om te bladeren',
+                    )}
+                    hint={t('PNG, JPG of WEBP')}
                     error={form.errors.avatar}
                     classNames={{ wrapper: 'sm:max-w-md' }}
                 />
@@ -148,7 +154,7 @@ export function UserForm({
 
             <div className="grid gap-5 sm:grid-cols-2">
                 <div className="grid gap-2">
-                    <Label htmlFor="name">Full name</Label>
+                    <Label htmlFor="name">{t('Volledige naam')}</Label>
                     <Input
                         id="name"
                         value={form.data.name}
@@ -162,7 +168,7 @@ export function UserForm({
                 </div>
 
                 <div className="grid gap-2">
-                    <Label htmlFor="email">Email address</Label>
+                    <Label htmlFor="email">{t('E-mailadres')}</Label>
                     <Input
                         id="email"
                         type="email"
@@ -179,10 +185,10 @@ export function UserForm({
 
             <div className="grid gap-2 sm:max-w-sm">
                 <Label htmlFor="password">
-                    Password
+                    {t('Wachtwoord')}
                     {isEdit && (
                         <span className="ml-1 text-xs font-normal text-muted-foreground">
-                            (leave blank to keep current)
+                            {t('(laat leeg om huidige te behouden)')}
                         </span>
                     )}
                 </Label>
@@ -201,15 +207,16 @@ export function UserForm({
 
             {showRoles && (
                 <div className="grid gap-2">
-                    <Label>Roles</Label>
+                    <Label>{t('Rollen')}</Label>
                     <p className="text-xs text-muted-foreground">
-                        Assign one or more roles. Permissions are inherited from
-                        the selected roles.
+                        {t(
+                            'Ken een of meer rollen toe. Rechten worden overgenomen van de geselecteerde rollen.',
+                        )}
                     </p>
                     <div className="mt-1 flex flex-wrap gap-2">
                         {selectableRoles.length === 0 && (
                             <span className="text-sm text-muted-foreground">
-                                No roles available.
+                                {t('Geen rollen beschikbaar.')}
                             </span>
                         )}
                         {selectableRoles.map((role) => {
@@ -255,7 +262,10 @@ export function UserForm({
                     ) : (
                         <UserPlus className="h-4 w-4" />
                     )}
-                    {submitLabel ?? (isEdit ? 'Save changes' : 'Create user')}
+                    {submitLabel ??
+                        (isEdit
+                            ? t('Wijzigingen opslaan')
+                            : t('Gebruiker aanmaken'))}
                 </Button>
                 {onCancel && (
                     <Button
@@ -264,12 +274,13 @@ export function UserForm({
                         onClick={onCancel}
                         disabled={form.processing}
                     >
-                        Cancel
+                        {t('Annuleren')}
                     </Button>
                 )}
                 {form.validating && (
                     <Badge variant="secondary" className="gap-1.5">
-                        <Loader2 className="h-3 w-3 animate-spin" /> Validating…
+                        <Loader2 className="h-3 w-3 animate-spin" />{' '}
+                        {t('Valideren…')}
                     </Badge>
                 )}
             </div>

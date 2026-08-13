@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import { DataPagination } from '@/components/admin/data-pagination';
@@ -41,6 +42,7 @@ export default function RolesIndex({
     roles: paginated,
     filters,
 }: RolesIndexProps) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const [search, setSearch] = useState(filters.search ?? '');
     const firstRender = useRef(true);
@@ -65,18 +67,20 @@ export default function RolesIndex({
 
     return (
         <>
-            <Head title="Roles" />
+            <Head title={t('Rollen')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Roles"
-                    description="Define roles and the permissions they grant."
+                    title={t('Rollen')}
+                    description={t(
+                        'Definieer rollen en de rechten die ze verlenen.',
+                    )}
                     icon={Shield}
                 >
                     {can(PERMISSIONS.ROLES.CREATE) && (
                         <Button asChild>
                             <Link href={roles.create(wayfinderLocale()).url}>
-                                <Plus className="h-4 w-4" /> Add role
+                                <Plus className="h-4 w-4" /> {t('Rol toevoegen')}
                             </Link>
                         </Button>
                     )}
@@ -87,7 +91,7 @@ export default function RolesIndex({
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search roles…"
+                        placeholder={t('Zoek rollen…')}
                         className="pl-9"
                     />
                 </div>
@@ -96,15 +100,15 @@ export default function RolesIndex({
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Role</TableHead>
+                                <TableHead>{t('Rol')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    Permissions
+                                    {t('Rechten')}
                                 </TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    Users
+                                    {t('Gebruikers')}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    Actions
+                                    {t('Acties')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -129,7 +133,7 @@ export default function RolesIndex({
                                                     </span>
                                                     {isSuper && (
                                                         <Badge variant="secondary">
-                                                            System
+                                                            {t('Systeem')}
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -163,7 +167,9 @@ export default function RolesIndex({
                                                                         role: role.id,
                                                                     },
                                                                 ).url}
-                                                                title="Edit"
+                                                                title={t(
+                                                                    'Bewerken',
+                                                                )}
                                                             >
                                                                 <Pencil className="h-4 w-4" />
                                                             </Link>
@@ -175,25 +181,12 @@ export default function RolesIndex({
                                                     ) &&
                                                         !isSuper && (
                                                             <ConfirmDeleteDialog
-                                                                description={
-                                                                    <>
-                                                                        Delete
-                                                                        the{' '}
-                                                                        <strong className="capitalize">
-                                                                            {
-                                                                                role.name
-                                                                            }
-                                                                        </strong>{' '}
-                                                                        role?
-                                                                        Users
-                                                                        with
-                                                                        this
-                                                                        role
-                                                                        will
-                                                                        lose its
-                                                                        permissions.
-                                                                    </>
-                                                                }
+                                                                description={t(
+                                                                    'De rol “{{name}}” verwijderen? Gebruikers met deze rol verliezen de bijbehorende rechten.',
+                                                                    {
+                                                                        name: role.name,
+                                                                    },
+                                                                )}
                                                                 onConfirm={() =>
                                                                     router.delete(
                                                                         roles.destroy(
@@ -212,7 +205,9 @@ export default function RolesIndex({
                                                                     variant="ghost"
                                                                     size="icon"
                                                                     className="text-muted-foreground hover:text-destructive"
-                                                                    title="Delete"
+                                                                    title={t(
+                                                                        'Verwijderen',
+                                                                    )}
                                                                 >
                                                                     <Trash2 className="h-4 w-4" />
                                                                 </Button>

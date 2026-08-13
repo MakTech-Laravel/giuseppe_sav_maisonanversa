@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Eye, FileText, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import { DataPagination } from '@/components/admin/data-pagination';
@@ -35,6 +36,7 @@ export default function PostsIndex({
     posts: Paginated<PostListItem>;
     filters: { search: string };
 }) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const [search, setSearch] = useState(filters.search ?? '');
     const firstRender = useRef(true);
@@ -59,17 +61,17 @@ export default function PostsIndex({
 
     return (
         <>
-            <Head title="Posts" />
+            <Head title={t('Berichten')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Posts"
-                    description="Manage journal and editorial content."
+                    title={t('Berichten')}
+                    description={t('Beheer journal- en redactionele content.')}
                     icon={FileText}
                 >
                     {can(PERMISSIONS.POSTS.CREATE) && (
                         <Button asChild>
                             <Link href={posts.create(wayfinderLocale())}>
-                                <Plus className="h-4 w-4" /> Add post
+                                <Plus className="h-4 w-4" /> {t('Bericht toevoegen')}
                             </Link>
                         </Button>
                     )}
@@ -79,7 +81,7 @@ export default function PostsIndex({
                     <Input
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder="Search posts…"
+                        placeholder={t('Berichten zoeken…')}
                         className="pl-9"
                     />
                 </div>
@@ -87,12 +89,12 @@ export default function PostsIndex({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>Title</TableHead>
+                                <TableHead>{t('Titel')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    Attachments
+                                    {t('Bijlagen')}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    Actions
+                                    {t('Acties')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -118,7 +120,7 @@ export default function PostsIndex({
                                                             locale: wayfinderLocale(),
                                                             post: post.id,
                                                         })}
-                                                        title="View"
+                                                        title={t('Bekijken')}
                                                     >
                                                         <Eye className="h-4 w-4" />
                                                     </Link>
@@ -135,7 +137,7 @@ export default function PostsIndex({
                                                             locale: wayfinderLocale(),
                                                             post: post.id,
                                                         })}
-                                                        title="Edit"
+                                                        title={t('Bewerken')}
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Link>
@@ -143,7 +145,10 @@ export default function PostsIndex({
                                             )}
                                             {can(PERMISSIONS.POSTS.DELETE) && (
                                                 <ConfirmDeleteDialog
-                                                    description={`Permanently delete “${post.title}” and its attachments?`}
+                                                    description={t(
+                                                        '“{{title}}” en bijbehorende bijlagen permanent verwijderen?',
+                                                        { title: post.title },
+                                                    )}
                                                     onConfirm={() =>
                                                         router.delete(
                                                             posts.destroy({
@@ -157,7 +162,7 @@ export default function PostsIndex({
                                                         variant="ghost"
                                                         size="icon"
                                                         className="text-muted-foreground hover:text-destructive"
-                                                        title="Delete"
+                                                        title={t('Verwijderen')}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
@@ -171,7 +176,7 @@ export default function PostsIndex({
                     </Table>
                     {paginated.data.length === 0 && (
                         <div className="px-4 py-16 text-center text-sm text-muted-foreground">
-                            No posts found.
+                            {t('Geen berichten gevonden.')}
                         </div>
                     )}
                     <DataPagination meta={paginated} />
@@ -184,6 +189,6 @@ export default function PostsIndex({
 PostsIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Posts', href: posts.index(wayfinderLocale()) },
+        { title: 'Berichten', href: posts.index(wayfinderLocale()) },
     ],
 };

@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { Mail, TriangleAlert } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +23,19 @@ interface Subscriber {
     joined_at: string;
 }
 
+function translateSubscriberStatus(
+    status: string,
+    t: (key: string) => string,
+): string {
+    const statusMap: Record<string, string> = {
+        Active: 'Actief',
+        Inactive: 'Inactief',
+        Unsubscribed: 'Uitgeschreven',
+    };
+
+    return t(statusMap[status] ?? status);
+}
+
 export default function LetterIndex({
     subscribers,
     letterConnected,
@@ -29,23 +43,27 @@ export default function LetterIndex({
     subscribers: Subscriber[];
     letterConnected: boolean;
 }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="Heritage Letter" />
+            <Head title={t('Heritage Letter')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Heritage Letter"
-                    description="View newsletter subscribers and delivery status."
+                    title={t('Heritage Letter')}
+                    description={t(
+                        'Bekijk nieuwsbriefabonnees en leveringsstatus.',
+                    )}
                     icon={Mail}
                 />
                 {!letterConnected && (
                     <Alert>
                         <TriangleAlert className="h-4 w-4" />
                         <AlertTitle>
-                            Mailing service is not connected
+                            {t('Mailservice is niet gekoppeld')}
                         </AlertTitle>
                         <AlertDescription>
-                            Subscriber records below are demonstration data.
+                            {t('De abonnees hieronder zijn demogegevens.')}
                         </AlertDescription>
                     </Alert>
                 )}
@@ -53,10 +71,10 @@ export default function LetterIndex({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>Subscriber</TableHead>
-                                <TableHead>Status</TableHead>
+                                <TableHead>{t('Abonnee')}</TableHead>
+                                <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    Joined
+                                    {t('Ingeschreven op')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -73,7 +91,10 @@ export default function LetterIndex({
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant="secondary">
-                                            {subscriber.status}
+                                            {translateSubscriberStatus(
+                                                subscriber.status,
+                                                t,
+                                            )}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="hidden sm:table-cell">

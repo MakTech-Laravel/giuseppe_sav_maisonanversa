@@ -1,5 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, ShieldPlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { RoleForm } from '@/components/admin/role-form';
 import { Button } from '@/components/ui/button';
@@ -13,19 +14,24 @@ export default function CreateRole({
 }: {
     permissions: PermissionOption[];
 }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="Create role" />
+            <Head title={t('Rol aanmaken')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title="Create role"
-                    description="Name the role and grant it permissions."
+                    title={t('Rol aanmaken')}
+                    description={t(
+                        'Geef de rol een naam en ken rechten toe.',
+                    )}
                     icon={ShieldPlus}
                 >
                     <Button variant="outline" asChild>
                         <Link href={roles.index(wayfinderLocale()).url}>
-                            <ArrowLeft className="h-4 w-4" /> Back to roles
+                            <ArrowLeft className="h-4 w-4" />{' '}
+                            {t('Terug naar rollen')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
