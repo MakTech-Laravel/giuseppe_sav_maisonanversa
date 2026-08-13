@@ -3,14 +3,17 @@
 namespace App\Providers;
 
 use App\Enums\RoleEnum;
+use App\Listeners\StripeEventListener;
 use App\Models\User;
 use App\Support\AdminTypePermissionBypass;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Cashier\Events\WebhookReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +32,15 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configureSpatiePermissions();
+        $this->configureCashierWebhooks();
+    }
+
+    /**
+     * Listen for Cashier webhook payloads (guest checkout fulfillment).
+     */
+    protected function configureCashierWebhooks(): void
+    {
+        Event::listen(WebhookReceived::class, StripeEventListener::class);
     }
 
     /**

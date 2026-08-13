@@ -1,5 +1,7 @@
+import { router } from '@inertiajs/react';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { store as checkoutStore } from '@/actions/App/Http/Controllers/Maison/CheckoutController';
 import { MaisonLink } from '@/components/maison/maison-link';
 import {
     MaisonModal,
@@ -7,7 +9,8 @@ import {
     modalNoteClassName,
 } from '@/components/maison/modals/maison-modal';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
-import { SuccessPanel } from '@/components/maison/ui/success-panel';
+import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
+import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
 
 type OrderModalProps = {
@@ -20,10 +23,12 @@ const EDITION_NUMBERS = Array.from({ length: 100 }, (_, index) => index + 1);
 
 /**
  * The three-step reservation flow: details, preferred number (1–100) with an
- * optional monogram, then payment summary. Prototype-mode until Stripe is wired.
+ * optional monogram, then payment summary. Submits to Cashier Checkout (EUR).
  */
 export function OrderModal({ onClose }: OrderModalProps) {
     const { t } = useTranslation();
+    const { locale } = useLocale();
+    const { priceLabel, productName } = useCheckoutDisplay();
     const [step, setStep] = useState<Step>(1);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -32,7 +37,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
     const [monogram, setMonogram] = useState('');
     const [giftWrap, setGiftWrap] = useState(false);
     const [giftMessage, setGiftMessage] = useState('');
-    const [paid, setPaid] = useState(false);
+    const [processing, setProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -44,7 +49,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         setMonogram('');
         setGiftWrap(false);
         setGiftMessage('');
-        setPaid(false);
+        setProcessing(false);
         setError(null);
     }, []);
 
@@ -80,7 +85,47 @@ export function OrderModal({ onClose }: OrderModalProps) {
     }
 
     function onPay(): void {
-        setPaid(true);
+        if (selectedNumber === null || processing) {
+            return;
+        }
+
+        setError(null);
+        setProcessing(true);
+
+        router.post(
+            checkoutStore.url(locale),
+            {
+                name: name.trim(),
+                email: email.trim(),
+                phone: phone.trim() || null,
+                edition_number: selectedNumber,
+                monogram: monogram.trim().toUpperCase() || null,
+                gift_wrap: giftWrap,
+                gift_message: giftMessage.trim() || null,
+            },
+            {
+                onError: (errors) => {
+                    const message =
+                        errors.checkout ||
+                        errors.email ||
+                        errors.name ||
+                        errors.edition_number ||
+                        Object.values(errors)[0];
+
+                    setError(
+                        typeof message === 'string'
+                            ? message
+                            : t(
+                                  'Betaling kon niet worden gestart. Probeer opnieuw.',
+                              ),
+                    );
+                    setProcessing(false);
+                },
+                onFinish: () => {
+                    setProcessing(false);
+                },
+            },
+        );
     }
 
     return (
@@ -93,47 +138,34 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 {t('Reserveer Uw Nummer')}
             </h2>
             <span className="mb-4 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
-                {t('Heritage No.001 · Founding Edition · € 249')}
+                {`${productName} · ${priceLabel}`}
             </span>
 
-            {!paid && (
-                <div className="mb-5 flex gap-2">
-                    {steps.map(({ n, label }) => (
-                        <div
-                            key={n}
+            <div className="mb-5 flex gap-2">
+                {steps.map(({ n, label }) => (
+                    <div
+                        key={n}
+                        className={cn(
+                            'flex-1 border-b pb-2.5 text-center font-sans text-[9px] tracking-[0.18em] text-stone uppercase',
+                            step === n && 'border-gold text-choc',
+                            step > n && 'border-gold/25',
+                            step < n && 'border-gold/25',
+                        )}
+                    >
+                        <span
                             className={cn(
-                                'flex-1 border-b pb-2.5 text-center font-sans text-[9px] tracking-[0.18em] text-stone uppercase',
-                                step === n && 'border-gold text-choc',
-                                step > n && 'border-gold/25',
-                                step < n && 'border-gold/25',
+                                'mb-1 block font-serif text-lg text-gold',
+                                step > n && 'opacity-55',
                             )}
                         >
-                            <span
-                                className={cn(
-                                    'mb-1 block font-serif text-lg text-gold',
-                                    step > n && 'opacity-55',
-                                )}
-                            >
-                                {n}
-                            </span>
-                            {label}
-                        </div>
-                    ))}
-                </div>
-            )}
+                            {n}
+                        </span>
+                        {label}
+                    </div>
+                ))}
+            </div>
 
-            {paid ? (
-                <SuccessPanel
-                    title={t('U wordt doorverwezen naar betaling.')}
-                    icon="✓"
-                >
-                    <p>
-                        {t(
-                            'De betaalpagina opent in een nieuw venster. Wij bevestigen uw reservering en editienummer persoonlijk per e-mail.',
-                        )}
-                    </p>
-                </SuccessPanel>
-            ) : step === 1 ? (
+            {step === 1 ? (
                 <form onSubmit={onStepOne} className="flex flex-col gap-3.5">
                     <label className="sr-only" htmlFor="ord-name">
                         {t('Volledige naam')}
@@ -225,14 +257,13 @@ export function OrderModal({ onClose }: OrderModalProps) {
                             value={monogram}
                             onChange={(event) =>
                                 setMonogram(
-                                    event.target.value.toUpperCase(),
+                                    event.target.value
+                                        .replace(/[^a-zA-Z]/g, '')
+                                        .toUpperCase(),
                                 )
                             }
-                            placeholder={t('Bijv. YS')}
-                            className={cn(
-                                modalInputClassName,
-                                'max-w-[170px] tracking-[0.2em] uppercase',
-                            )}
+                            placeholder="MA"
+                            className={modalInputClassName}
                         />
                     </div>
 
@@ -251,7 +282,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
                             disabled={selectedNumber === null}
                             onClick={onStepTwo}
                         >
-                            {t('Volgende — Overzicht')}
+                            {t('Volgende — Betaling')}
                         </MaisonButton>
                     </div>
                 </div>
@@ -267,55 +298,59 @@ export function OrderModal({ onClose }: OrderModalProps) {
                         giftMessage={giftMessage}
                     />
 
-                    <div className="mb-4 rounded-md border border-gold/25 bg-black/3 p-3.5 ma-sm:p-4">
-                        <label className="flex cursor-pointer items-center gap-2.5 font-sans text-xs tracking-[0.12em] text-choc uppercase">
-                            <input
-                                type="checkbox"
-                                checked={giftWrap}
-                                onChange={(event) =>
-                                    setGiftWrap(event.target.checked)
-                                }
-                                className="size-4 accent-gold"
-                            />
-                            {t('Als cadeau verpakken')}
-                        </label>
+                    <label className="mb-4 flex cursor-pointer items-start gap-3">
+                        <input
+                            type="checkbox"
+                            checked={giftWrap}
+                            onChange={(event) =>
+                                setGiftWrap(event.target.checked)
+                            }
+                            className="mt-1"
+                        />
+                        <span className="text-[13px] leading-[1.5] text-choc3">
+                            {t('Cadeauverpakking toevoegen')}
+                        </span>
+                    </label>
 
-                        {giftWrap && (
-                            <div className="mt-3 animate-in fade-in duration-250">
-                                <label className="sr-only" htmlFor="gift-msg">
-                                    {t(
-                                        'Persoonlijke boodschap op de kaart (optioneel)',
-                                    )}
-                                </label>
-                                <textarea
-                                    id="gift-msg"
-                                    rows={2}
-                                    value={giftMessage}
-                                    onChange={(event) =>
-                                        setGiftMessage(event.target.value)
-                                    }
-                                    placeholder={t(
-                                        'Persoonlijke boodschap op de kaart (optioneel)',
-                                    )}
-                                    className={cn(
-                                        modalInputClassName,
-                                        'min-h-[72px] resize-y font-sans text-[13px]',
-                                    )}
-                                />
-                                <p className="mt-2.5 font-sans text-[9px] tracking-[0.12em] text-choc3 uppercase">
-                                    {t(
-                                        'Luxe cadeauverpakking · handgeschreven kaart · geen prijs op de pakbon',
-                                    )}
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                    {giftWrap && (
+                        <div className="mb-4">
+                            <label
+                                htmlFor="ord-gift"
+                                className="mb-2 block font-sans text-[10px] tracking-[0.18em] text-choc3 uppercase"
+                            >
+                                {t('Cadeauboodschap (optioneel)')}
+                            </label>
+                            <textarea
+                                id="ord-gift"
+                                value={giftMessage}
+                                onChange={(event) =>
+                                    setGiftMessage(event.target.value)
+                                }
+                                className={cn(
+                                    modalInputClassName,
+                                    'min-h-[72px] resize-y font-sans text-[13px]',
+                                )}
+                            />
+                            <p className="mt-2.5 font-sans text-[9px] tracking-[0.12em] text-choc3 uppercase">
+                                {t(
+                                    'Luxe cadeauverpakking · handgeschreven kaart · geen prijs op de pakbon',
+                                )}
+                            </p>
+                        </div>
+                    )}
+
+                    {error && (
+                        <p role="alert" className="mb-3 text-[13px] text-choc3">
+                            {error}
+                        </p>
+                    )}
 
                     <div className="flex items-center gap-2.5">
                         <MaisonButton
                             type="button"
                             variant="outlineChoc"
                             onClick={() => setStep(2)}
+                            disabled={processing}
                         >
                             {t('← Terug')}
                         </MaisonButton>
@@ -323,9 +358,12 @@ export function OrderModal({ onClose }: OrderModalProps) {
                             type="button"
                             variant="filled"
                             block
+                            disabled={processing}
                             onClick={onPay}
                         >
-                            {t('Ga naar betaling — € 249')}
+                            {processing
+                                ? t('Bezig…')
+                                : `${t('Ga naar betaling —')} ${priceLabel}`}
                         </MaisonButton>
                     </div>
 
@@ -337,18 +375,16 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 </div>
             )}
 
-            {!paid && (
-                <p className={modalNoteClassName}>
-                    {t('Beveiligde betaling via Stripe · SSL-versleuteld ·')}{' '}
-                    <MaisonLink
-                        to="terms"
-                        className="underline underline-offset-2 hover:text-gold"
-                        onClick={onClose}
-                    >
-                        {t('Voorwaarden')}
-                    </MaisonLink>
-                </p>
-            )}
+            <p className={modalNoteClassName}>
+                {t('Beveiligde betaling via Stripe · SSL-versleuteld ·')}{' '}
+                <MaisonLink
+                    to="terms"
+                    className="underline underline-offset-2 hover:text-gold"
+                    onClick={onClose}
+                >
+                    {t('Voorwaarden')}
+                </MaisonLink>
+            </p>
         </MaisonModal>
     );
 }
@@ -371,16 +407,14 @@ function OrderSummary({
     giftMessage: string;
 }) {
     const { t } = useTranslation();
+    const { priceLabel, productName } = useCheckoutDisplay();
     const mono = monogram.trim().toUpperCase();
     const trimmedPhone = phone.trim();
     const trimmedMessage = giftMessage.trim();
 
     return (
         <div className="mb-4 rounded border border-gold/22 bg-black/3 p-4.5">
-            <SummaryRow
-                label={t('Product')}
-                value={t('Heritage No.001 — Founding Edition')}
-            />
+            <SummaryRow label={t('Product')} value={productName} />
             <SummaryRow label={t('Houder')} value={name.trim()} />
             {number !== null && (
                 <SummaryRow
@@ -407,11 +441,7 @@ function OrderSummary({
                     )}
                 </>
             )}
-            <SummaryRow
-                label={t('Totaal')}
-                value="€ 249"
-                total
-            />
+            <SummaryRow label={t('Totaal')} value={priceLabel} total />
             <p className="mt-2.5 font-sans text-[10px] leading-[1.6] tracking-[0.1em] text-choc3 uppercase">
                 {t(
                     'Voorkeursnummer en monogram onder voorbehoud — wij bevestigen de beschikbaarheid persoonlijk.',

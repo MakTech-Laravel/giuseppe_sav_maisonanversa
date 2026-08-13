@@ -5,6 +5,7 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Wrap } from '@/components/maison/ui/section';
+import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import type { Edition } from '@/types/edition';
 
 const INCLUDES = [
@@ -25,6 +26,7 @@ const INCLUDES = [
 export function HomePreorder({ edition }: { edition: Edition }) {
     const { t } = useTranslation();
     const { openOrder, openCertificate, openNewsletter } = useShellActions();
+    const { priceLabel } = useCheckoutDisplay();
     const section = useRef<HTMLDivElement>(null);
     const [shown, setShown] = useState(0);
     const [fill, setFill] = useState(0);
@@ -134,7 +136,7 @@ export function HomePreorder({ edition }: { edition: Edition }) {
 
                     <Reveal className="border border-gold/20 bg-white/3 p-10">
                         <div className="mb-1 font-serif text-[48px] leading-none font-light text-cream">
-                            € 249
+                            {priceLabel}
                         </div>
                         <div className="mb-7 font-sans text-[9px] tracking-[0.2em] text-stone uppercase">
                             {t('Volledig vooraf · Inclusief Heritage Ervaring')}

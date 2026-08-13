@@ -1,6 +1,13 @@
 import type { Auth } from '@/types/auth';
 import type { Locale } from '@/types/locale';
 
+export type CheckoutShared = {
+    currency: string;
+    amount: number;
+    displayAmount: string;
+    productName: string;
+};
+
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface InputHTMLAttributes<T> {
@@ -17,6 +24,7 @@ declare module '@inertiajs/core' {
             locale: Locale;
             availableLocales: Locale[];
             availableImages: string[];
+            checkout: CheckoutShared;
             [key: string]: unknown;
         };
     }
