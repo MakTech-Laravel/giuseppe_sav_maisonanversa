@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Enums\RoleEnum;
+use App\Models\User;
+use App\Support\AdminTypePermissionBypass;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -57,8 +59,26 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureSpatiePermissions(): void
     {
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole(RoleEnum::SUPER_ADMIN->value) ? true : null;
+        Gate::before(function ($user, string $ability) {
+            if (! $user instanceof User) {
+                return null;
+            }
+
+            if ($user->hasRole(RoleEnum::SUPER_ADMIN->value)) {
+                return true;
+            }
+
+            /*
+             * TEMPORARY — see App\Support\AdminTypePermissionBypass.
+             * Only short-circuit Spatie permission names (e.g. users.index),
+             * never model policies (e.g. update, delete) so super-admin
+             * account locks in UserPolicy still apply.
+             */
+            if (AdminTypePermissionBypass::grantsAll($user) && str_contains($ability, '.')) {
+                return true;
+            }
+
+            return null;
         });
     }
 }

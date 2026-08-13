@@ -1,14 +1,11 @@
 import { Link } from '@inertiajs/react';
 import {
     FileText,
-    KeyRound,
     LayoutGrid,
     LockKeyhole,
     Mail,
     MessageCircle,
     ShoppingBag,
-    Shield,
-    ShieldCheck,
     User,
     UserRoundCog,
     Users,
@@ -34,9 +31,7 @@ import adminCommunity from '@/routes/admin/community';
 import adminCustomers from '@/routes/admin/customers';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
-import adminPermissions from '@/routes/admin/permissions';
 import adminPosts from '@/routes/admin/posts';
-import adminRoles from '@/routes/admin/roles';
 import profile from '@/routes/profile';
 import security from '@/routes/security';
 import { PERMISSIONS } from '@/types/permissions';
@@ -48,6 +43,12 @@ function buildMainNav(locale: string): NavNode[] {
             href: dashboard(locale),
             icon: LayoutGrid,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: 'Administrator',
+            href: adminAdmins.index(locale),
+            icon: UserRoundCog,
+            permissions: [PERMISSIONS.USERS.INDEX],
         },
         {
             title: 'Customers',
@@ -79,35 +80,7 @@ function buildMainNav(locale: string): NavNode[] {
             icon: FileText,
             permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
         },
-        {
-            title: 'Access Control',
-            icon: ShieldCheck,
-            permissions: [
-                PERMISSIONS.USERS.INDEX,
-                PERMISSIONS.ROLES.INDEX,
-                PERMISSIONS.PERMISSIONS.INDEX,
-            ],
-            items: [
-                {
-                    title: 'Admins',
-                    href: adminAdmins.index(locale),
-                    icon: UserRoundCog,
-                    permissions: [PERMISSIONS.USERS.INDEX],
-                },
-                {
-                    title: 'Roles',
-                    href: adminRoles.index(locale),
-                    icon: Shield,
-                    permissions: [PERMISSIONS.ROLES.INDEX],
-                },
-                {
-                    title: 'Permissions',
-                    href: adminPermissions.index(locale),
-                    icon: KeyRound,
-                    permissions: [PERMISSIONS.PERMISSIONS.INDEX],
-                },
-            ],
-        },
+        // Access Control (roles / permissions UI) disabled — out of product scope.
         {
             title: 'Profile',
             href: profile.edit(locale),

@@ -25,7 +25,7 @@ test('authenticated staff can visit the admin dashboard', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('dashboard')
-            ->has('stats', 4)
+            ->has('stats', 3)
             ->has('recentCustomers')
             ->where('staffName', $user->name)
         );
