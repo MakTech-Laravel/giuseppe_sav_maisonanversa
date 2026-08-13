@@ -7,6 +7,9 @@ use App\Models\User;
 /**
  * Demo payloads for the member dashboard shells until commerce is wired.
  *
+ * User-facing strings use Dutch source keys via __() so locale switching
+ * translates them the same way as the public site.
+ *
  * @phpstan-type MemberCard array{name: string, username: string, email: string, editionNumber: string, orderStatus: string, reservedAt: string}
  */
 final class MemberDemo
@@ -21,8 +24,8 @@ final class MemberDemo
             'username' => (string) $user->username,
             'email' => $user->email,
             'editionNumber' => '047',
-            'orderStatus' => 'Reserved',
-            'reservedAt' => '12 March 2026',
+            'orderStatus' => __('Gereserveerd'),
+            'reservedAt' => __('12 maart 2026'),
         ];
     }
 
@@ -35,19 +38,19 @@ final class MemberDemo
 
         return [
             [
-                'label' => 'Edition',
+                'label' => __('Editie'),
                 'value' => 'No.'.$member['editionNumber'],
-                'hint' => 'Founding Edition',
+                'hint' => __('Founding Edition'),
             ],
             [
-                'label' => 'Order',
+                'label' => __('Bestelling'),
                 'value' => $member['orderStatus'],
-                'hint' => 'Expected Q1 2027',
+                'hint' => __('Verwacht Q1 2027'),
             ],
             [
-                'label' => 'Circle',
-                'value' => 'Member',
-                'hint' => 'Permanent access',
+                'label' => __('Circle'),
+                'value' => __('Lid'),
+                'hint' => __('Permanente toegang'),
             ],
         ];
     }
@@ -63,32 +66,36 @@ final class MemberDemo
             'editionNumber' => $member['editionNumber'],
             'status' => $member['orderStatus'],
             'deliveryWindow' => 'Q1 2027',
-            'certificate' => 'Digital preview available',
-            'passport' => 'Four pages · linked to No.'.$member['editionNumber'],
+            'certificate' => __('Digitale voorvertoning beschikbaar'),
+            'passport' => __('Vier pagina\'s · gekoppeld aan No.:number', [
+                'number' => $member['editionNumber'],
+            ]),
         ];
     }
 
     /**
-     * @return list<array{id: string, label: string, date: string, amount: string, status: string, method: string}>
+     * @return list<array{id: string, label: string, date: string, amount: string, status: string, status_key: string, method: string}>
      */
     public static function orders(): array
     {
         return [
             [
                 'id' => 'MA-2026-0047',
-                'label' => 'Heritage No.001 — Founding Edition',
-                'date' => '12 March 2026',
+                'label' => __('Heritage No.001 — Founding Edition'),
+                'date' => __('12 maart 2026'),
                 'amount' => '€249.00',
-                'status' => 'Reserved',
-                'method' => 'Card · ··4242',
+                'status' => __('Gereserveerd'),
+                'status_key' => 'reserved',
+                'method' => __('Kaart · ··4242'),
             ],
             [
                 'id' => 'MA-2026-DEP-0047',
-                'label' => 'Reservation deposit',
-                'date' => '12 March 2026',
+                'label' => __('Reserveringswaarborg'),
+                'date' => __('12 maart 2026'),
                 'amount' => '€50.00',
-                'status' => 'Paid',
-                'method' => 'Card · ··4242',
+                'status' => __('Betaald'),
+                'status_key' => 'paid',
+                'method' => __('Kaart · ··4242'),
             ],
         ];
     }
@@ -100,6 +107,7 @@ final class MemberDemo
      *     date: string,
      *     amount: string,
      *     status: string,
+     *     status_key: string,
      *     method: string,
      *     summary: string,
      *     items: list<array{name: string, qty: int, price: string}>,
@@ -120,47 +128,49 @@ final class MemberDemo
         return [
             ...$order,
             'summary' => $isDeposit
-                ? 'Deposit held against your Founding Edition reservation. Applied to the balance when production opens.'
-                : 'Founding Edition reservation — balance due before shipment. Figures are prototype until Stripe is connected.',
+                ? __('Waarborg gehouden op uw Founding Edition-reservering. Verrekend met het saldo wanneer de productie start.')
+                : __('Founding Edition-reservering — saldo verschuldigd vóór verzending. Bedragen zijn prototype tot Stripe is aangesloten.'),
             'items' => $isDeposit
                 ? [
                     [
-                        'name' => 'Reservation deposit',
+                        'name' => __('Reserveringswaarborg'),
                         'qty' => 1,
                         'price' => '€50.00',
                     ],
                 ]
                 : [
                     [
-                        'name' => 'Heritage No.001 — Founding Edition',
+                        'name' => __('Heritage No.001 — Founding Edition'),
                         'qty' => 1,
                         'price' => '€249.00',
                     ],
                 ],
             'billing' => [
-                'name' => 'Founding Circle member',
-                'email' => 'on file with Maison Anversa',
-                'address' => 'Antwerp · Belgium (prototype)',
+                'name' => __('Founding Circle-lid'),
+                'email' => __('op bestand bij Maison Anversa'),
+                'address' => __('Antwerpen · België (prototype)'),
             ],
             'timeline' => [
                 [
-                    'label' => 'Order placed',
+                    'label' => __('Bestelling geplaatst'),
                     'at' => $order['date'],
                     'done' => true,
                 ],
                 [
-                    'label' => $isDeposit ? 'Deposit captured' : 'Reservation held',
+                    'label' => $isDeposit
+                        ? __('Waarborg vastgelegd')
+                        : __('Reservering vastgelegd'),
                     'at' => $order['date'],
                     'done' => true,
                 ],
                 [
-                    'label' => 'Production',
-                    'at' => 'Expected Q4 2026',
+                    'label' => __('Productie'),
+                    'at' => __('Verwacht Q4 2026'),
                     'done' => false,
                 ],
                 [
-                    'label' => 'Shipment',
-                    'at' => 'Expected Q1 2027',
+                    'label' => __('Verzending'),
+                    'at' => __('Verwacht Q1 2027'),
                     'done' => false,
                 ],
             ],
@@ -178,20 +188,22 @@ final class MemberDemo
             'editionNumber' => $number,
             'pages' => [
                 [
-                    'title' => 'Cover',
-                    'body' => 'Heritage Passport · Maison Anversa · Edition No.'.$number,
+                    'title' => __('Omslag'),
+                    'body' => __('Heritage Passport · Maison Anversa · Editie No.:number', [
+                        'number' => $number,
+                    ]),
                 ],
                 [
-                    'title' => 'Your place',
-                    'body' => 'This numbered piece belongs to the Founding Edition. It will not be reissued.',
+                    'title' => __('Uw plaats'),
+                    'body' => __('Dit genummerde stuk behoort tot de Founding Edition. Het wordt niet heruitgegeven.'),
                 ],
                 [
-                    'title' => 'Care',
-                    'body' => 'Store dry. Clean leather with a soft cloth. The house stands behind the craft.',
+                    'title' => __('Verzorging'),
+                    'body' => __('Droog bewaren. Reinig leer met een zachte doek. Het huis staat achter het vakmanschap.'),
                 ],
                 [
-                    'title' => 'Circle',
-                    'body' => 'Founding Circle access — sessions, Journal, and the rooms of the house.',
+                    'title' => __('Circle'),
+                    'body' => __('Founding Circle-toegang — sessies, Journal en de kamers van het huis.'),
                 ],
             ],
         ];

@@ -1,4 +1,5 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import InputError from '@/components/input-error';
 import {
     MemberPageHeader,
@@ -13,21 +14,26 @@ import { Spinner } from '@/components/ui/spinner';
 import { store } from '@/routes/password/confirm';
 
 export default function MemberConfirmPassword() {
+    const { t } = useTranslation();
     const { locale } = usePage().props;
 
     return (
         <>
-            <Head title="Confirm password" />
+            <Head title={t('Wachtwoord bevestigen')} />
             <MemberPageHeader
-                eyebrow="Security"
-                title="Confirm your password"
-                description="This is a secure area of your account. Confirm your password to continue."
+                eyebrow={t('Beveiliging')}
+                title={t('Bevestig uw wachtwoord')}
+                description={t(
+                    'Dit is een beveiligd gedeelte van uw account. Bevestig uw wachtwoord om verder te gaan.',
+                )}
             />
 
             <MemberPanel className="max-w-md">
                 <MemberSectionTitle
-                    title="Password check"
-                    description="Required before viewing or changing security settings."
+                    title={t('Wachtwoordcontrole')}
+                    description={t(
+                        'Vereist voordat u beveiligingsinstellingen bekijkt of wijzigt.',
+                    )}
                 />
                 <Form {...store.form()} resetOnSuccess={['password']}>
                     {({ processing, errors }) => (
@@ -37,12 +43,12 @@ export default function MemberConfirmPassword() {
                                     htmlFor="password"
                                     className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                 >
-                                    Password
+                                    {t('Wachtwoord')}
                                 </Label>
                                 <PasswordInput
                                     id="password"
                                     name="password"
-                                    placeholder="Your current password"
+                                    placeholder={t('Uw huidige wachtwoord')}
                                     autoComplete="current-password"
                                     autoFocus
                                     className={memberFieldClassName}
@@ -57,13 +63,13 @@ export default function MemberConfirmPassword() {
                                     data-test="confirm-password-button"
                                 >
                                     {processing && <Spinner />}
-                                    Confirm password
+                                    {t('Wachtwoord bevestigen')}
                                 </Button>
                                 <Link
                                     href={`/${locale}/member`}
                                     className="font-sans text-[11px] tracking-[0.14em] text-sand uppercase no-underline hover:text-gold"
                                 >
-                                    Cancel
+                                    {t('Annuleren')}
                                 </Link>
                             </div>
                         </div>

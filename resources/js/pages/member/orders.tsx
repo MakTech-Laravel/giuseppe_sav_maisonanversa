@@ -1,4 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import {
     MemberPageHeader,
     MemberPanel,
@@ -11,32 +12,46 @@ type Order = {
     date: string;
     amount: string;
     status: string;
+    status_key: string;
     method: string;
 };
 
 export default function MemberOrders({ orders }: { orders: Order[] }) {
+    const { t } = useTranslation();
     const { locale } = usePage().props;
 
     return (
         <>
-            <Head title="Orders" />
+            <Head title={t('Bestellingen')} />
             <MemberPageHeader
-                eyebrow="Account"
-                title="Orders & payments"
-                description="Prototype history until Stripe is connected — figures shown for layout only."
+                eyebrow={t('Account')}
+                title={t('Bestellingen & betalingen')}
+                description={t(
+                    'Prototypegeschiedenis tot Stripe is aangesloten — bedragen alleen voor de layout.',
+                )}
             />
 
             <MemberPanel className="overflow-x-auto p-0">
                 <table className="w-full min-w-180 text-left">
                     <thead>
                         <tr className="border-b border-gold/20 font-sans text-[9px] tracking-[0.2em] text-gold uppercase">
-                            <th className="px-6 py-4 font-medium">Reference</th>
-                            <th className="px-6 py-4 font-medium">Item</th>
-                            <th className="px-6 py-4 font-medium">Date</th>
-                            <th className="px-6 py-4 font-medium">Amount</th>
-                            <th className="px-6 py-4 font-medium">Status</th>
+                            <th className="px-6 py-4 font-medium">
+                                {t('Referentie')}
+                            </th>
+                            <th className="px-6 py-4 font-medium">
+                                {t('Artikel')}
+                            </th>
+                            <th className="px-6 py-4 font-medium">
+                                {t('Datum')}
+                            </th>
+                            <th className="px-6 py-4 font-medium">
+                                {t('Bedrag')}
+                            </th>
+                            <th className="px-6 py-4 font-medium">
+                                {t('Status')}
+                            </th>
                             <th className="px-6 py-4 text-right font-medium">
-                                Action
+                                {t('Actie')}
                             </th>
                         </tr>
                     </thead>
@@ -66,8 +81,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                 <td className="px-6 py-4">
                                     <MemberStatusPill
                                         tone={
-                                            order.status.toLowerCase() ===
-                                            'paid'
+                                            order.status_key === 'paid'
                                                 ? 'success'
                                                 : 'neutral'
                                         }
@@ -80,7 +94,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                         href={`/${locale}/member/orders/${order.id}`}
                                         className="inline-flex min-h-9 items-center border border-gold/40 px-3 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline transition-colors hover:bg-gold hover:text-choc"
                                     >
-                                        View
+                                        {t('Bekijken')}
                                     </Link>
                                 </td>
                             </tr>

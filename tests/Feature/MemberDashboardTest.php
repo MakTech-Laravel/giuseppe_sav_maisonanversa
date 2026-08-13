@@ -153,14 +153,14 @@ test('the member nav includes the client feedback sections', function () {
     $source = file_get_contents(resource_path('js/components/member/member-nav.tsx'));
 
     foreach ([
-        'Dashboard',
-        'Orders',
-        'Founding Circle',
-        'Community',
-        'Heritage Letter',
-        'Profile & Account',
-        'Security',
-        'Logout',
+        "t('Dashboard')",
+        "t('Bestellingen')",
+        "t('Founding Circle')",
+        "t('Gemeenschap')",
+        "t('Heritage Letter')",
+        "t('Profiel & account')",
+        "t('Beveiliging')",
+        "t('Uitloggen')",
     ] as $label) {
         expect($source)->toContain($label);
     }
@@ -168,4 +168,18 @@ test('the member nav includes the client feedback sections', function () {
     expect($source)
         ->not->toContain('My Heritage')
         ->not->toContain('Passport');
+});
+
+test('member dashboard demo payloads are translated for english', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('member.dashboard', ['locale' => 'en']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('member/dashboard')
+            ->where('stats.0.label', 'Edition')
+            ->where('stats.0.hint', 'Founding Edition')
+            ->where('stats.1.value', 'Reserved')
+        );
 });

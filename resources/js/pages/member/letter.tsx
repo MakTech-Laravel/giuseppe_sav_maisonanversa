@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useState, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 import { Button } from '@/components/ui/button';
 
@@ -14,6 +15,7 @@ export default function MemberLetter({
 }: {
     preferences: Preferences;
 }) {
+    const { t } = useTranslation();
     const [data, setData] = useState(preferences);
     const [saved, setSaved] = useState(false);
 
@@ -22,24 +24,26 @@ export default function MemberLetter({
         setSaved(true);
     }
 
+    const options = [
+        ['heritageLetter', t('Heritage Letter')] as const,
+        ['productUpdates', t('Productupdates')] as const,
+        ['events', t('Sessies & events')] as const,
+    ];
+
     return (
         <>
-            <Head title="Heritage Letter" />
+            <Head title={t('Heritage Letter')} />
             <MemberPageHeader
-                eyebrow="Correspondence"
-                title="Heritage Letter preferences"
-                description="Choose what reaches you. Changes are prototype-only until the list provider is connected."
+                eyebrow={t('Correspondentie')}
+                title={t('Heritage Letter-voorkeuren')}
+                description={t(
+                    'Kies wat u bereikt. Wijzigingen zijn prototype tot de lijstprovider is aangesloten.',
+                )}
             />
 
             <MemberPanel className="max-w-xl">
                 <form onSubmit={onSubmit} className="space-y-5">
-                    {(
-                        [
-                            ['heritageLetter', 'Heritage Letter'],
-                            ['productUpdates', 'Product updates'],
-                            ['events', 'Sessions & events'],
-                        ] as const
-                    ).map(([key, label]) => (
+                    {options.map(([key, label]) => (
                         <label
                             key={key}
                             className="flex cursor-pointer items-center gap-3"
@@ -63,12 +67,14 @@ export default function MemberLetter({
                     ))}
 
                     <Button type="submit" className="mt-4">
-                        Save preferences
+                        {t('Voorkeuren opslaan')}
                     </Button>
 
                     {saved && (
                         <p className="font-sans text-[11px] tracking-[0.12em] text-gold2 uppercase">
-                            Preferences noted for this session (prototype)
+                            {t(
+                                'Voorkeuren genoteerd voor deze sessie (prototype)',
+                            )}
                         </p>
                     )}
                 </form>

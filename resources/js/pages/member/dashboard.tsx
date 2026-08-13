@@ -1,4 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 
 type Member = {
@@ -19,38 +20,41 @@ export default function MemberDashboard({
     member: Member;
     stats: Stat[];
 }) {
+    const { t } = useTranslation();
     const { locale } = usePage().props;
 
     const links = [
         {
             href: `/${locale}/member/orders`,
-            label: 'Orders',
-            hint: 'Payment history',
+            label: t('Bestellingen'),
+            hint: t('Betalingsgeschiedenis'),
         },
         {
             href: `/${locale}/member/circle`,
-            label: 'Founding Circle',
-            hint: 'Your membership card',
+            label: t('Founding Circle'),
+            hint: t('Uw lidmaatschapskaart'),
         },
         {
             href: `/${locale}/member/profile`,
-            label: 'Profile',
-            hint: 'Name, photo, email',
+            label: t('Profiel'),
+            hint: t('Naam, foto, e-mail'),
         },
         {
             href: `/${locale}/member/letter`,
-            label: 'Heritage Letter',
-            hint: 'Preferences',
+            label: t('Heritage Letter'),
+            hint: t('Voorkeuren'),
         },
     ] as const;
 
     return (
         <>
-            <Head title="Member Dashboard" />
+            <Head title={t('Dashboard')} />
             <MemberPageHeader
-                eyebrow="Founding Circle"
-                title={`Welcome, ${member.name}`}
-                description="Your rooms in the house — orders, the Circle, and account settings."
+                eyebrow={t('Founding Circle')}
+                title={t('Welkom, {{name}}', { name: member.name })}
+                description={t(
+                    'Uw kamers in het huis — bestellingen, de Circle en accountinstellingen.',
+                )}
             />
 
             <div className="mb-10 grid gap-4 md:grid-cols-3">

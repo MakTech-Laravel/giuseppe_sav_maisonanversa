@@ -1,16 +1,21 @@
 import { Head } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 
 type Card = { number: string; name: string; since: string };
 
 export default function MemberCircle({ card }: { card: Card }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="Founding Circle" />
+            <Head title={t('Founding Circle')} />
             <MemberPageHeader
-                eyebrow="Membership"
-                title="Founding Circle card"
-                description="Your digital card — the number that will not be reissued."
+                eyebrow={t('Lidmaatschap')}
+                title={t('Founding Circle-kaart')}
+                description={t(
+                    'Uw digitale kaart — het nummer dat niet opnieuw wordt uitgegeven.',
+                )}
             />
 
             <MemberPanel className="mx-auto max-w-md bg-choc p-10 text-center">
@@ -22,14 +27,16 @@ export default function MemberCircle({ card }: { card: Card }) {
                 </p>
                 <p className="mt-6 font-serif text-[24px] text-cream">{card.name}</p>
                 <p className="mt-2 font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
-                    Founding Circle · Since {card.since}
+                    {t('Founding Circle · sinds {{since}}', {
+                        since: card.since,
+                    })}
                 </p>
                 <span
                     aria-hidden="true"
                     className="mx-auto mt-8 block h-px w-12 bg-gold"
                 />
                 <p className="mt-6 font-sans text-[10px] tracking-[0.18em] text-sand uppercase">
-                    Permanent membership
+                    {t('Permanent lidmaatschap')}
                 </p>
             </MemberPanel>
         </>
