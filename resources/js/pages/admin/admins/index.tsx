@@ -319,6 +319,6 @@ function StatCard({
 AdminsIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Administrator', href: admins.index(wayfinderLocale()) },
+        { title: 'Beheerder', href: admins.index(wayfinderLocale()) },
     ],
 };

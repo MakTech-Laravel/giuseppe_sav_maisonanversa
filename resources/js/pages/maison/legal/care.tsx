@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import {
     LegalHeading,
     LegalList,
@@ -8,6 +7,7 @@ import {
     LegalParagraph,
 } from '@/components/maison/legal/legal-page-layout';
 import { MaisonLink } from '@/components/maison/maison-link';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 
 export default function Care() {
     const { t } = useTranslation();

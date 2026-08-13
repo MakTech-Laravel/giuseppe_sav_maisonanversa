@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from 'react';
+import { useState  } from 'react';
+import type {FormEvent} from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonModal, modalInputClassName, modalNoteClassName } from '@/components/maison/modals/maison-modal';
 import { MaisonButton } from '@/components/maison/ui/maison-button';

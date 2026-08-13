@@ -60,13 +60,20 @@ export function ContactDock() {
             return;
         }
 
-        if (window.location.hash === `#${id}`) {
+        const nextHash = `#${id}`;
+
+        if (window.location.hash === nextHash) {
             window.dispatchEvent(new HashChangeEvent('hashchange'));
 
             return;
         }
 
-        window.location.hash = id;
+        history.replaceState(
+            null,
+            '',
+            `${window.location.pathname}${window.location.search}${nextHash}`,
+        );
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
     }
 
     useEffect(() => {

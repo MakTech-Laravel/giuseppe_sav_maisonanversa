@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { LanguageSwitcher } from '@/components/maison/shell/language-switcher';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
+import { LanguageSwitcher } from '@/components/maison/shell/language-switcher';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 

@@ -1,5 +1,6 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
-import { useRef, useState, type ReactNode } from 'react';
+import { useRef, useState  } from 'react';
+import type {ReactNode} from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import InputError from '@/components/input-error';
@@ -9,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 
@@ -26,7 +28,7 @@ export default function Profile({
             <Head title="Profile settings" />
 
             <Form
-                {...ProfileController.update.form()}
+                {...ProfileController.update.form(wayfinderLocale())}
                 options={{
                     preserveScroll: true,
                 }}
@@ -217,6 +219,7 @@ function ProfileAvatarField({
                             onClick={() => {
                                 setRemoveAvatar(true);
                                 setPreview(null);
+
                                 if (inputRef.current) {
                                     inputRef.current.value = '';
                                 }
@@ -254,8 +257,8 @@ function ProfileAvatarField({
 Profile.layout = {
     breadcrumbs: [
         {
-            title: 'Profile settings',
-            href: edit(),
+            title: 'Profielinstellingen',
+            href: edit(wayfinderLocale()),
         },
     ],
 };

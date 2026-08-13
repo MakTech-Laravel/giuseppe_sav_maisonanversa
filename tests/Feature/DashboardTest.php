@@ -26,10 +26,30 @@ test('authenticated staff can visit the admin dashboard', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('dashboard')
             ->has('stats', 3)
+            ->where('stats.0.key', 'Klanten')
+            ->where('stats.0.hintKey', 'Lid-accounts')
+            ->where('stats.1.key', 'Beheerders')
+            ->where('stats.2.key', 'Posts')
             ->has('recentCustomers')
             ->where('staffName', $user->name)
+            ->where('locale', defaultLocale())
         );
 });
+
+test('admin dashboard is reachable under each maison locale', function (string $locale) {
+    $user = User::factory()->admin()->create();
+    $user->assignRole(RoleEnum::SUPER_ADMIN->value);
+    $user->syncTypeFromRoles();
+
+    $this->actingAs($user)
+        ->get(route('admin.dashboard', ['locale' => $locale]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('dashboard')
+            ->where('locale', $locale)
+            ->where('stats.0.key', 'Klanten')
+        );
+})->with(['nl', 'en', 'fr']);
 
 test('users without dashboard permission are forbidden', function () {
     $user = User::factory()->customer()->create();

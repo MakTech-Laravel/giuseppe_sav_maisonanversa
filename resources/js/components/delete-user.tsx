@@ -14,6 +14,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 
 export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -59,7 +60,7 @@ export default function DeleteUser() {
                         </DialogDescription>
 
                         <Form
-                            {...ProfileController.destroy.form()}
+                            {...ProfileController.destroy.form(wayfinderLocale())}
                             options={{
                                 preserveScroll: true,
                             }}

@@ -1,8 +1,10 @@
 import { Head, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
-import { imageAsset, type ImageAssetName } from '@/lib/imagery';
-import { maisonUrl, type MaisonPage } from '@/lib/maison-navigation';
+import { imageAsset  } from '@/lib/imagery';
+import type {ImageAssetName} from '@/lib/imagery';
+import { maisonUrl  } from '@/lib/maison-navigation';
+import type {MaisonPage} from '@/lib/maison-navigation';
 import type { Locale } from '@/types/locale';
 
 type SharedProps = {
@@ -172,7 +174,7 @@ export function MaisonSeoHead({
         : `${origin}${seoImage}`;
 
     return (
-        <Head title={title} titleTemplate="%s">
+        <Head title={title}>
             <meta head-key="description" name="description" content={description} />
             <link head-key="canonical" rel="canonical" href={canonical} />
             {availableLocales.map((alternateLocale) => (

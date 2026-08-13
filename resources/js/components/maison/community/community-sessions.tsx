@@ -1,12 +1,14 @@
-import { useState, type ReactNode } from 'react';
+import { useState  } from 'react';
+import type {ReactNode} from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     SESSION_CARDS,
     SESSION_LEVELS,
     SESSION_LOCATIONS,
-    SESSION_PLAYERS_WANTED,
-    type SessionCardData,
+    SESSION_PLAYERS_WANTED
+    
 } from '@/components/maison/community/community-data';
+import type {SessionCardData} from '@/components/maison/community/community-data';
 import { Monogram } from '@/components/maison/ui/monogram';
 import { Wrap } from '@/components/maison/ui/section';
 import {

@@ -38,6 +38,6 @@ export default function CommunityIndex({ items }: { items: unknown[] }) {
 CommunityIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Community', href: community.index(wayfinderLocale()) },
+        { title: 'Gemeenschap', href: community.index(wayfinderLocale()) },
     ],
 };

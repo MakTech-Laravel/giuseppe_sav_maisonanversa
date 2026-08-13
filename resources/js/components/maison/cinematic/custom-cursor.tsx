@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { gsap, MEDIA, useGSAP } from '@/lib/gsap';
 
@@ -21,14 +21,28 @@ const GROW_TARGETS =
  * render `null`, so React does not try to hydrate the cursor against the next
  * sibling in the shell (which caused a mismatch with the topbar).
  */
+function subscribeClientOnly(callback: () => void): () => void {
+    void callback;
+
+    return () => {};
+}
+
+function getClientOnlySnapshot(): boolean {
+    return true;
+}
+
+function getServerOnlySnapshot(): boolean {
+    return false;
+}
+
 export function CustomCursor() {
-    const [mounted, setMounted] = useState(false);
+    const mounted = useSyncExternalStore(
+        subscribeClientOnly,
+        getClientOnlySnapshot,
+        getServerOnlySnapshot,
+    );
     const ring = useRef<HTMLDivElement>(null);
     const dot = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     useGSAP(
         () => {

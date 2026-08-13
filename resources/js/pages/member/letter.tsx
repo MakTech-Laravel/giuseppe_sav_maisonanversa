@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
-import { useState, type FormEvent } from 'react';
+import { useState  } from 'react';
+import type {FormEvent} from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 import { Button } from '@/components/ui/button';

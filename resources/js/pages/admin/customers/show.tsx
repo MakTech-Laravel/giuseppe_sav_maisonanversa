@@ -123,7 +123,7 @@ function Row({
 ShowCustomer.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Customers', href: customers.index(wayfinderLocale()) },
-        { title: 'Profile', href: customers.index(wayfinderLocale()) },
+        { title: 'Klanten', href: customers.index(wayfinderLocale()) },
+        { title: 'Profiel', href: customers.index(wayfinderLocale()) },
     ],
 };

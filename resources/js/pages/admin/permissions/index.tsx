@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePermission } from '@/hooks/use-permissions';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import permissions from '@/routes/admin/permissions';
 import { groupByGroup } from '@/types/admin';
@@ -55,9 +56,12 @@ export default function PermissionsIndex({
                             <Button variant="outline" asChild>
                                 <a
                                     href={
-                                        permissions.export({
-                                            query: { format: 'csv' },
-                                        }).url
+                                        permissions.export(
+                                            wayfinderLocale(),
+                                            {
+                                                query: { format: 'csv' },
+                                            },
+                                        ).url
                                     }
                                 >
                                     <FileText className="h-4 w-4" /> CSV
@@ -66,9 +70,12 @@ export default function PermissionsIndex({
                             <Button asChild>
                                 <a
                                     href={
-                                        permissions.export({
-                                            query: { format: 'xlsx' },
-                                        }).url
+                                        permissions.export(
+                                            wayfinderLocale(),
+                                            {
+                                                query: { format: 'xlsx' },
+                                            },
+                                        ).url
                                     }
                                 >
                                     <FileSpreadsheet className="h-4 w-4" />{' '}
@@ -153,7 +160,7 @@ export default function PermissionsIndex({
 
 PermissionsIndex.layout = {
     breadcrumbs: [
-        { title: 'Dashboard', href: dashboard() },
-        { title: 'Permissions', href: permissions.index() },
+        { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
+        { title: 'Rechten', href: permissions.index(wayfinderLocale()) },
     ],
 };

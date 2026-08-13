@@ -42,7 +42,7 @@ export default function CreateCustomer() {
 CreateCustomer.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Customers', href: customers.index(wayfinderLocale()) },
-        { title: 'Create', href: customers.create(wayfinderLocale()) },
+        { title: 'Klanten', href: customers.index(wayfinderLocale()) },
+        { title: 'Aanmaken', href: customers.create(wayfinderLocale()) },
     ],
 };

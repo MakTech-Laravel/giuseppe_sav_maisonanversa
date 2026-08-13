@@ -26,6 +26,7 @@ import FileUpload, { fileProgressKey } from '@/components/file-upload';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { index as fileUploadDemo } from '@/routes/file-upload-demo';
 import { update as postUpdate } from '@/routes/posts'; // Wayfinder
 import { store as uploadStore } from '@/routes/upload'; // Wayfinder
@@ -81,7 +82,7 @@ function SingleFileDemo() {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post(uploadStore().url, { onSuccess: () => reset() });
+        post(uploadStore(wayfinderLocale()).url, { onSuccess: () => reset() });
     }
 
     return (
@@ -172,7 +173,7 @@ function MultipleFilesDemo() {
             const key = fileProgressKey(file);
 
             router.post(
-                uploadStore().url,
+                uploadStore(wayfinderLocale()).url,
                 { file },
                 {
                     forceFormData: true,
@@ -294,15 +295,18 @@ function EditModeDemo({ post }: { post: Post }) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        submit(postUpdate(post.id).url, {
-            // On success the page reloads `demoPost` with the just-saved files
-            // included as existing attachments. Clear the local "new files" and
-            // the pending removals so nothing renders twice.
-            onSuccess: () => {
-                reset('files', 'remove_attachments');
-                setRemovedIds([]);
+        submit(
+            postUpdate({ locale: wayfinderLocale(), post: post.id }).url,
+            {
+                // On success the page reloads `demoPost` with the just-saved files
+                // included as existing attachments. Clear the local "new files" and
+                // the pending removals so nothing renders twice.
+                onSuccess: () => {
+                    reset('files', 'remove_attachments');
+                    setRemovedIds([]);
+                },
             },
-        });
+        );
     }
 
     return (
@@ -612,7 +616,7 @@ FileUploadDemo.layout = {
     breadcrumbs: [
         {
             title: 'File Upload Demo',
-            href: fileUploadDemo(),
+            href: fileUploadDemo(wayfinderLocale()),
         },
     ],
 };

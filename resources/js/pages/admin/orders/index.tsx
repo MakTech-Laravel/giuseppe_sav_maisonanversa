@@ -119,6 +119,6 @@ export default function OrdersIndex({
 OrdersIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Orders', href: ordersRoutes.index(wayfinderLocale()) },
+        { title: 'Bestellingen', href: ordersRoutes.index(wayfinderLocale()) },
     ],
 };

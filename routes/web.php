@@ -4,9 +4,9 @@ use App\Enums\PermissionEnum;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\OpsController;
-// use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
-// use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
 use App\Http\Controllers\FileUploadDemoController;
@@ -227,28 +227,27 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::USERS_DELETE->value);
             });
 
-            // Access Control pages (Roles / Permissions) commented out — not in product scope.
-            // Route::controller(RoleController::class)->group(function () {
-            //     Route::get('roles', 'index')->name('roles.index')
-            //         ->middleware('permission:'.PermissionEnum::ROLES_INDEX->value);
-            //     Route::get('roles/create', 'create')->name('roles.create')
-            //         ->middleware('permission:'.PermissionEnum::ROLES_CREATE->value);
-            //     Route::post('roles', 'store')->name('roles.store')
-            //         ->middleware(['permission:'.PermissionEnum::ROLES_CREATE->value, HandlePrecognitiveRequests::class]);
-            //     Route::get('roles/{role}/edit', 'edit')->name('roles.edit')
-            //         ->middleware('permission:'.PermissionEnum::ROLES_EDIT->value);
-            //     Route::put('roles/{role}', 'update')->name('roles.update')
-            //         ->middleware(['permission:'.PermissionEnum::ROLES_EDIT->value, HandlePrecognitiveRequests::class]);
-            //     Route::delete('roles/{role}', 'destroy')->name('roles.destroy')
-            //         ->middleware('permission:'.PermissionEnum::ROLES_DELETE->value);
-            // });
-            //
-            // Route::controller(PermissionController::class)->group(function () {
-            //     Route::get('permissions', 'index')->name('permissions.index')
-            //         ->middleware('permission:'.PermissionEnum::PERMISSIONS_INDEX->value);
-            //     Route::get('permissions/export', 'export')->name('permissions.export')
-            //         ->middleware('permission:'.PermissionEnum::PERMISSIONS_EXPORT->value);
-            // });
+            Route::controller(RoleController::class)->group(function () {
+                Route::get('roles', 'index')->name('roles.index')
+                    ->middleware('permission:'.PermissionEnum::ROLES_INDEX->value);
+                Route::get('roles/create', 'create')->name('roles.create')
+                    ->middleware('permission:'.PermissionEnum::ROLES_CREATE->value);
+                Route::post('roles', 'store')->name('roles.store')
+                    ->middleware(['permission:'.PermissionEnum::ROLES_CREATE->value, HandlePrecognitiveRequests::class]);
+                Route::get('roles/{role}/edit', 'edit')->name('roles.edit')
+                    ->middleware('permission:'.PermissionEnum::ROLES_EDIT->value);
+                Route::put('roles/{role}', 'update')->name('roles.update')
+                    ->middleware(['permission:'.PermissionEnum::ROLES_EDIT->value, HandlePrecognitiveRequests::class]);
+                Route::delete('roles/{role}', 'destroy')->name('roles.destroy')
+                    ->middleware('permission:'.PermissionEnum::ROLES_DELETE->value);
+            });
+
+            Route::controller(PermissionController::class)->group(function () {
+                Route::get('permissions', 'index')->name('permissions.index')
+                    ->middleware('permission:'.PermissionEnum::PERMISSIONS_INDEX->value);
+                Route::get('permissions/export', 'export')->name('permissions.export')
+                    ->middleware('permission:'.PermissionEnum::PERMISSIONS_EXPORT->value);
+            });
         });
 
         Route::middleware(['auth'])->group(function () {

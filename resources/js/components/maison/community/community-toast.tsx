@@ -8,7 +8,9 @@ import { cn } from '@/lib/utils';
 export function useCommunityToast() {
     const [message, setMessage] = useState('');
     const [visible, setVisible] = useState(false);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+        undefined,
+    );
 
     const show = useCallback((text: string) => {
         setMessage(text);

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';

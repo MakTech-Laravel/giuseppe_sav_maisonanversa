@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { FeedPostData } from '@/components/maison/community/community-data';
 import { CommunityCourts } from '@/components/maison/community/community-courts';
+import type { FeedPostData } from '@/components/maison/community/community-data';
 import { CommunityEvents } from '@/components/maison/community/community-events';
 import { CommunityFeed } from '@/components/maison/community/community-feed';
 import { CommunitySessions } from '@/components/maison/community/community-sessions';
 import {
-    CommunityTabs,
-    type CommunityTab,
+    CommunityTabs
+    
 } from '@/components/maison/community/community-tabs';
+import type {CommunityTab} from '@/components/maison/community/community-tabs';
 import type { useCommunityToast } from '@/components/maison/community/community-toast';
 import type { Paginated } from '@/types/admin';
 

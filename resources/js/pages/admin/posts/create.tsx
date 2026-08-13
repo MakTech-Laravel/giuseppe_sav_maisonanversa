@@ -65,6 +65,6 @@ CreatePost.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         { title: 'Posts', href: posts.index(wayfinderLocale()) },
-        { title: 'Create', href: posts.create(wayfinderLocale()) },
+        { title: 'Aanmaken', href: posts.create(wayfinderLocale()) },
     ],
 };

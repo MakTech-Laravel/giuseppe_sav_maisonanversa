@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
+import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { useLocale } from '@/hooks/use-locale';
 import {
@@ -16,6 +16,28 @@ import {
 import type { FcMember } from '@/lib/founding-circle';
 import { maisonUrl } from '@/lib/maison-navigation';
 
+function subscribeClientOnly(callback: () => void): () => void {
+    void callback;
+
+    return () => {};
+}
+
+function getIsClientSnapshot(): boolean {
+    return true;
+}
+
+function getIsServerSnapshot(): boolean {
+    return false;
+}
+
+function getStoredMemberSnapshot(): FcMember | null {
+    return readFcMember();
+}
+
+function getReferralSnapshot(): number | null {
+    return readReferralFromSearch(window.location.search);
+}
+
 /**
  * Client-only Founding Circle member portal. Mirrors the prototype's
  * localStorage session and `?ref=` invite banner until a real member API exists.
@@ -23,19 +45,30 @@ import { maisonUrl } from '@/lib/maison-navigation';
 export function CirclePortal() {
     const { t } = useTranslation();
     const { locale } = useLocale();
-    const [member, setMember] = useState<FcMember | null>(null);
-    const [ready, setReady] = useState(false);
+    const isClient = useSyncExternalStore(
+        subscribeClientOnly,
+        getIsClientSnapshot,
+        getIsServerSnapshot,
+    );
+    const storedMember = useSyncExternalStore(
+        subscribeClientOnly,
+        getStoredMemberSnapshot,
+        () => null,
+    );
+    const referral = useSyncExternalStore(
+        subscribeClientOnly,
+        getReferralSnapshot,
+        () => null,
+    );
+    const [memberOverride, setMemberOverride] = useState<
+        FcMember | null | undefined
+    >(undefined);
+    const member =
+        memberOverride !== undefined ? memberOverride : storedMember;
     const [num, setNum] = useState('');
     const [email, setEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [copyNote, setCopyNote] = useState<string | null>(null);
-    const [referral, setReferral] = useState<number | null>(null);
-
-    useEffect(() => {
-        setMember(readFcMember());
-        setReferral(readReferralFromSearch(window.location.search));
-        setReady(true);
-    }, []);
 
     const referralUrl = useMemo(() => {
         if (!member) {
@@ -72,13 +105,13 @@ export function CirclePortal() {
 
         const next = { num: parsed, email: trimmedEmail };
         writeFcMember(next);
-        setMember(next);
+        setMemberOverride(next);
         setCopyNote(null);
     }
 
     function onLogout() {
         clearFcMember();
-        setMember(null);
+        setMemberOverride(null);
         setNum('');
         setEmail('');
         setError(null);
@@ -98,6 +131,7 @@ export function CirclePortal() {
                 'fc-ref-input',
             ) as HTMLInputElement | null;
             input?.select();
+
             try {
                 document.execCommand('copy');
             } catch {
@@ -108,7 +142,7 @@ export function CirclePortal() {
         setCopyNote(t('Link gekopieerd — deel hem met een vriend.'));
     }
 
-    if (!ready) {
+    if (!isClient) {
         return (
             <div
                 className="mx-auto max-w-190 bg-choc2 px-8 py-16 text-cream md:px-16"

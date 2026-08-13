@@ -12,9 +12,10 @@ import {
 import {
     BOUTIQUE_MAP_SRC,
     BUREAU_BUBBLES,
-    BUREAU_PANEL_IDS,
-    type BureauPanelId,
+    BUREAU_PANEL_IDS
+    
 } from '@/components/maison/contact/contact-data';
+import type {BureauPanelId} from '@/components/maison/contact/contact-data';
 import { ContactFaq } from '@/components/maison/contact/contact-faq';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { cn } from '@/lib/utils';
@@ -355,6 +356,15 @@ function writePanelHash(id: BureauPanelId | null): void {
     history.replaceState(null, '', next);
 }
 
+function scrollToPanel(id: BureauPanelId): void {
+    requestAnimationFrame(() => {
+        document.getElementById(`bp-${id}`)?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+        });
+    });
+}
+
 /**
  * The contact bureau: chat bubbles that reveal one collapsible panel at a time,
  * directly under the chosen option.
@@ -364,7 +374,11 @@ function writePanelHash(id: BureauPanelId | null): void {
  * strings or a post-navigation timeout.
  */
 export function ContactBureau() {
-    const [openPanel, setOpenPanel] = useState<BureauPanelId | null>(null);
+    const [openPanel, setOpenPanel] = useState<BureauPanelId | null>(() =>
+        typeof window !== 'undefined'
+            ? panelIdFromHash(window.location.hash)
+            : null,
+    );
 
     function revealPanel(id: BureauPanelId | null) {
         setOpenPanel(id);
@@ -374,12 +388,7 @@ export function ContactBureau() {
             return;
         }
 
-        requestAnimationFrame(() => {
-            document.getElementById(`bp-${id}`)?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-            });
-        });
+        scrollToPanel(id);
     }
 
     function togglePanel(id: BureauPanelId) {
@@ -387,17 +396,24 @@ export function ContactBureau() {
     }
 
     useEffect(() => {
-        revealPanel(panelIdFromHash(window.location.hash));
+        const initialId = panelIdFromHash(window.location.hash);
+
+        if (initialId) {
+            scrollToPanel(initialId);
+        }
 
         function onHashChange() {
-            revealPanel(panelIdFromHash(window.location.hash));
+            const id = panelIdFromHash(window.location.hash);
+            setOpenPanel(id);
+
+            if (id) {
+                scrollToPanel(id);
+            }
         }
 
         window.addEventListener('hashchange', onHashChange);
 
         return () => window.removeEventListener('hashchange', onHashChange);
-        // Mount + hashchange only — toggling already owns state.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -6,6 +6,7 @@ import {
     UserRoundCog,
     Users,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,7 +33,7 @@ import posts from '@/routes/admin/posts';
 import { PERMISSIONS } from '@/types/permissions';
 
 interface DashboardProps {
-    stats: { label: string; value: string; hint: string }[];
+    stats: { key: string; value: string; hintKey: string }[];
     recentCustomers: {
         id: number;
         name: string;
@@ -48,25 +49,26 @@ export default function Dashboard({
     recentCustomers,
     staffName,
 }: DashboardProps) {
+    const { t } = useTranslation();
     const { can } = usePermission();
     const quickLinks = [
         {
-            label: 'Customers',
-            description: 'Manage member accounts',
+            label: t('Klanten'),
+            description: t('Beheer ledenaccounts'),
             href: customers.index(wayfinderLocale()),
             icon: Users,
             permission: PERMISSIONS.USERS.INDEX,
         },
         {
-            label: 'Administrator',
-            description: 'Manage staff accounts',
+            label: t('Beheerder'),
+            description: t('Beheer personeelsaccounts'),
             href: admins.index(wayfinderLocale()),
             icon: UserRoundCog,
             permission: PERMISSIONS.USERS.INDEX,
         },
         {
-            label: 'Posts',
-            description: 'Manage content entries',
+            label: t('Posts'),
+            description: t('Beheer contentitems'),
             href: posts.index(wayfinderLocale()),
             icon: FileText,
             permission: PERMISSIONS.POSTS.VIEW,
@@ -75,25 +77,29 @@ export default function Dashboard({
 
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title={t('Dashboard')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={`Welcome${staffName ? `, ${staffName}` : ''}`}
-                    description="An overview of Maison Anversa operations."
+                    title={`${t('Welkom')}${staffName ? `, ${staffName}` : ''}`}
+                    description={t(
+                        'Een overzicht van de Maison Anversa-operaties.',
+                    )}
                     icon={LayoutGrid}
                 />
 
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {stats.map((stat) => (
-                        <Card key={stat.label}>
+                        <Card key={stat.key}>
                             <CardHeader className="pb-2">
-                                <CardDescription>{stat.label}</CardDescription>
+                                <CardDescription>
+                                    {t(stat.key)}
+                                </CardDescription>
                                 <CardTitle className="text-3xl tabular-nums">
                                     {stat.value}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="text-xs text-muted-foreground">
-                                {stat.hint}
+                                {t(stat.hintKey)}
                             </CardContent>
                         </Card>
                     ))}
@@ -102,9 +108,11 @@ export default function Dashboard({
                 <div className="grid gap-6 xl:grid-cols-[1fr_2fr]">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Quick links</CardTitle>
+                            <CardTitle>{t('Snelkoppelingen')}</CardTitle>
                             <CardDescription>
-                                Jump to common administration areas.
+                                {t(
+                                    'Ga naar veelgebruikte beheerderssecties.',
+                                )}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-2">
@@ -136,21 +144,21 @@ export default function Dashboard({
 
                     <Card className="overflow-hidden">
                         <CardHeader>
-                            <CardTitle>Recent customers</CardTitle>
+                            <CardTitle>{t('Recente klanten')}</CardTitle>
                             <CardDescription>
-                                The latest member accounts.
+                                {t('De nieuwste ledenaccounts.')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Customer</TableHead>
+                                        <TableHead>{t('Klant')}</TableHead>
                                         <TableHead className="hidden md:table-cell">
-                                            Username
+                                            {t('Gebruikersnaam')}
                                         </TableHead>
                                         <TableHead className="hidden sm:table-cell">
-                                            Joined
+                                            {t('Lid sinds')}
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -185,7 +193,7 @@ export default function Dashboard({
                             </Table>
                             {recentCustomers.length === 0 && (
                                 <p className="p-8 text-center text-sm text-muted-foreground">
-                                    No customers yet.
+                                    {t('Nog geen klanten.')}
                                 </p>
                             )}
                         </CardContent>

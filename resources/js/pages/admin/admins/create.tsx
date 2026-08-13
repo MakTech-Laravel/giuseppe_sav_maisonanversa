@@ -42,7 +42,7 @@ export default function CreateAdmin() {
 CreateAdmin.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Administrator', href: admins.index(wayfinderLocale()) },
-        { title: 'Create', href: admins.create(wayfinderLocale()) },
+        { title: 'Beheerder', href: admins.index(wayfinderLocale()) },
+        { title: 'Aanmaken', href: admins.create(wayfinderLocale()) },
     ],
 };

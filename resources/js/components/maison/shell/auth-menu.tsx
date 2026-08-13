@@ -2,8 +2,8 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
-import { logout } from '@/routes';
 import { cn } from '@/lib/utils';
+import { logout } from '@/routes';
 
 type AuthUser = {
     name: string;

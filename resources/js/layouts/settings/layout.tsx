@@ -4,25 +4,31 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
-    {
-        title: 'Profile',
-        href: edit(),
-        icon: null,
-    },
-    {
-        title: 'Security',
-        href: editSecurity(),
-        icon: null,
-    },
-];
+function sidebarNavItems(): NavItem[] {
+    const locale = wayfinderLocale();
+
+    return [
+        {
+            title: 'Profile',
+            href: edit(locale),
+            icon: null,
+        },
+        {
+            title: 'Security',
+            href: editSecurity(locale),
+            icon: null,
+        },
+    ];
+}
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
+    const navItems = sidebarNavItems();
 
     return (
         <div className="px-4 py-8 sm:px-6 lg:px-8">
@@ -44,7 +50,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                         className="flex gap-1 overflow-x-auto lg:flex-col lg:space-y-1 lg:overflow-visible"
                         aria-label="Settings"
                     >
-                        {sidebarNavItems.map((item, index) => (
+                        {navItems.map((item, index) => (
                             <Button
                                 key={`${toUrl(item.href)}-${index}`}
                                 size="sm"

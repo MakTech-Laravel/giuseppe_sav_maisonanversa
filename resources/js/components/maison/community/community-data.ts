@@ -51,6 +51,7 @@ export type SessionCardData = {
     meta: string[];
     players: string[];
     emptySlots: number;
+    joined?: boolean;
 };
 
 export type EventCardData = {
