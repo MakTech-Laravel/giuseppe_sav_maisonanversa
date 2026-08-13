@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { gsap, MEDIA, useGSAP } from '@/lib/gsap';
 
@@ -16,85 +16,104 @@ const GROW_TARGETS =
  * Hover detection is delegated from the document rather than bound per element,
  * so content rendered later — feed posts, the hundred-cell number grid — grows
  * the ring without anything having to rebind.
+ *
+ * Portal mounts only after hydration: SSR and the first client paint both
+ * render `null`, so React does not try to hydrate the cursor against the next
+ * sibling in the shell (which caused a mismatch with the topbar).
  */
 export function CustomCursor() {
+    const [mounted, setMounted] = useState(false);
     const ring = useRef<HTMLDivElement>(null);
     const dot = useRef<HTMLDivElement>(null);
 
-    useGSAP(() => {
-        const media = gsap.matchMedia();
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
-        media.add(MEDIA.pointer, () => {
-            const ringEl = ring.current;
-            const dotEl = dot.current;
-
-            if (!ringEl || !dotEl) {
+    useGSAP(
+        () => {
+            if (!mounted) {
                 return;
             }
 
-            // Centred on the pointer, and stays centred as the ring grows.
-            gsap.set([ringEl, dotEl], { xPercent: -50, yPercent: -50 });
+            const media = gsap.matchMedia();
 
-            /*
-             * `quickTo` writes off the shared ticker instead of a loop of its
-             * own. The 0.4s power3 settle reproduces the prototype's 0.12
-             * per-frame lerp, whose time constant is about 130ms.
-             */
-            const ringX = gsap.quickTo(ringEl, 'x', {
-                duration: 0.4,
-                ease: 'power3',
-            });
-            const ringY = gsap.quickTo(ringEl, 'y', {
-                duration: 0.4,
-                ease: 'power3',
-            });
+            media.add(MEDIA.pointer, () => {
+                const ringEl = ring.current;
+                const dotEl = dot.current;
 
-            let visible = false;
-
-            const onMove = (event: PointerEvent) => {
-                ringX(event.clientX);
-                ringY(event.clientY);
-
-                // The dot is unsmoothed, so it sits exactly under the pointer.
-                gsap.set(dotEl, { x: event.clientX, y: event.clientY });
-
-                if (!visible) {
-                    visible = true;
-                    gsap.to([ringEl, dotEl], { opacity: 1, duration: 0.3 });
+                if (!ringEl || !dotEl) {
+                    return;
                 }
-            };
 
-            const onLeave = () => {
-                visible = false;
-                gsap.to([ringEl, dotEl], { opacity: 0, duration: 0.3 });
-            };
+                // Centred on the pointer, and stays centred as the ring grows.
+                gsap.set([ringEl, dotEl], { xPercent: -50, yPercent: -50 });
 
-            const onOver = (event: PointerEvent) => {
-                const target = event.target as Element | null;
+                /*
+                 * `quickTo` writes off the shared ticker instead of a loop of its
+                 * own. The 0.4s power3 settle reproduces the prototype's 0.12
+                 * per-frame lerp, whose time constant is about 130ms.
+                 */
+                const ringX = gsap.quickTo(ringEl, 'x', {
+                    duration: 0.4,
+                    ease: 'power3',
+                });
+                const ringY = gsap.quickTo(ringEl, 'y', {
+                    duration: 0.4,
+                    ease: 'power3',
+                });
 
-                ringEl.dataset.grow = String(
-                    Boolean(target?.closest?.(GROW_TARGETS)),
-                );
-            };
+                let visible = false;
 
-            document.addEventListener('pointermove', onMove);
-            document.addEventListener('pointerover', onOver);
-            document.documentElement.addEventListener('pointerleave', onLeave);
+                const onMove = (event: PointerEvent) => {
+                    ringX(event.clientX);
+                    ringY(event.clientY);
 
-            return () => {
-                document.removeEventListener('pointermove', onMove);
-                document.removeEventListener('pointerover', onOver);
-                document.documentElement.removeEventListener(
+                    // The dot is unsmoothed, so it sits exactly under the pointer.
+                    gsap.set(dotEl, { x: event.clientX, y: event.clientY });
+
+                    if (!visible) {
+                        visible = true;
+                        gsap.to([ringEl, dotEl], { opacity: 1, duration: 0.3 });
+                    }
+                };
+
+                const onLeave = () => {
+                    visible = false;
+                    gsap.to([ringEl, dotEl], { opacity: 0, duration: 0.3 });
+                };
+
+                const onOver = (event: PointerEvent) => {
+                    const target = event.target as Element | null;
+
+                    ringEl.dataset.grow = String(
+                        Boolean(target?.closest?.(GROW_TARGETS)),
+                    );
+                };
+
+                document.addEventListener('pointermove', onMove);
+                document.addEventListener('pointerover', onOver);
+                document.documentElement.addEventListener(
                     'pointerleave',
                     onLeave,
                 );
-            };
-        });
 
-        return () => media.revert();
-    });
+                return () => {
+                    document.removeEventListener('pointermove', onMove);
+                    document.removeEventListener('pointerover', onOver);
+                    document.documentElement.removeEventListener(
+                        'pointerleave',
+                        onLeave,
+                    );
+                };
+            });
 
-    if (typeof document === 'undefined') {
+            return () => media.revert();
+        },
+        { dependencies: [mounted] },
+    );
+
+    if (!mounted) {
         return null;
     }
 
