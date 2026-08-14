@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { MemberNav } from '@/components/member/member-nav';
 import { MemberTopbar } from '@/components/member/member-topbar';
@@ -13,6 +13,13 @@ export default function MemberLayout({ children }: { children: ReactNode }) {
 
     return (
         <div className="min-h-screen bg-choc font-serif text-cream">
+            <Head>
+                <meta
+                    head-key="robots"
+                    name="robots"
+                    content="noindex, nofollow"
+                />
+            </Head>
             <MemberTopbar
                 name={auth.user?.name ?? ''}
                 avatarUrl={auth.user?.avatar_url}

@@ -2,28 +2,21 @@
 
 use App\Support\Imagery;
 
-test('the home page receives the edition figures from config', function () {
-    config([
-        'maison.edition.reserved' => 73,
-        'maison.edition.total' => 100,
-    ]);
-
+test('the home page receives the edition figures from inventory', function () {
     $this->get('/nl')->assertOk()->assertInertia(fn ($page) => $page
         ->component('maison/home')
-        ->where('edition.reserved', 73)
+        ->where('edition.reserved', 0)
         ->where('edition.total', 100)
-        ->where('edition.available', 27)
+        ->where('edition.available', 99)
+        ->where('edition.soldOut', false)
     );
 });
 
-test('available stock cannot go below zero when reserved exceeds total', function () {
-    config([
-        'maison.edition.reserved' => 120,
-        'maison.edition.total' => 100,
-    ]);
-
+test('available stock is the unsold sellable pieces', function () {
     $this->get('/nl')->assertInertia(fn ($page) => $page
-        ->where('edition.available', 0)
+        ->where('edition.available', 99)
+        ->where('edition.sellable', 99)
+        ->where('edition.archived', 1)
     );
 });
 

@@ -71,11 +71,22 @@ test('the SEO head component publishes canonical and hreflang links', function (
         ->toContain('titleTemplate="%s"');
 });
 
+test('member pages are marked noindex', function () {
+    expect(File::get(resource_path('js/layouts/member-layout.tsx')))
+        ->toContain('noindex, nofollow');
+});
+
 test('the sitemap route is registered outside the locale prefix', function () {
     $route = Route::getRoutes()->getByName('sitemap');
 
     expect($route)->not->toBeNull()
         ->and($route->uri())->toBe('sitemap.xml');
+});
+
+test('robots.txt advertises the sitemap', function () {
+    expect(File::get(public_path('robots.txt')))
+        ->toContain('Sitemap:')
+        ->toContain('sitemap.xml');
 });
 
 test('configured page slugs match the named maison routes', function () {

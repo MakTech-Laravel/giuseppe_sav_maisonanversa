@@ -28,9 +28,9 @@ function translateSubscriberStatus(
     t: (key: string) => string,
 ): string {
     const statusMap: Record<string, string> = {
-        Active: 'Actief',
-        Inactive: 'Inactief',
-        Unsubscribed: 'Uitgeschreven',
+        pending: 'In behandeling',
+        subscribed: 'Actief',
+        unsubscribed: 'Uitgeschreven',
     };
 
     return t(statusMap[status] ?? status);

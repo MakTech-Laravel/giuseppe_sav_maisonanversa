@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Enums\SubscriberSource;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Member\UpdateLetterPreferencesRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
+use App\Models\NewsletterSubscriber;
+use App\Models\Order;
 use App\Models\User;
-use App\Support\MemberDemo;
+use App\Support\OrderPresenter;
+use App\Support\PassportPresenter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,66 +31,135 @@ class DashboardController extends Controller implements HasMiddleware
      */
     public static function middleware(): array
     {
-        return Features::canManageTwoFactorAuthentication()
-            && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
-                ? [new Middleware('password.confirm', only: ['security'])]
-                : [];
+        $middleware = [
+            new Middleware('founding-circle', only: ['heritage', 'passport', 'circle']),
+        ];
+
+        if (Features::canManageTwoFactorAuthentication()
+            && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')) {
+            $middleware[] = new Middleware('password.confirm', only: ['security']);
+        }
+
+        return $middleware;
     }
 
-    public function index(Request $request, string $locale): Response
+    public function index(Request $request, string $locale, PassportPresenter $passport, OrderPresenter $orders): Response
     {
         $user = $request->user();
+        $heritage = $passport->heritageOrder($user);
+        $number = $heritage?->edition_number !== null
+            ? str_pad((string) $heritage->edition_number, 3, '0', STR_PAD_LEFT)
+            : '—';
 
         return Inertia::render('member/dashboard', [
-            'member' => MemberDemo::member($user),
-            'stats' => MemberDemo::dashboardStats($user),
+            'member' => [
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'editionNumber' => $number,
+                'orderStatus' => $heritage ? $orders->statusLabel($heritage->status) : __('Geen editie'),
+                'reservedAt' => $heritage?->created_at?->translatedFormat('j F Y') ?? '',
+            ],
+            'stats' => [
+                ['label' => __('Editie'), 'value' => $number === '—' ? '—' : 'No.'.$number, 'hint' => __('Founding Edition')],
+                ['label' => __('Bestelling'), 'value' => $heritage ? $orders->statusLabel($heritage->status) : __('Geen'), 'hint' => $heritage?->created_at?->toDateString() ?? ''],
+                ['label' => __('Circle'), 'value' => $user->isFoundingCircle() ? __('Lid') : __('Nog niet'), 'hint' => __('Founding Circle')],
+            ],
         ]);
     }
 
-    public function heritage(Request $request, string $locale): Response
+    public function heritage(Request $request, string $locale, PassportPresenter $passport): Response
     {
+        $order = $passport->heritageOrder($request->user());
+        abort_if($order === null, 404);
+
+        $number = str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
+
         return Inertia::render('member/heritage', [
-            'heritage' => MemberDemo::heritage($request->user()),
+            'heritage' => [
+                'editionNumber' => $number,
+                'status' => $order->status->value,
+                'deliveryWindow' => $order->shipped_at?->toDateString() ?? __('In productie'),
+                'certificate' => __('Gekoppeld aan No. :number', ['number' => $number]),
+                'passport' => __('Vier pagina\'s · gekoppeld aan No. :number', ['number' => $number]),
+            ],
         ]);
     }
 
-    public function orders(string $locale): Response
+    public function orders(Request $request, string $locale, OrderPresenter $presenter): Response
     {
+        $orders = $request->user()
+            ->orders()
+            ->latest()
+            ->get()
+            ->map(fn (Order $order) => $presenter->summary($order))
+            ->values();
+
         return Inertia::render('member/orders', [
-            'orders' => MemberDemo::orders(),
+            'orders' => $orders,
         ]);
     }
 
-    public function orderShow(string $locale, string $order): Response
+    public function orderShow(Request $request, string $locale, Order $order, OrderPresenter $presenter): Response
     {
-        $detail = MemberDemo::order($order);
-
-        abort_if($detail === null, 404);
+        abort_unless($order->user_id === $request->user()->id, 403);
 
         return Inertia::render('member/order-show', [
-            'order' => $detail,
+            'order' => $presenter->detail($order),
         ]);
     }
 
-    public function passport(Request $request, string $locale): Response
+    public function passport(Request $request, string $locale, PassportPresenter $presenter): Response
     {
+        $passport = $presenter->forUser($request->user());
+        abort_if($passport === null, 404);
+
         return Inertia::render('member/passport', [
-            'passport' => MemberDemo::passport($request->user()),
+            'passport' => $passport,
         ]);
     }
 
-    public function circle(Request $request, string $locale): Response
+    public function circle(Request $request, string $locale, PassportPresenter $presenter): Response
     {
+        $card = $presenter->circleCard($request->user());
+        abort_if($card === null, 404);
+
         return Inertia::render('member/circle', [
-            'card' => MemberDemo::circleCard($request->user()),
+            'card' => $card,
         ]);
     }
 
-    public function letter(string $locale): Response
+    public function letter(Request $request, string $locale): Response
     {
+        $subscriber = NewsletterSubscriber::query()
+            ->where('email', $request->user()->email)
+            ->first();
+
         return Inertia::render('member/letter', [
-            'preferences' => MemberDemo::letterPreferences(),
+            'preferences' => $subscriber?->preferences ?? [
+                'heritageLetter' => false,
+                'productUpdates' => false,
+                'events' => false,
+            ],
         ]);
+    }
+
+    public function updateLetter(UpdateLetterPreferencesRequest $request, string $locale): RedirectResponse
+    {
+        $user = $request->user();
+        $subscriber = NewsletterSubscriber::query()->firstOrNew(['email' => $user->email]);
+
+        $subscriber->fill([
+            'name' => $user->name,
+            'locale' => $user->locale ?? $locale,
+            'source' => $subscriber->exists ? $subscriber->source : SubscriberSource::Member,
+            'consent_at' => $subscriber->consent_at ?? now(),
+            'preferences' => $request->validated(),
+        ])->save();
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Voorkeuren opgeslagen.')]);
+
+        return back();
     }
 
     public function profile(Request $request, string $locale): Response
@@ -132,7 +206,7 @@ class DashboardController extends Controller implements HasMiddleware
             $request->ensureStateIsValid();
 
             $props['twoFactorEnabled'] = $request->user()->hasEnabledTwoFactorAuthentication();
-            $props['requiresConfirmation'] = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
+            $props['requiresConfirmation'] = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword');
         }
 
         return Inertia::render('member/security', $props);

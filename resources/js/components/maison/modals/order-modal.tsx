@@ -20,8 +20,6 @@ type OrderModalProps = {
 
 type Step = 1 | 2 | 3;
 
-const EDITION_NUMBERS = Array.from({ length: 100 }, (_, index) => index + 1);
-
 /**
  * The three-step reservation flow: details, preferred number (1–100) with an
  * optional monogram, then payment summary. Submits to Cashier Checkout (EUR).
@@ -34,7 +32,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
     const [monogram, setMonogram] = useState('');
     const [giftWrap, setGiftWrap] = useState(false);
     const [giftMessage, setGiftMessage] = useState('');
@@ -45,7 +42,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         () =>
             [
                 { n: 1, label: t('Gegevens') },
-                { n: 2, label: t('Nummer') },
+                { n: 2, label: t('Monogram') },
                 { n: 3, label: t('Betaling') },
             ] as const,
         [t],
@@ -64,16 +61,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
         setStep(2);
     }
 
-    function onStepTwo(): void {
-        if (selectedNumber === null) {
-            return;
-        }
-
-        setStep(3);
-    }
-
     function onPay(): void {
-        if (selectedNumber === null || processing) {
+        if (processing) {
             return;
         }
 
@@ -86,7 +75,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 name: name.trim(),
                 email: email.trim(),
                 phone: phone.trim() || null,
-                edition_number: selectedNumber,
                 monogram: monogram.trim().toUpperCase() || null,
                 gift_wrap: giftWrap,
                 gift_message: giftMessage.trim() || null,
@@ -97,7 +85,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
                         errors.checkout ||
                         errors.email ||
                         errors.name ||
-                        errors.edition_number ||
                         Object.values(errors)[0];
 
                     setError(
@@ -200,34 +187,16 @@ export function OrderModal({ onClose }: OrderModalProps) {
                     )}
 
                     <MaisonButton type="submit" variant="filled" block>
-                        {t('Volgende — Kies uw nummer')}
+                        {t('Volgende — Monogram')}
                     </MaisonButton>
                 </form>
             ) : step === 2 ? (
                 <div>
                     <p className="mb-3.5 text-[13px] leading-[1.6] text-choc3">
                         {t(
-                            'Kies uw voorkeursnummer (1–100). Wij bevestigen persoonlijk of het nog beschikbaar is.',
+                            'Uw editienummer wordt automatisch toegewezen na succesvolle betaling. No. 001 blijft in het archief.',
                         )}
                     </p>
-
-                    <div className="mb-4 grid max-h-[190px] grid-cols-10 gap-1.25 overflow-auto p-1">
-                        {EDITION_NUMBERS.map((number) => (
-                            <button
-                                key={number}
-                                type="button"
-                                aria-pressed={selectedNumber === number}
-                                onClick={() => setSelectedNumber(number)}
-                                className={cn(
-                                    'aspect-square rounded-sm border border-gold/22 bg-black/3 font-sans text-[10px] text-choc3 transition-colors hover:border-gold hover:text-gold',
-                                    selectedNumber === number &&
-                                        'border-gold bg-gold text-choc',
-                                )}
-                            >
-                                {number}
-                            </button>
-                        ))}
-                    </div>
 
                     <div className="mb-4">
                         <label
@@ -267,8 +236,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
                             type="button"
                             variant="filled"
                             block
-                            disabled={selectedNumber === null}
-                            onClick={onStepTwo}
+                            onClick={() => setStep(3)}
                         >
                             {t('Volgende — Betaling')}
                         </MaisonButton>
@@ -280,7 +248,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
                         name={name}
                         email={email}
                         phone={phone}
-                        number={selectedNumber}
                         monogram={monogram}
                         giftWrap={giftWrap}
                         giftMessage={giftMessage}
@@ -381,7 +348,6 @@ function OrderSummary({
     name,
     email,
     phone,
-    number,
     monogram,
     giftWrap,
     giftMessage,
@@ -389,7 +355,6 @@ function OrderSummary({
     name: string;
     email: string;
     phone: string;
-    number: number | null;
     monogram: string;
     giftWrap: boolean;
     giftMessage: string;
@@ -404,12 +369,10 @@ function OrderSummary({
         <div className="mb-4 rounded border border-gold/22 bg-black/3 p-4.5">
             <SummaryRow label={t('Product')} value={productName} />
             <SummaryRow label={t('Houder')} value={name.trim()} />
-            {number !== null && (
-                <SummaryRow
-                    label={t('Voorkeursnummer')}
-                    value={`№ ${String(number).padStart(3, '0')} / 100`}
-                />
-            )}
+            <SummaryRow
+                label={t('Editienummer')}
+                value={t('Toegewezen na betaling')}
+            />
             {mono && <SummaryRow label={t('Monogram')} value={mono} />}
             <SummaryRow label={t('E-mail')} value={email.trim()} />
             {trimmedPhone && (
@@ -432,7 +395,7 @@ function OrderSummary({
             <SummaryRow label={t('Totaal')} value={priceLabel} total />
             <p className="mt-2.5 font-sans text-[10px] leading-[1.6] tracking-[0.1em] text-choc3 uppercase">
                 {t(
-                    'Voorkeursnummer en monogram onder voorbehoud — wij bevestigen de beschikbaarheid persoonlijk.',
+                    'Het editienummer wordt toegewezen na bevestigde betaling. No. 001 blijft in het Maison Anversa-archief.',
                 )}
             </p>
         </div>

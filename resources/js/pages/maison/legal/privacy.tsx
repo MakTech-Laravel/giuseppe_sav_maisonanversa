@@ -91,7 +91,7 @@ export default function Privacy() {
                 <LegalHeading>{t('7. Cookies')}</LegalHeading>
                 <LegalParagraph>
                     {t(
-                        'Onze site gebruikt minimale cookies voor functionaliteit en anonimiserende analyse. U kunt cookies beheren via uw browserinstellingen.',
+                        'Noodzakelijke cookies (sessie, taal, beveiliging) zijn altijd actief. Analytics- en marketingcookies laden pas na uw toestemming via de cookiebanner.',
                     )}
                 </LegalParagraph>
             </LegalPageLayout>

@@ -82,21 +82,34 @@ export function ProductDetail({ edition }: { edition: Edition }) {
                             ))}
                         </div>
 
-                        <MaisonButton
-                            variant="filled"
-                            block
-                            onClick={openOrder}
-                            className="mb-3"
-                        >
-                            {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
-                        </MaisonButton>
-                        <MaisonButton
-                            variant="outlineChoc"
-                            block
-                            onClick={openNewsletter}
-                        >
-                            {t('Schrijf in voor Heritage Letter')}
-                        </MaisonButton>
+                        {edition.soldOut ? (
+                            <MaisonButton
+                                variant="filled"
+                                block
+                                onClick={openNewsletter}
+                                className="mb-3"
+                            >
+                                {t('Schrijf in voor Heritage Letter')}
+                            </MaisonButton>
+                        ) : (
+                            <MaisonButton
+                                variant="filled"
+                                block
+                                onClick={openOrder}
+                                className="mb-3"
+                            >
+                                {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
+                            </MaisonButton>
+                        )}
+                        {!edition.soldOut && (
+                            <MaisonButton
+                                variant="outlineChoc"
+                                block
+                                onClick={openNewsletter}
+                            >
+                                {t('Schrijf in voor Heritage Letter')}
+                            </MaisonButton>
+                        )}
 
                         <div className="mt-6 grid grid-cols-3 gap-4 border-t border-gold/15 pt-6">
                             {GUARANTEES.map((item) => (

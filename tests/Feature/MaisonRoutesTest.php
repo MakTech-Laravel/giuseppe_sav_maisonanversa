@@ -1,5 +1,8 @@
 <?php
 
+use App\Enums\EditionPieceStatus;
+use App\Models\EditionPiece;
+use App\Services\Edition\EditionInventory;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -105,28 +108,23 @@ test('every page is registered under a locale-prefixed named route', function (
         ->and($route->gatherMiddleware())->toContain('locale');
 })->with(array_keys(maisonPages()));
 
-test('the edition figures reach every page from a single source', function () {
-    config([
-        'maison.edition.reserved' => 73,
-        'maison.edition.total' => 100,
-    ]);
-
+test('the edition figures reach every page from inventory', function () {
     $this->get('/nl/product')->assertInertia(fn ($page) => $page
-        ->where('edition.reserved', 73)
+        ->where('edition.reserved', 0)
         ->where('edition.total', 100)
-        // The prototype quoted this figure separately and it had drifted.
-        ->where('edition.available', 27)
+        ->where('edition.available', 99)
     );
 });
 
-test('the available count never goes negative when an edition oversells', function () {
-    config([
-        'maison.edition.reserved' => 120,
-        'maison.edition.total' => 100,
-    ]);
+test('sold-out inventory reports zero available pieces', function () {
+    EditionPiece::query()
+        ->where('status', EditionPieceStatus::Available)
+        ->update(['status' => EditionPieceStatus::Allocated]);
+
+    app(EditionInventory::class)->bust();
 
     $this->get('/nl/product')
-        ->assertInertia(fn ($page) => $page->where('edition.available', 0));
+        ->assertInertia(fn ($page) => $page->where('edition.available', 0)->where('edition.soldOut', true));
 });
 
 test('an unknown page under a valid locale is not found', function () {

@@ -35,4 +35,17 @@ return [
         ],
     ],
 
+    'brevo' => [
+        'api_key' => env('BREVO_API_KEY'),
+        'list_heritage_letter' => env('BREVO_LIST_HERITAGE_LETTER'),
+        'list_waitlist' => env('BREVO_LIST_WAITLIST'),
+        'welcome_via' => env('BREVO_WELCOME_VIA', 'brevo'),
+        'smtp' => [
+            'host' => env('BREVO_SMTP_HOST', 'smtp-relay.brevo.com'),
+            'port' => env('BREVO_SMTP_PORT', 587),
+            'username' => env('BREVO_SMTP_USERNAME'),
+            'password' => env('BREVO_SMTP_PASSWORD'),
+        ],
+    ],
+
 ];

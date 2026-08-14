@@ -234,7 +234,7 @@ final class AdminDemo
      */
     public static function heritageInventory(): array
     {
-        $reserved = (int) config('maison.edition.reserved', 73);
+        $reserved = 0;
         $total = (int) config('maison.edition.total', 100);
 
         return [

@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\BrevoContacts;
 use App\Enums\RoleEnum;
 use App\Listeners\StripeEventListener;
 use App\Models\User;
-use App\Support\AdminTypePermissionBypass;
+use App\Services\Brevo\HttpBrevoContacts;
+use App\Services\Brevo\NullBrevoContacts;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(BrevoContacts::class, function (): BrevoContacts {
+            return filled(config('services.brevo.api_key'))
+                ? new HttpBrevoContacts
+                : new NullBrevoContacts;
+        });
     }
 
     /**
@@ -77,16 +83,6 @@ class AppServiceProvider extends ServiceProvider
             }
 
             if ($user->hasRole(RoleEnum::SUPER_ADMIN->value)) {
-                return true;
-            }
-
-            /*
-             * TEMPORARY — see App\Support\AdminTypePermissionBypass.
-             * Only short-circuit Spatie permission names (e.g. users.index),
-             * never model policies (e.g. update, delete) so super-admin
-             * account locks in UserPolicy still apply.
-             */
-            if (AdminTypePermissionBypass::grantsAll($user) && str_contains($ability, '.')) {
                 return true;
             }
 

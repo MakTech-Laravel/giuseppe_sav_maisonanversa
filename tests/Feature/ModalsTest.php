@@ -29,10 +29,10 @@ test('the scroll lock utility counts holders so nested locks do not unlock early
         ->toContain('export function scrollLockHolders');
 });
 
-test('the order modal renders a hundred-cell number grid', function () {
+test('the order modal assigns the edition number after payment', function () {
     expect(modalSource('order-modal.tsx'))
-        ->toContain('Array.from({ length: 100 }')
-        ->toContain('grid-cols-10');
+        ->toContain('Toegewezen na betaling')
+        ->not->toContain('Array.from({ length: 100 }');
 });
 
 test('modal components do not use inline onclick handlers', function () {

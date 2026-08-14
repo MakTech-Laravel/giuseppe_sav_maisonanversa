@@ -49,6 +49,13 @@ enum PermissionEnum: string
     case SETTINGS_EXPORT = 'settings.export';
     case SETTINGS_PRINT = 'settings.print';
 
+    case HERITAGE_VIEW = 'heritage.view';
+    case ORDERS_MANAGE = 'orders.manage';
+    case COMMUNITY_MODERATE = 'community.moderate';
+    case COMMUNITY_OFFICIAL = 'community.official';
+    case COMMUNITY_PARTICIPATE = 'community.participate';
+    case SESSIONS_MANAGE = 'sessions.manage';
+
     // -------------------------------------------------------------------------
     // group() — returns the display group for the `group` DB column.
     // Used by PermissionSeeder and the role management UI (grouped checkboxes).
@@ -93,6 +100,14 @@ enum PermissionEnum: string
             self::SETTINGS_IMPORT,
             self::SETTINGS_EXPORT,
             self::SETTINGS_PRINT => 'Settings',
+
+            self::HERITAGE_VIEW,
+            self::ORDERS_MANAGE => 'Heritage',
+
+            self::COMMUNITY_MODERATE,
+            self::COMMUNITY_OFFICIAL,
+            self::COMMUNITY_PARTICIPATE,
+            self::SESSIONS_MANAGE => 'Community',
         };
     }
 

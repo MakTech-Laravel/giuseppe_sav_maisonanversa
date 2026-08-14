@@ -10,6 +10,7 @@ enum RoleEnum: string
     case AUTHOR = 'author';
     case VIEWER = 'viewer';
     case USER = 'user';
+    case FOUNDING_CIRCLE = 'founding-circle';
 
     // -------------------------------------------------------------------------
     // guard() — guard name for this role.
@@ -66,6 +67,12 @@ enum RoleEnum: string
                 PermissionEnum::SETTINGS_VIEW,
                 PermissionEnum::SETTINGS_EDIT,
                 PermissionEnum::SETTINGS_EXPORT,
+
+                PermissionEnum::HERITAGE_VIEW,
+                PermissionEnum::ORDERS_MANAGE,
+                PermissionEnum::COMMUNITY_MODERATE,
+                PermissionEnum::COMMUNITY_OFFICIAL,
+                PermissionEnum::SESSIONS_MANAGE,
             ],
 
             self::EDITOR => [
@@ -93,6 +100,11 @@ enum RoleEnum: string
             self::USER => [
                 PermissionEnum::DASHBOARD_VIEW,
                 PermissionEnum::POSTS_VIEW,
+            ],
+
+            self::FOUNDING_CIRCLE => [
+                PermissionEnum::HERITAGE_VIEW,
+                PermissionEnum::COMMUNITY_PARTICIPATE,
             ],
         };
     }

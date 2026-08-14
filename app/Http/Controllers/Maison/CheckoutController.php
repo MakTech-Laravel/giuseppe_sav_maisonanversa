@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Maison;
 
 use App\Enums\OrderStatus;
+use App\Exceptions\EditionSoldOutException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maison\CheckoutRequest;
 use App\Models\Order;
 use App\Services\Checkout\FoundingEditionCheckout;
 use App\Services\Checkout\OrderFulfillment;
+use App\Services\Edition\EditionAllocator;
+use App\Services\Edition\EditionInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Cashier\Cashier;
@@ -26,32 +30,48 @@ class CheckoutController extends Controller
         CheckoutRequest $request,
         string $locale,
         FoundingEditionCheckout $checkout,
+        EditionAllocator $allocator,
+        EditionInventory $inventory,
     ): SymfonyResponse {
-        $data = $request->validated();
-
-        $checkoutUrl = DB::transaction(function () use ($request, $data, $locale, $checkout): string {
-            $order = Order::query()->create([
-                'user_id' => $request->user()?->id,
-                'status' => OrderStatus::Incomplete,
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'] ?? null,
-                'edition_number' => $data['edition_number'],
-                'monogram' => $data['monogram'] ?? null,
-                'gift_wrap' => (bool) ($data['gift_wrap'] ?? false),
-                'gift_message' => $data['gift_message'] ?? null,
-                'currency' => 'eur',
-                'amount' => (int) config('maison.checkout.amount'),
+        if ($inventory->snapshot()['available'] === 0) {
+            throw ValidationException::withMessages([
+                'checkout' => __('Heritage No.001 is uitverkocht.'),
             ]);
+        }
 
-            $session = $checkout->create($order, $locale, $request->user());
+        try {
+            $checkoutUrl = DB::transaction(function () use ($request, $locale, $checkout, $allocator): string {
+                $data = $request->validated();
 
-            $order->update([
-                'stripe_checkout_session_id' => $session['session_id'],
+                $order = Order::query()->create([
+                    'user_id' => $request->user()?->id,
+                    'status' => OrderStatus::Incomplete,
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'locale' => $locale,
+                    'phone' => $data['phone'] ?? null,
+                    'monogram' => $data['monogram'] ?? null,
+                    'gift_wrap' => (bool) ($data['gift_wrap'] ?? false),
+                    'gift_message' => $data['gift_message'] ?? null,
+                    'currency' => 'eur',
+                    'amount' => (int) config('maison.checkout.amount'),
+                ]);
+
+                $allocator->hold($order);
+
+                $session = $checkout->create($order, $locale, $request->user());
+
+                $order->update([
+                    'stripe_checkout_session_id' => $session['session_id'],
+                ]);
+
+                return $session['url'];
+            });
+        } catch (EditionSoldOutException) {
+            throw ValidationException::withMessages([
+                'checkout' => __('Heritage No.001 is uitverkocht.'),
             ]);
-
-            return $session['url'];
-        });
+        }
 
         return Inertia::location($checkoutUrl);
     }

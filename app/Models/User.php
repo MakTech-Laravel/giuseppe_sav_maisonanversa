@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\GuardEnum;
 use App\Enums\RoleEnum;
 use App\Enums\UserType;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -17,9 +18,9 @@ use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'username', 'type', 'password', 'avatar'])]
+#[Fillable(['name', 'email', 'username', 'type', 'password', 'avatar', 'locale', 'marketing_consent_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use Billable, HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable;
@@ -29,33 +30,26 @@ class User extends Authenticatable
         return GuardEnum::WEB->value;
     }
 
-    /**
-     * Whether this account holds the super-admin role.
-     */
     public function isSuperAdmin(): bool
     {
         return $this->hasRole(RoleEnum::SUPER_ADMIN->value);
     }
 
-    /**
-     * Whether this account is a customer (member dashboard).
-     */
     public function isCustomer(): bool
     {
         return $this->type === UserType::Customer;
     }
 
-    /**
-     * Whether this account is an admin-type user (admin dashboard).
-     */
     public function isAdmin(): bool
     {
         return $this->type === UserType::Admin;
     }
 
-    /**
-     * Align the stored type with the user's Spatie roles.
-     */
+    public function isFoundingCircle(): bool
+    {
+        return $this->hasRole(RoleEnum::FOUNDING_CIRCLE->value) || $this->isAdmin();
+    }
+
     public function syncTypeFromRoles(): void
     {
         $hasStaffRole = $this->hasAnyRole(UserType::staffRoleValues());
@@ -65,9 +59,6 @@ class User extends Authenticatable
         ])->save();
     }
 
-    /**
-     * Build a unique login handle from a display name.
-     */
     public static function generateUsername(string $name, ?int $ignoreId = null): string
     {
         $base = Str::slug(Str::lower($name), '_');
@@ -91,8 +82,14 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the attributes that should be cast.
-     *
+     * @return HasMany<Order, $this>
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array
@@ -101,6 +98,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'marketing_consent_at' => 'datetime',
             'type' => UserType::class,
         ];
     }

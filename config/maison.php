@@ -73,15 +73,12 @@ return [
     | Edition stock
     |--------------------------------------------------------------------------
     |
-    | The single source for Heritage No.001 availability. The prototype carried
-    | three copies of this figure that had already drifted apart, so the hero
-    | counter, the pre-order progress bar and the product prose all read from
-    | here instead. A real stock table replaces this entry later.
+    | Total edition size only. Live reserved/available/sold-out figures come
+    | from the edition_pieces table via EditionInventory.
     |
     */
 
     'edition' => [
-        'reserved' => (int) env('MAISON_EDITION_RESERVED', 73),
         'total' => (int) env('MAISON_EDITION_TOTAL', 100),
     ],
 
@@ -110,23 +107,5 @@ return [
     */
 
     'mailchimp_form_url' => env('MAISON_MAILCHIMP_FORM_URL', ''),
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY: admin-type users get every permission
-    |--------------------------------------------------------------------------
-    |
-    | While Access Control is out of the UI, flip this on so any account with
-    | `users.type = admin` passes Spatie `permission:*` middleware and sees all
-    | nav items. Super-admin Gate::before still applies separately.
-    |
-    | TURN OFF / DELETE when restoring role-permission management:
-    |   - set MAISON_ADMIN_TYPE_GRANTS_ALL_PERMISSIONS=false, or
-    |   - remove this key + App\Support\AdminTypePermissionBypass + its wires
-    |     in AppServiceProvider and HandleInertiaRequests.
-    |
-    */
-
-    'admin_type_grants_all_permissions' => (bool) env('MAISON_ADMIN_TYPE_GRANTS_ALL_PERMISSIONS', true),
 
 ];

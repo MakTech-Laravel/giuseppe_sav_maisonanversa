@@ -1,9 +1,10 @@
-import { Head } from '@inertiajs/react';
-import { MessageCircle, TriangleAlert } from 'lucide-react';
+import { Head, useForm } from '@inertiajs/react';
+import { MessageCircle } from 'lucide-react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Table,
     TableBody,
@@ -18,47 +19,36 @@ import community from '@/routes/admin/community';
 
 interface QueueItem {
     id: string;
-    author: string;
-    excerpt: string;
-    type: string;
+    reporter?: string;
+    reason?: string;
     status: string;
-    status_key: string;
-    date: string;
 }
 
-function translateQueueType(
-    type: string,
-    t: (key: string) => string,
-): string {
-    const typeMap: Record<string, string> = {
-        post: 'Bericht',
-        comment: 'Reactie',
-    };
-
-    return t(typeMap[type] ?? type);
-}
-
-function translateQueueStatus(
-    status: string,
-    t: (key: string) => string,
-): string {
-    const statusMap: Record<string, string> = {
-        Open: 'Open',
-        Reported: 'Gemeld',
-        Approved: 'Goedgekeurd',
-    };
-
-    return t(statusMap[status] ?? status);
+interface CommunityPostRow {
+    id: string;
+    author: string;
+    content: string;
+    is_official: boolean;
+    status: string;
 }
 
 export default function CommunityIndex({
     items,
-    communityConnected,
+    posts = [],
 }: {
     items: QueueItem[];
+    posts?: CommunityPostRow[];
     communityConnected: boolean;
 }) {
     const { t } = useTranslation();
+    const form = useForm(community.official(wayfinderLocale()), {
+        content: '',
+    });
+
+    function submitOfficial(event: FormEvent) {
+        event.preventDefault();
+        form.submit();
+    }
 
     return (
         <>
@@ -71,59 +61,65 @@ export default function CommunityIndex({
                     )}
                     icon={MessageCircle}
                 />
-                {!communityConnected && (
-                    <Alert>
-                        <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>
-                            {t('Communityservice is niet gekoppeld')}
-                        </AlertTitle>
-                        <AlertDescription>
-                            {t(
-                                'Deze moderatiewachtrij bevat demogegevens totdat de communityservice is geconfigureerd.',
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                )}
+                <form
+                    onSubmit={submitOfficial}
+                    className="space-y-3 rounded-xl border bg-card p-5 shadow-sm"
+                >
+                    <p className="text-sm font-medium">
+                        {t('Officieel bericht')}
+                    </p>
+                    <textarea
+                        value={form.data.content}
+                        onChange={(event) =>
+                            form.setData('content', event.target.value)
+                        }
+                        className="min-h-24 w-full rounded-md border px-3 py-2 text-sm"
+                    />
+                    <Button type="submit" disabled={form.processing}>
+                        {t('Publiceren')}
+                    </Button>
+                </form>
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead>{t('Auteur')}</TableHead>
                                 <TableHead>{t('Fragment')}</TableHead>
-                                <TableHead>{t('Type')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
-                                <TableHead className="hidden sm:table-cell">
-                                    {t('Datum')}
-                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {items.map((item) => (
-                                <TableRow key={item.id}>
-                                    <TableCell>
-                                        <span className="font-medium">
-                                            {item.author}
-                                        </span>
-                                        <p className="text-xs text-muted-foreground">
-                                            {item.id}
-                                        </p>
+                            {posts.map((post) => (
+                                <TableRow key={post.id}>
+                                    <TableCell className="font-medium">
+                                        {post.author}
+                                        {post.is_official && (
+                                            <Badge
+                                                className="ml-2"
+                                                variant="secondary"
+                                            >
+                                                {t('Officieel')}
+                                            </Badge>
+                                        )}
                                     </TableCell>
                                     <TableCell className="max-w-md truncate">
-                                        {item.excerpt}
+                                        {post.content}
                                     </TableCell>
+                                    <TableCell>{t(post.status)}</TableCell>
+                                </TableRow>
+                            ))}
+                            {items.map((item) => (
+                                <TableRow key={`report-${item.id}`}>
                                     <TableCell>
-                                        {translateQueueType(item.type, t)}
+                                        {item.reporter ?? item.id}
+                                    </TableCell>
+                                    <TableCell className="max-w-md truncate">
+                                        {item.reason}
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant="secondary">
-                                            {translateQueueStatus(
-                                                item.status,
-                                                t,
-                                            )}
+                                            {t(item.status)}
                                         </Badge>
-                                    </TableCell>
-                                    <TableCell className="hidden sm:table-cell">
-                                        {item.date}
                                     </TableCell>
                                 </TableRow>
                             ))}

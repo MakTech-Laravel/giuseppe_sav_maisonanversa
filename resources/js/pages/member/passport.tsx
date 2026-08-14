@@ -7,7 +7,11 @@ type PassportPage = { title: string; body: string };
 export default function MemberPassport({
     passport,
 }: {
-    passport: { editionNumber: string; pages: PassportPage[] };
+    passport: {
+        editionNumber: string;
+        pages: PassportPage[];
+        verificationUrl?: string;
+    };
 }) {
     const { t } = useTranslation();
 
@@ -36,6 +40,12 @@ export default function MemberPassport({
                         <p className="mt-4 text-[15px] leading-[1.8] text-sand">
                             {page.body}
                         </p>
+                        {page.title === passport.pages[3]?.title &&
+                            passport.verificationUrl && (
+                                <p className="mt-4 break-all font-sans text-[11px] text-gold">
+                                    {passport.verificationUrl}
+                                </p>
+                            )}
                     </MemberPanel>
                 ))}
             </div>

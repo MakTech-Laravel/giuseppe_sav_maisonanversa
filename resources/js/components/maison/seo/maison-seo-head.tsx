@@ -146,6 +146,7 @@ type MaisonSeoHeadProps = {
     articleSlug?: string;
     /** Social image for a Journal piece; falls back to the house default. */
     image?: ImageAssetName;
+    noIndex?: boolean;
 };
 
 /**
@@ -160,6 +161,7 @@ export function MaisonSeoHead({
     description: descriptionOverride,
     articleSlug,
     image: imageOverride,
+    noIndex = false,
 }: MaisonSeoHeadProps) {
     const { locale, availableLocales } = useLocale();
     const { appUrl, seoImage } = usePage<SharedProps>().props;
@@ -174,7 +176,10 @@ export function MaisonSeoHead({
         : `${origin}${seoImage}`;
 
     return (
-        <Head title={title}>
+        <Head title={title} titleTemplate="%s">
+            {noIndex && (
+                <meta head-key="robots" name="robots" content="noindex, nofollow" />
+            )}
             <meta head-key="description" name="description" content={description} />
             <link head-key="canonical" rel="canonical" href={canonical} />
             {availableLocales.map((alternateLocale) => (

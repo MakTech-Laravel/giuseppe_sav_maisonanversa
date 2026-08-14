@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('phone')->nullable();
-            $table->unsignedSmallInteger('edition_number');
+            $table->unsignedSmallInteger('edition_number')->nullable();
             $table->string('monogram', 3)->nullable();
             $table->boolean('gift_wrap')->default(false);
             $table->text('gift_message')->nullable();

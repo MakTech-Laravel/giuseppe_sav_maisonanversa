@@ -1,16 +1,11 @@
 <?php
 
-test('the product page receives the edition figures from config', function () {
-    config([
-        'maison.edition.reserved' => 73,
-        'maison.edition.total' => 100,
-    ]);
-
+test('the product page receives the edition figures from inventory', function () {
     $this->get('/nl/product')->assertOk()->assertInertia(fn ($page) => $page
         ->component('maison/product')
-        ->where('edition.reserved', 73)
+        ->where('edition.reserved', 0)
         ->where('edition.total', 100)
-        ->where('edition.available', 27)
+        ->where('edition.available', 99)
     );
 });
 

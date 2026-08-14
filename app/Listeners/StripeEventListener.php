@@ -24,6 +24,7 @@ class StripeEventListener
             'checkout.session.completed',
             'checkout.session.async_payment_succeeded' => $this->handleCheckoutPaid($event->payload),
             'checkout.session.async_payment_failed' => $this->handleCheckoutFailed($event->payload),
+            'checkout.session.expired' => $this->handleCheckoutExpired($event->payload),
             default => null,
         };
     }
@@ -58,6 +59,20 @@ class StripeEventListener
         }
 
         $this->fulfillment->markFailedFromSession($session);
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    private function handleCheckoutExpired(array $payload): void
+    {
+        $session = $this->sessionFromPayload($payload);
+
+        if ($session === null) {
+            return;
+        }
+
+        $this->fulfillment->markExpiredBySessionId($session->id ?? null);
     }
 
     /**

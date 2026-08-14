@@ -1,9 +1,19 @@
 <?php
 
+use App\Enums\OrderStatus;
+use App\Enums\RoleEnum;
+use App\Models\Order;
 use App\Models\User;
+use App\Services\Edition\EditionAllocator;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\Features;
+
+beforeEach(function () {
+    $this->seed([PermissionSeeder::class, RoleSeeder::class]);
+});
 
 test('guests are redirected from the member dashboard', function () {
     $this->get(localized('member.dashboard'))
@@ -19,13 +29,17 @@ test('members can view the dashboard shell', function () {
         ->assertInertia(fn ($page) => $page
             ->component('member/dashboard')
             ->where('member.name', 'Circle Member')
-            ->where('member.editionNumber', '047')
+            ->where('member.editionNumber', '—')
             ->has('stats', 3)
         );
 });
 
 test('members can view heritage under a locale prefix', function () {
     $user = User::factory()->create();
+    $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+    $order = Order::factory()->forUser($user)->create();
+    app(EditionAllocator::class)->allocate($order);
+    $order->update(['status' => OrderStatus::Paid]);
 
     $this->actingAs($user)
         ->get(route('member.heritage', ['locale' => 'en']))
@@ -38,6 +52,11 @@ test('members can view heritage, orders, passport, circle and letter shells', fu
     string $component,
 ) {
     $user = User::factory()->create();
+    $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    $order = Order::factory()->forUser($user)->create();
+    app(EditionAllocator::class)->allocate($order);
+    $order->update(['status' => OrderStatus::Paid]);
 
     $this->actingAs($user)
         ->withSession(['auth.password_confirmed_at' => time()])
@@ -102,13 +121,14 @@ test('members can upload and remove a profile avatar', function () {
 
 test('members can view an order detail page', function () {
     $user = User::factory()->create();
+    $order = Order::factory()->forUser($user)->create();
 
     $this->actingAs($user)
-        ->get(localized('member.orders.show', ['order' => 'MA-2026-0047']))
+        ->get(localized('member.orders.show', ['order' => $order->id]))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('member/order-show')
-            ->where('order.id', 'MA-2026-0047')
+            ->where('order.id', (string) $order->id)
             ->has('order.items')
             ->has('order.timeline')
         );
@@ -180,6 +200,6 @@ test('member dashboard demo payloads are translated for english', function () {
             ->component('member/dashboard')
             ->where('stats.0.label', 'Edition')
             ->where('stats.0.hint', 'Founding Edition')
-            ->where('stats.1.value', 'Reserved')
+            ->where('stats.1.value', 'None')
         );
 });

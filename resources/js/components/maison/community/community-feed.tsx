@@ -1,5 +1,4 @@
-import { InfiniteScroll, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { InfiniteScroll, router, usePage } from '@inertiajs/react';
 import { CommunityCirclePanel } from '@/components/maison/community/community-circle-panel';
 import type { FeedPostData } from '@/components/maison/community/community-data';
 import { FeedCompose } from '@/components/maison/community/feed-compose';
@@ -32,27 +31,15 @@ export function CommunityFeed({
     onViewEvents,
     onPostPublished,
 }: CommunityFeedProps) {
-    const { auth } = usePage().props;
+    const { auth, locale } = usePage().props;
     const userName = auth.user?.name ?? 'Member';
     const userInitials = initialsFromName(userName);
-    const [localPosts, setLocalPosts] = useState<FeedPostData[]>([]);
 
     function handlePublish(text: string) {
-        const newPost: FeedPostData = {
-            id: `user-${Date.now()}`,
-            userAuthored: true,
-            initials: userInitials,
-            avatarBg: '#291c18',
-            name: userName,
-            info: 'Zojuist',
-            badge: 'FC Lid',
-            content: text,
-            likes: 0,
-            comments: [],
-        };
-
-        setLocalPosts((current) => [newPost, ...current]);
-        onPostPublished();
+        router.post(`/${locale}/community/posts`, { content: text }, {
+            preserveScroll: true,
+            onSuccess: () => onPostPublished(),
+        });
     }
 
     return (
@@ -62,10 +49,6 @@ export function CommunityFeed({
                     initials={userInitials}
                     onPublish={handlePublish}
                 />
-
-                {localPosts.map((post) => (
-                    <FeedPostCard key={post.id} post={post} />
-                ))}
 
                 <InfiniteScroll data="posts" buffer={400}>
                     {posts.data.map((post) => (

@@ -2,12 +2,26 @@
 
 namespace App\Services\Checkout;
 
+use App\Enums\GuardEnum;
 use App\Enums\OrderStatus;
+use App\Enums\RoleEnum;
+use App\Mail\OrderConfirmation;
+use App\Mail\SoldOutNotice;
+use App\Models\NewsletterSubscriber;
 use App\Models\Order;
+use App\Services\Edition\EditionAllocator;
+use App\Services\Edition\EditionInventory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Role;
 
 class OrderFulfillment
 {
+    public function __construct(
+        private EditionAllocator $allocator,
+        private EditionInventory $inventory,
+    ) {}
+
     /**
      * Mark an order paid from a Stripe Checkout Session (idempotent).
      */
@@ -23,13 +37,19 @@ class OrderFulfillment
             return $order;
         }
 
-        return DB::transaction(function () use ($order, $session): Order {
+        $alreadyPaid = $order->status === OrderStatus::Paid
+            || $order->status === OrderStatus::Shipped
+            || $order->status === OrderStatus::Delivered;
+
+        $fulfilled = DB::transaction(function () use ($order, $session): Order {
             /** @var Order $locked */
             $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
 
-            if ($locked->status === OrderStatus::Paid) {
+            if (in_array($locked->status, [OrderStatus::Paid, OrderStatus::Shipped, OrderStatus::Delivered], true)) {
                 return $locked;
             }
+
+            $this->allocator->allocate($locked);
 
             $locked->fill([
                 'status' => OrderStatus::Paid,
@@ -37,8 +57,27 @@ class OrderFulfillment
                 'stripe_payment_intent_id' => $this->paymentIntentId($session) ?? $locked->stripe_payment_intent_id,
             ])->save();
 
-            return $locked->refresh();
+            $locked->refresh();
+
+            if ($locked->user !== null) {
+                Role::findOrCreate(RoleEnum::FOUNDING_CIRCLE->value, GuardEnum::WEB->value);
+                $locked->user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+            }
+
+            return $locked;
         });
+
+        if (! $alreadyPaid) {
+            Mail::to($fulfilled->email)
+                ->locale($fulfilled->locale)
+                ->queue(new OrderConfirmation($fulfilled));
+
+            if ($this->inventory->snapshot()['soldOut']) {
+                $this->notifySoldOut();
+            }
+        }
+
+        return $fulfilled;
     }
 
     /**
@@ -56,9 +95,11 @@ class OrderFulfillment
             /** @var Order $locked */
             $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
 
-            if ($locked->status === OrderStatus::Paid) {
+            if (in_array($locked->status, [OrderStatus::Paid, OrderStatus::Shipped, OrderStatus::Delivered], true)) {
                 return $locked;
             }
+
+            $this->allocator->release($locked);
 
             $locked->fill([
                 'status' => OrderStatus::Failed,
@@ -87,9 +128,25 @@ class OrderFulfillment
             return $order;
         }
 
+        $this->allocator->release($order);
+
         $order->update(['status' => OrderStatus::Canceled]);
 
         return $order->refresh();
+    }
+
+    public function markExpiredBySessionId(?string $sessionId): ?Order
+    {
+        return $this->markCanceledBySessionId($sessionId);
+    }
+
+    private function notifySoldOut(): void
+    {
+        NewsletterSubscriber::query()
+            ->where('status', 'subscribed')
+            ->each(fn (NewsletterSubscriber $subscriber) => Mail::to($subscriber->email)
+                ->locale($subscriber->locale)
+                ->queue(new SoldOutNotice($subscriber)));
     }
 
     private function findOrderForSession(object $session): ?Order
