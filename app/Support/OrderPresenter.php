@@ -12,14 +12,21 @@ class OrderPresenter
      */
     public function summary(Order $order): array
     {
+        $order->loadMissing('product');
+
         $amount = Money::format((string) $order->amount).' €';
+        $name = $order->product?->name ?? __('Product');
         $number = $order->edition_number !== null
             ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
-            : '—';
+            : null;
+
+        $label = $number !== null
+            ? __(':product — No. :number', ['product' => $name, 'number' => $number])
+            : $name;
 
         return [
             'id' => (string) $order->id,
-            'label' => __('Heritage No.001 — No. :number', ['number' => $number]),
+            'label' => $label,
             'date' => $order->created_at?->toDateString() ?? '',
             'amount' => $amount,
             'status' => $this->statusLabel($order->status),
@@ -33,18 +40,30 @@ class OrderPresenter
      */
     public function detail(Order $order): array
     {
+        $order->loadMissing('product');
+
         $summary = $this->summary($order);
         $amount = $summary['amount'];
+        $name = $order->product?->name ?? __('Product');
+        $total = (int) ($order->product?->edition_total ?? 0);
         $number = $order->edition_number !== null
             ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
             : '—';
 
+        $editionSummary = $total > 0 && $order->edition_number !== null
+            ? __(':product · No. :number / :total', [
+                'product' => $name,
+                'number' => $number,
+                'total' => $total,
+            ])
+            : $name;
+
         return [
             ...$summary,
-            'summary' => __('Founding Edition · No. :number / 100', ['number' => $number]),
+            'summary' => $editionSummary,
             'items' => [
                 [
-                    'name' => __('Heritage No.001 — Founding Edition'),
+                    'name' => $name,
                     'qty' => 1,
                     'price' => $amount,
                 ],

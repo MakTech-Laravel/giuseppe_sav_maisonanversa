@@ -27,7 +27,14 @@ type Step = 1 | 2 | 3;
 export function OrderModal({ onClose }: OrderModalProps) {
     const { t } = useTranslation();
     const { locale } = useLocale();
-    const { priceLabel, productName } = useCheckoutDisplay();
+    const {
+        priceLabel,
+        productName,
+        deliveryLabel,
+        shippingEuIncluded,
+        shippingEstimateMin,
+        shippingEstimateMax,
+    } = useCheckoutDisplay();
     const [step, setStep] = useState<Step>(1);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -326,6 +333,22 @@ export function OrderModal({ onClose }: OrderModalProps) {
                         {t(
                             'U wordt doorgestuurd naar onze beveiligde betaalpagina. Betaling via Stripe.',
                         )}
+                    </p>
+                    {deliveryLabel ? (
+                        <p className={cn(modalNoteClassName, 'mt-2')}>
+                            {deliveryLabel}
+                        </p>
+                    ) : null}
+                    <p className={cn(modalNoteClassName, 'mt-2')}>
+                        {shippingEuIncluded
+                            ? t('Verzending inbegrepen in de EU (indicatie).')
+                            : t(
+                                  'Verzending later in rekening gebracht — indicatie {{min}}–{{max}} €.',
+                                  {
+                                      min: shippingEstimateMin,
+                                      max: shippingEstimateMax,
+                                  },
+                              )}
                     </p>
                 </div>
             )}

@@ -27,6 +27,10 @@ class PassportPresenter
      */
     public function fromOrder(Order $order): array
     {
+        $order->loadMissing('product', 'editionPiece');
+
+        $name = $order->product?->name ?? __('Product');
+        $total = (int) ($order->product?->edition_total ?? 0);
         $number = str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
         $token = $order->editionPiece?->verification_token ?? '';
         $url = $token !== ''
@@ -40,7 +44,11 @@ class PassportPresenter
             'pages' => [
                 [
                     'title' => __('Omslag'),
-                    'body' => __('HERITAGE PASSPORT · Heritage No.001 · Founding Edition · No. :number / 100', ['number' => $number]),
+                    'body' => __('HERITAGE PASSPORT · :product · No. :number / :total', [
+                        'product' => $name,
+                        'number' => $number,
+                        'total' => $total,
+                    ]),
                 ],
                 [
                     'title' => __('Het Huis'),
@@ -48,8 +56,10 @@ class PassportPresenter
                 ],
                 [
                     'title' => __('Productidentiteit'),
-                    'body' => __('Heritage No.001 · No. :number / 100 · :owner · Geauthenticeerd · Yusuf Savran / Oprichter · Antwerpen', [
+                    'body' => __(':product · No. :number / :total · :owner · Geauthenticeerd · Yusuf Savran / Oprichter · Antwerpen', [
+                        'product' => $name,
                         'number' => $number,
+                        'total' => $total,
                         'owner' => $order->name,
                     ]),
                 ],
@@ -82,6 +92,10 @@ class PassportPresenter
     public function heritageOrder(User $user): ?Order
     {
         return $user->orders()
+            ->with('product')
+            ->whereHas('product', function ($query): void {
+                $query->where('grants_founding_circle', true);
+            })
             ->whereIn('status', [OrderStatus::Paid, OrderStatus::Shipped, OrderStatus::Delivered])
             ->whereNotNull('edition_number')
             ->latest()

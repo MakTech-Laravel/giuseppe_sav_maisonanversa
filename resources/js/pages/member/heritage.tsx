@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 
 type Heritage = {
+    productName: string | null;
+    editionTotal: number | null;
     editionNumber: string;
     status: string;
     deliveryWindow: string;
@@ -17,7 +19,7 @@ export default function MemberHeritage({ heritage }: { heritage: Heritage }) {
         <>
             <Head title={t('Mijn Heritage')} />
             <MemberPageHeader
-                eyebrow={t('Heritage No.001')}
+                eyebrow={heritage.productName ?? t('Heritage')}
                 title={t('Editie No.{{number}}', {
                     number: heritage.editionNumber,
                 })}

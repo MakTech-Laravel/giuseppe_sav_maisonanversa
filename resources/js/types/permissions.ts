@@ -54,6 +54,9 @@ export const PERMISSIONS = {
         VIEW: 'reports.view',
         EXPORT: 'reports.export',
     },
+    HERITAGE: {
+        VIEW: 'heritage.view',
+    },
 } as const;
 
 // Auto-derived union type from the const above.

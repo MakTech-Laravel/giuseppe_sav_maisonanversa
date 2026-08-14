@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\CommerceSetting;
 use App\Models\Product;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Support\Imagery;
@@ -74,6 +75,7 @@ class HandleInertiaRequests extends Middleware
             'seoImage' => config('maison.seo.image'),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => fn (): array => Product::checkoutShare(),
+            'commerce' => fn (): array => CommerceSetting::current()->toShare(),
 
             /*
              * Which of the site's photographs exist yet. Everything else falls

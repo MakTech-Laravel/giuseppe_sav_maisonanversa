@@ -6,6 +6,15 @@ export type CheckoutShared = {
     amount: string;
     displayAmount: string;
     productName: string;
+    deliveryLabel: string | null;
+};
+
+export type CommerceShared = {
+    shippingEstimateMin: string;
+    shippingEstimateMax: string;
+    shippingEuIncluded: boolean;
+    defaultExpectedDeliveryLabel: string | null;
+    pricesIncludeTax: boolean;
 };
 
 declare module 'react' {
@@ -25,6 +34,7 @@ declare module '@inertiajs/core' {
             availableLocales: Locale[];
             availableImages: string[];
             checkout: CheckoutShared;
+            commerce: CommerceShared;
             [key: string]: unknown;
         };
     }

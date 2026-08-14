@@ -1,5 +1,5 @@
 /**
- * Heritage No.001 stock figures from the edition_pieces table.
+ * Per-product stock figures from edition_pieces or stock_quantity.
  */
 export type Edition = {
     reserved: number;
@@ -9,4 +9,6 @@ export type Edition = {
     allocated: number;
     archived: number;
     soldOut: boolean;
+    deliveryLabel?: string | null;
+    productName?: string | null;
 };

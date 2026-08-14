@@ -237,7 +237,7 @@ final class AdminDemo
     public static function heritageInventory(): array
     {
         $reserved = 0;
-        $total = (int) config('maison.edition.total', 100);
+        $total = (int) (Product::founding()?->edition_total ?? 0);
 
         return [
             'product_name' => Product::founding()?->name ?? 'Heritage No.001 — Founding Edition',

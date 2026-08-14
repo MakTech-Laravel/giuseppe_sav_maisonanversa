@@ -1,3 +1,4 @@
+import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import {
     LegalHeading,
@@ -10,6 +11,10 @@ import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 
 export default function Shipping() {
     const { t } = useTranslation();
+    const { commerce, checkout } = usePage().props;
+    const shippingRange = `${commerce.shippingEstimateMin}–${commerce.shippingEstimateMax} €`;
+    const deliveryLabel =
+        checkout.deliveryLabel ?? commerce.defaultExpectedDeliveryLabel;
 
     return (
         <>
@@ -24,9 +29,14 @@ export default function Shipping() {
                 <LegalList>
                     <LegalListItem>
                         <strong>{t('Europa:')}</strong>{' '}
-                        {t(
-                            'verzending inbegrepen. Geleverd via geadresseerde, verzekerde zending.',
-                        )}
+                        {commerce.shippingEuIncluded
+                            ? t(
+                                  'verzending inbegrepen. Geleverd via geadresseerde, verzekerde zending.',
+                              )
+                            : t(
+                                  'later in rekening gebracht. Indicatie {{range}} — nog geen Stripe-regel tot bevestiging.',
+                                  { range: shippingRange },
+                              )}
                     </LegalListItem>
                     <LegalListItem>
                         <strong>{t('Buiten Europa:')}</strong>{' '}
@@ -42,7 +52,8 @@ export default function Shipping() {
                     </LegalListItem>
                     <LegalListItem>
                         <strong>{t('Levertijd Founding Edition:')}</strong>{' '}
-                        {t('Q1 2027, in volgorde van reservering.')}
+                        {deliveryLabel ??
+                            t('In volgorde van reservering — onder voorbehoud van productie.')}
                     </LegalListItem>
                 </LegalList>
 

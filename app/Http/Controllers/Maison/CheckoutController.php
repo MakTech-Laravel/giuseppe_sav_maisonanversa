@@ -12,6 +12,7 @@ use App\Services\Checkout\FoundingEditionCheckout;
 use App\Services\Checkout\OrderFulfillment;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
+use App\Services\Edition\SimpleStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -34,16 +35,17 @@ class CheckoutController extends Controller
         EditionAllocator $allocator,
         EditionInventory $inventory,
     ): SymfonyResponse {
-        if ($inventory->snapshot()['available'] === 0) {
+        if ($inventory->snapshot($product = Product::founding())['available'] === 0) {
             throw ValidationException::withMessages([
-                'checkout' => __('Heritage No.001 is uitverkocht.'),
+                'checkout' => __(':product is uitverkocht.', [
+                    'product' => $product?->name ?? 'Heritage No.001',
+                ]),
             ]);
         }
 
         try {
-            $checkoutUrl = DB::transaction(function () use ($request, $locale, $checkout, $allocator): string {
+            $checkoutUrl = DB::transaction(function () use ($request, $locale, $checkout, $allocator, $product): string {
                 $data = $request->validated();
-                $product = Product::founding();
 
                 if ($product === null) {
                     throw ValidationException::withMessages([
@@ -66,7 +68,11 @@ class CheckoutController extends Controller
                     'amount' => $product->amount,
                 ]);
 
-                $allocator->hold($order);
+                if ($product->isLimitedEdition()) {
+                    $allocator->hold($order);
+                } else {
+                    app(SimpleStock::class)->reserve($product);
+                }
 
                 $session = $checkout->create($order, $locale, $request->user());
 
@@ -78,7 +84,9 @@ class CheckoutController extends Controller
             });
         } catch (EditionSoldOutException) {
             throw ValidationException::withMessages([
-                'checkout' => __('Heritage No.001 is uitverkocht.'),
+                'checkout' => __(':product is uitverkocht.', [
+                    'product' => Product::founding()?->name ?? 'Heritage No.001',
+                ]),
             ]);
         }
 

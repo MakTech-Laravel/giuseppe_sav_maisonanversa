@@ -8,6 +8,8 @@ import {
     Package,
     Settings2,
     ShoppingBag,
+    Store,
+    Truck,
     UserRoundCog,
     Users,
     UsersRound,
@@ -31,6 +33,7 @@ import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
 import adminCircle from '@/routes/admin/circle';
+import adminCommerce from '@/routes/admin/commerce';
 import adminCommunity from '@/routes/admin/community';
 import adminCustomers from '@/routes/admin/customers';
 import adminEvents from '@/routes/admin/events';
@@ -38,6 +41,7 @@ import adminHeritage from '@/routes/admin/heritage';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
 import adminPosts from '@/routes/admin/posts';
+import adminProducts from '@/routes/admin/products';
 import { PERMISSIONS } from '@/types/permissions';
 
 function buildMainNav(
@@ -82,9 +86,21 @@ function buildMainNav(
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
-            title: t('Heritage-product'),
+            title: t('Catalogus'),
+            href: adminProducts.index(locale),
+            icon: Store,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Editievoorraad'),
             href: adminHeritage.index(locale),
             icon: Package,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Handelsinstellingen'),
+            href: adminCommerce.edit(locale),
+            icon: Truck,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {

@@ -6,6 +6,7 @@ use App\Enums\EditionPieceStatus;
 use App\Exceptions\EditionSoldOutException;
 use App\Models\EditionPiece;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class EditionAllocator
@@ -29,7 +30,7 @@ class EditionAllocator
                             'reserved_until' => now()->addMinutes(30),
                         ])->save();
 
-                        app(EditionInventory::class)->bust();
+                        app(EditionInventory::class)->bust($lockedOrder->product);
                     }
 
                     return $existing->refresh();
@@ -37,6 +38,7 @@ class EditionAllocator
             }
 
             $piece = EditionPiece::query()
+                ->where('product_id', $lockedOrder->product_id)
                 ->where('status', EditionPieceStatus::Available)
                 ->orderBy('edition_number')
                 ->lockForUpdate()
@@ -56,7 +58,7 @@ class EditionAllocator
                 'edition_piece_id' => $piece->id,
             ])->save();
 
-            app(EditionInventory::class)->bust();
+            app(EditionInventory::class)->bust($lockedOrder->product);
 
             return $piece->refresh();
         });
@@ -93,6 +95,7 @@ class EditionAllocator
             }
 
             $available = EditionPiece::query()
+                ->where('product_id', $lockedOrder->product_id)
                 ->where('status', EditionPieceStatus::Available)
                 ->orderBy('edition_number')
                 ->lockForUpdate()
@@ -135,7 +138,7 @@ class EditionAllocator
                 'edition_number' => null,
             ])->save();
 
-            app(EditionInventory::class)->bust();
+            app(EditionInventory::class)->bust($lockedOrder->product);
         });
     }
 
@@ -161,6 +164,7 @@ class EditionAllocator
                     }
 
                     $orderId = $locked->order_id;
+                    $productId = $locked->product_id;
 
                     $locked->fill([
                         'status' => EditionPieceStatus::Available,
@@ -176,12 +180,16 @@ class EditionAllocator
                     }
 
                     $released++;
+
+                    if ($productId !== null) {
+                        $product = Product::query()->find($productId);
+
+                        if ($product !== null) {
+                            app(EditionInventory::class)->bust($product);
+                        }
+                    }
                 });
             });
-
-        if ($released > 0) {
-            app(EditionInventory::class)->bust();
-        }
 
         return $released;
     }
@@ -200,7 +208,7 @@ class EditionAllocator
             'edition_number' => $piece->edition_number,
         ])->save();
 
-        app(EditionInventory::class)->bust();
+        app(EditionInventory::class)->bust($order->product);
 
         return $piece->refresh();
     }

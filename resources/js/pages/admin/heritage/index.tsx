@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { Loader2, Package, TriangleAlert } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +27,11 @@ interface HeritageProduct {
     amount: string;
     currency: string;
     stripe_price_id: string | null;
+}
+
+interface CatalogOption {
+    id: number;
+    name: string;
 }
 
 interface HeritageInventory {
@@ -59,10 +64,12 @@ function translateInventoryStatus(
 
 export default function HeritageIndex({
     product,
+    catalog = [],
     inventory,
     heritageConnected,
 }: {
     product: HeritageProduct | null;
+    catalog?: CatalogOption[];
     inventory: HeritageInventory;
     heritageConnected: boolean;
 }) {
@@ -70,12 +77,12 @@ export default function HeritageIndex({
 
     return (
         <>
-            <Head title={t('Heritage-product')} />
+            <Head title={t('Editievoorraad')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Heritage-product')}
+                    title={t('Editievoorraad')}
                     description={t(
-                        'Bekijk Heritage No.001-voorraad en productstatus.',
+                        'Nummering en voorraad per limited-edition product.',
                     )}
                     icon={Package}
                 />
@@ -91,6 +98,30 @@ export default function HeritageIndex({
                             )}
                         </AlertDescription>
                     </Alert>
+                )}
+                {catalog.length > 1 && product && (
+                    <div className="grid max-w-md gap-2">
+                        <Label htmlFor="catalog-product">{t('Product')}</Label>
+                        <select
+                            id="catalog-product"
+                            className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+                            value={product.id}
+                            onChange={(event) => {
+                                router.get(
+                                    heritageRoutes.index(wayfinderLocale())
+                                        .url,
+                                    { product: event.target.value },
+                                    { preserveState: false },
+                                );
+                            }}
+                        >
+                            {catalog.map((item) => (
+                                <option key={item.id} value={item.id}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 )}
                 {product && <HeritageProductForm product={product} />}
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -244,7 +275,7 @@ HeritageIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: 'Heritage-product',
+            title: 'Editievoorraad',
             href: heritageRoutes.index(wayfinderLocale()),
         },
     ],
