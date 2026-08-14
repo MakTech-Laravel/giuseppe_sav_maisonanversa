@@ -229,6 +229,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('heritage', 'heritage')->name('heritage.index')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::patch('heritage/{product}', 'updateHeritageProduct')->name('heritage.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('community', 'community')->name('community.index')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::post('community/official', 'storeOfficialPost')->name('community.official')

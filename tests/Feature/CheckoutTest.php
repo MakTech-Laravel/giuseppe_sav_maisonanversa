@@ -3,6 +3,7 @@
 use App\Enums\OrderStatus;
 use App\Listeners\StripeEventListener;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use App\Services\Checkout\FoundingEditionCheckout;
 use App\Services\Checkout\OrderFulfillment;
@@ -10,10 +11,13 @@ use Laravel\Cashier\Events\WebhookReceived;
 use Mockery\MockInterface;
 
 test('cashier currency is eur only', function () {
+    $product = Product::founding();
+
     expect(config('cashier.currency'))->toBe('eur');
     expect(config('maison.checkout.currency'))->toBe('eur');
-    expect(config('maison.checkout.amount'))->toBe(24900);
-    expect(config('maison.checkout.price_id'))->not->toBeEmpty();
+    expect($product)->not->toBeNull()
+        ->and($product->amount)->toBe('249.00')
+        ->and($product->currency)->toBe('eur');
 });
 
 test('checkout success and cancel pages are reachable', function () {
@@ -37,7 +41,6 @@ test('checkout requires reservation details', function () {
 test('checkout creates an incomplete order and redirects to stripe', function () {
     config([
         'cashier.secret' => 'sk_test_fake',
-        'maison.checkout.price_id' => 'price_test_founding_edition',
     ]);
 
     $this->mock(FoundingEditionCheckout::class, function (MockInterface $mock) {
@@ -62,7 +65,8 @@ test('checkout creates an incomplete order and redirects to stripe', function ()
         ->and($order->edition_number)->toBeNull()
         ->and($order->edition_piece_id)->not->toBeNull()
         ->and($order->currency)->toBe('eur')
-        ->and($order->amount)->toBe(24900)
+        ->and($order->amount)->toBe('249.00')
+        ->and($order->product_id)->toBe(Product::founding()->id)
         ->and($order->stripe_checkout_session_id)->toBe('cs_test_session_123');
 });
 
@@ -82,7 +86,6 @@ test('checkout fails gracefully when stripe keys are missing', function () {
 test('authenticated checkout attaches the user to the order', function () {
     config([
         'cashier.secret' => 'sk_test_fake',
-        'maison.checkout.price_id' => 'price_test_founding_edition',
     ]);
 
     $user = User::factory()->create();

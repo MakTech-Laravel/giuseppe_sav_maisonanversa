@@ -7,6 +7,7 @@ use App\Exceptions\EditionSoldOutException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maison\CheckoutRequest;
 use App\Models\Order;
+use App\Models\Product;
 use App\Services\Checkout\FoundingEditionCheckout;
 use App\Services\Checkout\OrderFulfillment;
 use App\Services\Edition\EditionAllocator;
@@ -42,9 +43,17 @@ class CheckoutController extends Controller
         try {
             $checkoutUrl = DB::transaction(function () use ($request, $locale, $checkout, $allocator): string {
                 $data = $request->validated();
+                $product = Product::founding();
+
+                if ($product === null) {
+                    throw ValidationException::withMessages([
+                        'checkout' => __('This product is not available for checkout yet.'),
+                    ]);
+                }
 
                 $order = Order::query()->create([
                     'user_id' => $request->user()?->id,
+                    'product_id' => $product->id,
                     'status' => OrderStatus::Incomplete,
                     'name' => $data['name'],
                     'email' => $data['email'],
@@ -53,8 +62,8 @@ class CheckoutController extends Controller
                     'monogram' => $data['monogram'] ?? null,
                     'gift_wrap' => (bool) ($data['gift_wrap'] ?? false),
                     'gift_message' => $data['gift_message'] ?? null,
-                    'currency' => 'eur',
-                    'amount' => (int) config('maison.checkout.amount'),
+                    'currency' => $product->currency,
+                    'amount' => $product->amount,
                 ]);
 
                 $allocator->hold($order);

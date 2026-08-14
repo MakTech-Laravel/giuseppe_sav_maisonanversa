@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\OrderStatus;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,6 +22,7 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => null,
+            'product_id' => Product::query()->where('slug', Product::FOUNDING_SLUG)->value('id'),
             'status' => OrderStatus::Incomplete,
             'name' => fake()->name(),
             'email' => fake()->safeEmail(),
@@ -32,7 +34,7 @@ class OrderFactory extends Factory
             'gift_wrap' => false,
             'gift_message' => null,
             'currency' => 'eur',
-            'amount' => 24900,
+            'amount' => '249.00',
             'stripe_checkout_session_id' => null,
             'stripe_payment_intent_id' => null,
         ];
