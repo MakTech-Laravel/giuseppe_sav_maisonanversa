@@ -47,6 +47,7 @@ class FoundingEditionCheckout
 
         $sessionOptions = [
             'mode' => 'payment',
+            'payment_method_types' => ['card', 'bancontact'],
             'success_url' => route('maison.checkout.success', ['locale' => $locale]).'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('maison.checkout.cancel', ['locale' => $locale]).'?session_id={CHECKOUT_SESSION_ID}',
             'adaptive_pricing' => ['enabled' => false],

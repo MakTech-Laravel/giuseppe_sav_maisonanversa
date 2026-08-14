@@ -1,11 +1,13 @@
 <?php
 
 use App\Enums\PermissionEnum;
+use App\Http\Controllers\Admin\CommerceSettingController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
@@ -231,6 +233,7 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('heritage/{product}', 'updateHeritageProduct')->name('heritage.update')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+
                 Route::get('community', 'community')->name('community.index')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::post('community/official', 'storeOfficialPost')->name('community.official')
@@ -241,6 +244,28 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('letter/export', 'exportLetter')->name('letter.export')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+            });
+
+            Route::controller(AdminProductController::class)->group(function () {
+                Route::get('products', 'index')->name('products.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('products/create', 'create')->name('products.create')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('products', 'store')->name('products.store')
+                    ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+                Route::get('products/{product}/edit', 'edit')->name('products.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('products/{product}', 'update')->name('products.update')
+                    ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+                Route::get('products/{product}/inventory', 'inventory')->name('products.inventory')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(CommerceSettingController::class)->group(function () {
+                Route::get('commerce', 'edit')->name('commerce.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::patch('commerce', 'update')->name('commerce.update')
+                    ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
             });
 
             Route::controller(AdminPostController::class)->group(function () {

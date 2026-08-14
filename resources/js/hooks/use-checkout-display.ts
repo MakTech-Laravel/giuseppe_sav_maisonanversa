@@ -4,20 +4,27 @@ import { usePage } from '@inertiajs/react';
  * Shared Founding Edition checkout display from the products table.
  */
 export function useCheckoutDisplay() {
-    const { checkout } = usePage().props;
+    const { checkout, commerce } = usePage().props;
 
-    const amount = checkout?.amount ?? '249.00';
-    const displayAmount = checkout?.displayAmount ?? '249,00';
+    const amount = checkout?.amount ?? '';
+    const displayAmount = checkout?.displayAmount ?? '';
     const currency = (checkout?.currency ?? 'eur').toUpperCase();
-    const productName =
-        checkout?.productName ?? 'Heritage No.001 — Founding Edition';
-    const priceLabel = `€ ${displayAmount}`;
+    const productName = checkout?.productName ?? '';
+    const deliveryLabel =
+        checkout?.deliveryLabel ??
+        commerce?.defaultExpectedDeliveryLabel ??
+        null;
+    const priceLabel = displayAmount !== '' ? `€ ${displayAmount}` : '';
 
     return {
         amount,
         displayAmount,
         currency,
         productName,
+        deliveryLabel,
         priceLabel,
+        shippingEstimateMin: commerce?.shippingEstimateMin ?? '12.00',
+        shippingEstimateMax: commerce?.shippingEstimateMax ?? '18.00',
+        shippingEuIncluded: commerce?.shippingEuIncluded ?? true,
     };
 }

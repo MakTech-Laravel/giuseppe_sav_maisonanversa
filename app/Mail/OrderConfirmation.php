@@ -22,12 +22,16 @@ class OrderConfirmation extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Bestelling bevestigd — Heritage No.001'),
+            subject: __('Bestelling bevestigd — :product', [
+                'product' => $this->order->product?->name ?? __('Product'),
+            ]),
         );
     }
 
     public function content(): Content
     {
+        $this->order->loadMissing('product');
+
         return new Content(
             markdown: 'emails.order-confirmation',
         );

@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('edition_pieces', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
-            $table->unsignedSmallInteger('edition_number')->unique();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->unsignedSmallInteger('edition_number');
             $table->string('status')->default(EditionPieceStatus::Available->value)->index();
             $table->unsignedBigInteger('order_id')->nullable()->unique();
             $table->timestamp('reserved_until')->nullable()->index();
@@ -23,6 +23,8 @@ return new class extends Migration
             $table->uuid('verification_token')->unique();
             $table->text('notes')->nullable();
             $table->timestamps();
+
+            $table->unique(['product_id', 'edition_number']);
         });
     }
 

@@ -28,7 +28,7 @@ const GUARANTEES = [
 export function ProductDetail({ edition }: { edition: Edition }) {
     const { t } = useTranslation();
     const { openOrder, openNewsletter } = useShellActions();
-    const { priceLabel } = useCheckoutDisplay();
+    const { priceLabel, deliveryLabel } = useCheckoutDisplay();
 
     return (
         <Section tone="cream" className="py-18">
@@ -53,8 +53,13 @@ export function ProductDetail({ edition }: { edition: Edition }) {
                             />
                             <p className="font-sans text-[9px] tracking-[0.2em] text-stone uppercase">
                                 {edition.available} {t('Nummers nog')}{' '}
-                                {t('beschikbaar')} ·{' '}
-                                {t('Verwachte levering: Q1 2027')}
+                                {t('beschikbaar')}
+                                {deliveryLabel ? (
+                                    <>
+                                        {' '}
+                                        · {deliveryLabel}
+                                    </>
+                                ) : null}
                             </p>
                         </div>
                         <p className="mb-7 border-b border-gold/20 pb-7 text-[15px] leading-[1.85] text-choc3">

@@ -73,13 +73,18 @@ class DashboardController extends Controller implements HasMiddleware
         $order = $passport->heritageOrder($request->user());
         abort_if($order === null, 404);
 
+        $order->loadMissing('product');
         $number = str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
 
         return Inertia::render('member/heritage', [
             'heritage' => [
+                'productName' => $order->product?->name,
+                'editionTotal' => $order->product?->edition_total,
                 'editionNumber' => $number,
                 'status' => $order->status->value,
-                'deliveryWindow' => $order->shipped_at?->toDateString() ?? __('In productie'),
+                'deliveryWindow' => $order->product?->expected_delivery_label
+                    ?? $order->shipped_at?->toDateString()
+                    ?? __('In productie'),
                 'certificate' => __('Gekoppeld aan No. :number', ['number' => $number]),
                 'passport' => __('Vier pagina\'s · gekoppeld aan No. :number', ['number' => $number]),
             ],

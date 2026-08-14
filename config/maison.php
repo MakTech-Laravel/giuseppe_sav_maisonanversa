@@ -70,25 +70,8 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Edition stock
-    |--------------------------------------------------------------------------
-    |
-    | Total edition size only. Live reserved/available/sold-out figures come
-    | from the edition_pieces table via EditionInventory.
-    |
-    */
-
-    'edition' => [
-        'total' => (int) env('MAISON_EDITION_TOTAL', 100),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Checkout
-    |--------------------------------------------------------------------------
-    |
-    | Founding Edition is charged in EUR only. Name, amount, and Stripe Price
-    | IDs live on the products table and are synced to Stripe automatically.
+    | Live reserved/available/sold-out figures come from each product's
+    | edition_pieces (limited editions) or stock_quantity (simple products).
     |
     */
 

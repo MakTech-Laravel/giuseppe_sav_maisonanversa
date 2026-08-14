@@ -6,6 +6,8 @@ export default function Verify({
     piece,
 }: {
     piece: {
+        productName: string | null;
+        editionTotal: number;
         editionNumber: string;
         status: string;
         notes: string | null;
@@ -21,10 +23,13 @@ export default function Verify({
                 <meta name="robots" content="noindex, nofollow" />
             </Head>
             <PageHero
-                eyebrow={t('Heritage No.001')}
+                eyebrow={piece.productName ?? t('Authenticiteit')}
                 title={
                     <>
-                        No.{piece.editionNumber} <em>/ 100</em>
+                        No.{piece.editionNumber}
+                        {piece.editionTotal > 0 ? (
+                            <em> / {piece.editionTotal}</em>
+                        ) : null}
                     </>
                 }
                 subtitle={

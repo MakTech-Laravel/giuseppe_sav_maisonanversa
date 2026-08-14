@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\OrderStatus;
+use App\Enums\ProductType;
 use App\Enums\RoleEnum;
 use App\Exports\NewsletterSubscribersExport;
 use App\Http\Controllers\Controller;
@@ -11,7 +12,6 @@ use App\Mail\ShippingNotification;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunityReport;
-use App\Models\EditionPiece;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\Product;
@@ -233,35 +233,18 @@ class OpsController extends Controller
         ]);
     }
 
-    public function heritage(Request $request, string $locale, EditionInventory $inventory): Response
+    public function heritage(Request $request, string $locale, EditionInventory $inventory, ProductController $products): Response
     {
-        $snapshot = $inventory->snapshot();
-        $pieces = EditionPiece::query()->orderBy('edition_number')->get();
-        $product = Product::founding();
+        $id = $request->integer('product');
+        $product = $id > 0
+            ? Product::query()->where('type', ProductType::LimitedEdition)->find($id)
+            : Product::founding();
 
-        return Inertia::render('admin/heritage/index', [
-            'product' => $product === null ? null : [
-                'id' => $product->id,
-                'name' => $product->name,
-                'amount' => (string) $product->amount,
-                'currency' => $product->currency,
-                'stripe_price_id' => $product->stripe_price_id,
-            ],
-            'inventory' => [
-                'product_name' => $product?->name ?? 'Heritage No.001 — Founding Edition',
-                'total' => $snapshot['total'],
-                'reserved' => $snapshot['reserved'],
-                'available' => $snapshot['available'],
-                'rows' => $pieces->map(fn (EditionPiece $piece) => [
-                    'sku' => 'HE-'.$piece->formattedNumber(),
-                    'label' => 'No.'.$piece->formattedNumber(),
-                    'status' => $piece->status->value,
-                    'status_key' => $piece->status->value,
-                    'notes' => $piece->notes ?? '',
-                ]),
-            ],
-            'heritageConnected' => true,
-        ]);
+        $product ??= Product::founding();
+
+        abort_if($product === null, 404);
+
+        return $products->renderInventory($product, $inventory);
     }
 
     public function updateHeritageProduct(

@@ -26,7 +26,7 @@ const INCLUDES = [
 export function HomePreorder({ edition }: { edition: Edition }) {
     const { t } = useTranslation();
     const { openOrder, openCertificate, openNewsletter } = useShellActions();
-    const { priceLabel } = useCheckoutDisplay();
+    const { priceLabel, deliveryLabel } = useCheckoutDisplay();
     const section = useRef<HTMLDivElement>(null);
     const [shown, setShown] = useState(0);
     const [fill, setFill] = useState(0);
@@ -129,9 +129,11 @@ export function HomePreorder({ edition }: { edition: Edition }) {
                             </p>
                         </div>
 
-                        <p className="font-sans text-[13px] tracking-[0.1em] text-stone">
-                            {t('Verwachte levering: Q1 2027')}
-                        </p>
+                        {deliveryLabel ? (
+                            <p className="font-sans text-[13px] tracking-[0.1em] text-stone">
+                                {deliveryLabel}
+                            </p>
+                        ) : null}
                     </Reveal>
 
                     <Reveal className="border border-gold/20 bg-white/3 p-10">

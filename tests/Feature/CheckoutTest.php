@@ -1,12 +1,15 @@
 <?php
 
 use App\Enums\OrderStatus;
+use App\Enums\RoleEnum;
 use App\Listeners\StripeEventListener;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Checkout\FoundingEditionCheckout;
 use App\Services\Checkout\OrderFulfillment;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Laravel\Cashier\Events\WebhookReceived;
 use Mockery\MockInterface;
 
@@ -180,6 +183,43 @@ test('stripe webhook listener fulfills paid checkout sessions', function () {
 
     expect($order->fresh()->status)->toBe(OrderStatus::Paid)
         ->and($order->fresh()->stripe_payment_intent_id)->toBe('pi_test_hook');
+});
+
+test('paid founding checkout grants founding circle but other products do not', function () {
+    $this->seed([PermissionSeeder::class, RoleSeeder::class]);
+
+    $member = User::factory()->create();
+    $foundingOrder = Order::factory()->forUser($member)->create([
+        'status' => OrderStatus::Incomplete,
+        'stripe_checkout_session_id' => 'cs_test_circle_1',
+    ]);
+
+    app(OrderFulfillment::class)->markPaidFromSession((object) [
+        'id' => 'cs_test_circle_1',
+        'payment_status' => 'paid',
+        'payment_intent' => 'pi_circle',
+        'metadata' => ['order_id' => (string) $foundingOrder->id],
+    ]);
+
+    expect($member->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeTrue();
+
+    $otherProduct = Product::factory()->create(['grants_founding_circle' => false]);
+    $otherUser = User::factory()->create();
+    $otherOrder = Order::factory()->forUser($otherUser)->create([
+        'product_id' => $otherProduct->id,
+        'status' => OrderStatus::Incomplete,
+        'stripe_checkout_session_id' => 'cs_test_circle_2',
+    ]);
+
+    app(OrderFulfillment::class)->markPaidFromSession((object) [
+        'id' => 'cs_test_circle_2',
+        'payment_status' => 'paid',
+        'payment_intent' => 'pi_other',
+        'metadata' => ['order_id' => (string) $otherOrder->id],
+    ]);
+
+    expect($otherUser->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse()
+        ->and($otherOrder->fresh()->edition_number)->toBeNull();
 });
 
 test('stripe webhook listener marks async payment failures', function () {

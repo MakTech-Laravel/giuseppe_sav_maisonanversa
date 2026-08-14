@@ -15,11 +15,15 @@ class VerificationController extends Controller
     {
         $piece = EditionPiece::query()
             ->where('verification_token', $token)
-            ->with('order')
+            ->with(['order', 'product'])
             ->firstOrFail();
+
+        $total = (int) ($piece->product?->edition_total ?? 0);
 
         return Inertia::render('maison/verify', [
             'piece' => [
+                'productName' => $piece->product?->name,
+                'editionTotal' => $total,
                 'editionNumber' => $piece->formattedNumber(),
                 'status' => $piece->status->value,
                 'notes' => $piece->notes,

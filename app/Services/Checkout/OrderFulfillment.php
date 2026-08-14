@@ -11,6 +11,7 @@ use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
+use App\Services\Edition\SimpleStock;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
@@ -20,6 +21,7 @@ class OrderFulfillment
     public function __construct(
         private EditionAllocator $allocator,
         private EditionInventory $inventory,
+        private SimpleStock $simpleStock,
     ) {}
 
     /**
@@ -44,12 +46,15 @@ class OrderFulfillment
         $fulfilled = DB::transaction(function () use ($order, $session): Order {
             /** @var Order $locked */
             $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
+            $locked->loadMissing('product');
 
             if (in_array($locked->status, [OrderStatus::Paid, OrderStatus::Shipped, OrderStatus::Delivered], true)) {
                 return $locked;
             }
 
-            $this->allocator->allocate($locked);
+            if ($locked->product?->isLimitedEdition()) {
+                $this->allocator->allocate($locked);
+            }
 
             $locked->fill([
                 'status' => OrderStatus::Paid,
@@ -58,8 +63,9 @@ class OrderFulfillment
             ])->save();
 
             $locked->refresh();
+            $locked->loadMissing('product', 'user');
 
-            if ($locked->user !== null) {
+            if ($locked->user !== null && $locked->product?->grants_founding_circle) {
                 Role::findOrCreate(RoleEnum::FOUNDING_CIRCLE->value, GuardEnum::WEB->value);
                 $locked->user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
             }
@@ -72,7 +78,7 @@ class OrderFulfillment
                 ->locale($fulfilled->locale)
                 ->queue(new OrderConfirmation($fulfilled));
 
-            if ($this->inventory->snapshot()['soldOut']) {
+            if ($this->inventory->snapshot($fulfilled->product)['soldOut']) {
                 $this->notifySoldOut();
             }
         }
@@ -94,12 +100,13 @@ class OrderFulfillment
         return DB::transaction(function () use ($order, $session): Order {
             /** @var Order $locked */
             $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
+            $locked->loadMissing('product');
 
             if (in_array($locked->status, [OrderStatus::Paid, OrderStatus::Shipped, OrderStatus::Delivered], true)) {
                 return $locked;
             }
 
-            $this->allocator->release($locked);
+            $this->releaseInventory($locked);
 
             $locked->fill([
                 'status' => OrderStatus::Failed,
@@ -128,7 +135,8 @@ class OrderFulfillment
             return $order;
         }
 
-        $this->allocator->release($order);
+        $order->loadMissing('product');
+        $this->releaseInventory($order);
 
         $order->update(['status' => OrderStatus::Canceled]);
 
@@ -138,6 +146,19 @@ class OrderFulfillment
     public function markExpiredBySessionId(?string $sessionId): ?Order
     {
         return $this->markCanceledBySessionId($sessionId);
+    }
+
+    private function releaseInventory(Order $order): void
+    {
+        if ($order->product?->isLimitedEdition()) {
+            $this->allocator->release($order);
+
+            return;
+        }
+
+        if ($order->product?->isSimple() && $order->status === OrderStatus::Incomplete) {
+            $this->simpleStock->release($order->product);
+        }
     }
 
     private function notifySoldOut(): void

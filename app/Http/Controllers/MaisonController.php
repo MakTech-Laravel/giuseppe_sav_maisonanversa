@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CommunityEvent;
 use App\Models\CommunitySession;
+use App\Models\Product;
 use App\Services\Edition\EditionInventory;
 use App\Support\CommunityFeed;
 use App\Support\Journal;
@@ -15,7 +16,7 @@ use Inertia\Response;
 /**
  * The public Maison Anversa site. Most pages are presentational in this phase;
  * the Journal is the exception, paging a static catalog. Edition figures are
- * the one piece of shared state and come from config/maison.php.
+ * the one piece of shared state and come from each product's inventory.
  */
 class MaisonController extends Controller
 {
@@ -193,6 +194,6 @@ class MaisonController extends Controller
      */
     private function edition(): array
     {
-        return app(EditionInventory::class)->snapshot();
+        return app(EditionInventory::class)->snapshot(Product::founding());
     }
 }
