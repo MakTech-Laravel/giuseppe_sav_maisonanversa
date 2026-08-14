@@ -86,7 +86,7 @@ test('the circle benefits grid matches the prototype hairline layout', function 
     expect($source)
         ->toContain('bg-sand')
         ->toContain('gap-0.5')
-        ->toContain('bg-cream p-10')
+        ->toContain('bg-cream p-6 md:p-10')
         ->toContain('text-[80px]')
         ->toContain('text-gold/4')
         ->toContain('text-[36px]')

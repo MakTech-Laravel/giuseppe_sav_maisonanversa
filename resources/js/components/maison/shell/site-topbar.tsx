@@ -12,16 +12,16 @@ export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
     const { t } = useTranslation();
 
     return (
-        <div className="fixed inset-x-0 top-0 z-[200] flex h-[var(--topbar-h)] items-center justify-between border-b border-gold/20 bg-choc px-6 md:px-12">
-            <span className="hidden font-sans text-[10px] font-light tracking-[0.22em] text-cream uppercase md:inline">
+        <div className="fixed inset-x-0 top-0 z-[200] flex h-[var(--topbar-h)] items-center justify-between gap-3 border-b border-gold/20 bg-choc px-4 ma-lg:px-12">
+            <span className="hidden shrink-0 font-sans text-[10px] font-light tracking-[0.22em] text-cream uppercase ma-lg:inline">
                 Maison Anversa
             </span>
 
-            <span className="font-serif text-[11px] font-medium tracking-[0.15em] text-gold uppercase md:text-[13px] md:tracking-[0.2em]">
+            <span className="min-w-0 truncate text-center font-serif text-[10px] font-medium tracking-[0.12em] text-gold uppercase ma-lg:text-[13px] ma-lg:tracking-[0.2em]">
                 {t('Eerste Editie — Beperkt tot 100 Stuks')}
             </span>
 
-            <div className="hidden items-center gap-6 md:flex">
+            <div className="hidden items-center gap-6 ma-lg:flex">
                 <button
                     type="button"
                     onClick={onNewsletter}

@@ -157,14 +157,14 @@ export function MaisonModal({
                 onClick={onClose}
             />
 
-            <div className="relative flex h-full items-center justify-center overflow-y-auto p-6 ma-sm:p-10">
+            <div className="relative flex h-full items-center justify-center overflow-y-auto p-4 ma-sm:p-10">
                 <div
                     ref={panel}
                     role="dialog"
                     aria-modal="true"
                     aria-label={t(label)}
                     className={cn(
-                        'relative w-full max-w-[520px] bg-cream p-10 ma-sm:p-12',
+                        'relative w-full max-w-[520px] bg-cream px-6 py-10 ma-sm:p-12',
                         panelClassName,
                     )}
                     onClick={(event) => event.stopPropagation()}

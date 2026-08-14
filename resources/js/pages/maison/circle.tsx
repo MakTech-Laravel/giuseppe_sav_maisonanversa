@@ -82,7 +82,7 @@ export default function Circle() {
                         {BENEFITS.map((benefit) => (
                             <Reveal
                                 key={benefit.num}
-                                className="relative overflow-hidden bg-cream p-10"
+                                className="relative overflow-hidden bg-cream p-6 md:p-10"
                             >
                                 <span
                                     aria-hidden="true"
@@ -108,7 +108,11 @@ export default function Circle() {
                     <CirclePortal />
 
                     <div className="mt-10 text-center">
-                        <MaisonButton variant="choc" onClick={openOrder}>
+                        <MaisonButton
+                            variant="choc"
+                            onClick={openOrder}
+                            className="max-w-full px-4 text-center whitespace-normal"
+                        >
                             {t('Word Founding Member — Bekijk Heritage No.001')}
                         </MaisonButton>
                     </div>
