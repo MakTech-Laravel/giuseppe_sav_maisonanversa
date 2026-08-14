@@ -20,18 +20,18 @@ test('the founding circle portal persists the member in localStorage under the p
         ->toContain('readReferralFromSearch');
 });
 
-test('the circle portal builds crawlable referral links rather than hash navigation', function () {
+test('the circle portal points members to the authenticated card', function () {
     $source = file_get_contents(resource_path('js/components/maison/circle/circle-portal.tsx'));
 
     expect($source)
-        ->toContain('maisonUrl')
-        ->toContain('?ref=')
-        ->toContain('navigator.clipboard')
+        ->toContain('openAuth')
+        ->toContain('/member/circle')
         ->not->toContain('onclick=')
-        ->not->toContain('alert(');
+        ->not->toContain('alert(')
+        ->not->toContain('localStorage');
 });
 
-test('the circle portal sits as a dark card on the cream section', function () {
+test('the circle portal sits on the cream circle page', function () {
     $page = file_get_contents(resource_path('js/pages/maison/circle.tsx'));
     $portal = file_get_contents(resource_path('js/components/maison/circle/circle-portal.tsx'));
 
@@ -40,9 +40,8 @@ test('the circle portal sits as a dark card on the cream section', function () {
         ->toContain('openOrder')
         ->not->toContain('tone="choc2"')
         ->and($portal)
-        ->toContain('bg-choc2')
-        ->toContain('max-w-190')
-        ->toContain('max-w-110');
+        ->toContain('bg-cream2')
+        ->toContain('border-gold/25');
 });
 
 test('dressing CTAs use shell actions or maison links', function () {

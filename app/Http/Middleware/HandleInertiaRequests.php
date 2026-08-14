@@ -2,9 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\PermissionEnum;
 use App\Services\Auth\PostLoginRedirectService;
-use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -52,14 +50,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames(),
-                    // TEMPORARY — AdminTypePermissionBypass shares every permission
-                    // name so the sidebar/usePermission hooks match Gate::before.
-                    'permissions' => AdminTypePermissionBypass::grantsAll($user)
-                        ? collect(PermissionEnum::cases())->map->value->values()
-                        : $user->getAllPermissions()->pluck('name'),
+                    'permissions' => $user->getAllPermissions()->pluck('name'),
                     'is_super_admin' => $user->hasRole('super-admin'),
                     'type' => $user->type->value,
                     'is_admin' => $user->isAdmin(),
+                    'is_founding_circle' => $user->isFoundingCircle(),
                     'dashboard_url' => $redirects->dashboardUrlFor($user, $request),
                     'avatar_url' => $user->avatar
                         ? Storage::disk('public')->url($user->avatar)
@@ -76,6 +71,7 @@ class HandleInertiaRequests extends Middleware
             'availableLocales' => config('maison.locales'),
             'appUrl' => config('app.url'),
             'seoImage' => config('maison.seo.image'),
+            'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => [
                 'currency' => config('maison.checkout.currency'),
                 'amount' => (int) config('maison.checkout.amount'),

@@ -1,15 +1,12 @@
-import { useState } from 'react';
+import { router, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import {
-    EVENT_CARDS
-    
-} from '@/components/maison/community/community-data';
-import type {EventCardData} from '@/components/maison/community/community-data';
+import type { CommunityEventPayload } from '@/components/maison/community/community-data';
 import { Monogram } from '@/components/maison/ui/monogram';
 import { Wrap } from '@/components/maison/ui/section';
 import { cn } from '@/lib/utils';
 
 type CommunityEventsProps = {
+    events: CommunityEventPayload[];
     onRsvp: () => void;
 };
 
@@ -19,19 +16,19 @@ const EVENT_IMAGE_CLASSES = {
     3: 'bg-linear-to-br from-[#1A1F2E] to-[#0C1018]',
 } as const;
 
-export function CommunityEvents({ onRsvp }: CommunityEventsProps) {
+export function CommunityEvents({ events, onRsvp }: CommunityEventsProps) {
     const { t } = useTranslation();
-    const [events, setEvents] = useState(
-        EVENT_CARDS.map((event) => ({ ...event, joined: false })),
-    );
+    const { locale } = usePage().props;
 
     function handleJoin(eventId: string) {
-        setEvents((current) =>
-            current.map((event) =>
-                event.id === eventId ? { ...event, joined: true } : event,
-            ),
+        router.post(
+            `/${locale}/community/events/${eventId}/rsvp`,
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: () => onRsvp(),
+            },
         );
-        onRsvp();
     }
 
     return (
@@ -45,11 +42,16 @@ export function CommunityEvents({ onRsvp }: CommunityEventsProps) {
                 )}
             </p>
 
+            {events.length === 0 && (
+                <p className="text-sm text-choc3">{t('Nog geen events gepland.')}</p>
+            )}
+
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {events.map((event) => (
+                {events.map((event, index) => (
                     <EventCard
                         key={event.id}
                         event={event}
+                        variant={((index % 3) + 1) as 1 | 2 | 3}
                         onJoin={() => handleJoin(event.id)}
                     />
                 ))}
@@ -59,11 +61,12 @@ export function CommunityEvents({ onRsvp }: CommunityEventsProps) {
 }
 
 type EventCardProps = {
-    event: EventCardData & { joined?: boolean };
+    event: CommunityEventPayload;
+    variant: 1 | 2 | 3;
     onJoin: () => void;
 };
 
-function EventCard({ event, onJoin }: EventCardProps) {
+function EventCard({ event, variant, onJoin }: EventCardProps) {
     const { t } = useTranslation();
 
     return (
@@ -71,11 +74,11 @@ function EventCard({ event, onJoin }: EventCardProps) {
             <div
                 className={cn(
                     'relative flex h-40 items-center justify-center',
-                    EVENT_IMAGE_CLASSES[event.imageVariant],
+                    EVENT_IMAGE_CLASSES[variant],
                 )}
             >
                 <span className="font-serif text-lg tracking-[0.2em] text-gold/8 uppercase">
-                    {event.imageLabel}
+                    Maison Anversa
                 </span>
                 <span className="absolute top-3.5 left-4 border border-gold/30 bg-choc/80 px-2.5 py-1 font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
                     {t('Founding Circle Only')}
@@ -84,13 +87,13 @@ function EventCard({ event, onJoin }: EventCardProps) {
 
             <div className="px-5 pt-5 pb-6">
                 <div className="mb-2 font-sans text-[9px] tracking-[0.2em] text-gold uppercase">
-                    {t(event.date)}
+                    {event.starts_at}
                 </div>
                 <div className="mb-1.5 font-serif text-xl font-medium text-cream">
-                    {t(event.title)}
+                    {event.title}
                 </div>
                 <div className="mb-3.5 font-sans text-[9px] tracking-[0.1em] text-stone">
-                    {t(event.location)}
+                    {event.location}
                 </div>
 
                 <div className="mb-4 flex items-center gap-2.5">
@@ -105,15 +108,9 @@ function EventCard({ event, onJoin }: EventCardProps) {
                                 )}
                             />
                         ))}
-                        {event.attendees.length > 1 && (
-                            <Monogram
-                                initials="+"
-                                className="-ml-1.5 size-7 border-2 border-choc2 text-[10px]"
-                            />
-                        )}
                     </div>
                     <div className="font-sans text-[10px] tracking-[0.1em] text-stone">
-                        {t(event.attendeeCount)}
+                        {event.rsvp_count} {t('leden gaan')}
                     </div>
                 </div>
 
@@ -130,7 +127,7 @@ function EventCard({ event, onJoin }: EventCardProps) {
                 >
                     {event.joined
                         ? t('✓ Aangemeld voor dit event')
-                        : t(event.cta)}
+                        : t('Bevestig deelname →')}
                 </button>
             </div>
         </article>

@@ -1,12 +1,10 @@
-import { useState  } from 'react';
-import type {FormEvent} from 'react';
 import { useTranslation } from 'react-i18next';
+import { HeritageLetterForm } from '@/components/maison/heritage-letter-form';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Section, Wrap } from '@/components/maison/ui/section';
-import { SuccessPanel } from '@/components/maison/ui/success-panel';
 
 export default function Story() {
     const { t } = useTranslation();
@@ -115,18 +113,6 @@ export default function Story() {
 
 function StoryNewsletter() {
     const { t } = useTranslation();
-    const [email, setEmail] = useState('');
-    const [sent, setSent] = useState(false);
-
-    function onSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (!event.currentTarget.reportValidity()) {
-            return;
-        }
-
-        setSent(true);
-    }
 
     return (
         <div className="grid items-center gap-10 border-t border-gold/15 bg-choc px-8 py-18 text-cream md:grid-cols-2 md:gap-15 md:px-20">
@@ -142,49 +128,7 @@ function StoryNewsletter() {
                 </p>
             </div>
 
-            <div>
-                {sent ? (
-                    <SuccessPanel
-                        title={t('Bedankt — welkom bij Maison Anversa.')}
-                        icon="✓"
-                        className="text-left [&_div]:text-sand [&_h3]:text-cream"
-                    />
-                ) : (
-                    <form
-                        onSubmit={onSubmit}
-                        className="flex flex-col gap-0 sm:flex-row"
-                    >
-                        <label className="sr-only" htmlFor="nl-story-email">
-                            {t('Uw e-mailadres')}
-                        </label>
-                        <input
-                            id="nl-story-email"
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(event) => setEmail(event.target.value)}
-                            placeholder={t('Uw e-mailadres')}
-                            className="min-w-0 flex-1 border border-gold/25 bg-transparent px-4 py-3.5 font-sans text-[13px] text-cream outline-none placeholder:text-stone focus:border-gold"
-                        />
-                        <button
-                            type="submit"
-                            data-magnetic
-                            className="shrink-0 border border-gold bg-gold px-6 py-3.5 font-sans text-[10px] font-medium tracking-[0.25em] text-choc uppercase transition-colors hover:bg-gold2"
-                        >
-                            {t('Schrijf in')}
-                        </button>
-                    </form>
-                )}
-                <p className="mt-3 font-sans text-[10px] tracking-[0.08em] text-stone">
-                    {t('Privacyverklaring van toepassing.')}{' '}
-                    <MaisonLink
-                        to="privacy"
-                        className="underline underline-offset-2 hover:text-gold"
-                    >
-                        {t('Privacybeleid')}
-                    </MaisonLink>
-                </p>
-            </div>
+            <HeritageLetterForm source="story" />
         </div>
     );
 }

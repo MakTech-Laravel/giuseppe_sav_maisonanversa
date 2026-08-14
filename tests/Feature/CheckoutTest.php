@@ -31,7 +31,7 @@ test('checkout success and cancel pages are reachable', function () {
 
 test('checkout requires reservation details', function () {
     $this->post(localized('maison.checkout.store'), [])
-        ->assertSessionHasErrors(['name', 'email', 'edition_number']);
+        ->assertSessionHasErrors(['name', 'email']);
 });
 
 test('checkout creates an incomplete order and redirects to stripe', function () {
@@ -52,7 +52,6 @@ test('checkout creates an incomplete order and redirects to stripe', function ()
     $this->post(localized('maison.checkout.store'), [
         'name' => 'Test Buyer',
         'email' => 'buyer@example.com',
-        'edition_number' => 47,
         'gift_wrap' => false,
     ])->assertRedirect('https://checkout.stripe.com/c/pay/test_session');
 
@@ -60,7 +59,8 @@ test('checkout creates an incomplete order and redirects to stripe', function ()
 
     expect($order)->not->toBeNull()
         ->and($order->status)->toBe(OrderStatus::Incomplete)
-        ->and($order->edition_number)->toBe(47)
+        ->and($order->edition_number)->toBeNull()
+        ->and($order->edition_piece_id)->not->toBeNull()
         ->and($order->currency)->toBe('eur')
         ->and($order->amount)->toBe(24900)
         ->and($order->stripe_checkout_session_id)->toBe('cs_test_session_123');
@@ -73,7 +73,6 @@ test('checkout fails gracefully when stripe keys are missing', function () {
         ->post(localized('maison.checkout.store'), [
             'name' => 'Test Buyer',
             'email' => 'buyer@example.com',
-            'edition_number' => 12,
         ])
         ->assertSessionHasErrors('checkout');
 
@@ -101,7 +100,6 @@ test('authenticated checkout attaches the user to the order', function () {
         ->post(localized('maison.checkout.store'), [
             'name' => $user->name,
             'email' => $user->email,
-            'edition_number' => 3,
         ])
         ->assertRedirect('https://checkout.stripe.com/c/pay/test_session');
 

@@ -13,6 +13,7 @@ import type { ShellActions } from '@/components/maison/shell/shell-actions';
 import { SiteFooter } from '@/components/maison/shell/site-footer';
 import { SiteNav } from '@/components/maison/shell/site-nav';
 import { SiteTopbar } from '@/components/maison/shell/site-topbar';
+import { CookieConsentBanner } from '@/components/maison/cookie-consent-banner';
 import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
 import { activePage } from '@/lib/maison-navigation';
@@ -121,6 +122,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                     <SiteFooter onNewsletter={actions.openNewsletter} />
                     <EtchingBand />
                     <ContactDock />
+                    <CookieConsentBanner />
 
                     {activePage(url, locale) === 'home' && <ImmersiveIntro />}
 

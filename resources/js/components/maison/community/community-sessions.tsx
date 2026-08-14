@@ -1,14 +1,16 @@
-import { useState  } from 'react';
-import type {ReactNode} from 'react';
+import { router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    SESSION_CARDS,
     SESSION_LEVELS,
     SESSION_LOCATIONS,
-    SESSION_PLAYERS_WANTED
-    
+    SESSION_PLAYERS_WANTED,
 } from '@/components/maison/community/community-data';
-import type {SessionCardData} from '@/components/maison/community/community-data';
+import type {
+    CommunitySessionPayload,
+    SessionCardData,
+} from '@/components/maison/community/community-data';
 import { Monogram } from '@/components/maison/ui/monogram';
 import { Wrap } from '@/components/maison/ui/section';
 import {
@@ -22,52 +24,51 @@ import {
 import { cn } from '@/lib/utils';
 
 type CommunitySessionsProps = {
+    sessions: CommunitySessionPayload[];
     onJoin: () => void;
 };
 
-/**
- * Open sessions list in normal page flow. “Plan a session” lives in a fixed
- * sheet trigger so the form stays reachable no matter how long the list is.
- */
-export function CommunitySessions({ onJoin }: CommunitySessionsProps) {
+function toSessionCard(
+    session: CommunitySessionPayload,
+    t: (key: string) => string,
+): SessionCardData {
+    const spots =
+        session.spots === null
+            ? t('Open')
+            : session.spots <= 0
+              ? 'Vol'
+              : session.spots === 1
+                ? '1 plek vrij'
+                : `${session.spots} plekken vrij`;
+
+    return {
+        id: session.id,
+        title: session.location,
+        spots,
+        meta: [session.starts_at, session.location, session.level ?? ''].filter(
+            Boolean,
+        ),
+        players: session.players,
+        emptySlots: session.spots ?? 0,
+        joined: session.joined,
+    };
+}
+
+export function CommunitySessions({ sessions, onJoin }: CommunitySessionsProps) {
     const { t } = useTranslation();
-    const [sessions, setSessions] = useState(SESSION_CARDS);
+    const { locale } = usePage().props;
     const [created, setCreated] = useState(false);
     const [plannerOpen, setPlannerOpen] = useState(false);
 
     function handleJoin(sessionId: string) {
-        setSessions((current) =>
-            current.map((session) => {
-                if (session.id !== sessionId || session.joined) {
-                    return session;
-                }
-
-                const spotsMatch = session.spots.match(/^(\d+)/);
-                const openSpots = spotsMatch
-                    ? Number.parseInt(spotsMatch[1], 10)
-                    : 0;
-                const nextSpots = openSpots - 1;
-
-                return {
-                    ...session,
-                    joined: true,
-                    spots:
-                        nextSpots <= 0
-                            ? 'Vol'
-                            : nextSpots === 1
-                              ? '1 plek vrij'
-                              : `${nextSpots} plekken vrij`,
-                    players: [...session.players, 'YS'],
-                    emptySlots: Math.max(0, session.emptySlots - 1),
-                };
-            }),
+        router.post(
+            `/${locale}/community/sessions/${sessionId}/join`,
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: () => onJoin(),
+            },
         );
-
-        onJoin();
-    }
-
-    function handleCreateSession() {
-        setCreated(true);
     }
 
     return (
@@ -84,10 +85,16 @@ export function CommunitySessions({ onJoin }: CommunitySessionsProps) {
                     </p>
                 </div>
 
+                {sessions.length === 0 && (
+                    <p className="mb-6 text-sm text-choc3">
+                        {t('Nog geen open sessies. Plan de eerste.')}
+                    </p>
+                )}
+
                 {sessions.map((session) => (
                     <SessionCard
                         key={session.id}
-                        session={session}
+                        session={toSessionCard(session, t)}
                         onJoin={() => handleJoin(session.id)}
                     />
                 ))}
@@ -120,7 +127,7 @@ export function CommunitySessions({ onJoin }: CommunitySessionsProps) {
                         {!created ? (
                             <SessionPlannerForm
                                 onCreate={() => {
-                                    handleCreateSession();
+                                    setCreated(true);
                                 }}
                             />
                         ) : (
@@ -166,7 +173,7 @@ function SessionCard({ session, onJoin }: SessionCardProps) {
         <article className="mb-4 border border-gold/15 bg-cream2 p-7">
             <div className="mb-3 flex items-start justify-between gap-3">
                 <div className="font-serif text-[22px] font-medium text-choc">
-                    {t(session.title)}
+                    {session.title}
                 </div>
                 <div
                     className={cn(
@@ -184,7 +191,7 @@ function SessionCard({ session, onJoin }: SessionCardProps) {
                         key={item}
                         className="font-sans text-[10px] tracking-[0.1em] text-stone"
                     >
-                        {t(item)}
+                        {item}
                     </div>
                 ))}
             </div>
@@ -228,19 +235,44 @@ type SessionPlannerFormProps = {
 
 function SessionPlannerForm({ onCreate }: SessionPlannerFormProps) {
     const { t } = useTranslation();
+    const { locale } = usePage().props;
+    const [date, setDate] = useState('2027-02-08');
+    const [time, setTime] = useState('10:00');
+    const [location, setLocation] = useState(SESSION_LOCATIONS[0] ?? 'Antwerp');
+    const [level, setLevel] = useState(SESSION_LEVELS[0] ?? '');
+    const [capacity, setCapacity] = useState('4');
+    const [notes, setNotes] = useState('');
+
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        router.post(
+            `/${locale}/community/sessions`,
+            {
+                starts_at: `${date}T${time}`,
+                location,
+                level,
+                capacity: Number(capacity) || null,
+                notes: notes || null,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => onCreate(),
+            },
+        );
+    }
 
     return (
-        <form
-            onSubmit={(event) => {
-                event.preventDefault();
-                onCreate();
-            }}
-            className="space-y-4"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4">
             <Field label={t('Club Corner locatie')}>
-                <select className={fieldClassName}>
-                    {SESSION_LOCATIONS.map((location) => (
-                        <option key={location}>{t(location)}</option>
+                <select
+                    className={fieldClassName}
+                    value={location}
+                    onChange={(event) => setLocation(event.target.value)}
+                >
+                    {SESSION_LOCATIONS.map((item) => (
+                        <option key={item} value={item}>
+                            {t(item)}
+                        </option>
                     ))}
                 </select>
             </Field>
@@ -248,7 +280,8 @@ function SessionPlannerForm({ onCreate }: SessionPlannerFormProps) {
             <Field label={t('Datum')}>
                 <input
                     type="date"
-                    defaultValue="2027-02-08"
+                    value={date}
+                    onChange={(event) => setDate(event.target.value)}
                     className={fieldClassName}
                 />
             </Field>
@@ -256,23 +289,39 @@ function SessionPlannerForm({ onCreate }: SessionPlannerFormProps) {
             <Field label={t('Tijdstip')}>
                 <input
                     type="time"
-                    defaultValue="10:00"
+                    value={time}
+                    onChange={(event) => setTime(event.target.value)}
                     className={fieldClassName}
                 />
             </Field>
 
             <Field label={t('Niveau')}>
-                <select className={fieldClassName}>
-                    {SESSION_LEVELS.map((level) => (
-                        <option key={level}>{t(level)}</option>
+                <select
+                    className={fieldClassName}
+                    value={level}
+                    onChange={(event) => setLevel(event.target.value)}
+                >
+                    {SESSION_LEVELS.map((item) => (
+                        <option key={item} value={item}>
+                            {t(item)}
+                        </option>
                     ))}
                 </select>
             </Field>
 
             <Field label={t('Extra spelers gezocht')}>
-                <select className={fieldClassName}>
+                <select
+                    className={fieldClassName}
+                    value={capacity}
+                    onChange={(event) => setCapacity(event.target.value)}
+                >
                     {SESSION_PLAYERS_WANTED.map((option) => (
-                        <option key={option}>{t(option)}</option>
+                        <option
+                            key={option}
+                            value={option.replace(/\D/g, '') || '4'}
+                        >
+                            {t(option)}
+                        </option>
                     ))}
                 </select>
             </Field>
@@ -280,6 +329,8 @@ function SessionPlannerForm({ onCreate }: SessionPlannerFormProps) {
             <Field label={t('Notitie (optioneel)')}>
                 <input
                     type="text"
+                    value={notes}
+                    onChange={(event) => setNotes(event.target.value)}
                     placeholder={t('Bijv. niveau, taal, bijzonderheden...')}
                     className={fieldClassName}
                 />

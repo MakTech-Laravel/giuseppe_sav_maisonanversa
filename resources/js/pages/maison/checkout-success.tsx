@@ -19,7 +19,14 @@ export default function CheckoutSuccess({
 
     return (
         <>
-            <MaisonSeoHead page="home" />
+            <MaisonSeoHead
+                page="home"
+                title={t('Betaling bevestigd — Maison Anversa')}
+                description={t(
+                    'Uw Founding Edition-reservering is ontvangen.',
+                )}
+                noIndex
+            />
 
             <PageHero
                 eyebrow={t('Betaling')}

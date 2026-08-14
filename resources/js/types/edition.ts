@@ -1,10 +1,12 @@
 /**
- * Heritage No.001 stock figures, shared by every public page from
- * `config/maison.php` so the hero counter, the pre-order bar and the product
- * prose cannot disagree the way the prototype's three copies did.
+ * Heritage No.001 stock figures from the edition_pieces table.
  */
 export type Edition = {
     reserved: number;
     total: number;
     available: number;
+    sellable: number;
+    allocated: number;
+    archived: number;
+    soldOut: boolean;
 };

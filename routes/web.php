@@ -9,8 +9,12 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
+use App\Http\Controllers\Community\CommunityController;
+use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
+use App\Http\Controllers\Maison\NewsletterController;
+use App\Http\Controllers\Maison\VerificationController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\PostAttachmentController;
@@ -37,6 +41,10 @@ Route::get('/', function (Request $request, LocalePreferenceService $locales) {
 })->name('home');
 
 Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
+
+Route::post('cookie-consent', [CookieConsentController::class, 'store'])
+    ->middleware('throttle:20,1')
+    ->name('cookie-consent.store');
 
 Route::middleware('web')->controller(AuthModalRedirectController::class)->group(function () {
     Route::get('login', 'login')->name('login');
@@ -74,6 +82,17 @@ Route::prefix('{locale}')
             Route::get('shipping', 'shipping')->name('shipping');
             Route::get('care', 'care')->name('care');
         });
+
+        Route::get('verify/{token}', VerificationController::class)
+            ->where('token', '[0-9a-fA-F-]{36}')
+            ->name('verify');
+
+        Route::post('heritage-letter', [NewsletterController::class, 'store'])
+            ->middleware('throttle:5,1')
+            ->name('heritage-letter.store');
+        Route::get('heritage-letter/unsubscribe/{subscriber}', [NewsletterController::class, 'unsubscribe'])
+            ->middleware('signed')
+            ->name('heritage-letter.unsubscribe');
 
         Route::controller(CheckoutController::class)->group(function () {
             Route::post('checkout', 'store')
@@ -140,11 +159,23 @@ Route::prefix('{locale}')
                 Route::get('passport', 'passport')->name('passport');
                 Route::get('circle', 'circle')->name('circle');
                 Route::get('letter', 'letter')->name('letter');
+                Route::patch('letter', 'updateLetter')->name('letter.update');
                 Route::get('profile', 'profile')->name('profile');
                 Route::patch('profile', 'updateProfile')->name('profile.update');
                 Route::get('security', 'security')->name('security');
                 Route::delete('profile', 'destroy')->name('profile.destroy');
             });
+
+        Route::prefix('community')->name('community.')->controller(CommunityController::class)->group(function () {
+            Route::post('posts', 'storePost')->name('posts.store');
+            Route::post('posts/{communityPost}/comments', 'storeComment')->name('posts.comments.store');
+            Route::post('posts/{communityPost}/like', 'toggleLike')->name('posts.like');
+            Route::post('posts/{communityPost}/hide', 'hidePost')->name('posts.hide');
+            Route::post('sessions', 'storeSession')->name('sessions.store');
+            Route::post('sessions/{communitySession}/join', 'joinSession')->name('sessions.join');
+            Route::delete('sessions/{communitySession}/leave', 'leaveSession')->name('sessions.leave');
+            Route::post('events/{communityEvent}/rsvp', 'rsvpEvent')->name('events.rsvp');
+        });
 
         // ── Demo landing page ─────────────────────────────────────────────────────
         Route::get('/file-upload-demo', [FileUploadDemoController::class, 'index'])
@@ -183,9 +214,11 @@ Route::prefix('{locale}')
 
             Route::controller(OpsController::class)->group(function () {
                 Route::get('orders', 'orders')->name('orders.index')
-                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                    ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
                 Route::get('orders/{order}', 'orderShow')->name('orders.show')
-                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                    ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
+                Route::patch('orders/{order}', 'updateOrderStatus')->name('orders.update')
+                    ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
                 Route::get('events', 'events')->name('events.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('events/{event}', 'eventShow')->name('events.show')
@@ -195,10 +228,16 @@ Route::prefix('{locale}')
                 Route::get('circle/{member}', 'circleShow')->name('circle.show')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('heritage', 'heritage')->name('heritage.index')
-                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('community', 'community')->name('community.index')
-                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::post('community/official', 'storeOfficialPost')->name('community.official')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_OFFICIAL->value);
+                Route::post('community/posts/{communityPost}/hide', 'hideCommunityPost')->name('community.hide')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::get('letter', 'letter')->name('letter.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('letter/export', 'exportLetter')->name('letter.export')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
             });
 

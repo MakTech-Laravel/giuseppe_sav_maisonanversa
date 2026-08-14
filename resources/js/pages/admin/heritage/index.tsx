@@ -35,9 +35,10 @@ function translateInventoryStatus(
     t: (key: string) => string,
 ): string {
     const statusMap: Record<string, string> = {
-        'On sale': 'Te koop',
-        Bundled: 'Inbegrepen',
-        Optional: 'Optioneel',
+        archive: 'Archief',
+        available: 'Beschikbaar',
+        reserved: 'Gereserveerd',
+        allocated: 'Toegewezen',
     };
 
     return t(statusMap[status] ?? status);

@@ -23,6 +23,7 @@ export type FeedPostData = {
     imageLabel?: string;
     likes: number;
     comments: FeedComment[];
+    liked?: boolean;
 };
 
 export type CourtPin = {
@@ -64,6 +65,30 @@ export type EventCardData = {
     attendees: string[];
     attendeeCount: string;
     cta: string;
+};
+
+export type CommunitySessionPayload = {
+    id: string;
+    location: string;
+    starts_at: string;
+    capacity: number | null;
+    level: string | null;
+    notes: string | null;
+    host: string;
+    joined: boolean;
+    spots: number | null;
+    players: string[];
+};
+
+export type CommunityEventPayload = {
+    id: string;
+    title: string;
+    description: string | null;
+    starts_at: string;
+    location: string;
+    joined: boolean;
+    rsvp_count: number;
+    attendees: string[];
 };
 
 export const SIDEBAR_MEMBERS = [

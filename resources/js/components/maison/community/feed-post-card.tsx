@@ -1,11 +1,8 @@
-import { usePage } from '@inertiajs/react';
-import { useState  } from 'react';
-import type {FormEvent} from 'react';
+import { router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type {
-    FeedComment,
-    FeedPostData,
-} from '@/components/maison/community/community-data';
+import type { FeedPostData } from '@/components/maison/community/community-data';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { Monogram } from '@/components/maison/ui/monogram';
 import { cn } from '@/lib/utils';
@@ -14,36 +11,18 @@ type FeedPostCardProps = {
     post: FeedPostData;
 };
 
-function initialsFromName(name: string): string {
-    const parts = name.trim().split(/\s+/).filter(Boolean);
-
-    if (parts.length === 0) {
-        return 'MA';
-    }
-
-    if (parts.length === 1) {
-        return parts[0].slice(0, 2).toUpperCase();
-    }
-
-    return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`.toUpperCase();
-}
-
 export function FeedPostCard({ post }: FeedPostCardProps) {
     const { t } = useTranslation();
-    const { auth } = usePage().props;
-    const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(post.likes);
+    const { auth, locale } = usePage().props;
     const [commentsOpen, setCommentsOpen] = useState(false);
-    const [comments, setComments] = useState<FeedComment[]>(post.comments);
     const [draft, setDraft] = useState('');
 
     function toggleLike() {
-        setLiked((current) => {
-            const next = !current;
-            setLikeCount((count) => count + (next ? 1 : -1));
-
-            return next;
-        });
+        router.post(
+            `/${locale}/community/posts/${post.id}/like`,
+            {},
+            { preserveScroll: true },
+        );
     }
 
     function submitComment(event: FormEvent<HTMLFormElement>) {
@@ -55,18 +34,17 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
             return;
         }
 
-        const name = auth.user.name;
-        const next: FeedComment = {
-            id: `local-${Date.now()}`,
-            name,
-            initials: initialsFromName(name),
-            body,
-            info: t('Zojuist'),
-        };
-
-        setComments((current) => [...current, next]);
-        setDraft('');
-        setCommentsOpen(true);
+        router.post(
+            `/${locale}/community/posts/${post.id}/comments`,
+            { body },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setDraft('');
+                    setCommentsOpen(true);
+                },
+            },
+        );
     }
 
     return (
@@ -134,12 +112,12 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                     onClick={toggleLike}
                     className={cn(
                         'flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-stone transition-colors',
-                        liked && 'text-gold2',
+                        post.liked && 'text-gold2',
                     )}
                 >
-                    <span>{liked ? '♥' : '♡'}</span>
+                    <span>{post.liked ? '♥' : '♡'}</span>
                     <span>
-                        {likeCount} {t('likes')}
+                        {post.likes} {t('likes')}
                     </span>
                 </button>
                 <button
@@ -151,7 +129,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                     )}
                 >
                     <span>💬</span>
-                    {comments.length} {t('reacties')}
+                    {post.comments.length} {t('reacties')}
                 </button>
                 <button
                     type="button"
@@ -164,7 +142,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
             {commentsOpen && (
                 <div className="mt-4 border-t border-gold/10 pt-4">
                     <ul className="mb-4 flex flex-col gap-3.5">
-                        {comments.map((comment) => (
+                        {post.comments.map((comment) => (
                             <li
                                 key={comment.id}
                                 className="flex items-start gap-3"

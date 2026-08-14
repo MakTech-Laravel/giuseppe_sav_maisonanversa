@@ -64,5 +64,12 @@
     </head>
     <body class="antialiased">
         <x-inertia::app />
+        @php
+            $consent = json_decode(request()->cookie('maison_consent', ''), true);
+            $allowAnalytics = is_array($consent) && ($consent['analytics'] ?? false);
+        @endphp
+        @if ($allowAnalytics)
+            {{-- Analytics scripts load only after explicit consent. --}}
+        @endif
     </body>
 </html>

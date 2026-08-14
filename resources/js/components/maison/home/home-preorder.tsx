@@ -158,21 +158,34 @@ export function HomePreorder({ edition }: { edition: Edition }) {
                         >
                             {t('Bekijk certificaatvoorbeeld →')}
                         </button>
-                        <MaisonButton
-                            variant="gold"
-                            block
-                            onClick={openOrder}
-                            className="mb-3"
-                        >
-                            {t('Reserveer Uw Nummer')}
-                        </MaisonButton>
-                        <MaisonButton
-                            variant="outlineCream"
-                            block
-                            onClick={openNewsletter}
-                        >
-                            {t('Schrijf in voor Heritage Letter')}
-                        </MaisonButton>
+                        {edition.soldOut ? (
+                            <MaisonButton
+                                variant="gold"
+                                block
+                                onClick={openNewsletter}
+                                className="mb-3"
+                            >
+                                {t('Schrijf in voor Heritage Letter')}
+                            </MaisonButton>
+                        ) : (
+                            <>
+                                <MaisonButton
+                                    variant="gold"
+                                    block
+                                    onClick={openOrder}
+                                    className="mb-3"
+                                >
+                                    {t('Reserveer Uw Nummer')}
+                                </MaisonButton>
+                                <MaisonButton
+                                    variant="outlineCream"
+                                    block
+                                    onClick={openNewsletter}
+                                >
+                                    {t('Schrijf in voor Heritage Letter')}
+                                </MaisonButton>
+                            </>
+                        )}
                     </Reveal>
                 </div>
             </Wrap>

@@ -12,41 +12,33 @@ beforeEach(function () {
     $this->seed([PermissionSeeder::class, RoleSeeder::class]);
 });
 
-test('admin-type users pass every permission check while the bypass is enabled', function () {
-    config(['maison.admin_type_grants_all_permissions' => true]);
-
+test('viewers do not receive staff-wide permission grants', function () {
     $staff = User::factory()->admin()->create();
     $staff->assignRole(RoleEnum::VIEWER->value);
     $staff->syncTypeFromRoles();
 
     expect($staff->type)->toBe(UserType::Admin)
-        ->and(Gate::forUser($staff)->allows(PermissionEnum::USERS_DELETE->value))->toBeTrue()
-        ->and(Gate::forUser($staff)->allows(PermissionEnum::DASHBOARD_VIEW->value))->toBeTrue();
+        ->and(Gate::forUser($staff)->allows(PermissionEnum::DASHBOARD_VIEW->value))->toBeTrue()
+        ->and(Gate::forUser($staff)->allows(PermissionEnum::USERS_DELETE->value))->toBeFalse();
 });
 
-test('customer-type users do not receive the admin-type permission bypass', function () {
-    config(['maison.admin_type_grants_all_permissions' => true]);
-
+test('customer-type users cannot manage staff accounts', function () {
     $customer = User::factory()->customer()->create();
     $customer->assignRole(RoleEnum::USER->value);
 
     expect(Gate::forUser($customer)->allows(PermissionEnum::USERS_DELETE->value))->toBeFalse();
 });
 
-test('disabling the bypass restores role-based permission checks', function () {
-    config(['maison.admin_type_grants_all_permissions' => false]);
-
+test('admins receive heritage and community permissions', function () {
     $staff = User::factory()->admin()->create();
-    $staff->assignRole(RoleEnum::VIEWER->value);
+    $staff->assignRole(RoleEnum::ADMIN->value);
     $staff->syncTypeFromRoles();
 
-    expect(Gate::forUser($staff)->allows(PermissionEnum::DASHBOARD_VIEW->value))->toBeTrue()
-        ->and(Gate::forUser($staff)->allows(PermissionEnum::USERS_DELETE->value))->toBeFalse();
+    expect(Gate::forUser($staff)->allows(PermissionEnum::ORDERS_MANAGE->value))->toBeTrue()
+        ->and(Gate::forUser($staff)->allows(PermissionEnum::COMMUNITY_MODERATE->value))->toBeTrue();
 });
 
 test('admin-type bypass does not override model policies for super-admins', function () {
-    config(['maison.admin_type_grants_all_permissions' => true]);
-
     $staff = User::factory()->admin()->create();
     $staff->assignRole(RoleEnum::ADMIN->value);
     $staff->syncTypeFromRoles();

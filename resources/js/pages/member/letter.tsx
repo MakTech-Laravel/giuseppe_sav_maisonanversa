@@ -1,6 +1,5 @@
-import { Head } from '@inertiajs/react';
-import { useState  } from 'react';
-import type {FormEvent} from 'react';
+import { Head, useForm } from '@inertiajs/react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
 import { Button } from '@/components/ui/button';
@@ -17,12 +16,11 @@ export default function MemberLetter({
     preferences: Preferences;
 }) {
     const { t } = useTranslation();
-    const [data, setData] = useState(preferences);
-    const [saved, setSaved] = useState(false);
+    const form = useForm(preferences);
 
     function onSubmit(event: FormEvent) {
         event.preventDefault();
-        setSaved(true);
+        form.patch(`/${window.location.pathname.split('/')[1]}/member/letter`);
     }
 
     const options = [
@@ -51,14 +49,10 @@ export default function MemberLetter({
                         >
                             <input
                                 type="checkbox"
-                                checked={data[key]}
-                                onChange={(event) => {
-                                    setSaved(false);
-                                    setData((current) => ({
-                                        ...current,
-                                        [key]: event.target.checked,
-                                    }));
-                                }}
+                                checked={form.data[key]}
+                                onChange={(event) =>
+                                    form.setData(key, event.target.checked)
+                                }
                                 className="size-4 accent-gold"
                             />
                             <span className="font-sans text-[12px] tracking-[0.14em] text-cream uppercase">
@@ -67,15 +61,13 @@ export default function MemberLetter({
                         </label>
                     ))}
 
-                    <Button type="submit" className="mt-4">
+                    <Button type="submit" className="mt-4" disabled={form.processing}>
                         {t('Voorkeuren opslaan')}
                     </Button>
 
-                    {saved && (
+                    {form.recentlySuccessful && (
                         <p className="font-sans text-[11px] tracking-[0.12em] text-gold2 uppercase">
-                            {t(
-                                'Voorkeuren genoteerd voor deze sessie (prototype)',
-                            )}
+                            {t('Voorkeuren opgeslagen.')}
                         </p>
                     )}
                 </form>

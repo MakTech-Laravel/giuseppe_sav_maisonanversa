@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CommunityPost;
 use App\Models\User;
 use App\Support\CommunityFeed;
 use Illuminate\Support\Facades\File;
@@ -24,6 +25,7 @@ test('guests do not receive the community feed props', function () {
 
 test('authenticated members receive a scrollable community feed', function () {
     $user = User::factory()->create();
+    CommunityPost::factory()->count(CommunityFeed::PER_PAGE + 4)->create();
 
     $this->actingAs($user)
         ->get(localized('maison.community'))
@@ -32,14 +34,15 @@ test('authenticated members receive a scrollable community feed', function () {
             ->component('maison/community')
             ->has('posts.data', CommunityFeed::PER_PAGE)
             ->where('posts.current_page', 1)
-            ->where('posts.last_page', (int) ceil(count(CommunityFeed::posts()) / CommunityFeed::PER_PAGE))
+            ->where('posts.last_page', 2)
             ->has('posts.data.0.comments')
         );
 });
 
 test('authenticated members can load the next community feed page', function () {
     $user = User::factory()->create();
-    $secondPageFirstId = CommunityFeed::posts()[CommunityFeed::PER_PAGE]['id'];
+    CommunityPost::factory()->count(CommunityFeed::PER_PAGE + 4)->create();
+    $secondPageFirst = CommunityPost::query()->latest()->skip(CommunityFeed::PER_PAGE)->first();
 
     $this->actingAs($user)
         ->get(route('maison.community', [
@@ -49,7 +52,7 @@ test('authenticated members can load the next community feed page', function () 
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('posts.current_page', 2)
-            ->where('posts.data.0.id', $secondPageFirstId)
+            ->where('posts.data.0.id', (string) $secondPageFirst->id)
         );
 });
 
