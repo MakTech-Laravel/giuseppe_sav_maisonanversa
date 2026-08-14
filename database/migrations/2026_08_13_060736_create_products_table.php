@@ -21,14 +21,6 @@ return new class extends Migration
             $table->string('stripe_price_id')->nullable();
             $table->timestamps();
         });
-
-        Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('product_id')->nullable()->after('user_id')->constrained()->nullOnDelete();
-        });
-
-        Schema::table('edition_pieces', function (Blueprint $table) {
-            $table->foreignId('product_id')->nullable()->after('id')->constrained()->nullOnDelete();
-        });
     }
 
     /**
@@ -36,14 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('edition_pieces', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('product_id');
-        });
-
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('product_id');
-        });
-
         Schema::dropIfExists('products');
     }
 };

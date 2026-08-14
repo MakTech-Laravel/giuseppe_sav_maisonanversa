@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('edition_pieces', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
             $table->unsignedSmallInteger('edition_number')->unique();
             $table->string('status')->default(EditionPieceStatus::Available->value)->index();
             $table->unsignedBigInteger('order_id')->nullable()->unique();
