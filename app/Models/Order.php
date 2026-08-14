@@ -18,6 +18,7 @@ class Order extends Model
      */
     protected $fillable = [
         'user_id',
+        'product_id',
         'edition_piece_id',
         'status',
         'name',
@@ -46,7 +47,7 @@ class Order extends Model
             'status' => OrderStatus::class,
             'edition_number' => 'integer',
             'gift_wrap' => 'boolean',
-            'amount' => 'integer',
+            'amount' => 'decimal:2',
             'shipped_at' => 'datetime',
             'delivered_at' => 'datetime',
             'follow_up_sent_at' => 'datetime',
@@ -59,6 +60,14 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return BelongsTo<Product, $this>
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     /**

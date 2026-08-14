@@ -1,9 +1,14 @@
-import { Head } from '@inertiajs/react';
-import { Package, TriangleAlert } from 'lucide-react';
+import { Head, useForm } from '@inertiajs/react';
+import { Loader2, Package, TriangleAlert } from 'lucide-react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import InputError from '@/components/input-error';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
     Table,
     TableBody,
@@ -15,6 +20,14 @@ import {
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import heritageRoutes from '@/routes/admin/heritage';
+
+interface HeritageProduct {
+    id: number;
+    name: string;
+    amount: string;
+    currency: string;
+    stripe_price_id: string | null;
+}
 
 interface HeritageInventory {
     product_name: string;
@@ -45,9 +58,11 @@ function translateInventoryStatus(
 }
 
 export default function HeritageIndex({
+    product,
     inventory,
     heritageConnected,
 }: {
+    product: HeritageProduct | null;
     inventory: HeritageInventory;
     heritageConnected: boolean;
 }) {
@@ -77,6 +92,7 @@ export default function HeritageIndex({
                         </AlertDescription>
                     </Alert>
                 )}
+                {product && <HeritageProductForm product={product} />}
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <StatCard
                         label={t('Product')}
@@ -133,6 +149,67 @@ export default function HeritageIndex({
                 </div>
             </div>
         </>
+    );
+}
+
+function HeritageProductForm({ product }: { product: HeritageProduct }) {
+    const { t } = useTranslation();
+    const form = useForm(
+        heritageRoutes.update({
+            locale: wayfinderLocale(),
+            product: product.id,
+        }),
+        {
+            name: product.name,
+            amount: product.amount,
+        },
+    );
+
+    const submit = (event: FormEvent) => {
+        event.preventDefault();
+        form.submit();
+    };
+
+    return (
+        <form
+            onSubmit={submit}
+            className="grid gap-4 rounded-xl border bg-card p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-3"
+        >
+            <div className="grid gap-2">
+                <Label htmlFor="name">{t('Naam')}</Label>
+                <Input
+                    id="name"
+                    value={form.data.name}
+                    onChange={(event) =>
+                        form.setData('name', event.target.value)
+                    }
+                />
+                <InputError message={form.errors.name} />
+            </div>
+            <div className="grid gap-2">
+                <Label htmlFor="amount">{t('Bedrag')}</Label>
+                <Input
+                    id="amount"
+                    name="amount"
+                    type="text"
+                    inputMode="decimal"
+                    value={form.data.amount}
+                    onChange={(event) =>
+                        form.setData('amount', event.target.value)
+                    }
+                />
+                <p className="text-xs text-muted-foreground">EUR</p>
+                <InputError message={form.errors.amount} />
+            </div>
+            <div className="flex items-end">
+                <Button type="submit" disabled={form.processing}>
+                    {form.processing && (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                    )}
+                    {t('Wijzigingen opslaan')}
+                </Button>
+            </div>
+        </form>
     );
 }
 

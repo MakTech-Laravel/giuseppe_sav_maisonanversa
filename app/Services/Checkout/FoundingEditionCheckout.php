@@ -3,13 +3,17 @@
 namespace App\Services\Checkout;
 
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
+use App\Services\Stripe\StripeCatalog;
 use Illuminate\Validation\ValidationException;
 use Laravel\Cashier\Checkout;
 use RuntimeException;
 
 class FoundingEditionCheckout
 {
+    public function __construct(private StripeCatalog $catalog) {}
+
     /**
      * Create a Stripe Checkout session for a pending Founding Edition order (EUR).
      *
@@ -25,11 +29,19 @@ class FoundingEditionCheckout
             ]);
         }
 
-        $priceId = (string) config('maison.checkout.price_id');
+        $product = $order->product ?? Product::founding();
 
-        if ($priceId === '') {
+        if ($product === null) {
             throw ValidationException::withMessages([
-                'checkout' => __('Stripe Price ID is not configured. Set MAISON_STRIPE_PRICE_ID.'),
+                'checkout' => __('This product is not available for checkout yet.'),
+            ]);
+        }
+
+        $product = $this->catalog->sync($product);
+
+        if (blank($product->stripe_price_id)) {
+            throw ValidationException::withMessages([
+                'checkout' => __('Unable to create a Stripe price for this product. Try again shortly.'),
             ]);
         }
 
@@ -40,13 +52,15 @@ class FoundingEditionCheckout
             'adaptive_pricing' => ['enabled' => false],
             'metadata' => [
                 'order_id' => (string) $order->id,
-                'product' => 'founding_edition',
+                'product_id' => (string) $product->id,
+                'product' => $product->slug,
                 'currency' => 'eur',
                 'edition_number' => (string) $order->edition_number,
             ],
             'payment_intent_data' => [
                 'metadata' => [
                     'order_id' => (string) $order->id,
+                    'product_id' => (string) $product->id,
                     'edition_number' => (string) $order->edition_number,
                 ],
             ],
@@ -60,7 +74,7 @@ class FoundingEditionCheckout
             ? Checkout::customer($user)
             : Checkout::guest();
 
-        $session = $builder->create([$priceId => 1], $sessionOptions);
+        $session = $builder->create([$product->stripe_price_id => 1], $sessionOptions);
 
         return [
             'url' => $session->url,

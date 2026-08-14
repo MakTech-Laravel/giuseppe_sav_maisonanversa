@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\RoleEnum;
 use App\Exports\NewsletterSubscribersExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateHeritageProductRequest;
 use App\Mail\ShippingNotification;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
@@ -13,6 +14,7 @@ use App\Models\CommunityReport;
 use App\Models\EditionPiece;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
 use App\Support\OrderPresenter;
@@ -235,10 +237,18 @@ class OpsController extends Controller
     {
         $snapshot = $inventory->snapshot();
         $pieces = EditionPiece::query()->orderBy('edition_number')->get();
+        $product = Product::founding();
 
         return Inertia::render('admin/heritage/index', [
+            'product' => $product === null ? null : [
+                'id' => $product->id,
+                'name' => $product->name,
+                'amount' => (string) $product->amount,
+                'currency' => $product->currency,
+                'stripe_price_id' => $product->stripe_price_id,
+            ],
             'inventory' => [
-                'product_name' => config('maison.checkout.product_name'),
+                'product_name' => $product?->name ?? 'Heritage No.001 — Founding Edition',
                 'total' => $snapshot['total'],
                 'reserved' => $snapshot['reserved'],
                 'available' => $snapshot['available'],
@@ -252,5 +262,15 @@ class OpsController extends Controller
             ],
             'heritageConnected' => true,
         ]);
+    }
+
+    public function updateHeritageProduct(
+        UpdateHeritageProductRequest $request,
+        string $locale,
+        Product $product,
+    ): RedirectResponse {
+        $product->update($request->validated());
+
+        return back();
     }
 }

@@ -12,7 +12,7 @@ class OrderPresenter
      */
     public function summary(Order $order): array
     {
-        $amount = number_format($order->amount / 100, 2, ',', '.').' €';
+        $amount = Money::format((string) $order->amount).' €';
         $number = $order->edition_number !== null
             ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
             : '—';

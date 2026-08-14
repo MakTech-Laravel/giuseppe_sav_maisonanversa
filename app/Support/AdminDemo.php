@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Models\Product;
+
 /**
  * Demo payloads for admin ops shells until commerce / community backends exist.
  */
@@ -238,7 +240,7 @@ final class AdminDemo
         $total = (int) config('maison.edition.total', 100);
 
         return [
-            'product_name' => (string) config('maison.checkout.product_name', 'Heritage No.001 — Founding Edition'),
+            'product_name' => Product::founding()?->name ?? 'Heritage No.001 — Founding Edition',
             'total' => $total,
             'reserved' => $reserved,
             'available' => max(0, $total - $reserved),

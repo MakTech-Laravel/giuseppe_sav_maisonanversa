@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Product;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Support\Imagery;
 use Illuminate\Http\Request;
@@ -72,12 +73,7 @@ class HandleInertiaRequests extends Middleware
             'appUrl' => config('app.url'),
             'seoImage' => config('maison.seo.image'),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
-            'checkout' => [
-                'currency' => config('maison.checkout.currency'),
-                'amount' => (int) config('maison.checkout.amount'),
-                'displayAmount' => number_format(((int) config('maison.checkout.amount')) / 100, 0, ',', '.'),
-                'productName' => config('maison.checkout.product_name'),
-            ],
+            'checkout' => fn (): array => Product::checkoutShare(),
 
             /*
              * Which of the site's photographs exist yet. Everything else falls

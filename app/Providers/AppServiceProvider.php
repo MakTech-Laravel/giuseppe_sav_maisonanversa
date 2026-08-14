@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Contracts\BrevoContacts;
+use App\Contracts\StripeCatalogGateway;
 use App\Enums\RoleEnum;
 use App\Listeners\StripeEventListener;
 use App\Models\User;
 use App\Services\Brevo\HttpBrevoContacts;
 use App\Services\Brevo\NullBrevoContacts;
+use App\Services\Stripe\CashierStripeCatalogGateway;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
                 ? new HttpBrevoContacts
                 : new NullBrevoContacts;
         });
+
+        $this->app->bind(StripeCatalogGateway::class, CashierStripeCatalogGateway::class);
     }
 
     /**

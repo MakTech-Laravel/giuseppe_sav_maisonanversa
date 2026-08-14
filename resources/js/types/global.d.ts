@@ -3,7 +3,7 @@ import type { Locale } from '@/types/locale';
 
 export type CheckoutShared = {
     currency: string;
-    amount: number;
+    amount: string;
     displayAmount: string;
     productName: string;
 };

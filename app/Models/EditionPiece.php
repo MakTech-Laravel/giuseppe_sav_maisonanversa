@@ -18,6 +18,7 @@ class EditionPiece extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'product_id',
         'edition_number',
         'status',
         'order_id',
@@ -47,6 +48,14 @@ class EditionPiece extends Model
                 $piece->verification_token = (string) Str::uuid();
             }
         });
+    }
+
+    /**
+     * @return BelongsTo<Product, $this>
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     /**

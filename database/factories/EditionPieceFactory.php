@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\EditionPieceStatus;
 use App\Models\EditionPiece;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,8 @@ class EditionPieceFactory extends Factory
     public function definition(): array
     {
         return [
+            'product_id' => Product::query()->where('slug', Product::FOUNDING_SLUG)->value('id')
+                ?? Product::factory()->founding(),
             'edition_number' => fake()->unique()->numberBetween(2, 100),
             'status' => EditionPieceStatus::Available,
             'verification_token' => (string) Str::uuid(),

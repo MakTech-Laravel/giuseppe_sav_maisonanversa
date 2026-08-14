@@ -84,20 +84,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Checkout (Cashier / Stripe)
+    | Checkout
     |--------------------------------------------------------------------------
     |
-    | Founding Edition is charged in EUR only via a pre-created Stripe Price.
-    | Amount (cents) is for display / local Order records; Checkout charges
-    | the Price ID. Adaptive pricing is disabled so buyers always pay euros.
+    | Founding Edition is charged in EUR only. Name, amount, and Stripe Price
+    | IDs live on the products table and are synced to Stripe automatically.
     |
     */
 
     'checkout' => [
         'currency' => 'eur',
-        'amount' => (int) env('MAISON_CHECKOUT_AMOUNT', 24900),
-        'product_name' => env('MAISON_CHECKOUT_PRODUCT_NAME', 'Heritage No.001 — Founding Edition'),
-        'price_id' => env('MAISON_STRIPE_PRICE_ID', ''),
     ],
 
     /*
