@@ -26,3 +26,16 @@ test('community parent tables migrate before tables that reference them', functi
     expect($index('create_community_events_table'))
         ->toBeLessThan($index('create_event_rsvps_table'));
 });
+
+test('composite unique indexes stay within mysql identifier length', function () {
+    $source = file_get_contents(database_path(
+        'migrations/2026_08_14_054455_create_community_session_participants_table.php',
+    ));
+
+    expect($source)->toContain("'csp_session_user_unique'");
+
+    $default = 'community_session_participants_community_session_id_user_id_unique';
+
+    expect(strlen($default))->toBeGreaterThan(64)
+        ->and(strlen('csp_session_user_unique'))->toBeLessThanOrEqual(64);
+});
