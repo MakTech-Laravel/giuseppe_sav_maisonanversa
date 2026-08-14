@@ -18,20 +18,20 @@ export function MemberTopbar({
 
     return (
         <header className="sticky top-0 z-40 border-b border-gold/20 bg-choc2 text-cream">
-            <div className="mx-auto flex h-16 w-full max-w-320 items-center justify-between px-6 md:px-10">
+            <div className="mx-auto flex h-16 w-full max-w-320 items-center justify-between gap-3 px-4 md:px-10">
                 <Link
                     href={`/${locale}`}
-                    className="flex items-center gap-3 no-underline"
+                    className="flex min-w-0 items-center gap-3 no-underline"
                 >
                     <PlaceholderImage
                         asset="logo-icon"
                         ratio="1 / 1"
                         alt=""
                         captioned={false}
-                        className="size-8"
+                        className="size-8 shrink-0"
                     />
-                    <div>
-                        <p className="font-serif text-[15px] tracking-[0.18em] text-cream uppercase">
+                    <div className="min-w-0">
+                        <p className="truncate font-serif text-[13px] tracking-[0.18em] text-cream uppercase sm:text-[15px]">
                             Maison Anversa
                         </p>
                         <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">

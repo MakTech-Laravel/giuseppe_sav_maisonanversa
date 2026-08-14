@@ -31,8 +31,50 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                 )}
             />
 
-            <MemberPanel className="overflow-x-auto p-0">
-                <table className="w-full min-w-180 text-left">
+            <MemberPanel className="p-0 md:overflow-x-auto">
+                <div className="divide-y divide-gold/10 md:hidden">
+                    {orders.map((order) => (
+                        <div key={order.id} className="space-y-3 px-5 py-5">
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                    <p className="text-[15px] text-cream">
+                                        {order.label}
+                                    </p>
+                                    <p className="mt-1 font-sans text-[11px] text-stone">
+                                        {order.id} · {order.method}
+                                    </p>
+                                </div>
+                                <p className="shrink-0 font-serif text-[18px] text-cream">
+                                    {order.amount}
+                                </p>
+                            </div>
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                    <MemberStatusPill
+                                        tone={
+                                            order.status_key === 'paid'
+                                                ? 'success'
+                                                : 'neutral'
+                                        }
+                                    >
+                                        {order.status}
+                                    </MemberStatusPill>
+                                    <p className="text-[13px] text-sand">
+                                        {order.date}
+                                    </p>
+                                </div>
+                                <Link
+                                    href={`/${locale}/member/orders/${order.id}`}
+                                    className="inline-flex min-h-9 items-center border border-gold/40 px-3 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline transition-colors hover:bg-gold hover:text-choc"
+                                >
+                                    {t('Bekijken')}
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <table className="hidden w-full min-w-180 text-left md:table">
                     <thead>
                         <tr className="border-b border-gold/20 font-sans text-[9px] tracking-[0.2em] text-gold uppercase">
                             <th className="px-6 py-4 font-medium">

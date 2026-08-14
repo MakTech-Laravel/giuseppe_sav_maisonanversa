@@ -116,7 +116,7 @@ export function ProductDetail({ edition }: { edition: Edition }) {
                             </MaisonButton>
                         )}
 
-                        <div className="mt-6 grid grid-cols-3 gap-4 border-t border-gold/15 pt-6">
+                        <div className="mt-6 grid grid-cols-1 gap-4 border-t border-gold/15 pt-6 sm:grid-cols-3">
                             {GUARANTEES.map((item) => (
                                 <div key={item.text} className="text-center">
                                     <div
