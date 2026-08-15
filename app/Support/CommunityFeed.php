@@ -20,7 +20,7 @@ final class CommunityFeed
         $userId = $request->user()?->id;
 
         $query = CommunityPost::query()
-            ->with(['author', 'comments.author'])
+            ->with(['author', 'comments.author', 'translations', 'comments.translations'])
             ->withCount('likes')
             ->where('status', 'published')
             ->whereNull('hidden_at')
@@ -50,14 +50,14 @@ final class CommunityFeed
                     'info' => $post->created_at?->diffForHumans() ?? '',
                     'badge' => $post->is_official ? __('Officieel') : __('Lid'),
                     'badgeOfficial' => $post->is_official,
-                    'content' => $post->content,
+                    'content' => $post->translated('content'),
                     'likes' => $post->likes_count,
                     'liked' => (bool) ($post->liked ?? false),
                     'comments' => $post->comments->map(fn ($comment) => [
                         'id' => (string) $comment->id,
                         'name' => $comment->author->name,
                         'initials' => strtoupper(substr($comment->author->name, 0, 2)),
-                        'body' => $comment->body,
+                        'body' => $comment->translated('body'),
                         'info' => $comment->created_at?->diffForHumans() ?? '',
                     ])->all(),
                 ];

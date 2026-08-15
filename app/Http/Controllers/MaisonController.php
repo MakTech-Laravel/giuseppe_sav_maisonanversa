@@ -110,11 +110,11 @@ class MaisonController extends Controller
                 ->get()
                 ->map(fn (CommunitySession $session) => [
                     'id' => (string) $session->id,
-                    'location' => $session->location,
+                    'location' => $session->translated('location'),
                     'starts_at' => $session->starts_at->toIso8601String(),
                     'capacity' => $session->capacity,
                     'level' => $session->level,
-                    'notes' => $session->notes,
+                    'notes' => $session->translated('notes'),
                     'host' => $session->host->name,
                     'joined' => $session->participants->contains('user_id', $request->user()->id),
                     'spots' => $session->capacity === null
@@ -129,10 +129,10 @@ class MaisonController extends Controller
                 ->get()
                 ->map(fn (CommunityEvent $event) => [
                     'id' => (string) $event->id,
-                    'title' => $event->title,
-                    'description' => $event->description,
+                    'title' => $event->translated('title'),
+                    'description' => $event->translated('description'),
                     'starts_at' => $event->starts_at->toIso8601String(),
-                    'location' => $event->location,
+                    'location' => $event->translated('location'),
                     'joined' => $event->rsvps->contains('user_id', $request->user()->id),
                     'rsvp_count' => $event->rsvps->count(),
                     'attendees' => $event->rsvps

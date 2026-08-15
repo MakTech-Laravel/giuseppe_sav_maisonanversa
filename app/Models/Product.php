@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ProductType;
+use App\Models\Concerns\TranslatesWithDeepL;
 use App\Observers\ProductObserver;
 use App\Support\Money;
 use Database\Factories\ProductFactory;
@@ -18,7 +19,15 @@ class Product extends Model
     public const FOUNDING_SLUG = 'heritage-no-001';
 
     /** @use HasFactory<ProductFactory> */
-    use HasFactory;
+    use HasFactory, TranslatesWithDeepL;
+
+    /**
+     * @var list<string>
+     */
+    protected array $translatable = [
+        'name',
+        'expected_delivery_label',
+    ];
 
     /**
      * @var list<string>
@@ -117,8 +126,10 @@ class Product extends Model
     {
         $product = static::founding();
         $amount = $product?->amount;
-        $deliveryLabel = $product?->expected_delivery_label
-            ?? CommerceSetting::current()->default_expected_delivery_label;
+        $deliveryLabel = $product !== null
+            ? ($product->translated('expected_delivery_label')
+                ?: CommerceSetting::current()->translated('default_expected_delivery_label'))
+            : CommerceSetting::current()->translated('default_expected_delivery_label');
 
         if ($amount === null) {
             return [
@@ -134,7 +145,7 @@ class Product extends Model
             'currency' => $product->currency,
             'amount' => (string) $amount,
             'displayAmount' => Money::format((string) $amount),
-            'productName' => $product->name,
+            'productName' => $product->translated('name'),
             'deliveryLabel' => $deliveryLabel,
         ];
     }
