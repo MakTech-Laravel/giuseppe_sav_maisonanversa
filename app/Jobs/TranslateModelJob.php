@@ -85,10 +85,15 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
             }
 
             try {
-                $translated = $translator->translateMany(array_values($pending), strtoupper($locale));
+                $translated = $translator->translateMany(
+                    array_values($pending),
+                    $translator->targetLang($locale),
+                );
             } catch (RequestException $exception) {
                 if ($exception->response?->status() === 456) {
                     $this->release(3600);
+
+                    return;
                 }
 
                 throw $exception;

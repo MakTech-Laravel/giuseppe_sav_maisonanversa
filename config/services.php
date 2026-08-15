@@ -51,6 +51,11 @@ return [
     'deepl' => [
         'key' => env('DEEPL_API_KEY'),
         'host' => env('DEEPL_API_HOST'),
+        'targets' => [
+            'nl' => 'NL',
+            'en' => 'EN-GB',
+            'fr' => 'FR',
+        ],
     ],
 
 ];

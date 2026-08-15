@@ -40,7 +40,9 @@ trait TranslatesWithDeepL
         'type',
         'sold_out_behavior',
         'remember_token',
-        'avatar',
+        'url',
+        'website',
+        'href',
     ];
 
     /**
@@ -181,7 +183,7 @@ trait TranslatesWithDeepL
             return true;
         }
 
-        if (str_ends_with($name, '_id') || str_ends_with($name, '_at')) {
+        if (str_ends_with($name, '_id') || str_ends_with($name, '_at') || str_ends_with($name, '_url')) {
             return true;
         }
 

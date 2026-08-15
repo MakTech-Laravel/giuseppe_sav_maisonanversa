@@ -178,9 +178,9 @@ class OpsController extends Controller
         return Inertia::render('admin/events/index', [
             'events' => $events->map(fn (CommunityEvent $event) => [
                 'id' => (string) $event->id,
-                'title' => $event->title,
+                'title' => $event->translated('title'),
                 'starts_at' => $event->starts_at->toIso8601String(),
-                'location' => $event->location,
+                'location' => $event->translated('location'),
             ]),
             'eventsConnected' => true,
         ]);
@@ -193,10 +193,10 @@ class OpsController extends Controller
         return Inertia::render('admin/events/show', [
             'event' => [
                 'id' => (string) $event->id,
-                'title' => $event->title,
-                'description' => $event->description,
+                'title' => $event->translated('title'),
+                'description' => $event->translated('description'),
                 'starts_at' => $event->starts_at->toIso8601String(),
-                'location' => $event->location,
+                'location' => $event->translated('location'),
                 'guest_list' => $event->rsvps->map(fn ($rsvp) => $rsvp->user->name)->all(),
             ],
             'eventsConnected' => true,

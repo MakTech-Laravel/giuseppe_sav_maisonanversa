@@ -23,7 +23,7 @@ class OrderConfirmation extends Mailable implements ShouldQueue
     {
         return new Envelope(
             subject: __('Bestelling bevestigd — :product', [
-                'product' => $this->order->product?->name ?? __('Product'),
+                'product' => $this->translatedProductName(),
             ]),
         );
     }
@@ -35,5 +35,12 @@ class OrderConfirmation extends Mailable implements ShouldQueue
         return new Content(
             markdown: 'emails.order-confirmation',
         );
+    }
+
+    private function translatedProductName(): string
+    {
+        $this->order->loadMissing('product');
+
+        return $this->order->product?->translated('name', $this->order->locale) ?? __('Product');
     }
 }
