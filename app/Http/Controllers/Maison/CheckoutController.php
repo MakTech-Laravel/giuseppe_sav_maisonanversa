@@ -38,7 +38,7 @@ class CheckoutController extends Controller
         if ($inventory->snapshot($product = Product::founding())['available'] === 0) {
             throw ValidationException::withMessages([
                 'checkout' => __(':product is uitverkocht.', [
-                    'product' => $product?->name ?? 'Heritage No.001',
+                    'product' => $product?->translated('name') ?? 'Heritage No.001',
                 ]),
             ]);
         }
@@ -85,7 +85,7 @@ class CheckoutController extends Controller
         } catch (EditionSoldOutException) {
             throw ValidationException::withMessages([
                 'checkout' => __(':product is uitverkocht.', [
-                    'product' => Product::founding()?->name ?? 'Heritage No.001',
+                    'product' => Product::founding()?->translated('name') ?? 'Heritage No.001',
                 ]),
             ]);
         }

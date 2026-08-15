@@ -3,6 +3,7 @@
 use Database\Seeders\EditionPieceSeeder;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /*
@@ -57,4 +58,23 @@ function defaultLocale(): string
 function localized(string $name, array $parameters = [], bool $absolute = true): string
 {
     return route($name, ['locale' => defaultLocale(), ...$parameters], $absolute);
+}
+
+function fakeDeepLTranslations(): void
+{
+    config(['services.deepl.key' => 'test-key:fx']);
+
+    Http::fake(function ($request) {
+        $target = (string) $request->data()['target_lang'];
+        $label = str_starts_with($target, 'EN') ? 'EN' : (str_starts_with($target, 'FR') ? 'FR' : $target);
+        $texts = $request->data()['text'];
+        $texts = is_array($texts) ? $texts : [$texts];
+
+        return Http::response([
+            'translations' => array_map(
+                fn (string $text): array => ['text' => $label.' '.$text],
+                $texts,
+            ),
+        ]);
+    });
 }

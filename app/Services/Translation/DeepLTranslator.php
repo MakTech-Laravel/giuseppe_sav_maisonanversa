@@ -2,9 +2,11 @@
 
 namespace App\Services\Translation;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class DeepLTranslator
 {
@@ -30,6 +32,15 @@ class DeepLTranslator
         return str_ends_with($key, ':fx') ? self::FREE_HOST : self::PAID_HOST;
     }
 
+    public function targetLang(string $locale): string
+    {
+        $targets = config('services.deepl.targets', []);
+
+        return is_array($targets) && isset($targets[$locale])
+            ? (string) $targets[$locale]
+            : strtoupper($locale);
+    }
+
     /**
      * Translate many source strings into one target locale, preserving order.
      *
@@ -43,25 +54,40 @@ class DeepLTranslator
         }
 
         if (! $this->configured()) {
+            once(function (): void {
+                Log::warning('DeepL API key is missing; visitors will see Dutch source copy.');
+            });
+
             return $texts;
         }
 
-        $response = Http::withHeaders([
-            'Authorization' => 'DeepL-Auth-Key '.config('services.deepl.key'),
-        ])
-            ->acceptJson()
-            ->asJson()
-            ->timeout(20)
-            ->retry(2, 200)
-            ->post($this->host().'/v2/translate', [
-                'text' => array_values($texts),
-                'source_lang' => strtoupper($source),
-                'target_lang' => strtoupper($target),
-                'preserve_formatting' => true,
-            ]);
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'DeepL-Auth-Key '.config('services.deepl.key'),
+            ])
+                ->acceptJson()
+                ->asJson()
+                ->timeout(20)
+                ->retry(2, 200, function (Throwable $exception): bool {
+                    if ($exception instanceof ConnectionException) {
+                        return true;
+                    }
 
-        if ($response->status() === 456) {
-            Log::warning('DeepL quota exceeded.');
+                    return $exception instanceof RequestException
+                        && $exception->response->status() === 429;
+                })
+                ->post($this->host().'/v2/translate', [
+                    'text' => array_values($texts),
+                    'source_lang' => strtoupper($source),
+                    'target_lang' => $this->normalizeTarget($target),
+                    'preserve_formatting' => true,
+                ]);
+        } catch (RequestException $exception) {
+            if ($exception->response?->status() === 456) {
+                Log::warning('DeepL quota exceeded.');
+            }
+
+            throw $exception;
         }
 
         if ($response->failed()) {
@@ -80,5 +106,14 @@ class DeepLTranslator
     public function translate(string $text, string $target, string $source = 'NL'): string
     {
         return $this->translateMany([$text], $target, $source)[0] ?? $text;
+    }
+
+    private function normalizeTarget(string $target): string
+    {
+        if (strlen($target) <= 2) {
+            return $this->targetLang(strtolower($target));
+        }
+
+        return strtoupper($target);
     }
 }
