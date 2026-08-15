@@ -27,6 +27,15 @@ test('community parent tables migrate before tables that reference them', functi
         ->toBeLessThan($index('create_event_rsvps_table'));
 });
 
+test('the translations unique index name fits mysql identifier length', function () {
+    $source = file_get_contents(database_path(
+        'migrations/2026_08_15_031856_create_translations_table.php',
+    ));
+
+    expect($source)->toContain("'translations_morph_locale_column_unique'");
+    expect(strlen('translations_morph_locale_column_unique'))->toBeLessThanOrEqual(64);
+});
+
 test('composite unique indexes stay within mysql identifier length', function () {
     $source = file_get_contents(database_path(
         'migrations/2026_08_14_054455_create_community_session_participants_table.php',

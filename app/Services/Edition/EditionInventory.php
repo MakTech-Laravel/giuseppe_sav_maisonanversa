@@ -32,7 +32,7 @@ class EditionInventory
             return $this->emptySnapshot();
         }
 
-        return Cache::remember($this->cacheKey($product), now()->addMinutes(5), function () use ($product): array {
+        $snapshot = Cache::remember($this->cacheKey($product), now()->addMinutes(5), function () use ($product): array {
             if ($product->type === ProductType::Simple) {
                 $available = max(0, (int) $product->stock_quantity);
 
@@ -72,6 +72,12 @@ class EditionInventory
                 'productName' => $product->name,
             ];
         });
+
+        $snapshot['productName'] = $product->translated('name');
+        $snapshot['deliveryLabel'] = $product->translated('expected_delivery_label')
+            ?: $snapshot['deliveryLabel'];
+
+        return $snapshot;
     }
 
     public function bust(?Product $product = null): void

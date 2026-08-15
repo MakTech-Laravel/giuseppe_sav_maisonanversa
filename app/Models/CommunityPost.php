@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TranslatesWithDeepL;
 use Database\Factories\CommunityPostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class CommunityPost extends Model
 {
     /** @use HasFactory<CommunityPostFactory> */
-    use HasFactory;
+    use HasFactory, TranslatesWithDeepL;
 
     protected $fillable = ['author_id', 'content', 'is_official', 'status', 'hidden_at'];
 
