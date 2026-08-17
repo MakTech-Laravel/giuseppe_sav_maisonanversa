@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
+import { MemberNotificationBell } from '@/components/member/member-notification-bell';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { LanguageSwitcher } from '@/components/maison/shell/language-switcher';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -40,6 +41,7 @@ export function MemberTopbar({
                     </div>
                 </Link>
                 <div className="flex items-center gap-3 md:gap-4">
+                    <MemberNotificationBell />
                     <LanguageSwitcher className="gap-1 [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
                     <span
                         aria-hidden="true"

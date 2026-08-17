@@ -25,6 +25,7 @@ class StripeEventListener
             'checkout.session.async_payment_succeeded' => $this->handleCheckoutPaid($event->payload),
             'checkout.session.async_payment_failed' => $this->handleCheckoutFailed($event->payload),
             'checkout.session.expired' => $this->handleCheckoutExpired($event->payload),
+            'charge.refunded' => $this->handleChargeRefunded($event->payload),
             default => null,
         };
     }
@@ -73,6 +74,26 @@ class StripeEventListener
         }
 
         $this->fulfillment->markExpiredBySessionId($session->id ?? null);
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    private function handleChargeRefunded(array $payload): void
+    {
+        $object = $payload['data']['object'] ?? null;
+
+        if (! is_array($object)) {
+            return;
+        }
+
+        $paymentIntent = $object['payment_intent'] ?? null;
+
+        if (! is_string($paymentIntent) || $paymentIntent === '') {
+            return;
+        }
+
+        $this->fulfillment->markRefundedFromPaymentIntent($paymentIntent);
     }
 
     /**

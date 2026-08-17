@@ -3,6 +3,7 @@
 use App\Enums\ProductType;
 use App\Enums\RoleEnum;
 use App\Models\EditionPiece;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
@@ -100,4 +101,31 @@ test('viewers cannot create products', function () {
             'grants_founding_circle' => false,
         ])
         ->assertForbidden();
+});
+
+test('staff can delete a product without orders', function () {
+    $product = Product::factory()->create([
+        'name' => 'Disposable Cloth',
+        'slug' => 'disposable-cloth',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->delete(route('admin.products.destroy', ['product' => $product->id]))
+        ->assertRedirect(route('admin.products.index'));
+
+    expect(Product::query()->find($product->id))->toBeNull();
+});
+
+test('staff cannot delete a product that has orders', function () {
+    $product = Product::founding();
+
+    Order::factory()->create(['product_id' => $product->id]);
+
+    $this->actingAs($this->admin)
+        ->from(route('admin.products.index'))
+        ->delete(route('admin.products.destroy', ['product' => $product->id]))
+        ->assertRedirect()
+        ->assertSessionHasErrors('product');
+
+    expect(Product::query()->find($product->id))->not->toBeNull();
 });

@@ -2,8 +2,11 @@
 
 use App\Enums\PermissionEnum;
 use App\Http\Controllers\Admin\CommerceSettingController;
+use App\Http\Controllers\Admin\CommunityCourtController;
+use App\Http\Controllers\Admin\CommunityEventController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
@@ -15,10 +18,13 @@ use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
+use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
 use App\Http\Controllers\Maison\VerificationController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
+use App\Http\Controllers\Member\NotificationController;
+use App\Http\Controllers\Member\PassportPdfController;
 use App\Http\Controllers\PostAttachmentController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
@@ -83,6 +89,15 @@ Route::prefix('{locale}')
             Route::get('terms', 'terms')->name('terms');
             Route::get('shipping', 'shipping')->name('shipping');
             Route::get('care', 'care')->name('care');
+        });
+
+        Route::controller(InquiryController::class)->group(function () {
+            Route::post('contact', 'storeContact')
+                ->middleware('throttle:5,1')
+                ->name('contact.store');
+            Route::post('corner/inquire', 'storeCorner')
+                ->middleware('throttle:5,1')
+                ->name('corner.inquire');
         });
 
         Route::get('verify/{token}', VerificationController::class)
@@ -159,6 +174,7 @@ Route::prefix('{locale}')
                 Route::get('orders', 'orders')->name('orders');
                 Route::get('orders/{order}', 'orderShow')->name('orders.show');
                 Route::get('passport', 'passport')->name('passport');
+                Route::get('passport.pdf', PassportPdfController::class)->name('passport.pdf');
                 Route::get('circle', 'circle')->name('circle');
                 Route::get('letter', 'letter')->name('letter');
                 Route::patch('letter', 'updateLetter')->name('letter.update');
@@ -166,6 +182,8 @@ Route::prefix('{locale}')
                 Route::patch('profile', 'updateProfile')->name('profile.update');
                 Route::get('security', 'security')->name('security');
                 Route::delete('profile', 'destroy')->name('profile.destroy');
+                Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+                Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
             });
 
         Route::prefix('community')->name('community.')->controller(CommunityController::class)->group(function () {
@@ -173,6 +191,7 @@ Route::prefix('{locale}')
             Route::post('posts/{communityPost}/comments', 'storeComment')->name('posts.comments.store');
             Route::post('posts/{communityPost}/like', 'toggleLike')->name('posts.like');
             Route::post('posts/{communityPost}/hide', 'hidePost')->name('posts.hide');
+            Route::post('posts/{communityPost}/report', 'reportPost')->name('posts.report');
             Route::post('sessions', 'storeSession')->name('sessions.store');
             Route::post('sessions/{communitySession}/join', 'joinSession')->name('sessions.join');
             Route::delete('sessions/{communitySession}/leave', 'leaveSession')->name('sessions.leave');
@@ -221,13 +240,13 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
                 Route::patch('orders/{order}', 'updateOrderStatus')->name('orders.update')
                     ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
-                Route::get('events', 'events')->name('events.index')
-                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
-                Route::get('events/{event}', 'eventShow')->name('events.show')
-                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('circle', 'circle')->name('circle.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::post('circle', 'assignCircleMember')->name('circle.assign')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('circle/{member}', 'circleShow')->name('circle.show')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::delete('circle/{member}', 'removeCircleMember')->name('circle.remove')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('heritage', 'heritage')->name('heritage.index')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
@@ -240,10 +259,63 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_OFFICIAL->value);
                 Route::post('community/posts/{communityPost}/hide', 'hideCommunityPost')->name('community.hide')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::patch('community/reports/{communityReport}', 'resolveCommunityReport')->name('community.reports.resolve')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::get('letter', 'letter')->name('letter.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('letter/export', 'exportLetter')->name('letter.export')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+            });
+
+            Route::controller(CommunityEventController::class)->group(function () {
+                Route::get('events', 'index')->name('events.index')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('events/create', 'create')->name('events.create')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::post('events', 'store')->name('events.store')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('events/{event}', 'show')->name('events.show')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::get('events/{event}/edit', 'edit')->name('events.edit')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::put('events/{event}', 'update')->name('events.update')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::delete('events/{event}', 'destroy')->name('events.destroy')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+            });
+
+            Route::controller(CommunityCourtController::class)->group(function () {
+                Route::get('courts', 'index')->name('courts.index')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::get('courts/create', 'create')->name('courts.create')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::post('courts', 'store')->name('courts.store')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::get('courts/{court}', 'show')->name('courts.show')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::get('courts/{court}/edit', 'edit')->name('courts.edit')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::put('courts/{court}', 'update')->name('courts.update')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::delete('courts/{court}', 'destroy')->name('courts.destroy')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+            });
+
+            Route::controller(JournalArticleController::class)->group(function () {
+                Route::get('journal', 'index')->name('journal.index')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
+                Route::get('journal/create', 'create')->name('journal.create')
+                    ->middleware('permission:'.PermissionEnum::POSTS_CREATE->value);
+                Route::post('journal', 'store')->name('journal.store')
+                    ->middleware('permission:'.PermissionEnum::POSTS_CREATE->value);
+                Route::get('journal/{article}', 'show')->name('journal.show')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
+                Route::get('journal/{article}/edit', 'edit')->name('journal.edit')
+                    ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
+                Route::put('journal/{article}', 'update')->name('journal.update')
+                    ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
+                Route::delete('journal/{article}', 'destroy')->name('journal.destroy')
+                    ->middleware('permission:'.PermissionEnum::POSTS_DELETE->value);
             });
 
             Route::controller(AdminProductController::class)->group(function () {
@@ -257,6 +329,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('products/{product}', 'update')->name('products.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+                Route::delete('products/{product}', 'destroy')->name('products.destroy')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('products/{product}/inventory', 'inventory')->name('products.inventory')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });

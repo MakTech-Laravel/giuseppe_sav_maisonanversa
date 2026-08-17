@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommunityCourt;
 use App\Models\CommunityEvent;
 use App\Models\CommunitySession;
 use App\Models\Product;
@@ -14,9 +15,9 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 /**
- * The public Maison Anversa site. Most pages are presentational in this phase;
- * the Journal is the exception, paging a static catalog. Edition figures are
- * the one piece of shared state and come from each product's inventory.
+ * The public Maison Anversa site. The Journal pages Eloquent articles via
+ * {@see Journal}; community props load live sessions, events and courts.
+ * Edition figures come from each product's inventory.
  */
 class MaisonController extends Controller
 {
@@ -140,6 +141,26 @@ class MaisonController extends Controller
                         ->map(fn ($rsvp) => strtoupper(substr($rsvp->user->name, 0, 2)))
                         ->all(),
                 ]);
+            $props['courts'] = CommunityCourt::query()
+                ->published()
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get()
+                ->map(function (CommunityCourt $court) {
+                    $pin = $court->mapPinPosition();
+
+                    return [
+                        'id' => (string) $court->id,
+                        'title' => $court->translated('title'),
+                        'body' => $court->translated('body'),
+                        'location' => $court->translated('location'),
+                        'lat' => $court->lat !== null ? (float) $court->lat : null,
+                        'lng' => $court->lng !== null ? (float) $court->lng : null,
+                        'pin_top' => $pin['top'] ?? null,
+                        'pin_left' => $pin['left'] ?? null,
+                        'coming' => $pin === null,
+                    ];
+                });
         }
 
         return $this->page('community', $props);

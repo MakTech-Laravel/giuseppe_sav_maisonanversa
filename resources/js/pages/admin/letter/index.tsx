@@ -1,9 +1,10 @@
 import { Head } from '@inertiajs/react';
-import { Mail, TriangleAlert } from 'lucide-react';
+import { Download, Mail, TriangleAlert } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Table,
     TableBody,
@@ -55,7 +56,14 @@ export default function LetterIndex({
                         'Bekijk nieuwsbriefabonnees en leveringsstatus.',
                     )}
                     icon={Mail}
-                />
+                >
+                    <Button variant="outline" asChild>
+                        <a href={letter.export(wayfinderLocale()).url}>
+                            <Download className="h-4 w-4" />
+                            {t('Exporteren')}
+                        </a>
+                    </Button>
+                </AdminPageHeader>
                 {!letterConnected && (
                     <Alert>
                         <TriangleAlert className="h-4 w-4" />
@@ -63,7 +71,9 @@ export default function LetterIndex({
                             {t('Mailservice is niet gekoppeld')}
                         </AlertTitle>
                         <AlertDescription>
-                            {t('De abonnees hieronder zijn demogegevens.')}
+                            {t(
+                                'De abonnees hieronder zijn echt; Brevo-sync staat uit totdat de API-sleutel is geconfigureerd.',
+                            )}
                         </AlertDescription>
                     </Alert>
                 )}

@@ -22,7 +22,7 @@ class SessionJoinedNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     public function toMail(object $notifiable): MailMessage
@@ -34,5 +34,21 @@ class SessionJoinedNotification extends Notification implements ShouldQueue
                 'when' => $this->session->starts_at->translatedFormat('j F Y H:i'),
             ]))
             ->line($this->session->location);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
+    {
+        return [
+            'title' => __('Sessie-aanmelding'),
+            'body' => __(':name heeft zich aangemeld voor uw sessie op :when.', [
+                'name' => $this->memberName,
+                'when' => $this->session->starts_at->translatedFormat('j F Y H:i'),
+            ]),
+            'session_id' => $this->session->id,
+            'member_name' => $this->memberName,
+        ];
     }
 }
