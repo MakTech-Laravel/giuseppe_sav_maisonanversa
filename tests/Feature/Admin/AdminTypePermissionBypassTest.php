@@ -10,15 +10,28 @@ use Illuminate\Support\Facades\Gate;
 
 beforeEach(function () {
     $this->seed([PermissionSeeder::class, RoleSeeder::class]);
+    config(['maison.admin_type_grants_all_permissions' => true]);
 });
 
-test('viewers do not receive staff-wide permission grants', function () {
+test('admin-type users receive every Spatie permission when bypass is enabled', function () {
     $staff = User::factory()->admin()->create();
     $staff->assignRole(RoleEnum::VIEWER->value);
     $staff->syncTypeFromRoles();
 
     expect($staff->type)->toBe(UserType::Admin)
         ->and(Gate::forUser($staff)->allows(PermissionEnum::DASHBOARD_VIEW->value))->toBeTrue()
+        ->and(Gate::forUser($staff)->allows(PermissionEnum::USERS_DELETE->value))->toBeTrue()
+        ->and(Gate::forUser($staff)->allows(PermissionEnum::ORDERS_MANAGE->value))->toBeTrue();
+});
+
+test('admin-type bypass can be turned off', function () {
+    config(['maison.admin_type_grants_all_permissions' => false]);
+
+    $staff = User::factory()->admin()->create();
+    $staff->assignRole(RoleEnum::VIEWER->value);
+    $staff->syncTypeFromRoles();
+
+    expect(Gate::forUser($staff)->allows(PermissionEnum::DASHBOARD_VIEW->value))->toBeTrue()
         ->and(Gate::forUser($staff)->allows(PermissionEnum::USERS_DELETE->value))->toBeFalse();
 });
 
@@ -27,15 +40,6 @@ test('customer-type users cannot manage staff accounts', function () {
     $customer->assignRole(RoleEnum::USER->value);
 
     expect(Gate::forUser($customer)->allows(PermissionEnum::USERS_DELETE->value))->toBeFalse();
-});
-
-test('admins receive heritage and community permissions', function () {
-    $staff = User::factory()->admin()->create();
-    $staff->assignRole(RoleEnum::ADMIN->value);
-    $staff->syncTypeFromRoles();
-
-    expect(Gate::forUser($staff)->allows(PermissionEnum::ORDERS_MANAGE->value))->toBeTrue()
-        ->and(Gate::forUser($staff)->allows(PermissionEnum::COMMUNITY_MODERATE->value))->toBeTrue();
 });
 
 test('admin-type bypass does not override model policies for super-admins', function () {

@@ -1,90 +1,47 @@
 import type { UrlMethodPair } from '@inertiajs/core';
-import { useForm, usePage } from '@inertiajs/react';
-import { Loader2, Lock, UserPlus } from 'lucide-react';
-import { motion } from 'motion/react';
+import { useForm } from '@inertiajs/react';
+import { Loader2, Save, UserPlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import FileUpload from '@/components/file-upload';
 import InputError from '@/components/input-error';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
-import { avatarUrl, SUPER_ADMIN_ROLE } from '@/types/admin';
-import type { RoleRef } from '@/types/admin';
+import { avatarUrl } from '@/types/admin';
+import { AdminPanel } from './admin-resource-shell';
 
 interface UserFormDefaults {
     name: string;
     email: string;
-    roles: string[];
 }
 
 interface UserFormProps {
     action: UrlMethodPair;
-    roles: RoleRef[];
-    showRoles?: boolean;
     submitLabel?: string;
     isEdit?: boolean;
     currentAvatar?: string | null;
-    /** The target is the only remaining super-admin — its role is locked. */
-    isLastSuperAdmin?: boolean;
     defaults?: UserFormDefaults;
     onCancel?: () => void;
 }
 
 export function UserForm({
     action,
-    roles,
-    showRoles = true,
     submitLabel,
     isEdit = false,
     currentAvatar = null,
-    isLastSuperAdmin = false,
     defaults,
     onCancel,
 }: UserFormProps) {
     const { t } = useTranslation();
-    const actorIsSuperAdmin =
-        usePage().props.auth.user?.is_super_admin ?? false;
 
     const form = useForm(action, {
         name: defaults?.name ?? '',
         email: defaults?.email ?? '',
         password: '',
-        roles: defaults?.roles ?? [],
         avatar: null as File | null,
         remove_avatar: false as boolean,
     });
-
-    // Only a super-admin may see/assign the protected super-admin role.
-    const selectableRoles = actorIsSuperAdmin
-        ? roles
-        : roles.filter((r) => r.name !== SUPER_ADMIN_ROLE);
-
-    const toggleRole = (name: string) => {
-        const hasRole = form.data.roles.includes(name);
-
-        // Block removing the super-admin role from the last super-admin.
-        if (name === SUPER_ADMIN_ROLE && hasRole && isLastSuperAdmin) {
-            toast.error(
-                t(
-                    'Ken de superbeheerderrol toe aan een andere beheerder voordat u deze verwijdert van de laatste superbeheerder.',
-                ),
-            );
-
-            return;
-        }
-
-        form.setData(
-            'roles',
-            hasRole
-                ? form.data.roles.filter((r) => r !== name)
-                : [...form.data.roles, name],
-        );
-    };
 
     const existingAvatar =
         isEdit && currentAvatar && !form.data.avatar && !form.data.remove_avatar
@@ -111,28 +68,13 @@ export function UserForm({
     };
 
     return (
-        <motion.form
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            onSubmit={handleSubmit}
-            className="space-y-6"
-        >
-            {isLastSuperAdmin && (
-                <Alert>
-                    <Lock className="h-4 w-4" />
-                    <AlertTitle>{t('Laatste superbeheerder')}</AlertTitle>
-                    <AlertDescription>
-                        {t(
-                            'Dit is het enige account met de superbeheerderrol. Ken de superbeheerderrol eerst toe aan een andere beheerder om wijzigingen door te voeren.',
-                        )}
-                    </AlertDescription>
-                </Alert>
-            )}
-
-            {/* Avatar — powered by the shared FileUpload component */}
-            <div className="grid gap-2">
-                <Label>{t('Profielfoto')}</Label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <AdminPanel
+                title={t('Profielfoto')}
+                description={t(
+                    'Optioneel. Wordt getoond in community en ledengebied.',
+                )}
+            >
                 <FileUpload
                     accept="image/*"
                     maxSize={2}
@@ -148,117 +90,80 @@ export function UserForm({
                     )}
                     hint={t('PNG, JPG of WEBP')}
                     error={form.errors.avatar}
-                    classNames={{ wrapper: 'sm:max-w-md' }}
+                    classNames={{ wrapper: 'max-w-md' }}
                 />
-            </div>
+            </AdminPanel>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-                <div className="grid gap-2">
-                    <Label htmlFor="name">{t('Volledige naam')}</Label>
-                    <Input
-                        id="name"
-                        value={form.data.name}
-                        onChange={(e) => form.setData('name', e.target.value)}
-                        onBlur={() => form.validate('name')}
-                        aria-invalid={form.invalid('name')}
-                        placeholder="Jane Doe"
-                        autoComplete="name"
-                    />
-                    <InputError message={form.errors.name} />
-                </div>
-
-                <div className="grid gap-2">
-                    <Label htmlFor="email">{t('E-mailadres')}</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        value={form.data.email}
-                        onChange={(e) => form.setData('email', e.target.value)}
-                        onBlur={() => form.validate('email')}
-                        aria-invalid={form.invalid('email')}
-                        placeholder="jane@example.com"
-                        autoComplete="email"
-                    />
-                    <InputError message={form.errors.email} />
-                </div>
-            </div>
-
-            <div className="grid gap-2 sm:max-w-sm">
-                <Label htmlFor="password">
-                    {t('Wachtwoord')}
-                    {isEdit && (
-                        <span className="ml-1 text-xs font-normal text-muted-foreground">
-                            {t('(laat leeg om huidige te behouden)')}
-                        </span>
-                    )}
-                </Label>
-                <Input
-                    id="password"
-                    type="password"
-                    value={form.data.password}
-                    onChange={(e) => form.setData('password', e.target.value)}
-                    onBlur={() => form.validate('password')}
-                    aria-invalid={form.invalid('password')}
-                    placeholder="••••••••"
-                    autoComplete="new-password"
-                />
-                <InputError message={form.errors.password} />
-            </div>
-
-            {showRoles && (
-                <div className="grid gap-2">
-                    <Label>{t('Rollen')}</Label>
-                    <p className="text-xs text-muted-foreground">
-                        {t(
-                            'Ken een of meer rollen toe. Rechten worden overgenomen van de geselecteerde rollen.',
-                        )}
-                    </p>
-                    <div className="mt-1 flex flex-wrap gap-2">
-                        {selectableRoles.length === 0 && (
-                            <span className="text-sm text-muted-foreground">
-                                {t('Geen rollen beschikbaar.')}
-                            </span>
-                        )}
-                        {selectableRoles.map((role) => {
-                            const checked = form.data.roles.includes(role.name);
-                            const isProtected = role.name === SUPER_ADMIN_ROLE;
-                            const locked =
-                                isProtected && isLastSuperAdmin && checked;
-
-                            return (
-                                <Label
-                                    key={role.id}
-                                    className={cn(
-                                        'flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium capitalize transition-colors',
-                                        checked
-                                            ? 'border-primary bg-primary/10 text-primary'
-                                            : 'hover:bg-muted',
-                                        locked && 'cursor-not-allowed',
-                                    )}
-                                >
-                                    <Checkbox
-                                        checked={checked}
-                                        onCheckedChange={() =>
-                                            toggleRole(role.name)
-                                        }
-                                        className="size-3.5"
-                                    />
-                                    {role.name}
-                                    {locked && (
-                                        <Lock className="h-3 w-3 opacity-70" />
-                                    )}
-                                </Label>
-                            );
-                        })}
+            <AdminPanel
+                title={t('Accountgegevens')}
+                description={t('Naam, e-mail en wachtwoord voor dit account.')}
+            >
+                <div className="grid gap-5 sm:grid-cols-2">
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">{t('Volledige naam')}</Label>
+                        <Input
+                            id="name"
+                            value={form.data.name}
+                            onChange={(e) =>
+                                form.setData('name', e.target.value)
+                            }
+                            onBlur={() => form.validate('name')}
+                            aria-invalid={form.invalid('name')}
+                            placeholder="Jane Doe"
+                            autoComplete="name"
+                        />
+                        <InputError message={form.errors.name} />
                     </div>
-                    <InputError message={form.errors.roles} />
-                </div>
-            )}
 
-            <div className="flex items-center gap-3 border-t pt-5">
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">{t('E-mailadres')}</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            value={form.data.email}
+                            onChange={(e) =>
+                                form.setData('email', e.target.value)
+                            }
+                            onBlur={() => form.validate('email')}
+                            aria-invalid={form.invalid('email')}
+                            placeholder="jane@example.com"
+                            autoComplete="email"
+                        />
+                        <InputError message={form.errors.email} />
+                    </div>
+
+                    <div className="grid gap-2 sm:col-span-2 sm:max-w-md">
+                        <Label htmlFor="password">
+                            {t('Wachtwoord')}
+                            {isEdit && (
+                                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                                    {t('(laat leeg om huidige te behouden)')}
+                                </span>
+                            )}
+                        </Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            value={form.data.password}
+                            onChange={(e) =>
+                                form.setData('password', e.target.value)
+                            }
+                            onBlur={() => form.validate('password')}
+                            aria-invalid={form.invalid('password')}
+                            placeholder="••••••••"
+                            autoComplete="new-password"
+                        />
+                        <InputError message={form.errors.password} />
+                    </div>
+                </div>
+            </AdminPanel>
+
+            <div className="flex flex-wrap items-center gap-3">
                 <Button type="submit" disabled={form.processing}>
                     {form.processing ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : isEdit ? (
+                        <Save className="h-4 w-4" />
                     ) : (
                         <UserPlus className="h-4 w-4" />
                     )}
@@ -284,6 +189,46 @@ export function UserForm({
                     </Badge>
                 )}
             </div>
-        </motion.form>
+        </form>
+    );
+}
+
+interface UserFormAsideProps {
+    isEdit?: boolean;
+    entityLabel: string;
+}
+
+export function UserFormAside({
+    isEdit = false,
+    entityLabel,
+}: UserFormAsideProps) {
+    const { t } = useTranslation();
+
+    return (
+        <AdminPanel title={t('Tips')}>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+                <li>
+                    {isEdit
+                        ? t(
+                              'Laat het wachtwoord leeg om het huidige wachtwoord te behouden.',
+                          )
+                        : t(
+                              'Het nieuwe account kan direct inloggen met het opgegeven wachtwoord.',
+                          )}
+                </li>
+                <li>
+                    {t(
+                        'Een avatar is optioneel en wordt getoond in community en ledengebied.',
+                    )}
+                </li>
+                <li>
+                    {isEdit
+                        ? t('U bewerkt: {{entity}}', { entity: entityLabel })
+                        : t('Type account: {{entity}}', {
+                              entity: entityLabel,
+                          })}
+                </li>
+            </ul>
+        </AdminPanel>
     );
 }

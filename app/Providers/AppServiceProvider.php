@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\Brevo\HttpBrevoContacts;
 use App\Services\Brevo\NullBrevoContacts;
 use App\Services\Stripe\CashierStripeCatalogGateway;
+use App\Support\AdminTypePermissionBypass;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -87,6 +88,11 @@ class AppServiceProvider extends ServiceProvider
             }
 
             if ($user->hasRole(RoleEnum::SUPER_ADMIN->value)) {
+                return true;
+            }
+
+            // TEMPORARY — see AdminTypePermissionBypass.
+            if (AdminTypePermissionBypass::allowsAbility($user, $ability)) {
                 return true;
             }
 
