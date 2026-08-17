@@ -69,6 +69,22 @@ class ProductController extends Controller
         return redirect()->route('admin.products.edit', ['product' => $product]);
     }
 
+    public function destroy(string $locale, Product $product): RedirectResponse
+    {
+        if ($product->orders()->exists()) {
+            return back()->withErrors([
+                'product' => __('Dit product heeft bestellingen en kan niet worden verwijderd. Depubliceer het in plaats daarvan.'),
+            ]);
+        }
+
+        $product->editionPieces()->delete();
+        $product->delete();
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Product verwijderd.')]);
+
+        return redirect()->route('admin.products.index');
+    }
+
     public function inventory(string $locale, Product $product, EditionInventory $inventory): Response
     {
         abort_unless($product->isLimitedEdition(), 404);
@@ -108,7 +124,6 @@ class ProductController extends Controller
                     'notes' => $piece->notes ?? '',
                 ]),
             ],
-            'heritageConnected' => true,
         ]);
     }
 

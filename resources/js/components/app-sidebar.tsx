@@ -1,9 +1,11 @@
 import { Link } from '@inertiajs/react';
 import {
+    BookOpen,
     CalendarDays,
     FileText,
     LayoutGrid,
     Mail,
+    MapPin,
     MessageCircle,
     Package,
     Settings2,
@@ -35,9 +37,11 @@ import adminAdmins from '@/routes/admin/admins';
 import adminCircle from '@/routes/admin/circle';
 import adminCommerce from '@/routes/admin/commerce';
 import adminCommunity from '@/routes/admin/community';
+import adminCourts from '@/routes/admin/courts';
 import adminCustomers from '@/routes/admin/customers';
 import adminEvents from '@/routes/admin/events';
 import adminHeritage from '@/routes/admin/heritage';
+import adminJournal from '@/routes/admin/journal';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
 import adminPosts from '@/routes/admin/posts';
@@ -80,6 +84,12 @@ function buildMainNav(
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {
+            title: t('Club Corners'),
+            href: adminCourts.index(locale),
+            icon: MapPin,
+            permissions: [PERMISSIONS.COMMUNITY.MODERATE],
+        },
+        {
             title: t('Founding Circle'),
             href: adminCircle.index(locale),
             icon: UsersRound,
@@ -114,6 +124,12 @@ function buildMainNav(
             href: adminLetter.index(locale),
             icon: Mail,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Journal'),
+            href: adminJournal.index(locale),
+            icon: BookOpen,
+            permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
         },
         {
             title: t('Berichten'),

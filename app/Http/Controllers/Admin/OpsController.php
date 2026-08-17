@@ -7,23 +7,27 @@ use App\Enums\ProductType;
 use App\Enums\RoleEnum;
 use App\Exports\NewsletterSubscribersExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AssignCircleMemberRequest;
+use App\Http\Requests\Admin\ResolveCommunityReportRequest;
 use App\Http\Requests\Admin\UpdateHeritageProductRequest;
 use App\Mail\ShippingNotification;
-use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunityReport;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\Checkout\OrderFulfillment;
 use App\Services\Edition\EditionInventory;
 use App\Support\OrderPresenter;
+use App\Support\PassportPresenter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
+use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class OpsController extends Controller
@@ -41,7 +45,6 @@ class OpsController extends Controller
 
         return Inertia::render('admin/orders/index', [
             'orders' => $orders,
-            'commerceConnected' => true,
         ]);
     }
 
@@ -52,17 +55,37 @@ class OpsController extends Controller
 
         return Inertia::render('admin/orders/show', [
             'order' => $detail,
-            'commerceConnected' => true,
         ]);
     }
 
-    public function updateOrderStatus(Request $request, string $locale, Order $order): RedirectResponse
-    {
+    public function updateOrderStatus(
+        Request $request,
+        string $locale,
+        Order $order,
+        OrderFulfillment $fulfillment,
+    ): RedirectResponse {
         $data = $request->validate([
             'status' => ['required', 'in:shipped,delivered,refunded'],
         ]);
 
         $status = OrderStatus::from($data['status']);
+
+        if ($status === OrderStatus::Refunded) {
+            try {
+                $fulfillment->refund($order);
+            } catch (ApiErrorException) {
+                Inertia::flash('toast', [
+                    'type' => 'error',
+                    'message' => __('Stripe-terugbetaling mislukt. Probeer opnieuw.'),
+                ]);
+
+                return back();
+            }
+
+            Inertia::flash('toast', ['type' => 'success', 'message' => __('Bestelstatus bijgewerkt.')]);
+
+            return back();
+        }
 
         $order->fill(['status' => $status]);
 
@@ -111,7 +134,6 @@ class OpsController extends Controller
                     'is_official' => $post->is_official,
                     'status' => $post->status,
                 ]),
-            'communityConnected' => true,
         ]);
     }
 
@@ -145,6 +167,20 @@ class OpsController extends Controller
         return back();
     }
 
+    public function resolveCommunityReport(
+        ResolveCommunityReportRequest $request,
+        string $locale,
+        CommunityReport $communityReport,
+    ): RedirectResponse {
+        $communityReport->update([
+            'status' => $request->validated('status'),
+        ]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Melding bijgewerkt.')]);
+
+        return back();
+    }
+
     public function letter(Request $request, string $locale): Response
     {
         $subscribers = NewsletterSubscriber::query()
@@ -171,66 +207,48 @@ class OpsController extends Controller
         return Excel::download(new NewsletterSubscribersExport, 'heritage-letter.csv');
     }
 
-    public function events(Request $request, string $locale): Response
-    {
-        $events = CommunityEvent::query()->orderBy('starts_at')->get();
-
-        return Inertia::render('admin/events/index', [
-            'events' => $events->map(fn (CommunityEvent $event) => [
-                'id' => (string) $event->id,
-                'title' => $event->translated('title'),
-                'starts_at' => $event->starts_at->toIso8601String(),
-                'location' => $event->translated('location'),
-            ]),
-            'eventsConnected' => true,
-        ]);
-    }
-
-    public function eventShow(Request $request, string $locale, CommunityEvent $event): Response
-    {
-        $event->load('rsvps.user');
-
-        return Inertia::render('admin/events/show', [
-            'event' => [
-                'id' => (string) $event->id,
-                'title' => $event->translated('title'),
-                'description' => $event->translated('description'),
-                'starts_at' => $event->starts_at->toIso8601String(),
-                'location' => $event->translated('location'),
-                'guest_list' => $event->rsvps->map(fn ($rsvp) => $rsvp->user->name)->all(),
-            ],
-            'eventsConnected' => true,
-        ]);
-    }
-
-    public function circle(Request $request, string $locale): Response
+    public function circle(Request $request, string $locale, PassportPresenter $passport): Response
     {
         $members = User::query()
             ->role(RoleEnum::FOUNDING_CIRCLE->value)
             ->get()
-            ->map(fn (User $user) => [
-                'id' => (string) $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ]);
+            ->map(fn (User $user) => $this->circleMemberPayload($user, $passport));
 
         return Inertia::render('admin/circle/index', [
             'members' => $members,
-            'circleConnected' => true,
         ]);
     }
 
-    public function circleShow(Request $request, string $locale, User $member): Response
+    public function circleShow(Request $request, string $locale, User $member, PassportPresenter $passport): Response
     {
         return Inertia::render('admin/circle/show', [
             'member' => [
-                'id' => (string) $member->id,
-                'name' => $member->name,
-                'email' => $member->email,
+                ...$this->circleMemberPayload($member, $passport),
                 'benefits' => [__('Digital Heritage Passport'), __('Founding Circle Card')],
             ],
-            'circleConnected' => true,
         ]);
+    }
+
+    public function assignCircleMember(
+        AssignCircleMemberRequest $request,
+        string $locale,
+    ): RedirectResponse {
+        $user = $this->resolveCircleUser($request);
+
+        $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Lid toegevoegd aan Founding Circle.')]);
+
+        return back();
+    }
+
+    public function removeCircleMember(Request $request, string $locale, User $member): RedirectResponse
+    {
+        $member->removeRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Lid verwijderd uit Founding Circle.')]);
+
+        return back();
     }
 
     public function heritage(Request $request, string $locale, EditionInventory $inventory, ProductController $products): Response
@@ -255,5 +273,35 @@ class OpsController extends Controller
         $product->update($request->validated());
 
         return back();
+    }
+
+    /**
+     * @return array{id: string, name: string, email: string, edition: string|null, status: string, joined_at: string|null}
+     */
+    private function circleMemberPayload(User $user, PassportPresenter $passport): array
+    {
+        $order = $passport->heritageOrder($user);
+
+        return [
+            'id' => (string) $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'edition' => $order?->edition_number !== null
+                ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
+                : null,
+            'status' => $order !== null ? 'Active' : 'Reserved',
+            'joined_at' => $order?->created_at?->toDateString(),
+        ];
+    }
+
+    private function resolveCircleUser(AssignCircleMemberRequest $request): User
+    {
+        $data = $request->validated();
+
+        if (! empty($data['user_id'])) {
+            return User::query()->findOrFail($data['user_id']);
+        }
+
+        return User::query()->where('email', $data['email'])->firstOrFail();
     }
 }

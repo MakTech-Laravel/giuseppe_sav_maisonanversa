@@ -1,5 +1,10 @@
 <?php
 
+use App\Enums\InquiryType;
+use App\Mail\InquiryReceived;
+use App\Models\Inquiry;
+use Illuminate\Support\Facades\Mail;
+
 test('the contact page renders the maison contact component', function () {
     $this->get('/nl/contact')
         ->assertOk()
@@ -51,13 +56,13 @@ test('the contact faq uses native details elements', function () {
         ->not->toContain('MaisonAccordion');
 });
 
-test('three bureau forms submit through a shared mailto helper', function () {
+test('three bureau forms post contact inquiries through inertia', function () {
     $formSource = file_get_contents(resource_path('js/components/maison/contact/bureau-form.tsx'));
     $bureauSource = file_get_contents(resource_path('js/components/maison/contact/contact-bureau.tsx'));
-    $mailtoSource = file_get_contents(resource_path('js/components/maison/contact/bureau-mailto.ts'));
 
-    expect($mailtoSource)->toContain('submitBureauMailto')
-        ->and($formSource)->toContain('submitBureauMailto')
+    expect($formSource)->toContain('storeContact')
+        ->and($formSource)->toContain("from '@/routes/maison/contact'")
+        ->and($formSource)->not->toContain('submitBureauMailto')
         ->and($bureauSource)->toContain('Afspraak aanvraag')
         ->and($bureauSource)->toContain('Privé consult aanvraag')
         ->and($bureauSource)->toContain('Feedback');
@@ -69,4 +74,36 @@ test('the contact bureau chat renders bubble actions safely without innerHTML', 
     expect($source)
         ->not->toContain('dangerouslySetInnerHTML')
         ->not->toContain('innerHTML');
+});
+
+test('a contact inquiry is persisted and queued to the bureau inbox', function () {
+    Mail::fake();
+
+    $this->post('/nl/contact', [
+        'name' => 'Yusuf Savran',
+        'email' => 'yusuf@example.com',
+        'subject' => 'Afspraak aanvraag',
+        'message' => 'Graag een atelierbezoek.',
+        'datum' => '2026-09-01',
+        'moment' => 'Ochtend',
+    ])->assertRedirect();
+
+    $inquiry = Inquiry::query()->first();
+
+    expect($inquiry)->not->toBeNull()
+        ->and($inquiry->type)->toBe(InquiryType::Contact)
+        ->and($inquiry->name)->toBe('Yusuf Savran')
+        ->and($inquiry->email)->toBe('yusuf@example.com')
+        ->and($inquiry->subject)->toBe('Afspraak aanvraag')
+        ->and($inquiry->message)->toBe('Graag een atelierbezoek.')
+        ->and($inquiry->locale)->toBe('nl')
+        ->and($inquiry->meta)->toMatchArray([
+            'datum' => '2026-09-01',
+            'moment' => 'Ochtend',
+        ]);
+
+    Mail::assertQueued(InquiryReceived::class, function (InquiryReceived $mail) use ($inquiry) {
+        return $mail->inquiry->is($inquiry)
+            && $mail->hasTo(config('mail.bureau_address', config('mail.from.address')));
+    });
 });

@@ -6,8 +6,8 @@ use App\Listeners\StripeEventListener;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use App\Services\Checkout\FoundingEditionCheckout;
 use App\Services\Checkout\OrderFulfillment;
+use App\Services\Checkout\ProductCheckout;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Laravel\Cashier\Events\WebhookReceived;
@@ -46,7 +46,7 @@ test('checkout creates an incomplete order and redirects to stripe', function ()
         'cashier.secret' => 'sk_test_fake',
     ]);
 
-    $this->mock(FoundingEditionCheckout::class, function (MockInterface $mock) {
+    $this->mock(ProductCheckout::class, function (MockInterface $mock) {
         $mock->shouldReceive('create')
             ->once()
             ->andReturn([
@@ -93,7 +93,7 @@ test('authenticated checkout attaches the user to the order', function () {
 
     $user = User::factory()->create();
 
-    $this->mock(FoundingEditionCheckout::class, function (MockInterface $mock) {
+    $this->mock(ProductCheckout::class, function (MockInterface $mock) {
         $mock->shouldReceive('create')
             ->once()
             ->andReturn([
@@ -110,6 +110,53 @@ test('authenticated checkout attaches the user to the order', function () {
         ->assertRedirect('https://checkout.stripe.com/c/pay/test_session');
 
     expect(Order::query()->first()->user_id)->toBe($user->id);
+});
+
+test('checkout accepts product_id for a second published product', function () {
+    config([
+        'cashier.secret' => 'sk_test_fake',
+    ]);
+
+    $product = Product::factory()->create([
+        'name' => 'Accessory Pack',
+        'amount' => '49.00',
+        'is_published' => true,
+        'stock_quantity' => 5,
+    ]);
+
+    $this->mock(ProductCheckout::class, function (MockInterface $mock) {
+        $mock->shouldReceive('create')
+            ->once()
+            ->andReturn([
+                'url' => 'https://checkout.stripe.com/c/pay/test_multi',
+                'session_id' => 'cs_test_multi_1',
+            ]);
+    });
+
+    $this->post(localized('maison.checkout.store'), [
+        'product_id' => $product->id,
+        'name' => 'Multi Buyer',
+        'email' => 'multi@example.com',
+    ])->assertRedirect('https://checkout.stripe.com/c/pay/test_multi');
+
+    $order = Order::query()->first();
+
+    expect($order)->not->toBeNull()
+        ->and($order->product_id)->toBe($product->id)
+        ->and($order->amount)->toBe('49.00')
+        ->and($product->fresh()->stock_quantity)->toBe(4);
+});
+
+test('checkout rejects unpublished product_id', function () {
+    $product = Product::factory()->create(['is_published' => false]);
+
+    $this->post(localized('maison.checkout.store'), [
+        'product_id' => $product->id,
+        'name' => 'Buyer',
+        'email' => 'buyer@example.com',
+    ])->assertSessionHasErrors('product_id');
+
+    expect(Order::query()->count())->toBe(0);
 });
 
 test('cancel marks an incomplete order as canceled', function () {

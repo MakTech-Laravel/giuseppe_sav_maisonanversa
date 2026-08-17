@@ -5,9 +5,11 @@ namespace App\Console\Commands\Translation;
 use App\Jobs\TranslateModelJob;
 use App\Models\CommerceSetting;
 use App\Models\CommunityComment;
+use App\Models\CommunityCourt;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
+use App\Models\JournalArticle;
 use App\Models\Product;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
@@ -24,8 +26,10 @@ class RetryTranslationsCommand extends Command
     private const MODELS = [
         'communitypost' => CommunityPost::class,
         'communitycomment' => CommunityComment::class,
+        'communitycourt' => CommunityCourt::class,
         'communityevent' => CommunityEvent::class,
         'communitysession' => CommunitySession::class,
+        'journalarticle' => JournalArticle::class,
         'product' => Product::class,
         'commercesetting' => CommerceSetting::class,
     ];
@@ -35,7 +39,7 @@ class RetryTranslationsCommand extends Command
         $models = $this->resolveModels();
 
         if ($models === []) {
-            $this->error('Unknown model. Use communitypost, communitycomment, communityevent, communitysession, product, or commercesetting.');
+            $this->error('Unknown model. Use communitypost, communitycomment, communitycourt, communityevent, communitysession, journalarticle, product, or commercesetting.');
 
             return self::FAILURE;
         }

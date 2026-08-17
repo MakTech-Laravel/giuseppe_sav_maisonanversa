@@ -6,10 +6,12 @@ use App\Enums\RoleEnum;
 use App\Jobs\TranslateModelJob;
 use App\Mail\OrderConfirmation;
 use App\Models\CommunityComment;
+use App\Models\CommunityCourt;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
 use App\Models\EditionPiece;
+use App\Models\JournalArticle;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -302,6 +304,25 @@ test('community events auto-detect title description and location', function () 
         ->toEqualCanonicalizing(['title', 'description', 'location'])
         ->not->toContain('email')
         ->not->toContain('url');
+});
+
+test('community courts auto-detect title body and location', function () {
+    $court = CommunityCourt::factory()->create();
+
+    expect($court->translatableColumns())
+        ->toEqualCanonicalizing(['title', 'body', 'location'])
+        ->not->toContain('lat')
+        ->not->toContain('lng');
+});
+
+test('journal articles translate title excerpt body category and date label', function () {
+    $article = JournalArticle::factory()->create();
+
+    expect($article->translatableColumns())
+        ->toEqualCanonicalizing(['title', 'excerpt', 'body', 'category', 'date_label'])
+        ->not->toContain('slug')
+        ->not->toContain('author')
+        ->not->toContain('cover_path');
 });
 
 test('community sessions translate notes and location but not level', function () {

@@ -182,7 +182,7 @@ function BureauPanelBody({ id }: { id: BureauPanelId }) {
                     >
                         <BureauFieldRow>
                             <BureauInput
-                                name="naam"
+                                name="name"
                                 placeholder="Naam"
                                 required
                             />
@@ -210,7 +210,7 @@ function BureauPanelBody({ id }: { id: BureauPanelId }) {
                             />
                         </BureauFieldRow>
                         <BureauTextarea
-                            name="bericht"
+                            name="message"
                             placeholder="Korte toelichting (optioneel)"
                         />
                     </BureauForm>
@@ -231,7 +231,7 @@ function BureauPanelBody({ id }: { id: BureauPanelId }) {
                     >
                         <BureauFieldRow>
                             <BureauInput
-                                name="naam"
+                                name="name"
                                 placeholder="Naam"
                                 required
                             />
@@ -262,7 +262,7 @@ function BureauPanelBody({ id }: { id: BureauPanelId }) {
                             />
                         </BureauFieldRow>
                         <BureauTextarea
-                            name="bericht"
+                            name="message"
                             placeholder="Waarover wilt u spreken? (optioneel)"
                         />
                     </BureauForm>
@@ -306,11 +306,16 @@ function BureauPanelBody({ id }: { id: BureauPanelId }) {
                         submitLabel="Verstuur feedback"
                     >
                         <BureauFieldRow>
-                            <BureauInput name="naam" placeholder="Naam" />
+                            <BureauInput
+                                name="name"
+                                placeholder="Naam"
+                                required
+                            />
                             <BureauInput
                                 name="email"
                                 type="email"
                                 placeholder="E-mailadres"
+                                required
                             />
                         </BureauFieldRow>
                         <BureauSelect
@@ -325,7 +330,7 @@ function BureauPanelBody({ id }: { id: BureauPanelId }) {
                             className="col-span-full"
                         />
                         <BureauTextarea
-                            name="bericht"
+                            name="message"
                             rows={4}
                             placeholder="Uw feedback..."
                         />

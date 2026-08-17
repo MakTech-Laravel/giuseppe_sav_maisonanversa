@@ -32,6 +32,7 @@ test('the scroll lock utility counts holders so nested locks do not unlock early
 test('the order modal assigns the edition number after payment', function () {
     expect(modalSource('order-modal.tsx'))
         ->toContain('Toegewezen na betaling')
+        ->toContain('product_id')
         ->not->toContain('Array.from({ length: 100 }');
 });
 

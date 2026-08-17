@@ -120,7 +120,7 @@ class Product extends Model
     /**
      * Shared checkout display for Inertia (public storefront = founding SKU).
      *
-     * @return array{currency: string, amount: string, displayAmount: string, productName: string, deliveryLabel: string|null}
+     * @return array{productId: int|null, currency: string, amount: string, displayAmount: string, productName: string, deliveryLabel: string|null}
      */
     public static function checkoutShare(): array
     {
@@ -133,6 +133,7 @@ class Product extends Model
 
         if ($amount === null) {
             return [
+                'productId' => $product?->id,
                 'currency' => 'eur',
                 'amount' => '',
                 'displayAmount' => '',
@@ -142,6 +143,7 @@ class Product extends Model
         }
 
         return [
+            'productId' => $product->id,
             'currency' => $product->currency,
             'amount' => (string) $amount,
             'displayAmount' => Money::format((string) $amount),

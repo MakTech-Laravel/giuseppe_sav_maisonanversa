@@ -1,8 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
-import { Eye, ShoppingBag, TriangleAlert } from 'lucide-react';
+import { Eye, ShoppingBag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,28 +26,7 @@ interface Order {
     status_key: string;
 }
 
-function translateOrderStatus(
-    status: string,
-    t: (key: string) => string,
-): string {
-    const statusMap: Record<string, string> = {
-        Active: 'Actief',
-        Reserved: 'Gereserveerd',
-        Paid: 'Betaald',
-        Cancelled: 'Geannuleerd',
-        Pending: 'In behandeling',
-    };
-
-    return t(statusMap[status] ?? status);
-}
-
-export default function OrdersIndex({
-    orders,
-    commerceConnected,
-}: {
-    orders: Order[];
-    commerceConnected: boolean;
-}) {
+export default function OrdersIndex({ orders }: { orders: Order[] }) {
     const { t } = useTranslation();
 
     return (
@@ -62,19 +40,6 @@ export default function OrdersIndex({
                     )}
                     icon={ShoppingBag}
                 />
-                {!commerceConnected && (
-                    <Alert>
-                        <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>
-                            {t('Commerce is niet gekoppeld')}
-                        </AlertTitle>
-                        <AlertDescription>
-                            {t(
-                                'Deze bestellingen zijn demogegevens totdat de commerceprovider is geconfigureerd.',
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                )}
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                     <Table>
                         <TableHeader>
@@ -109,10 +74,7 @@ export default function OrdersIndex({
                                     <TableCell>{order.amount}</TableCell>
                                     <TableCell>
                                         <Badge variant="secondary">
-                                            {translateOrderStatus(
-                                                order.status,
-                                                t,
-                                            )}
+                                            {order.status}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">

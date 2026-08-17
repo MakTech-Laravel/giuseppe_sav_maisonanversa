@@ -1,5 +1,6 @@
-import { useRef, useState  } from 'react';
-import type {FormEvent} from 'react';
+import { useRef } from 'react';
+import type { FormEvent } from 'react';
+import { useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
@@ -10,6 +11,8 @@ import { PageHero } from '@/components/maison/ui/page-hero';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { SuccessPanel } from '@/components/maison/ui/success-panel';
+import { useLocale } from '@/hooks/use-locale';
+import { inquire as cornerInquire } from '@/routes/maison/corner';
 
 const PACKAGE_ITEMS = [
     {
@@ -482,19 +485,26 @@ export default function Corner() {
 
 function CornerPartnershipForm() {
     const { t } = useTranslation();
-    const [sent, setSent] = useState(false);
+    const { locale } = useLocale();
+    const form = useForm({
+        club_name: '',
+        name: '',
+        email: '',
+        location: '',
+        courts: COURT_OPTIONS[0],
+        format: FORMAT_OPTIONS[0],
+        message: '',
+        website: '',
+    });
 
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-
-        if (!event.currentTarget.reportValidity()) {
-            return;
-        }
-
-        setSent(true);
+        form.post(cornerInquire.url(locale), {
+            preserveScroll: true,
+        });
     }
 
-    if (sent) {
+    if (form.recentlySuccessful) {
         return (
             <SuccessPanel
                 title={t('Aanvraag ontvangen.')}
@@ -508,6 +518,16 @@ function CornerPartnershipForm() {
 
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
+            <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                value={form.data.website}
+                onChange={(event) => form.setData('website', event.target.value)}
+            />
+
             <div className="flex flex-col gap-1.5">
                 <label
                     htmlFor="corner-club-name"
@@ -517,12 +537,21 @@ function CornerPartnershipForm() {
                 </label>
                 <input
                     id="corner-club-name"
-                    name="clubName"
+                    name="club_name"
                     type="text"
                     required
+                    value={form.data.club_name}
+                    onChange={(event) =>
+                        form.setData('club_name', event.target.value)
+                    }
                     placeholder={t('Naam van uw padelclub')}
                     className={fieldClassName}
                 />
+                {form.errors.club_name && (
+                    <p role="alert" className="text-[13px] text-choc3">
+                        {form.errors.club_name}
+                    </p>
+                )}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -534,12 +563,19 @@ function CornerPartnershipForm() {
                 </label>
                 <input
                     id="corner-contact"
-                    name="contactPerson"
+                    name="name"
                     type="text"
                     required
+                    value={form.data.name}
+                    onChange={(event) => form.setData('name', event.target.value)}
                     placeholder={t('Uw naam en functie')}
                     className={fieldClassName}
                 />
+                {form.errors.name && (
+                    <p role="alert" className="text-[13px] text-choc3">
+                        {form.errors.name}
+                    </p>
+                )}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -554,9 +590,16 @@ function CornerPartnershipForm() {
                     name="email"
                     type="email"
                     required
+                    value={form.data.email}
+                    onChange={(event) => form.setData('email', event.target.value)}
                     placeholder={t('uw@emailadres.be')}
                     className={fieldClassName}
                 />
+                {form.errors.email && (
+                    <p role="alert" className="text-[13px] text-choc3">
+                        {form.errors.email}
+                    </p>
+                )}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -571,9 +614,18 @@ function CornerPartnershipForm() {
                     name="location"
                     type="text"
                     required
+                    value={form.data.location}
+                    onChange={(event) =>
+                        form.setData('location', event.target.value)
+                    }
                     placeholder={t('Antwerpen, België')}
                     className={fieldClassName}
                 />
+                {form.errors.location && (
+                    <p role="alert" className="text-[13px] text-choc3">
+                        {form.errors.location}
+                    </p>
+                )}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -587,7 +639,10 @@ function CornerPartnershipForm() {
                     id="corner-courts"
                     name="courts"
                     required
-                    defaultValue={COURT_OPTIONS[0]}
+                    value={form.data.courts}
+                    onChange={(event) =>
+                        form.setData('courts', event.target.value)
+                    }
                     className={fieldClassName}
                 >
                     {COURT_OPTIONS.map((option) => (
@@ -609,7 +664,10 @@ function CornerPartnershipForm() {
                     id="corner-format"
                     name="format"
                     required
-                    defaultValue={FORMAT_OPTIONS[0]}
+                    value={form.data.format}
+                    onChange={(event) =>
+                        form.setData('format', event.target.value)
+                    }
                     className={fieldClassName}
                 >
                     {FORMAT_OPTIONS.map((option) => (
@@ -629,17 +687,33 @@ function CornerPartnershipForm() {
                 </label>
                 <textarea
                     id="corner-about"
-                    name="about"
+                    name="message"
                     required
+                    value={form.data.message}
+                    onChange={(event) =>
+                        form.setData('message', event.target.value)
+                    }
                     placeholder={t(
                         'Beschrijf kort de sfeer en identiteit van uw club...',
                     )}
                     className={`${fieldClassName} min-h-25 resize-y`}
                 />
+                {form.errors.message && (
+                    <p role="alert" className="text-[13px] text-choc3">
+                        {form.errors.message}
+                    </p>
+                )}
             </div>
 
-            <MaisonButton type="submit" variant="gold" block>
-                {t('Verstuur Partnership Aanvraag')}
+            <MaisonButton
+                type="submit"
+                variant="gold"
+                block
+                disabled={form.processing}
+            >
+                {form.processing
+                    ? t('Bezig…')
+                    : t('Verstuur Partnership Aanvraag')}
             </MaisonButton>
         </form>
     );

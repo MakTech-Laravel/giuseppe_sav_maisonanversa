@@ -1,10 +1,11 @@
-import { Head, Link } from '@inertiajs/react';
-import { Eye, TriangleAlert, UsersRound } from 'lucide-react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Eye, UsersRound } from 'lucide-react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -19,12 +20,11 @@ import circleRoutes from '@/routes/admin/circle';
 
 interface CircleMember {
     id: string;
-    edition: string;
+    edition: string | null;
     name: string;
     email: string;
     status: string;
-    status_key: string;
-    joined_at: string;
+    joined_at: string | null;
 }
 
 function translateMemberStatus(
@@ -41,12 +41,39 @@ function translateMemberStatus(
 
 export default function CircleIndex({
     members,
-    circleConnected,
 }: {
     members: CircleMember[];
-    circleConnected: boolean;
 }) {
     const { t } = useTranslation();
+    const form = useForm(circleRoutes.assign(wayfinderLocale()), {
+        email: '',
+        user_id: '',
+    });
+
+    function submitAssign(event: FormEvent) {
+        event.preventDefault();
+        form
+            .transform((data) => ({
+                email: data.email || null,
+                user_id: data.user_id === '' ? null : Number(data.user_id),
+            }))
+            .submit({
+                onSuccess: () => form.reset(),
+            });
+    }
+
+    function removeMember(memberId: string) {
+        if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
+            return;
+        }
+
+        router.delete(
+            circleRoutes.remove({
+                locale: wayfinderLocale(),
+                member: memberId,
+            }).url,
+        );
+    }
 
     return (
         <>
@@ -59,19 +86,47 @@ export default function CircleIndex({
                     )}
                     icon={UsersRound}
                 />
-                {!circleConnected && (
-                    <Alert>
-                        <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>
-                            {t('Circle-ledenbestand is niet gekoppeld')}
-                        </AlertTitle>
-                        <AlertDescription>
-                            {t(
-                                'Deze leden zijn demogegevens totdat betaalde edities aan het roster zijn gekoppeld.',
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                )}
+                <form
+                    onSubmit={submitAssign}
+                    className="flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm sm:flex-row sm:items-end"
+                >
+                    <div className="flex-1 space-y-1">
+                        <p className="text-sm font-medium">
+                            {t('Lid toevoegen')}
+                        </p>
+                        <Input
+                            type="email"
+                            placeholder={t('E-mail')}
+                            value={form.data.email}
+                            onChange={(event) =>
+                                form.setData('email', event.target.value)
+                            }
+                        />
+                        {form.errors.email && (
+                            <p className="text-sm text-destructive">
+                                {form.errors.email}
+                            </p>
+                        )}
+                    </div>
+                    <div className="w-full space-y-1 sm:w-40">
+                        <Input
+                            type="number"
+                            placeholder={t('User ID')}
+                            value={form.data.user_id}
+                            onChange={(event) =>
+                                form.setData('user_id', event.target.value)
+                            }
+                        />
+                        {form.errors.user_id && (
+                            <p className="text-sm text-destructive">
+                                {form.errors.user_id}
+                            </p>
+                        )}
+                    </div>
+                    <Button type="submit" disabled={form.processing}>
+                        {t('Toewijzen')}
+                    </Button>
+                </form>
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                     <Table>
                         <TableHeader>
@@ -94,7 +149,9 @@ export default function CircleIndex({
                             {members.map((member) => (
                                 <TableRow key={member.id}>
                                     <TableCell className="font-medium">
-                                        № {member.edition}
+                                        {member.edition
+                                            ? `№ ${member.edition}`
+                                            : '—'}
                                     </TableCell>
                                     <TableCell>{member.name}</TableCell>
                                     <TableCell className="hidden md:table-cell">
@@ -109,9 +166,9 @@ export default function CircleIndex({
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="hidden sm:table-cell">
-                                        {member.joined_at}
+                                        {member.joined_at ?? '—'}
                                     </TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="space-x-1 text-right">
                                         <Button
                                             variant="ghost"
                                             size="icon"
@@ -126,6 +183,16 @@ export default function CircleIndex({
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            type="button"
+                                            onClick={() =>
+                                                removeMember(member.id)
+                                            }
+                                        >
+                                            {t('Verwijderen')}
                                         </Button>
                                     </TableCell>
                                 </TableRow>

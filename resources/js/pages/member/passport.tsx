@@ -1,6 +1,9 @@
 import { Head } from '@inertiajs/react';
+import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import PassportPdfController from '@/actions/App/Http/Controllers/Member/PassportPdfController';
 import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 
 type PassportPage = { title: string; body: string };
 
@@ -25,6 +28,16 @@ export default function MemberPassport({
                     'Vier pagina\'s van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.',
                 )}
             />
+
+            <div className="mb-8">
+                <a
+                    href={PassportPdfController.url(wayfinderLocale())}
+                    className="inline-flex items-center gap-2 border border-gold/45 bg-choc3 px-4 py-2.5 font-sans text-[11px] tracking-[0.16em] text-cream uppercase no-underline transition-colors hover:border-gold hover:text-gold"
+                >
+                    <Download className="size-3.5" aria-hidden />
+                    {t('Download PDF')}
+                </a>
+            </div>
 
             <div className="grid gap-4 md:grid-cols-2">
                 {passport.pages.map((page, index) => (

@@ -71,6 +71,12 @@ export function CommunitySessions({ sessions, onJoin }: CommunitySessionsProps) 
         );
     }
 
+    function handleLeave(sessionId: string) {
+        router.delete(`/${locale}/community/sessions/${sessionId}/leave`, {
+            preserveScroll: true,
+        });
+    }
+
     return (
         <>
             <Wrap className="mx-auto max-w-3xl px-6 py-12 md:px-10 lg:px-20">
@@ -96,6 +102,7 @@ export function CommunitySessions({ sessions, onJoin }: CommunitySessionsProps) 
                         key={session.id}
                         session={toSessionCard(session, t)}
                         onJoin={() => handleJoin(session.id)}
+                        onLeave={() => handleLeave(session.id)}
                     />
                 ))}
             </Wrap>
@@ -163,9 +170,10 @@ export function CommunitySessions({ sessions, onJoin }: CommunitySessionsProps) 
 type SessionCardProps = {
     session: SessionCardData & { joined?: boolean };
     onJoin: () => void;
+    onLeave: () => void;
 };
 
-function SessionCard({ session, onJoin }: SessionCardProps) {
+function SessionCard({ session, onJoin, onLeave }: SessionCardProps) {
     const { t } = useTranslation();
     const full = session.spots === 'Vol';
 
@@ -210,21 +218,24 @@ function SessionCard({ session, onJoin }: SessionCardProps) {
                 ))}
             </div>
 
-            <button
-                type="button"
-                disabled={session.joined || full}
-                onClick={onJoin}
-                className={cn(
-                    'cursor-pointer border-none px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] uppercase transition-colors disabled:cursor-default',
-                    session.joined
-                        ? 'bg-gold2 text-choc'
-                        : 'bg-choc text-cream hover:bg-gold2',
-                )}
-            >
-                {session.joined
-                    ? t('✓ Aangemeld')
-                    : t('Sluit aan bij deze sessie')}
-            </button>
+            {session.joined ? (
+                <button
+                    type="button"
+                    onClick={onLeave}
+                    className="cursor-pointer border border-gold/30 bg-transparent px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10"
+                >
+                    {t('Verlaat sessie')}
+                </button>
+            ) : (
+                <button
+                    type="button"
+                    disabled={full}
+                    onClick={onJoin}
+                    className="cursor-pointer border-none bg-choc px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2 disabled:cursor-default disabled:opacity-50"
+                >
+                    {t('Sluit aan bij deze sessie')}
+                </button>
+            )}
         </article>
     );
 }

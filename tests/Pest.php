@@ -1,6 +1,7 @@
 <?php
 
 use Database\Seeders\EditionPieceSeeder;
+use Database\Seeders\JournalArticleSeeder;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -20,7 +21,11 @@ use Tests\TestCase;
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->beforeEach(function () {
-        $this->seed([ProductSeeder::class, EditionPieceSeeder::class]);
+        $this->seed([
+            ProductSeeder::class,
+            EditionPieceSeeder::class,
+            JournalArticleSeeder::class,
+        ]);
     })
     ->in('Feature');
 

@@ -1,8 +1,11 @@
-import type { FormEvent, ReactNode } from 'react';
+import { Form } from '@inertiajs/react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { submitBureauMailto } from '@/components/maison/contact/bureau-mailto';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
+import { SuccessPanel } from '@/components/maison/ui/success-panel';
+import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
+import { store as storeContact } from '@/routes/maison/contact';
 
 const fieldClassName =
     'w-full rounded border border-gold/25 bg-black/30 px-3.5 py-3 font-sans text-[13px] text-cream outline-none focus:border-gold';
@@ -21,28 +24,53 @@ export function BureauForm({
     className,
 }: BureauFormProps) {
     const { t } = useTranslation();
-
-    function onSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (!event.currentTarget.reportValidity()) {
-            return;
-        }
-
-        submitBureauMailto(event.currentTarget, t(subject));
-    }
+    const { locale } = useLocale();
 
     return (
-        <form
-            onSubmit={onSubmit}
+        <Form
+            {...storeContact.form(locale)}
             className={cn('mt-4.5 grid gap-3', className)}
+            options={{ preserveScroll: true }}
+            resetOnSuccess
         >
-            {children}
-
-            <MaisonButton type="submit" variant="gold" className="mt-1">
-                {t(submitLabel)}
-            </MaisonButton>
-        </form>
+            {({ processing, recentlySuccessful, errors }) =>
+                recentlySuccessful ? (
+                    <SuccessPanel
+                        title={t('Uw bericht is ontvangen.')}
+                        icon="✓"
+                        className="text-left [&_div]:text-sand [&_h3]:text-cream"
+                    >
+                        <p>{t('Wij bevestigen persoonlijk zo snel mogelijk.')}</p>
+                    </SuccessPanel>
+                ) : (
+                    <>
+                        <input type="hidden" name="subject" value={t(subject)} />
+                        <input
+                            type="text"
+                            name="website"
+                            tabIndex={-1}
+                            autoComplete="off"
+                            className="hidden"
+                            defaultValue=""
+                        />
+                        {children}
+                        {(errors.name || errors.email || errors.message) && (
+                            <p role="alert" className="text-[13px] text-gold">
+                                {errors.name || errors.email || errors.message}
+                            </p>
+                        )}
+                        <MaisonButton
+                            type="submit"
+                            variant="gold"
+                            className="mt-1"
+                            disabled={processing}
+                        >
+                            {processing ? t('Bezig…') : t(submitLabel)}
+                        </MaisonButton>
+                    </>
+                )
+            }
+        </Form>
     );
 }
 

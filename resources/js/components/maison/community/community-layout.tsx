@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CommunityCourts } from '@/components/maison/community/community-courts';
 import type {
+    CommunityCourtPayload,
     CommunityEventPayload,
     CommunitySessionPayload,
     FeedPostData,
@@ -19,6 +20,7 @@ type CommunityLayoutProps = {
     posts: Paginated<FeedPostData>;
     sessions: CommunitySessionPayload[];
     events: CommunityEventPayload[];
+    courts: CommunityCourtPayload[];
 };
 
 export function CommunityLayout({
@@ -26,6 +28,7 @@ export function CommunityLayout({
     posts,
     sessions,
     events,
+    courts,
 }: CommunityLayoutProps) {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<CommunityTab>('feed');
@@ -49,7 +52,7 @@ export function CommunityLayout({
                 />
             )}
 
-            {activeTab === 'courts' && <CommunityCourts />}
+            {activeTab === 'courts' && <CommunityCourts courts={courts} />}
 
             {activeTab === 'sessions' && (
                 <CommunitySessions
