@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\CommerceSetting;
 use App\Models\Product;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -52,7 +53,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames(),
-                    'permissions' => $user->getAllPermissions()->pluck('name'),
+                    // TEMPORARY — AdminTypePermissionBypass shares every permission
+                    // name so the sidebar matches full staff access.
+                    'permissions' => AdminTypePermissionBypass::grants($user)
+                        ? AdminTypePermissionBypass::allPermissionNames()
+                        : $user->getAllPermissions()->pluck('name'),
                     'is_super_admin' => $user->hasRole('super-admin'),
                     'type' => $user->type->value,
                     'is_admin' => $user->isAdmin(),

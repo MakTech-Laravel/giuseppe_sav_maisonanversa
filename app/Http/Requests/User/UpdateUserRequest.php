@@ -46,6 +46,12 @@ class UpdateUserRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {
+            // Role assignment is not part of the current admin CRUD UI.
+            // Skip invariants unless the client explicitly sent roles.
+            if (! $this->exists('roles')) {
+                return;
+            }
+
             $roles = (array) $this->input('roles', []);
 
             /** @var User $target */
