@@ -115,4 +115,16 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Bureau Inbox
+    |--------------------------------------------------------------------------
+    |
+    | Contact and Club Corner inquiries are queued to this address. Falls back
+    | to the global from address when BUREAU_MAIL_ADDRESS is not set.
+    |
+    */
+
+    'bureau_address' => env('BUREAU_MAIL_ADDRESS', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+
 ];

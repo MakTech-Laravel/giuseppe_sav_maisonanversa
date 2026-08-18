@@ -17,7 +17,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['community_session_id', 'user_id']);
+            $table->unique(
+                ['community_session_id', 'user_id'],
+                'csp_session_user_unique',
+            );
         });
     }
 

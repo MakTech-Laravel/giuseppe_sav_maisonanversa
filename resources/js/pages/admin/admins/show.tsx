@@ -1,28 +1,23 @@
 import { Head, Link } from '@inertiajs/react';
-import {
-    ArrowLeft,
-    Calendar,
-    IdCard,
-    Mail,
-    Pencil,
-    ShieldCheck,
-} from 'lucide-react';
-import { motion } from 'motion/react';
+import { ArrowLeft, IdCard, Pencil } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import {
+    AdminPanel,
+    AdminResourceShell,
+} from '@/components/admin/admin-resource-shell';
+import { AdminUserProfile } from '@/components/admin/admin-user-profile';
 import { Button } from '@/components/ui/button';
 import { usePermission } from '@/hooks/use-permissions';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import admins from '@/routes/admin/admins';
-import { avatarUrl } from '@/types/admin';
 import type { AdminUser } from '@/types/admin';
 import { PERMISSIONS } from '@/types/permissions';
 
 export default function ShowAdmin({ user }: { user: AdminUser }) {
     const { t } = useTranslation();
     const { can } = usePermission();
-    const url = avatarUrl(user.avatar);
 
     return (
         <>
@@ -50,77 +45,52 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                         </Button>
                     )}
                 </AdminPageHeader>
-                <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="max-w-2xl overflow-hidden rounded-xl border bg-card shadow-sm"
+
+                <AdminResourceShell
+                    aside={
+                        <AdminPanel
+                            title={t('Acties')}
+                            description={t(
+                                'Beheer dit personeelsaccount vanuit het adminpaneel.',
+                            )}
+                        >
+                            <div className="flex flex-col gap-2">
+                                {can(PERMISSIONS.USERS.EDIT) && (
+                                    <Button asChild className="w-full">
+                                        <Link
+                                            href={admins.edit({
+                                                locale: wayfinderLocale(),
+                                                user: user.id,
+                                            })}
+                                        >
+                                            <Pencil className="h-4 w-4" />{' '}
+                                            {t('Bewerken')}
+                                        </Link>
+                                    </Button>
+                                )}
+                                <Button
+                                    variant="outline"
+                                    asChild
+                                    className="w-full"
+                                >
+                                    <Link
+                                        href={admins.index(wayfinderLocale())}
+                                    >
+                                        <ArrowLeft className="h-4 w-4" />{' '}
+                                        {t('Terug naar beheerders')}
+                                    </Link>
+                                </Button>
+                            </div>
+                        </AdminPanel>
+                    }
                 >
-                    <div className="flex flex-col items-center gap-3 border-b bg-muted/40 p-6 text-center">
-                        <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-2 border-primary/20 bg-primary/10 text-2xl font-bold text-primary">
-                            {url ? (
-                                <img
-                                    src={url}
-                                    alt={user.name}
-                                    className="h-full w-full object-cover"
-                                />
-                            ) : (
-                                user.name.charAt(0).toUpperCase()
-                            )}
-                        </div>
-                        <div>
-                            <h2 className="text-lg font-bold">{user.name}</h2>
-                            <p className="text-sm text-muted-foreground">
-                                {user.email}
-                            </p>
-                        </div>
-                    </div>
-                    <dl className="divide-y text-sm">
-                        <Row
-                            icon={IdCard}
-                            label={t('Beheerder-ID')}
-                            value={`#${user.id}`}
-                        />
-                        <Row icon={Mail} label={t('E-mail')} value={user.email} />
-                        <Row
-                            icon={ShieldCheck}
-                            label={t('Geverifieerd')}
-                            value={
-                                user.email_verified_at
-                                    ? t('Ja')
-                                    : t('In afwachting')
-                            }
-                        />
-                        <Row
-                            icon={Calendar}
-                            label={t('Lid sinds')}
-                            value={new Date(user.created_at).toLocaleDateString(
-                                undefined,
-                                { dateStyle: 'long' },
-                            )}
-                        />
-                    </dl>
-                </motion.div>
+                    <AdminUserProfile
+                        user={user}
+                        idLabel={t('Beheerder-ID')}
+                    />
+                </AdminResourceShell>
             </div>
         </>
-    );
-}
-
-function Row({
-    icon: Icon,
-    label,
-    value,
-}: {
-    icon: typeof IdCard;
-    label: string;
-    value: string;
-}) {
-    return (
-        <div className="flex items-center justify-between gap-2 px-6 py-3">
-            <dt className="flex items-center gap-2 text-muted-foreground">
-                <Icon className="h-4 w-4 opacity-70" /> {label}
-            </dt>
-            <dd className="font-medium">{value}</dd>
-        </div>
     );
 }
 

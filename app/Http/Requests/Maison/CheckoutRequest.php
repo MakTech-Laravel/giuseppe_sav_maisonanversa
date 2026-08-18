@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Maison;
 
+use App\Models\Product;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CheckoutRequest extends FormRequest
 {
@@ -18,6 +20,11 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'product_id' => [
+                'nullable',
+                'integer',
+                Rule::exists((new Product)->getTable(), 'id')->where('is_published', true),
+            ],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:40'],

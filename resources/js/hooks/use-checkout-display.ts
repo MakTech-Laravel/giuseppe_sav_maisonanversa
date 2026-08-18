@@ -6,6 +6,7 @@ import { usePage } from '@inertiajs/react';
 export function useCheckoutDisplay() {
     const { checkout, commerce } = usePage().props;
 
+    const productId = checkout?.productId ?? null;
     const amount = checkout?.amount ?? '';
     const displayAmount = checkout?.displayAmount ?? '';
     const currency = (checkout?.currency ?? 'eur').toUpperCase();
@@ -17,6 +18,7 @@ export function useCheckoutDisplay() {
     const priceLabel = displayAmount !== '' ? `€ ${displayAmount}` : '';
 
     return {
+        productId,
         amount,
         displayAmount,
         currency,

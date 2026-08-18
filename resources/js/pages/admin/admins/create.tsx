@@ -2,7 +2,11 @@ import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { UserForm } from '@/components/admin/user-form';
+import {
+    AdminPanel,
+    AdminResourceShell,
+} from '@/components/admin/admin-resource-shell';
+import { UserForm, UserFormAside } from '@/components/admin/user-form';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
@@ -26,17 +30,29 @@ export default function CreateAdmin() {
                         </Link>
                     </Button>
                 </AdminPageHeader>
-                <div className="w-full rounded-xl border bg-card p-6 shadow-sm md:p-8">
+
+                <AdminResourceShell
+                    aside={
+                        <>
+                            <UserFormAside entityLabel={t('Beheerder')} />
+                            <AdminPanel title={t('Toegang')}>
+                                <p className="text-sm text-muted-foreground">
+                                    {t(
+                                        'Beheerderaccounts krijgen volledige toegang tot het adminpaneel.',
+                                    )}
+                                </p>
+                            </AdminPanel>
+                        </>
+                    }
+                >
                     <UserForm
                         action={admins.store(wayfinderLocale())}
-                        roles={[]}
-                        showRoles={false}
                         submitLabel={t('Beheerder aanmaken')}
                         onCancel={() =>
                             router.visit(admins.index(wayfinderLocale()))
                         }
                     />
-                </div>
+                </AdminResourceShell>
             </div>
         </>
     );

@@ -36,4 +36,9 @@ class SimpleStock
         $product->increment('stock_quantity');
         app(EditionInventory::class)->bust($product->fresh());
     }
+
+    public function releaseOnRefund(Product $product): void
+    {
+        $this->release($product);
+    }
 }

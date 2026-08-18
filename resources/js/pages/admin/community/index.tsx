@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { MessageCircle } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ import community from '@/routes/admin/community';
 
 interface QueueItem {
     id: string;
+    post_id?: number | string;
     reporter?: string;
     reason?: string;
     status: string;
@@ -38,7 +39,6 @@ export default function CommunityIndex({
 }: {
     items: QueueItem[];
     posts?: CommunityPostRow[];
-    communityConnected: boolean;
 }) {
     const { t } = useTranslation();
     const form = useForm(community.official(wayfinderLocale()), {
@@ -48,6 +48,28 @@ export default function CommunityIndex({
     function submitOfficial(event: FormEvent) {
         event.preventDefault();
         form.submit();
+    }
+
+    function hidePost(postId: string) {
+        router.post(
+            community.hide({
+                locale: wayfinderLocale(),
+                communityPost: Number(postId),
+            }).url,
+            {},
+            { preserveScroll: true },
+        );
+    }
+
+    function resolveReport(reportId: string, status: 'resolved' | 'dismissed') {
+        router.patch(
+            community.reports.resolve({
+                locale: wayfinderLocale(),
+                communityReport: Number(reportId),
+            }).url,
+            { status },
+            { preserveScroll: true },
+        );
     }
 
     return (
@@ -86,6 +108,9 @@ export default function CommunityIndex({
                                 <TableHead>{t('Auteur')}</TableHead>
                                 <TableHead>{t('Fragment')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
+                                <TableHead className="text-right">
+                                    {t('Acties')}
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -106,6 +131,18 @@ export default function CommunityIndex({
                                         {post.content}
                                     </TableCell>
                                     <TableCell>{t(post.status)}</TableCell>
+                                    <TableCell className="text-right">
+                                        {post.status !== 'hidden' && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                type="button"
+                                                onClick={() => hidePost(post.id)}
+                                            >
+                                                {t('Verbergen')}
+                                            </Button>
+                                        )}
+                                    </TableCell>
                                 </TableRow>
                             ))}
                             {items.map((item) => (
@@ -120,6 +157,38 @@ export default function CommunityIndex({
                                         <Badge variant="secondary">
                                             {t(item.status)}
                                         </Badge>
+                                    </TableCell>
+                                    <TableCell className="text-right space-x-2">
+                                        {item.status === 'open' && (
+                                            <>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    type="button"
+                                                    onClick={() =>
+                                                        resolveReport(
+                                                            item.id,
+                                                            'resolved',
+                                                        )
+                                                    }
+                                                >
+                                                    {t('Oplossen')}
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    type="button"
+                                                    onClick={() =>
+                                                        resolveReport(
+                                                            item.id,
+                                                            'dismissed',
+                                                        )
+                                                    }
+                                                >
+                                                    {t('Afwijzen')}
+                                                </Button>
+                                            </>
+                                        )}
                                     </TableCell>
                                 </TableRow>
                             ))}

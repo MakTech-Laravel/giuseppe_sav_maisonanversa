@@ -29,7 +29,7 @@ class PassportPresenter
     {
         $order->loadMissing('product', 'editionPiece');
 
-        $name = $order->product?->name ?? __('Product');
+        $name = $order->product?->translated('name') ?? __('Product');
         $total = (int) ($order->product?->edition_total ?? 0);
         $number = str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
         $token = $order->editionPiece?->verification_token ?? '';

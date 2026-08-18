@@ -57,6 +57,11 @@ export const PERMISSIONS = {
     HERITAGE: {
         VIEW: 'heritage.view',
     },
+    COMMUNITY: {
+        MODERATE: 'community.moderate',
+        OFFICIAL: 'community.official',
+        PARTICIPATE: 'community.participate',
+    },
 } as const;
 
 // Auto-derived union type from the const above.

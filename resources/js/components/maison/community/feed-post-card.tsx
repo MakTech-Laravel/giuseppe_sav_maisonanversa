@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { FeedPostData } from '@/components/maison/community/community-data';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { Monogram } from '@/components/maison/ui/monogram';
+import { usePermission, PERMISSIONS } from '@/hooks/use-permissions';
 import { cn } from '@/lib/utils';
 
 type FeedPostCardProps = {
@@ -14,14 +15,47 @@ type FeedPostCardProps = {
 export function FeedPostCard({ post }: FeedPostCardProps) {
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
+    const { can } = usePermission();
     const [commentsOpen, setCommentsOpen] = useState(false);
     const [draft, setDraft] = useState('');
+    const [reportOpen, setReportOpen] = useState(false);
+    const [reportReason, setReportReason] = useState('');
 
     function toggleLike() {
         router.post(
             `/${locale}/community/posts/${post.id}/like`,
             {},
             { preserveScroll: true },
+        );
+    }
+
+    function hidePost() {
+        router.post(
+            `/${locale}/community/posts/${post.id}/hide`,
+            {},
+            { preserveScroll: true },
+        );
+    }
+
+    function submitReport(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        const reason = reportReason.trim();
+
+        if (!reason || !auth.user) {
+            return;
+        }
+
+        router.post(
+            `/${locale}/community/posts/${post.id}/report`,
+            { reason },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setReportReason('');
+                    setReportOpen(false);
+                },
+            },
         );
     }
 
@@ -106,7 +140,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                 </div>
             )}
 
-            <footer className="flex items-center gap-6 border-t border-gold/10 pt-3.5">
+            <footer className="flex flex-wrap items-center gap-6 border-t border-gold/10 pt-3.5">
                 <button
                     type="button"
                     onClick={toggleLike}
@@ -131,6 +165,24 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                     <span>💬</span>
                     {post.comments.length} {t('reacties')}
                 </button>
+                {auth.user && (
+                    <button
+                        type="button"
+                        onClick={() => setReportOpen((open) => !open)}
+                        className="flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-stone"
+                    >
+                        {t('Melden')}
+                    </button>
+                )}
+                {can(PERMISSIONS.COMMUNITY.MODERATE) && (
+                    <button
+                        type="button"
+                        onClick={hidePost}
+                        className="flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-stone"
+                    >
+                        {t('Verbergen')}
+                    </button>
+                )}
                 <button
                     type="button"
                     className="ml-auto flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-stone"
@@ -138,6 +190,32 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                     <span>↗</span> {t('Delen')}
                 </button>
             </footer>
+
+            {reportOpen && (
+                <form
+                    onSubmit={submitReport}
+                    className="mt-4 flex flex-col gap-2.5 border-t border-gold/10 pt-4 sm:flex-row sm:items-start"
+                >
+                    <label className="sr-only" htmlFor={`report-${post.id}`}>
+                        {t('Reden voor melding')}
+                    </label>
+                    <input
+                        id={`report-${post.id}`}
+                        type="text"
+                        value={reportReason}
+                        onChange={(event) => setReportReason(event.target.value)}
+                        placeholder={t('Waarom meldt u dit bericht?')}
+                        maxLength={500}
+                        className="min-w-0 flex-1 border border-gold/20 bg-cream px-3.5 py-2.5 font-serif text-sm text-choc outline-none focus:border-gold2"
+                    />
+                    <button
+                        type="submit"
+                        className="shrink-0 bg-choc px-4 py-2.5 font-sans text-[10px] font-medium tracking-[0.18em] text-cream uppercase transition-colors hover:bg-gold2"
+                    >
+                        {t('Verstuur melding')}
+                    </button>
+                </form>
+            )}
 
             {commentsOpen && (
                 <div className="mt-4 border-t border-gold/10 pt-4">

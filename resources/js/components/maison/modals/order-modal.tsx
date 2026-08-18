@@ -28,6 +28,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
     const { t } = useTranslation();
     const { locale } = useLocale();
     const {
+        productId,
         priceLabel,
         productName,
         deliveryLabel,
@@ -79,6 +80,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         router.post(
             checkoutStore.url(locale),
             {
+                ...(productId !== null ? { product_id: productId } : {}),
                 name: name.trim(),
                 email: email.trim(),
                 phone: phone.trim() || null,

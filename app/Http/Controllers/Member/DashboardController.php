@@ -78,11 +78,11 @@ class DashboardController extends Controller implements HasMiddleware
 
         return Inertia::render('member/heritage', [
             'heritage' => [
-                'productName' => $order->product?->name,
+                'productName' => $order->product?->translated('name'),
                 'editionTotal' => $order->product?->edition_total,
                 'editionNumber' => $number,
                 'status' => $order->status->value,
-                'deliveryWindow' => $order->product?->expected_delivery_label
+                'deliveryWindow' => $order->product?->translated('expected_delivery_label')
                     ?? $order->shipped_at?->toDateString()
                     ?? __('In productie'),
                 'certificate' => __('Gekoppeld aan No. :number', ['number' => $number]),

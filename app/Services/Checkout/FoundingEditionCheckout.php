@@ -15,7 +15,10 @@ class FoundingEditionCheckout
     public function __construct(private StripeCatalog $catalog) {}
 
     /**
-     * Create a Stripe Checkout session for a pending Founding Edition order (EUR).
+     * Create a Stripe Checkout session for a pending product order (EUR).
+     *
+     * Resolves the Product from the order (any published catalog SKU), syncs the
+     * Stripe Catalog price, then opens Checkout. Prefer injecting ProductCheckout.
      *
      * @return array{url: string, session_id: string}
      */
@@ -29,6 +32,7 @@ class FoundingEditionCheckout
             ]);
         }
 
+        $order->loadMissing('product');
         $product = $order->product ?? Product::founding();
 
         if ($product === null) {

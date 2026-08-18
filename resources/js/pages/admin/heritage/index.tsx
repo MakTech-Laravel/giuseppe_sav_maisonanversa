@@ -1,10 +1,9 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import { Loader2, Package, TriangleAlert } from 'lucide-react';
+import { Loader2, Package } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import InputError from '@/components/input-error';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -66,12 +65,10 @@ export default function HeritageIndex({
     product,
     catalog = [],
     inventory,
-    heritageConnected,
 }: {
     product: HeritageProduct | null;
     catalog?: CatalogOption[];
     inventory: HeritageInventory;
-    heritageConnected: boolean;
 }) {
     const { t } = useTranslation();
 
@@ -86,19 +83,6 @@ export default function HeritageIndex({
                     )}
                     icon={Package}
                 />
-                {!heritageConnected && (
-                    <Alert>
-                        <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>
-                            {t('Productbeheer is niet gekoppeld')}
-                        </AlertTitle>
-                        <AlertDescription>
-                            {t(
-                                'Voorraadtellingen komen uit configuratie; mutaties blijven demogegevens tot een voorraadtabel bestaat.',
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                )}
                 {catalog.length > 1 && product && (
                     <div className="grid max-w-md gap-2">
                         <Label htmlFor="catalog-product">{t('Product')}</Label>

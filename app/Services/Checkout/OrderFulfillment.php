@@ -14,7 +14,9 @@ use App\Services\Edition\EditionInventory;
 use App\Services\Edition\SimpleStock;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Laravel\Cashier\Cashier;
 use Spatie\Permission\Models\Role;
+use Stripe\Exception\ApiErrorException;
 
 class OrderFulfillment
 {
@@ -84,6 +86,68 @@ class OrderFulfillment
         }
 
         return $fulfilled;
+    }
+
+    /**
+     * Create a Stripe refund (when a PaymentIntent exists), restore inventory, and mark refunded.
+     *
+     * @throws ApiErrorException
+     */
+    public function refund(Order $order): Order
+    {
+        if ($order->status === OrderStatus::Refunded) {
+            return $order;
+        }
+
+        if (filled($order->stripe_payment_intent_id)) {
+            Cashier::stripe()->refunds->create([
+                'payment_intent' => $order->stripe_payment_intent_id,
+            ]);
+        }
+
+        return $this->markRefunded($order);
+    }
+
+    /**
+     * Mark an order refunded from a Stripe charge.refunded webhook (idempotent, no Stripe call).
+     */
+    public function markRefundedFromPaymentIntent(?string $paymentIntentId): ?Order
+    {
+        if ($paymentIntentId === null || $paymentIntentId === '') {
+            return null;
+        }
+
+        $order = Order::query()
+            ->where('stripe_payment_intent_id', $paymentIntentId)
+            ->first();
+
+        if ($order === null) {
+            return null;
+        }
+
+        return $this->markRefunded($order);
+    }
+
+    /**
+     * Restore inventory and set status to refunded (idempotent).
+     */
+    public function markRefunded(Order $order): Order
+    {
+        return DB::transaction(function () use ($order): Order {
+            /** @var Order $locked */
+            $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
+            $locked->loadMissing('product');
+
+            if ($locked->status === OrderStatus::Refunded) {
+                return $locked;
+            }
+
+            $this->releaseInventoryOnRefund($locked);
+
+            $locked->fill(['status' => OrderStatus::Refunded])->save();
+
+            return $locked->refresh();
+        });
     }
 
     /**
@@ -158,6 +222,19 @@ class OrderFulfillment
 
         if ($order->product?->isSimple() && $order->status === OrderStatus::Incomplete) {
             $this->simpleStock->release($order->product);
+        }
+    }
+
+    private function releaseInventoryOnRefund(Order $order): void
+    {
+        if ($order->product?->isLimitedEdition()) {
+            $this->allocator->releaseOnRefund($order);
+
+            return;
+        }
+
+        if ($order->product?->isSimple()) {
+            $this->simpleStock->releaseOnRefund($order->product);
         }
     }
 

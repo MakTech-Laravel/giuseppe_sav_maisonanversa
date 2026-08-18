@@ -1,8 +1,9 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Package, Pencil, Plus, Search } from 'lucide-react';
+import { Package, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import { DataPagination } from '@/components/admin/data-pagination';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -111,8 +112,12 @@ export default function ProductsIndex({
                                             ? t('Gepubliceerd')
                                             : t('Concept')}
                                     </TableCell>
-                                    <TableCell className="text-right">
-                                        <Button variant="outline" size="sm" asChild>
+                                    <TableCell className="space-x-2 text-right">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            asChild
+                                        >
                                             <Link
                                                 href={products.edit({
                                                     locale: wayfinderLocale(),
@@ -123,6 +128,27 @@ export default function ProductsIndex({
                                                 {t('Bewerken')}
                                             </Link>
                                         </Button>
+                                        <ConfirmDeleteDialog
+                                            description={t(
+                                                'Dit product en ongebruikte editiedelen worden permanent verwijderd.',
+                                            )}
+                                            onConfirm={() =>
+                                                router.delete(
+                                                    products.destroy({
+                                                        locale: wayfinderLocale(),
+                                                        product: product.id,
+                                                    }).url,
+                                                )
+                                            }
+                                        >
+                                            <Button
+                                                variant="destructive"
+                                                size="sm"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                                {t('Verwijderen')}
+                                            </Button>
+                                        </ConfirmDeleteDialog>
                                     </TableCell>
                                 </TableRow>
                             ))}

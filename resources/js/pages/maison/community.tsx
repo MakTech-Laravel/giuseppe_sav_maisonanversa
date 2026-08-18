@@ -1,6 +1,7 @@
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import type {
+    CommunityCourtPayload,
     CommunityEventPayload,
     CommunitySessionPayload,
     FeedPostData,
@@ -19,12 +20,14 @@ type CommunityPageProps = {
     posts?: Paginated<FeedPostData>;
     sessions?: CommunitySessionPayload[];
     events?: CommunityEventPayload[];
+    courts?: CommunityCourtPayload[];
 };
 
 export default function Community({
     posts,
     sessions = [],
     events = [],
+    courts = [],
 }: CommunityPageProps) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
@@ -53,6 +56,7 @@ export default function Community({
                     posts={posts}
                     sessions={sessions}
                     events={events}
+                    courts={courts}
                 />
             ) : (
                 <CommunityLoginGate />

@@ -1,8 +1,7 @@
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, TriangleAlert, UsersRound } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { ArrowLeft, UsersRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
@@ -11,12 +10,11 @@ import circleRoutes from '@/routes/admin/circle';
 
 interface CircleMemberDetail {
     id: string;
-    edition: string;
+    edition: string | null;
     name: string;
     email: string;
     status: string;
-    joined_at: string;
-    summary: string;
+    joined_at: string | null;
     benefits: string[];
 }
 
@@ -34,20 +32,46 @@ function translateMemberStatus(
 
 export default function CircleShow({
     member,
-    circleConnected,
 }: {
     member: CircleMemberDetail;
-    circleConnected: boolean;
 }) {
     const { t } = useTranslation();
 
+    function removeMember() {
+        if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
+            return;
+        }
+
+        router.delete(
+            circleRoutes.remove({
+                locale: wayfinderLocale(),
+                member: member.id,
+            }).url,
+            {
+                onSuccess: () => {
+                    router.visit(circleRoutes.index(wayfinderLocale()).url);
+                },
+            },
+        );
+    }
+
     return (
         <>
-            <Head title={`${t('Editie')} № ${member.edition}`} />
+            <Head
+                title={
+                    member.edition
+                        ? `${t('Editie')} № ${member.edition}`
+                        : member.name
+                }
+            />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={`${t('Editie')} № ${member.edition}`}
-                    description={member.summary}
+                    title={
+                        member.edition
+                            ? `${t('Editie')} № ${member.edition}`
+                            : member.name
+                    }
+                    description={member.email}
                     icon={UsersRound}
                 >
                     <Button variant="outline" asChild>
@@ -56,18 +80,10 @@ export default function CircleShow({
                             {t('Terug naar Founding Circle')}
                         </Link>
                     </Button>
+                    <Button variant="destructive" type="button" onClick={removeMember}>
+                        {t('Verwijderen')}
+                    </Button>
                 </AdminPageHeader>
-                {!circleConnected && (
-                    <Alert>
-                        <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>{t('Demo-lid')}</AlertTitle>
-                        <AlertDescription>
-                            {t(
-                                'Live lidmaatschapsgegevens verschijnen hier nadat edities aan betaalde bestellingen zijn gekoppeld.',
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                )}
                 <div className="grid max-w-4xl gap-6 lg:grid-cols-3">
                     <dl className="space-y-4 rounded-xl border bg-card p-6 text-sm shadow-sm">
                         <Detail label={t('Referentie')} value={member.id} />
@@ -75,7 +91,7 @@ export default function CircleShow({
                         <Detail label={t('E-mail')} value={member.email} />
                         <Detail
                             label={t('Ingeschreven op')}
-                            value={member.joined_at}
+                            value={member.joined_at ?? '—'}
                         />
                         <div>
                             <dt className="text-muted-foreground">

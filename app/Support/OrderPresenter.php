@@ -15,7 +15,7 @@ class OrderPresenter
         $order->loadMissing('product');
 
         $amount = Money::format((string) $order->amount).' €';
-        $name = $order->product?->name ?? __('Product');
+        $name = $order->product?->translated('name') ?? __('Product');
         $number = $order->edition_number !== null
             ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
             : null;
@@ -44,7 +44,7 @@ class OrderPresenter
 
         $summary = $this->summary($order);
         $amount = $summary['amount'];
-        $name = $order->product?->name ?? __('Product');
+        $name = $order->product?->translated('name') ?? __('Product');
         $total = (int) ($order->product?->edition_total ?? 0);
         $number = $order->edition_number !== null
             ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)

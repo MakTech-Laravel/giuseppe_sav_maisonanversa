@@ -3,17 +3,24 @@
 namespace App\Http\Controllers\Community;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Community\ReportCommunityPostRequest;
+use App\Mail\RsvpConfirmation;
 use App\Models\CommunityComment;
 use App\Models\CommunityEvent;
 use App\Models\CommunityLike;
 use App\Models\CommunityPost;
+use App\Models\CommunityReport;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\EventRsvp;
+use App\Models\User;
+use App\Notifications\ReportFiledNotification;
 use App\Notifications\SessionJoinedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class CommunityController extends Controller
@@ -83,6 +90,26 @@ class CommunityController extends Controller
             'status' => 'hidden',
             'hidden_at' => now(),
         ]);
+
+        return back();
+    }
+
+    public function reportPost(ReportCommunityPostRequest $request, string $locale, CommunityPost $communityPost): RedirectResponse
+    {
+        $report = CommunityReport::query()->create([
+            'reporter_id' => $request->user()->id,
+            'community_post_id' => $communityPost->id,
+            'reason' => $request->validated('reason'),
+            'status' => 'open',
+        ]);
+
+        $moderators = User::permission('community.moderate')->get();
+
+        if ($moderators->isNotEmpty()) {
+            Notification::send($moderators, new ReportFiledNotification($report));
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht gemeld.')]);
 
         return back();
     }
@@ -163,10 +190,14 @@ class CommunityController extends Controller
     {
         abort_unless($request->user()->isFoundingCircle(), 403);
 
-        EventRsvp::query()->firstOrCreate([
+        $rsvp = EventRsvp::query()->firstOrCreate([
             'community_event_id' => $communityEvent->id,
             'user_id' => $request->user()->id,
         ]);
+
+        if ($rsvp->wasRecentlyCreated) {
+            Mail::to($request->user())->queue(new RsvpConfirmation($communityEvent));
+        }
 
         return back();
     }
