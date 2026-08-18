@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             EditionPieceSeeder::class,
             CommerceSettingSeeder::class,
+            JournalArticleSeeder::class,
+            CommunityCourtSeeder::class,
         ]);
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }

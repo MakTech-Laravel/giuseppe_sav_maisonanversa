@@ -1,13 +1,18 @@
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, ReceiptText, TriangleAlert } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { ArrowLeft, ReceiptText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import orders from '@/routes/admin/orders';
+
+interface TimelineItem {
+    label: string;
+    at: string;
+    done: boolean;
+}
 
 interface Order {
     id: string;
@@ -16,33 +21,31 @@ interface Order {
     date: string;
     amount: string;
     status: string;
+    status_key: string;
     summary: string;
     items: { name: string; qty: number; price: string }[];
+    billing?: { name: string; email: string; address: string };
+    timeline?: TimelineItem[];
 }
 
-function translateOrderStatus(
-    status: string,
-    t: (key: string) => string,
-): string {
-    const statusMap: Record<string, string> = {
-        Active: 'Actief',
-        Reserved: 'Gereserveerd',
-        Paid: 'Betaald',
-        Cancelled: 'Geannuleerd',
-        Pending: 'In behandeling',
-    };
-
-    return t(statusMap[status] ?? status);
-}
-
-export default function ShowOrder({
-    order,
-    commerceConnected,
-}: {
-    order: Order;
-    commerceConnected: boolean;
-}) {
+export default function ShowOrder({ order }: { order: Order }) {
     const { t } = useTranslation();
+    const canShip = ['paid', 'incomplete'].includes(order.status_key);
+    const canDeliver = ['paid', 'shipped'].includes(order.status_key);
+    const canRefund = !['refunded', 'canceled', 'failed'].includes(
+        order.status_key,
+    );
+
+    const updateStatus = (status: 'shipped' | 'delivered' | 'refunded') => {
+        router.patch(
+            orders.update({
+                locale: wayfinderLocale(),
+                order: order.id,
+            }).url,
+            { status },
+            { preserveScroll: true },
+        );
+    };
 
     return (
         <>
@@ -60,43 +63,102 @@ export default function ShowOrder({
                         </Link>
                     </Button>
                 </AdminPageHeader>
-                {!commerceConnected && (
-                    <Alert>
-                        <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>{t('Demobestelling')}</AlertTitle>
-                        <AlertDescription>
-                            {t(
-                                'Live commercedetails verschijnen hier nadat een provider is gekoppeld.',
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                )}
+                <div className="flex flex-wrap gap-2">
+                    {canShip && (
+                        <Button
+                            type="button"
+                            onClick={() => updateStatus('shipped')}
+                        >
+                            {t('Markeer als verzonden')}
+                        </Button>
+                    )}
+                    {canDeliver && (
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => updateStatus('delivered')}
+                        >
+                            {t('Markeer als geleverd')}
+                        </Button>
+                    )}
+                    {canRefund && (
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => updateStatus('refunded')}
+                        >
+                            {t('Markeer als terugbetaald')}
+                        </Button>
+                    )}
+                </div>
                 <div className="grid max-w-4xl gap-6 lg:grid-cols-3">
-                    <div className="rounded-xl border bg-card p-6 shadow-sm lg:col-span-2">
-                        <h2 className="mb-4 text-sm font-semibold">
-                            {t('Bestelregels')}
-                        </h2>
-                        <div className="divide-y">
-                            {order.items.map((item) => (
-                                <div
-                                    key={item.name}
-                                    className="flex justify-between gap-4 py-3 text-sm"
-                                >
-                                    <span>
-                                        {item.name} × {item.qty}
-                                    </span>
-                                    <span className="font-medium">
-                                        {item.price}
-                                    </span>
-                                </div>
-                            ))}
+                    <div className="space-y-6 lg:col-span-2">
+                        <div className="rounded-xl border bg-card p-6 shadow-sm">
+                            <h2 className="mb-4 text-sm font-semibold">
+                                {t('Bestelregels')}
+                            </h2>
+                            <div className="divide-y">
+                                {order.items.map((item) => (
+                                    <div
+                                        key={item.name}
+                                        className="flex justify-between gap-4 py-3 text-sm"
+                                    >
+                                        <span>
+                                            {item.name} × {item.qty}
+                                        </span>
+                                        <span className="font-medium">
+                                            {item.price}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
+                        {order.timeline && order.timeline.length > 0 && (
+                            <div className="rounded-xl border bg-card p-6 shadow-sm">
+                                <h2 className="mb-4 text-sm font-semibold">
+                                    {t('Tijdlijn')}
+                                </h2>
+                                <ol className="space-y-3 text-sm">
+                                    {order.timeline.map((step) => (
+                                        <li
+                                            key={step.label}
+                                            className="flex justify-between gap-4"
+                                        >
+                                            <span
+                                                className={
+                                                    step.done
+                                                        ? 'font-medium'
+                                                        : 'text-muted-foreground'
+                                                }
+                                            >
+                                                {step.label}
+                                            </span>
+                                            <span className="text-muted-foreground">
+                                                {step.at || '—'}
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ol>
+                            </div>
+                        )}
                     </div>
                     <dl className="space-y-4 rounded-xl border bg-card p-6 text-sm shadow-sm">
                         <Detail
                             label={t('Klant')}
-                            value={order.customer}
+                            value={order.billing?.name ?? order.customer}
                         />
+                        {order.billing?.email && (
+                            <Detail
+                                label={t('E-mail')}
+                                value={order.billing.email}
+                            />
+                        )}
+                        {order.billing?.address && (
+                            <Detail
+                                label={t('Telefoon')}
+                                value={order.billing.address}
+                            />
+                        )}
                         <Detail label={t('Datum')} value={order.date} />
                         <Detail label={t('Totaal')} value={order.amount} />
                         <div>
@@ -104,9 +166,7 @@ export default function ShowOrder({
                                 {t('Status')}
                             </dt>
                             <dd className="mt-1">
-                                <Badge variant="secondary">
-                                    {translateOrderStatus(order.status, t)}
-                                </Badge>
+                                <Badge variant="secondary">{order.status}</Badge>
                             </dd>
                         </div>
                     </dl>

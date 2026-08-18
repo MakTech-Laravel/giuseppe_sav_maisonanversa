@@ -37,5 +37,7 @@
         <env name="STRIPE_KEY" value="pk_test_cashier"/>
         <env name="STRIPE_SECRET" value=""/>
         <env name="STRIPE_WEBHOOK_SECRET" value=""/>
+        <env name="DEEPL_API_KEY" value=""/>
+        <env name="DEEPL_API_HOST" value=""/>
     </php>
 </phpunit>

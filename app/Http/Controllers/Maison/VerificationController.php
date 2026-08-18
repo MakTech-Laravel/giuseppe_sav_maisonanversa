@@ -22,7 +22,7 @@ class VerificationController extends Controller
 
         return Inertia::render('maison/verify', [
             'piece' => [
-                'productName' => $piece->product?->name,
+                'productName' => $piece->product?->translated('name'),
                 'editionTotal' => $total,
                 'editionNumber' => $piece->formattedNumber(),
                 'status' => $piece->status->value,

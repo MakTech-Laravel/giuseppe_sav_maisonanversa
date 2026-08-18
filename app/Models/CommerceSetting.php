@@ -2,10 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TranslatesWithDeepL;
 use Illuminate\Database\Eloquent\Model;
 
 class CommerceSetting extends Model
 {
+    use TranslatesWithDeepL;
+
+    /**
+     * @var list<string>
+     */
+    protected array $translatable = [
+        'default_expected_delivery_label',
+    ];
+
     /**
      * @var list<string>
      */
@@ -64,7 +74,7 @@ class CommerceSetting extends Model
             'shippingEstimateMin' => (string) $this->shipping_estimate_min,
             'shippingEstimateMax' => (string) $this->shipping_estimate_max,
             'shippingEuIncluded' => $this->shipping_eu_included,
-            'defaultExpectedDeliveryLabel' => $this->default_expected_delivery_label,
+            'defaultExpectedDeliveryLabel' => $this->translated('default_expected_delivery_label'),
             'pricesIncludeTax' => $this->prices_include_tax,
         ];
     }

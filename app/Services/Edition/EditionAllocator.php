@@ -142,6 +142,47 @@ class EditionAllocator
         });
     }
 
+    /**
+     * Return a reserved or allocated piece to available stock after a refund.
+     */
+    public function releaseOnRefund(Order $order): void
+    {
+        DB::transaction(function () use ($order): void {
+            $lockedOrder = Order::query()->whereKey($order->id)->lockForUpdate()->first();
+
+            if ($lockedOrder === null || $lockedOrder->edition_piece_id === null) {
+                return;
+            }
+
+            $piece = EditionPiece::query()
+                ->whereKey($lockedOrder->edition_piece_id)
+                ->lockForUpdate()
+                ->first();
+
+            if ($piece === null || $piece->isArchive()) {
+                return;
+            }
+
+            if (! in_array($piece->status, [EditionPieceStatus::Reserved, EditionPieceStatus::Allocated], true)) {
+                return;
+            }
+
+            $piece->fill([
+                'status' => EditionPieceStatus::Available,
+                'order_id' => null,
+                'reserved_until' => null,
+                'allocated_at' => null,
+            ])->save();
+
+            $lockedOrder->forceFill([
+                'edition_piece_id' => null,
+                'edition_number' => null,
+            ])->save();
+
+            app(EditionInventory::class)->bust($lockedOrder->product);
+        });
+    }
+
     public function releaseExpiredHolds(): int
     {
         $released = 0;

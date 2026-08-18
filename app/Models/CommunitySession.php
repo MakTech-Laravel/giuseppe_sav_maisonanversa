@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TranslatesWithDeepL;
 use Database\Factories\CommunitySessionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class CommunitySession extends Model
 {
     /** @use HasFactory<CommunitySessionFactory> */
-    use HasFactory;
+    use HasFactory, TranslatesWithDeepL;
+
+    /**
+     * @var list<string>
+     */
+    protected array $translationExcept = ['level'];
 
     protected $fillable = ['host_id', 'starts_at', 'location', 'capacity', 'level', 'notes'];
 

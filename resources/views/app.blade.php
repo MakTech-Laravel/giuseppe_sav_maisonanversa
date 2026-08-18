@@ -67,9 +67,16 @@
         @php
             $consent = json_decode(request()->cookie('maison_consent', ''), true);
             $allowAnalytics = is_array($consent) && ($consent['analytics'] ?? false);
+            $measurementId = config('services.analytics.measurement_id');
         @endphp
-        @if ($allowAnalytics)
-            {{-- Analytics scripts load only after explicit consent. --}}
+        @if ($allowAnalytics && filled($measurementId))
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ $measurementId }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', @json($measurementId));
+            </script>
         @endif
     </body>
 </html>

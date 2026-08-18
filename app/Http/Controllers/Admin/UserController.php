@@ -79,6 +79,8 @@ class UserController extends Controller
     {
         $this->ensureAdmin($user);
 
+        $user->load('roles:id,name');
+
         return Inertia::render('admin/admins/show', [
             'user' => $user,
         ]);

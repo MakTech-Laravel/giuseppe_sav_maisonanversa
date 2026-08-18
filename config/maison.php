@@ -87,4 +87,23 @@ return [
 
     'mailchimp_form_url' => env('MAISON_MAILCHIMP_FORM_URL', ''),
 
+    /*
+    |--------------------------------------------------------------------------
+    | TEMPORARY: admin-type users get every permission
+    |--------------------------------------------------------------------------
+    |
+    | While Access Control is out of the UI, flip this on so any account with
+    | `users.type = admin` passes Spatie `permission:*` middleware and sees all
+    | nav items. Super-admin Gate::before still applies separately. Model
+    | policies (e.g. editing another super-admin) are NOT bypassed.
+    |
+    | TURN OFF / DELETE when restoring role-permission management:
+    |   - set MAISON_ADMIN_TYPE_GRANTS_ALL_PERMISSIONS=false, or
+    |   - remove this key + App\Support\AdminTypePermissionBypass + its wires
+    |     in AppServiceProvider and HandleInertiaRequests.
+    |
+    */
+
+    'admin_type_grants_all_permissions' => (bool) env('MAISON_ADMIN_TYPE_GRANTS_ALL_PERMISSIONS', true),
+
 ];

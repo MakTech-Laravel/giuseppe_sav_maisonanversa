@@ -2,13 +2,15 @@
 
 namespace App\Support;
 
+use App\Models\JournalArticle;
+use Database\Seeders\JournalArticleSeeder;
+
 /**
- * The Maison Anversa Journal: editorial pieces served from one catalog so the
+ * The Maison Anversa Journal: a thin facade over {@see JournalArticle} so the
  * index, the detail page and the sitemap cannot drift apart.
  *
- * Copy stays in Dutch as the source language, with English and French carried
- * beside it. The controller localises before Inertia, so the page never has to
- * look up a thousand-character key in the JSON dictionaries.
+ * Dutch remains the source language on the model; English and French live in
+ * the translations table (seeded from {@see staticCatalog()} or via DeepL).
  *
  * @phpstan-type LocaleCopy array{nl: string, en: string, fr: string}
  * @phpstan-type Article array{
@@ -19,7 +21,7 @@ namespace App\Support;
  *     excerpt: LocaleCopy,
  *     author: string,
  *     date: LocaleCopy,
- *     body: list<LocaleCopy>
+ *     body: LocaleCopy|list<LocaleCopy>
  * }
  */
 final class Journal
@@ -31,7 +33,13 @@ final class Journal
      */
     public static function articles(): array
     {
-        return self::catalog();
+        return JournalArticle::query()
+            ->published()
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->map(fn (JournalArticle $article): array => $article->toCatalogArray())
+            ->all();
     }
 
     /**
@@ -39,13 +47,12 @@ final class Journal
      */
     public static function find(string $slug): ?array
     {
-        foreach (self::catalog() as $article) {
-            if ($article['slug'] === $slug) {
-                return $article;
-            }
-        }
+        $article = JournalArticle::query()
+            ->published()
+            ->where('slug', $slug)
+            ->first();
 
-        return null;
+        return $article?->toCatalogArray();
     }
 
     /**
@@ -67,7 +74,7 @@ final class Journal
         $pick = fn (array $copy): string => $copy[$locale] ?? $copy['nl'];
 
         $date = $pick($article['date']);
-        $body = array_map($pick, $article['body']);
+        $body = self::localizeBody($article['body'], $pick);
 
         return [
             'slug' => $article['slug'],
@@ -102,7 +109,7 @@ final class Journal
      */
     public static function related(string $slug, string $locale, int $limit = 3): array
     {
-        $catalog = self::catalog();
+        $catalog = self::articles();
         $index = array_search($slug, array_column($catalog, 'slug'), true);
 
         if ($index === false) {
@@ -124,13 +131,63 @@ final class Journal
      */
     public static function slugs(): array
     {
-        return array_column(self::catalog(), 'slug');
+        return array_column(self::articles(), 'slug');
     }
 
     /**
+     * Join paragraph LocaleCopy lists into a single LocaleCopy string for storage.
+     *
+     * @param  list<LocaleCopy>  $paragraphs
+     * @return LocaleCopy
+     */
+    public static function joinBodyParagraphs(array $paragraphs): array
+    {
+        $locales = ['nl', 'en', 'fr'];
+        $joined = [];
+
+        foreach ($locales as $locale) {
+            $joined[$locale] = implode("\n\n", array_map(
+                fn (array $copy): string => $copy[$locale] ?? $copy['nl'],
+                $paragraphs,
+            ));
+        }
+
+        return $joined;
+    }
+
+    /**
+     * @param  LocaleCopy|list<LocaleCopy>  $body
+     * @param  callable(LocaleCopy): string  $pick
+     * @return list<string>
+     */
+    private static function localizeBody(array $body, callable $pick): array
+    {
+        if ($body === []) {
+            return [];
+        }
+
+        if (isset($body['nl']) || isset($body['en']) || isset($body['fr'])) {
+            /** @var LocaleCopy $body */
+            $text = trim($pick($body));
+
+            if ($text === '') {
+                return [];
+            }
+
+            return preg_split("/\n\n+/", $text) ?: [$text];
+        }
+
+        /** @var list<LocaleCopy> $body */
+        return array_map($pick, $body);
+    }
+
+    /**
+     * Static editorial catalog used by {@see JournalArticleSeeder}
+     * and `journal:import-static`. Prefer {@see articles()} for runtime reads.
+     *
      * @return list<Article>
      */
-    private static function catalog(): array
+    public static function staticCatalog(): array
     {
         $heritage = ['nl' => 'Erfgoed', 'en' => 'Heritage', 'fr' => 'Patrimoine'];
         $sport = ['nl' => 'Sport & Cultuur', 'en' => 'Sport & Culture', 'fr' => 'Sport & Culture'];

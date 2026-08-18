@@ -2,7 +2,11 @@ import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Pencil } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { UserForm } from '@/components/admin/user-form';
+import {
+    AdminPanel,
+    AdminResourceShell,
+} from '@/components/admin/admin-resource-shell';
+import { UserForm, UserFormAside } from '@/components/admin/user-form';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
@@ -29,28 +33,65 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                             {t('Terug naar klanten')}
                         </Link>
                     </Button>
+                    <Button variant="secondary" asChild>
+                        <Link
+                            href={customers.show({
+                                locale: wayfinderLocale(),
+                                user: customer.id,
+                            })}
+                        >
+                            {t('Bekijk profiel')}
+                        </Link>
+                    </Button>
                 </AdminPageHeader>
-                <div className="w-full rounded-xl border bg-card p-6 shadow-sm md:p-8">
+
+                <AdminResourceShell
+                    aside={
+                        <>
+                            <UserFormAside
+                                isEdit
+                                entityLabel={customer.name}
+                            />
+                            <AdminPanel title={t('Account')}>
+                                <dl className="space-y-2 text-sm">
+                                    <div className="flex justify-between gap-3">
+                                        <dt className="text-muted-foreground">
+                                            {t('Klant-ID')}
+                                        </dt>
+                                        <dd className="font-medium">
+                                            #{customer.id}
+                                        </dd>
+                                    </div>
+                                    <div className="flex justify-between gap-3">
+                                        <dt className="text-muted-foreground">
+                                            {t('E-mail')}
+                                        </dt>
+                                        <dd className="truncate font-medium">
+                                            {customer.email}
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </AdminPanel>
+                        </>
+                    }
+                >
                     <UserForm
                         action={customers.update({
                             locale: wayfinderLocale(),
                             user: customer.id,
                         })}
-                        roles={[]}
-                        showRoles={false}
                         isEdit
                         currentAvatar={customer.avatar}
                         submitLabel={t('Klant opslaan')}
                         defaults={{
                             name: customer.name,
                             email: customer.email,
-                            roles: [],
                         }}
                         onCancel={() =>
                             router.visit(customers.index(wayfinderLocale()))
                         }
                     />
-                </div>
+                </AdminResourceShell>
             </div>
         </>
     );
