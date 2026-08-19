@@ -59,7 +59,7 @@ export function PageHero({
                     </p>
                 )}
 
-                {children}
+                {children && <div className="relative mt-10">{children}</div>}
             </Wrap>
         </section>
     );
