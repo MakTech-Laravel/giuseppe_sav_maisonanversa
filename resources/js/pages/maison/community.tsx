@@ -36,7 +36,7 @@ export default function Community({
 
     return (
         <>
-            <MaisonSeoHead page="community" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow={t('Founding Circle & Club Corner')}

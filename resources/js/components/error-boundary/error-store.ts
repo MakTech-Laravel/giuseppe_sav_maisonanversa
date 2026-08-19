@@ -16,6 +16,10 @@ function generateId(): string {
 }
 
 export function getStoredErrors(): StoredError[] {
+    if (typeof sessionStorage === 'undefined') {
+        return [];
+    }
+
     try {
         const raw = sessionStorage.getItem(STORAGE_KEY);
 
@@ -57,7 +61,7 @@ export function pushError(
         stack,
         componentStack,
         timestamp: Date.now(),
-        url: window.location.href,
+        url: typeof window === 'undefined' ? '' : window.location.href,
         count: 1,
     };
 
@@ -68,6 +72,10 @@ export function pushError(
 }
 
 export function clearErrors(): void {
+    if (typeof sessionStorage === 'undefined') {
+        return;
+    }
+
     sessionStorage.removeItem(STORAGE_KEY);
 }
 
@@ -77,6 +85,10 @@ export function removeError(id: string): void {
 }
 
 function saveErrors(errors: StoredError[]): void {
+    if (typeof sessionStorage === 'undefined') {
+        return;
+    }
+
     try {
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(errors));
     } catch {

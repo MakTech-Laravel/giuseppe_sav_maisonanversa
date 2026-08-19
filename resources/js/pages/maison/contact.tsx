@@ -8,7 +8,7 @@ export default function Contact() {
 
     return (
         <>
-            <MaisonSeoHead page="contact" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow={t('Bureau')}

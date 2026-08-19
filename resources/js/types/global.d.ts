@@ -1,5 +1,6 @@
 import type { Auth } from '@/types/auth';
 import type { Locale } from '@/types/locale';
+import type { SeoDocument } from '@/types/seo';
 
 export type CheckoutShared = {
     productId: number | null;
@@ -53,6 +54,7 @@ declare module '@inertiajs/core' {
             availableImages: string[];
             checkout: CheckoutShared;
             commerce: CommerceShared;
+            seo: SeoDocument;
             notifications: SharedNotifications | null;
             [key: string]: unknown;
         };

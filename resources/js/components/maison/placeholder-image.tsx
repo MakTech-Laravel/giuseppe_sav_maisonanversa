@@ -18,6 +18,7 @@ type PlaceholderImageProps = {
     overlay?: string;
     className?: string;
     loading?: 'eager' | 'lazy';
+    fetchPriority?: 'high' | 'low' | 'auto';
 };
 
 /**
@@ -33,6 +34,7 @@ export function PlaceholderImage({
     overlay,
     className,
     loading = 'lazy',
+    fetchPriority,
 }: PlaceholderImageProps) {
     const { availableImages } = usePage().props;
     const {
@@ -56,6 +58,7 @@ export function PlaceholderImage({
                     src={`/${path}`}
                     alt={alt ?? label}
                     loading={loading}
+                    fetchPriority={fetchPriority}
                     className="h-full w-full object-cover"
                 />
             ) : (

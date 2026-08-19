@@ -40,9 +40,9 @@ export function ProductDetail({ edition }: { edition: Edition }) {
                         <span className="mb-3 block font-sans text-[9px] tracking-[0.28em] text-gold uppercase">
                             Maison Anversa · Founding Edition
                         </span>
-                        <h2 className="mb-1.5 font-serif text-[clamp(28px,3.5vw,48px)] leading-[1.1] font-medium [&_em]:text-gold [&_em]:italic">
+                        <p className="mb-1.5 font-serif text-[clamp(28px,3.5vw,48px)] leading-[1.1] font-medium [&_em]:text-gold [&_em]:italic">
                             Heritage <em>No.001</em>
-                        </h2>
+                        </p>
                         <div className="mb-1 font-serif text-[40px] leading-none font-light text-choc">
                             {priceLabel}
                         </div>

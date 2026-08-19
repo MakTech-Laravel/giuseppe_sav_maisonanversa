@@ -21,13 +21,7 @@ export default function JournalShow({
 
     return (
         <>
-            <MaisonSeoHead
-                page="journal"
-                title={`${article.title} — Maison Anversa`}
-                description={article.excerpt}
-                articleSlug={article.slug}
-                image={article.asset}
-            />
+            <MaisonSeoHead image={article.asset} />
 
             <PageHero
                 className="[&_h1]:mx-auto [&_h1]:max-w-240 [&_h1]:text-[clamp(28px,4vw,46px)]"

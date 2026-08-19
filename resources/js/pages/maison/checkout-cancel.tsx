@@ -9,12 +9,7 @@ export default function CheckoutCancel() {
 
     return (
         <>
-            <MaisonSeoHead
-                page="home"
-                title={t('Betaling geannuleerd — Maison Anversa')}
-                description={t('Uw betaling is geannuleerd. Er is niets in rekening gebracht.')}
-                noIndex
-            />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow={t('Betaling')}

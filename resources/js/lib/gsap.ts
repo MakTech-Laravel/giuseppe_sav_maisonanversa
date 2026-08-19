@@ -8,20 +8,25 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
  * ScrollTrigger instance. `useGSAP` is registered too, which is what lets it
  * revert the animations a component created when that component unmounts.
  */
-gsap.registerPlugin(useGSAP, ScrollTrigger, CustomEase);
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(useGSAP, ScrollTrigger, CustomEase);
+}
 
 /**
  * The prototype's `cubic-bezier(0.2, 0.8, 0.2, 1)`, reproduced exactly rather
  * than approximated with `power3.out`. Used by the reveals and the magnetic
  * buttons, which is where the site's motion signature comes from.
  */
-export const MAISON_EASE = CustomEase.create('maison', '0.2,0.8,0.2,1');
+export const MAISON_EASE =
+    typeof window === 'undefined'
+        ? 'power3.out'
+        : CustomEase.create('maison', '0.2,0.8,0.2,1');
 
 /** The prototype's page-transition curve, `cubic-bezier(0.4, 0, 0.2, 1)`. */
-export const TRANSITION_EASE = CustomEase.create(
-    'maisonTransition',
-    '0.4,0,0.2,1',
-);
+export const TRANSITION_EASE =
+    typeof window === 'undefined'
+        ? 'power2.inOut'
+        : CustomEase.create('maisonTransition', '0.4,0,0.2,1');
 
 /**
  * The contexts every effect is declared inside. `gsap.matchMedia()` reverts

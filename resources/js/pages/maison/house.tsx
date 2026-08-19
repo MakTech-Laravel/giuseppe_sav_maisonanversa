@@ -3,7 +3,6 @@ import { MaisonFloorplan } from '@/components/maison/house/maison-floorplan';
 import { MaisonRoomList } from '@/components/maison/house/maison-room-list';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
-import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Section, Wrap } from '@/components/maison/ui/section';
 
@@ -12,7 +11,7 @@ export default function House() {
 
     return (
         <>
-            <MaisonSeoHead page="house" />
+            <MaisonSeoHead />
 
             <Section tone="dark" className="text-center">
                 <Wrap>
@@ -23,7 +22,9 @@ export default function House() {
                         captioned={false}
                         className="mx-auto mb-1.5 w-[min(340px,72vw)] opacity-94 drop-shadow-[0_6px_30px_rgba(0,0,0,0.4)]"
                     />
-                    <Eyebrow className="mt-3.5">{t('Het Huis')}</Eyebrow>
+                    <h1 className="mt-3.5 font-serif text-[clamp(36px,5vw,56px)] leading-[1.1] font-normal text-cream">
+                        {t('Het Huis')}
+                    </h1>
                     <GoldRule center className="mx-auto" />
                     <p className="mx-auto mt-5 max-w-160 text-[15px] leading-[1.85] text-sand">
                         {t(

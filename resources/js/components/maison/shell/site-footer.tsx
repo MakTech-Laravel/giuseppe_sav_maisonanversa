@@ -50,9 +50,9 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
 
                 {FOOTER_COLUMNS.map((column) => (
                     <div key={column.heading}>
-                        <h4 className="mb-4.5 font-sans text-[8px] font-medium tracking-[0.3em] text-gold uppercase">
+                        <p className="mb-4.5 font-sans text-[8px] font-medium tracking-[0.3em] text-gold uppercase">
                             {t(column.heading)}
-                        </h4>
+                        </p>
 
                         <ul className="flex flex-col gap-2.5">
                             {column.items.map((item) => (

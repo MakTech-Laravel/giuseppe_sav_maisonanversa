@@ -18,7 +18,7 @@ export default function Shipping() {
 
     return (
         <>
-            <MaisonSeoHead page="shipping" />
+            <MaisonSeoHead />
 
             <LegalPageLayout
                 titleKey="Verzending & Retour"

@@ -12,7 +12,7 @@ export default function Terms() {
 
     return (
         <>
-            <MaisonSeoHead page="terms" />
+            <MaisonSeoHead />
 
             <LegalPageLayout
                 titleKey="Algemene voorwaarden"

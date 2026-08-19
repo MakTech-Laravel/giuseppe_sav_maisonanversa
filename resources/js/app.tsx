@@ -9,12 +9,8 @@ import { I18nProvider, readInitialLocale } from '@/components/i18n-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
-import AppLayout from '@/layouts/app-layout';
-import AuthLayout from '@/layouts/auth-layout';
-import FrontendLayout from '@/layouts/frontend-layout';
-import MemberLayout from '@/layouts/member-layout';
-import SettingsLayout from '@/layouts/settings/layout';
 import { createI18nForLocale } from '@/lib/i18n';
+import { resolvePageLayout } from '@/lib/inertia-layouts';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -26,22 +22,7 @@ const i18n = await createI18nForLocale(readInitialLocale());
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    layout: (name) => {
-        switch (true) {
-            case name === 'welcome':
-                return null;
-            case name.startsWith('maison/'):
-                return FrontendLayout;
-            case name.startsWith('member/'):
-                return MemberLayout;
-            case name.startsWith('auth/'):
-                return AuthLayout;
-            case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
-            default:
-                return AppLayout;
-        }
-    },
+    layout: resolvePageLayout,
     strictMode: true,
     withApp(app) {
         return (

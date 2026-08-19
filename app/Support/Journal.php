@@ -135,6 +135,23 @@ final class Journal
     }
 
     /**
+     * @return list<array{slug: string, lastmod: string|null}>
+     */
+    public static function sitemapArticles(): array
+    {
+        return JournalArticle::query()
+            ->published()
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get(['slug', 'updated_at', 'published_at'])
+            ->map(fn (JournalArticle $article): array => [
+                'slug' => $article->slug,
+                'lastmod' => ($article->updated_at ?? $article->published_at)?->toAtomString(),
+            ])
+            ->all();
+    }
+
+    /**
      * Join paragraph LocaleCopy lists into a single LocaleCopy string for storage.
      *
      * @param  list<LocaleCopy>  $paragraphs

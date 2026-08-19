@@ -11,11 +11,13 @@ use App\Services\Brevo\HttpBrevoContacts;
 use App\Services\Brevo\NullBrevoContacts;
 use App\Services\Stripe\CashierStripeCatalogGateway;
 use App\Support\AdminTypePermissionBypass;
+use App\Support\Seo\MaisonSeo;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Cashier\Events\WebhookReceived;
@@ -44,6 +46,17 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
         $this->configureSpatiePermissions();
         $this->configureCashierWebhooks();
+        $this->configureSeoViewData();
+    }
+
+    /**
+     * Blade fallback meta for first paint when the SSR process is down.
+     */
+    protected function configureSeoViewData(): void
+    {
+        View::composer('app', function ($view): void {
+            $view->with('seo', MaisonSeo::document(request()));
+        });
     }
 
     /**
