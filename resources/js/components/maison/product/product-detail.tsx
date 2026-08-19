@@ -43,7 +43,7 @@ export function ProductDetail({ edition }: { edition: Edition }) {
                         <p className="mb-1.5 font-serif text-[clamp(28px,3.5vw,48px)] leading-[1.1] font-medium [&_em]:text-gold [&_em]:italic">
                             Heritage <em>No.001</em>
                         </p>
-                        <div className="mb-1 font-serif text-[40px] leading-none font-light text-choc">
+                        <div className="mb-1 font-serif text-[40px] leading-none font-light text-choc lining-nums">
                             {priceLabel}
                         </div>
                         <div className="mb-7 flex items-center gap-3">

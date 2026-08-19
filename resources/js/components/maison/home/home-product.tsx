@@ -40,17 +40,9 @@ export function HomeProduct() {
                             {SPECS.map((spec) => (
                                 <li
                                     key={spec}
-                                    className="flex items-center gap-2.5 text-[13px] text-choc3 before:text-[20px] before:leading-0 before:text-gold2 before:content-['·']"
+                                    className="flex items-center gap-2.5 font-sans text-[13px] text-choc3 before:text-[20px] before:leading-0 before:text-gold2 before:content-['·']"
                                 >
-                                    {/*
-                                     * The two carbon lines are English product
-                                     * vocabulary that the dictionary never
-                                     * carried; the rest are Dutch keys.
-                                     */}
-                                    {spec.startsWith('Full Carbon') ||
-                                    spec.startsWith('Premium 3K')
-                                        ? spec
-                                        : t(spec)}
+                                    {t(spec)}
                                 </li>
                             ))}
                         </ul>
@@ -101,7 +93,7 @@ export function HomeProduct() {
 
                     <Reveal className="ma-md:col-span-2 ma-lg:col-span-1">
                         <div className="mx-auto w-full max-w-70 border border-gold/25 px-6 py-8 text-center ma-lg:mx-0 ma-lg:max-w-none">
-                            <div className="mb-1.5 font-serif text-[68px] leading-none font-light text-gold2">
+                            <div className="mb-1.5 font-serif text-[68px] leading-none font-light text-gold2 lining-nums">
                                 100
                             </div>
                             <div className="font-sans text-[8px] font-light tracking-[0.28em] text-choc3 uppercase">
@@ -115,7 +107,7 @@ export function HomeProduct() {
                                 <br />
                                 {t('genummerd')}
                             </div>
-                            <div className="mt-3.5 font-serif text-lg font-medium tracking-[0.1em] text-choc">
+                            <div className="mt-3.5 font-serif text-lg font-medium tracking-[0.1em] text-choc lining-nums">
                                 001 / 100
                             </div>
                         </div>

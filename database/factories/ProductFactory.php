@@ -41,7 +41,7 @@ class ProductFactory extends Factory
             'stock_quantity' => null,
             'is_published' => true,
             'grants_founding_circle' => true,
-            'expected_delivery_label' => 'Q1 2027 — subject to production',
+            'expected_delivery_label' => 'Q1 2027 — ONDER VOORBEHOUD VAN PRODUCTIE',
         ]);
     }
 

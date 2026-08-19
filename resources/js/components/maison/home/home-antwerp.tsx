@@ -81,7 +81,7 @@ function Figure({
 }) {
     return (
         <div>
-            <div className="font-serif text-[36px] leading-none font-light text-gold">
+            <div className="font-serif text-[36px] leading-none font-light text-gold lining-nums">
                 {value}
             </div>
             <div className="mt-1.5 font-sans text-[9px] font-light tracking-[0.2em] text-sand uppercase">

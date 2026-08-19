@@ -152,6 +152,39 @@ export const IMAGE_ASSETS = {
 
 export type ImageAssetName = keyof typeof IMAGE_ASSETS;
 
+export const IMAGE_SRCSET_WIDTHS = [768, 1280, 2560] as const;
+
+export type ImageVariant = {
+    width: number;
+    webp: string;
+    avif: string;
+};
+
+/**
+ * Responsive WebP / AVIF variants generated next to the source photograph.
+ * Missing widths are skipped when the source is smaller than that breakpoint.
+ */
+export function imageVariants(path: string): ImageVariant[] {
+    const match = path.match(/^(images\/.+?\/)([^/]+)\.(png|jpe?g)$/i);
+
+    if (!match) {
+        return [];
+    }
+
+    const [, directory, name] = match;
+    const folder = directory.replace(/^images\//, 'images/optimized/');
+
+    return IMAGE_SRCSET_WIDTHS.map((width) => ({
+        width,
+        webp: `${folder}${name}-${width}.webp`,
+        avif: `${folder}${name}-${width}.avif`,
+    }));
+}
+
+export function srcset(variants: ImageVariant[], format: 'webp' | 'avif'): string {
+    return variants.map((variant) => `/${variant[format]} ${variant.width}w`).join(', ');
+}
+
 export function imageAsset(name: ImageAssetName): ImageAsset {
     return IMAGE_ASSETS[name];
 }

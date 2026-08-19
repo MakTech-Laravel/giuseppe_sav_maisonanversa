@@ -25,7 +25,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
                     aria-current={option === locale ? 'true' : undefined}
                     onClick={() => void switchLocale(option)}
                     className={cn(
-                        'inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border px-2 py-1.5 font-sans text-[10px] font-semibold tracking-[0.08em] uppercase transition-colors',
+                        'inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border px-2 py-1.5 font-sans text-[10px] font-medium tracking-[0.08em] uppercase transition-colors',
                         option === locale
                             ? 'border-gold bg-gold/12 text-cream'
                             : 'border-transparent text-sand hover:border-gold/40 hover:text-cream',

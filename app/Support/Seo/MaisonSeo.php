@@ -39,12 +39,12 @@ final class MaisonSeo
      */
     private const PAGES = [
         'home' => [
-            'title' => 'Maison Anversa — European Heritage Sports and Lifestyle House',
+            'title' => 'Maison Anversa — Europees erfgoedhuis voor sport en lifestyle',
             'description' => 'Een Europees erfgoedhuis, geworteld in Antwerpen. Heritage No.001 — beperkt tot 100 stuks. Elk genummerd. De Founding Edition wordt nooit herhaald.',
         ],
         'house' => [
             'title' => 'Het Huis — Maison Anversa',
-            'description' => 'Ontdek het Huis van Maison Anversa — negen kamers, één erfgoedverhaal, geworteld in Antwerpen.',
+            'description' => 'Ontdek het Huis van Maison Anversa — acht kamers, één erfgoedverhaal, geworteld in Antwerpen.',
         ],
         'product' => [
             'title' => 'Heritage No.001 — Maison Anversa',
@@ -68,7 +68,7 @@ final class MaisonSeo
         ],
         'community' => [
             'title' => 'Community — Maison Anversa',
-            'description' => 'De Community van Maison Anversa — sessions, events en een netwerk van gelijkgestemde leden.',
+            'description' => 'De Community van Maison Anversa — sessies, evenementen en een netwerk van gelijkgestemde leden.',
         ],
         'corner' => [
             'title' => 'Club Corner — Maison Anversa',
@@ -389,10 +389,14 @@ final class MaisonSeo
         $links = [];
 
         foreach ($locales as $locale) {
-            $links[] = [
-                'hreflang' => $locale,
-                'href' => route($routeName, ['locale' => $locale, ...$parameters]),
-            ];
+            try {
+                $links[] = [
+                    'hreflang' => $locale,
+                    'href' => route($routeName, ['locale' => $locale, ...$parameters]),
+                ];
+            } catch (\Throwable) {
+                return [];
+            }
         }
 
         $links[] = [

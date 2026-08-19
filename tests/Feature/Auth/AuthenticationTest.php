@@ -13,6 +13,15 @@ test('login redirects to the localized home with auth modal flash', function () 
     $response->assertSessionHas('open_auth_modal', 'login');
 });
 
+test('authenticated visitors are sent to their dashboard instead of the login modal', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get(route('login'));
+
+    $response->assertRedirect(localized('member.dashboard', absolute: false));
+    $response->assertSessionMissing('open_auth_modal');
+});
+
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 

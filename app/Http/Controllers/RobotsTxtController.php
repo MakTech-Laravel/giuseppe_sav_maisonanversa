@@ -7,10 +7,17 @@ use Illuminate\Http\Response;
 class RobotsTxtController extends Controller
 {
     /**
-     * Allow public content and assets; keep private application areas out of the crawl.
+     * Production allows public content; every other environment opts out of indexing.
      */
     public function __invoke(): Response
     {
+        if (! app()->isProduction()) {
+            return response("User-agent: *\nDisallow: /\n", 200, [
+                'Content-Type' => 'text/plain; charset=UTF-8',
+                'X-Robots-Tag' => 'noindex, nofollow',
+            ]);
+        }
+
         $origin = rtrim((string) config('app.url'), '/');
         $lines = [
             'User-agent: *',
