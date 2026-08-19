@@ -11,7 +11,7 @@ export default function Story() {
 
     return (
         <>
-            <MaisonSeoHead page="story" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow="Maison Anversa"

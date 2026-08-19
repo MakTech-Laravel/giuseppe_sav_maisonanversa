@@ -16,7 +16,7 @@ import type { Edition } from '@/types/edition';
 export default function Home({ edition }: { edition: Edition }) {
     return (
         <>
-            <MaisonSeoHead page="home" />
+            <MaisonSeoHead />
             <HomeHero edition={edition} />
             <HomeMarquee />
             <HomeIntro />

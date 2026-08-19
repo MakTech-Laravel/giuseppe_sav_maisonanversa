@@ -46,7 +46,7 @@ export default function Circle() {
 
     return (
         <>
-            <MaisonSeoHead page="circle" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow={t('De eerste 100')}

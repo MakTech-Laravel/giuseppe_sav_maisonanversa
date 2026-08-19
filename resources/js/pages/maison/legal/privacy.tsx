@@ -14,7 +14,7 @@ export default function Privacy() {
 
     return (
         <>
-            <MaisonSeoHead page="privacy" />
+            <MaisonSeoHead />
 
             <LegalPageLayout
                 titleKey="Privacybeleid"

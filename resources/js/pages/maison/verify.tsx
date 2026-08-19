@@ -1,6 +1,6 @@
-import { Head } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { PageHero } from '@/components/maison/ui/page-hero';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 
 export default function Verify({
     piece,
@@ -19,9 +19,7 @@ export default function Verify({
 
     return (
         <>
-            <Head title={t('Authenticiteit')}>
-                <meta name="robots" content="noindex, nofollow" />
-            </Head>
+            <MaisonSeoHead />
             <PageHero
                 eyebrow={piece.productName ?? t('Authenticiteit')}
                 title={

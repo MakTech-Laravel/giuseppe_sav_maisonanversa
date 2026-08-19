@@ -130,13 +130,17 @@ function openingSlide(): number {
  * visitor is inside the house.
  */
 export function ImmersiveIntro() {
-    const [running, setRunning] = useState(shouldRun);
+    const [running, setRunning] = useState(false);
 
     useLayoutEffect(() => {
-        if (!running) {
+        const next = shouldRun();
+
+        setRunning(next);
+
+        if (!next) {
             document.getElementById(BOOT_COVER_ID)?.remove();
         }
-    }, [running]);
+    }, []);
 
     if (!running) {
         return null;
