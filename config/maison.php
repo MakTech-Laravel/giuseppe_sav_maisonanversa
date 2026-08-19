@@ -68,6 +68,22 @@ return [
         'image' => '/images/rooms/room-entrance.png',
         'image_width' => 1024,
         'image_height' => 682,
+        'sitemap_cache_seconds' => (int) env('MAISON_SITEMAP_CACHE_SECONDS', 3600),
+        'disallow_paths' => [
+            '/login',
+            '/register',
+            '/forgot-password',
+            '/two-factor-challenge',
+            '/telescope',
+        ],
+        'disallow_locale_segments' => [
+            'admin',
+            'member',
+            'settings',
+            'checkout',
+            'file-upload-demo',
+            'verify',
+        ],
     ],
 
     /*
