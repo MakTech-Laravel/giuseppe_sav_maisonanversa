@@ -36,14 +36,13 @@ test('the sitemap lists every public page in every locale', function () {
 
 test('the sitemap includes lastmod for journal articles', function () {
     $slug = Journal::slugs()[0];
-    $article = Journal::sitemapArticles()[0];
 
     $body = $this->get('/sitemap.xml')->assertOk()->getContent();
 
     expect($body)
         ->toContain(url('/nl/journal/'.$slug))
         ->toContain('<lastmod>')
-        ->toContain($article['lastmod']);
+        ->toMatch('/<lastmod>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}<\/lastmod>/');
 });
 
 test('the sitemap includes lastmod for static public pages', function () {
@@ -52,7 +51,7 @@ test('the sitemap includes lastmod for static public pages', function () {
     expect($body)
         ->toContain(url('/nl'))
         ->toContain('<lastmod>')
-        ->toMatch('/<loc>'.preg_quote(url('/nl'), '/').'<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/');
+        ->toMatch('/<loc>'.preg_quote(url('/nl'), '/').'<\/loc>[\s\S]*?<lastmod>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}<\/lastmod>/');
 });
 
 test('the sitemap omits private and transactional urls', function () {

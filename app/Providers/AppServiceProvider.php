@@ -6,7 +6,9 @@ use App\Contracts\BrevoContacts;
 use App\Contracts\StripeCatalogGateway;
 use App\Enums\RoleEnum;
 use App\Listeners\StripeEventListener;
+use App\Models\JournalArticle;
 use App\Models\User;
+use App\Observers\JournalArticleObserver;
 use App\Services\Brevo\HttpBrevoContacts;
 use App\Services\Brevo\NullBrevoContacts;
 use App\Services\Stripe\CashierStripeCatalogGateway;
@@ -47,6 +49,8 @@ class AppServiceProvider extends ServiceProvider
         $this->configureSpatiePermissions();
         $this->configureCashierWebhooks();
         $this->configureSeoViewData();
+
+        JournalArticle::observe(JournalArticleObserver::class);
     }
 
     /**
