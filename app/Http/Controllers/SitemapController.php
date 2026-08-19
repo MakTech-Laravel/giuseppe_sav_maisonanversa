@@ -22,15 +22,17 @@ class SitemapController extends Controller
                 'maison.'.$page,
                 $locales,
                 $defaultLocale,
+                lastmod: $this->lastmodForPage($page),
             )];
         }
 
-        foreach (Journal::slugs() as $slug) {
+        foreach (Journal::sitemapArticles() as $article) {
             $urls = [...$urls, ...$this->localizedUrls(
                 'maison.journal.show',
                 $locales,
                 $defaultLocale,
-                ['slug' => $slug],
+                ['slug' => $article['slug']],
+                $article['lastmod'],
             )];
         }
 
@@ -42,13 +44,14 @@ class SitemapController extends Controller
     /**
      * @param  list<string>  $locales
      * @param  array<string, string>  $parameters
-     * @return list<array{loc: string, alternates: list<array{hreflang: string, href: string}>}>
+     * @return list<array{loc: string, lastmod: string|null, alternates: list<array{hreflang: string, href: string}>}>
      */
     private function localizedUrls(
         string $routeName,
         array $locales,
         string $defaultLocale,
         array $parameters = [],
+        ?string $lastmod = null,
     ): array {
         $alternates = collect($locales)
             ->map(fn (string $locale) => [
@@ -64,8 +67,24 @@ class SitemapController extends Controller
         return collect($locales)
             ->map(fn (string $locale) => [
                 'loc' => route($routeName, ['locale' => $locale, ...$parameters]),
+                'lastmod' => $lastmod,
                 'alternates' => $alternates,
             ])
             ->all();
+    }
+
+    private function lastmodForPage(string $page): ?string
+    {
+        $relative = in_array($page, ['privacy', 'terms', 'shipping', 'care'], true)
+            ? "legal/{$page}.tsx"
+            : "{$page}.tsx";
+
+        $path = resource_path("js/pages/maison/{$relative}");
+
+        if (! is_file($path)) {
+            return null;
+        }
+
+        return gmdate('Y-m-d', filemtime($path));
     }
 }

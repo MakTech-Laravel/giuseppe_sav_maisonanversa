@@ -66,6 +66,8 @@ return [
 
     'seo' => [
         'image' => '/images/rooms/room-entrance.png',
+        'image_width' => 1024,
+        'image_height' => 682,
     ],
 
     /*

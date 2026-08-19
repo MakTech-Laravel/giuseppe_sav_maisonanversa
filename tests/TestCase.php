@@ -12,6 +12,8 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        $this->withoutVite();
+
         URL::defaults(['locale' => config('maison.default_locale')]);
 
         /*

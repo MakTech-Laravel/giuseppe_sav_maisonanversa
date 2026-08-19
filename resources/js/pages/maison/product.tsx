@@ -15,7 +15,7 @@ export default function Product({ edition }: { edition: Edition }) {
 
     return (
         <>
-            <MaisonSeoHead page="product" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow={t('Founding Edition · 100 Stuks Wereldwijd')}

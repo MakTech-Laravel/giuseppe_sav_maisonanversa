@@ -1,6 +1,7 @@
 <?php
 
 use App\Support\Journal;
+use App\Support\Seo\MaisonSeo;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,37 @@ test('the sitemap lists every public page in every locale', function () {
     );
 });
 
+test('the sitemap includes lastmod for journal articles', function () {
+    $slug = Journal::slugs()[0];
+    $article = Journal::sitemapArticles()[0];
+
+    $body = $this->get('/sitemap.xml')->assertOk()->getContent();
+
+    expect($body)
+        ->toContain(url('/nl/journal/'.$slug))
+        ->toContain('<lastmod>')
+        ->toContain($article['lastmod']);
+});
+
+test('the sitemap includes lastmod for static public pages', function () {
+    $body = $this->get('/sitemap.xml')->assertOk()->getContent();
+
+    expect($body)
+        ->toContain(url('/nl'))
+        ->toContain('<lastmod>')
+        ->toMatch('/<loc>'.preg_quote(url('/nl'), '/').'<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/');
+});
+
+test('the sitemap omits private and transactional urls', function () {
+    $body = $this->get('/sitemap.xml')->assertOk()->getContent();
+
+    expect($body)
+        ->not->toContain('/admin')
+        ->not->toContain('/member')
+        ->not->toContain('/checkout')
+        ->not->toContain('/login');
+});
+
 test('every public page mounts the shared SEO head component', function (string $componentPath) {
     $source = File::get(resource_path("js/pages/maison/{$componentPath}.tsx"));
 
@@ -55,6 +87,10 @@ test('every public page mounts the shared SEO head component', function (string 
     'legal/terms',
     'legal/shipping',
     'legal/care',
+    'checkout-success',
+    'checkout-cancel',
+    'verify',
+    'newsletter-unsubscribed',
 ]);
 
 test('the SEO head component publishes canonical and hreflang links', function () {
@@ -65,14 +101,19 @@ test('the SEO head component publishes canonical and hreflang links', function (
     expect($source)
         ->toContain('rel="canonical"')
         ->toContain('hrefLang=')
-        ->toContain('hrefLang="x-default"')
         ->toContain('property="og:title"')
         ->toContain('name="twitter:card"')
-        ->toContain('titleTemplate="%s"');
+        ->toContain('titleTemplate="%s"')
+        ->toContain('og:image:width')
+        ->toContain('application/ld+json');
 });
 
-test('member pages are marked noindex', function () {
+test('member admin and auth layouts are marked noindex', function () {
     expect(File::get(resource_path('js/layouts/member-layout.tsx')))
+        ->toContain('noindex, nofollow');
+    expect(File::get(resource_path('js/layouts/app-layout.tsx')))
+        ->toContain('noindex, nofollow');
+    expect(File::get(resource_path('js/layouts/auth-layout.tsx')))
         ->toContain('noindex, nofollow');
 });
 
@@ -83,10 +124,24 @@ test('the sitemap route is registered outside the locale prefix', function () {
         ->and($route->uri())->toBe('sitemap.xml');
 });
 
-test('robots.txt advertises the sitemap', function () {
-    expect(File::get(public_path('robots.txt')))
-        ->toContain('Sitemap:')
-        ->toContain('sitemap.xml');
+test('robots.txt advertises the absolute sitemap and disallows private areas', function () {
+    $response = $this->get('/robots.txt');
+
+    $response->assertOk();
+    expect($response->headers->get('Content-Type'))->toContain('text/plain');
+
+    $body = $response->getContent();
+    $origin = rtrim((string) config('app.url'), '/');
+
+    expect($body)
+        ->toContain('Sitemap: '.$origin.'/sitemap.xml')
+        ->toContain('Disallow: /login')
+        ->toContain('Disallow: /nl/admin')
+        ->toContain('Disallow: /en/member')
+        ->toContain('Disallow: /fr/settings')
+        ->toContain('Disallow: /nl/checkout')
+        ->not->toContain('Disallow: /build')
+        ->not->toContain('Disallow: /images');
 });
 
 test('configured page slugs match the named maison routes', function () {
@@ -99,4 +154,107 @@ test('configured page slugs match the named maison routes', function () {
 
         expect($route->uri())->toBe($expectedUri);
     }
+});
+
+test('public pages share unique indexable seo documents', function () {
+    $titles = [];
+
+    foreach (config('maison.pages') as $slug) {
+        $path = $slug === '' ? '/nl' : "/nl/{$slug}";
+        $this->get($path)->assertOk()->assertInertia(function ($page) use (&$titles): void {
+            $page->where('seo.robots', null);
+            $titles[] = $page->toArray()['props']['seo']['title'];
+        });
+    }
+
+    expect($titles)->toHaveCount(14)
+        ->and(count(array_unique($titles)))->toBe(14);
+});
+
+test('the home seo document uses the canonical locale url', function () {
+    $this->get('/nl')->assertOk()->assertInertia(fn ($page) => $page
+        ->component('maison/home')
+        ->where('seo.canonical', url('/nl'))
+        ->where('seo.robots', null)
+        ->where('seo.title', 'Maison Anversa — European Heritage Sports and Lifestyle House')
+    );
+});
+
+test('a journal article canonical includes the slug and is unique from the index', function () {
+    $slug = 'waarom-antwerpen-luxewereld';
+
+    $this->get("/nl/journal/{$slug}")->assertOk()->assertInertia(fn ($page) => $page
+        ->component('maison/journal/show')
+        ->where('seo.canonical', url("/nl/journal/{$slug}"))
+        ->where('seo.ogType', 'article')
+        ->where('seo.robots', null)
+    );
+
+    $this->get('/nl/journal')->assertOk()->assertInertia(fn ($page) => $page
+        ->where('seo.canonical', url('/nl/journal'))
+        ->where('seo.ogType', 'website')
+    );
+});
+
+test('checkout pages are noindex and do not reuse the home canonical', function () {
+    $this->get(localized('maison.checkout.success'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('maison/checkout-success')
+            ->where('seo.robots', 'noindex, nofollow')
+            ->where('seo.canonical', localized('maison.checkout.success'))
+        );
+
+    $this->get(localized('maison.checkout.cancel'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('seo.robots', 'noindex, nofollow')
+            ->where('seo.canonical', localized('maison.checkout.cancel'))
+        );
+});
+
+test('the product page includes product and faq structured data', function () {
+    $this->get('/nl/product')->assertOk()->assertInertia(function ($page): void {
+        $page->where('seo.robots', null);
+
+        $graphs = $page->toArray()['props']['seo']['jsonLd'][0]['@graph'];
+        $types = array_column($graphs, '@type');
+
+        expect($types)->toContain('Organization')
+            ->toContain('WebSite')
+            ->toContain('Product')
+            ->toContain('FAQPage');
+    });
+});
+
+test('the contact page includes faq structured data from the visible questions', function () {
+    $this->get('/nl/contact')->assertOk()->assertInertia(function ($page): void {
+        $graphs = $page->toArray()['props']['seo']['jsonLd'][0]['@graph'];
+        $types = array_column($graphs, '@type');
+        $faq = collect($graphs)->firstWhere('@type', 'FAQPage');
+
+        expect($types)->toContain('FAQPage')
+            ->and($faq['mainEntity'])->toHaveCount(6);
+    });
+});
+
+test('community remains indexable as a public doorway', function () {
+    $this->get('/nl/community')->assertOk()->assertInertia(fn ($page) => $page
+        ->component('maison/community')
+        ->where('seo.robots', null)
+        ->where('seo.canonical', url('/nl/community'))
+    );
+});
+
+test('maison seo documents unique titles for every public page', function () {
+    $document = MaisonSeo::document();
+
+    expect($document)->toHaveKeys([
+        'title',
+        'description',
+        'canonical',
+        'robots',
+        'hreflang',
+        'jsonLd',
+    ]);
 });

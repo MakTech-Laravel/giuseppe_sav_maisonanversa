@@ -72,6 +72,8 @@ export function ProductGallery() {
                         ratio={null}
                         alt="Heritage No.001"
                         captioned={false}
+                        loading="eager"
+                        fetchPriority="high"
                         overlay="linear-gradient(to top, rgba(41,28,24,0.5) 0%, rgba(41,28,24,0.05) 45%)"
                         className="h-full w-full"
                     />

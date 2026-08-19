@@ -38,10 +38,10 @@ export function EtchingBand() {
                  * translator walked the DOM node by node — so the emphasised word
                  * is its own entry rather than markup inside one sentence.
                  */}
-                <h3 className="font-serif text-[clamp(22px,2.4vw,30px)] tracking-[0.06em] text-cream">
+                <p className="font-serif text-[clamp(22px,2.4vw,30px)] tracking-[0.06em] text-cream">
                     {t('De stad die ons')}{' '}
                     <em className="text-gold">{t('draagt')}</em>.
-                </h3>
+                </p>
             </div>
         </div>
     );

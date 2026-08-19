@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
 
 export default function AuthLayout({
@@ -11,6 +12,13 @@ export default function AuthLayout({
 }) {
     return (
         <div className="contents font-sans text-base/normal">
+            <Head>
+                <meta
+                    head-key="robots"
+                    name="robots"
+                    content="noindex, nofollow"
+                />
+            </Head>
             <AuthLayoutTemplate title={title} description={description}>
                 {children}
             </AuthLayoutTemplate>

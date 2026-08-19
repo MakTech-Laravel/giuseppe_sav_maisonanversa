@@ -11,7 +11,7 @@ export default function Journal({ articles }: { articles: JournalPaginator }) {
 
     return (
         <>
-            <MaisonSeoHead page="journal" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow="Maison Anversa"

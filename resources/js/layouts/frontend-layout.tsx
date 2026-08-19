@@ -1,6 +1,7 @@
 import { usePage } from '@inertiajs/react';
 import { useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
 import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
@@ -58,6 +59,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     const main = useRef<HTMLElement>(null);
     const { url, props } = usePage<PageProps>();
     const { locale } = useLocale();
+    const { t } = useTranslation();
     const [userModal, setUserModal] = useState<ModalKind>(null);
     const [userAuthView, setUserAuthView] = useState<AuthView>('login');
     const [dismissedAuthPromptKey, setDismissedAuthPromptKey] = useState<
@@ -106,10 +108,18 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         <ShellActionsProvider value={actions}>
             <PageTransition>
                 <div className="min-h-screen bg-cream text-choc">
+                    <a
+                        href="#main"
+                        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[300] focus:bg-cream focus:px-4 focus:py-2 focus:font-sans focus:text-sm focus:text-choc"
+                    >
+                        {t('Ga naar de inhoud')}
+                    </a>
                     <CinematicLayer />
 
-                    <SiteTopbar onNewsletter={actions.openNewsletter} />
-                    <SiteNav />
+                    <header>
+                        <SiteTopbar onNewsletter={actions.openNewsletter} />
+                        <SiteNav />
+                    </header>
 
                     <main
                         ref={main}

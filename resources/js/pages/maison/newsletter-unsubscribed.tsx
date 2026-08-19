@@ -1,15 +1,13 @@
-import { Head } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { PageHero } from '@/components/maison/ui/page-hero';
+import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 
 export default function NewsletterUnsubscribed() {
     const { t } = useTranslation();
 
     return (
         <>
-            <Head title={t('Uitgeschreven')}>
-                <meta name="robots" content="noindex, nofollow" />
-            </Head>
+            <MaisonSeoHead />
             <PageHero
                 eyebrow={t('Heritage Letter')}
                 title={t('Uitgeschreven')}
