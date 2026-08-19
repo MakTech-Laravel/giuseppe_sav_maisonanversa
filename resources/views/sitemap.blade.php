@@ -5,6 +5,9 @@
 @foreach ($urls as $url)
     <url>
         <loc>{{ $url['loc'] }}</loc>
+        @if (! empty($url['lastmod']))
+        <lastmod>{{ $url['lastmod'] }}</lastmod>
+        @endif
 @foreach ($url['alternates'] as $alternate)
         <xhtml:link rel="alternate" hreflang="{{ $alternate['hreflang'] }}" href="{{ $alternate['href'] }}" />
 @endforeach

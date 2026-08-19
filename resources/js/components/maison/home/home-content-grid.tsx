@@ -28,7 +28,7 @@ const CARDS = [
         eye: 'Club Corner',
         title: 'Maison Anversa in uw padelclub.',
         desc: 'Een fysieke aanwezigheid in geselecteerde padelclubs — product, verhaal en community op één plek.',
-        link: 'Meer info →',
+        link: 'Ontdek Club Corner →',
     },
     {
         to: 'story' as MaisonPage,
@@ -60,7 +60,7 @@ export function HomeContentGrid() {
                             <PlaceholderImage
                                 asset={card.asset}
                                 ratio={null}
-                                alt=""
+                                alt={t(card.title)}
                                 captioned={false}
                                 overlay="linear-gradient(to top, rgba(41,28,24,0.55) 0%, rgba(41,28,24,0.15) 100%)"
                                 className="h-full w-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:object-center"
@@ -72,12 +72,12 @@ export function HomeContentGrid() {
                                 ? card.eye
                                 : t(card.eye)}
                         </div>
-                        <div className="mb-2.5 font-serif text-xl leading-[1.3] font-medium text-cream">
+                        <h2 className="mb-2.5 font-serif text-xl leading-[1.3] font-medium text-cream">
                             {t(card.title)}
-                        </div>
-                        <div className="flex-1 text-[13px] leading-[1.7] text-stone">
+                        </h2>
+                        <p className="flex-1 text-[13px] leading-[1.7] text-stone">
                             {t(card.desc)}
-                        </div>
+                        </p>
                         <div className="mt-5 inline-flex items-center gap-2 border-b border-gold/25 pb-0.5 font-sans text-[8px] tracking-[0.25em] text-gold uppercase transition-colors group-hover:border-gold">
                             {t(card.link)}
                         </div>

@@ -67,7 +67,7 @@ export default function Dressing() {
 
     return (
         <>
-            <MaisonSeoHead page="dressing" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow={t('Kamer III · Maison Anversa')}
@@ -187,12 +187,12 @@ export default function Dressing() {
                                     {value.icon}
                                 </span>
                                 <div>
-                                    <div className="mb-0.75 font-sans text-[9px] font-medium tracking-[0.22em] text-choc uppercase">
+                                    <h3 className="mb-0.75 font-sans text-[9px] font-medium tracking-[0.22em] text-choc uppercase">
                                         {t(value.title)}
-                                    </div>
-                                    <div className="text-[13px] leading-[1.6] text-choc3">
+                                    </h3>
+                                    <p className="text-[13px] leading-[1.6] text-choc3">
                                         {t(value.desc)}
-                                    </div>
+                                    </p>
                                 </div>
                             </Reveal>
                         ))}
@@ -220,12 +220,12 @@ export default function Dressing() {
                                 <div className="mb-3.5 font-serif text-[44px] leading-none font-light text-gold/18">
                                     {item.num}
                                 </div>
-                                <div className="mb-2 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
+                                <h3 className="mb-2 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
                                     {t(item.title)}
-                                </div>
-                                <div className="text-[12px] leading-[1.65] text-sand">
+                                </h3>
+                                <p className="text-[12px] leading-[1.65] text-sand">
                                     {t(item.desc)}
-                                </div>
+                                </p>
                             </Reveal>
                         ))}
                     </div>

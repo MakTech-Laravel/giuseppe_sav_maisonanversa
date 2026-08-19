@@ -4,14 +4,19 @@ use App\Http\Middleware\EnsureFoundingCircle;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SetLocale;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Services\Locale\LocalePreferenceService;
+use App\Support\Seo\MaisonSeo;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -73,5 +78,25 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->respond(function (Response $response, Throwable $e, Request $request) {
+            if ($response->getStatusCode() !== 404 || $request->expectsJson()) {
+                return $response;
+            }
+
+            $locales = app(LocalePreferenceService::class);
+            $segment = $request->segment(1);
+            $locale = is_string($segment) && $locales->isSupported($segment)
+                ? $segment
+                : $locales->preferred($request);
+
+            app()->setLocale($locale);
+            URL::defaults(['locale' => $locale]);
+            $request->attributes->set('maison_seo_error', true);
+
+            Inertia::share('seo', MaisonSeo::document($request));
+
+            return Inertia::render('errors/404')
+                ->toResponse($request)
+                ->setStatusCode(404);
+        });
     })->create();

@@ -14,7 +14,7 @@ export default function Care() {
 
     return (
         <>
-            <MaisonSeoHead page="care" />
+            <MaisonSeoHead />
 
             <LegalPageLayout
                 titleKey="Zorg & Garantie"

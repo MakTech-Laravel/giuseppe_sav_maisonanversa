@@ -157,7 +157,7 @@ export default function Corner() {
 
     return (
         <>
-            <MaisonSeoHead page="corner" />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow="Maison Anversa"
@@ -462,9 +462,9 @@ export default function Corner() {
                                                 {step.num}
                                             </div>
                                             <div>
-                                                <h4 className="mb-1 font-serif text-lg font-medium text-choc">
+                                                <h3 className="mb-1 font-serif text-lg font-medium text-choc">
                                                     {t(step.title)}
-                                                </h4>
+                                                </h3>
                                                 <p className="text-[14px] leading-[1.7] text-choc3">
                                                     {t(step.desc)}
                                                 </p>

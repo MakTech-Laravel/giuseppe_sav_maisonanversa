@@ -26,6 +26,7 @@ export function HomeHero({ edition }: { edition: Edition }) {
                 alt=""
                 captioned={false}
                 loading="eager"
+                fetchPriority="high"
                 className="absolute inset-0 h-full w-full"
             />
 

@@ -15,10 +15,20 @@ import type { Locale } from '@/types/locale';
  * has to exist before the tree mounts, which avoids a flash of Dutch copy.
  */
 export function readInitialLocale(): Locale {
-    const page = getInitialPageFromDOM<{ props?: { locale?: unknown } }>('app');
-    const locale = page?.props?.locale;
+    if (typeof document === 'undefined') {
+        return SOURCE_LOCALE;
+    }
 
-    return isLocale(locale) ? locale : SOURCE_LOCALE;
+    try {
+        const page = getInitialPageFromDOM<{ props?: { locale?: unknown } }>(
+            'app',
+        );
+        const locale = page?.props?.locale;
+
+        return isLocale(locale) ? locale : SOURCE_LOCALE;
+    } catch {
+        return SOURCE_LOCALE;
+    }
 }
 
 /**
@@ -34,7 +44,9 @@ export function I18nProvider({
     i18n: I18n;
     children: ReactNode;
 }) {
-    const [locale, setLocale] = useState<Locale>(readInitialLocale);
+    const [locale, setLocale] = useState<Locale>(() =>
+        isLocale(i18n.language) ? i18n.language : readInitialLocale(),
+    );
 
     useEffect(
         () =>

@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
+use App\Support\Seo\MaisonSeo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
@@ -78,6 +79,7 @@ class HandleInertiaRequests extends Middleware
             'availableLocales' => config('maison.locales'),
             'appUrl' => config('app.url'),
             'seoImage' => config('maison.seo.image'),
+            'seo' => fn (): array => MaisonSeo::document($request),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => fn (): array => Product::checkoutShare(),
             'commerce' => fn (): array => CommerceSetting::current()->toShare(),

@@ -37,6 +37,23 @@ export function CommunityLoginGate() {
                         'De Community is exclusief voor Founding Circle leden en Club Corner partners. Log in om toegang te krijgen.',
                     )}
                 </p>
+                <ul className="mb-9 space-y-2 text-left text-sm leading-[1.7] text-choc3">
+                    <li>
+                        {t(
+                            'Plan padelsessies met andere leden van het huis.',
+                        )}
+                    </li>
+                    <li>
+                        {t(
+                            'Ontdek exclusieve evenementen van Maison Anversa.',
+                        )}
+                    </li>
+                    <li>
+                        {t(
+                            'Vind de courts en clubs waar het huis aanwezig is.',
+                        )}
+                    </li>
+                </ul>
 
                 <MaisonButton
                     variant="filled"

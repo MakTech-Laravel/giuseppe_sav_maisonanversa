@@ -19,6 +19,10 @@ const PULL = 0.12;
  */
 export function useMagnetic() {
     useGSAP(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
         const media = gsap.matchMedia();
 
         media.add(MEDIA.pointer, () => {

@@ -120,9 +120,9 @@ function BureauPanel({
             id={`bp-${id}`}
             className="w-full animate-in fade-in slide-in-from-bottom-2 rounded-lg border border-gold/20 bg-black/18 px-7 py-7.5 duration-300"
         >
-            <h3 className="mb-2 font-serif text-[22px] font-normal text-cream">
+            <h2 className="mb-2 font-serif text-[22px] font-normal text-cream">
                 {t(title)}
-            </h3>
+            </h2>
             {children}
         </div>
     );

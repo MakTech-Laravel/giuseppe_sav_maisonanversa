@@ -26,6 +26,7 @@ use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\Member\PassportPdfController;
 use App\Http\Controllers\PostAttachmentController;
+use App\Http\Controllers\RobotsTxtController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\SitemapController;
@@ -48,6 +49,7 @@ Route::get('/', function (Request $request, LocalePreferenceService $locales) {
     return redirect('/'.$locale);
 })->name('home');
 
+Route::get('robots.txt', RobotsTxtController::class)->name('robots');
 Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::post('cookie-consent', [CookieConsentController::class, 'store'])
@@ -412,4 +414,12 @@ Route::prefix('{locale}')
         Route::put('settings/password', [SecurityController::class, 'update'])
             ->middleware('throttle:6,1')
             ->name('user-password.update');
+    });
+
+Route::prefix('{locale}')
+    ->middleware('locale')
+    ->group(function () {
+        Route::fallback(function () {
+            abort(404);
+        });
     });
