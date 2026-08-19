@@ -18,12 +18,12 @@ import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { gsap, MAISON_EASE, useGSAP } from '@/lib/gsap';
 import { imageAsset } from '@/lib/imagery';
 import {
-    BOOT_COVER_ID,
     CLOSING_SLIDE,
     INTRO_ROOMS,
     INTRO_SLIDES,
     introCopy,
     introPanel,
+    removeBootCover,
     ROOM_COUNT,
 } from '@/lib/maison-intro';
 import { cn } from '@/lib/utils';
@@ -63,7 +63,7 @@ function writeSession(key: string, value: string): void {
     }
 }
 
-/** `?p=0..6` opens on a given slide, for screenshots and QA. */
+/** `?p=0..n` opens on a given slide, for screenshots and QA. */
 function requestedSlide(params: URLSearchParams): number | null {
     const requested = Number(params.get('p'));
 
@@ -79,7 +79,7 @@ function requestedSlide(params: URLSearchParams): number | null {
  * The intro is an arrival, so it plays once per session: returning to the home
  * page from a room does not replay it. `?intro=1` asks for it again.
  *
- * Reduced motion skips it altogether. It is seven slides of drifting photography
+ * Reduced motion skips it altogether. It is a sequence of drifting photography
  * with no still equivalent, and the home page behind it says the same things —
  * the prototype came to the same conclusion.
  */
@@ -123,14 +123,16 @@ function openingSlide(): number {
 }
 
 /**
- * The seven-room arrival sequence, over the home page.
+ * The eight-room arrival sequence, over the home page.
  *
  * Mounted by the shell on the home page only. The stage itself lives in a child
  * component so that none of its listeners, timers or scroll lock exist once the
  * visitor is inside the house.
  */
 export function ImmersiveIntro() {
-    const [running, setRunning] = useState(false);
+    const [running, setRunning] = useState(() =>
+        typeof window === 'undefined' ? false : shouldRun(),
+    );
 
     useLayoutEffect(() => {
         const next = shouldRun();
@@ -138,7 +140,7 @@ export function ImmersiveIntro() {
         setRunning(next);
 
         if (!next) {
-            document.getElementById(BOOT_COVER_ID)?.remove();
+            removeBootCover();
         }
     }, []);
 
@@ -243,10 +245,6 @@ function IntroStage({ onDismissed }: { onDismissed: () => void }) {
 
     /* ── Leaving ────────────────────────────────────────────────────────── */
 
-    /**
-     * Both exits record that the house has been entered: dismissing the overlay
-     * in place, and following a room link, which unmounts the stage.
-     */
     const markSeen = useCallback(() => {
         writeSession(SEEN_KEY, '1');
         writeSession(SLIDE_KEY, '0');
@@ -260,6 +258,7 @@ function IntroStage({ onDismissed }: { onDismissed: () => void }) {
 
         dismissed.current = true;
         markSeen();
+        removeBootCover();
 
         gsap.to(stage.current, {
             opacity: 0,
@@ -372,6 +371,7 @@ function IntroStage({ onDismissed }: { onDismissed: () => void }) {
     /* Announces the overlay, and gives the arrow keys somewhere to belong. */
     useEffect(() => {
         if (curtainLifted) {
+            removeBootCover();
             stage.current?.focus();
         }
     }, [curtainLifted]);

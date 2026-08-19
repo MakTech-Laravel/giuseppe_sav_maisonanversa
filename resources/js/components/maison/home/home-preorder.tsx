@@ -105,7 +105,7 @@ export function HomePreorder({ edition }: { edition: Edition }) {
                                 <span className="font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
                                     {t('Voortgang Founding Edition')}
                                 </span>
-                                <span className="font-serif text-[22px] text-gold">
+                                <span className="font-serif text-[22px] text-gold lining-nums">
                                     {shown} / {edition.total}
                                 </span>
                             </div>
@@ -137,7 +137,7 @@ export function HomePreorder({ edition }: { edition: Edition }) {
                     </Reveal>
 
                     <Reveal className="border border-gold/20 bg-white/3 p-10">
-                        <div className="mb-1 font-serif text-[48px] leading-none font-light text-cream">
+                        <div className="mb-1 font-serif text-[48px] leading-none font-light text-cream lining-nums">
                             {priceLabel}
                         </div>
                         <div className="mb-7 font-sans text-[9px] tracking-[0.2em] text-stone uppercase">
@@ -147,7 +147,7 @@ export function HomePreorder({ edition }: { edition: Edition }) {
                             {INCLUDES.map((item) => (
                                 <li
                                     key={item}
-                                    className="flex items-center gap-2.5 text-[14px] text-sand before:font-sans before:text-[13px] before:text-gold before:content-['→']"
+                                    className="flex items-center gap-2.5 font-sans text-[14px] text-sand before:font-sans before:text-[13px] before:text-gold before:content-['→']"
                                 >
                                     {t(item)}
                                 </li>

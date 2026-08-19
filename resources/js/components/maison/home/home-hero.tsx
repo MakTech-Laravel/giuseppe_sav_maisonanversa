@@ -81,7 +81,7 @@ export function HomeHero({ edition }: { edition: Edition }) {
             </div>
 
             <div className="absolute right-8 bottom-16 z-2 hidden text-right max-[480px]:hidden sm:block md:right-20 md:bottom-20">
-                <div className="font-serif text-[72px] leading-none font-light text-gold">
+                <div className="font-serif text-[72px] leading-none font-light text-gold lining-nums">
                     {String(edition.available).padStart(2, '0')}
                 </div>
                 <div className="my-2 ml-auto h-px w-8 bg-gold/30" />

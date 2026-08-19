@@ -1,0 +1,159 @@
+{
+    "images/brand/antwerp-cityscape.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/brand/antwerp-cityscape-768.webp",
+            "avif": "images/optimized/brand/antwerp-cityscape-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/brand/antwerp-cityscape-1280.webp",
+            "avif": "images/optimized/brand/antwerp-cityscape-1280.avif"
+        }
+    ],
+    "images/brand/hero-mansion.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/brand/hero-mansion-768.webp",
+            "avif": "images/optimized/brand/hero-mansion-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/brand/hero-mansion-1280.webp",
+            "avif": "images/optimized/brand/hero-mansion-1280.avif"
+        }
+    ],
+    "images/brand/maison-facade-house.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/brand/maison-facade-house-768.webp",
+            "avif": "images/optimized/brand/maison-facade-house-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/brand/maison-facade-house-1280.webp",
+            "avif": "images/optimized/brand/maison-facade-house-1280.avif"
+        }
+    ],
+    "images/brand/maison-facade.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/brand/maison-facade-768.webp",
+            "avif": "images/optimized/brand/maison-facade-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/brand/maison-facade-1280.webp",
+            "avif": "images/optimized/brand/maison-facade-1280.avif"
+        }
+    ],
+    "images/editorial/antwerp-ets-band.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/editorial/antwerp-ets-band-768.webp",
+            "avif": "images/optimized/editorial/antwerp-ets-band-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/editorial/antwerp-ets-band-1280.webp",
+            "avif": "images/optimized/editorial/antwerp-ets-band-1280.avif"
+        }
+    ],
+    "images/logos/logo-icon.jpg": [
+        {
+            "width": 768,
+            "webp": "images/optimized/logos/logo-icon-768.webp",
+            "avif": "images/optimized/logos/logo-icon-768.avif"
+        }
+    ],
+    "images/product/atelier-workshop.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/product/atelier-workshop-768.webp",
+            "avif": "images/optimized/product/atelier-workshop-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/product/atelier-workshop-1280.webp",
+            "avif": "images/optimized/product/atelier-workshop-1280.avif"
+        }
+    ],
+    "images/product/heritage-001-detail-gravure.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/product/heritage-001-detail-gravure-768.webp",
+            "avif": "images/optimized/product/heritage-001-detail-gravure-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/product/heritage-001-detail-gravure-1280.webp",
+            "avif": "images/optimized/product/heritage-001-detail-gravure-1280.avif"
+        }
+    ],
+    "images/product/heritage-001-front.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/product/heritage-001-front-768.webp",
+            "avif": "images/optimized/product/heritage-001-front-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/product/heritage-001-front-1280.webp",
+            "avif": "images/optimized/product/heritage-001-front-1280.avif"
+        }
+    ],
+    "images/product/heritage-001-lifestyle-court.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/product/heritage-001-lifestyle-court-768.webp",
+            "avif": "images/optimized/product/heritage-001-lifestyle-court-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/product/heritage-001-lifestyle-court-1280.webp",
+            "avif": "images/optimized/product/heritage-001-lifestyle-court-1280.avif"
+        }
+    ],
+    "images/rooms/room-atelier.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/rooms/room-atelier-768.webp",
+            "avif": "images/optimized/rooms/room-atelier-768.avif"
+        }
+    ],
+    "images/rooms/room-coffee.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/rooms/room-coffee-768.webp",
+            "avif": "images/optimized/rooms/room-coffee-768.avif"
+        }
+    ],
+    "images/rooms/room-courtyard.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/rooms/room-courtyard-768.webp",
+            "avif": "images/optimized/rooms/room-courtyard-768.avif"
+        }
+    ],
+    "images/rooms/room-dressing.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/rooms/room-dressing-768.webp",
+            "avif": "images/optimized/rooms/room-dressing-768.avif"
+        }
+    ],
+    "images/rooms/room-entrance.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/rooms/room-entrance-768.webp",
+            "avif": "images/optimized/rooms/room-entrance-768.avif"
+        }
+    ],
+    "images/rooms/room-library.png": [
+        {
+            "width": 768,
+            "webp": "images/optimized/rooms/room-library-768.webp",
+            "avif": "images/optimized/rooms/room-library-768.avif"
+        }
+    ]
+}
