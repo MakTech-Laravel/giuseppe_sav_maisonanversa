@@ -9,6 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     Table,
     TableBody,
     TableCell,
@@ -86,25 +93,35 @@ export default function HeritageIndex({
                 {catalog.length > 1 && product && (
                     <div className="grid max-w-md gap-2">
                         <Label htmlFor="catalog-product">{t('Product')}</Label>
-                        <select
-                            id="catalog-product"
-                            className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
-                            value={product.id}
-                            onChange={(event) => {
+                        <Select
+                            value={String(product.id)}
+                            onValueChange={(value) => {
                                 router.get(
                                     heritageRoutes.index(wayfinderLocale())
                                         .url,
-                                    { product: event.target.value },
+                                    { product: value },
                                     { preserveState: false },
                                 );
                             }}
                         >
-                            {catalog.map((item) => (
-                                <option key={item.id} value={item.id}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </select>
+                            <SelectTrigger
+                                id="catalog-product"
+                                className="w-full border-gold/25 bg-choc/50 text-cream data-placeholder:text-stone"
+                            >
+                                <SelectValue placeholder={t('Product')} />
+                            </SelectTrigger>
+                            <SelectContent className="border-gold/25 bg-choc text-cream">
+                                {catalog.map((item) => (
+                                    <SelectItem
+                                        key={item.id}
+                                        value={String(item.id)}
+                                        className="text-cream focus:bg-gold/15 focus:text-cream"
+                                    >
+                                        {item.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 )}
                 {product && <HeritageProductForm product={product} />}
