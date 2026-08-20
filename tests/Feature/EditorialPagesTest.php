@@ -61,15 +61,16 @@ test('the dressing page keeps the philosophy values and six collection pieces vi
         ->toContain('Technische stoffen')
         ->toContain('Beperkte productie')
         ->toContain('Tijdloze palet')
-        ->toContain('Padel Polo')
-        ->toContain('Court Short')
-        ->toContain('Warm-up Jacket')
-        ->toContain('Court Cap')
-        ->toContain('Sport Handdoek')
-        ->toContain('Padel Grip')
         ->toContain('ma-lg:grid-cols-6')
         ->toContain('min-h-120')
         ->not->toContain('ma-lg:grid-cols-[1fr_1.1fr_1fr]');
+
+    $this->get('/nl/dressing')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->has('items', 6)
+            ->where('items.0.name', 'Padel Polo')
+            ->where('items.5.name', 'Padel Grip'));
 });
 
 test('the dressing founding-circle heading translates ziet into English', function () {

@@ -97,6 +97,15 @@ return [
         'currency' => 'eur',
     ],
 
+    'corner_form_options' => [
+        'court_options' => ['4-6 courts', '7-10 courts', '10+ courts'],
+        'format_options' => [
+            'Formaat A — Heritage Corner',
+            'Formaat B — Founding Club Corner',
+            'Nog niet beslist',
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Integration seams

@@ -74,44 +74,6 @@ const CRITERIA = [
     'Minimaal 4 courts en een actieve ledenlijst van 200+ leden',
 ] as const;
 
-const CLUBS = [
-    {
-        location: 'België',
-        name: 'Antwerpen',
-        status: 'In gesprek — 2026',
-        pending: true,
-    },
-    {
-        location: 'België',
-        name: 'Brussel',
-        status: 'Open voor aanvragen',
-        pending: false,
-    },
-    {
-        location: 'Nederland',
-        name: 'Amsterdam',
-        status: 'Open voor aanvragen',
-        pending: false,
-    },
-    {
-        location: 'Nederland',
-        name: 'Rotterdam',
-        status: 'Open voor aanvragen',
-        pending: false,
-    },
-    {
-        location: 'Duitsland',
-        name: 'Hamburg',
-        status: 'Open voor aanvragen',
-        pending: false,
-    },
-    {
-        location: 'Uw stad?',
-        name: 'Neem contact op',
-        status: 'Open voor aanvragen',
-        pending: false,
-    },
-] as const;
 
 const PROCESS_STEPS = [
     {
@@ -136,18 +98,27 @@ const PROCESS_STEPS = [
     },
 ] as const;
 
-const COURT_OPTIONS = ['4-6 courts', '7-10 courts', '10+ courts'] as const;
-
-const FORMAT_OPTIONS = [
-    'Formaat A — Heritage Corner',
-    'Formaat B — Founding Club Corner',
-    'Nog niet beslist',
-] as const;
-
 const fieldClassName =
     'border border-gold/20 bg-cream2 px-4 py-3 font-serif text-base text-choc outline-none transition-colors placeholder:text-stone focus:border-gold2';
 
-export default function Corner() {
+type CornerClub = {
+    city: string;
+    country: string;
+    status: string;
+};
+
+type CornerFormOptions = {
+    court_options: string[];
+    format_options: string[];
+};
+
+export default function Corner({
+    clubs = [],
+    cornerFormOptions,
+}: {
+    clubs?: CornerClub[];
+    cornerFormOptions: CornerFormOptions;
+}) {
     const { t } = useTranslation();
     const contactRef = useRef<HTMLDivElement>(null);
 
@@ -408,20 +379,20 @@ export default function Corner() {
                     </div>
 
                     <div className="grid gap-0.5 sm:grid-cols-2 lg:grid-cols-3">
-                        {CLUBS.map((club) => (
+                        {clubs.map((club) => (
                             <Reveal
-                                key={`${club.location}-${club.name}`}
+                                key={`${club.country}-${club.city}`}
                                 className="border border-gold/10 bg-white/3 px-7 py-8"
                             >
                                 <span className="mb-2 block font-sans text-[9px] tracking-[0.25em] text-gold uppercase">
-                                    {t(club.location)}
+                                    {t(club.country)}
                                 </span>
                                 <div className="mb-2 font-serif text-2xl font-medium text-cream">
-                                    {t(club.name)}
+                                    {t(club.city)}
                                 </div>
                                 <div
                                     className={
-                                        club.pending
+                                        club.status === 'in_discussion'
                                             ? 'font-sans text-[10px] tracking-[0.15em] text-stone uppercase'
                                             : 'font-sans text-[10px] tracking-[0.15em] text-gold uppercase'
                                     }
@@ -474,7 +445,7 @@ export default function Corner() {
                                 </div>
                             </div>
 
-                            <CornerPartnershipForm />
+                            <CornerPartnershipForm cornerFormOptions={cornerFormOptions} />
                         </div>
                     </Wrap>
                 </div>
@@ -483,7 +454,11 @@ export default function Corner() {
     );
 }
 
-function CornerPartnershipForm() {
+function CornerPartnershipForm({
+    cornerFormOptions,
+}: {
+    cornerFormOptions: CornerFormOptions;
+}) {
     const { t } = useTranslation();
     const { locale } = useLocale();
     const form = useForm({
@@ -491,8 +466,8 @@ function CornerPartnershipForm() {
         name: '',
         email: '',
         location: '',
-        courts: COURT_OPTIONS[0],
-        format: FORMAT_OPTIONS[0],
+        courts: cornerFormOptions.court_options[0] ?? '',
+        format: cornerFormOptions.format_options[0] ?? '',
         message: '',
         website: '',
     });
@@ -645,7 +620,7 @@ function CornerPartnershipForm() {
                     }
                     className={fieldClassName}
                 >
-                    {COURT_OPTIONS.map((option) => (
+                    {cornerFormOptions.court_options.map((option) => (
                         <option key={option} value={option}>
                             {t(option)}
                         </option>
@@ -670,7 +645,7 @@ function CornerPartnershipForm() {
                     }
                     className={fieldClassName}
                 >
-                    {FORMAT_OPTIONS.map((option) => (
+                    {cornerFormOptions.format_options.map((option) => (
                         <option key={option} value={option}>
                             {t(option)}
                         </option>

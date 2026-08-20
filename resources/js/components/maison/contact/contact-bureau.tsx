@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,12 +11,11 @@ import {
     BureauTextarea,
 } from '@/components/maison/contact/bureau-form';
 import {
-    BOUTIQUE_MAP_SRC,
-    BUREAU_BUBBLES,
-    BUREAU_PANEL_IDS
-    
+    BUREAU_PANEL_IDS,
+    buildBureauBubbles,
+    type BureauPanelId,
+    type SiteShared,
 } from '@/components/maison/contact/contact-data';
-import type {BureauPanelId} from '@/components/maison/contact/contact-data';
 import { ContactFaq } from '@/components/maison/contact/contact-faq';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { cn } from '@/lib/utils';
@@ -138,7 +138,15 @@ function BureauNote({ children }: { children: string }) {
     );
 }
 
-function BureauPanelBody({ id }: { id: BureauPanelId }) {
+function BureauPanelBody({
+    id,
+    mapSrc,
+    faqs,
+}: {
+    id: BureauPanelId;
+    mapSrc: string;
+    faqs: Array<{ question: string; answer: string }>;
+}) {
     const { t } = useTranslation();
 
     switch (id) {
@@ -286,13 +294,13 @@ function BureauPanelBody({ id }: { id: BureauPanelId }) {
                     <iframe
                         title={t('Maison Anversa — Antwerpen')}
                         loading="lazy"
-                        src={BOUTIQUE_MAP_SRC}
+                        src={mapSrc}
                         className="mt-4 h-60 w-full rounded-md border border-gold/20 brightness-[0.85] grayscale-[0.3]"
                     />
                 </>
             );
         case 'faq':
-            return <ContactFaq />;
+            return <ContactFaq faqs={faqs} />;
         case 'feedback':
             return (
                 <>
@@ -379,6 +387,11 @@ function scrollToPanel(id: BureauPanelId): void {
  * strings or a post-navigation timeout.
  */
 export function ContactBureau() {
+    const { site, faqs } = usePage<{
+        site: SiteShared;
+        faqs: Array<{ question: string; answer: string }>;
+    }>().props;
+    const bureauBubbles = buildBureauBubbles(site);
     const [openPanel, setOpenPanel] = useState<BureauPanelId | null>(() =>
         typeof window !== 'undefined'
             ? panelIdFromHash(window.location.hash)
@@ -425,7 +438,7 @@ export function ContactBureau() {
         <Section tone="dark">
             <Wrap>
                 <div className="mx-auto flex max-w-190 flex-col gap-3">
-                    {BUREAU_BUBBLES.map((bubble) => (
+                    {bureauBubbles.map((bubble) => (
                         <div
                             key={bubble.name}
                             className="flex flex-col items-end gap-3"
@@ -455,7 +468,11 @@ export function ContactBureau() {
                                     open={openPanel === bubble.panel}
                                     title={PANEL_TITLES[bubble.panel]}
                                 >
-                                    <BureauPanelBody id={bubble.panel} />
+                                    <BureauPanelBody
+                                        id={bubble.panel}
+                                        mapSrc={site.boutiqueMapSrc}
+                                        faqs={faqs}
+                                    />
                                 </BureauPanel>
                             ) : null}
                         </div>

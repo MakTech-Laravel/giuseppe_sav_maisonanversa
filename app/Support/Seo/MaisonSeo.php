@@ -4,6 +4,7 @@ namespace App\Support\Seo;
 
 use App\Models\JournalArticle;
 use App\Models\Product;
+use App\Models\SeoMeta;
 use App\Services\Edition\EditionInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -155,6 +156,14 @@ final class MaisonSeo
     ];
 
     /**
+     * @return array<string, array{title: string, description: string}>
+     */
+    public static function defaults(): array
+    {
+        return self::PAGES;
+    }
+
+    /**
      * @return SeoDocument
      */
     public static function document(?Request $request = null): array
@@ -302,6 +311,17 @@ final class MaisonSeo
         }
 
         if ($page !== null && isset(self::PAGES[$page])) {
+            $meta = SeoMeta::query()
+                ->where('page_key', $page)
+                ->first();
+
+            if ($meta !== null) {
+                return [
+                    'title' => $meta->translated('title'),
+                    'description' => $meta->translated('description'),
+                ];
+            }
+
             return [
                 'title' => __(self::PAGES[$page]['title']),
                 'description' => __(self::PAGES[$page]['description']),

@@ -13,7 +13,19 @@ import { HomeUnboxing } from '@/components/maison/home/home-unboxing';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import type { Edition } from '@/types/edition';
 
-export default function Home({ edition }: { edition: Edition }) {
+type HomeProductData = {
+    materials?: string[];
+    trust_badges?: string[];
+    includes?: string[];
+};
+
+export default function Home({
+    edition,
+    product,
+}: {
+    edition: Edition;
+    product?: HomeProductData | null;
+}) {
     return (
         <>
             <MaisonSeoHead />
@@ -22,10 +34,10 @@ export default function Home({ edition }: { edition: Edition }) {
             <HomeIntro />
             <HomeStory />
             <HomeAntwerp />
-            <HomeProduct />
+            <HomeProduct product={product} />
             <HomeUnboxing />
             <HomeCircle />
-            <HomePreorder edition={edition} />
+            <HomePreorder edition={edition} includes={product?.includes} />
             <HomeContentGrid />
             <HomeManifesto />
             <HomeNewsletter />

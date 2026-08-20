@@ -28,42 +28,23 @@ const VALUES = [
     },
 ] as const;
 
-const PREVIEW = [
-    {
-        num: '01',
-        title: 'Padel Polo',
-        desc: 'Technisch piqué · Vintage crème · Gouden borduurmonogram · Korte en lange mouw',
-    },
-    {
-        num: '02',
-        title: 'Court Short',
-        desc: 'Italiaanse technisch weefsel · Chocoladebruin · Zijsplit · Verstelbare taille',
-    },
-    {
-        num: '03',
-        title: 'Warm-up Jacket',
-        desc: 'Premium ripstop · Zwart · YKK rits · Verborgen binnenzak',
-    },
-    {
-        num: '04',
-        title: 'Court Cap',
-        desc: 'Gestructureerde pasvorm · Vintage crème · Handgestikt M-monogram',
-    },
-    {
-        num: '05',
-        title: 'Sport Handdoek',
-        desc: '600g Egyptisch katoen · Chocoladebruin · Gouden randdetail',
-    },
-    {
-        num: '06',
-        title: 'Padel Grip',
-        desc: 'Echt leder · Set van 3 · Chocolade · Perforatie patroon',
-    },
-] as const;
+type DressingItem = {
+    name: string;
+    category: string;
+    status: string;
+};
 
-export default function Dressing() {
+export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
     const { t } = useTranslation();
     const { openNewsletter } = useShellActions();
+    const preview =
+        items.length > 0
+            ? items.map((item, index) => ({
+                  num: String(index + 1).padStart(2, '0'),
+                  title: item.name,
+                  desc: `${item.category} · ${item.status}`,
+              }))
+            : [];
 
     return (
         <>
@@ -212,7 +193,7 @@ export default function Dressing() {
                     </Reveal>
 
                     <div className="grid grid-cols-2 gap-0.5 md:grid-cols-3 ma-lg:grid-cols-6">
-                        {PREVIEW.map((item) => (
+                        {preview.map((item) => (
                             <Reveal
                                 key={item.num}
                                 className="border border-gold/10 bg-white/3 px-5 pt-7 pb-6 transition-colors hover:border-gold/25 hover:bg-gold/5"

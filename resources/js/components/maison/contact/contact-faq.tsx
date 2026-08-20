@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { CONTACT_FAQ } from '@/components/maison/contact/contact-data';
 import { cn } from '@/lib/utils';
 
 type ContactFaqProps = {
     className?: string;
+    faqs: Array<{ question: string; answer: string }>;
 };
 
 /**
@@ -12,12 +12,12 @@ type ContactFaqProps = {
  * Native `<details>` FAQ for the contact bureau on a dark ground, with keyboard
  * support and `aria-expanded` without a Radix wrapper.
  */
-export function ContactFaq({ className }: ContactFaqProps) {
+export function ContactFaq({ className, faqs }: ContactFaqProps) {
     const { t } = useTranslation();
 
     return (
         <div className={cn('mt-1', className)}>
-            {CONTACT_FAQ.map((item) => (
+            {faqs.map((item) => (
                 <details
                     key={item.question}
                     className="group border-b border-gold/14"

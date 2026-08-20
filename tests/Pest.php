@@ -1,8 +1,14 @@
 <?php
 
+use Database\Seeders\DressingItemSeeder;
 use Database\Seeders\EditionPieceSeeder;
+use Database\Seeders\FaqSeeder;
 use Database\Seeders\JournalArticleSeeder;
+use Database\Seeders\LegalPageSeeder;
+use Database\Seeders\PartnerClubSeeder;
 use Database\Seeders\ProductSeeder;
+use Database\Seeders\SeoMetaSeeder;
+use Database\Seeders\SiteSettingSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -25,6 +31,12 @@ pest()->extend(TestCase::class)
             ProductSeeder::class,
             EditionPieceSeeder::class,
             JournalArticleSeeder::class,
+            SiteSettingSeeder::class,
+            FaqSeeder::class,
+            DressingItemSeeder::class,
+            PartnerClubSeeder::class,
+            LegalPageSeeder::class,
+            SeoMetaSeeder::class,
         ]);
     })
     ->in('Feature');

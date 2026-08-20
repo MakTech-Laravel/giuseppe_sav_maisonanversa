@@ -36,7 +36,7 @@ test('products use the explicit translatable name column', function () {
     $product = Product::query()->where('slug', Product::FOUNDING_SLUG)->first();
 
     expect($product->translatableColumns())
-        ->toBe(['name', 'expected_delivery_label']);
+        ->toBe(['name', 'hero_subtitle', 'expected_delivery_label']);
 });
 
 test('deepl uses the free host for keys ending in fx', function () {

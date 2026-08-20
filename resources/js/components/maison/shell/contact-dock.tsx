@@ -14,28 +14,12 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { buildContactDockItems } from '@/components/maison/contact/contact-data';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { useLocale } from '@/hooks/use-locale';
 import { activePage } from '@/lib/maison-navigation';
-
-/** The panel the eight items live in. `panel` targets a bureau on /contact. */
-const ITEMS = [
-    {
-        icon: MessageCircle,
-        label: 'WhatsApp ons',
-        href: 'https://wa.me/32400000000',
-    },
-    { icon: Phone, label: 'Bel ons', href: 'tel:+32400000000' },
-    { icon: Mail, label: 'E-mail ons', href: 'mailto:hello@maisonanversa.com' },
-    { icon: Package, label: 'Bestelstatus', panel: 'bestel' },
-    { icon: Heart, label: 'Maison Care', panel: 'care' },
-    { icon: CalendarDays, label: 'Boek een afspraak', panel: 'afspraak' },
-    { icon: Video, label: 'Privé consult', panel: 'concierge' },
-    { icon: MapPin, label: 'Vind uw Boutique', panel: 'boutique' },
-    { icon: HelpCircle, label: 'Veelgestelde vragen', panel: 'faq' },
-    { icon: MessageSquare, label: 'Uw mening', panel: 'feedback' },
-] as const;
+import type { SiteShared } from '@/components/maison/contact/contact-data';
 
 /**
  * The floating help dock, bottom right on every page.
@@ -47,9 +31,13 @@ const ITEMS = [
  */
 export function ContactDock() {
     const { t } = useTranslation();
-    const { url } = usePage();
+    const page = usePage<{ site: SiteShared }>();
+    const { site } = page.props;
+    const items = buildContactDockItems(site);
     const { locale } = useLocale();
-    const onContact = activePage(url, locale) === 'contact';
+    const onContact =
+        activePage(typeof page.url === 'string' ? page.url : '', locale) ===
+        'contact';
     const [open, setOpen] = useState(false);
     const panel = useRef<HTMLDivElement>(null);
 
@@ -122,7 +110,7 @@ export function ContactDock() {
                     </div>
 
                     <div className="flex flex-col gap-1.75">
-                        {ITEMS.map((item) => {
+                        {items.map((item) => {
                             const className =
                                 'flex min-h-11 w-full items-center gap-3 rounded-[10px] border border-gold/20 px-3.25 py-2.75 text-left font-sans text-[13px] text-cream transition-colors hover:border-gold/40 hover:bg-gold/12';
 

@@ -6,17 +6,26 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 
-const SPECS = [
-    'Full Carbon Frame — 3K weave',
-    'Premium 3K Carbon Surface',
-    'Echte Lederen Greep',
-    'Heritage Certificaat + Paspoort',
-    'Founding Circle uitnodiging',
-    'Premium verpakking',
-] as const;
+type HomeProductData = {
+    materials?: string[];
+    trust_badges?: string[];
+};
 
-export function HomeProduct() {
+export function HomeProduct({ product }: { product?: HomeProductData | null }) {
     const { t } = useTranslation();
+    const specs = [
+        ...(product?.materials ?? []),
+        ...(product?.trust_badges ?? []),
+    ];
+    const fallbackSpecs = [
+        'Full Carbon Frame — 3K weave',
+        'Premium 3K Carbon Surface',
+        'Echte Lederen Greep',
+        'Heritage Certificaat + Paspoort',
+        'Founding Circle uitnodiging',
+        'Premium verpakking',
+    ];
+    const list = specs.length > 0 ? specs : fallbackSpecs;
 
     return (
         <Section tone="cream2">
@@ -37,7 +46,7 @@ export function HomeProduct() {
                             )}
                         </p>
                         <ul className="mb-8 flex flex-col gap-2">
-                            {SPECS.map((spec) => (
+                            {list.map((spec) => (
                                 <li
                                     key={spec}
                                     className="flex items-center gap-2.5 font-sans text-[13px] text-choc3 before:text-[20px] before:leading-0 before:text-gold2 before:content-['·']"
