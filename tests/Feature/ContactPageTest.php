@@ -44,7 +44,7 @@ test('the contact bureau exposes seven collapsible panels including a map embed'
         ->and($dataSource)->toContain("'faq'")
         ->and($dataSource)->toContain("'feedback'")
         ->and($source)->toContain('<iframe')
-        ->and($dataSource)->toContain('openstreetmap.org');
+        ->and($source)->toContain('mapSrc');
 });
 
 test('the contact faq uses native details elements', function () {

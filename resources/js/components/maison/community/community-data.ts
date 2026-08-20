@@ -72,13 +72,6 @@ export type CommunityCourtPayload = {
     coming: boolean;
 };
 
-export const SIDEBAR_MEMBERS = [
-    { initials: 'TJ', name: 'Thomas J.', meta: 'Antwerpen', num: '007' },
-    { initials: 'AV', name: 'Amelie V.', meta: 'Brussel', num: '023' },
-    { initials: 'MK', name: 'Marc K.', meta: 'Rotterdam', num: '041' },
-    { initials: 'LB', name: 'Lisa B.', meta: 'Amsterdam', num: '058' },
-] as const;
-
 export const SESSION_LOCATIONS = [
     'Padel Club Antwerpen',
     'Padel One Brussels',

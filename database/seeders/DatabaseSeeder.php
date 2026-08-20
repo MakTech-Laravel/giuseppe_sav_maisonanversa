@@ -19,10 +19,17 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             ProductSeeder::class,
+            FaqSeeder::class,
+            DressingItemSeeder::class,
+            PartnerClubSeeder::class,
+            LegalPageSeeder::class,
+            SeoMetaSeeder::class,
             EditionPieceSeeder::class,
             CommerceSettingSeeder::class,
+            SiteSettingSeeder::class,
             JournalArticleSeeder::class,
             CommunityCourtSeeder::class,
+            CommunityDemoSeeder::class,
         ]);
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }

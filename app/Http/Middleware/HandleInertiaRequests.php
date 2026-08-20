@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\CommerceSetting;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
@@ -83,6 +84,7 @@ class HandleInertiaRequests extends Middleware
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => fn (): array => Product::checkoutShare(),
             'commerce' => fn (): array => CommerceSetting::current()->toShare(),
+            'site' => fn (): array => SiteSetting::current()->toShare(),
 
             /*
              * Which of the site's photographs exist yet. Everything else falls

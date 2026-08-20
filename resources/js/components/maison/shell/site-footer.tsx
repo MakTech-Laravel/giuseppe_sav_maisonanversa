@@ -1,5 +1,7 @@
+import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
+import type { SiteShared } from '@/components/maison/contact/contact-data';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { FOOTER_COLUMNS, isNavItem } from '@/lib/maison-navigation';
 
@@ -13,6 +15,7 @@ import { FOOTER_COLUMNS, isNavItem } from '@/lib/maison-navigation';
  */
 export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
     const { t } = useTranslation();
+    const { site } = usePage<{ site: SiteShared }>().props;
 
     return (
         <footer className="relative overflow-hidden border-t border-gold/12 bg-choc px-6 pt-12 pb-25 md:px-20 md:pt-15 md:pb-9">
@@ -75,7 +78,11 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                                         </button>
                                     ) : (
                                         <a
-                                            href={item.href}
+                                            href={
+                                                item.label === 'Instagram'
+                                                    ? site.instagramUrl
+                                                    : item.href
+                                            }
                                             target={
                                                 item.href.startsWith('http')
                                                     ? '_blank'

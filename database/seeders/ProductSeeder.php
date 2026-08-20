@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
@@ -26,6 +27,8 @@ class ProductSeeder extends Seeder
                 'is_published' => true,
                 'grants_founding_circle' => true,
                 'expected_delivery_label' => 'Q1 2027 — ONDER VOORBEHOUD VAN PRODUCTIE',
+                'status' => ProductStatus::Active,
+                'sort_order' => 0,
             ],
         );
     }
