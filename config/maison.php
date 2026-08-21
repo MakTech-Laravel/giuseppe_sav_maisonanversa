@@ -68,6 +68,22 @@ return [
         'image' => '/images/rooms/room-entrance.png',
         'image_width' => 1024,
         'image_height' => 682,
+        'sitemap_cache_seconds' => (int) env('MAISON_SITEMAP_CACHE_SECONDS', 3600),
+        'disallow_paths' => [
+            '/login',
+            '/register',
+            '/forgot-password',
+            '/two-factor-challenge',
+            '/telescope',
+        ],
+        'disallow_locale_segments' => [
+            'admin',
+            'member',
+            'settings',
+            'checkout',
+            'file-upload-demo',
+            'verify',
+        ],
     ],
 
     /*
@@ -79,6 +95,15 @@ return [
 
     'checkout' => [
         'currency' => 'eur',
+    ],
+
+    'corner_form_options' => [
+        'court_options' => ['4-6 courts', '7-10 courts', '10+ courts'],
+        'format_options' => [
+            'Formaat A — Heritage Corner',
+            'Formaat B — Founding Club Corner',
+            'Nog niet beslist',
+        ],
     ],
 
     /*

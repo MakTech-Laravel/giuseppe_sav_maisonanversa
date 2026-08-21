@@ -44,13 +44,20 @@ class ProductController extends Controller
         return Inertia::render('admin/products/create');
     }
 
+    public function show(string $locale, Product $product): Response
+    {
+        return Inertia::render('admin/products/show', [
+            'product' => $this->formProduct($product),
+        ]);
+    }
+
     public function store(StoreProductRequest $request, string $locale): RedirectResponse
     {
-        $product = Product::query()->create($this->payload($request->validated()));
+        Product::query()->create($this->payload($request->validated()));
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product aangemaakt.')]);
 
-        return redirect()->route('admin.products.edit', ['product' => $product]);
+        return redirect()->route('admin.products.index', ['locale' => $locale]);
     }
 
     public function edit(string $locale, Product $product): Response

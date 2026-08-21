@@ -12,10 +12,17 @@ class CommunityCommentFactory extends Factory
 {
     public function definition(): array
     {
+        $comments = [
+            'Count me in if a court opens.',
+            'Excellent session. I would join the next morning slot as well.',
+            'The Antwerp club works perfectly for me.',
+            'Happy to bring a guest if that helps fill the group.',
+        ];
+
         return [
             'community_post_id' => CommunityPost::factory(),
             'author_id' => User::factory(),
-            'body' => fake()->sentence(),
+            'body' => $comments[array_rand($comments)],
         ];
     }
 }

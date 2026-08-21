@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/react';
-import { imageAsset } from '@/lib/imagery';
+import { imageAsset, imageVariants, srcset } from '@/lib/imagery';
 import type { ImageAssetName } from '@/lib/imagery';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +19,7 @@ type PlaceholderImageProps = {
     className?: string;
     loading?: 'eager' | 'lazy';
     fetchPriority?: 'high' | 'low' | 'auto';
+    sizes?: string;
 };
 
 /**
@@ -35,6 +36,7 @@ export function PlaceholderImage({
     className,
     loading = 'lazy',
     fetchPriority,
+    sizes = '(max-width: 768px) 768px, (max-width: 1280px) 1280px, 2560px',
 }: PlaceholderImageProps) {
     const { availableImages } = usePage().props;
     const {
@@ -47,6 +49,18 @@ export function PlaceholderImage({
 
     const exists = availableImages.includes(path);
     const aspectRatio = ratio === null ? undefined : (ratio ?? naturalRatio);
+    const available = new Set(availableImages);
+    const variants = imageVariants(path).filter(
+        (variant) => available.has(variant.webp) || available.has(variant.avif),
+    );
+    const avifSrcset = srcset(
+        variants.filter((variant) => available.has(variant.avif)),
+        'avif',
+    );
+    const webpSrcset = srcset(
+        variants.filter((variant) => available.has(variant.webp)),
+        'webp',
+    );
 
     return (
         <div
@@ -54,13 +68,29 @@ export function PlaceholderImage({
             style={{ aspectRatio }}
         >
             {exists ? (
-                <img
-                    src={`/${path}`}
-                    alt={alt ?? label}
-                    loading={loading}
-                    fetchPriority={fetchPriority}
-                    className="h-full w-full object-cover"
-                />
+                <picture>
+                    {avifSrcset !== '' && (
+                        <source
+                            type="image/avif"
+                            srcSet={avifSrcset}
+                            sizes={sizes}
+                        />
+                    )}
+                    {webpSrcset !== '' && (
+                        <source
+                            type="image/webp"
+                            srcSet={webpSrcset}
+                            sizes={sizes}
+                        />
+                    )}
+                    <img
+                        src={`/${path}`}
+                        alt={alt ?? label}
+                        loading={loading}
+                        fetchPriority={fetchPriority}
+                        className="h-full w-full object-cover"
+                    />
+                </picture>
             ) : (
                 <div
                     role={alt === '' ? 'presentation' : 'img'}

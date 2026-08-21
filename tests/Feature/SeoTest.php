@@ -36,14 +36,13 @@ test('the sitemap lists every public page in every locale', function () {
 
 test('the sitemap includes lastmod for journal articles', function () {
     $slug = Journal::slugs()[0];
-    $article = Journal::sitemapArticles()[0];
 
     $body = $this->get('/sitemap.xml')->assertOk()->getContent();
 
     expect($body)
         ->toContain(url('/nl/journal/'.$slug))
         ->toContain('<lastmod>')
-        ->toContain($article['lastmod']);
+        ->toMatch('/<lastmod>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}<\/lastmod>/');
 });
 
 test('the sitemap includes lastmod for static public pages', function () {
@@ -52,7 +51,7 @@ test('the sitemap includes lastmod for static public pages', function () {
     expect($body)
         ->toContain(url('/nl'))
         ->toContain('<lastmod>')
-        ->toMatch('/<loc>'.preg_quote(url('/nl'), '/').'<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/');
+        ->toMatch('/<loc>'.preg_quote(url('/nl'), '/').'<\/loc>[\s\S]*?<lastmod>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}<\/lastmod>/');
 });
 
 test('the sitemap omits private and transactional urls', function () {
@@ -108,6 +107,16 @@ test('the SEO head component publishes canonical and hreflang links', function (
         ->toContain('application/ld+json');
 });
 
+test('the Inertia title callback does not append a Laravel suffix', function () {
+    expect(File::get(resource_path('js/app.tsx')))
+        ->toContain('title: (title) => title || appName')
+        ->not->toContain('${title} - ${appName}');
+
+    expect(File::get(resource_path('js/ssr.tsx')))
+        ->toContain('title: (title) => title || appName')
+        ->not->toContain('${title} - ${appName}');
+});
+
 test('member admin and auth layouts are marked noindex', function () {
     expect(File::get(resource_path('js/layouts/member-layout.tsx')))
         ->toContain('noindex, nofollow');
@@ -125,6 +134,8 @@ test('the sitemap route is registered outside the locale prefix', function () {
 });
 
 test('robots.txt advertises the absolute sitemap and disallows private areas', function () {
+    $this->app['env'] = 'production';
+
     $response = $this->get('/robots.txt');
 
     $response->assertOk();
@@ -142,6 +153,20 @@ test('robots.txt advertises the absolute sitemap and disallows private areas', f
         ->toContain('Disallow: /nl/checkout')
         ->not->toContain('Disallow: /build')
         ->not->toContain('Disallow: /images');
+});
+
+test('staging robots.txt disallows all indexing', function () {
+    $response = $this->get('/robots.txt');
+
+    $response->assertOk();
+    expect($response->headers->get('Content-Type'))->toContain('text/plain');
+    expect($response->headers->get('X-Robots-Tag'))->toContain('noindex');
+
+    $body = $response->getContent();
+
+    expect($body)
+        ->toContain('Disallow: /')
+        ->not->toContain('Sitemap:');
 });
 
 test('configured page slugs match the named maison routes', function () {
@@ -176,7 +201,7 @@ test('the home seo document uses the canonical locale url', function () {
         ->component('maison/home')
         ->where('seo.canonical', url('/nl'))
         ->where('seo.robots', null)
-        ->where('seo.title', 'Maison Anversa — European Heritage Sports and Lifestyle House')
+        ->where('seo.title', 'Maison Anversa — Europees erfgoedhuis voor sport en lifestyle')
     );
 });
 

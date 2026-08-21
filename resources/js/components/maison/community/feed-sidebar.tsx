@@ -1,6 +1,5 @@
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { SIDEBAR_MEMBERS } from '@/components/maison/community/community-data';
 import { Monogram } from '@/components/maison/ui/monogram';
 
 type FeedSidebarProps = {
@@ -23,7 +22,26 @@ function initialsFromName(name: string): string {
 
 export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
     const { t } = useTranslation();
-    const { auth } = usePage().props;
+    const { auth, sidebar } = usePage<{
+        auth: { user: { name: string } | null };
+        sidebar: {
+            profile: {
+                editionNumber: string;
+                postCount: number;
+                sessionCount: number;
+            };
+            recentMembers: Array<{
+                name: string;
+                city: string;
+                editionNumber: string;
+            }>;
+            nextEvent: {
+                title: string;
+                location: string;
+                startsAt: string;
+            } | null;
+        };
+    }>().props;
     const name = auth.user?.name ?? t('Yusuf Savran');
     const initials = initialsFromName(name);
 
@@ -45,16 +63,16 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                             {name}
                         </div>
                         <div className="font-sans text-[9px] tracking-[0.15em] text-gold uppercase">
-                            {t('Founding Member · Nr. 001')}
+                            {t('Founding Member · Nr. {{num}}', { num: sidebar.profile.editionNumber })}
                         </div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-3 pt-3.5 text-center">
                     {[
-                        { value: '001', label: 'Nummer' },
-                        { value: '3', label: 'Posts' },
-                        { value: '5', label: 'Sessies' },
+                        { value: sidebar.profile.editionNumber, label: 'Nummer' },
+                        { value: String(sidebar.profile.postCount), label: 'Posts' },
+                        { value: String(sidebar.profile.sessionCount), label: 'Sessies' },
                     ].map((stat) => (
                         <div key={stat.label}>
                             <div className="font-serif text-xl font-light text-gold2">
@@ -73,22 +91,22 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                     {t('Recente Founding Members')}
                 </span>
 
-                {SIDEBAR_MEMBERS.map((member) => (
+                {sidebar.recentMembers.map((member) => (
                     <div
-                        key={member.initials}
+                        key={`${member.name}-${member.editionNumber}`}
                         className="flex items-center gap-3 border-b border-gold/10 py-2.5"
                     >
-                        <Monogram initials={member.initials} size="sm" />
+                        <Monogram initials={initialsFromName(member.name)} size="sm" />
                         <div className="flex-1">
                             <div className="font-serif text-[15px] font-medium text-choc">
                                 {member.name}
                             </div>
-                            <div className="font-sans text-[9px] tracking-[0.1em] text-stone">
-                                {t(member.meta)}
+                            <div className="font-sans text-[9px] tracking-widest text-stone">
+                                {t(member.city)}
                             </div>
                         </div>
                         <div className="font-serif text-[13px] text-gold2">
-                            {member.num}
+                            {member.editionNumber}
                         </div>
                     </div>
                 ))}
@@ -101,9 +119,9 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                     />
                     <div>
                         <div className="font-serif text-[15px] font-medium text-stone">
-                            {t('69 andere leden')}
+                            {t('Founding Circle')}
                         </div>
-                        <div className="font-sans text-[9px] tracking-[0.1em] text-stone">
+                        <div className="font-sans text-[9px] tracking-widest text-stone">
                             {t('Bekijk alle leden')}
                         </div>
                     </div>
@@ -117,13 +135,15 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
 
                 <div className="mb-3 bg-choc2 p-4">
                     <div className="mb-1.5 font-sans text-[9px] tracking-[0.2em] text-gold uppercase">
-                        {t('Za 14 Mrt 2027')}
+                        {sidebar.nextEvent?.startsAt ? t(sidebar.nextEvent.startsAt) : t('Nog geen event')}
                     </div>
                     <div className="mb-1 font-serif text-base font-medium text-cream">
-                        {t('Heritage No.001 Launch Event')}
+                        {sidebar.nextEvent
+                            ? t(sidebar.nextEvent.title)
+                            : t('Wordt binnenkort bekendgemaakt')}
                     </div>
-                    <div className="font-sans text-[9px] tracking-[0.1em] text-stone">
-                        {t('Padel Club Antwerpen')}
+                    <div className="font-sans text-[9px] tracking-widest text-stone">
+                        {sidebar.nextEvent ? t(sidebar.nextEvent.location) : t('Maison Anversa')}
                     </div>
                 </div>
 

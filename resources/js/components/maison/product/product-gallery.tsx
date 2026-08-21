@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties, MouseEvent } from 'react';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import type { ImageAssetName } from '@/lib/imagery';
 import { cn } from '@/lib/utils';
 
-const GALLERY: readonly ImageAssetName[] = [
+const DEFAULT_GALLERY: readonly ImageAssetName[] = [
     'heritage-001-front',
     'heritage-001-detail-gravure',
     'atelier-workshop',
@@ -18,7 +18,11 @@ const GALLERY: readonly ImageAssetName[] = [
  * scales the image node instead, so both real photographs and brand-palette
  * placeholders respond the same way. Fine pointers only; reduced motion skips it.
  */
-export function ProductGallery() {
+export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
+    const slides = useMemo(
+        () => (gallery.length > 0 ? gallery : [...DEFAULT_GALLERY]) as ImageAssetName[],
+        [gallery],
+    );
     const [active, setActive] = useState(0);
     const [zoomEnabled, setZoomEnabled] = useState(false);
     const [zooming, setZooming] = useState(false);
@@ -68,7 +72,7 @@ export function ProductGallery() {
             >
                 <div className="absolute inset-0" style={zoomStyle}>
                     <PlaceholderImage
-                        asset={GALLERY[active]}
+                        asset={slides[active] ?? slides[0]}
                         ratio={null}
                         alt="Heritage No.001"
                         captioned={false}
@@ -91,7 +95,7 @@ export function ProductGallery() {
                 role="tablist"
                 aria-label="Heritage No.001"
             >
-                {GALLERY.map((asset, index) => (
+                {slides.map((asset, index) => (
                     <button
                         key={asset}
                         type="button"

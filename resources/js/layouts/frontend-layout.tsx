@@ -107,7 +107,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     return (
         <ShellActionsProvider value={actions}>
             <PageTransition>
-                <div className="min-h-screen bg-cream text-choc">
+                <div className="min-h-screen bg-cream font-sans font-light text-choc lining-nums">
                     <a
                         href="#main"
                         className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[300] focus:bg-cream focus:px-4 focus:py-2 focus:font-sans focus:text-sm focus:text-choc"

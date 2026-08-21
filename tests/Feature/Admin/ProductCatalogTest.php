@@ -86,6 +86,19 @@ test('staff can open inventory for a limited product', function () {
         );
 });
 
+test('staff can view a product details page', function () {
+    $product = Product::founding();
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.show', ['product' => $product->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/products/show')
+            ->where('product.id', $product->id)
+            ->where('product.slug', $product->slug)
+        );
+});
+
 test('viewers cannot create products', function () {
     $viewer = User::factory()->admin()->create();
     $viewer->assignRole(RoleEnum::VIEWER->value);

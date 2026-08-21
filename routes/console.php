@@ -12,3 +12,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command(ReleaseExpiredHolds::class)->everyFiveMinutes();
 Schedule::command(SendPostDeliveryFollowUps::class)->daily();
+Schedule::command('seo:generate')->daily();

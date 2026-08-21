@@ -179,6 +179,54 @@ export const INTRO_SLIDES: readonly IntroSlide[] = [
         },
     },
     {
+        room: 'room-library',
+        destination: 'circle',
+        copy: {
+            nl: {
+                eyebrow: 'Kamer VI',
+                opening: 'De ',
+                emphasis: 'Founding Circle',
+                subtitle: 'Lidmaatschap & erfgoed',
+            },
+            en: {
+                eyebrow: 'Room VI',
+                opening: 'The ',
+                emphasis: 'Founding Circle',
+                subtitle: 'Membership & heritage',
+            },
+            fr: {
+                eyebrow: 'Salle VI',
+                opening: 'Le ',
+                emphasis: 'Founding Circle',
+                subtitle: 'Adhésion & patrimoine',
+            },
+        },
+    },
+    {
+        room: 'room-coffee',
+        destination: 'community',
+        copy: {
+            nl: {
+                eyebrow: 'Kamer VII',
+                opening: 'De ',
+                emphasis: 'Community',
+                subtitle: 'Sessies & ontmoetingen',
+            },
+            en: {
+                eyebrow: 'Room VII',
+                opening: 'The ',
+                emphasis: 'Community',
+                subtitle: 'Sessions & gatherings',
+            },
+            fr: {
+                eyebrow: 'Salle VII',
+                opening: 'La ',
+                emphasis: 'Communauté',
+                subtitle: 'Sessions & rencontres',
+            },
+        },
+    },
+    {
         /* The closing card stays in the courtyard, as the prototype does. */
         room: 'room-courtyard',
         destination: 'home',
@@ -208,13 +256,17 @@ export const INTRO_SLIDES: readonly IntroSlide[] = [
 /** Matches the inline boot cover painted in `app.blade.php` before React mounts. */
 export const BOOT_COVER_ID = 'maison-boot-cover';
 
+export function removeBootCover(): void {
+    document.getElementById(BOOT_COVER_ID)?.remove();
+}
+
 /** The rooms, excluding the closing card, which the counter numbers against. */
 export const ROOM_COUNT = INTRO_SLIDES.length - 1;
 
 /** The index of the closing card. */
 export const CLOSING_SLIDE = INTRO_SLIDES.length - 1;
 
-/** The photographs to stack behind the intro: six, for seven slides. */
+/** The photographs to stack behind the intro: eight rooms, nine slides. */
 export const INTRO_ROOMS: readonly ImageAssetName[] = [
     ...new Set(INTRO_SLIDES.map((slide) => slide.room)),
 ];

@@ -40,11 +40,7 @@ export default function Community({
 
             <PageHero
                 eyebrow={t('Founding Circle & Club Corner')}
-                title={
-                    <>
-                        {t('De')} <em>Community</em>
-                    </>
-                }
+                title={t('De Community')}
                 subtitle={t(
                     'Een besloten ruimte voor Founding Circle leden en Club Corner partners. Deel uw ervaringen, plan sessies en ontdek exclusieve evenementen.',
                 )}

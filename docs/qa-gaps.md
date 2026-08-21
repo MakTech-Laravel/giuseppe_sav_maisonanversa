@@ -30,3 +30,9 @@ dirty PHP passes; the items below remain open on this stack.
   format:check` (9 Prettier files), and `npm run types:check` (17 TypeScript
   errors) fail on pre-existing Maison React code — not introduced by the test
   branch. Fix in a dedicated polish pass.
+
+## Dynamic CMS rollout
+
+- **Admin UI completeness:** backend CRUD and route wiring for FAQ, Dressing,
+  Partner Clubs, Sessions, Legal, and SEO are in place; dedicated admin page
+  screens still need a polish pass for production UX.

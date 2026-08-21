@@ -5,41 +5,30 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
-import type { ImageAssetName } from '@/lib/imagery';
 import type { MaisonPage } from '@/lib/maison-navigation';
 
 type RelatedEdition = {
-    asset: ImageAssetName;
-    edition: string;
+    cover_asset: string | null;
+    slug: string;
     name: string;
+    hero_subtitle: string;
     status: string;
     to?: MaisonPage;
 };
 
-const RELATED: readonly RelatedEdition[] = [
-    {
-        asset: 'heritage-001-front',
-        edition: 'Heritage No.002',
-        name: 'Binnenkort',
-        status: 'Volgende release · Aankondiging via de Heritage Letter',
-    },
-    {
-        asset: 'heritage-001-lifestyle-court',
-        edition: 'Heritage No.003',
-        name: 'Binnenkort',
-        status: 'In voorbereiding · Geen datum bekend',
-    },
-    {
-        asset: 'atelier-workshop',
-        edition: 'Het Huis',
-        name: 'Meer van ons',
-        status: 'Ontdek het volledige verhaal van Maison Anversa',
-        to: 'house',
-    },
-];
-
-export function ProductRelated() {
+export function ProductRelated({ related }: { related: RelatedEdition[] }) {
     const { t } = useTranslation();
+    const cards = [
+        ...related,
+        {
+            cover_asset: 'atelier-workshop',
+            slug: 'house',
+            name: 'Het Huis',
+            hero_subtitle: 'Meer van ons',
+            status: 'Ontdek het volledige verhaal van Maison Anversa',
+            to: 'house' as MaisonPage,
+        },
+    ];
 
     return (
         <Section tone="dark">
@@ -53,14 +42,14 @@ export function ProductRelated() {
                 </Reveal>
 
                 <div className="grid gap-6 md:grid-cols-3">
-                    {RELATED.map((card) => {
+                    {cards.map((card) => {
                         const body = (
                             <>
                                 <div className="relative aspect-4/5 overflow-hidden">
                                     <PlaceholderImage
-                                        asset={card.asset}
+                                        asset={card.cover_asset ?? 'heritage-001-front'}
                                         ratio={null}
-                                        alt={card.edition}
+                                        alt={card.name}
                                         captioned={false}
                                         className="absolute inset-0 h-full w-full"
                                     />
@@ -71,12 +60,10 @@ export function ProductRelated() {
                                 </div>
                                 <div className="px-6.5 py-7.5">
                                     <div className="font-sans text-[9px] tracking-[0.25em] text-gold uppercase">
-                                        {card.edition === 'Het Huis'
-                                            ? t(card.edition)
-                                            : card.edition}
+                                        {card.name === 'Het Huis' ? t(card.name) : card.name}
                                     </div>
                                     <div className="my-2 font-serif text-[25px] text-cream">
-                                        {t(card.name)}
+                                        {t(card.hero_subtitle)}
                                     </div>
                                     <div className="text-xs leading-[1.6] text-sand">
                                         {t(card.status)}
@@ -87,7 +74,7 @@ export function ProductRelated() {
 
                         return (
                             <Reveal
-                                key={card.edition}
+                                key={card.slug}
                                 className="overflow-hidden bg-choc2"
                             >
                                 {card.to ? (
