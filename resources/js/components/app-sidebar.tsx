@@ -2,7 +2,9 @@ import { Link } from '@inertiajs/react';
 import {
     BookOpen,
     CalendarDays,
+    CircleHelp,
     FileText,
+    Globe,
     LayoutGrid,
     Mail,
     MapPin,
@@ -10,6 +12,7 @@ import {
     Package,
     Settings2,
     ShoppingBag,
+    Shirt,
     Store,
     Truck,
     UserRoundCog,
@@ -36,16 +39,23 @@ import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
 import adminCircle from '@/routes/admin/circle';
 import adminCommerce from '@/routes/admin/commerce';
+import adminSiteSettings from '@/routes/admin/site-settings';
 import adminCommunity from '@/routes/admin/community';
 import adminCourts from '@/routes/admin/courts';
 import adminCustomers from '@/routes/admin/customers';
+import adminDressingItems from '@/routes/admin/dressing-items';
 import adminEvents from '@/routes/admin/events';
+import adminFaqs from '@/routes/admin/faqs';
 import adminHeritage from '@/routes/admin/heritage';
 import adminJournal from '@/routes/admin/journal';
+import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
+import adminPartnerClubs from '@/routes/admin/partner-clubs';
 import adminPosts from '@/routes/admin/posts';
 import adminProducts from '@/routes/admin/products';
+import adminSeoMetas from '@/routes/admin/seo-metas';
+import adminSessions from '@/routes/admin/community-sessions';
 import { PERMISSIONS } from '@/types/permissions';
 
 function buildMainNav(
@@ -111,6 +121,48 @@ function buildMainNav(
             title: t('Handelsinstellingen'),
             href: adminCommerce.edit(locale),
             icon: Truck,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Site-instellingen'),
+            href: adminSiteSettings.edit(locale),
+            icon: Globe,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('FAQ'),
+            href: adminFaqs.index(locale),
+            icon: CircleHelp,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Kleedkamer'),
+            href: adminDressingItems.index(locale),
+            icon: Shirt,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Partner Clubs'),
+            href: adminPartnerClubs.index(locale),
+            icon: MapPin,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Sessies'),
+            href: adminSessions.index(locale),
+            icon: CalendarDays,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('Juridische Pagina\'s'),
+            href: adminLegalPages.index(locale),
+            icon: FileText,
+            permissions: [PERMISSIONS.DASHBOARD.VIEW],
+        },
+        {
+            title: t('SEO Meta'),
+            href: adminSeoMetas.index(locale),
+            icon: Globe,
             permissions: [PERMISSIONS.DASHBOARD.VIEW],
         },
         {

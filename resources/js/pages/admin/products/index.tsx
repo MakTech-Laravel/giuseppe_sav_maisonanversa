@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Package, Pencil, Plus, Search, Trash2 } from 'lucide-react';
+import { Eye, Package, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
@@ -113,6 +113,18 @@ export default function ProductsIndex({
                                             : t('Concept')}
                                     </TableCell>
                                     <TableCell className="space-x-2 text-right">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            asChild
+                                        >
+                                            <Link
+                                                href={`/${wayfinderLocale()}/admin/products/${product.id}`}
+                                            >
+                                                <Eye className="h-4 w-4" />
+                                                {t('Bekijken')}
+                                            </Link>
+                                        </Button>
                                         <Button
                                             variant="outline"
                                             size="sm"

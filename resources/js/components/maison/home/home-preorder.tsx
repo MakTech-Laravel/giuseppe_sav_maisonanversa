@@ -8,7 +8,7 @@ import { Wrap } from '@/components/maison/ui/section';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import type { Edition } from '@/types/edition';
 
-const INCLUDES = [
+const DEFAULT_INCLUDES = [
     'Heritage No.001 racket (individueel genummerd)',
     'Heritage Certificaat met oprichterzegel',
     "Heritage Paspoort (24 pagina's)",
@@ -23,7 +23,15 @@ const INCLUDES = [
  * uses — so they cannot drift apart the way the prototype's hardcoded 73 and
  * 27 already had.
  */
-export function HomePreorder({ edition }: { edition: Edition }) {
+export function HomePreorder({
+    edition,
+    includes,
+}: {
+    edition: Edition;
+    includes?: string[];
+}) {
+    const items = includes && includes.length > 0 ? includes : DEFAULT_INCLUDES;
+
     const { t } = useTranslation();
     const { openOrder, openCertificate, openNewsletter } = useShellActions();
     const { priceLabel, deliveryLabel } = useCheckoutDisplay();
@@ -105,7 +113,7 @@ export function HomePreorder({ edition }: { edition: Edition }) {
                                 <span className="font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
                                     {t('Voortgang Founding Edition')}
                                 </span>
-                                <span className="font-serif text-[22px] text-gold">
+                                <span className="font-serif text-[22px] text-gold lining-nums">
                                     {shown} / {edition.total}
                                 </span>
                             </div>
@@ -137,17 +145,17 @@ export function HomePreorder({ edition }: { edition: Edition }) {
                     </Reveal>
 
                     <Reveal className="border border-gold/20 bg-white/3 p-10">
-                        <div className="mb-1 font-serif text-[48px] leading-none font-light text-cream">
+                        <div className="mb-1 font-serif text-[48px] leading-none font-light text-cream lining-nums">
                             {priceLabel}
                         </div>
                         <div className="mb-7 font-sans text-[9px] tracking-[0.2em] text-stone uppercase">
                             {t('Volledig vooraf · Inclusief Heritage Ervaring')}
                         </div>
                         <ul className="mb-7 flex flex-col gap-2.5">
-                            {INCLUDES.map((item) => (
+                            {items.map((item) => (
                                 <li
                                     key={item}
-                                    className="flex items-center gap-2.5 text-[14px] text-sand before:font-sans before:text-[13px] before:text-gold before:content-['→']"
+                                    className="flex items-center gap-2.5 font-sans text-[14px] text-sand before:font-sans before:text-[13px] before:text-gold before:content-['→']"
                                 >
                                     {t(item)}
                                 </li>

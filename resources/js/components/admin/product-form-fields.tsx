@@ -3,6 +3,13 @@ import InputError from '@/components/input-error';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 export type ProductFormData = {
     name: string;
@@ -55,22 +62,36 @@ export function ProductFormFields({
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="type">{t('Type')}</Label>
-                <select
-                    id="type"
-                    className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+                <Select
                     value={data.type}
-                    onChange={(event) =>
+                    onValueChange={(value) =>
                         setData(
                             'type',
-                            event.target.value as ProductFormData['type'],
+                            value as ProductFormData['type'],
                         )
                     }
                 >
-                    <option value="simple">{t('Eenvoudige voorraad')}</option>
-                    <option value="limited_edition">
-                        {t('Gelimiteerde editie')}
-                    </option>
-                </select>
+                    <SelectTrigger
+                        id="type"
+                        className="w-full border-gold/25 bg-choc/50 text-cream data-placeholder:text-stone"
+                    >
+                        <SelectValue placeholder={t('Type')} />
+                    </SelectTrigger>
+                    <SelectContent className="border-gold/25 bg-choc text-cream">
+                        <SelectItem
+                            value="simple"
+                            className="text-cream focus:bg-gold/15 focus:text-cream"
+                        >
+                            {t('Eenvoudige voorraad')}
+                        </SelectItem>
+                        <SelectItem
+                            value="limited_edition"
+                            className="text-cream focus:bg-gold/15 focus:text-cream"
+                        >
+                            {t('Gelimiteerde editie')}
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
                 <InputError message={errors.type} />
             </div>
             <div className="grid gap-2">

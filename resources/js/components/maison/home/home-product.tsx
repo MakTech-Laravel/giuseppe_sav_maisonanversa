@@ -6,17 +6,26 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 
-const SPECS = [
-    'Full Carbon Frame — 3K weave',
-    'Premium 3K Carbon Surface',
-    'Echte Lederen Greep',
-    'Heritage Certificaat + Paspoort',
-    'Founding Circle uitnodiging',
-    'Premium verpakking',
-] as const;
+type HomeProductData = {
+    materials?: string[];
+    trust_badges?: string[];
+};
 
-export function HomeProduct() {
+export function HomeProduct({ product }: { product?: HomeProductData | null }) {
     const { t } = useTranslation();
+    const specs = [
+        ...(product?.materials ?? []),
+        ...(product?.trust_badges ?? []),
+    ];
+    const fallbackSpecs = [
+        'Full Carbon Frame — 3K weave',
+        'Premium 3K Carbon Surface',
+        'Echte Lederen Greep',
+        'Heritage Certificaat + Paspoort',
+        'Founding Circle uitnodiging',
+        'Premium verpakking',
+    ];
+    const list = specs.length > 0 ? specs : fallbackSpecs;
 
     return (
         <Section tone="cream2">
@@ -37,20 +46,12 @@ export function HomeProduct() {
                             )}
                         </p>
                         <ul className="mb-8 flex flex-col gap-2">
-                            {SPECS.map((spec) => (
+                            {list.map((spec) => (
                                 <li
                                     key={spec}
-                                    className="flex items-center gap-2.5 text-[13px] text-choc3 before:text-[20px] before:leading-0 before:text-gold2 before:content-['·']"
+                                    className="flex items-center gap-2.5 font-sans text-[13px] text-choc3 before:text-[20px] before:leading-0 before:text-gold2 before:content-['·']"
                                 >
-                                    {/*
-                                     * The two carbon lines are English product
-                                     * vocabulary that the dictionary never
-                                     * carried; the rest are Dutch keys.
-                                     */}
-                                    {spec.startsWith('Full Carbon') ||
-                                    spec.startsWith('Premium 3K')
-                                        ? spec
-                                        : t(spec)}
+                                    {t(spec)}
                                 </li>
                             ))}
                         </ul>
@@ -101,7 +102,7 @@ export function HomeProduct() {
 
                     <Reveal className="ma-md:col-span-2 ma-lg:col-span-1">
                         <div className="mx-auto w-full max-w-70 border border-gold/25 px-6 py-8 text-center ma-lg:mx-0 ma-lg:max-w-none">
-                            <div className="mb-1.5 font-serif text-[68px] leading-none font-light text-gold2">
+                            <div className="mb-1.5 font-serif text-[68px] leading-none font-light text-gold2 lining-nums">
                                 100
                             </div>
                             <div className="font-sans text-[8px] font-light tracking-[0.28em] text-choc3 uppercase">
@@ -115,7 +116,7 @@ export function HomeProduct() {
                                 <br />
                                 {t('genummerd')}
                             </div>
-                            <div className="mt-3.5 font-serif text-lg font-medium tracking-[0.1em] text-choc">
+                            <div className="mt-3.5 font-serif text-lg font-medium tracking-[0.1em] text-choc lining-nums">
                                 001 / 100
                             </div>
                         </div>

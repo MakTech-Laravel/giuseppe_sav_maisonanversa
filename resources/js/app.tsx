@@ -12,7 +12,7 @@ import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
 import { createI18nForLocale } from '@/lib/i18n';
 import { resolvePageLayout } from '@/lib/inertia-layouts';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Maison Anversa';
 
 /*
  * The dictionary is fetched before the app mounts so the first paint is already
@@ -21,7 +21,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const i18n = await createI18nForLocale(readInitialLocale());
 
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) => title || appName,
     layout: resolvePageLayout,
     strictMode: true,
     withApp(app) {

@@ -7,7 +7,7 @@ import { syncWayfinderLocale } from '@/lib/wayfinder-defaults';
 import { isLocale, SOURCE_LOCALE } from '@/types/locale';
 import ReactDOMServer from 'react-dom/server';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Maison Anversa';
 
 createServer((page) => {
     const locale = isLocale(page.props.locale) ? page.props.locale : SOURCE_LOCALE;
@@ -18,7 +18,7 @@ createServer((page) => {
         createInertiaApp({
             page,
             render: ReactDOMServer.renderToString,
-            title: (title) => (title ? `${title} - ${appName}` : appName),
+            title: (title) => title || appName,
             layout: resolvePageLayout,
             setup: ({ App, props }) => (
                 <I18nProvider i18n={i18n}>

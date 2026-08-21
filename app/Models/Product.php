@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\Concerns\TranslatesWithDeepL;
 use App\Observers\ProductObserver;
@@ -26,6 +27,7 @@ class Product extends Model
      */
     protected array $translatable = [
         'name',
+        'hero_subtitle',
         'expected_delivery_label',
     ];
 
@@ -45,6 +47,16 @@ class Product extends Model
         'grants_founding_circle',
         'expected_delivery_label',
         'sold_out_behavior',
+        'gallery',
+        'specs',
+        'materials',
+        'unboxing_steps',
+        'includes',
+        'guarantees',
+        'trust_badges',
+        'hero_subtitle',
+        'status',
+        'sort_order',
     ];
 
     /**
@@ -54,12 +66,21 @@ class Product extends Model
     {
         return [
             'type' => ProductType::class,
+            'status' => ProductStatus::class,
             'amount' => 'decimal:2',
             'edition_total' => 'integer',
             'archive_edition_numbers' => 'array',
+            'gallery' => 'array',
+            'specs' => 'array',
+            'materials' => 'array',
+            'unboxing_steps' => 'array',
+            'includes' => 'array',
+            'guarantees' => 'array',
+            'trust_badges' => 'array',
             'stock_quantity' => 'integer',
             'is_published' => 'boolean',
             'grants_founding_circle' => 'boolean',
+            'sort_order' => 'integer',
         ];
     }
 
@@ -115,6 +136,61 @@ class Product extends Model
     public function amountInCents(): int
     {
         return Money::toCents((string) $this->amount);
+    }
+
+    /**
+     * @return array{
+     *     id: int,
+     *     slug: string,
+     *     name: string,
+     *     hero_subtitle: string,
+     *     status: string,
+     *     sort_order: int,
+     *     gallery: array<int, string>,
+     *     specs: array<int, array{label: string, value: string}>,
+     *     materials: array<int, string>,
+     *     unboxing_steps: array<int, string>,
+     *     includes: array<int, string>,
+     *     guarantees: array<int, array{icon: string, text: string}>,
+     *     trust_badges: array<int, string>,
+     *     amount: string,
+     *     currency: string
+     * }
+     */
+    public function toPageShare(): array
+    {
+        return [
+            'id' => $this->id,
+            'slug' => $this->slug,
+            'name' => $this->translated('name'),
+            'hero_subtitle' => $this->translated('hero_subtitle'),
+            'status' => ($this->status ?? ProductStatus::Active)->value,
+            'sort_order' => $this->sort_order ?? 0,
+            'gallery' => $this->gallery ?? [],
+            'specs' => $this->specs ?? [],
+            'materials' => $this->materials ?? [],
+            'unboxing_steps' => $this->unboxing_steps ?? [],
+            'includes' => $this->includes ?? [],
+            'guarantees' => $this->guarantees ?? [],
+            'trust_badges' => $this->trust_badges ?? [],
+            'amount' => (string) $this->amount,
+            'currency' => $this->currency,
+        ];
+    }
+
+    /**
+     * @return array{id: int, slug: string, name: string, status: string, hero_subtitle: string, cover_asset: string|null}
+     */
+    public function toCardShare(): array
+    {
+        return [
+            'id' => $this->id,
+            'slug' => $this->slug,
+            'name' => $this->translated('name'),
+            'status' => ($this->status ?? ProductStatus::Active)->value,
+            'hero_subtitle' => $this->translated('hero_subtitle'),
+            'cover_asset' => $this->gallery[0] ?? null,
+        ];
     }
 
     /**

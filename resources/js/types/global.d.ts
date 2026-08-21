@@ -11,6 +11,21 @@ export type CheckoutShared = {
     deliveryLabel: string | null;
 };
 
+export type SiteShared = {
+    phone: string;
+    whatsapp: string;
+    emailHello: string;
+    emailPress: string;
+    instagramUrl: string;
+    boutiqueLat: number;
+    boutiqueLng: number;
+    boutiqueMapSrc: string;
+    whatsappHref: string;
+    phoneHref: string;
+    emailHelloHref: string;
+    announcementText: string | null;
+};
+
 export type CommerceShared = {
     shippingEstimateMin: string;
     shippingEstimateMax: string;
@@ -54,6 +69,7 @@ declare module '@inertiajs/core' {
             availableImages: string[];
             checkout: CheckoutShared;
             commerce: CommerceShared;
+            site: SiteShared;
             seo: SeoDocument;
             notifications: SharedNotifications | null;
             [key: string]: unknown;

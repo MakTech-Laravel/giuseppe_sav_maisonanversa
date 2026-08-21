@@ -52,7 +52,7 @@ class CommerceSetting extends Model
             'shipping_estimate_min' => '12.00',
             'shipping_estimate_max' => '18.00',
             'shipping_eu_included' => true,
-            'default_expected_delivery_label' => 'Q1 2027 — subject to production',
+            'default_expected_delivery_label' => 'Q1 2027 — ONDER VOORBEHOUD VAN PRODUCTIE',
             'prices_include_tax' => true,
         ]);
     }

@@ -4,14 +4,21 @@ use App\Enums\PermissionEnum;
 use App\Http\Controllers\Admin\CommerceSettingController;
 use App\Http\Controllers\Admin\CommunityCourtController;
 use App\Http\Controllers\Admin\CommunityEventController;
+use App\Http\Controllers\Admin\CommunitySessionController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\DressingItemController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\JournalArticleController;
+use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\OpsController;
+use App\Http\Controllers\Admin\PartnerClubController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SeoMetaController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
 use App\Http\Controllers\Community\CommunityController;
@@ -327,6 +334,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::post('products', 'store')->name('products.store')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+                Route::get('products/{product}', 'show')->name('products.show')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('products/{product}/edit', 'edit')->name('products.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('products/{product}', 'update')->name('products.update')
@@ -342,6 +351,91 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('commerce', 'update')->name('commerce.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+            });
+
+            Route::controller(FaqController::class)->group(function () {
+                Route::get('faqs', 'index')->name('faqs.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('faqs/create', 'create')->name('faqs.create')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('faqs', 'store')->name('faqs.store')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('faqs/{faq}/edit', 'edit')->name('faqs.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('faqs/{faq}', 'update')->name('faqs.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::delete('faqs/{faq}', 'destroy')->name('faqs.destroy')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(DressingItemController::class)->group(function () {
+                Route::get('dressing-items', 'index')->name('dressing-items.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('dressing-items/create', 'create')->name('dressing-items.create')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('dressing-items', 'store')->name('dressing-items.store')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('dressing-items/{dressingItem}/edit', 'edit')->name('dressing-items.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('dressing-items/{dressingItem}', 'update')->name('dressing-items.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::delete('dressing-items/{dressingItem}', 'destroy')->name('dressing-items.destroy')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(PartnerClubController::class)->group(function () {
+                Route::get('partner-clubs', 'index')->name('partner-clubs.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('partner-clubs/create', 'create')->name('partner-clubs.create')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('partner-clubs', 'store')->name('partner-clubs.store')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('partner-clubs/{partnerClub}/edit', 'edit')->name('partner-clubs.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('partner-clubs/{partnerClub}', 'update')->name('partner-clubs.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::delete('partner-clubs/{partnerClub}', 'destroy')->name('partner-clubs.destroy')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(SiteSettingController::class)->group(function () {
+                Route::get('site-settings', 'edit')->name('site-settings.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::patch('site-settings', 'update')->name('site-settings.update')
+                    ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+            });
+
+            Route::controller(LegalPageController::class)->group(function () {
+                Route::get('legal-pages', 'index')->name('legal-pages.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('legal-pages/{legalPage}/edit', 'edit')->name('legal-pages.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('legal-pages/{legalPage}', 'update')->name('legal-pages.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(SeoMetaController::class)->group(function () {
+                Route::get('seo-metas', 'index')->name('seo-metas.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('seo-metas/{seoMeta}/edit', 'edit')->name('seo-metas.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('seo-metas/{seoMeta}', 'update')->name('seo-metas.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(CommunitySessionController::class)->group(function () {
+                Route::get('sessions', 'index')->name('community-sessions.index')
+                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
+                Route::get('sessions/create', 'create')->name('community-sessions.create')
+                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
+                Route::post('sessions', 'store')->name('community-sessions.store')
+                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
+                Route::get('sessions/{communitySession}/edit', 'edit')->name('community-sessions.edit')
+                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
+                Route::put('sessions/{communitySession}', 'update')->name('community-sessions.update')
+                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
+                Route::delete('sessions/{communitySession}', 'destroy')->name('community-sessions.destroy')
+                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
             });
 
             Route::controller(AdminPostController::class)->group(function () {

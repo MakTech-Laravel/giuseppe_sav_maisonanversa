@@ -10,7 +10,38 @@ import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import type { Edition } from '@/types/edition';
 
-export default function Product({ edition }: { edition: Edition }) {
+type ProductPageData = {
+    name: string;
+    hero_subtitle: string;
+    gallery: string[];
+    specs: Array<{ label: string; value: string }>;
+    includes: string[];
+    guarantees: Array<{ icon: string; text: string }>;
+};
+
+type ProductFaq = {
+    question: string;
+    answer: string;
+};
+
+type ProductCard = {
+    name: string;
+    status: string;
+    hero_subtitle: string;
+    cover_asset: string | null;
+};
+
+export default function Product({
+    edition,
+    product,
+    faqs,
+    related,
+}: {
+    edition: Edition;
+    product: ProductPageData;
+    faqs: ProductFaq[];
+    related: ProductCard[];
+}) {
     const { t } = useTranslation();
 
     return (
@@ -25,17 +56,17 @@ export default function Product({ edition }: { edition: Edition }) {
                     </>
                 }
                 subtitle={t(
-                    'Het eerste hoofdstuk van Maison Anversa. Beperkt tot 100 stuks. Elk genummerd. De Founding Edition wordt nooit herhaald.',
+                    product.hero_subtitle,
                 )}
             />
 
-            <ProductDetail edition={edition} />
+            <ProductDetail edition={edition} product={product} />
             <ProductUnboxing />
             <ProductCraft />
             <ProductTrust />
             <ProductService />
-            <ProductFaq />
-            <ProductRelated />
+            <ProductFaq faqs={faqs} />
+            <ProductRelated related={related} />
         </>
     );
 }

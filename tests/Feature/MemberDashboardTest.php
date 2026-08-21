@@ -162,7 +162,7 @@ test('password confirmation for member security uses the member layout page', fu
 });
 
 test('the member layout is wired for member pages', function () {
-    $source = file_get_contents(resource_path('js/app.tsx'));
+    $source = file_get_contents(resource_path('js/lib/inertia-layouts.ts'));
 
     expect($source)
         ->toContain("name.startsWith('member/')")

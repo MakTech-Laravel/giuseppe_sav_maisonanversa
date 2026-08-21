@@ -62,7 +62,7 @@ test('password can be reset with valid token', function () {
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect(localized('admin.dashboard', absolute: false));
+            ->assertRedirect(route('login', absolute: false));
 
         return true;
     });

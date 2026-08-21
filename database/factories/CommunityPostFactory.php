@@ -13,9 +13,15 @@ class CommunityPostFactory extends Factory
 {
     public function definition(): array
     {
+        $posts = [
+            'Open training this Thursday at Padel Club Antwerpen. Two spots still available for members who want a faster evening session.',
+            'Morning rally at the riverside courts was excellent today. We are collecting preferred times for the next Founding Circle session.',
+            'Small note from the house: bring indoor layers for the late session. The terrace opens after play for coffee and recovery.',
+        ];
+
         return [
             'author_id' => User::factory(),
-            'content' => fake()->paragraph(),
+            'content' => $posts[array_rand($posts)],
             'is_official' => false,
             'status' => 'published',
         ];

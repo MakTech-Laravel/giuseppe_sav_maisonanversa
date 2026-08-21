@@ -29,7 +29,7 @@
             flashes underneath the preloader. ImmersiveIntro / Preloader remove
             #maison-boot-cover once they own the screen.
         --}}
-        <script>
+        <script @if (\Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}" @endif>
             (function () {
                 try {
                     if (sessionStorage.getItem('maison.intro.seen')) {
@@ -70,8 +70,8 @@
             $measurementId = config('services.analytics.measurement_id');
         @endphp
         @if ($allowAnalytics && filled($measurementId))
-            <script async src="https://www.googletagmanager.com/gtag/js?id={{ $measurementId }}"></script>
-            <script>
+            <script @if (\Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}" @endif async src="https://www.googletagmanager.com/gtag/js?id={{ $measurementId }}"></script>
+            <script @if (\Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}" @endif>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());

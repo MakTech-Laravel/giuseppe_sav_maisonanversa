@@ -26,10 +26,15 @@ export default defineConfig({
                 bunny('Baskervville', {
                     weights: [400],
                     styles: ['normal', 'italic'],
+                    subsets: ['latin'],
+                    preload: [{ weight: 400, style: 'normal' }],
                     fallbacks: ['Georgia', 'serif'],
                 }),
                 bunny('Montserrat', {
-                    weights: [200, 300, 400, 500, 600],
+                    weights: [300, 400, 500],
+                    styles: ['normal'],
+                    subsets: ['latin'],
+                    preload: [{ weight: 300, style: 'normal' }],
                     fallbacks: ['sans-serif'],
                 }),
             ],
