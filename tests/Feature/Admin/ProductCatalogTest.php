@@ -316,8 +316,17 @@ test('staff can view a product details page', function () {
             ->has('product.edition_number_postfix')
             ->has('product.archive_edition_numbers')
             ->has('product.primary_image')
-            ->has('product.gallery_images')
+            ->where('product.primary_image.url', '/images/product/heritage-001-front.png')
+            ->has('product.gallery_images', 3)
+            ->where('product.gallery_images.0.url', '/images/product/heritage-001-detail-gravure.png')
         );
+});
+
+test('product display media urls resolve imagery asset keys for admin previews', function () {
+    expect(Product::resolveMediaUrl('heritage-001-front'))
+        ->toBe('heritage-001-front')
+        ->and(Product::resolveDisplayMediaUrl('heritage-001-front'))
+        ->toBe('/images/product/heritage-001-front.png');
 });
 
 test('viewers cannot create products', function () {

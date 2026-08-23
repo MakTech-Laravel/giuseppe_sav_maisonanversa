@@ -6,6 +6,7 @@ use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\Concerns\TranslatesWithDeepL;
 use App\Observers\ProductObserver;
+use App\Support\Imagery;
 use App\Support\Money;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -272,6 +273,27 @@ class Product extends Model
         }
 
         return $item;
+    }
+
+    /**
+     * Browser-ready URL for admin previews and uploaded-file components.
+     * Asset keys from the imagery manifest resolve to `/images/...` paths.
+     */
+    public static function resolveDisplayMediaUrl(string $item): string
+    {
+        if ($item === '') {
+            return $item;
+        }
+
+        if (str_starts_with($item, 'http://') || str_starts_with($item, 'https://') || str_starts_with($item, '/')) {
+            return $item;
+        }
+
+        if (str_contains($item, '/')) {
+            return Storage::disk('public')->url($item);
+        }
+
+        return Imagery::assetUrl($item) ?? $item;
     }
 
     /**

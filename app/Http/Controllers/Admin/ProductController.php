@@ -488,7 +488,7 @@ class ProductController extends Controller
         return [
             'id' => $path,
             'path' => $path,
-            'url' => Product::resolveMediaUrl($path),
+            'url' => Product::resolveDisplayMediaUrl($path),
             'mime_type' => 'image/*',
             'name' => basename($path),
         ];
