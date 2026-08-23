@@ -169,7 +169,7 @@ export function CommunityEventFormFields({
                 <Label>{t('Thumbnail')}</Label>
                 <FileUpload
                     accept="image/png,image/jpeg,image/webp"
-                    maxSize={2}
+                    maxSize={false}
                     value={data.thumbnail}
                     onChange={(file) => {
                         setData('thumbnail', (file as File | null) ?? null);
@@ -180,7 +180,7 @@ export function CommunityEventFormFields({
                     placeholder={t(
                         'Sleep een thumbnail hierheen of klik om te bladeren',
                     )}
-                    hint={t('PNG, JPG of WEBP - max. 2 MB')}
+                    hint={t('PNG, JPG of WEBP')}
                     error={errors.thumbnail}
                 />
             </div>

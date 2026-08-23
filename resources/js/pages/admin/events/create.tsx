@@ -26,12 +26,14 @@ export default function CreateEvent() {
 
     function submit(event: FormEvent) {
         event.preventDefault();
-        form
-            .transform((data) => ({
-                ...data,
-                capacity: capacityFromFormValue(data.capacity),
-            }))
-            .submit({ forceFormData: true });
+
+        // Inertia's transform() does not return the form — do not chain.
+        form.transform((data) => ({
+            ...data,
+            capacity: capacityFromFormValue(data.capacity),
+        }));
+
+        form.submit({ forceFormData: true });
     }
 
     return (

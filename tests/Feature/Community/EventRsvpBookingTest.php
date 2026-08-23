@@ -115,6 +115,7 @@ test('admin event show lists bookings with minimum details', function () {
             ->component('admin/events/show')
             ->where('event.title', 'Circle Night')
             ->has('event.bookings', 1)
+            ->where('event.bookings.0.user_id', (string) $member->id)
             ->where('event.bookings.0.name', 'Ada Lovelace')
             ->where('event.bookings.0.email', 'ada@example.com')
             ->has('event.bookings.0.booked_at')
