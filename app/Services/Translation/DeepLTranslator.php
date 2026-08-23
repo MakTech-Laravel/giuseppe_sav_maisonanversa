@@ -24,12 +24,23 @@ class DeepLTranslator
         $configured = config('services.deepl.host');
 
         if (filled($configured)) {
-            return rtrim((string) $configured, '/');
+            return $this->normalizeHost((string) $configured);
         }
 
         $key = (string) config('services.deepl.key');
 
         return str_ends_with($key, ':fx') ? self::FREE_HOST : self::PAID_HOST;
+    }
+
+    private function normalizeHost(string $host): string
+    {
+        $host = rtrim($host, '/');
+
+        if (! str_starts_with($host, 'http://') && ! str_starts_with($host, 'https://')) {
+            $host = 'https://'.$host;
+        }
+
+        return $host;
     }
 
     public function targetLang(string $locale): string
