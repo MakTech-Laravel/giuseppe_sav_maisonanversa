@@ -73,12 +73,34 @@ test('staff can filter heritage inventory by range search and status', function 
             ->component('admin/heritage/index')
             ->has('pieces.data', 3)
             ->where('pieces.total', 3)
-            ->where('pieces.per_page', 100)
+            ->where('pieces.per_page', 75)
             ->where('filters.number_from', '10')
             ->where('filters.number_to', '12')
             ->where('filters.status', 'available')
+            ->where('filters.per_page', 75)
             ->where('pieces.data.0.label', '010')
             ->where('pieces.data.2.label', '012')
+        );
+});
+
+test('staff can set heritage inventory per page size', function () {
+    $this->actingAs($this->admin)
+        ->get(route('admin.heritage.index', ['per_page' => 25]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/heritage/index')
+            ->has('pieces.data', 25)
+            ->where('pieces.per_page', 25)
+            ->where('filters.per_page', 25)
+            ->where('perPageOptions', [25, 50, 75, 100, 150, 200, 300])
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.heritage.index', ['per_page' => 999]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('pieces.per_page', 75)
+            ->where('filters.per_page', 75)
         );
 });
 
