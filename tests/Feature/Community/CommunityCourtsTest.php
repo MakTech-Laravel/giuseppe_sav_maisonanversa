@@ -54,6 +54,30 @@ test('courts without coordinates are marked coming soon', function () {
         );
 });
 
+test('community courts are translated for the request locale', function () {
+    fakeDeepLTranslations();
+
+    $user = User::factory()->create();
+
+    CommunityCourt::factory()->create([
+        'title' => 'Padel Club Antwerpen',
+        'body' => 'Founding Club Corner',
+        'location' => 'Antwerpen, België',
+        'lat' => 51.2194,
+        'lng' => 4.4025,
+        'is_published' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('maison.community', ['locale' => 'en']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('courts.0.title', 'EN Padel Club Antwerpen')
+            ->where('courts.0.body', 'EN Founding Club Corner')
+            ->where('courts.0.location', 'EN Antwerpen, België')
+        );
+});
+
 test('guests do not receive courts props', function () {
     CommunityCourt::factory()->create(['is_published' => true]);
 
