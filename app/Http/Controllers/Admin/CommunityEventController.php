@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCommunityEventRequest;
 use App\Http\Requests\Admin\UpdateCommunityEventRequest;
 use App\Http\Requests\Admin\UpdateCommunityEventStatusRequest;
+use App\Http\Requests\Admin\UpdateCommunityEventTranslationsRequest;
 use App\Models\CommunityEvent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,6 +19,12 @@ use Inertia\Response;
 class CommunityEventController extends Controller
 {
     private const PER_PAGE = 15;
+
+    /** @var list<string> */
+    private const TRANSLATION_TARGET_LOCALES = ['en', 'fr'];
+
+    /** @var list<string> */
+    private const TRANSLATION_COLUMNS = ['title', 'description', 'location'];
 
     public function index(Request $request, string $locale): Response
     {
@@ -78,7 +85,7 @@ class CommunityEventController extends Controller
 
     public function show(Request $request, string $locale, CommunityEvent $event): Response
     {
-        $event->loadCount('rsvps')->load('rsvps.user');
+        $event->loadCount('rsvps')->load(['rsvps.user', 'translations']);
 
         return Inertia::render('admin/events/show', [
             'event' => [
@@ -96,21 +103,31 @@ class CommunityEventController extends Controller
                     ])
                     ->all(),
             ],
+            'locales' => config('maison.locales'),
+            'defaultLocale' => config('maison.default_locale'),
+            'translations' => $this->translationBundle($event),
+            'translationStatus' => $this->translationStatus($event),
         ]);
     }
 
     public function edit(Request $request, string $locale, CommunityEvent $event): Response
     {
+        $event->loadMissing('translations');
+
         return Inertia::render('admin/events/edit', [
             'event' => [
                 'id' => (string) $event->id,
-                'title' => $event->title,
-                'description' => $event->description,
                 'starts_at' => $event->starts_at?->format('Y-m-d\TH:i'),
-                'location' => $event->location,
                 'capacity' => $event->capacity,
                 'thumbnail_url' => $event->thumbnailUrl(),
             ],
+            'source' => [
+                'title' => $event->title,
+                'description' => $event->description ?? '',
+                'location' => $event->location ?? '',
+            ],
+            'defaultLocale' => config('maison.default_locale'),
+            'translations' => $this->translationBundle($event),
         ]);
     }
 
@@ -148,6 +165,48 @@ class CommunityEventController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Status bijgewerkt.')]);
 
         return back();
+    }
+
+    public function updateTranslations(
+        UpdateCommunityEventTranslationsRequest $request,
+        string $locale,
+        CommunityEvent $event,
+    ): RedirectResponse {
+        $data = $request->validated();
+
+        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+            foreach (self::TRANSLATION_COLUMNS as $column) {
+                $event->translations()->updateOrCreate(
+                    [
+                        'locale' => $targetLocale,
+                        'column' => $column,
+                    ],
+                    [
+                        'value' => $data[$targetLocale][$column],
+                        'source_hash' => $event->translationSourceHash($column),
+                    ],
+                );
+            }
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+
+        return redirect()->route('admin.events.show', [
+            'locale' => $locale,
+            'event' => $event->id,
+        ]);
+    }
+
+    public function translate(string $locale, CommunityEvent $event): RedirectResponse
+    {
+        $event->dispatchDeepLTranslation();
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+
+        return redirect()->route('admin.events.show', [
+            'locale' => $locale,
+            'event' => $event->id,
+        ]);
     }
 
     public function destroy(Request $request, string $locale, CommunityEvent $event): RedirectResponse
@@ -193,6 +252,51 @@ class CommunityEventController extends Controller
             'thumbnail_url' => $event->thumbnailUrl(),
             'status' => $event->status->value,
         ];
+    }
+
+    /**
+     * @return array<string, array{title: string, description: string, location: string}>
+     */
+    private function translationBundle(CommunityEvent $event): array
+    {
+        $bundle = [];
+
+        foreach (config('maison.locales') as $targetLocale) {
+            $bundle[$targetLocale] = [
+                'title' => $event->translated('title', $targetLocale),
+                'description' => $event->translated('description', $targetLocale),
+                'location' => $event->translated('location', $targetLocale),
+            ];
+        }
+
+        return $bundle;
+    }
+
+    /**
+     * @return array<string, array{title: bool, description: bool, location: bool}>
+     */
+    private function translationStatus(CommunityEvent $event): array
+    {
+        $status = [];
+
+        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+            $status[$targetLocale] = [
+                'title' => $event->translations->contains(
+                    fn ($translation): bool => $translation->locale === $targetLocale
+                        && $translation->column === 'title',
+                ),
+                'description' => $event->translations->contains(
+                    fn ($translation): bool => $translation->locale === $targetLocale
+                        && $translation->column === 'description',
+                ),
+                'location' => $event->translations->contains(
+                    fn ($translation): bool => $translation->locale === $targetLocale
+                        && $translation->column === 'location',
+                ),
+            ];
+        }
+
+        return $status;
     }
 
     private function storeThumbnail(UploadedFile $file): string

@@ -40,9 +40,43 @@ test('staff can open the event edit page', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/events/edit')
-            ->where('event.id', (string) $event->id)
-            ->where('event.title', 'Editable Event')
+            ->where('source.title', 'Editable Event')
+            ->where('defaultLocale', 'nl')
+            ->has('translations.en')
             ->has('event.starts_at')
+            ->missing('event.title')
+        );
+});
+
+test('event edit page shows stored english copy when admin locale is en', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Bron titel',
+        'description' => 'Bron beschrijving',
+        'location' => 'Antwerpen',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.events.translations.update', ['locale' => 'nl', 'event' => $event->id]), [
+            'en' => [
+                'title' => 'English title',
+                'description' => 'English description',
+                'location' => 'Antwerp',
+            ],
+            'fr' => [
+                'title' => 'Titre FR',
+                'description' => 'Description FR',
+                'location' => 'Anvers',
+            ],
+        ])
+        ->assertRedirect();
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.edit', ['locale' => 'en', 'event' => $event->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/events/edit')
+            ->where('translations.en.title', 'English title')
+            ->where('source.title', 'Bron titel')
         );
 });
 
@@ -182,4 +216,74 @@ test('admin can update event status', function () {
             ->where('events.data.0.title', 'Status Toggle Event')
             ->where('events.data.0.status', 'ongoing')
         );
+});
+
+test('event show exposes translation bundle and status', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Vertaal Event',
+        'description' => 'Beschrijving',
+        'location' => 'Antwerpen',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/events/show')
+            ->has('locales', 3)
+            ->where('defaultLocale', 'nl')
+            ->has('translations.nl')
+            ->has('translations.en')
+            ->has('translations.fr')
+            ->where('translations.nl.title', 'Vertaal Event')
+            ->has('translationStatus.en')
+            ->has('translationStatus.fr')
+        );
+});
+
+test('staff can manually update event translations', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Bron titel',
+        'description' => 'Bron beschrijving',
+        'location' => 'Antwerpen',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.events.translations.update', ['locale' => 'nl', 'event' => $event->id]), [
+            'en' => [
+                'title' => 'Custom EN title',
+                'description' => 'Custom EN description',
+                'location' => 'Antwerp',
+            ],
+            'fr' => [
+                'title' => 'Custom FR title',
+                'description' => 'Custom FR description',
+                'location' => 'Anvers',
+            ],
+        ])
+        ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
+
+    $event->refresh();
+
+    expect($event->translated('title', 'en'))->toBe('Custom EN title')
+        ->and($event->translated('description', 'fr'))->toBe('Custom FR description')
+        ->and($event->translated('location', 'en'))->toBe('Antwerp');
+});
+
+test('staff can queue deepl retranslation for an event', function () {
+    fakeDeepLTranslations();
+
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Hervertaal titel',
+        'description' => 'Hervertaal beschrijving',
+        'location' => 'Gent',
+    ]);
+
+    $event->translations()->delete();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.events.translate', ['locale' => 'nl', 'event' => $event->id]))
+        ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
+
+    expect($event->fresh()->translations()->count())->toBe(6);
 });
