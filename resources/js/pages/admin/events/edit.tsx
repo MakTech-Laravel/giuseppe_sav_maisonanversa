@@ -27,11 +27,19 @@ interface EventEditProps {
 
 export default function EditEvent({ event }: EventEditProps) {
     const { t } = useTranslation();
+
+    // Wayfinder `.form()` spoofs PUT via POST + `?_method=PUT` so multipart
+    // bodies are parsed by PHP (native PUT + FormData arrives empty).
+    const updateForm = eventsRoutes.update.form({
+        locale: wayfinderLocale(),
+        event: event.id,
+    });
+
     const form = useForm(
-        eventsRoutes.update({
-            locale: wayfinderLocale(),
-            event: event.id,
-        }),
+        {
+            url: updateForm.action,
+            method: updateForm.method,
+        },
         {
             title: event.title,
             description: event.description ?? '',
@@ -46,30 +54,25 @@ export default function EditEvent({ event }: EventEditProps) {
     function submit(formEvent: FormEvent) {
         formEvent.preventDefault();
 
-        const endpoint = eventsRoutes.update.url({
-            locale: wayfinderLocale(),
-            event: event.id,
+        // Inertia's transform() does not return the form — do not chain.
+        form.transform((data) => {
+            const payload: Record<string, unknown> = {
+                title: data.title,
+                description: data.description,
+                starts_at: data.starts_at,
+                location: data.location,
+                capacity: capacityFromFormValue(data.capacity),
+                remove_thumbnail: data.remove_thumbnail,
+            };
+
+            if (data.thumbnail instanceof File) {
+                payload.thumbnail = data.thumbnail;
+            }
+
+            return payload;
         });
 
-        form
-            .transform((data) => {
-                const payload: Record<string, unknown> = {
-                    title: data.title,
-                    description: data.description,
-                    starts_at: data.starts_at,
-                    location: data.location,
-                    capacity: capacityFromFormValue(data.capacity),
-                    remove_thumbnail: data.remove_thumbnail,
-                    _method: 'put',
-                };
-
-                if (data.thumbnail instanceof File) {
-                    payload.thumbnail = data.thumbnail;
-                }
-
-                return payload;
-            })
-            .post(endpoint, { forceFormData: true });
+        form.submit({ forceFormData: true });
     }
 
     return (

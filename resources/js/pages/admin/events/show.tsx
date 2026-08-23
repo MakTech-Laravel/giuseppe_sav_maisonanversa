@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, CalendarDays, Pencil, Users } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { ArrowLeft, CalendarDays, Eye, Pencil, Users } from 'lucide-react';
+import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,16 @@ import {
 } from '@/components/ui/table';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
+import customers from '@/routes/admin/customers';
 import eventsRoutes from '@/routes/admin/events';
+
+interface EventBooking {
+    id: string;
+    user_id: string;
+    name: string;
+    email: string;
+    booked_at: string | null;
+}
 
 interface EventDetail {
     id: string;
@@ -24,7 +34,14 @@ interface EventDetail {
     capacity: number | null;
     rsvp_count: number;
     thumbnail_url: string | null;
-    bookings: { id: string; name: string; email: string; booked_at: string | null }[];
+    bookings: EventBooking[];
+}
+
+function customerShowUrl(userId: string) {
+    return customers.show({
+        locale: wayfinderLocale(),
+        user: Number(userId),
+    });
 }
 
 function formatStartsAt(value: string): string {
@@ -137,22 +154,84 @@ export default function EventShow({ event }: { event: EventDetail }) {
                                         <TableHead className="hidden md:table-cell">
                                             {t('Geboekt op')}
                                         </TableHead>
+                                        <TableHead className="w-12 text-right">
+                                            <span className="sr-only">
+                                                {t('Acties')}
+                                            </span>
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {event.bookings.map((booking) => (
-                                        <TableRow key={booking.id}>
-                                            <TableCell className="font-medium">
-                                                {booking.name}
-                                            </TableCell>
-                                            <TableCell className="hidden sm:table-cell">
-                                                {booking.email}
-                                            </TableCell>
-                                            <TableCell className="hidden md:table-cell">
-                                                {formatBookedAt(booking.booked_at)}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                                    {event.bookings.map((booking) => {
+                                        const href = customerShowUrl(
+                                            booking.user_id,
+                                        );
+
+                                        const openCustomer = () => {
+                                            router.visit(href);
+                                        };
+
+                                        const onRowKeyDown = (
+                                            keyboardEvent: KeyboardEvent<HTMLTableRowElement>,
+                                        ) => {
+                                            if (
+                                                keyboardEvent.key === 'Enter' ||
+                                                keyboardEvent.key === ' '
+                                            ) {
+                                                keyboardEvent.preventDefault();
+                                                openCustomer();
+                                            }
+                                        };
+
+                                        return (
+                                            <TableRow
+                                                key={booking.id}
+                                                className="cursor-pointer"
+                                                tabIndex={0}
+                                                role="link"
+                                                aria-label={t(
+                                                    'Bekijk klant {{name}}',
+                                                    { name: booking.name },
+                                                )}
+                                                onClick={openCustomer}
+                                                onKeyDown={onRowKeyDown}
+                                            >
+                                                <TableCell className="font-medium">
+                                                    {booking.name}
+                                                </TableCell>
+                                                <TableCell className="hidden sm:table-cell">
+                                                    {booking.email}
+                                                </TableCell>
+                                                <TableCell className="hidden md:table-cell">
+                                                    {formatBookedAt(
+                                                        booking.booked_at,
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button
+                                                        asChild
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={(clickEvent) =>
+                                                            clickEvent.stopPropagation()
+                                                        }
+                                                    >
+                                                        <Link
+                                                            href={href}
+                                                            title={t(
+                                                                'Bekijken',
+                                                            )}
+                                                            aria-label={t(
+                                                                'Bekijken',
+                                                            )}
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Link>
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
                                 </TableBody>
                             </Table>
                         )}

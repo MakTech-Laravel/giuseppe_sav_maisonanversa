@@ -63,6 +63,7 @@ class CommunityEventController extends Controller
                     ->values()
                     ->map(fn ($rsvp) => [
                         'id' => (string) $rsvp->id,
+                        'user_id' => (string) $rsvp->user_id,
                         'name' => $rsvp->user->name,
                         'email' => $rsvp->user->email,
                         'booked_at' => $rsvp->created_at?->toIso8601String(),
