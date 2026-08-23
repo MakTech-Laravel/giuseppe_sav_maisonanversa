@@ -24,14 +24,15 @@ export default function CreateCourt() {
 
     function submit(event: FormEvent) {
         event.preventDefault();
-        form
-            .transform((data) => ({
-                ...data,
-                lat: data.lat === '' ? null : Number(data.lat),
-                lng: data.lng === '' ? null : Number(data.lng),
-                sort_order: Number(data.sort_order),
-            }))
-            .submit();
+
+        form.transform((data) => ({
+            ...data,
+            lat: data.lat === '' ? null : Number(data.lat),
+            lng: data.lng === '' ? null : Number(data.lng),
+            sort_order: Number(data.sort_order),
+        }));
+
+        form.submit();
     }
 
     return (
