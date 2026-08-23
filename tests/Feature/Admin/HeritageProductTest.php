@@ -34,7 +34,9 @@ test('staff can update the founding product name and amount', function () {
             'edition_number_prefix' => 'MA-',
             'edition_number_postfix' => '',
         ])
-        ->assertRedirect();
+        ->assertRedirect()
+        ->assertInertiaFlash('toast.type', 'success')
+        ->assertInertiaFlash('toast.message', __('Editieproduct bijgewerkt.'));
 
     $product->refresh();
 
