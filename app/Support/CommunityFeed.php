@@ -22,11 +22,21 @@ final class CommunityFeed
         $query = CommunityPost::query()
             ->with(['author', 'comments.author', 'translations', 'comments.translations'])
             ->withCount('likes')
-            ->where('status', 'published')
-            ->whereNull('hidden_at')
+            ->where(function ($query) use ($userId): void {
+                $query->where(function ($visible): void {
+                    $visible->where('status', 'published')
+                        ->whereNull('hidden_at');
+                });
+
+                if ($userId !== null) {
+                    $query->orWhere('author_id', $userId);
+                }
+            })
             ->latest();
 
         if ($userId !== null) {
+            $query->whereDoesntHave('hides', fn ($hides) => $hides->where('user_id', $userId));
+
             $query->withExists([
                 'likes as liked' => fn ($likes) => $likes->where('user_id', $userId),
             ]);
@@ -37,8 +47,9 @@ final class CommunityFeed
             ->withPath(route('maison.community', ['locale' => $pathLocale]));
 
         $paginator->setCollection(
-            $paginator->getCollection()->map(function (CommunityPost $post): array {
+            $paginator->getCollection()->map(function (CommunityPost $post) use ($pathLocale): array {
                 $initials = strtoupper(substr($post->author->name, 0, 2));
+                $content = $post->translated('content', $pathLocale);
 
                 return [
                     'id' => (string) $post->id,
@@ -50,14 +61,16 @@ final class CommunityFeed
                     'info' => $post->created_at?->diffForHumans() ?? '',
                     'badge' => $post->is_official ? __('Officieel') : __('Lid'),
                     'badgeOfficial' => $post->is_official,
-                    'content' => $post->translated('content'),
+                    'content' => $content,
+                    'excerpt' => CommunityPostPresenter::excerpt($content),
+                    'is_truncated' => CommunityPostPresenter::isTruncated($content),
                     'likes' => $post->likes_count,
                     'liked' => (bool) ($post->liked ?? false),
                     'comments' => $post->comments->map(fn ($comment) => [
                         'id' => (string) $comment->id,
                         'name' => $comment->author->name,
                         'initials' => strtoupper(substr($comment->author->name, 0, 2)),
-                        'body' => $comment->translated('body'),
+                        'body' => $comment->translated('body', $pathLocale),
                         'info' => $comment->created_at?->diffForHumans() ?? '',
                     ])->all(),
                 ];

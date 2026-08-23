@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import type { FeedPostData } from '@/components/maison/community/community-data';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { Monogram } from '@/components/maison/ui/monogram';
-import { usePermission, PERMISSIONS } from '@/hooks/use-permissions';
 import { cn } from '@/lib/utils';
 
 type FeedPostCardProps = {
@@ -15,11 +14,16 @@ type FeedPostCardProps = {
 export function FeedPostCard({ post }: FeedPostCardProps) {
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
-    const { can } = usePermission();
     const [commentsOpen, setCommentsOpen] = useState(false);
+    const [expanded, setExpanded] = useState(false);
     const [draft, setDraft] = useState('');
-    const [reportOpen, setReportOpen] = useState(false);
-    const [reportReason, setReportReason] = useState('');
+
+    const displayContent = post.userAuthored ? post.content : t(post.content);
+    const showTruncated =
+        (post.is_truncated ?? false) && ! expanded;
+    const visibleContent = showTruncated
+        ? (post.excerpt ?? displayContent)
+        : displayContent;
 
     function toggleLike() {
         router.post(
@@ -29,33 +33,11 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
         );
     }
 
-    function hidePost() {
+    function hideFromWall() {
         router.post(
             `/${locale}/community/posts/${post.id}/hide`,
             {},
             { preserveScroll: true },
-        );
-    }
-
-    function submitReport(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        const reason = reportReason.trim();
-
-        if (!reason || !auth.user) {
-            return;
-        }
-
-        router.post(
-            `/${locale}/community/posts/${post.id}/report`,
-            { reason },
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setReportReason('');
-                    setReportOpen(false);
-                },
-            },
         );
     }
 
@@ -128,9 +110,21 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                 </div>
             </header>
 
-            <p className="mb-4 text-[17px] leading-[1.75] whitespace-pre-wrap text-choc">
-                {post.userAuthored ? post.content : t(post.content)}
-            </p>
+            <div className="mb-4">
+                <p className="text-[17px] leading-[1.75] whitespace-pre-wrap text-choc">
+                    {visibleContent}
+                    {showTruncated ? '…' : ''}
+                </p>
+                {post.is_truncated && (
+                    <button
+                        type="button"
+                        onClick={() => setExpanded((value) => ! value)}
+                        className="mt-1 cursor-pointer border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-gold2 underline-offset-2 hover:underline"
+                    >
+                        {expanded ? t('Minder lezen') : t('Meer lezen')}
+                    </button>
+                )}
+            </div>
 
             {post.imageLabel && (
                 <div className="mb-4 flex aspect-video items-center justify-center bg-linear-to-br from-[#2A1A10] to-[#291c18]">
@@ -168,54 +162,13 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                 {auth.user && (
                     <button
                         type="button"
-                        onClick={() => setReportOpen((open) => !open)}
-                        className="flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-stone"
-                    >
-                        {t('Melden')}
-                    </button>
-                )}
-                {can(PERMISSIONS.COMMUNITY.MODERATE) && (
-                    <button
-                        type="button"
-                        onClick={hidePost}
+                        onClick={hideFromWall}
                         className="flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-stone"
                     >
                         {t('Verbergen')}
                     </button>
                 )}
-                <button
-                    type="button"
-                    className="ml-auto flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-stone"
-                >
-                    <span>↗</span> {t('Delen')}
-                </button>
             </footer>
-
-            {reportOpen && (
-                <form
-                    onSubmit={submitReport}
-                    className="mt-4 flex flex-col gap-2.5 border-t border-gold/10 pt-4 sm:flex-row sm:items-start"
-                >
-                    <label className="sr-only" htmlFor={`report-${post.id}`}>
-                        {t('Reden voor melding')}
-                    </label>
-                    <input
-                        id={`report-${post.id}`}
-                        type="text"
-                        value={reportReason}
-                        onChange={(event) => setReportReason(event.target.value)}
-                        placeholder={t('Waarom meldt u dit bericht?')}
-                        maxLength={500}
-                        className="min-w-0 flex-1 border border-gold/20 bg-cream px-3.5 py-2.5 font-serif text-sm text-choc outline-none focus:border-gold2"
-                    />
-                    <button
-                        type="submit"
-                        className="shrink-0 bg-choc px-4 py-2.5 font-sans text-[10px] font-medium tracking-[0.18em] text-cream uppercase transition-colors hover:bg-gold2"
-                    >
-                        {t('Verstuur melding')}
-                    </button>
-                </form>
-            )}
 
             {commentsOpen && (
                 <div className="mt-4 border-t border-gold/10 pt-4">

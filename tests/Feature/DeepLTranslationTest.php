@@ -18,8 +18,10 @@ use App\Models\User;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
 use App\Services\Translation\DeepLTranslator;
+use App\Support\CommunityFeed;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 
@@ -60,12 +62,12 @@ test('deepl uses the free host for keys ending in fx', function () {
     expect(app(DeepLTranslator::class)->host())->toBe('https://api-free.deepl.com');
 });
 
-test('saving a community post stores english and french translations', function () {
+test('saving a community post stores translations for all locales', function () {
     fakeDeepLTranslations();
 
     $post = CommunityPost::factory()->create(['content' => 'Hallo huis']);
 
-    expect($post->translations()->count())->toBe(2);
+    expect($post->translations()->count())->toBe(3);
 
     app()->setLocale('en');
     expect($post->fresh()->translated('content'))->toBe('EN Hallo huis');
@@ -74,7 +76,7 @@ test('saving a community post stores english and french translations', function 
     expect($post->fresh()->translated('content'))->toBe('FR Hallo huis');
 
     app()->setLocale('nl');
-    expect($post->fresh()->translated('content'))->toBe('Hallo huis');
+    expect($post->fresh()->translated('content'))->toBe('NL Hallo huis');
 });
 
 test('unchanged source text does not call deepl again', function () {
@@ -349,6 +351,17 @@ test('community sessions translate notes and location but not level', function (
         ->not->toContain('url');
 });
 
+test('community comments are translated for all locales like faqs', function () {
+    fakeDeepLTranslations();
+
+    $comment = CommunityComment::factory()->create(['body' => 'Mooi bericht']);
+
+    expect($comment->translations()->count())->toBe(3)
+        ->and($comment->translated('body', 'nl'))->toBe('NL Mooi bericht')
+        ->and($comment->translated('body', 'en'))->toBe('EN Mooi bericht')
+        ->and($comment->translated('body', 'fr'))->toBe('FR Mooi bericht');
+});
+
 test('the community feed exposes translated comment bodies', function () {
     fakeDeepLTranslations();
 
@@ -366,6 +379,36 @@ test('the community feed exposes translated comment bodies', function () {
         ->assertInertia(fn ($page) => $page
             ->where('posts.data.0.comments.0.body', 'EN Mooi bericht')
         );
+});
+
+test('community feed uses route locale when app locale differs', function () {
+    fakeDeepLTranslations();
+
+    $user = User::factory()->create();
+    $post = CommunityPost::factory()->create(['content' => 'Hallo huis']);
+    CommunityComment::factory()->create([
+        'community_post_id' => $post->id,
+        'author_id' => $user->id,
+        'body' => 'Mooi bericht',
+    ]);
+
+    app()->setLocale('nl');
+
+    $request = Request::create('/en/community', 'GET');
+    $request->setUserResolver(fn () => $user);
+
+    $route = app('router')->getRoutes()->getByName('maison.community');
+    $request->setRouteResolver(function () use ($route) {
+        $route->bind(new Request);
+        $route->setParameter('locale', 'en');
+
+        return $route;
+    });
+
+    $paginator = CommunityFeed::paginate($request);
+
+    expect($paginator->items()[0]['content'])->toBe('EN Hallo huis')
+        ->and($paginator->items()[0]['comments'][0]['body'])->toBe('EN Mooi bericht');
 });
 
 test('translation retry queues jobs for a specific model id', function () {
