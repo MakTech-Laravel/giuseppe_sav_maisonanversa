@@ -5,15 +5,28 @@ import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ProductFormFields } from '@/components/admin/product-form-fields';
 import type { ProductFormData } from '@/components/admin/product-form-fields';
+import type { ExistingFile } from '@/components/file-upload';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import products from '@/routes/admin/products';
 
-interface CatalogProduct extends ProductFormData {
+interface CatalogProduct {
     id: number;
+    name: string;
+    slug: string;
+    type: 'limited_edition' | 'simple';
+    amount: string;
     edition_total: string | number | null;
+    edition_number_prefix?: string | null;
+    edition_number_postfix?: string | null;
+    archive_edition_numbers: number[];
     stock_quantity: string | number | null;
+    is_published: boolean;
+    grants_founding_circle: boolean;
+    expected_delivery_label: string | null;
+    primary_image: ExistingFile | null;
+    gallery_images: ExistingFile[];
 }
 
 export default function EditProduct({ product }: { product: CatalogProduct }) {
@@ -26,17 +39,25 @@ export default function EditProduct({ product }: { product: CatalogProduct }) {
             type: product.type,
             amount: product.amount,
             edition_total: String(product.edition_total ?? ''),
-            archive_edition_numbers: product.archive_edition_numbers ?? '',
+            edition_number_prefix: product.edition_number_prefix ?? '',
+            edition_number_postfix: product.edition_number_postfix ?? '',
+            archive_edition_numbers: product.archive_edition_numbers ?? [],
             stock_quantity: String(product.stock_quantity ?? ''),
             is_published: product.is_published,
             grants_founding_circle: product.grants_founding_circle,
             expected_delivery_label: product.expected_delivery_label ?? '',
-        },
+            primary_image: null as File | null,
+            gallery_images: null as File[] | null,
+            remove_primary_image: false,
+            gallery_keep: (product.gallery_images ?? []).map((file) =>
+                String(file.id),
+            ),
+        } satisfies ProductFormData,
     );
 
     const submit = (event: FormEvent) => {
         event.preventDefault();
-        form.submit();
+        form.submit({ forceFormData: true });
     };
 
     return (
@@ -50,18 +71,21 @@ export default function EditProduct({ product }: { product: CatalogProduct }) {
                 >
                     <Button variant="outline" asChild>
                         <Link href={products.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug naar catalogus')}
+                            <ArrowLeft className="h-4 w-4" />{' '}
+                            {t('Terug naar catalogus')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
-                <form
-                    onSubmit={submit}
-                    className="w-full max-w-2xl space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
-                >
+                <form onSubmit={submit} className="w-full space-y-6">
                     <ProductFormFields
                         data={form.data}
                         errors={form.errors}
                         setData={form.setData}
+                        existingPrimary={product.primary_image}
+                        existingGallery={product.gallery_images}
+                        isUploading={form.processing}
+                        uploadProgress={form.progress?.percentage ?? null}
+                        onCancelUpload={() => form.cancel()}
                     />
                     <Button type="submit" disabled={form.processing}>
                         {form.processing && (

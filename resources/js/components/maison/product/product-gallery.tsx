@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties, MouseEvent } from 'react';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import type { ImageAssetName } from '@/lib/imagery';
+import { IMAGE_ASSETS } from '@/lib/imagery';
 import { cn } from '@/lib/utils';
 
 const DEFAULT_GALLERY: readonly ImageAssetName[] = [
@@ -10,6 +11,83 @@ const DEFAULT_GALLERY: readonly ImageAssetName[] = [
     'atelier-workshop',
     'heritage-001-lifestyle-court',
 ] as const;
+
+function isAssetKey(value: string): value is ImageAssetName {
+    return value in IMAGE_ASSETS;
+}
+
+function isMediaUrl(value: string): boolean {
+    return (
+        value.startsWith('http://') ||
+        value.startsWith('https://') ||
+        value.startsWith('/')
+    );
+}
+
+function ProductMedia({
+    src,
+    alt,
+    className,
+    loading = 'lazy',
+    fetchPriority,
+    overlay,
+}: {
+    src: string;
+    alt: string;
+    className?: string;
+    loading?: 'eager' | 'lazy';
+    fetchPriority?: 'high' | 'low' | 'auto';
+    overlay?: string;
+}) {
+    if (isAssetKey(src)) {
+        return (
+            <PlaceholderImage
+                asset={src}
+                ratio={null}
+                alt={alt}
+                captioned={false}
+                loading={loading}
+                fetchPriority={fetchPriority}
+                overlay={overlay}
+                className={className}
+            />
+        );
+    }
+
+    if (!isMediaUrl(src)) {
+        return (
+            <PlaceholderImage
+                asset="heritage-001-front"
+                ratio={null}
+                alt={alt}
+                captioned={false}
+                loading={loading}
+                fetchPriority={fetchPriority}
+                overlay={overlay}
+                className={className}
+            />
+        );
+    }
+
+    return (
+        <div className={cn('relative overflow-hidden', className)}>
+            <img
+                src={src}
+                alt={alt}
+                loading={loading}
+                fetchPriority={fetchPriority}
+                className="absolute inset-0 h-full w-full object-cover"
+            />
+            {overlay ? (
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0"
+                    style={{ background: overlay }}
+                />
+            ) : null}
+        </div>
+    );
+}
 
 /**
  * Sticky product gallery with thumbnail switching and cursor-follow zoom.
@@ -20,7 +98,7 @@ const DEFAULT_GALLERY: readonly ImageAssetName[] = [
  */
 export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
     const slides = useMemo(
-        () => (gallery.length > 0 ? gallery : [...DEFAULT_GALLERY]) as ImageAssetName[],
+        () => (gallery.length > 0 ? gallery : [...DEFAULT_GALLERY]),
         [gallery],
     );
     const [active, setActive] = useState(0);
@@ -71,11 +149,9 @@ export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
                 onMouseLeave={() => setZooming(false)}
             >
                 <div className="absolute inset-0" style={zoomStyle}>
-                    <PlaceholderImage
-                        asset={slides[active] ?? slides[0]}
-                        ratio={null}
+                    <ProductMedia
+                        src={slides[active] ?? slides[0]}
                         alt="Heritage No.001"
-                        captioned={false}
                         loading="eager"
                         fetchPriority="high"
                         overlay="linear-gradient(to top, rgba(41,28,24,0.5) 0%, rgba(41,28,24,0.05) 45%)"
@@ -97,7 +173,7 @@ export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
             >
                 {slides.map((asset, index) => (
                     <button
-                        key={asset}
+                        key={`${asset}-${index}`}
                         type="button"
                         role="tab"
                         aria-selected={index === active}
@@ -111,11 +187,9 @@ export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
                                 : 'border-gold/10 hover:border-gold',
                         )}
                     >
-                        <PlaceholderImage
-                            asset={asset}
-                            ratio={null}
+                        <ProductMedia
+                            src={asset}
                             alt=""
-                            captioned={false}
                             className="h-full w-full"
                         />
                     </button>

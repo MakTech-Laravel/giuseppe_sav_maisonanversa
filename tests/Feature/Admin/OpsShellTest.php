@@ -251,10 +251,13 @@ test('staff can view heritage product inventory', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/heritage/index')
-            ->has('inventory.rows', 100)
+            ->has('pieces.data', 100)
+            ->where('pieces.per_page', 100)
+            ->where('pieces.total', 100)
             ->where('inventory.total', 100)
             ->where('inventory.reserved', 0)
             ->where('inventory.product_name', 'Heritage No.001 — Founding Edition')
             ->where('product.amount', '249.00')
+            ->where('filters.search', '')
         );
 });
