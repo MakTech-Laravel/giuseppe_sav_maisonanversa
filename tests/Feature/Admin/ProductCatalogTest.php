@@ -214,6 +214,11 @@ test('staff can view a product details page', function () {
             ->component('admin/products/show')
             ->where('product.id', $product->id)
             ->where('product.slug', $product->slug)
+            ->has('product.edition_number_prefix')
+            ->has('product.edition_number_postfix')
+            ->has('product.archive_edition_numbers')
+            ->has('product.primary_image')
+            ->has('product.gallery_images')
         );
 });
 
