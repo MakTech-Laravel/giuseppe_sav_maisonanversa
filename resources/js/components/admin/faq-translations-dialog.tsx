@@ -99,11 +99,11 @@ export function FaqTranslationsDialog({
         });
     }
 
-    function retranslate() {
+    function retranslate(targetLocale?: FaqLocale) {
         setTranslating(true);
         router.post(
             faqs.translate({ locale, faq: faqId }).url,
-            {},
+            targetLocale ? { target_locale: targetLocale } : {},
             {
                 preserveScroll: true,
                 onFinish: () => setTranslating(false),
@@ -133,7 +133,7 @@ export function FaqTranslationsDialog({
                     <DialogTitle>{t('Vertalingen')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk NL, EN en FR handmatig of genereer opnieuw via DeepL. De brontaal wordt automatisch herkend.',
+                            'Bewerk vertalingen per taal. Bron tekst wijzig je via FAQ bewerken; DeepL vertaalt vanuit die bron.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -213,20 +213,37 @@ export function FaqTranslationsDialog({
                         />
                     </div>
 
-                    <DialogFooter className="gap-2 sm:justify-between">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            disabled={translating || form.processing}
-                            onClick={retranslate}
-                        >
-                            {translating ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <RefreshCw className="h-4 w-4" />
-                            )}
-                            {t('Opnieuw vertalen met DeepL')}
-                        </Button>
+                    <DialogFooter className="flex-col gap-2 sm:flex-row sm:justify-between">
+                        <div className="flex flex-wrap gap-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                disabled={translating || form.processing}
+                                onClick={() => retranslate(activeLocale)}
+                            >
+                                {translating ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <RefreshCw className="h-4 w-4" />
+                                )}
+                                {t('Opnieuw vertalen ({{locale}})', {
+                                    locale: LOCALE_LABELS[activeLocale],
+                                })}
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                disabled={translating || form.processing}
+                                onClick={() => retranslate()}
+                            >
+                                {translating ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <RefreshCw className="h-4 w-4" />
+                                )}
+                                {t('Alles opnieuw vertalen')}
+                            </Button>
+                        </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />

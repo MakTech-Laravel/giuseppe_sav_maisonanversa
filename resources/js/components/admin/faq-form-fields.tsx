@@ -216,7 +216,7 @@ export function FaqFormAside({
                     </li>
                     <li>
                         {t(
-                            'Schrijf in elke taal. DeepL herkent de taal automatisch en vult NL, EN en FR in na opslaan.',
+                            'Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan. Pas per taal aan via Vertalingen.',
                         )}
                     </li>
                     <li>
