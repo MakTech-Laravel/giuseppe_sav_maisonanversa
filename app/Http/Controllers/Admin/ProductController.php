@@ -25,26 +25,61 @@ class ProductController extends Controller
 
     public const INVENTORY_PER_PAGE_DEFAULT = 75;
 
+    /** @var list<int> */
+    public const CATALOG_PER_PAGE_OPTIONS = [10, 15, 25, 50, 100];
+
+    public const CATALOG_PER_PAGE_DEFAULT = 15;
+
     public function index(Request $request, string $locale): Response
     {
-        $search = trim((string) $request->query('search', ''));
+        $filters = $this->catalogFilters($request);
 
         $products = Product::query()
-            ->when($search !== '', function ($query) use ($search): void {
-                $query->where(function ($inner) use ($search): void {
+            ->when($filters['search'] !== '', function (Builder $query) use ($filters): void {
+                $search = $filters['search'];
+                $query->where(function (Builder $inner) use ($search): void {
                     $inner->where('name', 'like', "%{$search}%")
                         ->orWhere('slug', 'like', "%{$search}%");
                 });
             })
+            ->when($filters['type'] !== '', function (Builder $query) use ($filters): void {
+                $query->where('type', $filters['type']);
+            })
+            ->when($filters['status'] === 'published', function (Builder $query): void {
+                $query->where('is_published', true);
+            })
+            ->when($filters['status'] === 'draft', function (Builder $query): void {
+                $query->where('is_published', false);
+            })
+            ->when($filters['founding_circle'] === 'yes', function (Builder $query): void {
+                $query->where('grants_founding_circle', true);
+            })
+            ->when($filters['founding_circle'] === 'no', function (Builder $query): void {
+                $query->where('grants_founding_circle', false);
+            })
             ->latest('id')
-            ->paginate(15)
-            ->withQueryString();
+            ->paginate($filters['per_page'])
+            ->withQueryString()
+            ->through(fn (Product $product): array => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'type' => $product->type->value,
+                'amount' => (string) $product->amount,
+                'is_published' => $product->is_published,
+                'grants_founding_circle' => $product->grants_founding_circle,
+            ]);
 
         return Inertia::render('admin/products/index', [
             'products' => $products,
             'filters' => [
-                'search' => $search,
+                'search' => $filters['search'],
+                'type' => $filters['type'],
+                'status' => $filters['status'],
+                'founding_circle' => $filters['founding_circle'],
+                'per_page' => $filters['per_page'],
             ],
+            'perPageOptions' => self::CATALOG_PER_PAGE_OPTIONS,
         ]);
     }
 
@@ -165,6 +200,48 @@ class ProductController extends Controller
             ],
             'perPageOptions' => self::INVENTORY_PER_PAGE_OPTIONS,
         ]);
+    }
+
+    /**
+     * @return array{search: string, type: string, status: string, founding_circle: string, per_page: int}
+     */
+    private function catalogFilters(Request $request): array
+    {
+        $search = trim((string) $request->query('search', ''));
+        $type = trim((string) $request->query('type', ''));
+        $status = trim((string) $request->query('status', ''));
+        $foundingCircle = trim((string) $request->query('founding_circle', ''));
+
+        if (ProductType::tryFrom($type) === null) {
+            $type = '';
+        }
+
+        if (! in_array($status, ['published', 'draft'], true)) {
+            $status = '';
+        }
+
+        if (! in_array($foundingCircle, ['yes', 'no'], true)) {
+            $foundingCircle = '';
+        }
+
+        return [
+            'search' => $search,
+            'type' => $type,
+            'status' => $status,
+            'founding_circle' => $foundingCircle,
+            'per_page' => $this->catalogPerPage($request),
+        ];
+    }
+
+    private function catalogPerPage(Request $request): int
+    {
+        $perPage = $this->nullablePositiveInt($request->query('per_page'));
+
+        if ($perPage !== null && in_array($perPage, self::CATALOG_PER_PAGE_OPTIONS, true)) {
+            return $perPage;
+        }
+
+        return self::CATALOG_PER_PAGE_DEFAULT;
     }
 
     /**
