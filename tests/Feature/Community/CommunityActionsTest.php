@@ -2,6 +2,7 @@
 
 use App\Enums\RoleEnum;
 use App\Models\CommunityPost;
+use App\Models\CommunityPostHide;
 use App\Models\CommunityReport;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
@@ -44,19 +45,60 @@ test('members can report a community post', function () {
     Notification::assertSentTo($moderator, ReportFiledNotification::class);
 });
 
-test('moderators can hide a community post', function () {
-    $staff = User::factory()->admin()->create();
-    $staff->assignRole(RoleEnum::ADMIN->value);
-    $staff->syncTypeFromRoles();
+test('members can hide a post from their own feed only', function () {
+    $member = User::factory()->create();
+    $member->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+    $other = User::factory()->create();
+    $other->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
 
-    $post = CommunityPost::factory()->create();
+    $post = CommunityPost::factory()->create(['content' => 'Visible post']);
 
-    $this->actingAs($staff)
+    $this->actingAs($member)
         ->post(route('community.posts.hide', ['locale' => 'nl', 'communityPost' => $post->id]))
         ->assertRedirect();
 
-    expect($post->fresh()->status)->toBe('hidden')
-        ->and($post->fresh()->hidden_at)->not->toBeNull();
+    expect($post->fresh()->status)->toBe('published')
+        ->and(CommunityPostHide::query()->where([
+            'user_id' => $member->id,
+            'community_post_id' => $post->id,
+        ])->exists())->toBeTrue();
+
+    $this->actingAs($member)
+        ->get(route('maison.community', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->has('posts.data', 0));
+
+    $this->actingAs($other)
+        ->get(route('maison.community', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->has('posts.data', 1));
+});
+
+test('admin hidden posts stay on the authors wall but disappear for others', function () {
+    $author = User::factory()->create();
+    $author->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+    $viewer = User::factory()->create();
+    $viewer->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    $post = CommunityPost::factory()->create([
+        'author_id' => $author->id,
+        'content' => 'Admin hidden post',
+        'status' => 'hidden',
+        'hidden_at' => now(),
+    ]);
+
+    $this->actingAs($viewer)
+        ->get(route('maison.community', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->has('posts.data', 0));
+
+    $this->actingAs($author)
+        ->get(route('maison.community', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->has('posts.data', 1)
+            ->where('posts.data.0.content', 'Admin hidden post')
+        );
 });
 
 test('founding circle members can leave a session', function () {
@@ -116,4 +158,33 @@ test('staff can resolve and dismiss community reports', function () {
         ->assertRedirect();
 
     expect($open->fresh()->status)->toBe('dismissed');
+});
+
+test('posting a comment stores translations before the feed reloads', function () {
+    fakeDeepLTranslations();
+
+    $author = User::factory()->create();
+    $author->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+    $post = CommunityPost::factory()->create(['author_id' => $author->id]);
+
+    $this->actingAs($author)
+        ->post(route('community.posts.comments.store', [
+            'locale' => 'en',
+            'communityPost' => $post->id,
+        ]), [
+            'body' => 'Mooi bericht',
+        ])
+        ->assertRedirect();
+
+    $comment = $post->fresh()->comments()->first();
+
+    expect($comment)->not->toBeNull()
+        ->and($comment->translations()->count())->toBe(3);
+
+    $this->actingAs($author)
+        ->get(route('maison.community', ['locale' => 'en']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('posts.data.0.comments.0.body', 'EN Mooi bericht')
+        );
 });
