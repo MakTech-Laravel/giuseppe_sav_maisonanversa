@@ -6,6 +6,7 @@ use App\Enums\FaqContext;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreFaqRequest;
 use App\Http\Requests\Admin\UpdateFaqRequest;
+use App\Http\Requests\Admin\UpdateFaqTranslationsRequest;
 use App\Models\Faq;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -19,6 +20,12 @@ class FaqController extends Controller
     public const PER_PAGE_OPTIONS = [10, 15, 25, 50, 100];
 
     public const PER_PAGE_DEFAULT = 15;
+
+    /** @var list<string> */
+    private const TRANSLATION_TARGET_LOCALES = ['en', 'fr'];
+
+    /** @var list<string> */
+    private const TRANSLATION_COLUMNS = ['question', 'answer'];
 
     public function index(Request $request, string $locale): Response
     {
@@ -90,6 +97,8 @@ class FaqController extends Controller
 
     public function show(string $locale, Faq $faq): Response
     {
+        $faq->loadMissing('translations');
+
         return Inertia::render('admin/faqs/show', [
             'faq' => [
                 'id' => (string) $faq->id,
@@ -99,6 +108,10 @@ class FaqController extends Controller
                 'sort_order' => $faq->sort_order,
                 'is_published' => $faq->is_published,
             ],
+            'locales' => config('maison.locales'),
+            'defaultLocale' => config('maison.default_locale'),
+            'translations' => $this->translationBundle($faq),
+            'translationStatus' => $this->translationStatus($faq),
         ]);
     }
 
@@ -122,6 +135,48 @@ class FaqController extends Controller
         $faq->update($request->validated());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ bijgewerkt.')]);
+
+        return redirect()->route('admin.faqs.show', [
+            'locale' => $locale,
+            'faq' => $faq->id,
+        ]);
+    }
+
+    public function updateTranslations(
+        UpdateFaqTranslationsRequest $request,
+        string $locale,
+        Faq $faq,
+    ): RedirectResponse {
+        $data = $request->validated();
+
+        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+            foreach (self::TRANSLATION_COLUMNS as $column) {
+                $faq->translations()->updateOrCreate(
+                    [
+                        'locale' => $targetLocale,
+                        'column' => $column,
+                    ],
+                    [
+                        'value' => $data[$targetLocale][$column],
+                        'source_hash' => $faq->translationSourceHash($column),
+                    ],
+                );
+            }
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+
+        return redirect()->route('admin.faqs.show', [
+            'locale' => $locale,
+            'faq' => $faq->id,
+        ]);
+    }
+
+    public function translate(string $locale, Faq $faq): RedirectResponse
+    {
+        $faq->dispatchDeepLTranslation();
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
 
         return redirect()->route('admin.faqs.show', [
             'locale' => $locale,
@@ -176,6 +231,46 @@ class FaqController extends Controller
         }
 
         return self::PER_PAGE_DEFAULT;
+    }
+
+    /**
+     * @return array<string, array{question: string, answer: string}>
+     */
+    private function translationBundle(Faq $faq): array
+    {
+        $bundle = [];
+
+        foreach (config('maison.locales') as $targetLocale) {
+            $bundle[$targetLocale] = [
+                'question' => $faq->translated('question', $targetLocale),
+                'answer' => $faq->translated('answer', $targetLocale),
+            ];
+        }
+
+        return $bundle;
+    }
+
+    /**
+     * @return array<string, array{question: bool, answer: bool}>
+     */
+    private function translationStatus(Faq $faq): array
+    {
+        $status = [];
+
+        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+            $status[$targetLocale] = [
+                'question' => $faq->translations->contains(
+                    fn ($translation): bool => $translation->locale === $targetLocale
+                        && $translation->column === 'question',
+                ),
+                'answer' => $faq->translations->contains(
+                    fn ($translation): bool => $translation->locale === $targetLocale
+                        && $translation->column === 'answer',
+                ),
+            ];
+        }
+
+        return $status;
     }
 
     /**

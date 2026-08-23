@@ -367,6 +367,10 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('faqs/{faq}', 'update')->name('faqs.update')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('faqs/{faq}/translations', 'updateTranslations')->name('faqs.translations.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('faqs/{faq}/translate', 'translate')->name('faqs.translate')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::delete('faqs/{faq}', 'destroy')->name('faqs.destroy')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
