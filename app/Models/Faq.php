@@ -68,4 +68,32 @@ class Faq extends Model
     {
         return static::query()->forContextPublished($context)->get();
     }
+
+    /**
+     * @return list<string>
+     */
+    public function translationTargetLocales(): array
+    {
+        return config('maison.locales');
+    }
+
+    public function translationUsesAutoDetect(): bool
+    {
+        return true;
+    }
+
+    public function translated(string $column, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+        $source = (string) ($this->getAttribute($column) ?? '');
+
+        $this->loadMissing('translations');
+
+        $row = $this->translations->first(
+            fn (Translation $translation): bool => $translation->locale === $locale
+                && $translation->column === $column,
+        );
+
+        return filled($row?->value) ? (string) $row->value : $source;
+    }
 }
