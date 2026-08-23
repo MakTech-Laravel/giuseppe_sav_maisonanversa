@@ -497,10 +497,11 @@ export function ProductFormFields({
                             maxFiles={12}
                             value={data.gallery_images}
                             onChange={(files) =>
-                                setData(
-                                    'gallery_images',
-                                    (files as File[] | null) ?? null,
-                                )
+                                setData((current) => ({
+                                    ...current,
+                                    gallery_images:
+                                        (files as File[] | null) ?? null,
+                                }))
                             }
                             existingFiles={existingGallery.filter((file) =>
                                 data.gallery_keep.includes(String(file.id)),

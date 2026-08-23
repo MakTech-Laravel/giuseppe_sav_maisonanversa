@@ -393,7 +393,9 @@ function normalizeValueFiles(value: File | File[] | null | undefined): File[] {
         return [];
     }
 
-    return Array.isArray(value) ? value : [value];
+    const files = Array.isArray(value) ? value : [value];
+
+    return files.filter((file): file is File => file instanceof File);
 }
 
 function previewsMatchFiles(previews: FilePreview[], files: File[]): boolean {
@@ -897,7 +899,6 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
         // updates, and React Strict Mode remounts wipe local preview state. Rebuild
         // object URLs from `value` whenever the logical file set changes.
         const valueKey = normalizeValueFiles(value)
-            .filter((file): file is File => file instanceof File)
             .map(fileProgressKey)
             .join('|');
         const [prevValueKey, setPrevValueKey] = useState(valueKey);
@@ -905,9 +906,7 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
         if (valueKey !== prevValueKey) {
             setPrevValueKey(valueKey);
 
-            const nextFiles = normalizeValueFiles(value).filter(
-                (file): file is File => file instanceof File,
-            );
+            const nextFiles = normalizeValueFiles(value);
 
             if (!previewsMatchFiles(filePreviews, nextFiles)) {
                 setFilePreviews((prev) => {
