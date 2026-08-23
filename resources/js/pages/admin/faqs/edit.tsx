@@ -45,12 +45,11 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
 
     function submit(event: FormEvent) {
         event.preventDefault();
-        form
-            .transform((data) => ({
-                ...data,
-                sort_order: Number(data.sort_order),
-            }))
-            .submit();
+        form.transform((data) => ({
+            ...data,
+            sort_order: Number(data.sort_order),
+        }));
+        form.submit();
     }
 
     return (
