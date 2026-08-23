@@ -3,9 +3,11 @@ import { ArrowLeft, CalendarPlus, Loader2 } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import {
+    capacityFromFormValue,
+    CommunityEventFormFields,
+} from '@/components/admin/community-event-form-fields';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import eventsRoutes from '@/routes/admin/events';
@@ -17,7 +19,9 @@ export default function CreateEvent() {
         description: '',
         starts_at: '',
         location: '',
-        capacity: '' as string | number | null,
+        capacity: '',
+        thumbnail: null as File | null,
+        remove_thumbnail: false,
     });
 
     function submit(event: FormEvent) {
@@ -25,12 +29,9 @@ export default function CreateEvent() {
         form
             .transform((data) => ({
                 ...data,
-                capacity:
-                    data.capacity === '' || data.capacity === null
-                        ? null
-                        : Number(data.capacity),
+                capacity: capacityFromFormValue(data.capacity),
             }))
-            .submit();
+            .submit({ forceFormData: true });
     }
 
     return (
@@ -51,87 +52,13 @@ export default function CreateEvent() {
                 </AdminPageHeader>
                 <form
                     onSubmit={submit}
-                    className="w-full max-w-2xl space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
+                    className="w-full space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
                 >
-                    <div className="space-y-2">
-                        <Label htmlFor="title">{t('Titel')}</Label>
-                        <Input
-                            id="title"
-                            value={form.data.title}
-                            onChange={(event) =>
-                                form.setData('title', event.target.value)
-                            }
-                        />
-                        {form.errors.title && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.title}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="description">{t('Beschrijving')}</Label>
-                        <textarea
-                            id="description"
-                            value={form.data.description}
-                            onChange={(event) =>
-                                form.setData('description', event.target.value)
-                            }
-                            className="min-h-28 w-full rounded-md border px-3 py-2 text-sm"
-                        />
-                        {form.errors.description && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.description}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="starts_at">{t('Datum')}</Label>
-                        <Input
-                            id="starts_at"
-                            type="datetime-local"
-                            value={form.data.starts_at}
-                            onChange={(event) =>
-                                form.setData('starts_at', event.target.value)
-                            }
-                        />
-                        {form.errors.starts_at && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.starts_at}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="location">{t('Locatie')}</Label>
-                        <Input
-                            id="location"
-                            value={form.data.location}
-                            onChange={(event) =>
-                                form.setData('location', event.target.value)
-                            }
-                        />
-                        {form.errors.location && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.location}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="capacity">{t('Capaciteit')}</Label>
-                        <Input
-                            id="capacity"
-                            type="number"
-                            min={1}
-                            value={form.data.capacity ?? ''}
-                            onChange={(event) =>
-                                form.setData('capacity', event.target.value)
-                            }
-                        />
-                        {form.errors.capacity && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.capacity}
-                            </p>
-                        )}
-                    </div>
+                    <CommunityEventFormFields
+                        data={form.data}
+                        errors={form.errors}
+                        setData={form.setData}
+                    />
                     <Button type="submit" disabled={form.processing}>
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />

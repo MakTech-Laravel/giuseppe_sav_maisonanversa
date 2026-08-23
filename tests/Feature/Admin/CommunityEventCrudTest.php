@@ -73,5 +73,6 @@ test('events index exposes starts_at capacity and rsvp_count', function () {
             ->where('events.0.rsvp_count', 0)
             ->has('events.0.starts_at')
             ->has('events.0.location')
+            ->has('events.0.thumbnail_url')
         );
 });

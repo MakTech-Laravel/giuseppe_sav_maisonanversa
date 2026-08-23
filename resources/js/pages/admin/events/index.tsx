@@ -22,6 +22,7 @@ interface EventRow {
     location: string;
     capacity: number | null;
     rsvp_count: number;
+    thumbnail_url: string | null;
 }
 
 function formatStartsAt(value: string): string {
@@ -71,6 +72,7 @@ export default function EventsIndex({ events }: { events: EventRow[] }) {
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
+                                <TableHead className="w-14" />
                                 <TableHead>{t('Evenement')}</TableHead>
                                 <TableHead className="hidden md:table-cell">
                                     {t('Datum')}
@@ -87,6 +89,17 @@ export default function EventsIndex({ events }: { events: EventRow[] }) {
                         <TableBody>
                             {events.map((event) => (
                                 <TableRow key={event.id}>
+                                    <TableCell>
+                                        {event.thumbnail_url ? (
+                                            <img
+                                                src={event.thumbnail_url}
+                                                alt=""
+                                                className="size-10 rounded object-cover"
+                                            />
+                                        ) : (
+                                            <div className="size-10 rounded bg-muted" />
+                                        )}
+                                    </TableCell>
                                     <TableCell>
                                         <span className="font-medium">
                                             {event.title}
@@ -115,9 +128,7 @@ export default function EventsIndex({ events }: { events: EventRow[] }) {
                                                     locale: wayfinderLocale(),
                                                     event: event.id,
                                                 })}
-                                                title={t(
-                                                    'Evenement bekijken',
-                                                )}
+                                                title={t('Boekingen bekijken')}
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
