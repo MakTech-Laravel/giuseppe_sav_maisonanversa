@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Log;
 
 class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 {
@@ -22,21 +21,21 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 
     /**
      * @param  class-string<Model>  $modelClass
+     * @param  list<string>|null  $onlyLocales
      */
     public function __construct(
         public string $modelClass,
         public int $modelId,
-        public ?string $onlyLocale = null,
-        public ?string $onlyColumn = null,
+        public ?array $onlyLocales = null,
     ) {}
 
     public function uniqueId(): string
     {
-        $suffix = $this->onlyLocale !== null && $this->onlyColumn !== null
-            ? ":{$this->onlyLocale}:{$this->onlyColumn}"
-            : '';
+        $localeKey = $this->onlyLocales === null
+            ? 'all'
+            : implode(',', $this->onlyLocales);
 
-        return $this->modelClass.':'.$this->modelId.$suffix;
+        return $this->modelClass.':'.$this->modelId.':'.$localeKey;
     }
 
     public function handle(DeepLTranslator $translator): void
@@ -47,23 +46,21 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        /** @var Model&object{translatableColumns: callable, translations: mixed} $model */
-        $columns = $this->onlyColumn !== null
-            ? [$this->onlyColumn]
-            : $model->translatableColumns();
-        $targets = collect(config('maison.locales'))
-            ->reject(fn (string $locale): bool => $locale === config('maison.default_locale'))
-            ->when(
-                $this->onlyLocale !== null,
-                fn ($collection) => $collection->filter(
-                    fn (string $locale): bool => $locale === $this->onlyLocale,
-                ),
-            )
-            ->values();
+        /** @var Model&object{translatableColumns: callable, translations: mixed, translationTargetLocales: callable, translationUsesAutoDetect: callable} $model */
+        $columns = $model->translatableColumns();
+        $targets = collect($model->translationTargetLocales());
+
+        if ($this->onlyLocales !== null) {
+            $targets = $targets->intersect($this->onlyLocales)->values();
+        }
 
         if ($columns === [] || $targets->isEmpty()) {
             return;
         }
+
+        $sourceLocale = $model->translationUsesAutoDetect()
+            ? null
+            : strtoupper((string) config('maison.default_locale'));
 
         $model->loadMissing('translations');
 
@@ -96,11 +93,6 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
             }
 
             if (! $translator->configured()) {
-                Log::warning('TranslateModelJob skipped: DEEPL_API_KEY is not configured.', [
-                    'model' => $this->modelClass,
-                    'id' => $this->modelId,
-                ]);
-
                 return;
             }
 
@@ -108,6 +100,7 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
                 $translated = $translator->translateMany(
                     array_values($pending),
                     $translator->targetLang($locale),
+                    $sourceLocale,
                 );
             } catch (RequestException $exception) {
                 if ($exception->response?->status() === 456) {

@@ -83,7 +83,12 @@ function fakeDeepLTranslations(): void
 
     Http::fake(function ($request) {
         $target = (string) $request->data()['target_lang'];
-        $label = str_starts_with($target, 'EN') ? 'EN' : (str_starts_with($target, 'FR') ? 'FR' : $target);
+        $label = match (true) {
+            str_starts_with($target, 'EN') => 'EN',
+            str_starts_with($target, 'FR') => 'FR',
+            str_starts_with($target, 'NL') => 'NL',
+            default => $target,
+        };
         $texts = $request->data()['text'];
         $texts = is_array($texts) ? $texts : [$texts];
 

@@ -164,16 +164,41 @@ test('staff can view a faq detail page', function () {
             ->where('faq.sort_order', 4)
             ->where('faq.is_published', true)
             ->has('locales', 3)
-            ->where('defaultLocale', 'nl')
             ->has('translations.nl')
             ->has('translations.en')
             ->has('translations.fr')
+            ->has('translationStatus.nl')
             ->has('translationStatus.en')
             ->has('translationStatus.fr')
         );
 });
 
-test('creating a faq stores deepl english and french translations', function () {
+test('faq detail page shows translated content for the active locale', function () {
+    $faq = Faq::factory()->product()->published()->create([
+        'question' => 'English source question?',
+        'answer' => 'English source answer.',
+    ]);
+
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'question'],
+        ['value' => 'Question source en français ?', 'source_hash' => $faq->translationSourceHash('question')],
+    );
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'answer'],
+        ['value' => 'Réponse source en français.', 'source_hash' => $faq->translationSourceHash('answer')],
+    );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.faqs.show', ['locale' => 'fr', 'faq' => $faq->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/faqs/show')
+            ->where('faq.question', 'Question source en français ?')
+            ->where('faq.answer', 'Réponse source en français.')
+        );
+});
+
+test('creating a faq stores deepl translations for all locales', function () {
     fakeDeepLTranslations();
 
     $this->actingAs($this->admin)
@@ -188,9 +213,31 @@ test('creating a faq stores deepl english and french translations', function () 
 
     $faq = Faq::query()->where('question', 'DeepL FAQ vraag?')->firstOrFail();
 
-    expect($faq->translations()->count())->toBe(4)
+    expect($faq->translations()->count())->toBe(6)
+        ->and($faq->translated('question', 'nl'))->toBe('NL DeepL FAQ vraag?')
         ->and($faq->translated('question', 'en'))->toBe('EN DeepL FAQ vraag?')
         ->and($faq->translated('answer', 'fr'))->toBe('FR DeepL FAQ antwoord.');
+});
+
+test('creating a faq in english auto-detects and translates to all locales', function () {
+    fakeDeepLTranslations();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.faqs.store', ['locale' => 'nl']), [
+            'context' => FaqContext::Product->value,
+            'question' => 'How long will shipping take?',
+            'answer' => 'Standard shipping takes 3-5 days.',
+            'sort_order' => 0,
+            'is_published' => true,
+        ])
+        ->assertRedirect();
+
+    $faq = Faq::query()->where('question', 'How long will shipping take?')->firstOrFail();
+
+    expect($faq->translations()->count())->toBe(6)
+        ->and($faq->translated('question', 'en'))->toBe('EN How long will shipping take?')
+        ->and($faq->translated('question', 'fr'))->toBe('FR How long will shipping take?')
+        ->and($faq->translated('question', 'nl'))->toBe('NL How long will shipping take?');
 });
 
 test('staff can manually update faq translations', function () {
@@ -201,6 +248,10 @@ test('staff can manually update faq translations', function () {
 
     $this->actingAs($this->admin)
         ->put(route('admin.faqs.translations.update', ['locale' => 'nl', 'faq' => $faq->id]), [
+            'nl' => [
+                'question' => 'Custom NL question',
+                'answer' => 'Custom NL answer',
+            ],
             'en' => [
                 'question' => 'Custom EN question',
                 'answer' => 'Custom EN answer',
@@ -214,11 +265,79 @@ test('staff can manually update faq translations', function () {
 
     $faq->refresh();
 
-    expect($faq->translated('question', 'en'))->toBe('Custom EN question')
+    expect($faq->question)->toBe('Bron vraag')
+        ->and($faq->translated('question', 'nl'))->toBe('Custom NL question')
+        ->and($faq->translated('question', 'en'))->toBe('Custom EN question')
         ->and($faq->translated('answer', 'fr'))->toBe('Custom FR answer');
 });
 
-test('staff can queue deepl retranslation for a faq', function () {
+test('editing faq source requeues deepl for all locales', function () {
+    fakeDeepLTranslations();
+
+    $faq = Faq::factory()->product()->create([
+        'question' => 'Original source question',
+        'answer' => 'Original source answer',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.faqs.update', ['locale' => 'nl', 'faq' => $faq->id]), [
+            'context' => FaqContext::Product->value,
+            'question' => 'Updated source question',
+            'answer' => 'Updated source answer',
+            'sort_order' => $faq->sort_order,
+            'is_published' => true,
+        ])
+        ->assertRedirect(route('admin.faqs.show', ['locale' => 'nl', 'faq' => $faq->id]));
+
+    $faq->refresh();
+
+    expect($faq->question)->toBe('Updated source question')
+        ->and($faq->translated('question', 'en'))->toBe('EN Updated source question')
+        ->and($faq->translated('answer', 'fr'))->toBe('FR Updated source answer');
+});
+
+test('staff can retranslate a single faq locale from source', function () {
+    fakeDeepLTranslations();
+
+    $faq = Faq::factory()->product()->create([
+        'question' => 'Single locale source question',
+        'answer' => 'Single locale source answer',
+    ]);
+
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'question'],
+        ['value' => 'Keep EN question', 'source_hash' => $faq->translationSourceHash('question')],
+    );
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'answer'],
+        ['value' => 'Keep EN answer', 'source_hash' => $faq->translationSourceHash('answer')],
+    );
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'question'],
+        ['value' => 'Keep FR question', 'source_hash' => $faq->translationSourceHash('question')],
+    );
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'answer'],
+        ['value' => 'Keep FR answer', 'source_hash' => $faq->translationSourceHash('answer')],
+    );
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.faqs.translate', ['locale' => 'nl', 'faq' => $faq->id]), [
+            'target_locale' => 'nl',
+        ])
+        ->assertRedirect(route('admin.faqs.show', ['locale' => 'nl', 'faq' => $faq->id]));
+
+    $faq->refresh();
+
+    expect($faq->translated('question', 'nl'))->toBe('NL Single locale source question')
+        ->and($faq->translated('answer', 'nl'))->toBe('NL Single locale source answer')
+        ->and($faq->translated('question', 'en'))->toBe('Keep EN question')
+        ->and($faq->translated('answer', 'en'))->toBe('Keep EN answer')
+        ->and($faq->translated('question', 'fr'))->toBe('Keep FR question')
+        ->and($faq->translated('answer', 'fr'))->toBe('Keep FR answer');
+});
+
+test('staff can queue deepl retranslation for all faq locales', function () {
     fakeDeepLTranslations();
 
     $faq = Faq::factory()->product()->create([
@@ -232,7 +351,7 @@ test('staff can queue deepl retranslation for a faq', function () {
         ->post(route('admin.faqs.translate', ['locale' => 'nl', 'faq' => $faq->id]))
         ->assertRedirect(route('admin.faqs.show', ['locale' => 'nl', 'faq' => $faq->id]));
 
-    expect($faq->fresh()->translations()->count())->toBe(4);
+    expect($faq->fresh()->translations()->count())->toBe(6);
 });
 
 test('public faq pages serve translated copy for the active locale', function () {
