@@ -106,10 +106,16 @@ export function ProductFormFields({
 }: {
     data: ProductFormData;
     errors: ProductFormErrors;
-    setData: <K extends keyof ProductFormData>(
-        key: K,
-        value: ProductFormData[K],
-    ) => void;
+    setData: {
+        <K extends keyof ProductFormData>(
+            key: K,
+            value: ProductFormData[K],
+        ): void;
+        (data: ProductFormData): void;
+        (
+            updater: (current: ProductFormData) => ProductFormData,
+        ): void;
+    };
     existingPrimary?: ExistingFile | null;
     existingGallery?: ExistingFile[];
     isUploading?: boolean;
@@ -166,8 +172,8 @@ export function ProductFormFields({
                     'Naam, slug, type en prijs van dit catalogusproduct.',
                 )}
             >
-                <div className="grid gap-5 md:grid-cols-2">
-                    <div className="grid gap-2">
+                <div className="grid items-start gap-5 md:grid-cols-2">
+                    <div className="grid min-w-0 gap-2">
                         <Label htmlFor="name">{t('Naam')}</Label>
                         <Input
                             id="name"
@@ -180,7 +186,7 @@ export function ProductFormFields({
                         />
                         <InputError message={errors.name} />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="grid min-w-0 gap-2">
                         <Label htmlFor="slug">{t('Slug')}</Label>
                         <div className="flex gap-2">
                             <Input
@@ -190,12 +196,13 @@ export function ProductFormFields({
                                     setData('slug', event.target.value)
                                 }
                                 placeholder={t('bijv. heritage-no-002')}
-                                className="flex-1"
+                                className="min-w-0 flex-1"
                             />
                             <Button
                                 type="button"
                                 variant="outline"
                                 size="icon"
+                                className="shrink-0"
                                 aria-label={t('Genereer slug uit naam')}
                                 title={t('Genereer slug uit naam')}
                                 disabled={!data.name.trim()}
@@ -208,7 +215,7 @@ export function ProductFormFields({
                         </div>
                         <InputError message={errors.slug} />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="grid min-w-0 gap-2">
                         <Label htmlFor="type">{t('Type')}</Label>
                         <Select
                             value={data.type}
@@ -233,22 +240,27 @@ export function ProductFormFields({
                         </Select>
                         <InputError message={errors.type} />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="grid min-w-0 gap-2">
                         <Label htmlFor="amount">{t('Bedrag')}</Label>
-                        <Input
-                            id="amount"
-                            type="text"
-                            inputMode="decimal"
-                            value={data.amount}
-                            onChange={(event) =>
-                                setData('amount', event.target.value)
-                            }
-                            placeholder="249.00"
-                        />
-                        <p className="text-xs text-muted-foreground">EUR</p>
+                        <div className="relative">
+                            <Input
+                                id="amount"
+                                type="text"
+                                inputMode="decimal"
+                                value={data.amount}
+                                onChange={(event) =>
+                                    setData('amount', event.target.value)
+                                }
+                                placeholder="249.00"
+                                className="pr-12"
+                            />
+                            <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
+                                EUR
+                            </span>
+                        </div>
                         <InputError message={errors.amount} />
                     </div>
-                    <div className="grid gap-2 md:col-span-2">
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
                         <Label htmlFor="expected_delivery_label">
                             {t('Verwachte levering')}
                         </Label>
@@ -448,15 +460,15 @@ export function ProductFormFields({
                     <div className="grid gap-2">
                         <Label>{t('Primaire afbeelding')}</Label>
                         <FileUpload
-                            accept="image/png,image/jpeg,image/webp"
+                            accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
                             maxSize={5}
                             value={data.primary_image}
                             onChange={(file) => {
-                                setData(
-                                    'primary_image',
-                                    (file as File | null) ?? null,
-                                );
-                                setData('remove_primary_image', false);
+                                setData((current) => ({
+                                    ...current,
+                                    primary_image: (file as File | null) ?? null,
+                                    remove_primary_image: false,
+                                }));
                             }}
                             existingFiles={
                                 showExistingPrimary && existingPrimary
@@ -480,15 +492,16 @@ export function ProductFormFields({
                         <Label>{t('Galerij')}</Label>
                         <FileUpload
                             multiple
-                            accept="image/png,image/jpeg,image/webp"
+                            accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
                             maxSize={5}
                             maxFiles={12}
                             value={data.gallery_images}
                             onChange={(files) =>
-                                setData(
-                                    'gallery_images',
-                                    (files as File[] | null) ?? null,
-                                )
+                                setData((current) => ({
+                                    ...current,
+                                    gallery_images:
+                                        (files as File[] | null) ?? null,
+                                }))
                             }
                             existingFiles={existingGallery.filter((file) =>
                                 data.gallery_keep.includes(String(file.id)),
