@@ -175,7 +175,7 @@ export default function ShowFaq({
                     <AdminPanel
                         title={t('Inhoud')}
                     description={t(
-                        'Opgeslagen inhoud (elke taal). Bezoekers zien de vertaling voor hun taal.',
+                        'Opgeslagen brontekst. Bezoekers zien de vertaling voor hun taal.',
                     )}
                     >
                         <div className="mb-5 flex flex-wrap gap-2">

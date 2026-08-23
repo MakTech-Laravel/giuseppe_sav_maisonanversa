@@ -178,13 +178,16 @@ trait TranslatesWithDeepL
         return false;
     }
 
-    public function dispatchDeepLTranslation(): void
+    /**
+     * @param  list<string>|null  $onlyLocales
+     */
+    public function dispatchDeepLTranslation(?array $onlyLocales = null): void
     {
         if ($this->translatableColumns() === [] || ! $this->exists) {
             return;
         }
 
-        TranslateModelJob::dispatch($this::class, (int) $this->getKey());
+        TranslateModelJob::dispatch($this::class, (int) $this->getKey(), $onlyLocales);
     }
 
     public function translationSourceIsDirty(): bool

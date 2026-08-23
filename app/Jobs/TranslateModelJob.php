@@ -21,15 +21,21 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 
     /**
      * @param  class-string<Model>  $modelClass
+     * @param  list<string>|null  $onlyLocales
      */
     public function __construct(
         public string $modelClass,
         public int $modelId,
+        public ?array $onlyLocales = null,
     ) {}
 
     public function uniqueId(): string
     {
-        return $this->modelClass.':'.$this->modelId;
+        $localeKey = $this->onlyLocales === null
+            ? 'all'
+            : implode(',', $this->onlyLocales);
+
+        return $this->modelClass.':'.$this->modelId.':'.$localeKey;
     }
 
     public function handle(DeepLTranslator $translator): void
@@ -40,9 +46,13 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        /** @var Model&object{translatableColumns: callable, translations: mixed} $model */
+        /** @var Model&object{translatableColumns: callable, translations: mixed, translationTargetLocales: callable, translationUsesAutoDetect: callable} $model */
         $columns = $model->translatableColumns();
         $targets = collect($model->translationTargetLocales());
+
+        if ($this->onlyLocales !== null) {
+            $targets = $targets->intersect($this->onlyLocales)->values();
+        }
 
         if ($columns === [] || $targets->isEmpty()) {
             return;

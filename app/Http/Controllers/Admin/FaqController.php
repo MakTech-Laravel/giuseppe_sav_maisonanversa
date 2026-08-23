@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\FaqContext;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreFaqRequest;
+use App\Http\Requests\Admin\TranslateFaqRequest;
 use App\Http\Requests\Admin\UpdateFaqRequest;
 use App\Http\Requests\Admin\UpdateFaqTranslationsRequest;
 use App\Models\Faq;
@@ -176,10 +177,24 @@ class FaqController extends Controller
         ]);
     }
 
-    public function translate(string $locale, Faq $faq): RedirectResponse
+    public function translate(TranslateFaqRequest $request, string $locale, Faq $faq): RedirectResponse
     {
-        $faq->translations()->delete();
-        $faq->dispatchDeepLTranslation();
+        $targetLocale = $request->validated('target_locale');
+
+        if (filled($targetLocale)) {
+            $faq->translations()
+                ->where('locale', $targetLocale)
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $faq->dispatchDeepLTranslation([$targetLocale]);
+        } else {
+            $faq->translations()
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $faq->dispatchDeepLTranslation();
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
 
