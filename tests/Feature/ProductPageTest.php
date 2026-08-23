@@ -24,6 +24,9 @@ test('the gallery is sticky with thumbnail tabs and cursor zoom', function () {
     expect($source)
         ->toContain('lg:sticky')
         ->toContain('role="tablist"')
+        ->toContain('overflow-x-auto')
+        ->toContain('scrollbar-none')
+        ->toContain("addEventListener('wheel'")
         ->toContain('cursor-zoom-in')
         ->toContain('scale(2.2)')
         ->toContain('prefers-reduced-motion');

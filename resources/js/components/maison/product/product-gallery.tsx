@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { CSSProperties, MouseEvent } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, MouseEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import type { ImageAssetName } from '@/lib/imagery';
 import { IMAGE_ASSETS } from '@/lib/imagery';
@@ -90,6 +90,28 @@ function ProductMedia({
 }
 
 /**
+ * Keep the active thumbnail visible inside the strip without scrolling the page.
+ */
+function scrollThumbIntoStrip(
+    strip: HTMLDivElement,
+    thumb: HTMLButtonElement,
+    behavior: ScrollBehavior,
+): void {
+    const stripRect = strip.getBoundingClientRect();
+    const thumbRect = thumb.getBoundingClientRect();
+    const offset =
+        thumbRect.left < stripRect.left
+            ? thumbRect.left - stripRect.left
+            : thumbRect.right > stripRect.right
+              ? thumbRect.right - stripRect.right
+              : 0;
+
+    if (offset !== 0) {
+        strip.scrollBy({ left: offset, behavior });
+    }
+}
+
+/**
  * Sticky product gallery with thumbnail switching and cursor-follow zoom.
  *
  * Zoom mirrors the prototype (`background-size: 220%` under the pointer) but
@@ -111,6 +133,18 @@ export function ProductGallery({
     const [zoomEnabled, setZoomEnabled] = useState(false);
     const [zooming, setZooming] = useState(false);
     const [origin, setOrigin] = useState({ x: 50, y: 50 });
+    const stripRef = useRef<HTMLDivElement>(null);
+    const thumbRefs = useRef<Array<HTMLButtonElement | null>>([]);
+    const dragState = useRef({
+        active: false,
+        moved: false,
+        dragging: false,
+        startX: 0,
+        scrollLeft: 0,
+        pointerId: -1,
+        thumbIndex: -1,
+    });
+    const hasOverflow = slides.length > 4;
 
     const editionMark = useMemo(() => {
         const match = productName.match(/(\d{3})/);
@@ -130,6 +164,138 @@ export function ProductGallery({
 
         return () => media.removeEventListener('change', sync);
     }, []);
+
+    useEffect(() => {
+        const strip = stripRef.current;
+        const thumb = thumbRefs.current[active];
+
+        if (!strip || !thumb) {
+            return;
+        }
+
+        const prefersReducedMotion = window.matchMedia(
+            '(prefers-reduced-motion: reduce)',
+        ).matches;
+
+        scrollThumbIntoStrip(
+            strip,
+            thumb,
+            prefersReducedMotion ? 'auto' : 'smooth',
+        );
+    }, [active, slides.length]);
+
+    useEffect(() => {
+        const strip = stripRef.current;
+
+        if (!strip) {
+            return;
+        }
+
+        const onWheel = (event: WheelEvent) => {
+            if (strip.scrollWidth <= strip.clientWidth) {
+                return;
+            }
+
+            const delta =
+                Math.abs(event.deltaX) > Math.abs(event.deltaY)
+                    ? event.deltaX
+                    : event.deltaY;
+
+            if (delta === 0) {
+                return;
+            }
+
+            event.preventDefault();
+            strip.scrollLeft += delta;
+        };
+
+        strip.addEventListener('wheel', onWheel, { passive: false });
+
+        return () => {
+            strip.removeEventListener('wheel', onWheel);
+        };
+    }, [slides.length]);
+
+    function handleStripPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+        if (event.button !== 0) {
+            return;
+        }
+
+        const strip = stripRef.current;
+
+        if (!strip) {
+            return;
+        }
+
+        const thumb = (event.target as HTMLElement | null)?.closest(
+            '[role="tab"]',
+        );
+        const thumbIndex = thumb
+            ? thumbRefs.current.findIndex((element) => element === thumb)
+            : -1;
+
+        dragState.current = {
+            active: true,
+            moved: false,
+            dragging: false,
+            startX: event.clientX,
+            scrollLeft: strip.scrollLeft,
+            pointerId: event.pointerId,
+            thumbIndex,
+        };
+    }
+
+    function handleStripPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+        const drag = dragState.current;
+        const strip = stripRef.current;
+
+        if (
+            !drag.active ||
+            !strip ||
+            event.pointerId !== drag.pointerId
+        ) {
+            return;
+        }
+
+        const delta = event.clientX - drag.startX;
+
+        if (Math.abs(delta) <= 8) {
+            return;
+        }
+
+        if (!drag.dragging) {
+            drag.dragging = true;
+            drag.moved = true;
+            strip.setPointerCapture(event.pointerId);
+        }
+
+        strip.scrollLeft = drag.scrollLeft - delta;
+    }
+
+    function finishStripDrag(event: ReactPointerEvent<HTMLDivElement>) {
+        const drag = dragState.current;
+        const strip = stripRef.current;
+
+        if (
+            !drag.active ||
+            !strip ||
+            event.pointerId !== drag.pointerId
+        ) {
+            return;
+        }
+
+        if (!drag.moved && drag.thumbIndex >= 0) {
+            setActive(drag.thumbIndex);
+        }
+
+        drag.active = false;
+        drag.dragging = false;
+        drag.moved = false;
+
+        if (strip.hasPointerCapture(event.pointerId)) {
+            strip.releasePointerCapture(event.pointerId);
+        }
+    }
 
     function handleMove(event: MouseEvent<HTMLDivElement>) {
         if (!zoomEnabled) {
@@ -151,7 +317,7 @@ export function ProductGallery({
     };
 
     return (
-        <div className="lg:sticky lg:top-[calc(var(--topbar-h)+var(--nav-h)+20px)]">
+        <div className="min-w-0 lg:sticky lg:top-[calc(var(--topbar-h)+var(--nav-h)+20px)]">
             <div
                 className={cn(
                     'relative mb-3 aspect-4/5 overflow-hidden bg-choc2',
@@ -179,21 +345,31 @@ export function ProductGallery({
             </div>
 
             <div
-                className="grid grid-cols-4 gap-2"
+                ref={stripRef}
+                className={cn(
+                    'flex w-full min-w-0 touch-pan-x gap-2 overflow-x-auto overscroll-x-contain scroll-smooth scrollbar-none [-ms-overflow-style:none]',
+                    hasOverflow && 'cursor-grab active:cursor-grabbing',
+                )}
                 role="tablist"
                 aria-label={productName}
+                onPointerDown={handleStripPointerDown}
+                onPointerMove={handleStripPointerMove}
+                onPointerUp={finishStripDrag}
+                onPointerCancel={finishStripDrag}
             >
                 {slides.map((asset, index) => (
                     <button
                         key={`${asset}-${index}`}
+                        ref={(element) => {
+                            thumbRefs.current[index] = element;
+                        }}
                         type="button"
                         role="tab"
                         aria-selected={index === active}
                         aria-label={`${productName} ${index + 1}`}
-                        data-magnetic
                         onClick={() => setActive(index)}
                         className={cn(
-                            'aspect-square overflow-hidden border transition-colors',
+                            'aspect-square shrink-0 basis-[calc((100%-1.5rem)/4)] overflow-hidden border transition-colors select-none',
                             index === active
                                 ? 'border-gold'
                                 : 'border-gold/10 hover:border-gold',
@@ -202,7 +378,7 @@ export function ProductGallery({
                         <ProductMedia
                             src={asset}
                             alt=""
-                            className="h-full w-full"
+                            className="pointer-events-none h-full w-full"
                         />
                     </button>
                 ))}
