@@ -32,6 +32,8 @@ type TranslationStatus = {
     location: boolean;
 };
 
+type TranslatableColumn = keyof LocaleCopy;
+
 interface EventTranslationsDialogProps {
     eventId: string;
     locales: string[];
@@ -56,7 +58,10 @@ export function EventTranslationsDialog({
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const [open, setOpen] = useState(false);
-    const [translating, setTranslating] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [translatingField, setTranslatingField] = useState<string | null>(
+        null,
+    );
     const [activeLocale, setActiveLocale] = useState<string>(
         locales.find((code) => code !== defaultLocale) ?? 'en',
     );
@@ -100,7 +105,7 @@ export function EventTranslationsDialog({
     }, [open, translations]);
 
     function localeFieldValue(
-        field: keyof LocaleCopy,
+        field: TranslatableColumn,
         targetLocale: string,
     ): string {
         if (targetLocale === defaultLocale) {
@@ -116,7 +121,7 @@ export function EventTranslationsDialog({
 
     function setLocaleField(
         targetLocale: 'en' | 'fr',
-        field: keyof LocaleCopy,
+        field: TranslatableColumn,
         value: string,
     ) {
         form.setData(targetLocale, {
@@ -127,20 +132,47 @@ export function EventTranslationsDialog({
 
     function submit(event: FormEvent) {
         event.preventDefault();
-        form.submit({
-            preserveScroll: true,
-            onSuccess: () => setOpen(false),
-        });
-    }
 
-    function retranslate() {
-        setTranslating(true);
-        router.post(
-            eventsRoutes.translate({ locale, event: eventId }).url,
-            {},
+        if (activeLocale === defaultLocale) {
+            return;
+        }
+
+        const targetLocale = activeLocale as 'en' | 'fr';
+        const copy = form.data[targetLocale];
+
+        router.put(
+            eventsRoutes.translations.update({ locale, event: eventId }).url,
+            {
+                target_locale: targetLocale,
+                title: copy.title,
+                description: copy.description,
+                location: copy.location,
+            },
             {
                 preserveScroll: true,
-                onFinish: () => setTranslating(false),
+                onStart: () => setSaving(true),
+                onFinish: () => setSaving(false),
+                onSuccess: () => setOpen(false),
+            },
+        );
+    }
+
+    function translateField(
+        targetLocale: string,
+        column: TranslatableColumn,
+    ) {
+        const fieldKey = `${targetLocale}:${column}`;
+        setTranslatingField(fieldKey);
+
+        router.post(
+            eventsRoutes.translateColumn({ locale, event: eventId }).url,
+            {
+                target_locale: targetLocale,
+                column,
+            },
+            {
+                preserveScroll: true,
+                onFinish: () => setTranslatingField(null),
             },
         );
     }
@@ -167,7 +199,7 @@ export function EventTranslationsDialog({
                     <DialogTitle>{t('Vertalingen')}</DialogTitle>
                     <DialogDescription>
                         {t(
-                            'Nederlands is de bron. Engels en Frans kunnen handmatig worden aangepast of opnieuw via DeepL worden gegenereerd.',
+                            'Nederlands is de bron. Engels en Frans kunnen handmatig worden aangepast of per veld via DeepL worden gegenereerd.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -175,7 +207,7 @@ export function EventTranslationsDialog({
                 {(pendingEn || pendingFr) && (
                     <p className="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
                         {t(
-                            'Sommige vertalingen ontbreken nog. Sla het evenement opnieuw op of gebruik DeepL om ze te genereren.',
+                            'Sommige vertalingen ontbreken nog. Sla het evenement opnieuw op of gebruik DeepL per veld om ze te genereren.',
                         )}
                     </p>
                 )}
@@ -220,139 +252,152 @@ export function EventTranslationsDialog({
                     </div>
                 ) : (
                     <form onSubmit={submit} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor={`${activeLocale}-title`}>
-                                {t('Titel')} ({LOCALE_LABELS[activeLocale]})
-                            </Label>
-                            <Input
-                                id={`${activeLocale}-title`}
-                                value={localeFieldValue('title', activeLocale)}
-                                onChange={(event) =>
-                                    setLocaleField(
-                                        activeLocale as 'en' | 'fr',
-                                        'title',
-                                        event.target.value,
-                                    )
-                                }
-                            />
-                            {form.errors[
-                                `${activeLocale}.title` as keyof typeof form.errors
-                            ] ? (
-                                <p className="text-sm text-destructive">
-                                    {
-                                        form.errors[
-                                            `${activeLocale}.title` as keyof typeof form.errors
-                                        ]
-                                    }
-                                </p>
-                            ) : null}
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor={`${activeLocale}-description`}>
-                                {t('Beschrijving')} (
-                                {LOCALE_LABELS[activeLocale]})
-                            </Label>
-                            <Textarea
-                                id={`${activeLocale}-description`}
-                                value={localeFieldValue(
+                        <TranslatableField
+                            id={`${activeLocale}-title`}
+                            label={t('Titel')}
+                            localeLabel={LOCALE_LABELS[activeLocale]}
+                            value={localeFieldValue('title', activeLocale)}
+                            onChange={(value) =>
+                                setLocaleField(
+                                    activeLocale as 'en' | 'fr',
+                                    'title',
+                                    value,
+                                )
+                            }
+                            error={
+                                form.errors.title as string | undefined
+                            }
+                            onTranslate={() =>
+                                translateField(activeLocale, 'title')
+                            }
+                            translating={
+                                translatingField === `${activeLocale}:title`
+                            }
+                        />
+                        <TranslatableField
+                            id={`${activeLocale}-description`}
+                            label={t('Beschrijving')}
+                            localeLabel={LOCALE_LABELS[activeLocale]}
+                            value={localeFieldValue(
+                                'description',
+                                activeLocale,
+                            )}
+                            onChange={(value) =>
+                                setLocaleField(
+                                    activeLocale as 'en' | 'fr',
                                     'description',
-                                    activeLocale,
-                                )}
-                                onChange={(event) =>
-                                    setLocaleField(
-                                        activeLocale as 'en' | 'fr',
-                                        'description',
-                                        event.target.value,
-                                    )
-                                }
-                                className="min-h-28 resize-y"
-                            />
-                            {form.errors[
-                                `${activeLocale}.description` as keyof typeof form.errors
-                            ] ? (
-                                <p className="text-sm text-destructive">
-                                    {
-                                        form.errors[
-                                            `${activeLocale}.description` as keyof typeof form.errors
-                                        ]
-                                    }
-                                </p>
-                            ) : null}
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor={`${activeLocale}-location`}>
-                                {t('Locatie')} ({LOCALE_LABELS[activeLocale]})
-                            </Label>
-                            <Input
-                                id={`${activeLocale}-location`}
-                                value={localeFieldValue(
+                                    value,
+                                )
+                            }
+                            error={form.errors.description as string | undefined}
+                            multiline
+                            onTranslate={() =>
+                                translateField(activeLocale, 'description')
+                            }
+                            translating={
+                                translatingField ===
+                                `${activeLocale}:description`
+                            }
+                        />
+                        <TranslatableField
+                            id={`${activeLocale}-location`}
+                            label={t('Locatie')}
+                            localeLabel={LOCALE_LABELS[activeLocale]}
+                            value={localeFieldValue('location', activeLocale)}
+                            onChange={(value) =>
+                                setLocaleField(
+                                    activeLocale as 'en' | 'fr',
                                     'location',
-                                    activeLocale,
-                                )}
-                                onChange={(event) =>
-                                    setLocaleField(
-                                        activeLocale as 'en' | 'fr',
-                                        'location',
-                                        event.target.value,
-                                    )
-                                }
-                            />
-                            {form.errors[
-                                `${activeLocale}.location` as keyof typeof form.errors
-                            ] ? (
-                                <p className="text-sm text-destructive">
-                                    {
-                                        form.errors[
-                                            `${activeLocale}.location` as keyof typeof form.errors
-                                        ]
-                                    }
-                                </p>
-                            ) : null}
-                        </div>
+                                    value,
+                                )
+                            }
+                            error={form.errors.location as string | undefined}
+                            onTranslate={() =>
+                                translateField(activeLocale, 'location')
+                            }
+                            translating={
+                                translatingField === `${activeLocale}:location`
+                            }
+                        />
 
-                        <DialogFooter className="gap-2 sm:justify-between">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                disabled={translating || form.processing}
-                                onClick={retranslate}
-                            >
-                                {translating ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                ) : (
-                                    <RefreshCw className="h-4 w-4" />
-                                )}
-                                {t('Opnieuw vertalen met DeepL')}
-                            </Button>
-                            <Button type="submit" disabled={form.processing}>
-                                {form.processing ? (
+                        <DialogFooter>
+                            <Button type="submit" disabled={saving}>
+                                {saving ? (
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                 ) : null}
-                                {t('Vertalingen opslaan')}
+                                {t('Vertaling opslaan')}
                             </Button>
                         </DialogFooter>
                     </form>
                 )}
-
-                {activeLocale === defaultLocale ? (
-                    <DialogFooter>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            disabled={translating}
-                            onClick={retranslate}
-                        >
-                            {translating ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <RefreshCw className="h-4 w-4" />
-                            )}
-                            {t('Opnieuw vertalen met DeepL')}
-                        </Button>
-                    </DialogFooter>
-                ) : null}
             </DialogContent>
         </Dialog>
+    );
+}
+
+function TranslatableField({
+    id,
+    label,
+    localeLabel,
+    value,
+    onChange,
+    error,
+    multiline = false,
+    onTranslate,
+    translating,
+}: {
+    id: string;
+    label: string;
+    localeLabel: string;
+    value: string;
+    onChange: (value: string) => void;
+    error?: string;
+    multiline?: boolean;
+    onTranslate: () => void;
+    translating: boolean;
+}) {
+    const { t } = useTranslation();
+
+    return (
+        <div className="space-y-2">
+            <div className="flex items-center justify-between gap-2">
+                <Label htmlFor={id}>
+                    {label} ({localeLabel})
+                </Label>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    disabled={translating}
+                    onClick={onTranslate}
+                    title={t('Vertaal dit veld met DeepL')}
+                >
+                    {translating ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                        <RefreshCw className="h-4 w-4" />
+                    )}
+                    {t('DeepL')}
+                </Button>
+            </div>
+            {multiline ? (
+                <Textarea
+                    id={id}
+                    value={value}
+                    onChange={(event) => onChange(event.target.value)}
+                    className="min-h-28 resize-y"
+                />
+            ) : (
+                <Input
+                    id={id}
+                    value={value}
+                    onChange={(event) => onChange(event.target.value)}
+                />
+            )}
+            {error ? (
+                <p className="text-sm text-destructive">{error}</p>
+            ) : null}
+        </div>
     );
 }
 

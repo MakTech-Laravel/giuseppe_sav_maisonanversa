@@ -1,6 +1,7 @@
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, CalendarDays, Loader2 } from 'lucide-react';
 import type { FormEvent } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
@@ -69,7 +70,6 @@ export default function EditEvent({
 }: EventEditProps) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
-    const isSourceLocale = locale === defaultLocale;
     const localizedCopy = localeCopyForForm(
         isLocale(locale) ? locale : SOURCE_LOCALE,
         defaultLocale,
@@ -87,69 +87,61 @@ export default function EditEvent({
         remove_thumbnail: false,
     });
 
+    useEffect(() => {
+        const copy = localeCopyForForm(
+            isLocale(locale) ? locale : SOURCE_LOCALE,
+            defaultLocale,
+            source,
+            translations,
+        );
+
+        form.setData((current) => ({
+            ...current,
+            title: copy.title,
+            description: copy.description,
+            location: copy.location,
+            starts_at: event.starts_at,
+            capacity: capacityToFormValue(event.capacity),
+            thumbnail: null,
+            remove_thumbnail: false,
+        }));
+    }, [
+        locale,
+        defaultLocale,
+        source.title,
+        source.description,
+        source.location,
+        translations.en?.title,
+        translations.en?.description,
+        translations.en?.location,
+        translations.fr?.title,
+        translations.fr?.description,
+        translations.fr?.location,
+        event.starts_at,
+        event.capacity,
+    ]);
+
     function submit(formEvent: FormEvent) {
         formEvent.preventDefault();
 
-        if (isSourceLocale) {
-            form.transform((data) => {
-                const payload: Record<string, unknown> = {
-                    title: data.title,
-                    description: data.description,
-                    starts_at: data.starts_at,
-                    location: data.location,
-                    capacity: capacityFromFormValue(data.capacity),
-                    remove_thumbnail: data.remove_thumbnail,
-                };
+        form.transform((data) => {
+            const payload: Record<string, unknown> = {
+                title: data.title,
+                description: data.description,
+                starts_at: data.starts_at,
+                location: data.location,
+                capacity: capacityFromFormValue(data.capacity),
+                remove_thumbnail: data.remove_thumbnail,
+            };
 
-                if (data.thumbnail instanceof File) {
-                    payload.thumbnail = data.thumbnail;
-                }
+            if (data.thumbnail instanceof File) {
+                payload.thumbnail = data.thumbnail;
+            }
 
-                return payload;
-            });
+            return payload;
+        });
 
-            form.submit({ forceFormData: true });
-
-            return;
-        }
-
-        if (! isLocale(locale) || (locale !== 'en' && locale !== 'fr')) {
-            return;
-        }
-
-        router.put(
-            eventsRoutes.translations.update({
-                locale: wayfinderLocale(),
-                event: event.id,
-            }).url,
-            {
-                en:
-                    locale === 'en'
-                        ? {
-                              title: form.data.title,
-                              description: form.data.description,
-                              location: form.data.location,
-                          }
-                        : {
-                              title: translations.en?.title ?? '',
-                              description: translations.en?.description ?? '',
-                              location: translations.en?.location ?? '',
-                          },
-                fr:
-                    locale === 'fr'
-                        ? {
-                              title: form.data.title,
-                              description: form.data.description,
-                              location: form.data.location,
-                          }
-                        : {
-                              title: translations.fr?.title ?? '',
-                              description: translations.fr?.description ?? '',
-                              location: translations.fr?.location ?? '',
-                          },
-            },
-            { preserveScroll: true },
-        );
+        form.submit({ forceFormData: true });
     }
 
     return (
@@ -173,14 +165,6 @@ export default function EditEvent({
                     </Button>
                 </AdminPageHeader>
 
-                {! isSourceLocale && (
-                    <p className="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">
-                        {t(
-                            'Je bewerkt de vertaling voor deze taal. Datum, capaciteit en thumbnail wijzig je in het Nederlands (NL).',
-                        )}
-                    </p>
-                )}
-
                 <form
                     onSubmit={submit}
                     className="w-full space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
@@ -190,15 +174,12 @@ export default function EditEvent({
                         errors={form.errors}
                         setData={form.setData}
                         existingThumbnailUrl={event.thumbnail_url}
-                        lockSharedFields={! isSourceLocale}
                     />
                     <Button type="submit" disabled={form.processing}>
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {isSourceLocale
-                            ? t('Opslaan')
-                            : t('Vertalingen opslaan')}
+                        {t('Opslaan')}
                     </Button>
                 </form>
             </div>

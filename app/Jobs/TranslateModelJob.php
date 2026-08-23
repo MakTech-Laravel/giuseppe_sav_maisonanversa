@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Log;
 
 class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 {
@@ -25,11 +26,17 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
     public function __construct(
         public string $modelClass,
         public int $modelId,
+        public ?string $onlyLocale = null,
+        public ?string $onlyColumn = null,
     ) {}
 
     public function uniqueId(): string
     {
-        return $this->modelClass.':'.$this->modelId;
+        $suffix = $this->onlyLocale !== null && $this->onlyColumn !== null
+            ? ":{$this->onlyLocale}:{$this->onlyColumn}"
+            : '';
+
+        return $this->modelClass.':'.$this->modelId.$suffix;
     }
 
     public function handle(DeepLTranslator $translator): void
@@ -41,9 +48,17 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
         }
 
         /** @var Model&object{translatableColumns: callable, translations: mixed} $model */
-        $columns = $model->translatableColumns();
+        $columns = $this->onlyColumn !== null
+            ? [$this->onlyColumn]
+            : $model->translatableColumns();
         $targets = collect(config('maison.locales'))
             ->reject(fn (string $locale): bool => $locale === config('maison.default_locale'))
+            ->when(
+                $this->onlyLocale !== null,
+                fn ($collection) => $collection->filter(
+                    fn (string $locale): bool => $locale === $this->onlyLocale,
+                ),
+            )
             ->values();
 
         if ($columns === [] || $targets->isEmpty()) {
@@ -81,6 +96,11 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
             }
 
             if (! $translator->configured()) {
+                Log::warning('TranslateModelJob skipped: DEEPL_API_KEY is not configured.', [
+                    'model' => $this->modelClass,
+                    'id' => $this->modelId,
+                ]);
+
                 return;
             }
 
