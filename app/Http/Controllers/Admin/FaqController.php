@@ -109,8 +109,8 @@ class FaqController extends Controller
             'faq' => [
                 'id' => (string) $faq->id,
                 'context' => $faq->context->value,
-                'question' => $faq->question,
-                'answer' => $faq->answer,
+                'question' => $faq->translated('question'),
+                'answer' => $faq->translated('answer'),
                 'sort_order' => $faq->sort_order,
                 'is_published' => $faq->is_published,
             ],
