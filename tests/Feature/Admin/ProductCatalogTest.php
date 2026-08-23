@@ -43,7 +43,9 @@ test('staff can create a limited edition product and provision pieces', function
             'grants_founding_circle' => false,
             'expected_delivery_label' => 'Autumn 2027 — subject to production',
         ])
-        ->assertRedirect();
+        ->assertRedirect()
+        ->assertInertiaFlash('toast.type', 'success')
+        ->assertInertiaFlash('toast.message', __('Product aangemaakt.'));
 
     $product = Product::query()->where('slug', 'atelier-visit')->first();
 
