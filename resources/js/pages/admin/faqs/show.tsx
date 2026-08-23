@@ -3,6 +3,7 @@ import { ArrowLeft, CircleHelp, Pencil, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
+import { FaqTranslationsDialog } from '@/components/admin/faq-translations-dialog';
 import {
     AdminPanel,
     AdminResourceShell,
@@ -21,6 +22,24 @@ interface FaqDetails {
     answer: string;
     sort_order: number;
     is_published: boolean;
+}
+
+type LocaleCopy = {
+    question: string;
+    answer: string;
+};
+
+type TranslationStatus = {
+    question: boolean;
+    answer: boolean;
+};
+
+interface ShowFaqProps {
+    faq: FaqDetails;
+    locales: string[];
+    defaultLocale: string;
+    translations: Record<string, LocaleCopy>;
+    translationStatus: Record<string, TranslationStatus>;
 }
 
 function Field({
@@ -52,7 +71,13 @@ function Field({
     );
 }
 
-export default function ShowFaq({ faq }: { faq: FaqDetails }) {
+export default function ShowFaq({
+    faq,
+    locales,
+    defaultLocale,
+    translations,
+    translationStatus,
+}: ShowFaqProps) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const contextLabel =
@@ -97,6 +122,13 @@ export default function ShowFaq({ faq }: { faq: FaqDetails }) {
                             )}
                         >
                             <div className="flex flex-col gap-2">
+                                <FaqTranslationsDialog
+                                    faqId={faq.id}
+                                    locales={locales}
+                                    defaultLocale={defaultLocale}
+                                    translations={translations}
+                                    translationStatus={translationStatus}
+                                />
                                 <Button asChild className="w-full">
                                     <Link
                                         href={faqs.edit({

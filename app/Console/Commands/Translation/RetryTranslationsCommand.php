@@ -9,6 +9,7 @@ use App\Models\CommunityCourt;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
+use App\Models\Faq;
 use App\Models\JournalArticle;
 use App\Models\Product;
 use Illuminate\Console\Attributes\Description;
@@ -31,6 +32,7 @@ class RetryTranslationsCommand extends Command
         'communitysession' => CommunitySession::class,
         'journalarticle' => JournalArticle::class,
         'product' => Product::class,
+        'faq' => Faq::class,
         'commercesetting' => CommerceSetting::class,
     ];
 

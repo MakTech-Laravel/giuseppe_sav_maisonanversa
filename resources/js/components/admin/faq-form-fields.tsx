@@ -216,6 +216,11 @@ export function FaqFormAside({
                     </li>
                     <li>
                         {t(
+                            'Engels en Frans worden automatisch via DeepL gegenereerd na opslaan. Pas ze aan via Vertalingen op de detailpagina.',
+                        )}
+                    </li>
+                    <li>
+                        {t(
                             'Alleen gepubliceerde FAQs zijn zichtbaar op de website en in SEO.',
                         )}
                     </li>
