@@ -1,7 +1,6 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, CalendarDays, Loader2 } from 'lucide-react';
 import type { FormEvent } from 'react';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
@@ -13,25 +12,17 @@ import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import eventsRoutes from '@/routes/admin/events';
-import { isLocale, SOURCE_LOCALE } from '@/types/locale';
-import type { Locale } from '@/types/locale';
-
-type LocaleCopy = {
-    title: string;
-    description: string;
-    location: string;
-};
 
 interface EventEditProps {
     event: {
         id: string;
+        title: string;
+        description: string;
+        location: string;
         starts_at: string;
         capacity: number | null;
         thumbnail_url: string | null;
     };
-    source: LocaleCopy;
-    defaultLocale: string;
-    translations: Record<string, LocaleCopy>;
 }
 
 function multipartUpdateEndpoint(
@@ -49,77 +40,19 @@ function multipartUpdateEndpoint(
     };
 }
 
-function localeCopyForForm(
-    locale: Locale,
-    defaultLocale: string,
-    source: LocaleCopy,
-    translations: Record<string, LocaleCopy>,
-): LocaleCopy {
-    if (locale === defaultLocale) {
-        return source;
-    }
-
-    return translations[locale] ?? source;
-}
-
-export default function EditEvent({
-    event,
-    source,
-    defaultLocale,
-    translations,
-}: EventEditProps) {
+export default function EditEvent({ event }: EventEditProps) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
-    const localizedCopy = localeCopyForForm(
-        isLocale(locale) ? locale : SOURCE_LOCALE,
-        defaultLocale,
-        source,
-        translations,
-    );
 
     const form = useForm(multipartUpdateEndpoint(locale, event.id), {
-        title: localizedCopy.title,
-        description: localizedCopy.description,
+        title: event.title,
+        description: event.description,
         starts_at: event.starts_at,
-        location: localizedCopy.location,
+        location: event.location,
         capacity: capacityToFormValue(event.capacity),
         thumbnail: null as File | null,
         remove_thumbnail: false,
     });
-
-    useEffect(() => {
-        const copy = localeCopyForForm(
-            isLocale(locale) ? locale : SOURCE_LOCALE,
-            defaultLocale,
-            source,
-            translations,
-        );
-
-        form.setData((current) => ({
-            ...current,
-            title: copy.title,
-            description: copy.description,
-            location: copy.location,
-            starts_at: event.starts_at,
-            capacity: capacityToFormValue(event.capacity),
-            thumbnail: null,
-            remove_thumbnail: false,
-        }));
-    }, [
-        locale,
-        defaultLocale,
-        source.title,
-        source.description,
-        source.location,
-        translations.en?.title,
-        translations.en?.description,
-        translations.en?.location,
-        translations.fr?.title,
-        translations.fr?.description,
-        translations.fr?.location,
-        event.starts_at,
-        event.capacity,
-    ]);
 
     function submit(formEvent: FormEvent) {
         formEvent.preventDefault();
@@ -150,7 +83,7 @@ export default function EditEvent({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={t('Evenement bewerken')}
-                    description={localizedCopy.title}
+                    description={event.title}
                     icon={CalendarDays}
                 >
                     <Button variant="outline" asChild>

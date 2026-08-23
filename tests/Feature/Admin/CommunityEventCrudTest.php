@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\RoleEnum;
-use App\Jobs\TranslateModelJob;
 use App\Models\CommunityEvent;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
@@ -31,7 +30,28 @@ test('staff can create a community event', function () {
     expect(CommunityEvent::query()->where('title', 'Club Night')->exists())->toBeTrue();
 });
 
-test('staff can open the event edit page', function () {
+test('creating an event stores deepl translations for all locales', function () {
+    fakeDeepLTranslations();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.events.store', ['locale' => 'nl']), [
+            'title' => 'DeepL Event titel',
+            'description' => 'DeepL Event beschrijving.',
+            'starts_at' => now()->addWeek()->toDateTimeString(),
+            'location' => 'Antwerpen',
+            'capacity' => 30,
+        ])
+        ->assertRedirect();
+
+    $event = CommunityEvent::query()->where('title', 'DeepL Event titel')->firstOrFail();
+
+    expect($event->translations()->count())->toBe(9)
+        ->and($event->translated('title', 'nl'))->toBe('NL DeepL Event titel')
+        ->and($event->translated('title', 'en'))->toBe('EN DeepL Event titel')
+        ->and($event->translated('location', 'fr'))->toBe('FR Antwerpen');
+});
+
+test('staff can open the event edit page with source fields', function () {
     $event = CommunityEvent::factory()->create([
         'title' => 'Editable Event',
         'starts_at' => now()->addDays(4),
@@ -42,37 +62,9 @@ test('staff can open the event edit page', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/events/edit')
-            ->where('source.title', 'Editable Event')
-            ->where('defaultLocale', 'nl')
-            ->has('translations.en')
+            ->where('event.title', 'Editable Event')
+            ->where('event.id', (string) $event->id)
             ->has('event.starts_at')
-            ->missing('event.title')
-        );
-});
-
-test('event edit page shows stored english copy when admin locale is en', function () {
-    $event = CommunityEvent::factory()->create([
-        'title' => 'Bron titel',
-        'description' => 'Bron beschrijving',
-        'location' => 'Antwerpen',
-    ]);
-
-    $this->actingAs($this->admin)
-        ->put(route('admin.events.translations.update', ['locale' => 'nl', 'event' => $event->id]), [
-            'target_locale' => 'en',
-            'title' => 'English title',
-            'description' => 'English description',
-            'location' => 'Antwerp',
-        ])
-        ->assertRedirect();
-
-    $this->actingAs($this->admin)
-        ->get(route('admin.events.edit', ['locale' => 'en', 'event' => $event->id]))
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('admin/events/edit')
-            ->where('translations.en.title', 'English title')
-            ->where('source.title', 'Bron titel')
         );
 });
 
@@ -93,38 +85,30 @@ test('staff can update a community event', function () {
         ->and($event->fresh()->location)->toBe('Brussels');
 });
 
-test('nl update with changed source text wipes translations and queues deepl', function () {
+test('editing event source requeues deepl for all locales', function () {
+    fakeDeepLTranslations();
+
     $event = CommunityEvent::factory()->create([
-        'title' => 'Original title',
-        'description' => 'Original description',
+        'title' => 'Original source title',
+        'description' => 'Original source description',
         'location' => 'Antwerpen',
     ]);
 
-    $event->translations()->create([
-        'locale' => 'en',
-        'column' => 'title',
-        'value' => 'Stored EN title',
-        'source_hash' => $event->translationSourceHash('title'),
-    ]);
-
-    Queue::fake();
-
     $this->actingAs($this->admin)
         ->put(route('admin.events.update', ['locale' => 'nl', 'event' => $event->id]), [
-            'title' => 'Changed title',
-            'description' => 'Original description',
+            'title' => 'Updated source title',
+            'description' => 'Updated source description',
             'starts_at' => $event->starts_at->toDateTimeString(),
-            'location' => 'Antwerpen',
+            'location' => 'Gent',
             'capacity' => $event->capacity,
         ])
-        ->assertRedirect();
+        ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
 
-    expect($event->fresh()->title)->toBe('Changed title')
-        ->and($event->fresh()->translations()->count())->toBe(0);
+    $event->refresh();
 
-    Queue::assertPushed(TranslateModelJob::class, function (TranslateModelJob $job) use ($event): bool {
-        return $job->uniqueId() === CommunityEvent::class.':'.$event->id;
-    });
+    expect($event->title)->toBe('Updated source title')
+        ->and($event->translated('title', 'en'))->toBe('EN Updated source title')
+        ->and($event->translated('location', 'fr'))->toBe('FR Gent');
 });
 
 test('nl update without source text change keeps existing translations', function () {
@@ -158,30 +142,6 @@ test('nl update without source text change keeps existing translations', functio
         ->and($event->fresh()->translations()->count())->toBe(1);
 
     Queue::assertNothingPushed();
-});
-
-test('staff can update event copy in english via regular edit', function () {
-    $event = CommunityEvent::factory()->create([
-        'title' => 'Bron titel',
-        'description' => 'Bron beschrijving',
-        'location' => 'Antwerpen',
-    ]);
-
-    $this->actingAs($this->admin)
-        ->put(route('admin.events.update', ['locale' => 'en', 'event' => $event->id]), [
-            'title' => 'Edited EN title',
-            'description' => 'Edited EN description',
-            'starts_at' => $event->starts_at->toDateTimeString(),
-            'location' => 'Antwerp',
-            'capacity' => $event->capacity,
-        ])
-        ->assertRedirect();
-
-    $event->refresh();
-
-    expect($event->title)->toBe('Bron titel')
-        ->and($event->translated('title', 'en'))->toBe('Edited EN title')
-        ->and($event->translated('location', 'en'))->toBe('Antwerp');
 });
 
 test('staff can delete a community event', function () {
@@ -305,7 +265,7 @@ test('admin can update event status', function () {
         );
 });
 
-test('event show exposes translation bundle and status', function () {
+test('event show exposes translation bundle and status for all locales', function () {
     $event = CommunityEvent::factory()->create([
         'title' => 'Vertaal Event',
         'description' => 'Beschrijving',
@@ -318,84 +278,132 @@ test('event show exposes translation bundle and status', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/events/show')
             ->has('locales', 3)
-            ->where('defaultLocale', 'nl')
             ->has('translations.nl')
             ->has('translations.en')
             ->has('translations.fr')
             ->where('translations.nl.title', 'Vertaal Event')
+            ->has('translationStatus.nl')
             ->has('translationStatus.en')
             ->has('translationStatus.fr')
         );
 });
 
-test('staff can manually update event translations for one locale only', function () {
+test('event detail page shows translated content for the active locale', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'English source title',
+        'description' => 'English source description',
+        'location' => 'Antwerp',
+    ]);
+
+    $event->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'title'],
+        ['value' => 'Titre source en français', 'source_hash' => $event->translationSourceHash('title')],
+    );
+    $event->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'description'],
+        ['value' => 'Description source en français.', 'source_hash' => $event->translationSourceHash('description')],
+    );
+    $event->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'location'],
+        ['value' => 'Anvers', 'source_hash' => $event->translationSourceHash('location')],
+    );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.show', ['locale' => 'fr', 'event' => $event->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/events/show')
+            ->where('event.title', 'Titre source en français')
+            ->where('event.description', 'Description source en français.')
+            ->where('event.location', 'Anvers')
+        );
+});
+
+test('staff can manually update event translations for all locales', function () {
     $event = CommunityEvent::factory()->create([
         'title' => 'Bron titel',
         'description' => 'Bron beschrijving',
         'location' => 'Antwerpen',
     ]);
 
-    $event->translations()->create([
-        'locale' => 'fr',
-        'column' => 'title',
-        'value' => 'Existing FR title',
-        'source_hash' => $event->translationSourceHash('title'),
-    ]);
-
     $this->actingAs($this->admin)
         ->put(route('admin.events.translations.update', ['locale' => 'nl', 'event' => $event->id]), [
-            'target_locale' => 'en',
-            'title' => 'Custom EN title',
-            'description' => 'Custom EN description',
-            'location' => 'Antwerp',
+            'nl' => [
+                'title' => 'Custom NL title',
+                'description' => 'Custom NL description',
+                'location' => 'Antwerpen NL',
+            ],
+            'en' => [
+                'title' => 'Custom EN title',
+                'description' => 'Custom EN description',
+                'location' => 'Antwerp',
+            ],
+            'fr' => [
+                'title' => 'Custom FR title',
+                'description' => 'Custom FR description',
+                'location' => 'Anvers',
+            ],
         ])
         ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
 
     $event->refresh();
 
-    expect($event->translated('title', 'en'))->toBe('Custom EN title')
-        ->and($event->translated('location', 'en'))->toBe('Antwerp')
-        ->and($event->translated('title', 'fr'))->toBe('Existing FR title');
+    expect($event->title)->toBe('Bron titel')
+        ->and($event->translated('title', 'nl'))->toBe('Custom NL title')
+        ->and($event->translated('title', 'en'))->toBe('Custom EN title')
+        ->and($event->translated('location', 'fr'))->toBe('Anvers');
 });
 
-test('translate column runs deepl synchronously and stores result', function () {
+test('staff can retranslate a single event locale from source', function () {
     fakeDeepLTranslations();
 
     $event = CommunityEvent::factory()->create([
-        'title' => 'Tijger titel',
-        'description' => 'Beschrijving',
+        'title' => 'Single locale source title',
+        'description' => 'Single locale source description',
         'location' => 'Gent',
     ]);
 
-    $event->translations()->delete();
+    $event->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'title'],
+        ['value' => 'Keep EN title', 'source_hash' => $event->translationSourceHash('title')],
+    );
+    $event->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'description'],
+        ['value' => 'Keep EN description', 'source_hash' => $event->translationSourceHash('description')],
+    );
+    $event->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'location'],
+        ['value' => 'Keep EN location', 'source_hash' => $event->translationSourceHash('location')],
+    );
+    $event->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'title'],
+        ['value' => 'Keep FR title', 'source_hash' => $event->translationSourceHash('title')],
+    );
+    $event->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'description'],
+        ['value' => 'Keep FR description', 'source_hash' => $event->translationSourceHash('description')],
+    );
+    $event->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'location'],
+        ['value' => 'Keep FR location', 'source_hash' => $event->translationSourceHash('location')],
+    );
 
     $this->actingAs($this->admin)
-        ->post(route('admin.events.translate-column', ['locale' => 'nl', 'event' => $event->id]), [
-            'target_locale' => 'en',
-            'column' => 'title',
+        ->post(route('admin.events.translate', ['locale' => 'nl', 'event' => $event->id]), [
+            'target_locale' => 'nl',
         ])
-        ->assertRedirect();
+        ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
 
-    expect($event->fresh()->translated('title', 'en'))->toBe('EN Tijger titel');
+    $event->refresh();
+
+    expect($event->translated('title', 'nl'))->toBe('NL Single locale source title')
+        ->and($event->translated('description', 'nl'))->toBe('NL Single locale source description')
+        ->and($event->translated('location', 'nl'))->toBe('NL Gent')
+        ->and($event->translated('title', 'en'))->toBe('Keep EN title')
+        ->and($event->translated('title', 'fr'))->toBe('Keep FR title');
 });
 
-test('translate column without deepl key returns error flash', function () {
-    config(['services.deepl.key' => null]);
-
-    $event = CommunityEvent::factory()->create([
-        'title' => 'Titel zonder deepl',
-    ]);
-
-    $this->actingAs($this->admin)
-        ->post(route('admin.events.translate-column', ['locale' => 'nl', 'event' => $event->id]), [
-            'target_locale' => 'en',
-            'column' => 'title',
-        ])
-        ->assertRedirect()
-        ->assertInertiaFlash('toast.type', 'error');
-});
-
-test('staff can queue deepl retranslation for an event', function () {
+test('staff can queue deepl retranslation for all event locales', function () {
     fakeDeepLTranslations();
 
     $event = CommunityEvent::factory()->create([
@@ -410,5 +418,5 @@ test('staff can queue deepl retranslation for an event', function () {
         ->post(route('admin.events.translate', ['locale' => 'nl', 'event' => $event->id]))
         ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
 
-    expect($event->fresh()->translations()->count())->toBe(6);
+    expect($event->fresh()->translations()->count())->toBe(9);
 });

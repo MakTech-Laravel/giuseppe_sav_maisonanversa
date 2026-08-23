@@ -17,5 +17,5 @@ Admin events index supports `search` and `status` (opening|ongoing|closed) query
 ## Event status is a stored column
 Community events store status (opening|ongoing|closed) on community_events.status. Index filters and row badges use that column. Do not derive filter status from starts_at.
 
-## Event translations: auto DeepL + manual override
-On create/update in NL, Dutch source fields queue TranslateModelJob (never sync DeepL in HTTP). When NL source text changes, existing translation rows are deleted and re-queued. Edit in EN/FR uses the regular update route: shared fields update community_events; text fields replace that locale's rows in translations (delete then insert). Event show Vertalingen dialog saves one target locale at a time via PUT `admin.events.translations.update` with target_locale; per-field DeepL via POST `admin.events.translate-column` (runs synchronously); bulk re-queue via POST `admin.events.translate`. Flash error when DEEPL_API_KEY is missing.
+## Event translations: same pattern as FAQ
+Community events follow the FAQ translation flow. Source text lives on community_events (title, description, location). Create/update queues TranslateModelJob for all locales (nl, en, fr) via TranslatesWithDeepL with auto-detect. Edit form always shows source columns. Vertalingen dialog on show saves all locales via PUT `admin.events.translations.update`; single-locale or bulk DeepL retranslate via POST `admin.events.translate` with optional `target_locale`.

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class TranslateCommunityEventColumnRequest extends FormRequest
+class TranslateCommunityEventRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,8 +19,12 @@ class TranslateCommunityEventColumnRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'target_locale' => ['required', 'string', Rule::in(['en', 'fr'])],
-            'column' => ['required', 'string', Rule::in(['title', 'description', 'location'])],
+            'target_locale' => [
+                'sometimes',
+                'nullable',
+                'string',
+                Rule::in(config('maison.locales')),
+            ],
         ];
     }
 }
