@@ -38,7 +38,7 @@ class UpdateCommunityEventRequest extends FormRequest
             'starts_at' => ['required', 'date'],
             'location' => ['nullable', 'string', 'max:255'],
             'capacity' => ['nullable', 'integer', 'min:1', 'max:500'],
-            'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
             'remove_thumbnail' => ['sometimes', 'boolean'],
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\CommunityEventStatus;
 use App\Models\CommunityEvent;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -39,6 +40,31 @@ class CommunityEventFactory extends Factory
             'starts_at' => now()->addMonth(),
             'location' => $event['location'],
             'capacity' => $event['capacity'],
+            'status' => CommunityEventStatus::Opening,
         ];
+    }
+
+    public function opening(): static
+    {
+        return $this->state(fn (): array => [
+            'status' => CommunityEventStatus::Opening,
+            'starts_at' => now()->addDays(3),
+        ]);
+    }
+
+    public function ongoing(): static
+    {
+        return $this->state(fn (): array => [
+            'status' => CommunityEventStatus::Ongoing,
+            'starts_at' => now()->subHours(2),
+        ]);
+    }
+
+    public function closed(): static
+    {
+        return $this->state(fn (): array => [
+            'status' => CommunityEventStatus::Closed,
+            'starts_at' => now()->subDays(2),
+        ]);
     }
 }
