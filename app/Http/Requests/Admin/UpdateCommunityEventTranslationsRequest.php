@@ -4,7 +4,6 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateCommunityEventTranslationsRequest extends FormRequest
 {
@@ -19,10 +18,15 @@ class UpdateCommunityEventTranslationsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'target_locale' => ['required', 'string', Rule::in(['en', 'fr'])],
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:5000'],
-            'location' => ['required', 'string', 'max:255'],
+            'nl.title' => ['required', 'string', 'max:255'],
+            'nl.description' => ['required', 'string', 'max:5000'],
+            'nl.location' => ['required', 'string', 'max:255'],
+            'en.title' => ['required', 'string', 'max:255'],
+            'en.description' => ['required', 'string', 'max:5000'],
+            'en.location' => ['required', 'string', 'max:255'],
+            'fr.title' => ['required', 'string', 'max:255'],
+            'fr.description' => ['required', 'string', 'max:5000'],
+            'fr.location' => ['required', 'string', 'max:255'],
         ];
     }
 }

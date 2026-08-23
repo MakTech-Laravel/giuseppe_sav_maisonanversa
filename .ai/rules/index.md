@@ -6,3 +6,4 @@ Before planning or editing, find the row whose globs match the file's path and r
 | --- | --- |
 | app/Http/Controllers/Admin/CommunityEventController.php | .ai/rules/admin.md |
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
+| app/Services/Translation/** | .ai/rules/translation.md |

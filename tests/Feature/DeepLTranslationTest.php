@@ -54,6 +54,10 @@ test('deepl uses the free host for keys ending in fx', function () {
     config(['services.deepl.host' => 'https://example.test']);
 
     expect(app(DeepLTranslator::class)->host())->toBe('https://example.test');
+
+    config(['services.deepl.host' => 'api-free.deepl.com']);
+
+    expect(app(DeepLTranslator::class)->host())->toBe('https://api-free.deepl.com');
 });
 
 test('saving a community post stores english and french translations', function () {
@@ -141,7 +145,7 @@ test('translate jobs are unique per model', function () {
     $post = CommunityPost::factory()->create(['content' => 'Hallo']);
 
     Queue::assertPushed(TranslateModelJob::class, function (TranslateModelJob $job) use ($post): bool {
-        return $job->uniqueId() === CommunityPost::class.':'.$post->id;
+        return $job->uniqueId() === CommunityPost::class.':'.$post->id.':all';
     });
 });
 
@@ -313,7 +317,7 @@ test('creating a community event queues TranslateModelJob', function () {
     $event = CommunityEvent::factory()->create(['title' => 'Salon avond']);
 
     Queue::assertPushed(TranslateModelJob::class, function (TranslateModelJob $job) use ($event): bool {
-        return $job->uniqueId() === CommunityEvent::class.':'.$event->id;
+        return $job->uniqueId() === CommunityEvent::class.':'.$event->id.':all';
     });
 });
 
