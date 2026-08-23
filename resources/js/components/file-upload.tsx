@@ -861,13 +861,18 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
         useEffect(() => {
             previewsRef.current = filePreviews;
         }, [filePreviews]);
-        useEffect(
-            () => () => {
+
+        // Strict Mode runs effect cleanup then setup again on the same instance.
+        // Reset `alive` on every mount so selections aren't dropped after that cycle
+        // (common after Inertia client navigations in DEV).
+        useEffect(() => {
+            alive.current = true;
+
+            return () => {
                 alive.current = false;
                 previewsRef.current.forEach(revokePreview);
-            },
-            [],
-        );
+            };
+        }, []);
 
         // ── Imperative handle ────────────────────────────────────────────────────
         useImperativeHandle(
@@ -888,10 +893,11 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
         );
 
         // ── Sync previews with the controlled value ──────────────────────────────
-        // Inertia's setData cloneDeep() replaces File references on every field
-        // update, and React Strict Mode remounts wipe local preview state. Rebuild
+        // Inertia's setData cloneDeep() can replace File references on field
+        // updates, and React Strict Mode remounts wipe local preview state. Rebuild
         // object URLs from `value` whenever the logical file set changes.
         const valueKey = normalizeValueFiles(value)
+            .filter((file): file is File => file instanceof File)
             .map(fileProgressKey)
             .join('|');
         const [prevValueKey, setPrevValueKey] = useState(valueKey);
@@ -899,11 +905,16 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
         if (valueKey !== prevValueKey) {
             setPrevValueKey(valueKey);
 
-            const nextFiles = normalizeValueFiles(value);
+            const nextFiles = normalizeValueFiles(value).filter(
+                (file): file is File => file instanceof File,
+            );
 
             if (!previewsMatchFiles(filePreviews, nextFiles)) {
-                filePreviews.forEach(revokePreview);
-                setFilePreviews(nextFiles.map(buildPreview));
+                setFilePreviews((prev) => {
+                    prev.forEach(revokePreview);
+
+                    return nextFiles.map(buildPreview);
+                });
             }
         }
 

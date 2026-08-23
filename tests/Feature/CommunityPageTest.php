@@ -27,7 +27,7 @@ test('authenticated members receive a scrollable community feed', function () {
     $user = User::factory()->create();
     CommunityPost::factory()->count(CommunityFeed::PER_PAGE + 4)->create();
 
-    $this->actingAs($user)
+    $response = $this->actingAs($user)
         ->get(localized('maison.community'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
@@ -37,6 +37,18 @@ test('authenticated members receive a scrollable community feed', function () {
             ->where('posts.last_page', 2)
             ->has('posts.data.0.comments')
         );
+
+    $inertiaPage = $response->viewData('page');
+    $inertiaPage = is_array($inertiaPage) ? $inertiaPage : json_decode(json_encode($inertiaPage), true);
+
+    expect($inertiaPage['scrollProps']['posts'] ?? null)
+        ->toMatchArray([
+            'pageName' => 'page',
+            'currentPage' => 1,
+            'nextPage' => 2,
+            'previousPage' => null,
+            'reset' => false,
+        ]);
 });
 
 test('authenticated members can load the next community feed page', function () {
@@ -138,5 +150,8 @@ test('the community feed uses inertia infinite scroll', function () {
 
     expect($source)
         ->toContain('InfiniteScroll')
-        ->toContain('data="posts"');
+        ->toContain('data="posts"')
+        ->toContain('scrollProps?.posts')
+        ->toContain("router.on('beforeUpdate'")
+        ->toContain('flushSync');
 });

@@ -68,6 +68,7 @@ interface InventoryFilters {
     number_from: string;
     number_to: string;
     status: string;
+    per_page: number;
 }
 
 const STATUS_OPTIONS = [
@@ -76,6 +77,8 @@ const STATUS_OPTIONS = [
     'reserved',
     'allocated',
 ] as const;
+
+const DEFAULT_PER_PAGE = 75;
 
 function translateInventoryStatus(
     status: string,
@@ -101,6 +104,10 @@ function inventoryQuery(
         number_from: filters.number_from || undefined,
         number_to: filters.number_to || undefined,
         status: filters.status || undefined,
+        per_page:
+            filters.per_page === DEFAULT_PER_PAGE
+                ? undefined
+                : filters.per_page,
     };
 }
 
@@ -110,18 +117,23 @@ export default function HeritageIndex({
     inventory,
     pieces,
     filters,
+    perPageOptions = [25, 50, 75, 100, 150, 200, 300],
 }: {
     product: HeritageProduct | null;
     catalog?: CatalogOption[];
     inventory: HeritageInventory;
     pieces: Paginated<InventoryRow>;
     filters: InventoryFilters;
+    perPageOptions?: number[];
 }) {
     const { t } = useTranslation();
     const [search, setSearch] = useState(filters.search ?? '');
     const [numberFrom, setNumberFrom] = useState(filters.number_from ?? '');
     const [numberTo, setNumberTo] = useState(filters.number_to ?? '');
     const [status, setStatus] = useState(filters.status || 'all');
+    const [perPage, setPerPage] = useState(
+        filters.per_page ?? DEFAULT_PER_PAGE,
+    );
     const firstRender = useRef(true);
 
     useEffect(() => {
@@ -139,13 +151,14 @@ export default function HeritageIndex({
                     number_from: numberFrom,
                     number_to: numberTo,
                     status: status === 'all' ? '' : status,
+                    per_page: perPage,
                 }),
                 { preserveState: true, preserveScroll: true, replace: true },
             );
         }, 350);
 
         return () => clearTimeout(timeout);
-    }, [search, numberFrom, numberTo, status, product?.id]);
+    }, [search, numberFrom, numberTo, status, perPage, product?.id]);
 
     const hasActiveFilters =
         Boolean(search) ||
@@ -226,7 +239,7 @@ export default function HeritageIndex({
                 </div>
 
                 <div className="rounded-xl border bg-card p-4 shadow-sm sm:p-5">
-                    <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,0.7fr))_auto]">
+                    <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,0.7fr))_minmax(0,0.65fr)_auto]">
                         <div className="relative">
                             <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
@@ -292,6 +305,31 @@ export default function HeritageIndex({
                                 {STATUS_OPTIONS.map((value) => (
                                     <SelectItem key={value} value={value}>
                                         {translateInventoryStatus(value, t)}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Select
+                            value={String(perPage)}
+                            onValueChange={(value) =>
+                                setPerPage(Number(value))
+                            }
+                        >
+                            <SelectTrigger
+                                className="w-full"
+                                aria-label={t('Per pagina')}
+                            >
+                                <SelectValue placeholder={t('Per pagina')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {perPageOptions.map((option) => (
+                                    <SelectItem
+                                        key={option}
+                                        value={String(option)}
+                                    >
+                                        {t('{{count}} per pagina', {
+                                            count: option,
+                                        })}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
