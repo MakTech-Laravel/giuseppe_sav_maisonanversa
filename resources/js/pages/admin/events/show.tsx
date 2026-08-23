@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, CalendarDays, Pencil } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Pencil, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
@@ -23,10 +23,25 @@ interface EventDetail {
     location: string;
     capacity: number | null;
     rsvp_count: number;
-    guest_list: { name: string; email: string }[];
+    thumbnail_url: string | null;
+    bookings: { id: string; name: string; email: string; booked_at: string | null }[];
 }
 
 function formatStartsAt(value: string): string {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return value;
+    }
+
+    return date.toLocaleString();
+}
+
+function formatBookedAt(value: string | null): string {
+    if (!value) {
+        return '—';
+    }
+
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) {
@@ -65,51 +80,82 @@ export default function EventShow({ event }: { event: EventDetail }) {
                         </Link>
                     </Button>
                 </AdminPageHeader>
-                <div className="grid max-w-5xl gap-6 lg:grid-cols-3">
-                    <dl className="space-y-4 rounded-xl border bg-card p-6 text-sm shadow-sm">
-                        <Detail label={t('Referentie')} value={event.id} />
-                        <Detail
-                            label={t('Datum')}
-                            value={formatStartsAt(event.starts_at)}
-                        />
-                        <Detail label={t('Locatie')} value={event.location} />
-                        <Detail
-                            label={t('Aanwezigen')}
-                            value={
-                                event.capacity != null
-                                    ? `${event.rsvp_count} / ${event.capacity}`
-                                    : String(event.rsvp_count)
-                            }
-                        />
-                    </dl>
-                    <div className="overflow-hidden rounded-xl border bg-card shadow-sm lg:col-span-2">
-                        <div className="border-b px-6 py-4">
+
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+                    <div className="w-full shrink-0 space-y-4 rounded-xl border bg-card p-6 text-sm shadow-sm lg:w-80">
+                        {event.thumbnail_url ? (
+                            <img
+                                src={event.thumbnail_url}
+                                alt={event.title}
+                                className="aspect-video w-full rounded-lg object-cover"
+                            />
+                        ) : (
+                            <div className="flex aspect-video items-center justify-center rounded-lg bg-muted text-xs text-muted-foreground">
+                                {t('Geen thumbnail')}
+                            </div>
+                        )}
+                        <dl className="space-y-4">
+                            <Detail label={t('Referentie')} value={event.id} />
+                            <Detail
+                                label={t('Datum')}
+                                value={formatStartsAt(event.starts_at)}
+                            />
+                            <Detail label={t('Locatie')} value={event.location} />
+                            <Detail
+                                label={t('Aanwezigen')}
+                                value={
+                                    event.capacity != null
+                                        ? `${event.rsvp_count} / ${event.capacity}`
+                                        : String(event.rsvp_count)
+                                }
+                            />
+                        </dl>
+                    </div>
+
+                    <div className="min-w-0 flex-1 overflow-hidden rounded-xl border bg-card shadow-sm">
+                        <div className="flex items-center gap-2 border-b px-6 py-4">
+                            <Users className="h-4 w-4 text-muted-foreground" />
                             <h2 className="text-sm font-semibold">
-                                {t('Gastenlijst')}
+                                {t('Boekingen')}
                             </h2>
+                            <span className="text-xs text-muted-foreground">
+                                ({event.bookings.length})
+                            </span>
                         </div>
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                    <TableHead>{t('Naam')}</TableHead>
-                                    <TableHead className="hidden sm:table-cell">
-                                        {t('E-mail')}
-                                    </TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {event.guest_list.map((guest) => (
-                                    <TableRow key={guest.email}>
-                                        <TableCell className="font-medium">
-                                            {guest.name}
-                                        </TableCell>
-                                        <TableCell className="hidden sm:table-cell">
-                                            {guest.email}
-                                        </TableCell>
+                        {event.bookings.length === 0 ? (
+                            <p className="px-6 py-10 text-sm text-muted-foreground">
+                                {t('Nog niemand heeft geboekt.')}
+                            </p>
+                        ) : (
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="bg-muted/50 hover:bg-muted/50">
+                                        <TableHead>{t('Naam')}</TableHead>
+                                        <TableHead className="hidden sm:table-cell">
+                                            {t('E-mail')}
+                                        </TableHead>
+                                        <TableHead className="hidden md:table-cell">
+                                            {t('Geboekt op')}
+                                        </TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {event.bookings.map((booking) => (
+                                        <TableRow key={booking.id}>
+                                            <TableCell className="font-medium">
+                                                {booking.name}
+                                            </TableCell>
+                                            <TableCell className="hidden sm:table-cell">
+                                                {booking.email}
+                                            </TableCell>
+                                            <TableCell className="hidden md:table-cell">
+                                                {formatBookedAt(booking.booked_at)}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        )}
                     </div>
                 </div>
             </div>

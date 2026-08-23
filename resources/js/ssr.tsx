@@ -1,6 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
 import { I18nProvider } from '@/components/i18n-provider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { createI18nForLocale } from '@/lib/i18n';
 import { resolvePageLayout } from '@/lib/inertia-layouts';
 import { syncWayfinderLocale } from '@/lib/wayfinder-defaults';
@@ -22,7 +23,9 @@ createServer((page) => {
             layout: resolvePageLayout,
             setup: ({ App, props }) => (
                 <I18nProvider i18n={i18n}>
-                    <App {...props} />
+                    <TooltipProvider delayDuration={0}>
+                        <App {...props} />
+                    </TooltipProvider>
                 </I18nProvider>
             ),
         }),

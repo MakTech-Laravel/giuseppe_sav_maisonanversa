@@ -188,16 +188,43 @@ class CommunityController extends Controller
 
     public function rsvpEvent(Request $request, string $locale, CommunityEvent $communityEvent): RedirectResponse
     {
-        abort_unless($request->user()->isFoundingCircle(), 403);
+        abort_unless($request->user() !== null, 401);
 
-        $rsvp = EventRsvp::query()->firstOrCreate([
+        $existing = EventRsvp::query()->where([
+            'community_event_id' => $communityEvent->id,
+            'user_id' => $request->user()->id,
+        ])->first();
+
+        if ($existing !== null) {
+            return back();
+        }
+
+        $communityEvent->loadCount('rsvps');
+
+        abort_if($communityEvent->isFull(), 422, __('Dit evenement is vol.'));
+
+        EventRsvp::query()->create([
             'community_event_id' => $communityEvent->id,
             'user_id' => $request->user()->id,
         ]);
 
-        if ($rsvp->wasRecentlyCreated) {
-            Mail::to($request->user())->queue(new RsvpConfirmation($communityEvent));
-        }
+        Mail::to($request->user())->queue(new RsvpConfirmation($communityEvent));
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('U bent aangemeld voor dit evenement.')]);
+
+        return back();
+    }
+
+    public function cancelRsvp(Request $request, string $locale, CommunityEvent $communityEvent): RedirectResponse
+    {
+        abort_unless($request->user() !== null, 401);
+
+        EventRsvp::query()
+            ->where('community_event_id', $communityEvent->id)
+            ->where('user_id', $request->user()->id)
+            ->delete();
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Uw aanmelding is geannuleerd.')]);
 
         return back();
     }
