@@ -5,6 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     Table,
     TableBody,
     TableCell,
@@ -25,6 +32,8 @@ interface EventBooking {
     booked_at: string | null;
 }
 
+type EventLifecycleStatus = 'opening' | 'ongoing' | 'closed';
+
 interface EventDetail {
     id: string;
     title: string;
@@ -34,6 +43,7 @@ interface EventDetail {
     capacity: number | null;
     rsvp_count: number;
     thumbnail_url: string | null;
+    status: EventLifecycleStatus;
     bookings: EventBooking[];
 }
 
@@ -68,8 +78,33 @@ function formatBookedAt(value: string | null): string {
     return date.toLocaleString();
 }
 
+function statusLabel(
+    status: EventLifecycleStatus,
+    t: (key: string) => string,
+): string {
+    switch (status) {
+        case 'opening':
+            return t('Opening');
+        case 'ongoing':
+            return t('Lopend');
+        case 'closed':
+            return t('Gesloten');
+    }
+}
+
 export default function EventShow({ event }: { event: EventDetail }) {
     const { t } = useTranslation();
+
+    function updateEventStatus(nextStatus: EventLifecycleStatus) {
+        router.patch(
+            eventsRoutes.status({
+                locale: wayfinderLocale(),
+                event: event.id,
+            }).url,
+            { status: nextStatus },
+            { preserveScroll: true },
+        );
+    }
 
     return (
         <>
@@ -113,6 +148,41 @@ export default function EventShow({ event }: { event: EventDetail }) {
                         )}
                         <dl className="space-y-4">
                             <Detail label={t('Referentie')} value={event.id} />
+                            <div>
+                                <dt className="text-muted-foreground">
+                                    {t('Status')}
+                                </dt>
+                                <dd className="mt-1">
+                                    <Select
+                                        value={event.status}
+                                        onValueChange={(value) =>
+                                            updateEventStatus(
+                                                value as EventLifecycleStatus,
+                                            )
+                                        }
+                                    >
+                                        <SelectTrigger
+                                            className="w-full"
+                                            aria-label={t('Status wijzigen')}
+                                        >
+                                            <SelectValue>
+                                                {statusLabel(event.status, t)}
+                                            </SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="opening">
+                                                {t('Opening')}
+                                            </SelectItem>
+                                            <SelectItem value="ongoing">
+                                                {t('Lopend')}
+                                            </SelectItem>
+                                            <SelectItem value="closed">
+                                                {t('Gesloten')}
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </dd>
+                            </div>
                             <Detail
                                 label={t('Datum')}
                                 value={formatStartsAt(event.starts_at)}

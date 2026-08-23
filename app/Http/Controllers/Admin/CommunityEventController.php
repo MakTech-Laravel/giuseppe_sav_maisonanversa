@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CommunityEventStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCommunityEventRequest;
 use App\Http\Requests\Admin\UpdateCommunityEventRequest;
+use App\Http\Requests\Admin\UpdateCommunityEventStatusRequest;
 use App\Models\CommunityEvent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,15 +17,38 @@ use Inertia\Response;
 
 class CommunityEventController extends Controller
 {
+    private const PER_PAGE = 15;
+
     public function index(Request $request, string $locale): Response
     {
+        $filters = $this->indexFilters($request);
+
         $events = CommunityEvent::query()
             ->withCount('rsvps')
-            ->orderBy('starts_at')
-            ->get();
+            ->when($filters['search'] !== '', function ($query) use ($filters): void {
+                $search = $filters['search'];
+                $query->where(function ($inner) use ($search): void {
+                    $inner->where('title', 'like', "%{$search}%")
+                        ->orWhere('location', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when(
+                $filters['status'] !== '',
+                fn ($query) => $query->status($filters['status']),
+            )
+            ->when(
+                $filters['status'] === CommunityEventStatus::Closed->value,
+                fn ($query) => $query->orderByDesc('starts_at'),
+                fn ($query) => $query->orderBy('starts_at'),
+            )
+            ->paginate(self::PER_PAGE)
+            ->withQueryString()
+            ->through(fn (CommunityEvent $event): array => $this->summary($event));
 
         return Inertia::render('admin/events/index', [
-            'events' => $events->map(fn (CommunityEvent $event) => $this->summary($event)),
+            'events' => $events,
+            'filters' => $filters,
         ]);
     }
 
@@ -35,6 +60,7 @@ class CommunityEventController extends Controller
     public function store(StoreCommunityEventRequest $request, string $locale): RedirectResponse
     {
         $data = $request->safe()->except(['thumbnail']);
+        $data['status'] = CommunityEventStatus::Opening;
 
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $this->storeThumbnail($request->file('thumbnail'));
@@ -110,6 +136,20 @@ class CommunityEventController extends Controller
         ]);
     }
 
+    public function updateStatus(
+        UpdateCommunityEventStatusRequest $request,
+        string $locale,
+        CommunityEvent $event,
+    ): RedirectResponse {
+        $event->update([
+            'status' => $request->enum('status', CommunityEventStatus::class),
+        ]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Status bijgewerkt.')]);
+
+        return back();
+    }
+
     public function destroy(Request $request, string $locale, CommunityEvent $event): RedirectResponse
     {
         $this->deleteThumbnail($event);
@@ -121,7 +161,25 @@ class CommunityEventController extends Controller
     }
 
     /**
-     * @return array{id: string, title: string, starts_at: string, location: string, capacity: int|null, rsvp_count: int, thumbnail_url: string|null}
+     * @return array{search: string, status: string}
+     */
+    private function indexFilters(Request $request): array
+    {
+        $search = trim((string) $request->query('search', ''));
+        $status = trim((string) $request->query('status', ''));
+
+        if (CommunityEventStatus::tryFrom($status) === null) {
+            $status = '';
+        }
+
+        return [
+            'search' => $search,
+            'status' => $status,
+        ];
+    }
+
+    /**
+     * @return array{id: string, title: string, starts_at: string, location: string, capacity: int|null, rsvp_count: int, thumbnail_url: string|null, status: string}
      */
     private function summary(CommunityEvent $event): array
     {
@@ -133,6 +191,7 @@ class CommunityEventController extends Controller
             'capacity' => $event->capacity,
             'rsvp_count' => (int) ($event->rsvps_count ?? $event->rsvps()->count()),
             'thumbnail_url' => $event->thumbnailUrl(),
+            'status' => $event->status->value,
         ];
     }
 
