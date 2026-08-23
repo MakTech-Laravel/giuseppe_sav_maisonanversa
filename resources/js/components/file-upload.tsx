@@ -168,8 +168,8 @@ export interface FileUploadProps {
     multiple?: boolean;
     /** Comma-separated accept list. Enforced on BOTH click AND drag-drop. */
     accept?: string;
-    /** Per-file maximum in MB. Default: `10`. */
-    maxSize?: number;
+    /** Per-file maximum in MB. Default: `10`. Pass `false` for no size limit. */
+    maxSize?: number | false;
     /** Maximum total files (multiple mode). */
     maxFiles?: number;
     /**
@@ -1018,7 +1018,11 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
                         continue;
                     }
 
-                    if (file.size / BYTES_PER_MB > maxSize) {
+                    if (
+                        typeof maxSize === 'number' &&
+                        maxSize > 0 &&
+                        file.size / BYTES_PER_MB > maxSize
+                    ) {
                         rejected.push({
                             file,
                             reason: 'size',
@@ -1299,9 +1303,15 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
                         <p className="text-xs text-muted-foreground">{hint}</p>
                     )}
                     <p className="text-xs text-muted-foreground">
-                        Max {maxSize} MB per file
-                        {maxFiles && ` · up to ${maxFiles} files`}
-                        {accept && ` · ${accept}`}
+                        {[
+                            typeof maxSize === 'number' && maxSize > 0
+                                ? `Max ${maxSize} MB per file`
+                                : null,
+                            maxFiles ? `up to ${maxFiles} files` : null,
+                            accept || null,
+                        ]
+                            .filter(Boolean)
+                            .join(' · ')}
                     </p>
                 </div>
             </div>

@@ -1,8 +1,17 @@
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, CalendarDays, Pencil, Users } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { ArrowLeft, CalendarDays, Eye, Pencil, Users } from 'lucide-react';
+import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { EventTranslationsDialog } from '@/components/admin/event-translations-dialog';
 import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -13,7 +22,30 @@ import {
 } from '@/components/ui/table';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
+import customers from '@/routes/admin/customers';
 import eventsRoutes from '@/routes/admin/events';
+
+interface EventBooking {
+    id: string;
+    user_id: string;
+    name: string;
+    email: string;
+    booked_at: string | null;
+}
+
+type EventLifecycleStatus = 'opening' | 'ongoing' | 'closed';
+
+type LocaleCopy = {
+    title: string;
+    description: string;
+    location: string;
+};
+
+type TranslationStatus = {
+    title: boolean;
+    description: boolean;
+    location: boolean;
+};
 
 interface EventDetail {
     id: string;
@@ -24,7 +56,15 @@ interface EventDetail {
     capacity: number | null;
     rsvp_count: number;
     thumbnail_url: string | null;
-    bookings: { id: string; name: string; email: string; booked_at: string | null }[];
+    status: EventLifecycleStatus;
+    bookings: EventBooking[];
+}
+
+function customerShowUrl(userId: string) {
+    return customers.show({
+        locale: wayfinderLocale(),
+        user: Number(userId),
+    });
 }
 
 function formatStartsAt(value: string): string {
@@ -51,8 +91,45 @@ function formatBookedAt(value: string | null): string {
     return date.toLocaleString();
 }
 
-export default function EventShow({ event }: { event: EventDetail }) {
+function statusLabel(
+    status: EventLifecycleStatus,
+    t: (key: string) => string,
+): string {
+    switch (status) {
+        case 'opening':
+            return t('Opening');
+        case 'ongoing':
+            return t('Lopend');
+        case 'closed':
+            return t('Gesloten');
+    }
+}
+
+export default function EventShow({
+    event,
+    locales,
+    defaultLocale,
+    translations,
+    translationStatus,
+}: {
+    event: EventDetail;
+    locales: string[];
+    defaultLocale: string;
+    translations: Record<string, LocaleCopy>;
+    translationStatus: Record<string, TranslationStatus>;
+}) {
     const { t } = useTranslation();
+
+    function updateEventStatus(nextStatus: EventLifecycleStatus) {
+        router.patch(
+            eventsRoutes.status({
+                locale: wayfinderLocale(),
+                event: event.id,
+            }).url,
+            { status: nextStatus },
+            { preserveScroll: true },
+        );
+    }
 
     return (
         <>
@@ -94,8 +171,52 @@ export default function EventShow({ event }: { event: EventDetail }) {
                                 {t('Geen thumbnail')}
                             </div>
                         )}
+                        <div className="flex flex-col gap-2">
+                            <EventTranslationsDialog
+                                eventId={event.id}
+                                locales={locales}
+                                defaultLocale={defaultLocale}
+                                translations={translations}
+                                translationStatus={translationStatus}
+                            />
+                        </div>
                         <dl className="space-y-4">
                             <Detail label={t('Referentie')} value={event.id} />
+                            <div>
+                                <dt className="text-muted-foreground">
+                                    {t('Status')}
+                                </dt>
+                                <dd className="mt-1">
+                                    <Select
+                                        value={event.status}
+                                        onValueChange={(value) =>
+                                            updateEventStatus(
+                                                value as EventLifecycleStatus,
+                                            )
+                                        }
+                                    >
+                                        <SelectTrigger
+                                            className="w-full"
+                                            aria-label={t('Status wijzigen')}
+                                        >
+                                            <SelectValue>
+                                                {statusLabel(event.status, t)}
+                                            </SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="opening">
+                                                {t('Opening')}
+                                            </SelectItem>
+                                            <SelectItem value="ongoing">
+                                                {t('Lopend')}
+                                            </SelectItem>
+                                            <SelectItem value="closed">
+                                                {t('Gesloten')}
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </dd>
+                            </div>
                             <Detail
                                 label={t('Datum')}
                                 value={formatStartsAt(event.starts_at)}
@@ -137,22 +258,84 @@ export default function EventShow({ event }: { event: EventDetail }) {
                                         <TableHead className="hidden md:table-cell">
                                             {t('Geboekt op')}
                                         </TableHead>
+                                        <TableHead className="w-12 text-right">
+                                            <span className="sr-only">
+                                                {t('Acties')}
+                                            </span>
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {event.bookings.map((booking) => (
-                                        <TableRow key={booking.id}>
-                                            <TableCell className="font-medium">
-                                                {booking.name}
-                                            </TableCell>
-                                            <TableCell className="hidden sm:table-cell">
-                                                {booking.email}
-                                            </TableCell>
-                                            <TableCell className="hidden md:table-cell">
-                                                {formatBookedAt(booking.booked_at)}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                                    {event.bookings.map((booking) => {
+                                        const href = customerShowUrl(
+                                            booking.user_id,
+                                        );
+
+                                        const openCustomer = () => {
+                                            router.visit(href);
+                                        };
+
+                                        const onRowKeyDown = (
+                                            keyboardEvent: KeyboardEvent<HTMLTableRowElement>,
+                                        ) => {
+                                            if (
+                                                keyboardEvent.key === 'Enter' ||
+                                                keyboardEvent.key === ' '
+                                            ) {
+                                                keyboardEvent.preventDefault();
+                                                openCustomer();
+                                            }
+                                        };
+
+                                        return (
+                                            <TableRow
+                                                key={booking.id}
+                                                className="cursor-pointer"
+                                                tabIndex={0}
+                                                role="link"
+                                                aria-label={t(
+                                                    'Bekijk klant {{name}}',
+                                                    { name: booking.name },
+                                                )}
+                                                onClick={openCustomer}
+                                                onKeyDown={onRowKeyDown}
+                                            >
+                                                <TableCell className="font-medium">
+                                                    {booking.name}
+                                                </TableCell>
+                                                <TableCell className="hidden sm:table-cell">
+                                                    {booking.email}
+                                                </TableCell>
+                                                <TableCell className="hidden md:table-cell">
+                                                    {formatBookedAt(
+                                                        booking.booked_at,
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button
+                                                        asChild
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={(clickEvent) =>
+                                                            clickEvent.stopPropagation()
+                                                        }
+                                                    >
+                                                        <Link
+                                                            href={href}
+                                                            title={t(
+                                                                'Bekijken',
+                                                            )}
+                                                            aria-label={t(
+                                                                'Bekijken',
+                                                            )}
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Link>
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
                                 </TableBody>
                             </Table>
                         )}

@@ -199,7 +199,7 @@ test('staff can view events', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/events/index')
-            ->has('events', 1)
+            ->has('events.data', 1)
         );
 });
 
