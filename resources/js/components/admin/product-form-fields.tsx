@@ -385,45 +385,48 @@ export function ProductFormFields({
                                         })}
                                     </p>
                                 </div>
-                                <div className="max-h-96 overflow-y-auto rounded-lg border bg-muted/20 p-3 scrollbar-none">
-                                    <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
-                                        {editionNumbers.map((number) => {
-                                            const isArchived =
-                                                archived.has(number);
-                                            const id = `edition-${number}`;
+                                {/* contain-strict: Chromium otherwise lets this tall grid inflate page scrollHeight */}
+                                <div className="h-96 contain-strict overflow-hidden rounded-lg border bg-muted/20">
+                                    <div className="h-full overflow-y-auto p-3 scrollbar-none">
+                                        <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
+                                            {editionNumbers.map((number) => {
+                                                const isArchived =
+                                                    archived.has(number);
+                                                const id = `edition-${number}`;
 
-                                            return (
-                                                <label
-                                                    key={number}
-                                                    htmlFor={id}
-                                                    className={cn(
-                                                        'flex cursor-pointer flex-col items-center gap-1.5 rounded-md border px-1 py-2 text-center transition-colors',
-                                                        isArchived
-                                                            ? 'border-gold/40 bg-gold/10'
-                                                            : 'border-transparent hover:border-border hover:bg-background',
-                                                    )}
-                                                >
-                                                    <Checkbox
-                                                        id={id}
-                                                        checked={isArchived}
-                                                        onCheckedChange={(
-                                                            checked,
-                                                        ) =>
-                                                            toggleArchive(
-                                                                number,
-                                                                checked ===
-                                                                    true,
-                                                            )
-                                                        }
-                                                    />
-                                                    <span className="max-w-full truncate font-mono text-[10px] tabular-nums">
-                                                        {formatEditionLabel(
-                                                            number,
+                                                return (
+                                                    <label
+                                                        key={number}
+                                                        htmlFor={id}
+                                                        className={cn(
+                                                            'flex cursor-pointer flex-col items-center gap-1.5 rounded-md border px-1 py-2 text-center transition-colors',
+                                                            isArchived
+                                                                ? 'border-gold/40 bg-gold/10'
+                                                                : 'border-transparent hover:border-border hover:bg-background',
                                                         )}
-                                                    </span>
-                                                </label>
-                                            );
-                                        })}
+                                                    >
+                                                        <Checkbox
+                                                            id={id}
+                                                            checked={isArchived}
+                                                            onCheckedChange={(
+                                                                checked,
+                                                            ) =>
+                                                                toggleArchive(
+                                                                    number,
+                                                                    checked ===
+                                                                        true,
+                                                                )
+                                                            }
+                                                        />
+                                                        <span className="max-w-full truncate font-mono text-[10px] tabular-nums">
+                                                            {formatEditionLabel(
+                                                                number,
+                                                            )}
+                                                        </span>
+                                                    </label>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
                                 <InputError

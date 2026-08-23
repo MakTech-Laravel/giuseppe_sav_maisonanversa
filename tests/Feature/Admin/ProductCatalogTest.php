@@ -27,6 +27,104 @@ test('staff can view the product catalog', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/products/index')
             ->has('products.data', 1)
+            ->where('filters.search', '')
+            ->where('filters.type', '')
+            ->where('filters.status', '')
+            ->where('filters.founding_circle', '')
+            ->where('filters.per_page', 15)
+            ->has('perPageOptions', 5)
+        );
+});
+
+test('staff can filter the product catalog by search type status and founding circle', function () {
+    Product::factory()->create([
+        'name' => 'Studio Cloth',
+        'slug' => 'studio-cloth',
+        'type' => ProductType::Simple,
+        'is_published' => false,
+        'grants_founding_circle' => false,
+    ]);
+
+    Product::factory()->create([
+        'name' => 'Circle Bundle',
+        'slug' => 'circle-bundle',
+        'type' => ProductType::Simple,
+        'is_published' => true,
+        'grants_founding_circle' => true,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.index', ['search' => 'Circle']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/products/index')
+            ->has('products.data', 1)
+            ->where('products.data.0.slug', 'circle-bundle')
+            ->where('filters.search', 'Circle')
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.index', [
+            'type' => ProductType::LimitedEdition->value,
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('products.data', 1)
+            ->where('products.data.0.type', ProductType::LimitedEdition->value)
+            ->where('filters.type', ProductType::LimitedEdition->value)
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.index', ['status' => 'draft']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('products.data', 1)
+            ->where('products.data.0.slug', 'studio-cloth')
+            ->where('filters.status', 'draft')
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.index', ['founding_circle' => 'yes']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('products.data', 2)
+            ->where('filters.founding_circle', 'yes')
+            ->where('products.data', fn ($rows) => collect($rows)->pluck('slug')->sort()->values()->all() === [
+                'circle-bundle',
+                'heritage-no-001',
+            ])
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.index', [
+            'type' => ProductType::Simple->value,
+            'founding_circle' => 'yes',
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('products.data', 1)
+            ->where('products.data.0.slug', 'circle-bundle')
+        );
+});
+
+test('staff can change catalog page size within the whitelist', function () {
+    Product::factory()->count(20)->create();
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.index', ['per_page' => 10]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('products.data', 10)
+            ->where('filters.per_page', 10)
+            ->where('products.per_page', 10)
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.products.index', ['per_page' => 999]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.per_page', 15)
+            ->where('products.per_page', 15)
         );
 });
 
@@ -214,6 +312,11 @@ test('staff can view a product details page', function () {
             ->component('admin/products/show')
             ->where('product.id', $product->id)
             ->where('product.slug', $product->slug)
+            ->has('product.edition_number_prefix')
+            ->has('product.edition_number_postfix')
+            ->has('product.archive_edition_numbers')
+            ->has('product.primary_image')
+            ->has('product.gallery_images')
         );
 });
 
