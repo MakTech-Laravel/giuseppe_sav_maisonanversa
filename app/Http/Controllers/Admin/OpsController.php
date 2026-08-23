@@ -262,7 +262,7 @@ class OpsController extends Controller
 
         abort_if($product === null, 404);
 
-        return $products->renderInventory($product, $inventory);
+        return $products->renderInventory($request, $product, $inventory);
     }
 
     public function updateHeritageProduct(
