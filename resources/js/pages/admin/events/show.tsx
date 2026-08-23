@@ -3,6 +3,7 @@ import { ArrowLeft, CalendarDays, Eye, Pencil, Users } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { EventTranslationsDialog } from '@/components/admin/event-translations-dialog';
 import { Button } from '@/components/ui/button';
 import {
     Select,
@@ -33,6 +34,18 @@ interface EventBooking {
 }
 
 type EventLifecycleStatus = 'opening' | 'ongoing' | 'closed';
+
+type LocaleCopy = {
+    title: string;
+    description: string;
+    location: string;
+};
+
+type TranslationStatus = {
+    title: boolean;
+    description: boolean;
+    location: boolean;
+};
 
 interface EventDetail {
     id: string;
@@ -92,7 +105,19 @@ function statusLabel(
     }
 }
 
-export default function EventShow({ event }: { event: EventDetail }) {
+export default function EventShow({
+    event,
+    locales,
+    defaultLocale,
+    translations,
+    translationStatus,
+}: {
+    event: EventDetail;
+    locales: string[];
+    defaultLocale: string;
+    translations: Record<string, LocaleCopy>;
+    translationStatus: Record<string, TranslationStatus>;
+}) {
     const { t } = useTranslation();
 
     function updateEventStatus(nextStatus: EventLifecycleStatus) {
@@ -146,6 +171,15 @@ export default function EventShow({ event }: { event: EventDetail }) {
                                 {t('Geen thumbnail')}
                             </div>
                         )}
+                        <div className="flex flex-col gap-2">
+                            <EventTranslationsDialog
+                                eventId={event.id}
+                                locales={locales}
+                                defaultLocale={defaultLocale}
+                                translations={translations}
+                                translationStatus={translationStatus}
+                            />
+                        </div>
                         <dl className="space-y-4">
                             <Detail label={t('Referentie')} value={event.id} />
                             <div>

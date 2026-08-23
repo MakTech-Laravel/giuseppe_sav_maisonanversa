@@ -37,6 +37,7 @@ type CommunityEventFormFieldsProps = {
         value: CommunityEventFormData[K],
     ) => void;
     existingThumbnailUrl?: string | null;
+    lockSharedFields?: boolean;
 };
 
 export function CommunityEventFormFields({
@@ -44,6 +45,7 @@ export function CommunityEventFormFields({
     errors,
     setData,
     existingThumbnailUrl = null,
+    lockSharedFields = false,
 }: CommunityEventFormFieldsProps) {
     const { t } = useTranslation();
 
@@ -97,6 +99,7 @@ export function CommunityEventFormFields({
                         id="starts_at"
                         type="datetime-local"
                         value={data.starts_at}
+                        disabled={lockSharedFields}
                         onChange={(event) =>
                             setData('starts_at', event.target.value)
                         }
@@ -132,6 +135,7 @@ export function CommunityEventFormFields({
                     type="number"
                     min={1}
                     max={500}
+                    disabled={lockSharedFields}
                     placeholder={t('Laat leeg voor onbeperkt')}
                     value={data.capacity}
                     onChange={(event) =>
@@ -149,6 +153,7 @@ export function CommunityEventFormFields({
                                 size="sm"
                                 variant={active ? 'default' : 'outline'}
                                 className={cn('h-8 px-3 text-xs')}
+                                disabled={lockSharedFields}
                                 onClick={() =>
                                     setData('capacity', preset.value)
                                 }
@@ -170,6 +175,7 @@ export function CommunityEventFormFields({
                 <FileUpload
                     accept="image/png,image/jpeg,image/webp"
                     maxSize={false}
+                    disabled={lockSharedFields}
                     value={data.thumbnail}
                     onChange={(file) => {
                         setData('thumbnail', (file as File | null) ?? null);
