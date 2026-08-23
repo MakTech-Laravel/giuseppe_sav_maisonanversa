@@ -25,31 +25,36 @@ interface EventEditProps {
     };
 }
 
+function multipartUpdateEndpoint(
+    locale: string,
+    eventId: string,
+): { url: string; method: 'post' } {
+    const formDef = eventsRoutes.update.form({
+        locale,
+        event: eventId,
+    });
+
+    return {
+        url: formDef.action,
+        method: formDef.method,
+    };
+}
+
 export default function EditEvent({ event }: EventEditProps) {
     const { t } = useTranslation();
+    const locale = wayfinderLocale();
 
     // Wayfinder `.form()` spoofs PUT via POST + `?_method=PUT` so multipart
     // bodies are parsed by PHP (native PUT + FormData arrives empty).
-    const updateForm = eventsRoutes.update.form({
-        locale: wayfinderLocale(),
-        event: event.id,
+    const form = useForm(multipartUpdateEndpoint(locale, event.id), {
+        title: event.title,
+        description: event.description ?? '',
+        starts_at: event.starts_at,
+        location: event.location ?? '',
+        capacity: capacityToFormValue(event.capacity),
+        thumbnail: null as File | null,
+        remove_thumbnail: false,
     });
-
-    const form = useForm(
-        {
-            url: updateForm.action,
-            method: updateForm.method,
-        },
-        {
-            title: event.title,
-            description: event.description ?? '',
-            starts_at: event.starts_at,
-            location: event.location ?? '',
-            capacity: capacityToFormValue(event.capacity),
-            thumbnail: null as File | null,
-            remove_thumbnail: false,
-        },
-    );
 
     function submit(formEvent: FormEvent) {
         formEvent.preventDefault();

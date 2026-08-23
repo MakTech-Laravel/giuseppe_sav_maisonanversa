@@ -290,6 +290,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::put('events/{event}', 'update')->name('events.update')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::patch('events/{event}/status', 'updateStatus')->name('events.status')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::delete('events/{event}', 'destroy')->name('events.destroy')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
             });
