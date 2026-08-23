@@ -174,9 +174,9 @@ export default function ShowFaq({
                 >
                     <AdminPanel
                         title={t('Inhoud')}
-                    description={t(
-                        'Opgeslagen brontekst. Bezoekers zien de vertaling voor hun taal.',
-                    )}
+                        description={t(
+                            'Zoals bezoekers deze FAQ in de huidige taal zien.',
+                        )}
                     >
                         <div className="mb-5 flex flex-wrap gap-2">
                             <Badge variant="secondary">{contextLabel}</Badge>

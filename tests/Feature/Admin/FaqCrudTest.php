@@ -173,6 +173,31 @@ test('staff can view a faq detail page', function () {
         );
 });
 
+test('faq detail page shows translated content for the active locale', function () {
+    $faq = Faq::factory()->product()->published()->create([
+        'question' => 'English source question?',
+        'answer' => 'English source answer.',
+    ]);
+
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'question'],
+        ['value' => 'Question source en français ?', 'source_hash' => $faq->translationSourceHash('question')],
+    );
+    $faq->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'answer'],
+        ['value' => 'Réponse source en français.', 'source_hash' => $faq->translationSourceHash('answer')],
+    );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.faqs.show', ['locale' => 'fr', 'faq' => $faq->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/faqs/show')
+            ->where('faq.question', 'Question source en français ?')
+            ->where('faq.answer', 'Réponse source en français.')
+        );
+});
+
 test('creating a faq stores deepl translations for all locales', function () {
     fakeDeepLTranslations();
 
