@@ -82,9 +82,23 @@ class FaqController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ aangemaakt.')]);
 
-        return redirect()->route('admin.faqs.edit', [
+        return redirect()->route('admin.faqs.show', [
             'locale' => $locale,
             'faq' => $faq->id,
+        ]);
+    }
+
+    public function show(string $locale, Faq $faq): Response
+    {
+        return Inertia::render('admin/faqs/show', [
+            'faq' => [
+                'id' => (string) $faq->id,
+                'context' => $faq->context->value,
+                'question' => $faq->translated('question'),
+                'answer' => $faq->translated('answer'),
+                'sort_order' => $faq->sort_order,
+                'is_published' => $faq->is_published,
+            ],
         ]);
     }
 
@@ -109,7 +123,7 @@ class FaqController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ bijgewerkt.')]);
 
-        return redirect()->route('admin.faqs.edit', [
+        return redirect()->route('admin.faqs.show', [
             'locale' => $locale,
             'faq' => $faq->id,
         ]);
