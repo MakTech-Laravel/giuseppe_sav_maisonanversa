@@ -31,6 +31,12 @@ export function CommunityEvents({ events, onRsvp }: CommunityEventsProps) {
         );
     }
 
+    function handleCancel(eventId: string) {
+        router.delete(`/${locale}/community/events/${eventId}/rsvp`, {
+            preserveScroll: true,
+        });
+    }
+
     return (
         <Wrap className="px-6 py-12 md:px-10 lg:px-20">
             <h2 className="mb-2 font-serif text-[28px] font-medium text-choc">
@@ -38,12 +44,14 @@ export function CommunityEvents({ events, onRsvp }: CommunityEventsProps) {
             </h2>
             <p className="mb-10 max-w-140 text-base text-choc3">
                 {t(
-                    'Alleen zichtbaar voor Founding Circle leden en Club Corner partners. Aanmelden is gratis tenzij anders vermeld.',
+                    'Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.',
                 )}
             </p>
 
             {events.length === 0 && (
-                <p className="text-sm text-choc3">{t('Nog geen events gepland.')}</p>
+                <p className="text-sm text-choc3">
+                    {t('Nog geen events gepland.')}
+                </p>
             )}
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -53,6 +61,7 @@ export function CommunityEvents({ events, onRsvp }: CommunityEventsProps) {
                         event={event}
                         variant={((index % 3) + 1) as 1 | 2 | 3}
                         onJoin={() => handleJoin(event.id)}
+                        onCancel={() => handleCancel(event.id)}
                     />
                 ))}
             </div>
@@ -64,24 +73,34 @@ type EventCardProps = {
     event: CommunityEventPayload;
     variant: 1 | 2 | 3;
     onJoin: () => void;
+    onCancel: () => void;
 };
 
-function EventCard({ event, variant, onJoin }: EventCardProps) {
+function EventCard({ event, variant, onJoin, onCancel }: EventCardProps) {
     const { t } = useTranslation();
+    const full = event.is_full && !event.joined;
 
     return (
         <article className="overflow-hidden border border-gold/10 bg-choc2 transition-colors hover:border-gold/25">
             <div
                 className={cn(
-                    'relative flex h-40 items-center justify-center',
-                    EVENT_IMAGE_CLASSES[variant],
+                    'relative flex h-40 items-center justify-center overflow-hidden',
+                    !event.thumbnail_url && EVENT_IMAGE_CLASSES[variant],
                 )}
             >
-                <span className="font-serif text-lg tracking-[0.2em] text-gold/8 uppercase">
-                    Maison Anversa
-                </span>
+                {event.thumbnail_url ? (
+                    <img
+                        src={event.thumbnail_url}
+                        alt={event.title}
+                        className="absolute inset-0 size-full object-cover"
+                    />
+                ) : (
+                    <span className="font-serif text-lg tracking-[0.2em] text-gold/8 uppercase">
+                        Maison Anversa
+                    </span>
+                )}
                 <span className="absolute top-3.5 left-4 border border-gold/30 bg-choc/80 px-2.5 py-1 font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                    {t('Founding Circle Only')}
+                    {t('Leden only')}
                 </span>
             </div>
 
@@ -94,6 +113,9 @@ function EventCard({ event, variant, onJoin }: EventCardProps) {
                 </div>
                 <div className="mb-3.5 font-sans text-[9px] tracking-[0.1em] text-stone">
                     {event.location}
+                    {event.capacity != null
+                        ? ` · ${event.rsvp_count}/${event.capacity}`
+                        : ''}
                 </div>
 
                 <div className="mb-4 flex items-center gap-2.5">
@@ -114,21 +136,29 @@ function EventCard({ event, variant, onJoin }: EventCardProps) {
                     </div>
                 </div>
 
-                <button
-                    type="button"
-                    disabled={event.joined}
-                    onClick={onJoin}
-                    className={cn(
-                        'w-full cursor-pointer border px-3 py-3 font-sans text-[10px] font-medium tracking-[0.2em] uppercase transition-colors disabled:cursor-default',
-                        event.joined
-                            ? 'border-gold/25 bg-gold/25 text-gold'
-                            : 'border-gold/25 bg-gold/10 text-gold hover:bg-gold/20',
-                    )}
-                >
-                    {event.joined
-                        ? t('✓ Aangemeld voor dit event')
-                        : t('Bevestig deelname →')}
-                </button>
+                {event.joined ? (
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="w-full cursor-pointer border border-gold/25 bg-gold/25 px-3 py-3 font-sans text-[10px] font-medium tracking-[0.2em] text-gold uppercase transition-colors hover:bg-gold/35"
+                    >
+                        {t('Aanmelding annuleren')}
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        disabled={full}
+                        onClick={onJoin}
+                        className={cn(
+                            'w-full cursor-pointer border px-3 py-3 font-sans text-[10px] font-medium tracking-[0.2em] uppercase transition-colors disabled:cursor-default disabled:opacity-50',
+                            'border-gold/25 bg-gold/10 text-gold hover:bg-gold/20',
+                        )}
+                    >
+                        {full
+                            ? t('Volgeboekt')
+                            : t('Bevestig deelname →')}
+                    </button>
+                )}
             </div>
         </article>
     );

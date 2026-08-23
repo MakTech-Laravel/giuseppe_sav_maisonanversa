@@ -14,6 +14,13 @@ import type {
 import { Monogram } from '@/components/maison/ui/monogram';
 import { Wrap } from '@/components/maison/ui/section';
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
     Sheet,
     SheetContent,
     SheetDescription,
@@ -275,17 +282,23 @@ function SessionPlannerForm({ onCreate }: SessionPlannerFormProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <Field label={t('Club Corner locatie')}>
-                <select
-                    className={fieldClassName}
-                    value={location}
-                    onChange={(event) => setLocation(event.target.value)}
-                >
-                    {SESSION_LOCATIONS.map((item) => (
-                        <option key={item} value={item}>
-                            {t(item)}
-                        </option>
-                    ))}
-                </select>
+                <Select value={location} onValueChange={setLocation}>
+                    <SelectTrigger
+                        className={cn(
+                            fieldClassName,
+                            'h-auto w-full justify-between rounded-none shadow-none',
+                        )}
+                    >
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {SESSION_LOCATIONS.map((item) => (
+                            <SelectItem key={item} value={item}>
+                                {t(item)}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </Field>
 
             <Field label={t('Datum')}>
@@ -307,34 +320,47 @@ function SessionPlannerForm({ onCreate }: SessionPlannerFormProps) {
             </Field>
 
             <Field label={t('Niveau')}>
-                <select
-                    className={fieldClassName}
-                    value={level}
-                    onChange={(event) => setLevel(event.target.value)}
-                >
-                    {SESSION_LEVELS.map((item) => (
-                        <option key={item} value={item}>
-                            {t(item)}
-                        </option>
-                    ))}
-                </select>
+                <Select value={level} onValueChange={setLevel}>
+                    <SelectTrigger
+                        className={cn(
+                            fieldClassName,
+                            'h-auto w-full justify-between rounded-none shadow-none',
+                        )}
+                    >
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {SESSION_LEVELS.map((item) => (
+                            <SelectItem key={item} value={item}>
+                                {t(item)}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </Field>
 
             <Field label={t('Extra spelers gezocht')}>
-                <select
-                    className={fieldClassName}
-                    value={capacity}
-                    onChange={(event) => setCapacity(event.target.value)}
-                >
-                    {SESSION_PLAYERS_WANTED.map((option) => (
-                        <option
-                            key={option}
-                            value={option.replace(/\D/g, '') || '4'}
-                        >
-                            {t(option)}
-                        </option>
-                    ))}
-                </select>
+                <Select value={capacity} onValueChange={setCapacity}>
+                    <SelectTrigger
+                        className={cn(
+                            fieldClassName,
+                            'h-auto w-full justify-between rounded-none shadow-none',
+                        )}
+                    >
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {SESSION_PLAYERS_WANTED.map((option) => {
+                            const value = option.replace(/\D/g, '') || '4';
+
+                            return (
+                                <SelectItem key={option} value={value}>
+                                    {t(option)}
+                                </SelectItem>
+                            );
+                        })}
+                    </SelectContent>
+                </Select>
             </Field>
 
             <Field label={t('Notitie (optioneel)')}>

@@ -205,6 +205,7 @@ Route::prefix('{locale}')
             Route::post('sessions/{communitySession}/join', 'joinSession')->name('sessions.join');
             Route::delete('sessions/{communitySession}/leave', 'leaveSession')->name('sessions.leave');
             Route::post('events/{communityEvent}/rsvp', 'rsvpEvent')->name('events.rsvp');
+            Route::delete('events/{communityEvent}/rsvp', 'cancelRsvp')->name('events.rsvp.cancel');
         });
 
         // ── Demo landing page ─────────────────────────────────────────────────────

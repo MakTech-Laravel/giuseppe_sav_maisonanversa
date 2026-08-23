@@ -175,6 +175,7 @@ class MaisonController extends Controller
                 ]);
             $props['events'] = CommunityEvent::query()
                 ->with('rsvps.user')
+                ->withCount('rsvps')
                 ->where('starts_at', '>=', now()->subDay())
                 ->orderBy('starts_at')
                 ->get()
@@ -184,7 +185,10 @@ class MaisonController extends Controller
                     'description' => $event->translated('description'),
                     'starts_at' => $event->starts_at->toIso8601String(),
                     'location' => $event->translated('location'),
+                    'capacity' => $event->capacity,
+                    'thumbnail_url' => $event->thumbnailUrl(),
                     'joined' => $event->rsvps->contains('user_id', $request->user()->id),
+                    'is_full' => $event->isFull(),
                     'rsvp_count' => $event->rsvps->count(),
                     'attendees' => $event->rsvps
                         ->take(3)
