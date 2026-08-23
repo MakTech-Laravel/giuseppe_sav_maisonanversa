@@ -30,6 +30,10 @@ interface ProductDetails {
     is_published: boolean;
     grants_founding_circle: boolean;
     expected_delivery_label: string | null;
+    eyebrow?: string | null;
+    hero_eyebrow?: string | null;
+    hero_subtitle?: string | null;
+    description?: string | null;
     stripe_price_id: string | null;
     primary_image: ExistingFile | null;
     gallery_images: ExistingFile[];
@@ -183,6 +187,26 @@ export default function ShowProduct({ product }: { product: ProductDetails }) {
                                     product.expected_delivery_label ?? t('Geen')
                                 }
                             />
+                            <Field
+                                label={t('Productlabel')}
+                                value={product.eyebrow || t('Geen')}
+                            />
+                            <Field
+                                label={t('Hero-eyebrow')}
+                                value={product.hero_eyebrow || t('Geen')}
+                            />
+                            <div className="md:col-span-2">
+                                <Field
+                                    label={t('Hero-ondertitel')}
+                                    value={product.hero_subtitle || t('Geen')}
+                                />
+                            </div>
+                            <div className="md:col-span-2">
+                                <Field
+                                    label={t('Productbeschrijving')}
+                                    value={product.description || t('Geen')}
+                                />
+                            </div>
                             <Field
                                 label={t('Stripe price ID')}
                                 value={product.stripe_price_id ?? t('Geen')}

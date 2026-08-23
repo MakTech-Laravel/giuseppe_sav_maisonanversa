@@ -43,12 +43,22 @@ test('the admin shell exposes a language switcher', function () {
 
 test('the admin user menu uses the chocolate shell palette', function () {
     $navUser = file_get_contents(resource_path('js/components/nav-user.tsx'));
+    $authMenu = file_get_contents(resource_path('js/components/maison/shell/auth-menu.tsx'));
     $menu = file_get_contents(resource_path('js/components/user-menu-content.tsx'));
     $info = file_get_contents(resource_path('js/components/user-info.tsx'));
 
     expect($navUser)
         ->toContain('admin-kit')
         ->toContain('bg-sidebar')
+        ->toContain('auth?.user')
+        ->and($authMenu)
+        ->toContain('auth?.user')
+        ->and(file_get_contents(resource_path('js/components/maison/placeholder-image.tsx')))
+        ->toContain('availableImages ?? []')
+        ->and(file_get_contents(resource_path('js/hooks/use-locale.ts')))
+        ->toContain('availableLocales ?? [...LOCALES]')
+        ->and(file_get_contents(resource_path('js/components/maison/seo/maison-seo-head.tsx')))
+        ->toContain('if (!appUrl || !seo)')
         ->and($menu)
         ->toContain('focus:bg-sidebar-accent')
         ->and($info)

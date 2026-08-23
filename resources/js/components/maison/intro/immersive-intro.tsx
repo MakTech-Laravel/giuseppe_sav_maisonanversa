@@ -153,7 +153,7 @@ export function ImmersiveIntro() {
 }
 
 function IntroStage({ onDismissed }: { onDismissed: () => void }) {
-    const { availableImages } = usePage().props;
+    const availableImages = usePage().props.availableImages ?? [];
     const { locale } = useLocale();
     const { t } = useTranslation();
 

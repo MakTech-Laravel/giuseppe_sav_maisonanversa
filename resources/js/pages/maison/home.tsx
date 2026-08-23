@@ -14,8 +14,8 @@ import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import type { Edition } from '@/types/edition';
 
 type HomeProductData = {
-    materials?: string[];
-    trust_badges?: string[];
+    materials?: Array<{ name: string } | string>;
+    trust_badges?: Array<{ text: string } | string>;
     includes?: string[];
 };
 

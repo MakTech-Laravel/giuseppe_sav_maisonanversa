@@ -157,6 +157,9 @@ test('staff can view a faq detail page', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/faqs/show')
+            ->has('auth.user')
+            ->has('availableImages')
+            ->has('availableLocales')
             ->where('faq.id', (string) $faq->id)
             ->where('faq.question', 'Detail FAQ vraag')
             ->where('faq.answer', 'Detail FAQ antwoord')

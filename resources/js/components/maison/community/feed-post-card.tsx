@@ -42,7 +42,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
 
         const reason = reportReason.trim();
 
-        if (!reason || !auth.user) {
+        if (!reason || !auth?.user) {
             return;
         }
 
@@ -64,7 +64,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
 
         const body = draft.trim();
 
-        if (!body || !auth.user) {
+        if (!body || !auth?.user) {
             return;
         }
 
@@ -165,7 +165,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                     <span>💬</span>
                     {post.comments.length} {t('reacties')}
                 </button>
-                {auth.user && (
+                {auth?.user && (
                     <button
                         type="button"
                         onClick={() => setReportOpen((open) => !open)}

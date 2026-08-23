@@ -28,7 +28,10 @@ class Product extends Model
      */
     protected array $translatable = [
         'name',
+        'eyebrow',
+        'hero_eyebrow',
         'hero_subtitle',
+        'description',
         'expected_delivery_label',
     ];
 
@@ -57,7 +60,10 @@ class Product extends Model
         'includes',
         'guarantees',
         'trust_badges',
+        'eyebrow',
+        'hero_eyebrow',
         'hero_subtitle',
+        'description',
         'status',
         'sort_order',
     ];
@@ -176,18 +182,23 @@ class Product extends Model
      *     id: int,
      *     slug: string,
      *     name: string,
+     *     eyebrow: string,
+     *     hero_eyebrow: string,
      *     hero_subtitle: string,
+     *     description: string,
      *     status: string,
      *     sort_order: int,
      *     gallery: array<int, string>,
      *     specs: array<int, array{label: string, value: string}>,
-     *     materials: array<int, string>,
-     *     unboxing_steps: array<int, string>,
+     *     materials: array<int, array{num: string, name: string, desc: string}>,
+     *     unboxing_steps: array<int, array{num: string, title: string, desc: string}>,
      *     includes: array<int, string>,
      *     guarantees: array<int, array{icon: string, text: string}>,
-     *     trust_badges: array<int, string>,
+     *     trust_badges: array<int, array{icon: string, text: string}>,
      *     amount: string,
-     *     currency: string
+     *     currency: string,
+     *     expected_delivery_label: string,
+     *     edition_total: int|null
      * }
      */
     public function toPageShare(): array
@@ -196,7 +207,10 @@ class Product extends Model
             'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->translated('name'),
+            'eyebrow' => $this->translated('eyebrow'),
+            'hero_eyebrow' => $this->translated('hero_eyebrow'),
             'hero_subtitle' => $this->translated('hero_subtitle'),
+            'description' => $this->translated('description'),
             'status' => ($this->status ?? ProductStatus::Active)->value,
             'sort_order' => $this->sort_order ?? 0,
             'gallery' => $this->resolvedGallery(),
@@ -208,6 +222,8 @@ class Product extends Model
             'trust_badges' => $this->trust_badges ?? [],
             'amount' => (string) $this->amount,
             'currency' => $this->currency,
+            'expected_delivery_label' => $this->translated('expected_delivery_label'),
+            'edition_total' => $this->edition_total,
         ];
     }
 

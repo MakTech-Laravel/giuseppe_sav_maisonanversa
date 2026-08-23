@@ -37,7 +37,7 @@ export function CommunityFeed({
 }: CommunityFeedProps) {
     const page = usePage();
     const { auth, locale } = page.props;
-    const userName = auth.user?.name ?? 'Member';
+    const userName = auth?.user?.name ?? 'Member';
     const userInitials = initialsFromName(userName);
     const hasScrollProp = page.scrollProps?.posts != null;
     const [scrollEnabled, setScrollEnabled] = useState(hasScrollProp);

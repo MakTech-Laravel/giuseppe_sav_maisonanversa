@@ -254,7 +254,7 @@ export default function Welcome({
                         </div>
 
                         <div className="flex items-center gap-3">
-                            {auth.user ? (
+                            {auth?.user ? (
                                 <>
                                     <Link
                                         href={dashboard(wayfinderLocale())}
@@ -343,7 +343,7 @@ export default function Welcome({
                             >
                                 <Link
                                     href={
-                                        auth.user
+                                        auth?.user
                                             ? dashboard(wayfinderLocale())
                                             : register()
                                     }

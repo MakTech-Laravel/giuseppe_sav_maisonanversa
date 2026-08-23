@@ -42,7 +42,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
             } | null;
         };
     }>().props;
-    const name = auth.user?.name ?? t('Yusuf Savran');
+    const name = auth?.user?.name ?? t('Yusuf Savran');
     const initials = initialsFromName(name);
 
     return (

@@ -10,16 +10,23 @@ import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import type { Edition } from '@/types/edition';
 
-type ProductPageData = {
+export type ProductPageData = {
     name: string;
+    eyebrow: string;
+    hero_eyebrow: string;
     hero_subtitle: string;
+    description: string;
     gallery: string[];
     specs: Array<{ label: string; value: string }>;
+    materials: Array<{ num: string; name: string; desc: string }>;
+    unboxing_steps: Array<{ num: string; title: string; desc: string }>;
     includes: string[];
     guarantees: Array<{ icon: string; text: string }>;
+    trust_badges: Array<{ icon: string; text: string }>;
+    edition_total: number | null;
 };
 
-type ProductFaq = {
+type ProductFaqItem = {
     question: string;
     answer: string;
 };
@@ -39,7 +46,7 @@ export default function Product({
 }: {
     edition: Edition;
     product: ProductPageData;
-    faqs: ProductFaq[];
+    faqs: ProductFaqItem[];
     related: ProductCard[];
 }) {
     const { t } = useTranslation();
@@ -49,21 +56,23 @@ export default function Product({
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={t('Founding Edition · 100 Stuks Wereldwijd')}
-                title={
-                    <>
-                        Heritage <em>No.001</em>
-                    </>
+                eyebrow={
+                    product.hero_eyebrow
+                        ? t(product.hero_eyebrow)
+                        : undefined
                 }
-                subtitle={t(
-                    product.hero_subtitle,
-                )}
+                title={product.name}
+                subtitle={
+                    product.hero_subtitle
+                        ? t(product.hero_subtitle)
+                        : undefined
+                }
             />
 
             <ProductDetail edition={edition} product={product} />
-            <ProductUnboxing />
-            <ProductCraft />
-            <ProductTrust />
+            <ProductUnboxing steps={product.unboxing_steps} />
+            <ProductCraft materials={product.materials} />
+            <ProductTrust badges={product.trust_badges} />
             <ProductService />
             <ProductFaq faqs={faqs} />
             <ProductRelated related={related} />
