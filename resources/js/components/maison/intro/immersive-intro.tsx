@@ -130,9 +130,10 @@ function openingSlide(): number {
  * visitor is inside the house.
  */
 export function ImmersiveIntro() {
-    const [running, setRunning] = useState(() =>
-        typeof window === 'undefined' ? false : shouldRun(),
-    );
+    // Always start false so SSR HTML matches the first client render. The
+    // session/motion check runs after mount; otherwise hydration remounts the
+    // tree and can leave #maison-boot-cover stuck on screen.
+    const [running, setRunning] = useState(false);
 
     useLayoutEffect(() => {
         const next = shouldRun();

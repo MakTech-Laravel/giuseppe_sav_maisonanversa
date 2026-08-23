@@ -8,6 +8,12 @@ import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    server: {
+        host: '127.0.0.1',
+        port: 5173,
+        strictPort: true,
+        hmr: { host: '127.0.0.1' },
+      },
     resolve: {
         dedupe: ['react', 'react-dom'],
         alias: {

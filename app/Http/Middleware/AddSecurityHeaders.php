@@ -50,6 +50,10 @@ class AddSecurityHeaders
             'https://www.googletagmanager.com',
         ];
 
+        $style = ["'self'", "'unsafe-inline'", 'https://fonts.bunny.net'];
+        $font = ["'self'", 'https://fonts.bunny.net', 'data:'];
+        $img = ["'self'", 'data:', 'blob:'];
+
         $connect = [
             "'self'",
             'https://api.stripe.com',
@@ -65,8 +69,13 @@ class AddSecurityHeaders
             $script[] = "'unsafe-eval'";
 
             foreach (['localhost', '127.0.0.1', '[::1]'] as $host) {
-                $script[] = "http://{$host}:5173";
-                $connect[] = "http://{$host}:5173";
+                $origin = "http://{$host}:5173";
+
+                $script[] = $origin;
+                $style[] = $origin;
+                $font[] = $origin;
+                $img[] = $origin;
+                $connect[] = $origin;
                 $connect[] = "ws://{$host}:5173";
             }
         }
@@ -77,9 +86,9 @@ class AddSecurityHeaders
             'object-src' => ["'none'"],
             'frame-ancestors' => ["'self'"],
             'script-src' => $script,
-            'style-src' => ["'self'", "'unsafe-inline'", 'https://fonts.bunny.net'],
-            'font-src' => ["'self'", 'https://fonts.bunny.net', 'data:'],
-            'img-src' => ["'self'", 'data:', 'blob:'],
+            'style-src' => $style,
+            'font-src' => $font,
+            'img-src' => $img,
             'connect-src' => $connect,
             'frame-src' => [
                 "'self'",
