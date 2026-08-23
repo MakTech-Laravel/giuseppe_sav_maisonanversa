@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Community;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\ReportCommunityPostRequest;
+use App\Jobs\TranslateModelJob;
 use App\Mail\RsvpConfirmation;
 use App\Models\CommunityComment;
 use App\Models\CommunityEvent;
 use App\Models\CommunityLike;
 use App\Models\CommunityPost;
+use App\Models\CommunityPostHide;
 use App\Models\CommunityReport;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
@@ -54,11 +56,13 @@ class CommunityController extends Controller
             'body' => ['required', 'string', 'max:1000'],
         ]);
 
-        CommunityComment::query()->create([
+        $comment = CommunityComment::createQuietly([
             'community_post_id' => $communityPost->id,
             'author_id' => $request->user()->id,
             'body' => $data['body'],
         ]);
+
+        TranslateModelJob::dispatchSync(CommunityComment::class, $comment->id);
 
         return back();
     }
@@ -84,12 +88,12 @@ class CommunityController extends Controller
 
     public function hidePost(Request $request, string $locale, CommunityPost $communityPost): RedirectResponse
     {
-        abort_unless($request->user()->can('community.moderate'), 403);
-
-        $communityPost->update([
-            'status' => 'hidden',
-            'hidden_at' => now(),
+        CommunityPostHide::query()->firstOrCreate([
+            'user_id' => $request->user()->id,
+            'community_post_id' => $communityPost->id,
         ]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht verborgen op uw muur.')]);
 
         return back();
     }

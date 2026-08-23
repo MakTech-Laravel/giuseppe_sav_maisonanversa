@@ -19,6 +19,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Services\Checkout\OrderFulfillment;
 use App\Services\Edition\EditionInventory;
+use App\Support\CommunityPostPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
 use Illuminate\Http\RedirectResponse;
@@ -32,6 +33,8 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class OpsController extends Controller
 {
+    private const COMMUNITY_POSTS_PER_PAGE = 15;
+
     public function orders(Request $request, string $locale, OrderPresenter $presenter): Response
     {
         $orders = Order::query()
@@ -107,6 +110,9 @@ class OpsController extends Controller
 
     public function community(Request $request, string $locale): Response
     {
+        $filters = $this->communityFilters($request);
+        $userId = $request->user()?->id;
+
         $items = CommunityReport::query()
             ->with(['post', 'reporter'])
             ->latest()
@@ -120,20 +126,28 @@ class OpsController extends Controller
                 'status' => $report->status,
             ]);
 
+        $posts = CommunityPost::query()
+            ->with(['author', 'translations'])
+            ->when($filters['search'] !== '', function ($query) use ($filters): void {
+                $search = $filters['search'];
+                $query->where(function ($inner) use ($search): void {
+                    $inner->where('content', 'like', "%{$search}%")
+                        ->orWhereHas('author', fn ($author) => $author->where('name', 'like', "%{$search}%"));
+                });
+            })
+            ->when($filters['status'] !== '', fn ($query) => $query->where('status', $filters['status']))
+            ->when($filters['type'] === 'official', fn ($query) => $query->where('is_official', true))
+            ->when($filters['type'] === 'member', fn ($query) => $query->where('is_official', false))
+            ->latest()
+            ->paginate(self::COMMUNITY_POSTS_PER_PAGE)
+            ->withQueryString()
+            ->through(fn (CommunityPost $post) => $this->communityPostRow($post, $userId));
+
         return Inertia::render('admin/community/index', [
             'items' => $items,
-            'posts' => CommunityPost::query()
-                ->with('author')
-                ->latest()
-                ->limit(50)
-                ->get()
-                ->map(fn (CommunityPost $post) => [
-                    'id' => (string) $post->id,
-                    'author' => $post->author->name,
-                    'content' => $post->content,
-                    'is_official' => $post->is_official,
-                    'status' => $post->status,
-                ]),
+            'posts' => $posts,
+            'filters' => $filters,
+            'locales' => config('maison.locales'),
         ]);
     }
 
@@ -308,5 +322,103 @@ class OpsController extends Controller
         }
 
         return User::query()->where('email', $data['email'])->firstOrFail();
+    }
+
+    /**
+     * @return array{search: string, status: string, type: string}
+     */
+    private function communityFilters(Request $request): array
+    {
+        $search = trim((string) $request->query('search', ''));
+        $status = trim((string) $request->query('status', ''));
+        $type = trim((string) $request->query('type', ''));
+
+        if (! in_array($status, ['published', 'hidden'], true)) {
+            $status = '';
+        }
+
+        if (! in_array($type, ['official', 'member'], true)) {
+            $type = '';
+        }
+
+        return [
+            'search' => $search,
+            'status' => $status,
+            'type' => $type,
+        ];
+    }
+
+    /**
+     * @return array{
+     *     id: string,
+     *     author: string,
+     *     author_id: string,
+     *     content: string,
+     *     excerpt: string,
+     *     is_truncated: bool,
+     *     is_official: bool,
+     *     status: string,
+     *     can_edit: bool,
+     *     created_at: string|null,
+     *     translations: array<string, array{content: string}>,
+     *     translationStatus: array<string, array{content: bool}>
+     * }
+     */
+    private function communityPostRow(CommunityPost $post, ?int $userId): array
+    {
+        $sourceContent = $post->content;
+        $displayContent = $post->translated('content');
+
+        return [
+            'id' => (string) $post->id,
+            'author' => $post->author->name,
+            'author_id' => (string) $post->author_id,
+            'content' => $sourceContent,
+            'excerpt' => CommunityPostPresenter::excerpt($displayContent),
+            'is_truncated' => CommunityPostPresenter::isTruncated($displayContent),
+            'is_official' => $post->is_official,
+            'status' => $post->status,
+            'can_edit' => $userId !== null && $post->author_id === $userId,
+            'created_at' => $post->created_at?->toIso8601String(),
+            'translations' => $this->communityPostTranslationBundle($post),
+            'translationStatus' => $this->communityPostTranslationStatus($post),
+        ];
+    }
+
+    /**
+     * @return array<string, array{content: string}>
+     */
+    private function communityPostTranslationBundle(CommunityPost $post): array
+    {
+        $bundle = [];
+
+        foreach (config('maison.locales') as $targetLocale) {
+            $bundle[$targetLocale] = [
+                'content' => $post->translated('content', $targetLocale),
+            ];
+        }
+
+        return $bundle;
+    }
+
+    /**
+     * @return array<string, array{content: bool}>
+     */
+    private function communityPostTranslationStatus(CommunityPost $post): array
+    {
+        $post->loadMissing('translations');
+
+        $status = [];
+
+        foreach (config('maison.locales') as $targetLocale) {
+            $status[$targetLocale] = [
+                'content' => $post->translations->contains(
+                    fn ($translation): bool => $translation->locale === $targetLocale
+                        && $translation->column === 'content',
+                ),
+            ];
+        }
+
+        return $status;
     }
 }
