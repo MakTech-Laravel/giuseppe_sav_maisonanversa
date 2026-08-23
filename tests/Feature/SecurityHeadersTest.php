@@ -14,6 +14,8 @@ test('html responses send a content security policy with a vite nonce', function
         ->toContain('https://checkout.stripe.com')
         ->toContain('https://fonts.bunny.net')
         ->toContain('https://www.googletagmanager.com')
+        ->toContain('http://127.0.0.1:5173')
+        ->toContain("style-src 'self' 'unsafe-inline' https://fonts.bunny.net http://localhost:5173 http://127.0.0.1:5173")
         ->and($response->headers->get('X-Frame-Options'))->toBe('SAMEORIGIN')
         ->and($response->headers->get('X-Content-Type-Options'))->toBe('nosniff')
         ->and($response->headers->get('Referrer-Policy'))->toBe('strict-origin-when-cross-origin');
