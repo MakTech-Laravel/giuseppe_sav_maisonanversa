@@ -319,6 +319,8 @@ export function fileProgressKey(file: File): string {
 /**
  * Mirror the browser's `accept` matching so drag-dropped files honour the same
  * filter as the OS dialog. Supports `.ext`, `type/*`, and exact `type/subtype`.
+ * When the browser leaves `file.type` empty (common on Windows), fall back to
+ * the filename extension.
  */
 function matchesAccept(file: File, accept?: string): boolean {
     if (!accept) {
@@ -336,18 +338,75 @@ function matchesAccept(file: File, accept?: string): boolean {
 
     const name = file.name.toLowerCase();
     const mime = file.type.toLowerCase();
+    const extension = name.includes('.')
+        ? `.${name.split('.').pop()}`
+        : '';
 
     return tokens.some((token) => {
         if (token.startsWith('.')) {
-            return name.endsWith(token);
+            return extension === token || name.endsWith(token);
         }
 
         if (token.endsWith('/*')) {
-            return mime.startsWith(token.slice(0, -1));
+            if (mime.startsWith(token.slice(0, -1))) {
+                return true;
+            }
+
+            // Empty MIME: allow common image extensions for image/*.
+            if (!mime && token === 'image/*') {
+                return ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif'].includes(
+                    extension,
+                );
+            }
+
+            return false;
         }
 
-        return mime === token;
+        if (mime && mime === token) {
+            return true;
+        }
+
+        // Map image/jpeg ↔ .jpg/.jpeg when MIME is missing or non-standard.
+        if (token === 'image/jpeg' || token === 'image/jpg') {
+            return (
+                mime === 'image/jpeg' ||
+                mime === 'image/jpg' ||
+                extension === '.jpg' ||
+                extension === '.jpeg'
+            );
+        }
+
+        if (token === 'image/png') {
+            return mime === 'image/png' || extension === '.png';
+        }
+
+        if (token === 'image/webp') {
+            return mime === 'image/webp' || extension === '.webp';
+        }
+
+        return false;
     });
+}
+
+function normalizeValueFiles(value: File | File[] | null | undefined): File[] {
+    if (!value) {
+        return [];
+    }
+
+    const files = Array.isArray(value) ? value : [value];
+
+    return files.filter((file): file is File => file instanceof File);
+}
+
+function previewsMatchFiles(previews: FilePreview[], files: File[]): boolean {
+    if (previews.length !== files.length) {
+        return false;
+    }
+
+    return files.every(
+        (file, index) =>
+            fileProgressKey(file) === fileProgressKey(previews[index].file),
+    );
 }
 
 /** Build a lightweight preview. Object URLs reference the file — no base64 copy. */
@@ -554,6 +613,11 @@ interface FileCardProps {
     progress?: number;
     /** Show indeterminate spinner (no numeric value). */
     loading?: boolean;
+    /**
+     * How media fills the frame.
+     * `cover` crops to fill (grid thumbnails). `contain` letterboxes (hero/primary).
+     */
+    fit?: 'cover' | 'contain';
     classNames?: Pick<
         FileUploadClassNames,
         'card' | 'cardMedia' | 'cardInfo' | 'removeButton' | 'progressOverlay'
@@ -571,6 +635,7 @@ function FileCard({
     onCancel,
     progress,
     loading = false,
+    fit = 'cover',
     classNames = {},
 }: FileCardProps) {
     const ext = resolveExtLabel(mime);
@@ -594,6 +659,11 @@ function FileCard({
         };
     }, [isDone]);
 
+    const mediaFitClass =
+        fit === 'contain'
+            ? 'max-h-full max-w-full object-contain'
+            : 'h-full w-full object-cover';
+
     return (
         <div
             className={cn(
@@ -610,7 +680,10 @@ function FileCard({
                 {/* Thumbnail ──────────────────────────────────────────────── */}
                 <div
                     className={cn(
-                        'relative flex aspect-video items-center justify-center overflow-hidden bg-muted',
+                        'relative flex items-center justify-center overflow-hidden bg-muted',
+                        fit === 'contain'
+                            ? 'aspect-[4/3] max-h-64 w-full'
+                            : 'aspect-video max-h-52 w-full',
                         classNames.cardMedia,
                     )}
                 >
@@ -621,7 +694,7 @@ function FileCard({
                             draggable={false}
                             onClick={onPreview}
                             className={cn(
-                                'h-full w-full object-cover',
+                                mediaFitClass,
                                 onPreview ? 'cursor-zoom-in' : 'cursor-default',
                             )}
                         />
@@ -631,7 +704,7 @@ function FileCard({
                             preload="metadata"
                             onClick={onPreview}
                             className={cn(
-                                'h-full w-full object-cover',
+                                mediaFitClass,
                                 onPreview ? 'cursor-pointer' : 'cursor-default',
                             )}
                         />
@@ -774,7 +847,9 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
         ref,
     ) {
         const [isDragging, setIsDragging] = useState(false);
-        const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
+        const [filePreviews, setFilePreviews] = useState<FilePreview[]>(() =>
+            normalizeValueFiles(value).map(buildPreview),
+        );
         const [rejections, setRejections] = useState<FileRejection[]>([]);
         const [lightboxOpen, setLightboxOpen] = useState(false);
         const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -788,13 +863,18 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
         useEffect(() => {
             previewsRef.current = filePreviews;
         }, [filePreviews]);
-        useEffect(
-            () => () => {
+
+        // Strict Mode runs effect cleanup then setup again on the same instance.
+        // Reset `alive` on every mount so selections aren't dropped after that cycle
+        // (common after Inertia client navigations in DEV).
+        useEffect(() => {
+            alive.current = true;
+
+            return () => {
                 alive.current = false;
                 previewsRef.current.forEach(revokePreview);
-            },
-            [],
-        );
+            };
+        }, []);
 
         // ── Imperative handle ────────────────────────────────────────────────────
         useImperativeHandle(
@@ -814,20 +894,26 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
             [onChange],
         );
 
-        // ── Sync when value is cleared externally (form.reset() etc.) ────────────
-        // Render-time reconciliation — React's recommended alternative to an
-        // effect for "adjust state when a prop changes". When the controlled
-        // value drops to empty we release the object URLs and clear the cards.
-        // The follow-up setState re-renders before commit, so the revoked URLs
-        // are never painted.
-        const [prevValue, setPrevValue] = useState(value);
+        // ── Sync previews with the controlled value ──────────────────────────────
+        // Inertia's setData cloneDeep() can replace File references on field
+        // updates, and React Strict Mode remounts wipe local preview state. Rebuild
+        // object URLs from `value` whenever the logical file set changes.
+        const valueKey = normalizeValueFiles(value)
+            .map(fileProgressKey)
+            .join('|');
+        const [prevValueKey, setPrevValueKey] = useState(valueKey);
 
-        if (value !== prevValue) {
-            setPrevValue(value);
+        if (valueKey !== prevValueKey) {
+            setPrevValueKey(valueKey);
 
-            if (!value && filePreviews.length) {
-                filePreviews.forEach(revokePreview);
-                setFilePreviews([]);
+            const nextFiles = normalizeValueFiles(value);
+
+            if (!previewsMatchFiles(filePreviews, nextFiles)) {
+                setFilePreviews((prev) => {
+                    prev.forEach(revokePreview);
+
+                    return nextFiles.map(buildPreview);
+                });
             }
         }
 
@@ -1260,7 +1346,13 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
             const ft = resolveFileType(f.mime_type);
 
             return (
-                <div className={cn('w-full', className, classNames.wrapper)}>
+                <div
+                    className={cn(
+                        'w-full max-w-sm',
+                        className,
+                        classNames.wrapper,
+                    )}
+                >
                     {LightboxEl}
                     <FileCard
                         name={f.name ?? f.path.split('/').pop() ?? 'File'}
@@ -1268,6 +1360,7 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
                         preview={f.url}
                         type={ft}
                         mime={f.mime_type}
+                        fit="contain"
                         onRemove={
                             onRemoveExisting && !isUploading
                                 ? () => onRemoveExisting(f.id)
@@ -1299,7 +1392,7 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
             return (
                 <div
                     className={cn(
-                        'w-full space-y-2',
+                        'w-full max-w-sm space-y-2',
                         className,
                         classNames.wrapper,
                     )}
@@ -1311,6 +1404,7 @@ const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(
                         preview={p.preview}
                         type={p.type}
                         mime={p.file.type}
+                        fit="contain"
                         onRemove={
                             !isUploading ? () => handleRemoveNew(0) : undefined
                         }

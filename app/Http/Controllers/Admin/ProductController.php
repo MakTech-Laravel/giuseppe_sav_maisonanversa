@@ -20,6 +20,11 @@ use Inertia\Response;
 
 class ProductController extends Controller
 {
+    /** @var list<int> */
+    public const INVENTORY_PER_PAGE_OPTIONS = [25, 50, 75, 100, 150, 200, 300];
+
+    public const INVENTORY_PER_PAGE_DEFAULT = 75;
+
     public function index(Request $request, string $locale): Response
     {
         $search = trim((string) $request->query('search', ''));
@@ -124,7 +129,7 @@ class ProductController extends Controller
             ->where('product_id', $product->id)
             ->tap(fn ($query) => $this->applyInventoryFilters($query, $filters))
             ->orderBy('edition_number')
-            ->paginate(100)
+            ->paginate($filters['per_page'])
             ->withQueryString()
             ->through(fn (EditionPiece $piece) => [
                 'sku' => $product->formatEditionSku($piece->edition_number),
@@ -156,12 +161,14 @@ class ProductController extends Controller
                 'number_from' => $filters['number_from'] !== null ? (string) $filters['number_from'] : '',
                 'number_to' => $filters['number_to'] !== null ? (string) $filters['number_to'] : '',
                 'status' => $filters['status']?->value ?? '',
+                'per_page' => $filters['per_page'],
             ],
+            'perPageOptions' => self::INVENTORY_PER_PAGE_OPTIONS,
         ]);
     }
 
     /**
-     * @return array{search: string, number_from: int|null, number_to: int|null, status: EditionPieceStatus|null}
+     * @return array{search: string, number_from: int|null, number_to: int|null, status: EditionPieceStatus|null, per_page: int}
      */
     private function inventoryFilters(Request $request): array
     {
@@ -179,12 +186,24 @@ class ProductController extends Controller
             'number_from' => $numberFrom,
             'number_to' => $numberTo,
             'status' => EditionPieceStatus::tryFrom($statusValue),
+            'per_page' => $this->inventoryPerPage($request),
         ];
+    }
+
+    private function inventoryPerPage(Request $request): int
+    {
+        $perPage = $this->nullablePositiveInt($request->query('per_page'));
+
+        if ($perPage !== null && in_array($perPage, self::INVENTORY_PER_PAGE_OPTIONS, true)) {
+            return $perPage;
+        }
+
+        return self::INVENTORY_PER_PAGE_DEFAULT;
     }
 
     /**
      * @param  Builder<EditionPiece>  $query
-     * @param  array{search: string, number_from: int|null, number_to: int|null, status: EditionPieceStatus|null}  $filters
+     * @param  array{search: string, number_from: int|null, number_to: int|null, status: EditionPieceStatus|null, per_page: int}  $filters
      */
     private function applyInventoryFilters($query, array $filters): void
     {
