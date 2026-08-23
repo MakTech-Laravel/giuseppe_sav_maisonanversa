@@ -164,16 +164,16 @@ test('staff can view a faq detail page', function () {
             ->where('faq.sort_order', 4)
             ->where('faq.is_published', true)
             ->has('locales', 3)
-            ->where('defaultLocale', 'nl')
             ->has('translations.nl')
             ->has('translations.en')
             ->has('translations.fr')
+            ->has('translationStatus.nl')
             ->has('translationStatus.en')
             ->has('translationStatus.fr')
         );
 });
 
-test('creating a faq stores deepl english and french translations', function () {
+test('creating a faq stores deepl translations for all locales', function () {
     fakeDeepLTranslations();
 
     $this->actingAs($this->admin)
@@ -188,9 +188,31 @@ test('creating a faq stores deepl english and french translations', function () 
 
     $faq = Faq::query()->where('question', 'DeepL FAQ vraag?')->firstOrFail();
 
-    expect($faq->translations()->count())->toBe(4)
+    expect($faq->translations()->count())->toBe(6)
+        ->and($faq->translated('question', 'nl'))->toBe('NL DeepL FAQ vraag?')
         ->and($faq->translated('question', 'en'))->toBe('EN DeepL FAQ vraag?')
         ->and($faq->translated('answer', 'fr'))->toBe('FR DeepL FAQ antwoord.');
+});
+
+test('creating a faq in english auto-detects and translates to all locales', function () {
+    fakeDeepLTranslations();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.faqs.store', ['locale' => 'nl']), [
+            'context' => FaqContext::Product->value,
+            'question' => 'How long will shipping take?',
+            'answer' => 'Standard shipping takes 3-5 days.',
+            'sort_order' => 0,
+            'is_published' => true,
+        ])
+        ->assertRedirect();
+
+    $faq = Faq::query()->where('question', 'How long will shipping take?')->firstOrFail();
+
+    expect($faq->translations()->count())->toBe(6)
+        ->and($faq->translated('question', 'en'))->toBe('EN How long will shipping take?')
+        ->and($faq->translated('question', 'fr'))->toBe('FR How long will shipping take?')
+        ->and($faq->translated('question', 'nl'))->toBe('NL How long will shipping take?');
 });
 
 test('staff can manually update faq translations', function () {
@@ -201,6 +223,10 @@ test('staff can manually update faq translations', function () {
 
     $this->actingAs($this->admin)
         ->put(route('admin.faqs.translations.update', ['locale' => 'nl', 'faq' => $faq->id]), [
+            'nl' => [
+                'question' => 'Custom NL question',
+                'answer' => 'Custom NL answer',
+            ],
             'en' => [
                 'question' => 'Custom EN question',
                 'answer' => 'Custom EN answer',
@@ -214,7 +240,8 @@ test('staff can manually update faq translations', function () {
 
     $faq->refresh();
 
-    expect($faq->translated('question', 'en'))->toBe('Custom EN question')
+    expect($faq->translated('question', 'nl'))->toBe('Custom NL question')
+        ->and($faq->translated('question', 'en'))->toBe('Custom EN question')
         ->and($faq->translated('answer', 'fr'))->toBe('Custom FR answer');
 });
 
@@ -232,7 +259,7 @@ test('staff can queue deepl retranslation for a faq', function () {
         ->post(route('admin.faqs.translate', ['locale' => 'nl', 'faq' => $faq->id]))
         ->assertRedirect(route('admin.faqs.show', ['locale' => 'nl', 'faq' => $faq->id]));
 
-    expect($faq->fresh()->translations()->count())->toBe(4);
+    expect($faq->fresh()->translations()->count())->toBe(6);
 });
 
 test('public faq pages serve translated copy for the active locale', function () {

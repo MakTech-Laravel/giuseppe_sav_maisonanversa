@@ -22,10 +22,15 @@ class FaqController extends Controller
     public const PER_PAGE_DEFAULT = 15;
 
     /** @var list<string> */
-    private const TRANSLATION_TARGET_LOCALES = ['en', 'fr'];
-
-    /** @var list<string> */
     private const TRANSLATION_COLUMNS = ['question', 'answer'];
+
+    /**
+     * @return list<string>
+     */
+    private function translationLocales(): array
+    {
+        return config('maison.locales');
+    }
 
     public function index(Request $request, string $locale): Response
     {
@@ -103,13 +108,12 @@ class FaqController extends Controller
             'faq' => [
                 'id' => (string) $faq->id,
                 'context' => $faq->context->value,
-                'question' => $faq->translated('question'),
-                'answer' => $faq->translated('answer'),
+                'question' => $faq->question,
+                'answer' => $faq->answer,
                 'sort_order' => $faq->sort_order,
                 'is_published' => $faq->is_published,
             ],
             'locales' => config('maison.locales'),
-            'defaultLocale' => config('maison.default_locale'),
             'translations' => $this->translationBundle($faq),
             'translationStatus' => $this->translationStatus($faq),
         ]);
@@ -149,7 +153,7 @@ class FaqController extends Controller
     ): RedirectResponse {
         $data = $request->validated();
 
-        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+        foreach ($this->translationLocales() as $targetLocale) {
             foreach (self::TRANSLATION_COLUMNS as $column) {
                 $faq->translations()->updateOrCreate(
                     [
@@ -174,6 +178,7 @@ class FaqController extends Controller
 
     public function translate(string $locale, Faq $faq): RedirectResponse
     {
+        $faq->translations()->delete();
         $faq->dispatchDeepLTranslation();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
@@ -240,7 +245,7 @@ class FaqController extends Controller
     {
         $bundle = [];
 
-        foreach (config('maison.locales') as $targetLocale) {
+        foreach ($this->translationLocales() as $targetLocale) {
             $bundle[$targetLocale] = [
                 'question' => $faq->translated('question', $targetLocale),
                 'answer' => $faq->translated('answer', $targetLocale),
@@ -257,7 +262,7 @@ class FaqController extends Controller
     {
         $status = [];
 
-        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+        foreach ($this->translationLocales() as $targetLocale) {
             $status[$targetLocale] = [
                 'question' => $faq->translations->contains(
                     fn ($translation): bool => $translation->locale === $targetLocale

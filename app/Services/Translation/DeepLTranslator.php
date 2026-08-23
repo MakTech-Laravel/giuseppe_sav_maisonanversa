@@ -47,7 +47,7 @@ class DeepLTranslator
      * @param  list<string>  $texts
      * @return list<string>
      */
-    public function translateMany(array $texts, string $target, string $source = 'NL'): array
+    public function translateMany(array $texts, string $target, ?string $source = 'NL'): array
     {
         if ($texts === []) {
             return [];
@@ -59,6 +59,16 @@ class DeepLTranslator
             });
 
             return $texts;
+        }
+
+        $payload = [
+            'text' => array_values($texts),
+            'target_lang' => $this->normalizeTarget($target),
+            'preserve_formatting' => true,
+        ];
+
+        if ($source !== null) {
+            $payload['source_lang'] = strtoupper($source);
         }
 
         try {
@@ -76,12 +86,7 @@ class DeepLTranslator
                     return $exception instanceof RequestException
                         && $exception->response->status() === 429;
                 })
-                ->post($this->host().'/v2/translate', [
-                    'text' => array_values($texts),
-                    'source_lang' => strtoupper($source),
-                    'target_lang' => $this->normalizeTarget($target),
-                    'preserve_formatting' => true,
-                ]);
+                ->post($this->host().'/v2/translate', $payload);
         } catch (RequestException $exception) {
             if ($exception->response?->status() === 456) {
                 Log::warning('DeepL quota exceeded.');
@@ -103,7 +108,7 @@ class DeepLTranslator
         );
     }
 
-    public function translate(string $text, string $target, string $source = 'NL'): string
+    public function translate(string $text, string $target, ?string $source = 'NL'): string
     {
         return $this->translateMany([$text], $target, $source)[0] ?? $text;
     }

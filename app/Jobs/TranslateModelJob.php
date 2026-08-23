@@ -42,13 +42,15 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 
         /** @var Model&object{translatableColumns: callable, translations: mixed} $model */
         $columns = $model->translatableColumns();
-        $targets = collect(config('maison.locales'))
-            ->reject(fn (string $locale): bool => $locale === config('maison.default_locale'))
-            ->values();
+        $targets = collect($model->translationTargetLocales());
 
         if ($columns === [] || $targets->isEmpty()) {
             return;
         }
+
+        $sourceLocale = $model->translationUsesAutoDetect()
+            ? null
+            : strtoupper((string) config('maison.default_locale'));
 
         $model->loadMissing('translations');
 
@@ -88,6 +90,7 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
                 $translated = $translator->translateMany(
                     array_values($pending),
                     $translator->targetLang($locale),
+                    $sourceLocale,
                 );
             } catch (RequestException $exception) {
                 if ($exception->response?->status() === 456) {
