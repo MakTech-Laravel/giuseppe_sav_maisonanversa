@@ -11,6 +11,8 @@ use App\Models\Product;
 use App\Services\Edition\EditionInventory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -53,7 +55,11 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request, string $locale): RedirectResponse
     {
-        Product::query()->create($this->payload($request->validated()));
+        $validated = $request->validated();
+        $payload = $this->payload($validated);
+        $payload['gallery'] = $this->syncGallery([], $validated, $request);
+
+        Product::query()->create($payload);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product aangemaakt.')]);
 
@@ -69,7 +75,11 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, string $locale, Product $product): RedirectResponse
     {
-        $product->update($this->payload($request->validated()));
+        $validated = $request->validated();
+        $payload = $this->payload($validated);
+        $payload['gallery'] = $this->syncGallery($product->gallery ?? [], $validated, $request);
+
+        $product->update($payload);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product bijgewerkt.')]);
 
@@ -82,6 +92,10 @@ class ProductController extends Controller
             return back()->withErrors([
                 'product' => __('Dit product heeft bestellingen en kan niet worden verwijderd. Depubliceer het in plaats daarvan.'),
             ]);
+        }
+
+        foreach ($product->gallery ?? [] as $path) {
+            $this->deleteStoredMedia(is_string($path) ? $path : null);
         }
 
         $product->editionPieces()->delete();
@@ -106,7 +120,6 @@ class ProductController extends Controller
             ->where('product_id', $product->id)
             ->orderBy('edition_number')
             ->get();
-        $prefix = $product->skuPrefix();
 
         return Inertia::render('admin/heritage/index', [
             'product' => $this->formProduct($product),
@@ -124,8 +137,8 @@ class ProductController extends Controller
                 'reserved' => $snapshot['reserved'],
                 'available' => $snapshot['available'],
                 'rows' => $pieces->map(fn (EditionPiece $piece) => [
-                    'sku' => $prefix.'-'.$piece->formattedNumber(),
-                    'label' => 'No.'.$piece->formattedNumber(),
+                    'sku' => $product->formatEditionSku($piece->edition_number),
+                    'label' => $product->formatEditionLabel($piece->edition_number),
                     'status' => $piece->status->value,
                     'status_key' => $piece->status->value,
                     'notes' => $piece->notes ?? '',
@@ -149,6 +162,12 @@ class ProductController extends Controller
             'amount' => $validated['amount'],
             'currency' => 'eur',
             'edition_total' => $type === ProductType::LimitedEdition ? $validated['edition_total'] : null,
+            'edition_number_prefix' => $type === ProductType::LimitedEdition
+                ? ($validated['edition_number_prefix'] ?? null)
+                : null,
+            'edition_number_postfix' => $type === ProductType::LimitedEdition
+                ? ($validated['edition_number_postfix'] ?? null)
+                : null,
             'archive_edition_numbers' => $type === ProductType::LimitedEdition
                 ? ($validated['archive_edition_numbers'] ?? [])
                 : [],
@@ -161,10 +180,82 @@ class ProductController extends Controller
     }
 
     /**
+     * @param  list<string>  $currentGallery
+     * @param  array<string, mixed>  $validated
+     * @return list<string>
+     */
+    private function syncGallery(array $currentGallery, array $validated, Request $request): array
+    {
+        $primary = $currentGallery[0] ?? null;
+        $extras = array_values(array_slice($currentGallery, 1));
+
+        if (($validated['remove_primary_image'] ?? false) === true) {
+            $this->deleteStoredMedia($primary);
+            $primary = null;
+        }
+
+        if ($request->hasFile('primary_image')) {
+            $this->deleteStoredMedia($primary);
+            $primary = $request->file('primary_image')?->store('products', 'public');
+        }
+
+        /** @var list<string>|null $keep */
+        $keep = $validated['gallery_keep'] ?? null;
+
+        if (is_array($keep)) {
+            $removed = array_values(array_diff($extras, $keep));
+
+            foreach ($removed as $path) {
+                $this->deleteStoredMedia($path);
+            }
+
+            $extras = array_values(array_filter(
+                $extras,
+                fn (string $path): bool => in_array($path, $keep, true),
+            ));
+        }
+
+        if ($request->hasFile('gallery_images')) {
+            /** @var list<UploadedFile|null> $files */
+            $files = $request->file('gallery_images') ?? [];
+
+            foreach ($files as $file) {
+                if ($file instanceof UploadedFile) {
+                    $extras[] = $file->store('products', 'public');
+                }
+            }
+        }
+
+        return array_values(array_filter(
+            [$primary, ...$extras],
+            fn (mixed $path): bool => is_string($path) && $path !== '',
+        ));
+    }
+
+    private function deleteStoredMedia(?string $path): void
+    {
+        if ($path === null || $path === '' || ! str_contains($path, '/')) {
+            return;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return;
+        }
+
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function formProduct(Product $product): array
     {
+        $gallery = $product->gallery ?? [];
+        $primaryPath = $gallery[0] ?? null;
+        $extraPaths = array_values(array_slice($gallery, 1));
+
         return [
             'id' => $product->id,
             'name' => $product->name,
@@ -173,12 +264,37 @@ class ProductController extends Controller
             'amount' => (string) $product->amount,
             'currency' => $product->currency,
             'edition_total' => $product->edition_total,
-            'archive_edition_numbers' => implode(', ', $product->archiveEditionNumberList()),
+            'edition_number_prefix' => $product->edition_number_prefix ?? '',
+            'edition_number_postfix' => $product->edition_number_postfix ?? '',
+            'archive_edition_numbers' => $product->archiveEditionNumberList(),
             'stock_quantity' => $product->stock_quantity,
             'is_published' => $product->is_published,
             'grants_founding_circle' => $product->grants_founding_circle,
             'expected_delivery_label' => $product->expected_delivery_label,
             'stripe_price_id' => $product->stripe_price_id,
+            'primary_image' => $this->existingMediaFile($primaryPath),
+            'gallery_images' => array_values(array_filter(array_map(
+                fn (string $path): ?array => $this->existingMediaFile($path),
+                $extraPaths,
+            ))),
+        ];
+    }
+
+    /**
+     * @return array{id: string, path: string, url: string, mime_type: string, name: string}|null
+     */
+    private function existingMediaFile(?string $path): ?array
+    {
+        if ($path === null || $path === '') {
+            return null;
+        }
+
+        return [
+            'id' => $path,
+            'path' => $path,
+            'url' => Product::resolveMediaUrl($path),
+            'mime_type' => 'image/*',
+            'name' => basename($path),
         ];
     }
 }

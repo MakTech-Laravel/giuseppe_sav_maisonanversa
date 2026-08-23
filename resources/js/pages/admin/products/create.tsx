@@ -16,11 +16,17 @@ const defaults: ProductFormData = {
     type: 'simple',
     amount: '',
     edition_total: '100',
-    archive_edition_numbers: '',
+    edition_number_prefix: '',
+    edition_number_postfix: '',
+    archive_edition_numbers: [],
     stock_quantity: '0',
     is_published: true,
     grants_founding_circle: false,
     expected_delivery_label: '',
+    primary_image: null,
+    gallery_images: null,
+    remove_primary_image: false,
+    gallery_keep: [],
 };
 
 export default function CreateProduct() {
@@ -29,7 +35,7 @@ export default function CreateProduct() {
 
     const submit = (event: FormEvent) => {
         event.preventDefault();
-        form.submit();
+        form.submit({ forceFormData: true });
     };
 
     return (
@@ -43,18 +49,19 @@ export default function CreateProduct() {
                 >
                     <Button variant="outline" asChild>
                         <Link href={products.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug naar catalogus')}
+                            <ArrowLeft className="h-4 w-4" />{' '}
+                            {t('Terug naar catalogus')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
-                <form
-                    onSubmit={submit}
-                    className="w-full max-w-2xl space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
-                >
+                <form onSubmit={submit} className="w-full space-y-6">
                     <ProductFormFields
                         data={form.data}
                         errors={form.errors}
                         setData={form.setData}
+                        isUploading={form.processing}
+                        uploadProgress={form.progress?.percentage ?? null}
+                        onCancelUpload={() => form.cancel()}
                     />
                     <Button type="submit" disabled={form.processing}>
                         {form.processing && (

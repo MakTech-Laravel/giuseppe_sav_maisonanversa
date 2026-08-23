@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 #[ObservedBy([ProductObserver::class])]
@@ -41,6 +42,8 @@ class Product extends Model
         'amount',
         'currency',
         'edition_total',
+        'edition_number_prefix',
+        'edition_number_postfix',
         'archive_edition_numbers',
         'stock_quantity',
         'is_published',
@@ -128,9 +131,39 @@ class Product extends Model
 
     public function skuPrefix(): string
     {
+        if (filled($this->edition_number_prefix)) {
+            return (string) $this->edition_number_prefix;
+        }
+
         $letters = strtoupper((string) preg_replace('/[^a-zA-Z]/', '', $this->slug));
 
         return Str::substr($letters !== '' ? $letters : 'PR', 0, 2);
+    }
+
+    public function editionNumberPadWidth(): int
+    {
+        return max(3, strlen((string) max(1, (int) ($this->edition_total ?? 1))));
+    }
+
+    public function formatEditionDigits(int $number): string
+    {
+        return str_pad((string) $number, $this->editionNumberPadWidth(), '0', STR_PAD_LEFT);
+    }
+
+    public function formatEditionLabel(int $number): string
+    {
+        return ($this->edition_number_prefix ?? '').$this->formatEditionDigits($number).($this->edition_number_postfix ?? '');
+    }
+
+    public function formatEditionSku(int $number): string
+    {
+        $label = $this->formatEditionLabel($number);
+
+        if ($label !== $this->formatEditionDigits($number)) {
+            return $label;
+        }
+
+        return $this->skuPrefix().'-'.$this->formatEditionDigits($number);
     }
 
     public function amountInCents(): int
@@ -166,7 +199,7 @@ class Product extends Model
             'hero_subtitle' => $this->translated('hero_subtitle'),
             'status' => ($this->status ?? ProductStatus::Active)->value,
             'sort_order' => $this->sort_order ?? 0,
-            'gallery' => $this->gallery ?? [],
+            'gallery' => $this->resolvedGallery(),
             'specs' => $this->specs ?? [],
             'materials' => $this->materials ?? [],
             'unboxing_steps' => $this->unboxing_steps ?? [],
@@ -183,14 +216,46 @@ class Product extends Model
      */
     public function toCardShare(): array
     {
+        $gallery = $this->resolvedGallery();
+
         return [
             'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->translated('name'),
             'status' => ($this->status ?? ProductStatus::Active)->value,
             'hero_subtitle' => $this->translated('hero_subtitle'),
-            'cover_asset' => $this->gallery[0] ?? null,
+            'cover_asset' => $gallery[0] ?? null,
         ];
+    }
+
+    /**
+     * Resolve gallery items to either imagery asset keys or public URLs.
+     *
+     * @return list<string>
+     */
+    public function resolvedGallery(): array
+    {
+        return array_values(array_map(
+            fn (mixed $item): string => self::resolveMediaUrl(is_string($item) ? $item : ''),
+            $this->gallery ?? [],
+        ));
+    }
+
+    public static function resolveMediaUrl(string $item): string
+    {
+        if ($item === '') {
+            return $item;
+        }
+
+        if (str_starts_with($item, 'http://') || str_starts_with($item, 'https://') || str_starts_with($item, '/')) {
+            return $item;
+        }
+
+        if (str_contains($item, '/')) {
+            return Storage::disk('public')->url($item);
+        }
+
+        return $item;
     }
 
     /**
