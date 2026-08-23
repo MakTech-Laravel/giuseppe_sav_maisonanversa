@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class FaqFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -28,5 +26,33 @@ class FaqFactory extends Factory
             'sort_order' => fake()->numberBetween(0, 10),
             'is_published' => true,
         ];
+    }
+
+    public function product(): static
+    {
+        return $this->state(fn (): array => [
+            'context' => FaqContext::Product->value,
+        ]);
+    }
+
+    public function contact(): static
+    {
+        return $this->state(fn (): array => [
+            'context' => FaqContext::Contact->value,
+        ]);
+    }
+
+    public function published(): static
+    {
+        return $this->state(fn (): array => [
+            'is_published' => true,
+        ]);
+    }
+
+    public function draft(): static
+    {
+        return $this->state(fn (): array => [
+            'is_published' => false,
+        ]);
     }
 }
