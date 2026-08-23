@@ -18,6 +18,9 @@ class UpdateCommunityEventTranslationsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'nl.title' => ['required', 'string', 'max:255'],
+            'nl.description' => ['required', 'string', 'max:5000'],
+            'nl.location' => ['required', 'string', 'max:255'],
             'en.title' => ['required', 'string', 'max:255'],
             'en.description' => ['required', 'string', 'max:5000'],
             'en.location' => ['required', 'string', 'max:255'],

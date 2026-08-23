@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\CommunityEventStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCommunityEventRequest;
+use App\Http\Requests\Admin\TranslateCommunityEventRequest;
 use App\Http\Requests\Admin\UpdateCommunityEventRequest;
 use App\Http\Requests\Admin\UpdateCommunityEventStatusRequest;
 use App\Http\Requests\Admin\UpdateCommunityEventTranslationsRequest;
@@ -21,10 +22,15 @@ class CommunityEventController extends Controller
     private const PER_PAGE = 15;
 
     /** @var list<string> */
-    private const TRANSLATION_TARGET_LOCALES = ['en', 'fr'];
-
-    /** @var list<string> */
     private const TRANSLATION_COLUMNS = ['title', 'description', 'location'];
+
+    /**
+     * @return list<string>
+     */
+    private function translationLocales(): array
+    {
+        return config('maison.locales');
+    }
 
     public function index(Request $request, string $locale): Response
     {
@@ -104,7 +110,6 @@ class CommunityEventController extends Controller
                     ->all(),
             ],
             'locales' => config('maison.locales'),
-            'defaultLocale' => config('maison.default_locale'),
             'translations' => $this->translationBundle($event),
             'translationStatus' => $this->translationStatus($event),
         ]);
@@ -112,22 +117,16 @@ class CommunityEventController extends Controller
 
     public function edit(Request $request, string $locale, CommunityEvent $event): Response
     {
-        $event->loadMissing('translations');
-
         return Inertia::render('admin/events/edit', [
             'event' => [
                 'id' => (string) $event->id,
+                'title' => $event->title,
+                'description' => $event->description ?? '',
+                'location' => $event->location ?? '',
                 'starts_at' => $event->starts_at?->format('Y-m-d\TH:i'),
                 'capacity' => $event->capacity,
                 'thumbnail_url' => $event->thumbnailUrl(),
             ],
-            'source' => [
-                'title' => $event->title,
-                'description' => $event->description ?? '',
-                'location' => $event->location ?? '',
-            ],
-            'defaultLocale' => config('maison.default_locale'),
-            'translations' => $this->translationBundle($event),
         ]);
     }
 
@@ -143,7 +142,14 @@ class CommunityEventController extends Controller
             $data['thumbnail'] = null;
         }
 
-        $event->update($data);
+        $event->update([
+            'title' => $data['title'],
+            'description' => $data['description'] ?? '',
+            'location' => $data['location'] ?? '',
+            'starts_at' => $data['starts_at'],
+            'capacity' => $data['capacity'] ?? null,
+            ...(array_key_exists('thumbnail', $data) ? ['thumbnail' => $data['thumbnail']] : []),
+        ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Evenement bijgewerkt.')]);
 
@@ -174,7 +180,7 @@ class CommunityEventController extends Controller
     ): RedirectResponse {
         $data = $request->validated();
 
-        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+        foreach ($this->translationLocales() as $targetLocale) {
             foreach (self::TRANSLATION_COLUMNS as $column) {
                 $event->translations()->updateOrCreate(
                     [
@@ -197,9 +203,27 @@ class CommunityEventController extends Controller
         ]);
     }
 
-    public function translate(string $locale, CommunityEvent $event): RedirectResponse
-    {
-        $event->dispatchDeepLTranslation();
+    public function translate(
+        TranslateCommunityEventRequest $request,
+        string $locale,
+        CommunityEvent $event,
+    ): RedirectResponse {
+        $targetLocale = $request->validated('target_locale');
+
+        if (filled($targetLocale)) {
+            $event->translations()
+                ->where('locale', $targetLocale)
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $event->dispatchDeepLTranslation([$targetLocale]);
+        } else {
+            $event->translations()
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $event->dispatchDeepLTranslation();
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
 
@@ -261,7 +285,7 @@ class CommunityEventController extends Controller
     {
         $bundle = [];
 
-        foreach (config('maison.locales') as $targetLocale) {
+        foreach ($this->translationLocales() as $targetLocale) {
             $bundle[$targetLocale] = [
                 'title' => $event->translated('title', $targetLocale),
                 'description' => $event->translated('description', $targetLocale),
@@ -279,7 +303,7 @@ class CommunityEventController extends Controller
     {
         $status = [];
 
-        foreach (self::TRANSLATION_TARGET_LOCALES as $targetLocale) {
+        foreach ($this->translationLocales() as $targetLocale) {
             $status[$targetLocale] = [
                 'title' => $event->translations->contains(
                     fn ($translation): bool => $translation->locale === $targetLocale
