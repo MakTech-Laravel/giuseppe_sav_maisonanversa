@@ -297,13 +297,24 @@ test('order confirmation mail uses the order locale for the product name', funct
     $mailable->assertSeeInHtml('EN '.$product->name);
 });
 
-test('community events auto-detect title description and location', function () {
+test('community events translate title description and location but not thumbnail', function () {
     $event = CommunityEvent::factory()->create();
 
     expect($event->translatableColumns())
         ->toEqualCanonicalizing(['title', 'description', 'location'])
+        ->not->toContain('thumbnail')
         ->not->toContain('email')
         ->not->toContain('url');
+});
+
+test('creating a community event queues TranslateModelJob', function () {
+    Queue::fake();
+
+    $event = CommunityEvent::factory()->create(['title' => 'Salon avond']);
+
+    Queue::assertPushed(TranslateModelJob::class, function (TranslateModelJob $job) use ($event): bool {
+        return $job->uniqueId() === CommunityEvent::class.':'.$event->id;
+    });
 });
 
 test('community courts auto-detect title body and location', function () {

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\CommunityEventStatus;
 use App\Models\Concerns\TranslatesWithDeepL;
 use Database\Factories\CommunityEventFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,12 +16,24 @@ class CommunityEvent extends Model
     /** @use HasFactory<CommunityEventFactory> */
     use HasFactory, TranslatesWithDeepL;
 
+    /**
+     * Dutch source columns translated to en/fr via TranslateModelJob.
+     *
+     * @var list<string>
+     */
+    protected array $translatable = [
+        'title',
+        'description',
+        'location',
+    ];
+
     protected $fillable = [
         'title',
         'description',
         'starts_at',
         'location',
         'capacity',
+        'status',
         'thumbnail',
     ];
 
@@ -28,6 +42,7 @@ class CommunityEvent extends Model
         return [
             'starts_at' => 'datetime',
             'capacity' => 'integer',
+            'status' => CommunityEventStatus::class,
         ];
     }
 
@@ -56,5 +71,16 @@ class CommunityEvent extends Model
             : $this->rsvps()->count();
 
         return $count >= $this->capacity;
+    }
+
+    /**
+     * @param  Builder<CommunityEvent>  $query
+     * @return Builder<CommunityEvent>
+     */
+    public function scopeStatus(Builder $query, CommunityEventStatus|string $status): Builder
+    {
+        $value = $status instanceof CommunityEventStatus ? $status->value : $status;
+
+        return $query->where('status', $value);
     }
 }
