@@ -296,6 +296,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::post('events/{event}/translate', 'translate')->name('events.translate')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::post('events/{event}/translate-column', 'translateColumn')->name('events.translate-column')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::delete('events/{event}', 'destroy')->name('events.destroy')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
             });
