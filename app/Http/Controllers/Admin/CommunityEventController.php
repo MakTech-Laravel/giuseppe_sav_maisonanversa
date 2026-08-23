@@ -8,6 +8,8 @@ use App\Http\Requests\Admin\UpdateCommunityEventRequest;
 use App\Models\CommunityEvent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -32,7 +34,13 @@ class CommunityEventController extends Controller
 
     public function store(StoreCommunityEventRequest $request, string $locale): RedirectResponse
     {
-        $event = CommunityEvent::query()->create($request->validated());
+        $data = $request->safe()->except(['thumbnail']);
+
+        if ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $this->storeThumbnail($request->file('thumbnail'));
+        }
+
+        $event = CommunityEvent::query()->create($data);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Evenement aangemaakt.')]);
 
@@ -50,10 +58,16 @@ class CommunityEventController extends Controller
             'event' => [
                 ...$this->summary($event),
                 'description' => $event->translated('description'),
-                'guest_list' => $event->rsvps->map(fn ($rsvp) => [
-                    'name' => $rsvp->user->name,
-                    'email' => $rsvp->user->email,
-                ])->all(),
+                'bookings' => $event->rsvps
+                    ->sortBy('created_at')
+                    ->values()
+                    ->map(fn ($rsvp) => [
+                        'id' => (string) $rsvp->id,
+                        'name' => $rsvp->user->name,
+                        'email' => $rsvp->user->email,
+                        'booked_at' => $rsvp->created_at?->toIso8601String(),
+                    ])
+                    ->all(),
             ],
         ]);
     }
@@ -68,13 +82,24 @@ class CommunityEventController extends Controller
                 'starts_at' => $event->starts_at?->format('Y-m-d\TH:i'),
                 'location' => $event->location,
                 'capacity' => $event->capacity,
+                'thumbnail_url' => $event->thumbnailUrl(),
             ],
         ]);
     }
 
     public function update(UpdateCommunityEventRequest $request, string $locale, CommunityEvent $event): RedirectResponse
     {
-        $event->update($request->validated());
+        $data = $request->safe()->except(['thumbnail', 'remove_thumbnail']);
+
+        if ($request->hasFile('thumbnail')) {
+            $this->deleteThumbnail($event);
+            $data['thumbnail'] = $this->storeThumbnail($request->file('thumbnail'));
+        } elseif ($request->boolean('remove_thumbnail')) {
+            $this->deleteThumbnail($event);
+            $data['thumbnail'] = null;
+        }
+
+        $event->update($data);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Evenement bijgewerkt.')]);
 
@@ -86,6 +111,7 @@ class CommunityEventController extends Controller
 
     public function destroy(Request $request, string $locale, CommunityEvent $event): RedirectResponse
     {
+        $this->deleteThumbnail($event);
         $event->delete();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Evenement verwijderd.')]);
@@ -94,7 +120,7 @@ class CommunityEventController extends Controller
     }
 
     /**
-     * @return array{id: string, title: string, starts_at: string, location: string, capacity: int|null, rsvp_count: int}
+     * @return array{id: string, title: string, starts_at: string, location: string, capacity: int|null, rsvp_count: int, thumbnail_url: string|null}
      */
     private function summary(CommunityEvent $event): array
     {
@@ -105,6 +131,21 @@ class CommunityEventController extends Controller
             'location' => $event->translated('location'),
             'capacity' => $event->capacity,
             'rsvp_count' => (int) ($event->rsvps_count ?? $event->rsvps()->count()),
+            'thumbnail_url' => $event->thumbnailUrl(),
         ];
+    }
+
+    private function storeThumbnail(UploadedFile $file): string
+    {
+        return $file->store('community-events', 'public');
+    }
+
+    private function deleteThumbnail(CommunityEvent $event): void
+    {
+        if ($event->thumbnail === null || $event->thumbnail === '') {
+            return;
+        }
+
+        Storage::disk('public')->delete($event->thumbnail);
     }
 }

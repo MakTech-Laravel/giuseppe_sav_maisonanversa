@@ -3,9 +3,12 @@ import { ArrowLeft, CalendarDays, Loader2 } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import {
+    capacityFromFormValue,
+    capacityToFormValue,
+    CommunityEventFormFields,
+} from '@/components/admin/community-event-form-fields';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import eventsRoutes from '@/routes/admin/events';
@@ -18,6 +21,7 @@ interface EventEditProps {
         starts_at: string;
         location: string | null;
         capacity: number | null;
+        thumbnail_url: string | null;
     };
 }
 
@@ -33,21 +37,39 @@ export default function EditEvent({ event }: EventEditProps) {
             description: event.description ?? '',
             starts_at: event.starts_at,
             location: event.location ?? '',
-            capacity: event.capacity ?? ('' as string | number | null),
+            capacity: capacityToFormValue(event.capacity),
+            thumbnail: null as File | null,
+            remove_thumbnail: false,
         },
     );
 
     function submit(formEvent: FormEvent) {
         formEvent.preventDefault();
+
+        const endpoint = eventsRoutes.update.url({
+            locale: wayfinderLocale(),
+            event: event.id,
+        });
+
         form
-            .transform((data) => ({
-                ...data,
-                capacity:
-                    data.capacity === '' || data.capacity === null
-                        ? null
-                        : Number(data.capacity),
-            }))
-            .submit();
+            .transform((data) => {
+                const payload: Record<string, unknown> = {
+                    title: data.title,
+                    description: data.description,
+                    starts_at: data.starts_at,
+                    location: data.location,
+                    capacity: capacityFromFormValue(data.capacity),
+                    remove_thumbnail: data.remove_thumbnail,
+                    _method: 'put',
+                };
+
+                if (data.thumbnail instanceof File) {
+                    payload.thumbnail = data.thumbnail;
+                }
+
+                return payload;
+            })
+            .post(endpoint, { forceFormData: true });
     }
 
     return (
@@ -72,87 +94,14 @@ export default function EditEvent({ event }: EventEditProps) {
                 </AdminPageHeader>
                 <form
                     onSubmit={submit}
-                    className="w-full max-w-2xl space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
+                    className="w-full space-y-5 rounded-xl border bg-card p-6 shadow-sm md:p-8"
                 >
-                    <div className="space-y-2">
-                        <Label htmlFor="title">{t('Titel')}</Label>
-                        <Input
-                            id="title"
-                            value={form.data.title}
-                            onChange={(e) =>
-                                form.setData('title', e.target.value)
-                            }
-                        />
-                        {form.errors.title && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.title}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="description">{t('Beschrijving')}</Label>
-                        <textarea
-                            id="description"
-                            value={form.data.description}
-                            onChange={(e) =>
-                                form.setData('description', e.target.value)
-                            }
-                            className="min-h-28 w-full rounded-md border px-3 py-2 text-sm"
-                        />
-                        {form.errors.description && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.description}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="starts_at">{t('Datum')}</Label>
-                        <Input
-                            id="starts_at"
-                            type="datetime-local"
-                            value={form.data.starts_at}
-                            onChange={(e) =>
-                                form.setData('starts_at', e.target.value)
-                            }
-                        />
-                        {form.errors.starts_at && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.starts_at}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="location">{t('Locatie')}</Label>
-                        <Input
-                            id="location"
-                            value={form.data.location}
-                            onChange={(e) =>
-                                form.setData('location', e.target.value)
-                            }
-                        />
-                        {form.errors.location && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.location}
-                            </p>
-                        )}
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="capacity">{t('Capaciteit')}</Label>
-                        <Input
-                            id="capacity"
-                            type="number"
-                            min={1}
-                            value={form.data.capacity ?? ''}
-                            onChange={(e) =>
-                                form.setData('capacity', e.target.value)
-                            }
-                        />
-                        {form.errors.capacity && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.capacity}
-                            </p>
-                        )}
-                    </div>
+                    <CommunityEventFormFields
+                        data={form.data}
+                        errors={form.errors}
+                        setData={form.setData}
+                        existingThumbnailUrl={event.thumbnail_url}
+                    />
                     <Button type="submit" disabled={form.processing}>
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />

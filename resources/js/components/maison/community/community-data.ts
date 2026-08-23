@@ -55,7 +55,10 @@ export type CommunityEventPayload = {
     description: string | null;
     starts_at: string;
     location: string;
+    capacity: number | null;
+    thumbnail_url: string | null;
     joined: boolean;
+    is_full: boolean;
     rsvp_count: number;
     attendees: string[];
 };
