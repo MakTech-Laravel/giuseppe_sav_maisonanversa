@@ -361,6 +361,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::post('faqs', 'store')->name('faqs.store')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('faqs/{faq}', 'show')->name('faqs.show')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('faqs/{faq}/edit', 'edit')->name('faqs.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('faqs/{faq}', 'update')->name('faqs.update')

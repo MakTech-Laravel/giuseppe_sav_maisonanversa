@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { CircleHelp, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
+import { CircleHelp, Eye, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
@@ -279,6 +279,21 @@ export default function FaqsIndex({
                                         </TableCell>
                                         <TableCell>{faq.sort_order}</TableCell>
                                         <TableCell className="space-x-2 text-right">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={faqs.show({
+                                                        locale,
+                                                        faq: faq.id,
+                                                    })}
+                                                >
+                                                    <Eye className="h-4 w-4" />
+                                                    {t('Bekijken')}
+                                                </Link>
+                                            </Button>
                                             <Button
                                                 variant="outline"
                                                 size="sm"

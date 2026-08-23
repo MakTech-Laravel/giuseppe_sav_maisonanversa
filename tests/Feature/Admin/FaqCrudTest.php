@@ -97,15 +97,14 @@ test('staff can paginate faqs with a whitelisted per page value', function () {
 });
 
 test('staff can create a faq', function () {
-    $this->actingAs($this->admin)
+    $response = $this->actingAs($this->admin)
         ->post(route('admin.faqs.store', ['locale' => 'nl']), [
             'context' => FaqContext::Product->value,
             'question' => 'Nieuwe FAQ vraag?',
             'answer' => 'Nieuwe FAQ antwoord.',
             'sort_order' => 12,
             'is_published' => true,
-        ])
-        ->assertRedirect();
+        ]);
 
     $faq = Faq::query()->where('question', 'Nieuwe FAQ vraag?')->first();
 
@@ -114,6 +113,11 @@ test('staff can create a faq', function () {
         ->and($faq->answer)->toBe('Nieuwe FAQ antwoord.')
         ->and($faq->sort_order)->toBe(12)
         ->and($faq->is_published)->toBeTrue();
+
+    $response->assertRedirect(route('admin.faqs.show', [
+        'locale' => 'nl',
+        'faq' => $faq->id,
+    ]));
 });
 
 test('staff can update a faq', function () {
@@ -130,7 +134,7 @@ test('staff can update a faq', function () {
             'sort_order' => 3,
             'is_published' => false,
         ])
-        ->assertRedirect(route('admin.faqs.edit', ['locale' => 'nl', 'faq' => $faq->id]));
+        ->assertRedirect(route('admin.faqs.show', ['locale' => 'nl', 'faq' => $faq->id]));
 
     $faq->refresh();
 
@@ -139,6 +143,27 @@ test('staff can update a faq', function () {
         ->and($faq->answer)->toBe('Bijgewerkt antwoord')
         ->and($faq->sort_order)->toBe(3)
         ->and($faq->is_published)->toBeFalse();
+});
+
+test('staff can view a faq detail page', function () {
+    $faq = Faq::factory()->contact()->published()->create([
+        'question' => 'Detail FAQ vraag',
+        'answer' => 'Detail FAQ antwoord',
+        'sort_order' => 4,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.faqs.show', ['locale' => 'nl', 'faq' => $faq->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/faqs/show')
+            ->where('faq.id', (string) $faq->id)
+            ->where('faq.question', 'Detail FAQ vraag')
+            ->where('faq.answer', 'Detail FAQ antwoord')
+            ->where('faq.context', FaqContext::Contact->value)
+            ->where('faq.sort_order', 4)
+            ->where('faq.is_published', true)
+        );
 });
 
 test('staff can delete a faq', function () {
