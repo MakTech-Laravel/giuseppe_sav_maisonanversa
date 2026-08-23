@@ -29,6 +29,57 @@ test('staff can create a community event', function () {
     expect(CommunityEvent::query()->where('title', 'Club Night')->exists())->toBeTrue();
 });
 
+test('staff can open the event edit page', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Editable Event',
+        'starts_at' => now()->addDays(4),
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.edit', ['locale' => 'en', 'event' => $event->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/events/edit')
+            ->where('source.title', 'Editable Event')
+            ->where('defaultLocale', 'nl')
+            ->has('translations.en')
+            ->has('event.starts_at')
+            ->missing('event.title')
+        );
+});
+
+test('event edit page shows stored english copy when admin locale is en', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Bron titel',
+        'description' => 'Bron beschrijving',
+        'location' => 'Antwerpen',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.events.translations.update', ['locale' => 'nl', 'event' => $event->id]), [
+            'en' => [
+                'title' => 'English title',
+                'description' => 'English description',
+                'location' => 'Antwerp',
+            ],
+            'fr' => [
+                'title' => 'Titre FR',
+                'description' => 'Description FR',
+                'location' => 'Anvers',
+            ],
+        ])
+        ->assertRedirect();
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.edit', ['locale' => 'en', 'event' => $event->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/events/edit')
+            ->where('translations.en.title', 'English title')
+            ->where('source.title', 'Bron titel')
+        );
+});
+
 test('staff can update a community event', function () {
     $event = CommunityEvent::factory()->create(['title' => 'Old Title']);
 
@@ -56,10 +107,11 @@ test('staff can delete a community event', function () {
     expect(CommunityEvent::query()->whereKey($event->id)->exists())->toBeFalse();
 });
 
-test('events index exposes starts_at capacity and rsvp_count', function () {
+test('events index exposes starts_at capacity rsvp_count status and filters', function () {
     CommunityEvent::factory()->create([
         'title' => 'Heritage Meetup',
         'capacity' => 20,
+        'starts_at' => now()->addDays(3),
     ]);
 
     $this->actingAs($this->admin)
@@ -67,12 +119,171 @@ test('events index exposes starts_at capacity and rsvp_count', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/events/index')
-            ->has('events', 1)
-            ->where('events.0.title', 'Heritage Meetup')
-            ->where('events.0.capacity', 20)
-            ->where('events.0.rsvp_count', 0)
-            ->has('events.0.starts_at')
-            ->has('events.0.location')
-            ->has('events.0.thumbnail_url')
+            ->has('events.data', 1)
+            ->where('events.data.0.title', 'Heritage Meetup')
+            ->where('events.data.0.capacity', 20)
+            ->where('events.data.0.rsvp_count', 0)
+            ->where('events.data.0.status', 'opening')
+            ->has('events.data.0.starts_at')
+            ->has('events.data.0.location')
+            ->has('events.data.0.thumbnail_url')
+            ->where('filters.search', '')
+            ->where('filters.status', '')
         );
+});
+
+test('events index can search by title', function () {
+    CommunityEvent::factory()->create([
+        'title' => 'Circle Night',
+        'starts_at' => now()->addWeek(),
+    ]);
+    CommunityEvent::factory()->create([
+        'title' => 'Studio Session',
+        'starts_at' => now()->addDays(2),
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.index', ['locale' => 'nl', 'search' => 'Circle']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/events/index')
+            ->has('events.data', 1)
+            ->where('events.data.0.title', 'Circle Night')
+            ->where('filters.search', 'Circle')
+        );
+});
+
+test('events index filters by opening ongoing and closed status', function () {
+    CommunityEvent::factory()->opening()->create([
+        'title' => 'Upcoming Event',
+    ]);
+    CommunityEvent::factory()->ongoing()->create([
+        'title' => 'Ongoing Event',
+    ]);
+    CommunityEvent::factory()->closed()->create([
+        'title' => 'Closed Event',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.index', ['locale' => 'nl', 'status' => 'opening']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('events.data', 1)
+            ->where('events.data.0.title', 'Upcoming Event')
+            ->where('events.data.0.status', 'opening')
+            ->where('filters.status', 'opening')
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.index', ['locale' => 'nl', 'status' => 'ongoing']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('events.data', 1)
+            ->where('events.data.0.title', 'Ongoing Event')
+            ->where('events.data.0.status', 'ongoing')
+            ->where('filters.status', 'ongoing')
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.index', ['locale' => 'nl', 'status' => 'closed']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('events.data', 1)
+            ->where('events.data.0.title', 'Closed Event')
+            ->where('events.data.0.status', 'closed')
+            ->where('filters.status', 'closed')
+        );
+});
+
+test('admin can update event status', function () {
+    $event = CommunityEvent::factory()->opening()->create([
+        'title' => 'Status Toggle Event',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->patch(route('admin.events.status', ['locale' => 'nl', 'event' => $event->id]), [
+            'status' => 'ongoing',
+        ])
+        ->assertRedirect();
+
+    expect($event->fresh()->status->value)->toBe('ongoing');
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.index', ['locale' => 'nl', 'status' => 'ongoing']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('events.data', 1)
+            ->where('events.data.0.title', 'Status Toggle Event')
+            ->where('events.data.0.status', 'ongoing')
+        );
+});
+
+test('event show exposes translation bundle and status', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Vertaal Event',
+        'description' => 'Beschrijving',
+        'location' => 'Antwerpen',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/events/show')
+            ->has('locales', 3)
+            ->where('defaultLocale', 'nl')
+            ->has('translations.nl')
+            ->has('translations.en')
+            ->has('translations.fr')
+            ->where('translations.nl.title', 'Vertaal Event')
+            ->has('translationStatus.en')
+            ->has('translationStatus.fr')
+        );
+});
+
+test('staff can manually update event translations', function () {
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Bron titel',
+        'description' => 'Bron beschrijving',
+        'location' => 'Antwerpen',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.events.translations.update', ['locale' => 'nl', 'event' => $event->id]), [
+            'en' => [
+                'title' => 'Custom EN title',
+                'description' => 'Custom EN description',
+                'location' => 'Antwerp',
+            ],
+            'fr' => [
+                'title' => 'Custom FR title',
+                'description' => 'Custom FR description',
+                'location' => 'Anvers',
+            ],
+        ])
+        ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
+
+    $event->refresh();
+
+    expect($event->translated('title', 'en'))->toBe('Custom EN title')
+        ->and($event->translated('description', 'fr'))->toBe('Custom FR description')
+        ->and($event->translated('location', 'en'))->toBe('Antwerp');
+});
+
+test('staff can queue deepl retranslation for an event', function () {
+    fakeDeepLTranslations();
+
+    $event = CommunityEvent::factory()->create([
+        'title' => 'Hervertaal titel',
+        'description' => 'Hervertaal beschrijving',
+        'location' => 'Gent',
+    ]);
+
+    $event->translations()->delete();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.events.translate', ['locale' => 'nl', 'event' => $event->id]))
+        ->assertRedirect(route('admin.events.show', ['locale' => 'nl', 'event' => $event->id]));
+
+    expect($event->fresh()->translations()->count())->toBe(6);
 });
