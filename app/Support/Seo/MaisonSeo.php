@@ -2,6 +2,8 @@
 
 namespace App\Support\Seo;
 
+use App\Enums\FaqContext;
+use App\Models\Faq;
 use App\Models\JournalArticle;
 use App\Models\Product;
 use App\Models\SeoMeta;
@@ -94,58 +96,6 @@ final class MaisonSeo
         'care' => [
             'title' => 'Zorg & Garantie — Maison Anversa',
             'description' => 'Zorg en garantie voor Heritage No.001 — onderhoud, reparatie en klantenservice van Maison Anversa.',
-        ],
-    ];
-
-    /**
-     * @var list<array{question: string, answer: string}>
-     */
-    private const CONTACT_FAQ = [
-        [
-            'question' => 'Wanneer levert Heritage No.001?',
-            'answer' => 'Levering is gepland in Q1 2027. De Founding Edition levert in volgorde van reservering — hoe vroeger u reserveert, hoe lager uw nummer.',
-        ],
-        [
-            'question' => 'Hoe wordt mijn racket geleverd?',
-            'answer' => 'In een handgemaakte omslag, vergezeld van een certificaat van echtheid en uw genummerd editienummer.',
-        ],
-        [
-            'question' => 'Kan ik mijn racket retourneren?',
-            'answer' => 'Retourneren binnen 14 dagen na levering, mits ongebruikt. Het definitieve retourbeleid wordt vastgelegd bij lancering.',
-        ],
-        [
-            'question' => 'Is de prijs inclusief verzending?',
-            'answer' => 'Verzending binnen Europa is inbegrepen. Buiten Europa op aanvraag.',
-        ],
-        [
-            'question' => 'Hoe onderhoud ik het leder?',
-            'answer' => 'Behandel het leder tweemaal per jaar met een neutrale lederbalsem. Vermijd langdurig vocht en direct zonlicht.',
-        ],
-        [
-            'question' => 'Kan ik het racket personaliseren?',
-            'answer' => 'De Founding Edition is genummerd. Verdere personalisatie volgt in latere edities.',
-        ],
-    ];
-
-    /**
-     * @var list<array{question: string, answer: string}>
-     */
-    private const PRODUCT_FAQ = [
-        [
-            'question' => 'Wanneer wordt mijn racket geleverd?',
-            'answer' => 'De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie. Verwachte levering is Q1 2027. U ontvangt tussentijds updates over de voortgang.',
-        ],
-        [
-            'question' => 'Hoe weet ik dat mijn nummer uniek is?',
-            'answer' => 'Elk racket is individueel gestempeld (001–100) en vergezeld van een Heritage Certificaat met hetzelfde nummer en het oprichterzegel. Het nummer staat ook in ons register.',
-        ],
-        [
-            'question' => 'Kan ik mijn nummer kiezen?',
-            'answer' => 'Binnen de beschikbare nummers kunt u een voorkeur opgeven bij reservering. Leden van de Founding Circle hebben voorrang op lagere nummers.',
-        ],
-        [
-            'question' => 'Wordt Heritage No.001 opnieuw gemaakt?',
-            'answer' => 'Nee. De Founding Edition wordt niet herhaald — 100 stuks, eenmalig. Heritage No.001 kan daarna als reguliere collectie beschikbaar blijven. Toekomstige releases dragen andere nummers (No.002, No.003).',
         ],
     ];
 
@@ -535,11 +485,19 @@ final class MaisonSeo
 
         if ($page === 'product') {
             $graph[] = self::productSchema($canonical, $description, $ogImage, $organizationId);
-            $graph[] = self::faqSchema(self::PRODUCT_FAQ);
+            $productFaqs = self::publishedFaqItems(FaqContext::Product);
+
+            if ($productFaqs !== []) {
+                $graph[] = self::faqSchema($productFaqs);
+            }
         }
 
         if ($page === 'contact') {
-            $graph[] = self::faqSchema(self::CONTACT_FAQ);
+            $contactFaqs = self::publishedFaqItems(FaqContext::Contact);
+
+            if ($contactFaqs !== []) {
+                $graph[] = self::faqSchema($contactFaqs);
+            }
         }
 
         return [[
@@ -585,6 +543,20 @@ final class MaisonSeo
     }
 
     /**
+     * @return list<array{question: string, answer: string}>
+     */
+    private static function publishedFaqItems(FaqContext $context): array
+    {
+        return Faq::publishedFor($context)
+            ->map(fn (Faq $faq): array => [
+                'question' => $faq->translated('question'),
+                'answer' => $faq->translated('answer'),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
      * @param  list<array{question: string, answer: string}>  $items
      * @return array<string, mixed>
      */
@@ -594,10 +566,10 @@ final class MaisonSeo
             '@type' => 'FAQPage',
             'mainEntity' => array_map(fn (array $item): array => [
                 '@type' => 'Question',
-                'name' => __($item['question']),
+                'name' => $item['question'],
                 'acceptedAnswer' => [
                     '@type' => 'Answer',
-                    'text' => __($item['answer']),
+                    'text' => $item['answer'],
                 ],
             ], $items),
         ];

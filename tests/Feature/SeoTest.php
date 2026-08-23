@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\FaqContext;
+use App\Models\Faq;
 use App\Support\Journal;
 use App\Support\Seo\MaisonSeo;
 use Illuminate\Support\Facades\File;
@@ -253,13 +255,33 @@ test('the product page includes product and faq structured data', function () {
 });
 
 test('the contact page includes faq structured data from the visible questions', function () {
-    $this->get('/nl/contact')->assertOk()->assertInertia(function ($page): void {
+    $expectedCount = Faq::publishedFor(FaqContext::Contact)->count();
+
+    $this->get('/nl/contact')->assertOk()->assertInertia(function ($page) use ($expectedCount): void {
         $graphs = $page->toArray()['props']['seo']['jsonLd'][0]['@graph'];
         $types = array_column($graphs, '@type');
         $faq = collect($graphs)->firstWhere('@type', 'FAQPage');
 
         expect($types)->toContain('FAQPage')
-            ->and($faq['mainEntity'])->toHaveCount(6);
+            ->and($faq['mainEntity'])->toHaveCount($expectedCount);
+    });
+});
+
+test('draft faqs are excluded from contact faq structured data', function () {
+    Faq::factory()->contact()->draft()->create([
+        'question' => 'Draft SEO vraag',
+        'answer' => 'Draft SEO antwoord',
+    ]);
+
+    $publishedCount = Faq::publishedFor(FaqContext::Contact)->count();
+
+    $this->get('/nl/contact')->assertOk()->assertInertia(function ($page) use ($publishedCount): void {
+        $graphs = $page->toArray()['props']['seo']['jsonLd'][0]['@graph'];
+        $faq = collect($graphs)->firstWhere('@type', 'FAQPage');
+        $questions = collect($faq['mainEntity'])->pluck('name');
+
+        expect($faq['mainEntity'])->toHaveCount($publishedCount)
+            ->and($questions)->not->toContain('Draft SEO vraag');
     });
 });
 
