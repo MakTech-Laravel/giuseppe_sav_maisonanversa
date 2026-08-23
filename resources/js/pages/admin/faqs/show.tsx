@@ -37,7 +37,6 @@ type TranslationStatus = {
 interface ShowFaqProps {
     faq: FaqDetails;
     locales: string[];
-    defaultLocale: string;
     translations: Record<string, LocaleCopy>;
     translationStatus: Record<string, TranslationStatus>;
 }
@@ -74,7 +73,6 @@ function Field({
 export default function ShowFaq({
     faq,
     locales,
-    defaultLocale,
     translations,
     translationStatus,
 }: ShowFaqProps) {
@@ -125,7 +123,6 @@ export default function ShowFaq({
                                 <FaqTranslationsDialog
                                     faqId={faq.id}
                                     locales={locales}
-                                    defaultLocale={defaultLocale}
                                     translations={translations}
                                     translationStatus={translationStatus}
                                 />
@@ -177,9 +174,9 @@ export default function ShowFaq({
                 >
                     <AdminPanel
                         title={t('Inhoud')}
-                        description={t(
-                            'Vraag en antwoord zoals bezoekers ze op de site zien.',
-                        )}
+                    description={t(
+                        'Opgeslagen inhoud (elke taal). Bezoekers zien de vertaling voor hun taal.',
+                    )}
                     >
                         <div className="mb-5 flex flex-wrap gap-2">
                             <Badge variant="secondary">{contextLabel}</Badge>
@@ -190,16 +187,8 @@ export default function ShowFaq({
                             </Badge>
                         </div>
                         <div className="grid gap-5">
-                            <Field
-                                label={t('Vraag')}
-                                value={faq.question}
-                                pre
-                            />
-                            <Field
-                                label={t('Antwoord')}
-                                value={faq.answer}
-                                pre
-                            />
+                            <Field label={t('Vraag')} value={faq.question} pre />
+                            <Field label={t('Antwoord')} value={faq.answer} pre />
                         </div>
                     </AdminPanel>
 

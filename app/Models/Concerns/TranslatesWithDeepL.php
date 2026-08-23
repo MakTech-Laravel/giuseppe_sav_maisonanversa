@@ -162,6 +162,22 @@ trait TranslatesWithDeepL
         return hash('sha256', (string) ($this->getAttribute($column) ?? ''));
     }
 
+    /**
+     * @return list<string>
+     */
+    public function translationTargetLocales(): array
+    {
+        return collect(config('maison.locales'))
+            ->reject(fn (string $locale): bool => $locale === config('maison.default_locale'))
+            ->values()
+            ->all();
+    }
+
+    public function translationUsesAutoDetect(): bool
+    {
+        return false;
+    }
+
     public function dispatchDeepLTranslation(): void
     {
         if ($this->translatableColumns() === [] || ! $this->exists) {

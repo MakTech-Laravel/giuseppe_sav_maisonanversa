@@ -18,6 +18,8 @@ class UpdateFaqTranslationsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'nl.question' => ['required', 'string', 'max:5000'],
+            'nl.answer' => ['required', 'string', 'max:20000'],
             'en.question' => ['required', 'string', 'max:5000'],
             'en.answer' => ['required', 'string', 'max:20000'],
             'fr.question' => ['required', 'string', 'max:5000'],
