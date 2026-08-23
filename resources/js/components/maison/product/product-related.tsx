@@ -5,6 +5,8 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
+import type { ImageAssetName } from '@/lib/imagery';
+import { IMAGE_ASSETS } from '@/lib/imagery';
 import type { MaisonPage } from '@/lib/maison-navigation';
 
 type RelatedEdition = {
@@ -15,6 +17,46 @@ type RelatedEdition = {
     status: string;
     to?: MaisonPage;
 };
+
+function RelatedCover({ src, alt }: { src: string | null; alt: string }) {
+    const value = src ?? 'heritage-001-front';
+
+    if (value in IMAGE_ASSETS) {
+        return (
+            <PlaceholderImage
+                asset={value as ImageAssetName}
+                ratio={null}
+                alt={alt}
+                captioned={false}
+                className="absolute inset-0 h-full w-full"
+            />
+        );
+    }
+
+    if (
+        value.startsWith('http://') ||
+        value.startsWith('https://') ||
+        value.startsWith('/')
+    ) {
+        return (
+            <img
+                src={value}
+                alt={alt}
+                className="absolute inset-0 h-full w-full object-cover"
+            />
+        );
+    }
+
+    return (
+        <PlaceholderImage
+            asset="heritage-001-front"
+            ratio={null}
+            alt={alt}
+            captioned={false}
+            className="absolute inset-0 h-full w-full"
+        />
+    );
+}
 
 export function ProductRelated({ related }: { related: RelatedEdition[] }) {
     const { t } = useTranslation();
@@ -46,12 +88,9 @@ export function ProductRelated({ related }: { related: RelatedEdition[] }) {
                         const body = (
                             <>
                                 <div className="relative aspect-4/5 overflow-hidden">
-                                    <PlaceholderImage
-                                        asset={card.cover_asset ?? 'heritage-001-front'}
-                                        ratio={null}
+                                    <RelatedCover
+                                        src={card.cover_asset}
                                         alt={card.name}
-                                        captioned={false}
-                                        className="absolute inset-0 h-full w-full"
                                     />
                                     <div
                                         aria-hidden="true"
@@ -60,7 +99,9 @@ export function ProductRelated({ related }: { related: RelatedEdition[] }) {
                                 </div>
                                 <div className="px-6.5 py-7.5">
                                     <div className="font-sans text-[9px] tracking-[0.25em] text-gold uppercase">
-                                        {card.name === 'Het Huis' ? t(card.name) : card.name}
+                                        {card.name === 'Het Huis'
+                                            ? t(card.name)
+                                            : card.name}
                                     </div>
                                     <div className="my-2 font-serif text-[25px] text-cream">
                                         {t(card.hero_subtitle)}

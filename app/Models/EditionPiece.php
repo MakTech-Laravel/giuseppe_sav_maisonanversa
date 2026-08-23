@@ -73,6 +73,10 @@ class EditionPiece extends Model
 
     public function formattedNumber(): string
     {
-        return str_pad((string) $this->edition_number, 3, '0', STR_PAD_LEFT);
+        $width = $this->product !== null
+            ? $this->product->editionNumberPadWidth()
+            : max(3, strlen((string) $this->edition_number));
+
+        return str_pad((string) $this->edition_number, $width, '0', STR_PAD_LEFT);
     }
 }
