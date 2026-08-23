@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 type ContactFaqProps = {
@@ -13,7 +12,9 @@ type ContactFaqProps = {
  * support and `aria-expanded` without a Radix wrapper.
  */
 export function ContactFaq({ className, faqs }: ContactFaqProps) {
-    const { t } = useTranslation();
+    if (faqs.length === 0) {
+        return null;
+    }
 
     return (
         <div className={cn('mt-1', className)}>
@@ -23,7 +24,7 @@ export function ContactFaq({ className, faqs }: ContactFaqProps) {
                     className="group border-b border-gold/14"
                 >
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-sans text-[13px] text-cream [&::-webkit-details-marker]:hidden">
-                        {t(item.question)}
+                        {item.question}
                         <span
                             aria-hidden="true"
                             className="text-lg text-gold group-open:hidden"
@@ -39,7 +40,7 @@ export function ContactFaq({ className, faqs }: ContactFaqProps) {
                     </summary>
 
                     <div className="pb-4.5 font-sans text-[13px] leading-[1.8] text-sand">
-                        {t(item.answer)}
+                        {item.answer}
                     </div>
                 </details>
             ))}

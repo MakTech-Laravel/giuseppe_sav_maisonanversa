@@ -13,6 +13,10 @@ type ProductFaqItem = {
 export function ProductFaq({ faqs }: { faqs: ProductFaqItem[] }) {
     const { t } = useTranslation();
 
+    if (faqs.length === 0) {
+        return null;
+    }
+
     return (
         <Section tone="cream">
             <Wrap>
@@ -28,8 +32,8 @@ export function ProductFaq({ faqs }: { faqs: ProductFaqItem[] }) {
                     className="mx-auto max-w-205"
                     entries={faqs.map((item, index) => ({
                         value: `faq-${index}`,
-                        question: t(item.question),
-                        answer: t(item.answer),
+                        question: item.question,
+                        answer: item.answer,
                     }))}
                 />
             </Wrap>
