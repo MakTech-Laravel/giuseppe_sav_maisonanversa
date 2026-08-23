@@ -9,8 +9,11 @@ import { I18nProvider, readInitialLocale } from '@/components/i18n-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
+import { registerFlashToasts } from '@/hooks/use-flash-toast';
 import { createI18nForLocale } from '@/lib/i18n';
 import { resolvePageLayout } from '@/lib/inertia-layouts';
+
+registerFlashToasts();
 
 const appName = import.meta.env.VITE_APP_NAME || 'Maison Anversa';
 

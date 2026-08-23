@@ -272,6 +272,11 @@ class OpsController extends Controller
     ): RedirectResponse {
         $product->update($request->validated());
 
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Editieproduct bijgewerkt.'),
+        ]);
+
         return back();
     }
 
