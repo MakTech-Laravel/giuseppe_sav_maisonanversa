@@ -1,8 +1,9 @@
 import { router, useForm } from '@inertiajs/react';
-import { Languages, Loader2, RefreshCw } from 'lucide-react';
+import { Languages, Loader2, RefreshCw, TriangleAlert } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -125,10 +126,10 @@ export function FaqTranslationsDialog({
                     {t('Vertalingen')}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+            <DialogContent className="admin-kit max-h-[90vh] overflow-y-auto border-border bg-card text-card-foreground shadow-[0_12px_40px_rgba(41,28,24,0.55)] sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>{t('Vertalingen')}</DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-muted-foreground">
                         {t(
                             'Nederlands is de bron. Engels en Frans kunnen handmatig worden aangepast of opnieuw via DeepL worden gegenereerd.',
                         )}
@@ -136,11 +137,14 @@ export function FaqTranslationsDialog({
                 </DialogHeader>
 
                 {(pendingEn || pendingFr) && (
-                    <p className="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
-                        {t(
-                            'Sommige vertalingen ontbreken nog. Sla de FAQ opnieuw op of gebruik DeepL om ze te genereren.',
-                        )}
-                    </p>
+                    <Alert className="border-primary/35 bg-muted text-foreground">
+                        <TriangleAlert className="h-4 w-4 text-primary" />
+                        <AlertDescription className="text-muted-foreground">
+                            {t(
+                                'Sommige vertalingen ontbreken nog. Sla de FAQ opnieuw op of gebruik DeepL om ze te genereren.',
+                            )}
+                        </AlertDescription>
+                    </Alert>
                 )}
 
                 <div className="flex flex-wrap gap-2">
@@ -296,7 +300,7 @@ function ReadOnlyField({ label, value }: { label: string; value: string }) {
             <Label>{label}</Label>
             <div
                 className={cn(
-                    'min-h-20 rounded-md border bg-muted/30 px-3 py-2 text-sm whitespace-pre-wrap',
+                    'min-h-20 rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground whitespace-pre-wrap',
                 )}
             >
                 {value}
