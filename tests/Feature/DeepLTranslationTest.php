@@ -332,6 +332,21 @@ test('community courts auto-detect title body and location', function () {
         ->not->toContain('lng');
 });
 
+test('community courts are translated for all locales like faqs', function () {
+    fakeDeepLTranslations();
+
+    $court = CommunityCourt::factory()->create([
+        'title' => 'Padel Antwerpen',
+        'body' => 'Founding club',
+        'location' => 'Antwerpen',
+    ]);
+
+    expect($court->translations()->count())->toBe(9)
+        ->and($court->translated('title', 'nl'))->toBe('NL Padel Antwerpen')
+        ->and($court->translated('title', 'en'))->toBe('EN Padel Antwerpen')
+        ->and($court->translated('title', 'fr'))->toBe('FR Padel Antwerpen');
+});
+
 test('journal articles translate title excerpt body category and date label', function () {
     $article = JournalArticle::factory()->create();
 

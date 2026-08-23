@@ -323,6 +323,10 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::put('courts/{court}', 'update')->name('courts.update')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::put('courts/{court}/translations', 'updateTranslations')->name('courts.translations.update')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::post('courts/{court}/translate', 'translate')->name('courts.translate')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::delete('courts/{court}', 'destroy')->name('courts.destroy')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
             });
