@@ -363,6 +363,10 @@ class ProductController extends Controller
             'is_published' => $validated['is_published'],
             'grants_founding_circle' => $validated['grants_founding_circle'],
             'expected_delivery_label' => $validated['expected_delivery_label'] ?? null,
+            'eyebrow' => $validated['eyebrow'] ?? null,
+            'hero_eyebrow' => $validated['hero_eyebrow'] ?? null,
+            'hero_subtitle' => $validated['hero_subtitle'] ?? null,
+            'description' => $validated['description'] ?? null,
             'sold_out_behavior' => 'keep_page',
         ];
     }
@@ -459,6 +463,10 @@ class ProductController extends Controller
             'is_published' => $product->is_published,
             'grants_founding_circle' => $product->grants_founding_circle,
             'expected_delivery_label' => $product->expected_delivery_label,
+            'eyebrow' => $product->eyebrow ?? '',
+            'hero_eyebrow' => $product->hero_eyebrow ?? '',
+            'hero_subtitle' => $product->hero_subtitle ?? '',
+            'description' => $product->description ?? '',
             'stripe_price_id' => $product->stripe_price_id,
             'primary_image' => $this->existingMediaFile($primaryPath),
             'gallery_images' => array_values(array_filter(array_map(

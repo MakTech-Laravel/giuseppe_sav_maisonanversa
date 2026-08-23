@@ -16,6 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
 export type ProductFormData = {
@@ -31,6 +32,10 @@ export type ProductFormData = {
     is_published: boolean;
     grants_founding_circle: boolean;
     expected_delivery_label: string;
+    eyebrow: string;
+    hero_eyebrow: string;
+    hero_subtitle: string;
+    description: string;
     primary_image: File | null;
     gallery_images: File[] | null;
     remove_primary_image: boolean;
@@ -278,6 +283,64 @@ export function ProductFormFields({
                             )}
                         />
                         <InputError message={errors.expected_delivery_label} />
+                    </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="eyebrow">{t('Productlabel')}</Label>
+                        <Input
+                            id="eyebrow"
+                            value={data.eyebrow}
+                            onChange={(event) =>
+                                setData('eyebrow', event.target.value)
+                            }
+                            placeholder={t(
+                                'bijv. Maison Anversa · Founding Edition',
+                            )}
+                        />
+                        <InputError message={errors.eyebrow} />
+                    </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="hero_eyebrow">
+                            {t('Hero-eyebrow')}
+                        </Label>
+                        <Input
+                            id="hero_eyebrow"
+                            value={data.hero_eyebrow}
+                            onChange={(event) =>
+                                setData('hero_eyebrow', event.target.value)
+                            }
+                            placeholder={t(
+                                'bijv. Founding Edition · 100 Stuks Wereldwijd',
+                            )}
+                        />
+                        <InputError message={errors.hero_eyebrow} />
+                    </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="hero_subtitle">
+                            {t('Hero-ondertitel')}
+                        </Label>
+                        <Textarea
+                            id="hero_subtitle"
+                            value={data.hero_subtitle}
+                            onChange={(event) =>
+                                setData('hero_subtitle', event.target.value)
+                            }
+                            className="min-h-24 resize-y"
+                        />
+                        <InputError message={errors.hero_subtitle} />
+                    </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="description">
+                            {t('Productbeschrijving')}
+                        </Label>
+                        <Textarea
+                            id="description"
+                            value={data.description}
+                            onChange={(event) =>
+                                setData('description', event.target.value)
+                            }
+                            className="min-h-32 resize-y"
+                        />
+                        <InputError message={errors.description} />
                     </div>
                 </div>
             </AdminPanel>

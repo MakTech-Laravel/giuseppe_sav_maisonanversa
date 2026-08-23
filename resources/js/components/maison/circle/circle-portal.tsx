@@ -13,7 +13,7 @@ export function CirclePortal() {
     const { auth } = usePage().props;
     const { openAuth } = useShellActions();
 
-    if (auth.user) {
+    if (auth?.user) {
         return (
             <div className="my-12 border border-gold/25 bg-cream2 p-8 text-center">
                 <p className="font-serif text-2xl text-choc">

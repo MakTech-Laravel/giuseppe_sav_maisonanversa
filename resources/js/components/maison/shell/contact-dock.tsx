@@ -31,15 +31,15 @@ import type { SiteShared } from '@/components/maison/contact/contact-data';
  */
 export function ContactDock() {
     const { t } = useTranslation();
-    const page = usePage<{ site: SiteShared }>();
+    const page = usePage<{ site?: SiteShared }>();
     const { site } = page.props;
-    const items = buildContactDockItems(site);
     const { locale } = useLocale();
     const onContact =
         activePage(typeof page.url === 'string' ? page.url : '', locale) ===
         'contact';
     const [open, setOpen] = useState(false);
     const panel = useRef<HTMLDivElement>(null);
+    const items = site ? buildContactDockItems(site) : [];
 
     function openBureau(id: string) {
         setOpen(false);
@@ -89,6 +89,10 @@ export function ContactDock() {
             document.removeEventListener('pointerdown', onPointerDown);
         };
     }, [open]);
+
+    if (!site) {
+        return null;
+    }
 
     return (
         <div ref={panel}>

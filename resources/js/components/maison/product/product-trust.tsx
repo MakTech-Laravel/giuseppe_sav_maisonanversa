@@ -1,19 +1,21 @@
 import { useTranslation } from 'react-i18next';
 
-const TRUST = [
-    { icon: '◈', text: 'Genummerd 001–100' },
-    { icon: '✓', text: 'Echtheids-certificaat' },
-    { icon: '◆', text: 'Ontworpen in Antwerpen' },
-    { icon: '★', text: 'Founding Circle lid' },
-] as const;
+type TrustBadge = {
+    icon: string;
+    text: string;
+};
 
-export function ProductTrust() {
+export function ProductTrust({ badges = [] }: { badges?: TrustBadge[] }) {
     const { t } = useTranslation();
+
+    if (badges.length === 0) {
+        return null;
+    }
 
     return (
         <div className="bg-choc">
             <div className="flex flex-wrap justify-center gap-x-14 gap-y-8 px-8 py-13">
-                {TRUST.map((item) => (
+                {badges.map((item) => (
                     <div key={item.text} className="text-center">
                         <div
                             aria-hidden="true"

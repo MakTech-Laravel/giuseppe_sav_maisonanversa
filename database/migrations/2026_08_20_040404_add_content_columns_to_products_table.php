@@ -19,8 +19,11 @@ return new class extends Migration
             $table->json('includes')->nullable()->after('unboxing_steps');
             $table->json('guarantees')->nullable()->after('includes');
             $table->json('trust_badges')->nullable()->after('guarantees');
-            $table->text('hero_subtitle')->nullable()->after('trust_badges');
-            $table->string('status')->default('active')->after('hero_subtitle');
+            $table->string('eyebrow')->nullable()->after('trust_badges');
+            $table->string('hero_eyebrow')->nullable()->after('eyebrow');
+            $table->text('hero_subtitle')->nullable()->after('hero_eyebrow');
+            $table->text('description')->nullable()->after('hero_subtitle');
+            $table->string('status')->default('active')->after('description');
             $table->integer('sort_order')->default(0)->after('status');
         });
     }
@@ -39,7 +42,10 @@ return new class extends Migration
                 'includes',
                 'guarantees',
                 'trust_badges',
+                'eyebrow',
+                'hero_eyebrow',
                 'hero_subtitle',
+                'description',
                 'status',
                 'sort_order',
             ]);

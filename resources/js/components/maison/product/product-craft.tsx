@@ -4,31 +4,22 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Reveal } from '@/components/maison/ui/reveal';
 
-const MATERIALS = [
-    {
-        num: '01',
-        name: '3K Carbon Frame',
-        desc: 'De meest veeleisende weave in de industrie. Licht, stijf, en zichtbaar vakmanschap in elk raster.',
-    },
-    {
-        num: '02',
-        name: 'Echt Lederen Greep',
-        desc: 'Handafgewerkt, vegetaal gelooid. Wordt mooier met gebruik — synthetisch kan dat niet.',
-    },
-    {
-        num: '03',
-        name: 'EVA Soft Kern',
-        desc: 'Een balans tussen comfort en controle. Gekalibreerd voor zowel gevoel als kracht.',
-    },
-    {
-        num: '04',
-        name: 'Goudfolie & Letterpress',
-        desc: 'Certificaat en paspoort gedrukt met traditionele technieken. Geen laserprint.',
-    },
-] as const;
+type MaterialCard = {
+    num: string;
+    name: string;
+    desc: string;
+};
 
-export function ProductCraft() {
+export function ProductCraft({
+    materials = [],
+}: {
+    materials?: MaterialCard[];
+}) {
     const { t } = useTranslation();
+
+    if (materials.length === 0) {
+        return null;
+    }
 
     return (
         <section className="bg-choc text-cream">
@@ -57,7 +48,7 @@ export function ProductCraft() {
                     </p>
 
                     <div className="mt-10 grid grid-cols-1 gap-0.5 bg-gold/15 sm:grid-cols-2">
-                        {MATERIALS.map((item) => (
+                        {materials.map((item) => (
                             <div
                                 key={item.num}
                                 className="bg-choc2 px-6.5 py-7.5"

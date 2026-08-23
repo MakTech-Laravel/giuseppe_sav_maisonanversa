@@ -25,6 +25,10 @@ interface CatalogProduct {
     is_published: boolean;
     grants_founding_circle: boolean;
     expected_delivery_label: string | null;
+    eyebrow?: string | null;
+    hero_eyebrow?: string | null;
+    hero_subtitle?: string | null;
+    description?: string | null;
     primary_image: ExistingFile | null;
     gallery_images: ExistingFile[];
 }
@@ -46,6 +50,10 @@ export default function EditProduct({ product }: { product: CatalogProduct }) {
             is_published: product.is_published,
             grants_founding_circle: product.grants_founding_circle,
             expected_delivery_label: product.expected_delivery_label ?? '',
+            eyebrow: product.eyebrow ?? '',
+            hero_eyebrow: product.hero_eyebrow ?? '',
+            hero_subtitle: product.hero_subtitle ?? '',
+            description: product.description ?? '',
             primary_image: null as File | null,
             gallery_images: null as File[] | null,
             remove_primary_image: false,

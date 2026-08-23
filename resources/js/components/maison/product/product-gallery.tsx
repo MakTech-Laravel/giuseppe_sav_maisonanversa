@@ -96,7 +96,13 @@ function ProductMedia({
  * scales the image node instead, so both real photographs and brand-palette
  * placeholders respond the same way. Fine pointers only; reduced motion skips it.
  */
-export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
+export function ProductGallery({
+    gallery = [],
+    productName = 'Heritage No.001',
+}: {
+    gallery?: string[];
+    productName?: string;
+}) {
     const slides = useMemo(
         () => (gallery.length > 0 ? gallery : [...DEFAULT_GALLERY]),
         [gallery],
@@ -105,6 +111,12 @@ export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
     const [zoomEnabled, setZoomEnabled] = useState(false);
     const [zooming, setZooming] = useState(false);
     const [origin, setOrigin] = useState({ x: 50, y: 50 });
+
+    const editionMark = useMemo(() => {
+        const match = productName.match(/(\d{3})/);
+
+        return match?.[1] ?? '001';
+    }, [productName]);
 
     useEffect(() => {
         const media = window.matchMedia(
@@ -151,7 +163,7 @@ export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
                 <div className="absolute inset-0" style={zoomStyle}>
                     <ProductMedia
                         src={slides[active] ?? slides[0]}
-                        alt="Heritage No.001"
+                        alt={productName}
                         loading="eager"
                         fetchPriority="high"
                         overlay="linear-gradient(to top, rgba(41,28,24,0.5) 0%, rgba(41,28,24,0.05) 45%)"
@@ -162,14 +174,14 @@ export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
                     aria-hidden="true"
                     className="pointer-events-none absolute right-7 bottom-7 font-serif text-[64px] leading-none font-light text-gold/10"
                 >
-                    001
+                    {editionMark}
                 </div>
             </div>
 
             <div
                 className="grid grid-cols-4 gap-2"
                 role="tablist"
-                aria-label="Heritage No.001"
+                aria-label={productName}
             >
                 {slides.map((asset, index) => (
                     <button
@@ -177,7 +189,7 @@ export function ProductGallery({ gallery = [] }: { gallery?: string[] }) {
                         type="button"
                         role="tab"
                         aria-selected={index === active}
-                        aria-label={`Heritage No.001 ${index + 1}`}
+                        aria-label={`${productName} ${index + 1}`}
                         data-magnetic
                         onClick={() => setActive(index)}
                         className={cn(

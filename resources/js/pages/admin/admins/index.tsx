@@ -52,7 +52,7 @@ export default function AdminsIndex({
     const { t } = useTranslation();
     const { can } = usePermission();
     const actorIsSuperAdmin =
-        usePage().props.auth.user?.is_super_admin ?? false;
+        usePage().props.auth?.user?.is_super_admin ?? false;
     const [search, setSearch] = useState(filters.search ?? '');
     const firstRender = useRef(true);
 

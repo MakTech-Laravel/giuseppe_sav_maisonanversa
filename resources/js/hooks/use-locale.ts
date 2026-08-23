@@ -1,7 +1,7 @@
 import { router, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { loadDictionary } from '@/lib/i18n';
-import { isLocale, SOURCE_LOCALE } from '@/types/locale';
+import { isLocale, LOCALES, SOURCE_LOCALE } from '@/types/locale';
 import type { Locale } from '@/types/locale';
 
 /**
@@ -27,6 +27,7 @@ export function useLocale() {
     const { t } = useTranslation();
 
     const current = isLocale(locale) ? locale : SOURCE_LOCALE;
+    const locales = availableLocales ?? [...LOCALES];
 
     /**
      * Fetch the dictionary before navigating so the new page paints in its own
@@ -46,5 +47,5 @@ export function useLocale() {
         });
     }
 
-    return { locale: current, availableLocales, switchLocale, t };
+    return { locale: current, availableLocales: locales, switchLocale, t };
 }

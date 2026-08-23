@@ -32,7 +32,7 @@ export default function Community({
     const { t } = useTranslation();
     const { auth } = usePage().props;
     const toast = useCommunityToast();
-    const isAuthenticated = auth.user !== null;
+    const isAuthenticated = auth?.user != null;
 
     return (
         <>

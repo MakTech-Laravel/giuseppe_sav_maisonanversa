@@ -11,6 +11,7 @@ use App\Support\Imagery;
 use App\Support\Seo\MaisonSeo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -52,7 +53,12 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'auth' => [
+            /*
+             * Shell-critical props use always() so partial reloads and instant
+             * visits cannot leave the admin/public chrome without auth, locale,
+             * or imagery metadata.
+             */
+            'auth' => Inertia::always([
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames(),
                     // TEMPORARY — AdminTypePermissionBypass shares every permission
@@ -69,28 +75,28 @@ class HandleInertiaRequests extends Middleware
                         ? Storage::disk('public')->url($user->avatar)
                         : null,
                 ]) : null,
-            ],
+            ]),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             /*
              * Resolved lazily: Inertia collects shared data before route
              * middleware runs, so reading the locale eagerly would capture the
              * application default rather than the one SetLocale applies.
              */
-            'locale' => fn () => app()->getLocale(),
-            'availableLocales' => config('maison.locales'),
-            'appUrl' => config('app.url'),
+            'locale' => Inertia::always(fn () => app()->getLocale()),
+            'availableLocales' => Inertia::always(config('maison.locales')),
+            'appUrl' => Inertia::always(config('app.url')),
             'seoImage' => config('maison.seo.image'),
-            'seo' => fn (): array => MaisonSeo::document($request),
+            'seo' => Inertia::always(fn (): array => MaisonSeo::document($request)),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => fn (): array => Product::checkoutShare(),
             'commerce' => fn (): array => CommerceSetting::current()->toShare(),
-            'site' => fn (): array => SiteSetting::current()->toShare(),
+            'site' => Inertia::always(fn (): array => SiteSetting::current()->toShare()),
 
             /*
              * Which of the site's photographs exist yet. Everything else falls
              * back to a placeholder rather than requesting a missing file.
              */
-            'availableImages' => fn () => Imagery::existingPaths(),
+            'availableImages' => Inertia::always(Imagery::existingPaths()),
             'flash' => [
                 'open_auth_modal' => fn () => $request->session()->get('open_auth_modal'),
             ],
