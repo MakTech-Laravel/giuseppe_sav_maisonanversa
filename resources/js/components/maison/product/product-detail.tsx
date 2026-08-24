@@ -5,13 +5,7 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import type { Edition } from '@/types/edition';
-
-type ProductPageData = {
-    name: string;
-    gallery: string[];
-    specs: Array<{ label: string; value: string }>;
-    guarantees: Array<{ icon: string; text: string }>;
-};
+import type { ProductPageData } from '@/pages/maison/product';
 
 export function ProductDetail({
     edition,
@@ -28,12 +22,17 @@ export function ProductDetail({
         <Section tone="cream" className="py-18">
             <Wrap>
                 <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
-                    <ProductGallery gallery={product.gallery} />
+                    <ProductGallery
+                        gallery={product.gallery}
+                        productName={product.name}
+                    />
 
                     <div>
-                        <span className="mb-3 block font-sans text-[9px] tracking-[0.28em] text-gold uppercase">
-                            Maison Anversa · Founding Edition
-                        </span>
+                        {product.eyebrow ? (
+                            <span className="mb-3 block font-sans text-[9px] tracking-[0.28em] text-gold uppercase">
+                                {t(product.eyebrow)}
+                            </span>
+                        ) : null}
                         <p className="mb-1.5 font-serif text-[clamp(28px,3.5vw,48px)] leading-[1.1] font-medium [&_em]:text-gold [&_em]:italic">
                             {product.name}
                         </p>
@@ -56,30 +55,32 @@ export function ProductDetail({
                                 ) : null}
                             </p>
                         </div>
-                        <p className="mb-7 border-b border-gold/20 pb-7 text-[15px] leading-[1.85] text-choc3">
-                            {t(
-                                'Heritage No.001 is niet zomaar een padelracket. Het is het eerste object van een huis dat wordt gebouwd voor de lange termijn. Elk van de 100 stuks is individueel genummerd en wordt vergezeld van een volledige Heritage ervaring.',
-                            )}
-                        </p>
+                        {product.description ? (
+                            <p className="mb-7 border-b border-gold/20 pb-7 text-[15px] leading-[1.85] text-choc3">
+                                {t(product.description)}
+                            </p>
+                        ) : null}
 
-                        <div className="mb-8 flex flex-col">
-                            {product.specs.map((spec) => (
-                                <div
-                                    key={spec.label}
-                                    className="flex items-baseline justify-between gap-4 border-b border-gold/12 py-3"
-                                >
-                                    <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                                        {t(spec.label)}
-                                    </span>
-                                    <span className="text-right font-serif text-[15px] font-medium text-choc">
-                                        {spec.value === '3K Carbon' ||
-                                        spec.value === 'EVA Soft'
-                                            ? spec.value
-                                            : t(spec.value)}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
+                        {product.specs.length > 0 ? (
+                            <div className="mb-8 flex flex-col">
+                                {product.specs.map((spec) => (
+                                    <div
+                                        key={spec.label}
+                                        className="flex items-baseline justify-between gap-4 border-b border-gold/12 py-3"
+                                    >
+                                        <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
+                                            {t(spec.label)}
+                                        </span>
+                                        <span className="text-right font-serif text-[15px] font-medium text-choc">
+                                            {spec.value === '3K Carbon' ||
+                                            spec.value === 'EVA Soft'
+                                                ? spec.value
+                                                : t(spec.value)}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : null}
 
                         {edition.soldOut ? (
                             <MaisonButton
@@ -110,21 +111,26 @@ export function ProductDetail({
                             </MaisonButton>
                         )}
 
-                        <div className="mt-6 grid grid-cols-1 gap-4 border-t border-gold/15 pt-6 sm:grid-cols-3">
-                            {product.guarantees.map((item) => (
-                                <div key={item.text} className="text-center">
+                        {product.guarantees.length > 0 ? (
+                            <div className="mt-6 grid grid-cols-1 gap-4 border-t border-gold/15 pt-6 sm:grid-cols-3">
+                                {product.guarantees.map((item) => (
                                     <div
-                                        aria-hidden="true"
-                                        className="mb-1.5 text-lg text-gold2"
+                                        key={item.text}
+                                        className="text-center"
                                     >
-                                        {item.icon}
+                                        <div
+                                            aria-hidden="true"
+                                            className="mb-1.5 text-lg text-gold2"
+                                        >
+                                            {item.icon}
+                                        </div>
+                                        <div className="font-sans text-[9px] leading-[1.5] tracking-[0.15em] text-stone uppercase">
+                                            {t(item.text)}
+                                        </div>
                                     </div>
-                                    <div className="font-sans text-[9px] leading-[1.5] tracking-[0.15em] text-stone uppercase">
-                                        {t(item.text)}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </Wrap>

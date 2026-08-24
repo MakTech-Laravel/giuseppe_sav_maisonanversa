@@ -3,41 +3,18 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 
-const STEPS = [
-    {
-        num: '01',
-        title: 'Welkomstkaart',
-        desc: 'A5 · 400g katoenpapier · Letterpress · Handtekening oprichter',
-    },
-    {
-        num: '02',
-        title: 'Oprichtersbrief',
-        desc: 'Het verhaal van Maison Anversa. Persoonlijk, authentiek.',
-    },
-    {
-        num: '03',
-        title: 'Heritage Paspoort',
-        desc: "A6 · 24 pagina's · Vegetaal gelooide lederen omslag",
-    },
-    {
-        num: '04',
-        title: 'Heritage Certificaat',
-        desc: 'A5 · Letterpress + goudfolie · Oprichterzegel · Editienummer',
-    },
-    {
-        num: '05',
-        title: 'Founding Circle',
-        desc: 'Uitnodiging voor de permanente gemeenschap van de eerste 100.',
-    },
-    {
-        num: '06',
-        title: 'Heritage No.001',
-        desc: 'Premium canvas stofdoek · MA monogram · Individueel genummerd',
-    },
-] as const;
+type UnboxingStep = {
+    num: string;
+    title: string;
+    desc: string;
+};
 
-export function ProductUnboxing() {
+export function ProductUnboxing({ steps = [] }: { steps?: UnboxingStep[] }) {
     const { t } = useTranslation();
+
+    if (steps.length === 0) {
+        return null;
+    }
 
     return (
         <Section tone="dark">
@@ -57,7 +34,7 @@ export function ProductUnboxing() {
                 </Reveal>
 
                 <div className="grid grid-cols-2 gap-0.5 ma-lg:grid-cols-6 md:grid-cols-3">
-                    {STEPS.map((step) => (
+                    {steps.map((step) => (
                         <Reveal
                             key={step.num}
                             className="border border-gold/10 bg-white/3 px-5 pt-7 pb-6 transition-colors hover:border-gold/25 hover:bg-gold/5"

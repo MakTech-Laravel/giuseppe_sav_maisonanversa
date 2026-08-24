@@ -21,8 +21,8 @@ export default function MemberLayout({ children }: { children: ReactNode }) {
                 />
             </Head>
             <MemberTopbar
-                name={auth.user?.name ?? ''}
-                avatarUrl={auth.user?.avatar_url}
+                name={auth?.user?.name ?? ''}
+                avatarUrl={auth?.user?.avatar_url}
             />
             <div className="mx-auto flex w-full max-w-320 flex-col gap-8 px-6 py-8 md:flex-row md:items-start md:px-10">
                 <MemberNav />

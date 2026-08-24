@@ -6,6 +6,7 @@ use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\Concerns\TranslatesWithDeepL;
 use App\Observers\ProductObserver;
+use App\Support\Imagery;
 use App\Support\Money;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -28,7 +29,10 @@ class Product extends Model
      */
     protected array $translatable = [
         'name',
+        'eyebrow',
+        'hero_eyebrow',
         'hero_subtitle',
+        'description',
         'expected_delivery_label',
     ];
 
@@ -57,7 +61,10 @@ class Product extends Model
         'includes',
         'guarantees',
         'trust_badges',
+        'eyebrow',
+        'hero_eyebrow',
         'hero_subtitle',
+        'description',
         'status',
         'sort_order',
     ];
@@ -172,22 +179,55 @@ class Product extends Model
     }
 
     /**
+     * @return list<string>
+     */
+    public function translationTargetLocales(): array
+    {
+        return config('maison.locales');
+    }
+
+    public function translationUsesAutoDetect(): bool
+    {
+        return true;
+    }
+
+    public function translated(string $column, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+        $source = (string) ($this->getAttribute($column) ?? '');
+
+        $this->loadMissing('translations');
+
+        $row = $this->translations->first(
+            fn (Translation $translation): bool => $translation->locale === $locale
+                && $translation->column === $column,
+        );
+
+        return filled($row?->value) ? (string) $row->value : $source;
+    }
+
+    /**
      * @return array{
      *     id: int,
      *     slug: string,
      *     name: string,
+     *     eyebrow: string,
+     *     hero_eyebrow: string,
      *     hero_subtitle: string,
+     *     description: string,
      *     status: string,
      *     sort_order: int,
      *     gallery: array<int, string>,
      *     specs: array<int, array{label: string, value: string}>,
-     *     materials: array<int, string>,
-     *     unboxing_steps: array<int, string>,
+     *     materials: array<int, array{num: string, name: string, desc: string}>,
+     *     unboxing_steps: array<int, array{num: string, title: string, desc: string}>,
      *     includes: array<int, string>,
      *     guarantees: array<int, array{icon: string, text: string}>,
-     *     trust_badges: array<int, string>,
+     *     trust_badges: array<int, array{icon: string, text: string}>,
      *     amount: string,
-     *     currency: string
+     *     currency: string,
+     *     expected_delivery_label: string,
+     *     edition_total: int|null
      * }
      */
     public function toPageShare(): array
@@ -196,7 +236,10 @@ class Product extends Model
             'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->translated('name'),
+            'eyebrow' => $this->translated('eyebrow'),
+            'hero_eyebrow' => $this->translated('hero_eyebrow'),
             'hero_subtitle' => $this->translated('hero_subtitle'),
+            'description' => $this->translated('description'),
             'status' => ($this->status ?? ProductStatus::Active)->value,
             'sort_order' => $this->sort_order ?? 0,
             'gallery' => $this->resolvedGallery(),
@@ -208,6 +251,8 @@ class Product extends Model
             'trust_badges' => $this->trust_badges ?? [],
             'amount' => (string) $this->amount,
             'currency' => $this->currency,
+            'expected_delivery_label' => $this->translated('expected_delivery_label'),
+            'edition_total' => $this->edition_total,
         ];
     }
 
@@ -256,6 +301,27 @@ class Product extends Model
         }
 
         return $item;
+    }
+
+    /**
+     * Browser-ready URL for admin previews and uploaded-file components.
+     * Asset keys from the imagery manifest resolve to `/images/...` paths.
+     */
+    public static function resolveDisplayMediaUrl(string $item): string
+    {
+        if ($item === '') {
+            return $item;
+        }
+
+        if (str_starts_with($item, 'http://') || str_starts_with($item, 'https://') || str_starts_with($item, '/')) {
+            return $item;
+        }
+
+        if (str_contains($item, '/')) {
+            return Storage::disk('public')->url($item);
+        }
+
+        return Imagery::assetUrl($item) ?? $item;
     }
 
     /**

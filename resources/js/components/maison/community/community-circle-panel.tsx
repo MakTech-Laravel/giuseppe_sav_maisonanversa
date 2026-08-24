@@ -40,7 +40,7 @@ export function CommunityCirclePanel({
     const { t } = useTranslation();
     const { auth } = usePage().props;
     const [open, setOpen] = useState(false);
-    const name = auth.user?.name ?? 'Member';
+    const name = auth?.user?.name ?? 'Member';
     const initials = initialsFromName(name);
 
     function handleViewEvents() {

@@ -38,7 +38,7 @@ export function PlaceholderImage({
     fetchPriority,
     sizes = '(max-width: 768px) 768px, (max-width: 1280px) 1280px, 2560px',
 }: PlaceholderImageProps) {
-    const { availableImages } = usePage().props;
+    const availableImages = usePage().props.availableImages ?? [];
     const {
         path,
         ratio: naturalRatio,

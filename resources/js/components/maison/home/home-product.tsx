@@ -7,16 +7,25 @@ import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 
 type HomeProductData = {
-    materials?: string[];
-    trust_badges?: string[];
+    materials?: Array<{ name: string } | string>;
+    trust_badges?: Array<{ text: string } | string>;
+    includes?: string[];
 };
+
+function materialLabel(item: { name: string } | string): string {
+    return typeof item === 'string' ? item : item.name;
+}
+
+function badgeLabel(item: { text: string } | string): string {
+    return typeof item === 'string' ? item : item.text;
+}
 
 export function HomeProduct({ product }: { product?: HomeProductData | null }) {
     const { t } = useTranslation();
     const specs = [
-        ...(product?.materials ?? []),
-        ...(product?.trust_badges ?? []),
-    ];
+        ...(product?.materials ?? []).map(materialLabel),
+        ...(product?.trust_badges ?? []).map(badgeLabel),
+    ].filter((value) => value.trim() !== '');
     const fallbackSpecs = [
         'Full Carbon Frame — 3K weave',
         'Premium 3K Carbon Surface',
