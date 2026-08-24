@@ -20,6 +20,8 @@ export type FeedPostData = {
     badge: string;
     badgeOfficial?: boolean;
     content: string;
+    excerpt?: string;
+    is_truncated?: boolean;
     imageLabel?: string;
     likes: number;
     comments: FeedComment[];

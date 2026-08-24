@@ -149,6 +149,8 @@ class MaisonController extends Controller
     public function community(Request $request): Response
     {
         $props = [];
+        $routeLocale = $request->route('locale');
+        $pathLocale = is_string($routeLocale) ? $routeLocale : app()->getLocale();
 
         if ($request->user() !== null) {
             $props['posts'] = Inertia::scroll(
@@ -197,17 +199,18 @@ class MaisonController extends Controller
                 ]);
             $props['courts'] = CommunityCourt::query()
                 ->published()
+                ->with('translations')
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->get()
-                ->map(function (CommunityCourt $court) {
+                ->map(function (CommunityCourt $court) use ($pathLocale) {
                     $pin = $court->mapPinPosition();
 
                     return [
                         'id' => (string) $court->id,
-                        'title' => $court->translated('title'),
-                        'body' => $court->translated('body'),
-                        'location' => $court->translated('location'),
+                        'title' => $court->translated('title', $pathLocale),
+                        'body' => $court->translated('body', $pathLocale),
+                        'location' => $court->translated('location', $pathLocale),
                         'lat' => $court->lat !== null ? (float) $court->lat : null,
                         'lng' => $court->lng !== null ? (float) $court->lng : null,
                         'pin_top' => $pin['top'] ?? null,

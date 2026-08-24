@@ -108,13 +108,11 @@ function statusLabel(
 export default function EventShow({
     event,
     locales,
-    defaultLocale,
     translations,
     translationStatus,
 }: {
     event: EventDetail;
     locales: string[];
-    defaultLocale: string;
     translations: Record<string, LocaleCopy>;
     translationStatus: Record<string, TranslationStatus>;
 }) {
@@ -175,7 +173,6 @@ export default function EventShow({
                             <EventTranslationsDialog
                                 eventId={event.id}
                                 locales={locales}
-                                defaultLocale={defaultLocale}
                                 translations={translations}
                                 translationStatus={translationStatus}
                             />

@@ -3,6 +3,7 @@
 use App\Models\CommunityPost;
 use App\Models\User;
 use App\Support\CommunityFeed;
+use App\Support\CommunityPostPresenter;
 use Illuminate\Support\Facades\File;
 
 test('the community page renders the maison community component', function () {
@@ -36,6 +37,8 @@ test('authenticated members receive a scrollable community feed', function () {
             ->where('posts.current_page', 1)
             ->where('posts.last_page', 2)
             ->has('posts.data.0.comments')
+            ->has('posts.data.0.excerpt')
+            ->has('posts.data.0.is_truncated')
         );
 
     $inertiaPage = $response->viewData('page');
@@ -84,7 +87,9 @@ test('the feed composer renders user text safely without innerHTML', function ()
 
     expect($source.$postSource)
         ->not->toContain('dangerouslySetInnerHTML')
-        ->not->toContain('innerHTML');
+        ->not->toContain('innerHTML')
+        ->not->toContain('Melden')
+        ->not->toContain('Delen');
 });
 
 test('community tabs use react state instead of switchCommTab onclick strings', function () {
@@ -143,6 +148,32 @@ test('the community feed uses a circle sheet instead of an inline sidebar column
         ->toContain('Sheet')
         ->toContain('Uw Circle')
         ->toContain('FeedSidebar');
+});
+
+test('the community feed includes excerpt metadata for long posts', function () {
+    $user = User::factory()->create();
+    $longContent = str_repeat('Long community post. ', 20);
+
+    CommunityPost::factory()->create(['content' => $longContent]);
+    CommunityPost::factory()->create(['content' => 'Short post']);
+
+    $this->actingAs($user)
+        ->get(localized('maison.community'))
+        ->assertOk()
+        ->assertInertia(function ($page) use ($longContent) {
+            $page->component('maison/community');
+
+            $posts = collect($page->toArray()['props']['posts']['data'] ?? []);
+            $long = $posts->first(
+                fn (array $post): bool => str_contains($post['content'], 'Long community post'),
+            );
+            $short = $posts->firstWhere('content', 'Short post');
+
+            expect($long)->not->toBeNull()
+                ->and($long['is_truncated'] ?? null)->toBeTrue()
+                ->and($long['excerpt'] ?? null)->toBe(CommunityPostPresenter::excerpt($longContent))
+                ->and($short['is_truncated'] ?? null)->toBeFalse();
+        });
 });
 
 test('the community feed uses inertia infinite scroll', function () {

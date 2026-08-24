@@ -6,6 +6,7 @@ use App\Enums\RoleEnum;
 use App\Listeners\StripeEventListener;
 use App\Mail\ShippingNotification;
 use App\Models\CommunityEvent;
+use App\Models\CommunityPost;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\Product;
@@ -161,11 +162,15 @@ test('charge.refunded webhook marks the order refunded idempotently', function (
 });
 
 test('staff can view community moderation', function () {
+    CommunityPost::factory()->create();
+
     $this->actingAs($this->admin)
         ->get(route('admin.community.index'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/community/index')
+            ->has('posts.data', 1)
+            ->has('filters')
         );
 });
 

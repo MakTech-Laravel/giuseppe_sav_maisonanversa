@@ -13,6 +13,9 @@ class CommunityComment extends Model
     /** @use HasFactory<CommunityCommentFactory> */
     use HasFactory, TranslatesWithDeepL;
 
+    /** @var list<string> */
+    protected array $translatable = ['body'];
+
     protected $fillable = ['community_post_id', 'author_id', 'body'];
 
     public function post(): BelongsTo
@@ -23,5 +26,33 @@ class CommunityComment extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function translationTargetLocales(): array
+    {
+        return config('maison.locales');
+    }
+
+    public function translationUsesAutoDetect(): bool
+    {
+        return true;
+    }
+
+    public function translated(string $column, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+        $source = (string) ($this->getAttribute($column) ?? '');
+
+        $this->loadMissing('translations');
+
+        $row = $this->translations->first(
+            fn (Translation $translation): bool => $translation->locale === $locale
+                && $translation->column === $column,
+        );
+
+        return filled($row?->value) ? (string) $row->value : $source;
     }
 }
