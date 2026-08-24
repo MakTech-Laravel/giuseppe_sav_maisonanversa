@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\OrderStatus;
 use App\Enums\ProductType;
 use App\Enums\RoleEnum;
-use App\Exports\NewsletterSubscribersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignCircleMemberRequest;
 use App\Http\Requests\Admin\ResolveCommunityReportRequest;
@@ -13,7 +12,6 @@ use App\Http\Requests\Admin\UpdateHeritageProductRequest;
 use App\Mail\ShippingNotification;
 use App\Models\CommunityPost;
 use App\Models\CommunityReport;
-use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -27,9 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
-use Maatwebsite\Excel\Facades\Excel;
 use Stripe\Exception\ApiErrorException;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class OpsController extends Controller
 {
@@ -193,32 +189,6 @@ class OpsController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Melding bijgewerkt.')]);
 
         return back();
-    }
-
-    public function letter(Request $request, string $locale): Response
-    {
-        $subscribers = NewsletterSubscriber::query()
-            ->latest()
-            ->limit(200)
-            ->get()
-            ->map(fn (NewsletterSubscriber $subscriber) => [
-                'email' => $subscriber->email,
-                'name' => $subscriber->name ?: $subscriber->email,
-                'status' => $subscriber->status->value,
-                'joined_at' => $subscriber->consent_at?->toDateString() ?? $subscriber->created_at?->toDateString(),
-                'locale' => $subscriber->locale,
-                'synced_at' => $subscriber->synced_at?->toDateTimeString(),
-            ]);
-
-        return Inertia::render('admin/letter/index', [
-            'subscribers' => $subscribers,
-            'letterConnected' => filled(config('services.brevo.api_key')),
-        ]);
-    }
-
-    public function exportLetter(): BinaryFileResponse
-    {
-        return Excel::download(new NewsletterSubscribersExport, 'heritage-letter.csv');
     }
 
     public function circle(Request $request, string $locale, PassportPresenter $passport): Response

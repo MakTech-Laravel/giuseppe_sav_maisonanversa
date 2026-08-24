@@ -12,11 +12,16 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class NewsletterSubscribersExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
 {
     /**
+     * @param  Collection<int, NewsletterSubscriber>  $subscribers
+     */
+    public function __construct(private Collection $subscribers) {}
+
+    /**
      * @return Collection<int, NewsletterSubscriber>
      */
     public function collection()
     {
-        return NewsletterSubscriber::query()->orderBy('id')->get();
+        return $this->subscribers;
     }
 
     /**

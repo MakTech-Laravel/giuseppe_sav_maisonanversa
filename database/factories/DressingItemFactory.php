@@ -21,6 +21,7 @@ class DressingItemFactory extends Factory
             'name' => fake()->words(2, true),
             'slug' => fake()->unique()->slug(),
             'category' => fake()->randomElement(['Apparel', 'Accessories']),
+            'description' => fake()->sentence(12),
             'image_key' => fake()->randomElement(['room-dressing', 'heritage-001-front']),
             'status' => fake()->randomElement(['coming_soon', 'available']),
             'sort_order' => fake()->numberBetween(0, 10),

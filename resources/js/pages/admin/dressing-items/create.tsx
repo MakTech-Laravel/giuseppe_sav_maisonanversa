@@ -1,61 +1,55 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft, BookOpen, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Shirt } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { JournalArticleFormFields } from '@/components/admin/journal-article-form-fields';
-import type { JournalArticleFormData } from '@/components/admin/journal-article-form-fields';
+import { DressingItemFormFields } from '@/components/admin/dressing-item-form-fields';
+import type { DressingItemFormData } from '@/components/admin/dressing-item-form-fields';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
-import journalRoutes from '@/routes/admin/journal';
+import dressingItems from '@/routes/admin/dressing-items';
 
-const defaults: JournalArticleFormData = {
+const defaults: DressingItemFormData = {
+    name: '',
     slug: '',
-    title: '',
-    excerpt: '',
-    body: '',
-    cover_path: '',
     category: '',
-    author: '',
-    date_label: '',
-    published_at: '',
+    description: '',
+    status: 'coming_soon',
     sort_order: '0',
+    is_published: true,
+    image_key: '',
     image: null,
     remove_image: false,
 };
 
-export default function CreateJournalArticle() {
+export default function CreateDressingItem() {
     const { t } = useTranslation();
-    const form = useForm(journalRoutes.store(wayfinderLocale()), defaults);
+    const form = useForm(dressingItems.store(wayfinderLocale()), defaults);
 
-    function submit(event: FormEvent) {
+    const submit = (event: FormEvent) => {
         event.preventDefault();
-        form.transform((data) => ({
-            ...data,
-            published_at: data.published_at === '' ? null : data.published_at,
-            sort_order: Number(data.sort_order),
-        }));
         form.submit({ forceFormData: true });
-    }
+    };
 
     return (
         <>
-            <Head title={t('Journalartikel aanmaken')} />
+            <Head title={t('Dressing item aanmaken')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Journalartikel aanmaken')}
-                    description={t('Schrijf een nieuw journalstuk.')}
-                    icon={BookOpen}
+                    title={t('Dressing item aanmaken')}
+                    description={t('Voeg een item toe aan de Kleedkamer.')}
+                    icon={Shirt}
                 >
                     <Button variant="outline" asChild>
-                        <Link href={journalRoutes.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                        <Link href={dressingItems.index(wayfinderLocale())}>
+                            <ArrowLeft className="h-4 w-4" />{' '}
+                            {t('Terug naar Kleedkamer')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
                 <form onSubmit={submit} className="w-full space-y-6">
-                    <JournalArticleFormFields
+                    <DressingItemFormFields
                         data={form.data}
                         errors={form.errors}
                         setData={form.setData}
@@ -64,7 +58,7 @@ export default function CreateJournalArticle() {
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {t('Opslaan')}
+                        {t('Item aanmaken')}
                     </Button>
                 </form>
             </div>
@@ -72,10 +66,16 @@ export default function CreateJournalArticle() {
     );
 }
 
-CreateJournalArticle.layout = {
+CreateDressingItem.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Journal', href: journalRoutes.index(wayfinderLocale()) },
-        { title: 'Aanmaken', href: journalRoutes.create(wayfinderLocale()) },
+        {
+            title: 'Kleedkamer',
+            href: dressingItems.index(wayfinderLocale()),
+        },
+        {
+            title: 'Aanmaken',
+            href: dressingItems.create(wayfinderLocale()),
+        },
     ],
 };

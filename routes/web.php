@@ -10,12 +10,12 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DressingItemController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\HeritageLetterController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PartnerClubController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeoMetaController;
@@ -88,6 +88,7 @@ Route::prefix('{locale}')
             Route::get('story', 'story')->name('story');
             Route::get('circle', 'circle')->name('circle');
             Route::get('dressing', 'dressing')->name('dressing');
+            Route::get('dressing/{dressingItem:slug}', 'dressingShow')->name('dressing.show');
             Route::get('journal', 'journal')->name('journal');
             Route::get('journal/{slug}', 'journalShow')
                 ->where('slug', '[a-z0-9-]+')
@@ -272,9 +273,12 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::patch('community/reports/{communityReport}', 'resolveCommunityReport')->name('community.reports.resolve')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::get('letter', 'letter')->name('letter.index')
+            });
+
+            Route::controller(HeritageLetterController::class)->group(function () {
+                Route::get('letter', 'index')->name('letter.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
-                Route::get('letter/export', 'exportLetter')->name('letter.export')
+                Route::get('letter/export', 'export')->name('letter.export')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
             });
 
@@ -344,6 +348,10 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
                 Route::put('journal/{article}', 'update')->name('journal.update')
                     ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
+                Route::put('journal/{article}/translations', 'updateTranslations')->name('journal.translations.update')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
+                Route::post('journal/{article}/translate', 'translate')->name('journal.translate')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
                 Route::delete('journal/{article}', 'destroy')->name('journal.destroy')
                     ->middleware('permission:'.PermissionEnum::POSTS_DELETE->value);
             });
@@ -406,6 +414,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::post('dressing-items', 'store')->name('dressing-items.store')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('dressing-items/{dressingItem}', 'show')->name('dressing-items.show')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('dressing-items/{dressingItem}/edit', 'edit')->name('dressing-items.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('dressing-items/{dressingItem}', 'update')->name('dressing-items.update')
@@ -467,23 +477,6 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
                 Route::delete('sessions/{communitySession}', 'destroy')->name('community-sessions.destroy')
                     ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
-            });
-
-            Route::controller(AdminPostController::class)->group(function () {
-                Route::get('posts', 'index')->name('posts.index')
-                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
-                Route::get('posts/create', 'create')->name('posts.create')
-                    ->middleware('permission:'.PermissionEnum::POSTS_CREATE->value);
-                Route::post('posts', 'store')->name('posts.store')
-                    ->middleware(['permission:'.PermissionEnum::POSTS_CREATE->value, HandlePrecognitiveRequests::class]);
-                Route::get('posts/{post}', 'show')->name('posts.show')
-                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
-                Route::get('posts/{post}/edit', 'edit')->name('posts.edit')
-                    ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
-                Route::put('posts/{post}', 'update')->name('posts.update')
-                    ->middleware(['permission:'.PermissionEnum::POSTS_EDIT->value, HandlePrecognitiveRequests::class]);
-                Route::delete('posts/{post}', 'destroy')->name('posts.destroy')
-                    ->middleware('permission:'.PermissionEnum::POSTS_DELETE->value);
             });
 
             // Admins — staff accounts (Access Control).

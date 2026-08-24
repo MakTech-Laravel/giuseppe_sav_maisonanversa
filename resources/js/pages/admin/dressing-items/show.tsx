@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft, BookOpen, Eye, Pencil, Trash2 } from 'lucide-react';
+import { ArrowLeft, Pencil, Shirt, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
@@ -7,46 +7,24 @@ import {
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
-import { JournalTranslationsDialog } from '@/components/admin/journal-translations-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
-import journalRoutes from '@/routes/admin/journal';
+import dressingItems from '@/routes/admin/dressing-items';
 
-interface ArticleDetail {
+interface DressingItemDetails {
     id: string;
+    name: string;
     slug: string;
-    title: string;
-    excerpt: string;
-    body: string;
+    category: string;
+    description: string;
     image_url: string | null;
-    cover_path: string | null;
-    category: string | null;
-    author: string | null;
-    date_label: string | null;
-    published_at: string | null;
+    status: 'coming_soon' | 'available';
     sort_order: number;
     is_published: boolean;
-    public_url: string;
 }
-
-type LocaleCopy = {
-    title: string;
-    excerpt: string;
-    body: string;
-    category: string;
-    date_label: string;
-};
-
-type TranslationStatus = {
-    title: boolean;
-    excerpt: boolean;
-    body: boolean;
-    category: boolean;
-    date_label: boolean;
-};
 
 function Field({
     label,
@@ -77,39 +55,35 @@ function Field({
     );
 }
 
-export default function JournalShow({
-    article,
-    locales,
-    translations,
-    translationStatus,
+export default function ShowDressingItem({
+    item,
 }: {
-    article: ArticleDetail;
-    locales: string[];
-    translations: Record<string, LocaleCopy>;
-    translationStatus: Record<string, TranslationStatus>;
+    item: DressingItemDetails;
 }) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
+    const statusLabel =
+        item.status === 'available' ? t('Beschikbaar') : t('Binnenkort');
 
     return (
         <>
-            <Head title={article.title} />
+            <Head title={item.name} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={article.title}
-                    description={article.excerpt}
-                    icon={BookOpen}
+                    title={item.name}
+                    description={t('Bekijk dit item zoals op de site.')}
+                    icon={Shirt}
                 >
                     <Button variant="outline" asChild>
-                        <Link href={journalRoutes.index(wayfinderLocale())}>
+                        <Link href={dressingItems.index(locale)}>
                             <ArrowLeft className="h-4 w-4" /> {t('Terug')}
                         </Link>
                     </Button>
                     <Button asChild>
                         <Link
-                            href={journalRoutes.edit({
-                                locale: wayfinderLocale(),
-                                article: article.id,
+                            href={dressingItems.edit({
+                                locale,
+                                dressingItem: item.id,
                             })}
                         >
                             <Pencil className="h-4 w-4" /> {t('Bewerken')}
@@ -122,18 +96,18 @@ export default function JournalShow({
                         <AdminPanel
                             title={t('Acties')}
                             description={t(
-                                'Werk dit artikel bij, beheer vertalingen of open de publieke pagina.',
+                                'Werk dit item bij of ga terug naar de lijst.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
                                 <Button asChild className="w-full">
                                     <Link
-                                        href={journalRoutes.edit({
+                                        href={dressingItems.edit({
                                             locale,
-                                            article: article.id,
+                                            dressingItem: item.id,
                                         })}
                                     >
-                                        <Pencil className="h-4 w-4" />
+                                        <Pencil className="h-4 w-4" />{' '}
                                         {t('Bewerken')}
                                     </Link>
                                 </Button>
@@ -142,26 +116,20 @@ export default function JournalShow({
                                     asChild
                                     className="w-full"
                                 >
-                                    <Link href={article.public_url}>
-                                        <Eye className="h-4 w-4" />
-                                        {t('Bekijk dit artikel zoals op de site.')}
+                                    <Link href={dressingItems.index(locale)}>
+                                        <ArrowLeft className="h-4 w-4" />{' '}
+                                        {t('Terug')}
                                     </Link>
                                 </Button>
-                                <JournalTranslationsDialog
-                                    articleId={article.id}
-                                    locales={locales}
-                                    translations={translations}
-                                    translationStatus={translationStatus}
-                                />
                                 <ConfirmDeleteDialog
                                     description={t(
-                                        'Dit journalartikel wordt permanent verwijderd.',
+                                        'Dit item wordt permanent verwijderd.',
                                     )}
                                     onConfirm={() =>
                                         router.delete(
-                                            journalRoutes.destroy({
+                                            dressingItems.destroy({
                                                 locale,
-                                                article: article.id,
+                                                dressingItem: item.id,
                                             }).url,
                                         )
                                     }
@@ -170,7 +138,7 @@ export default function JournalShow({
                                         variant="destructive"
                                         className="w-full"
                                     >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Trash2 className="h-4 w-4" />{' '}
                                         {t('Verwijderen')}
                                     </Button>
                                 </ConfirmDeleteDialog>
@@ -181,43 +149,35 @@ export default function JournalShow({
                     <AdminPanel
                         title={t('Inhoud')}
                         description={t(
-                            'Zoals bezoekers dit artikel in de huidige taal zien.',
+                            'Zoals bezoekers dit item in de huidige taal zien.',
                         )}
                     >
                         <div className="mb-5 flex flex-wrap gap-2">
-                            {article.category ? (
-                                <Badge variant="secondary">
-                                    {article.category}
-                                </Badge>
-                            ) : null}
+                            <Badge variant="secondary">{item.category}</Badge>
+                            <Badge variant="secondary">{statusLabel}</Badge>
                             <Badge variant="secondary">
-                                {article.is_published
+                                {item.is_published
                                     ? t('Gepubliceerd')
                                     : t('Concept')}
                             </Badge>
                         </div>
 
-                        {article.image_url ? (
+                        {item.image_url ? (
                             <img
-                                src={article.image_url}
-                                alt={article.title}
-                                className="mb-5 aspect-4/3 w-full max-w-xl rounded-lg object-cover"
+                                src={item.image_url}
+                                alt={item.name}
+                                className="mb-5 aspect-4/3 w-full max-w-sm rounded-lg object-cover"
                             />
                         ) : (
-                            <div className="mb-5 flex aspect-4/3 w-full max-w-xl items-center justify-center rounded-lg bg-muted text-xs text-muted-foreground">
+                            <div className="mb-5 flex aspect-4/3 w-full max-w-sm items-center justify-center rounded-lg bg-muted text-xs text-muted-foreground">
                                 {t('Geen afbeelding')}
                             </div>
                         )}
 
                         <div className="grid gap-5">
                             <Field
-                                label={t('Excerpt')}
-                                value={article.excerpt || t('—')}
-                                pre
-                            />
-                            <Field
-                                label={t('Body')}
-                                value={article.body || t('—')}
+                                label={t('Beschrijving')}
+                                value={item.description || t('—')}
                                 pre
                             />
                         </div>
@@ -226,35 +186,21 @@ export default function JournalShow({
                     <AdminPanel
                         title={t('Instellingen')}
                         description={t(
-                            'Categorie, auteur, publicatie en fallback cover voor dit artikel.',
+                            'Categorie, volgorde en publicatiestatus voor dit item.',
                         )}
                     >
                         <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                            <Field label={t('Slug')} value={article.slug} mono />
-                            <Field
-                                label={t('Auteur')}
-                                value={article.author || t('—')}
-                            />
-                            <Field
-                                label={t('Datumlabel')}
-                                value={article.date_label || t('—')}
-                            />
-                            <Field
-                                label={t('Cover asset')}
-                                value={article.cover_path || t('Geen')}
-                            />
+                            <Field label={t('Slug')} value={item.slug} mono />
                             <Field
                                 label={t('Volgorde')}
-                                value={String(article.sort_order)}
+                                value={String(item.sort_order)}
                                 mono
                             />
                             <Field
-                                label={t('Publicatie')}
+                                label={t('Status')}
                                 value={
-                                    article.published_at
-                                        ? new Date(
-                                              article.published_at,
-                                          ).toLocaleString()
+                                    item.is_published
+                                        ? t('Gepubliceerd')
                                         : t('Concept')
                                 }
                             />
@@ -266,10 +212,13 @@ export default function JournalShow({
     );
 }
 
-JournalShow.layout = {
+ShowDressingItem.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Journal', href: journalRoutes.index(wayfinderLocale()) },
-        { title: 'Gegevens', href: journalRoutes.index(wayfinderLocale()) },
+        {
+            title: 'Kleedkamer',
+            href: dressingItems.index(wayfinderLocale()),
+        },
+        { title: 'Gegevens', href: '#' },
     ],
 };

@@ -15,7 +15,8 @@ use Database\Seeders\JournalArticleSeeder;
  * @phpstan-type LocaleCopy array{nl: string, en: string, fr: string}
  * @phpstan-type Article array{
  *     slug: string,
- *     asset: string,
+ *     asset: string|null,
+ *     image_url: string|null,
  *     category: LocaleCopy,
  *     title: LocaleCopy,
  *     excerpt: LocaleCopy,
@@ -60,6 +61,7 @@ final class Journal
      * @return array{
      *     slug: string,
      *     asset: string,
+     *     image_url: string|null,
      *     category: string,
      *     title: string,
      *     excerpt: string,
@@ -78,7 +80,8 @@ final class Journal
 
         return [
             'slug' => $article['slug'],
-            'asset' => $article['asset'],
+            'asset' => $article['asset'] ?: 'antwerp-cityscape',
+            'image_url' => $article['image_url'],
             'category' => $pick($article['category']),
             'title' => $pick($article['title']),
             'excerpt' => $pick($article['excerpt']),
@@ -91,7 +94,7 @@ final class Journal
 
     /**
      * @param  Article  $article
-     * @return array{slug: string, asset: string, category: string, title: string, excerpt: string, author: string, date: string, meta: string}
+     * @return array{slug: string, asset: string, image_url: string|null, category: string, title: string, excerpt: string, author: string, date: string, meta: string}
      */
     public static function card(array $article, string $locale): array
     {
@@ -105,7 +108,7 @@ final class Journal
      * The next pieces in the catalog, wrapping around so the last article
      * still has neighbours.
      *
-     * @return list<array{slug: string, asset: string, category: string, title: string, excerpt: string, author: string, date: string, meta: string}>
+     * @return list<array{slug: string, asset: string, image_url: string|null, category: string, title: string, excerpt: string, author: string, date: string, meta: string}>
      */
     public static function related(string $slug, string $locale, int $limit = 3): array
     {

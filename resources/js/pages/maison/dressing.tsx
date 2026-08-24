@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { DressingItemMedia } from '@/components/maison/dressing/dressing-item-media';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
@@ -9,6 +10,8 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
+import { useLocale } from '@/hooks/use-locale';
+import { maisonUrl } from '@/lib/maison-navigation';
 
 const VALUES = [
     {
@@ -30,21 +33,19 @@ const VALUES = [
 
 type DressingItem = {
     name: string;
+    slug: string;
     category: string;
-    status: string;
+    status: 'coming_soon' | 'available';
+    image_url: string | null;
+    image_key: string | null;
 };
 
 export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
     const { t } = useTranslation();
     const { openNewsletter } = useShellActions();
-    const preview =
-        items.length > 0
-            ? items.map((item, index) => ({
-                  num: String(index + 1).padStart(2, '0'),
-                  title: item.name,
-                  desc: `${item.category} · ${item.status}`,
-              }))
-            : [];
+    const { locale } = useLocale();
+    const statusLabel = (status: DressingItem['status']) =>
+        status === 'available' ? t('Beschikbaar') : t('Binnenkort');
 
     return (
         <>
@@ -192,21 +193,33 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                         </h2>
                     </Reveal>
 
-                    <div className="grid grid-cols-2 gap-0.5 md:grid-cols-3 ma-lg:grid-cols-6">
-                        {preview.map((item) => (
-                            <Reveal
-                                key={item.num}
-                                className="border border-gold/10 bg-white/3 px-5 pt-7 pb-6 transition-colors hover:border-gold/25 hover:bg-gold/5"
-                            >
-                                <div className="mb-3.5 font-serif text-[44px] leading-none font-light text-gold/18">
-                                    {item.num}
-                                </div>
-                                <h3 className="mb-2 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
-                                    {t(item.title)}
-                                </h3>
-                                <p className="text-[12px] leading-[1.65] text-sand">
-                                    {t(item.desc)}
-                                </p>
+                    <div className="grid grid-cols-2 gap-0.5 ma-lg:grid-cols-6 md:grid-cols-3">
+                        {items.map((item) => (
+                            <Reveal key={item.slug}>
+                                <MaisonLink
+                                    href={`${maisonUrl('dressing', locale)}/${item.slug}`}
+                                    className="group block h-full border border-gold/10 bg-white/3 transition-colors hover:border-gold/25 hover:bg-gold/5"
+                                >
+                                    <div className="relative aspect-square overflow-hidden bg-choc2">
+                                        <DressingItemMedia
+                                            imageUrl={item.image_url}
+                                            imageKey={item.image_key}
+                                            alt={item.name}
+                                            className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                                        />
+                                        <span className="absolute top-2 left-2 rounded-full bg-choc/80 px-2 py-1 font-sans text-[8px] tracking-[0.18em] text-gold uppercase">
+                                            {statusLabel(item.status)}
+                                        </span>
+                                    </div>
+                                    <div className="px-4 pt-4 pb-6">
+                                        <h3 className="mb-1.5 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
+                                            {item.name}
+                                        </h3>
+                                        <p className="text-[11px] tracking-[0.1em] text-sand uppercase">
+                                            {item.category}
+                                        </p>
+                                    </div>
+                                </MaisonLink>
                             </Reveal>
                         ))}
                     </div>
