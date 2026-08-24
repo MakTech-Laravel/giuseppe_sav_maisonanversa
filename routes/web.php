@@ -88,6 +88,7 @@ Route::prefix('{locale}')
             Route::get('story', 'story')->name('story');
             Route::get('circle', 'circle')->name('circle');
             Route::get('dressing', 'dressing')->name('dressing');
+            Route::get('dressing/{dressingItem:slug}', 'dressingShow')->name('dressing.show');
             Route::get('journal', 'journal')->name('journal');
             Route::get('journal/{slug}', 'journalShow')
                 ->where('slug', '[a-z0-9-]+')
@@ -405,6 +406,8 @@ Route::prefix('{locale}')
                 Route::get('dressing-items/create', 'create')->name('dressing-items.create')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::post('dressing-items', 'store')->name('dressing-items.store')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('dressing-items/{dressingItem}', 'show')->name('dressing-items.show')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('dressing-items/{dressingItem}/edit', 'edit')->name('dressing-items.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);

@@ -18,6 +18,7 @@ use App\Support\CommunityFeed;
 use App\Support\Journal;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -89,16 +90,66 @@ class MaisonController extends Controller
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->get()
-                ->map(fn (DressingItem $item): array => [
-                    'name' => $item->translated('name'),
-                    'slug' => $item->slug,
-                    'category' => $item->translated('category'),
-                    'status' => $item->status,
-                    'image_key' => $item->image_key,
-                ])
+                ->map(fn (DressingItem $item): array => $this->dressingCard($item))
                 ->values()
                 ->all(),
         ]);
+    }
+
+    public function dressingShow(string $locale, DressingItem $dressingItem): Response
+    {
+        abort_unless($dressingItem->is_published, 404);
+
+        $related = DressingItem::query()
+            ->where('is_published', true)
+            ->where('id', '!=', $dressingItem->id)
+            ->where('category', $dressingItem->category)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->limit(3)
+            ->get();
+
+        if ($related->isEmpty()) {
+            $related = DressingItem::query()
+                ->where('is_published', true)
+                ->where('id', '!=', $dressingItem->id)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->limit(3)
+                ->get();
+        }
+
+        return $this->page('dressing-show', [
+            'item' => [
+                ...$this->dressingCard($dressingItem),
+                'description' => $dressingItem->translated('description'),
+            ],
+            'related' => $related
+                ->map(fn (DressingItem $item): array => $this->dressingCard($item))
+                ->values()
+                ->all(),
+        ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function dressingCard(DressingItem $item): array
+    {
+        return [
+            'name' => $item->translated('name'),
+            'slug' => $item->slug,
+            'category' => $item->translated('category'),
+            'status' => $item->status,
+            /*
+             * Kept apart rather than collapsed into resolvedImageUrl(): a
+             * seeded image_key with no photograph on disk yet must still
+             * fall back to the front end's brand-palette PlaceholderImage,
+             * which only image_key (not a synthesized /images/... URL) can do.
+             */
+            'image_url' => $item->image_path !== null ? Storage::disk('public')->url($item->image_path) : null,
+            'image_key' => $item->image_key,
+        ];
     }
 
     public function journal(Request $request): Response
