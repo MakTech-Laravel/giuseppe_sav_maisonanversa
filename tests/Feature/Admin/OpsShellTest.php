@@ -182,7 +182,8 @@ test('staff can view letter subscribers', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/letter/index')
-            ->has('subscribers')
+            ->has('subscribers.data', 1)
+            ->has('filters')
         );
 });
 

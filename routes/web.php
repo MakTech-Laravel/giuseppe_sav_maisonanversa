@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DressingItemController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\HeritageLetterController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\OpsController;
@@ -272,9 +273,12 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::patch('community/reports/{communityReport}', 'resolveCommunityReport')->name('community.reports.resolve')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::get('letter', 'letter')->name('letter.index')
+            });
+
+            Route::controller(HeritageLetterController::class)->group(function () {
+                Route::get('letter', 'index')->name('letter.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
-                Route::get('letter/export', 'exportLetter')->name('letter.export')
+                Route::get('letter/export', 'export')->name('letter.export')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
             });
 
