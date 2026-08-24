@@ -52,7 +52,6 @@ import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
 import adminPartnerClubs from '@/routes/admin/partner-clubs';
-import adminPosts from '@/routes/admin/posts';
 import adminProducts from '@/routes/admin/products';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSessions from '@/routes/admin/community-sessions';
@@ -191,12 +190,6 @@ function buildNavGroups(
                     title: t('Journal'),
                     href: adminJournal.index(locale),
                     icon: BookOpen,
-                    permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
-                },
-                {
-                    title: t('Berichten'),
-                    href: adminPosts.index(locale),
-                    icon: FileText,
                     permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
                 },
             ],

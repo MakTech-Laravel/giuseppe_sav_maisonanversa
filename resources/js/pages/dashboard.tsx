@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import {
     ArrowRight,
-    FileText,
+    BookOpen,
     LayoutGrid,
     UserRoundCog,
     Users,
@@ -29,7 +29,7 @@ import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import admins from '@/routes/admin/admins';
 import customers from '@/routes/admin/customers';
-import posts from '@/routes/admin/posts';
+import journalRoutes from '@/routes/admin/journal';
 import { PERMISSIONS } from '@/types/permissions';
 
 interface DashboardProps {
@@ -67,10 +67,10 @@ export default function Dashboard({
             permission: PERMISSIONS.USERS.INDEX,
         },
         {
-            label: t('Berichten'),
-            description: t('Beheer contentitems'),
-            href: posts.index(wayfinderLocale()),
-            icon: FileText,
+            label: t('Journal'),
+            description: t('Beheer redactionele journalartikelen.'),
+            href: journalRoutes.index(wayfinderLocale()),
+            icon: BookOpen,
             permission: PERMISSIONS.POSTS.VIEW,
         },
     ];
