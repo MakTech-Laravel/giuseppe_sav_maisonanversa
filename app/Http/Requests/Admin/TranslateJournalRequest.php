@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Post;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdatePostRequest extends FormRequest
+class TranslateJournalRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,7 +19,12 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
+            'target_locale' => [
+                'sometimes',
+                'nullable',
+                'string',
+                Rule::in(config('maison.locales')),
+            ],
         ];
     }
 }

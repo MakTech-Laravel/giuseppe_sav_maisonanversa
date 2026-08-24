@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
-use App\Models\Post;
+use App\Models\JournalArticle;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,9 +27,9 @@ class DashboardController extends Controller
                     'hintKey' => 'Personeelsaccounts',
                 ],
                 [
-                    'key' => 'Berichten',
-                    'value' => (string) Post::query()->count(),
-                    'hintKey' => 'Contentitems',
+                    'key' => 'Journal',
+                    'value' => (string) JournalArticle::query()->count(),
+                    'hintKey' => 'Journalartikelen',
                 ],
             ],
             'recentCustomers' => User::query()

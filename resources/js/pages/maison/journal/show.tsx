@@ -33,14 +33,23 @@ export default function JournalShow({
             <Section tone="cream">
                 <Wrap>
                     <figure className="mx-auto mb-16 max-w-180">
-                        <PlaceholderImage
-                            asset={article.asset}
-                            ratio={null}
-                            alt={article.title}
-                            captioned={false}
-                            className="w-full bg-choc2 [&_img]:h-auto [&_img]:w-full [&_img]:object-contain"
-                            loading="eager"
-                        />
+                        {article.image_url ? (
+                            <img
+                                src={article.image_url}
+                                alt={article.title}
+                                className="w-full bg-choc2"
+                                loading="eager"
+                            />
+                        ) : (
+                            <PlaceholderImage
+                                asset={article.asset}
+                                ratio={null}
+                                alt={article.title}
+                                captioned={false}
+                                className="w-full bg-choc2 [&_img]:h-auto [&_img]:w-full [&_img]:object-contain"
+                                loading="eager"
+                            />
+                        )}
                     </figure>
 
                     <article className="mx-auto max-w-180">
