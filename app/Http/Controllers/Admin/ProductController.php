@@ -113,7 +113,7 @@ class ProductController extends Controller
         $product->loadMissing('translations');
 
         return Inertia::render('admin/products/show', [
-            'product' => $this->translatedProduct($product),
+            'product' => $this->translatedProduct($product, $locale),
             'locales' => $this->translationLocales(),
             'translations' => $this->translationBundle($product),
             'translationStatus' => $this->translationStatus($product),
@@ -570,12 +570,12 @@ class ProductController extends Controller
      *
      * @return array<string, mixed>
      */
-    private function translatedProduct(Product $product): array
+    private function translatedProduct(Product $product, string $locale): array
     {
         $data = $this->formProduct($product);
 
         foreach (self::TRANSLATION_COLUMNS as $column) {
-            $data[$column] = $product->translated($column);
+            $data[$column] = $product->translated($column, $locale);
         }
 
         return $data;

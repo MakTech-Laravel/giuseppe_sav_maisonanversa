@@ -11,6 +11,7 @@ import { ProductTranslationsDialog } from '@/components/admin/product-translatio
 import type { ExistingFile } from '@/components/file-upload';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
@@ -96,6 +97,7 @@ export default function ShowProduct({
     translationStatus: Record<string, TranslationStatus>;
 }) {
     const { t } = useTranslation();
+    const { locale: currentLocale } = useLocale();
     const locale = wayfinderLocale();
     const isLimited = product.type === 'limited_edition';
     const editionTotal = product.edition_total ?? 0;
@@ -104,6 +106,23 @@ export default function ShowProduct({
         () => new Set(product.archive_edition_numbers),
         [product.archive_edition_numbers],
     );
+
+    const display = useMemo(() => {
+        const localized = translations[currentLocale];
+
+        return {
+            name: localized?.name || product.name,
+            eyebrow: localized?.eyebrow || product.eyebrow || '',
+            hero_eyebrow: localized?.hero_eyebrow || product.hero_eyebrow || '',
+            hero_subtitle:
+                localized?.hero_subtitle || product.hero_subtitle || '',
+            description: localized?.description || product.description || '',
+            expected_delivery_label:
+                localized?.expected_delivery_label ||
+                product.expected_delivery_label ||
+                '',
+        };
+    }, [currentLocale, translations, product]);
 
     const formatEditionLabel = (number: number): string =>
         `${product.edition_number_prefix}${String(number).padStart(padWidth, '0')}${product.edition_number_postfix}`;
@@ -115,10 +134,10 @@ export default function ShowProduct({
 
     return (
         <>
-            <Head title={product.name} />
+            <Head title={display.name} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={product.name}
+                    title={display.name}
                     description={t(
                         'Bekijk kerngegevens van dit catalogusproduct.',
                     )}
@@ -206,7 +225,7 @@ export default function ShowProduct({
                             ) : null}
                         </div>
                         <div className="grid items-start gap-5 md:grid-cols-2">
-                            <Field label={t('Naam')} value={product.name} />
+                            <Field label={t('Naam')} value={display.name} />
                             <Field
                                 label={t('Slug')}
                                 value={product.slug}
@@ -219,27 +238,27 @@ export default function ShowProduct({
                             <Field
                                 label={t('Verwachte levering')}
                                 value={
-                                    product.expected_delivery_label ?? t('Geen')
+                                    display.expected_delivery_label || t('Geen')
                                 }
                             />
                             <Field
                                 label={t('Productlabel')}
-                                value={product.eyebrow || t('Geen')}
+                                value={display.eyebrow || t('Geen')}
                             />
                             <Field
                                 label={t('Hero-eyebrow')}
-                                value={product.hero_eyebrow || t('Geen')}
+                                value={display.hero_eyebrow || t('Geen')}
                             />
                             <div className="md:col-span-2">
                                 <Field
                                     label={t('Hero-ondertitel')}
-                                    value={product.hero_subtitle || t('Geen')}
+                                    value={display.hero_subtitle || t('Geen')}
                                 />
                             </div>
                             <div className="md:col-span-2">
                                 <Field
                                     label={t('Productbeschrijving')}
-                                    value={product.description || t('Geen')}
+                                    value={display.description || t('Geen')}
                                 />
                             </div>
                             <Field
@@ -404,7 +423,7 @@ export default function ShowProduct({
                                                         product.primary_image
                                                             .url
                                                     }
-                                                    alt={product.name}
+                                                    alt={display.name}
                                                     className="max-h-full max-w-full object-contain"
                                                 />
                                             </div>
@@ -432,7 +451,7 @@ export default function ShowProduct({
                                                                 src={image.url}
                                                                 alt={
                                                                     image.name ??
-                                                                    product.name
+                                                                    display.name
                                                                 }
                                                                 className="h-full w-full object-cover"
                                                             />

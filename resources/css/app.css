@@ -141,6 +141,10 @@
     --border: rgba(141, 112, 90, 0.25);
     --input: rgba(141, 112, 90, 0.35);
     --ring: #8d705a;
+
+    --scrollbar-track: #e8e0d5;
+    --scrollbar-thumb: rgba(141, 112, 90, 0.55);
+    --scrollbar-thumb-hover: #8d705a;
 }
 
 /*
@@ -216,11 +220,50 @@
     --color-border: var(--border);
     --color-input: var(--input);
     --color-ring: var(--ring);
+
+    --scrollbar-track: #352722;
+    --scrollbar-thumb: rgba(196, 164, 132, 0.45);
+    --scrollbar-thumb-hover: #c4a484;
+}
+
+/*
+ * Dark chocolate shells (member area, modals) inherit the same scrollbar
+ * palette as admin without requiring the full admin-kit token set.
+ */
+.bg-choc {
+    --scrollbar-track: #352722;
+    --scrollbar-thumb: rgba(196, 164, 132, 0.45);
+    --scrollbar-thumb-hover: #c4a484;
 }
 
 @layer base {
     * {
         @apply border-border;
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    }
+
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background-color: var(--scrollbar-track);
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--scrollbar-thumb);
+        border: 2px solid var(--scrollbar-track);
+        border-radius: 9999px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: var(--scrollbar-thumb-hover);
+    }
+
+    *::-webkit-scrollbar-corner {
+        background-color: var(--scrollbar-track);
     }
 
     html {
