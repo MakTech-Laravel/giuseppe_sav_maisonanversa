@@ -9,10 +9,9 @@ test('the admin sidebar includes administrator and hides access control', functi
         "t('Bestellingen')",
         "t('Gemeenschap')",
         "t('Heritage Letter')",
-        "t('Berichten')",
+        "t('Journal')",
         "t('Beheerder')",
         "t('Profiel & Beveiliging')",
-        "t('Platform')",
     ] as $needle) {
         expect($source)->toContain($needle);
     }
@@ -24,6 +23,7 @@ test('the admin sidebar includes administrator and hides access control', functi
         ->not->toContain("t('Roles')")
         ->not->toContain("t('Permissions')")
         ->not->toContain("t('Admins')")
+        ->not->toContain("t('Berichten')")
         ->not->toContain('File Upload Demo')
         ->not->toContain("href: '#'");
 });

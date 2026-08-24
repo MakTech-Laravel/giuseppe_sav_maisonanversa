@@ -1,11 +1,10 @@
 <?php
 
 use App\Enums\RoleEnum;
-use App\Models\Post;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Inertia\Testing\AssertableInertia as Assert;
+use Illuminate\Support\Facades\Route;
 
 beforeEach(function () {
     $this->seed([PermissionSeeder::class, RoleSeeder::class]);
@@ -15,56 +14,18 @@ beforeEach(function () {
     $this->admin->syncTypeFromRoles();
 });
 
-test('staff can list posts', function () {
-    Post::factory()->create(['title' => 'Maison note']);
-
-    $this->actingAs($this->admin)
-        ->get(route('admin.posts.index'))
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('admin/posts/index')
-            ->has('posts.data', 1)
-        );
+test('the demo admin posts resource is not registered', function () {
+    expect(Route::has('admin.posts.index'))->toBeFalse()
+        ->and(Route::has('admin.posts.create'))->toBeFalse()
+        ->and(Route::has('admin.posts.store'))->toBeFalse()
+        ->and(Route::has('admin.posts.show'))->toBeFalse()
+        ->and(Route::has('admin.posts.edit'))->toBeFalse()
+        ->and(Route::has('admin.posts.update'))->toBeFalse()
+        ->and(Route::has('admin.posts.destroy'))->toBeFalse();
 });
 
-test('staff can create a post', function () {
+test('the demo admin posts path is not found', function () {
     $this->actingAs($this->admin)
-        ->post(route('admin.posts.store'), [
-            'title' => 'Heritage journal draft',
-        ])
-        ->assertRedirect();
-
-    $post = Post::where('title', 'Heritage journal draft')->sole();
-
-    expect($post)->not->toBeNull();
-});
-
-test('staff can update a post', function () {
-    $post = Post::factory()->create(['title' => 'Old title']);
-
-    $this->actingAs($this->admin)
-        ->put(route('admin.posts.update', ['post' => $post]), [
-            'title' => 'New title',
-        ])
-        ->assertRedirect(route('admin.posts.show', ['post' => $post]));
-
-    expect($post->fresh()->title)->toBe('New title');
-});
-
-test('staff can delete a post', function () {
-    $post = Post::factory()->create();
-
-    $this->actingAs($this->admin)
-        ->delete(route('admin.posts.destroy', ['post' => $post]))
-        ->assertRedirect(route('admin.posts.index'));
-
-    expect(Post::find($post->id))->toBeNull();
-});
-
-test('users without posts permission are forbidden', function () {
-    $user = User::factory()->customer()->create();
-
-    $this->actingAs($user)
-        ->get(route('admin.posts.index'))
-        ->assertForbidden();
+        ->get('/'.defaultLocale().'/admin/posts')
+        ->assertNotFound();
 });
