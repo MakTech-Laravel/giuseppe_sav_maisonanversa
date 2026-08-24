@@ -30,7 +30,10 @@ class ImportStaticContentCommand extends Command
                 'is_published' => true,
                 'grants_founding_circle' => true,
                 'expected_delivery_label' => 'Q1 2027 — ONDER VOORBEHOUD VAN PRODUCTIE',
+                'eyebrow' => 'Maison Anversa · Founding Edition',
+                'hero_eyebrow' => 'Founding Edition · 100 Stuks Wereldwijd',
                 'hero_subtitle' => 'Het eerste hoofdstuk van Maison Anversa. Beperkt tot 100 stuks. Elk genummerd. De Founding Edition wordt nooit herhaald.',
+                'description' => 'Heritage No.001 is niet zomaar een padelracket. Het is het eerste object van een huis dat wordt gebouwd voor de lange termijn. Elk van de 100 stuks is individueel genummerd en wordt vergezeld van een volledige Heritage ervaring.',
                 'sort_order' => 0,
                 'gallery' => [
                     'heritage-001-front',
@@ -48,15 +51,58 @@ class ImportStaticContentCommand extends Command
                     ['label' => 'Editie', 'value' => 'Founding Edition — éénmalig'],
                 ],
                 'materials' => [
-                    'Full Carbon Frame — 3K weave',
-                    'Premium 3K Carbon Surface',
-                    'Echte Lederen Greep',
+                    [
+                        'num' => '01',
+                        'name' => '3K Carbon Frame',
+                        'desc' => 'De meest veeleisende weave in de industrie. Licht, stijf, en zichtbaar vakmanschap in elk raster.',
+                    ],
+                    [
+                        'num' => '02',
+                        'name' => 'Echt Lederen Greep',
+                        'desc' => 'Handafgewerkt, vegetaal gelooid. Wordt mooier met gebruik — synthetisch kan dat niet.',
+                    ],
+                    [
+                        'num' => '03',
+                        'name' => 'EVA Soft Kern',
+                        'desc' => 'Een balans tussen comfort en controle. Gekalibreerd voor zowel gevoel als kracht.',
+                    ],
+                    [
+                        'num' => '04',
+                        'name' => 'Goudfolie & Letterpress',
+                        'desc' => 'Certificaat en paspoort gedrukt met traditionele technieken. Geen laserprint.',
+                    ],
                 ],
                 'unboxing_steps' => [
-                    'Atelier verzegeling en nummercontrole',
-                    'Heritage Certificaat met oprichterzegel',
-                    "Heritage Paspoort met 24 pagina's",
-                    'Welkomstkaart en oprichtersbrief',
+                    [
+                        'num' => '01',
+                        'title' => 'Welkomstkaart',
+                        'desc' => 'A5 · 400g katoenpapier · Letterpress · Handtekening oprichter',
+                    ],
+                    [
+                        'num' => '02',
+                        'title' => 'Oprichtersbrief',
+                        'desc' => 'Het verhaal van Maison Anversa. Persoonlijk, authentiek.',
+                    ],
+                    [
+                        'num' => '03',
+                        'title' => 'Heritage Paspoort',
+                        'desc' => "A6 · 24 pagina's · Vegetaal gelooide lederen omslag",
+                    ],
+                    [
+                        'num' => '04',
+                        'title' => 'Heritage Certificaat',
+                        'desc' => 'A5 · Letterpress + goudfolie · Oprichterzegel · Editienummer',
+                    ],
+                    [
+                        'num' => '05',
+                        'title' => 'Founding Circle',
+                        'desc' => 'Uitnodiging voor de permanente gemeenschap van de eerste 100.',
+                    ],
+                    [
+                        'num' => '06',
+                        'title' => 'Heritage No.001',
+                        'desc' => 'Premium canvas stofdoek · MA monogram · Individueel genummerd',
+                    ],
                 ],
                 'includes' => [
                     'Heritage No.001 racket (individueel genummerd)',
@@ -72,9 +118,10 @@ class ImportStaticContentCommand extends Command
                     ['icon' => '◈', 'text' => 'Authenticiteit gegarandeerd'],
                 ],
                 'trust_badges' => [
-                    'Authenticiteit gegarandeerd',
-                    'Heritage Certificaat + Paspoort',
-                    'Founding Circle uitnodiging',
+                    ['icon' => '◈', 'text' => 'Genummerd 001–100'],
+                    ['icon' => '✓', 'text' => 'Echtheids-certificaat'],
+                    ['icon' => '◆', 'text' => 'Ontworpen in Antwerpen'],
+                    ['icon' => '★', 'text' => 'Founding Circle lid'],
                 ],
             ],
         );
@@ -93,7 +140,10 @@ class ImportStaticContentCommand extends Command
                 'grants_founding_circle' => false,
                 'sort_order' => 1,
                 'gallery' => ['heritage-001-front'],
+                'eyebrow' => 'Maison Anversa · Coming Soon',
+                'hero_eyebrow' => 'Volgende release',
                 'hero_subtitle' => 'Volgende release · Aankondiging via de Heritage Letter',
+                'description' => '',
             ],
         );
 
@@ -111,7 +161,10 @@ class ImportStaticContentCommand extends Command
                 'grants_founding_circle' => false,
                 'sort_order' => 2,
                 'gallery' => ['heritage-001-lifestyle-court'],
+                'eyebrow' => 'Maison Anversa · Coming Soon',
+                'hero_eyebrow' => 'In voorbereiding',
                 'hero_subtitle' => 'In voorbereiding · Geen datum bekend',
+                'description' => '',
             ],
         );
 

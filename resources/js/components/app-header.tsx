@@ -58,7 +58,7 @@ const activeItemStyles = 'text-neutral-900';
 
 export function AppHeader({ breadcrumbs = [] }: Props) {
     const page = usePage();
-    const { auth } = page.props;
+    const user = page.props.auth?.user;
     const { locale } = useLocale();
     const getInitials = useInitials();
     const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
@@ -223,19 +223,17 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 >
                                     <Avatar className="size-8 overflow-hidden rounded-full">
                                         <AvatarImage
-                                            src={auth.user?.avatar ?? undefined}
-                                            alt={auth.user?.name}
+                                            src={user?.avatar ?? undefined}
+                                            alt={user?.name}
                                         />
                                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black">
-                                            {getInitials(auth.user?.name ?? '')}
+                                            {getInitials(user?.name ?? '')}
                                         </AvatarFallback>
                                     </Avatar>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="end">
-                                {auth.user && (
-                                    <UserMenuContent user={auth.user} />
-                                )}
+                                {user && <UserMenuContent user={user} />}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

@@ -16,6 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
 export type ProductFormData = {
@@ -31,6 +32,10 @@ export type ProductFormData = {
     is_published: boolean;
     grants_founding_circle: boolean;
     expected_delivery_label: string;
+    eyebrow: string;
+    hero_eyebrow: string;
+    hero_subtitle: string;
+    description: string;
     primary_image: File | null;
     gallery_images: File[] | null;
     remove_primary_image: boolean;
@@ -112,9 +117,7 @@ export function ProductFormFields({
             value: ProductFormData[K],
         ): void;
         (data: ProductFormData): void;
-        (
-            updater: (current: ProductFormData) => ProductFormData,
-        ): void;
+        (updater: (current: ProductFormData) => ProductFormData): void;
     };
     existingPrimary?: ExistingFile | null;
     existingGallery?: ExistingFile[];
@@ -279,7 +282,70 @@ export function ProductFormFields({
                         />
                         <InputError message={errors.expected_delivery_label} />
                     </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="eyebrow">{t('Productlabel')}</Label>
+                        <Input
+                            id="eyebrow"
+                            value={data.eyebrow}
+                            onChange={(event) =>
+                                setData('eyebrow', event.target.value)
+                            }
+                            placeholder={t(
+                                'bijv. Maison Anversa · Founding Edition',
+                            )}
+                        />
+                        <InputError message={errors.eyebrow} />
+                    </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="hero_eyebrow">
+                            {t('Hero-eyebrow')}
+                        </Label>
+                        <Input
+                            id="hero_eyebrow"
+                            value={data.hero_eyebrow}
+                            onChange={(event) =>
+                                setData('hero_eyebrow', event.target.value)
+                            }
+                            placeholder={t(
+                                'bijv. Founding Edition · 100 Stuks Wereldwijd',
+                            )}
+                        />
+                        <InputError message={errors.hero_eyebrow} />
+                    </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="hero_subtitle">
+                            {t('Hero-ondertitel')}
+                        </Label>
+                        <Textarea
+                            id="hero_subtitle"
+                            value={data.hero_subtitle}
+                            onChange={(event) =>
+                                setData('hero_subtitle', event.target.value)
+                            }
+                            className="min-h-24 resize-y"
+                        />
+                        <InputError message={errors.hero_subtitle} />
+                    </div>
+                    <div className="grid min-w-0 gap-2 md:col-span-2">
+                        <Label htmlFor="description">
+                            {t('Productbeschrijving')}
+                        </Label>
+                        <Textarea
+                            id="description"
+                            value={data.description}
+                            onChange={(event) =>
+                                setData('description', event.target.value)
+                            }
+                            className="min-h-32 resize-y"
+                        />
+                        <InputError message={errors.description} />
+                    </div>
                 </div>
+                <p className="mt-5 text-xs text-muted-foreground">
+                    {t(
+                        'Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan. Pas per taal aan via Vertalingen.',
+                    )}
+                </p>
             </AdminPanel>
 
             <AdminPanel
@@ -386,8 +452,8 @@ export function ProductFormFields({
                                     </p>
                                 </div>
                                 {/* contain-strict: Chromium otherwise lets this tall grid inflate page scrollHeight */}
-                                <div className="h-96 contain-strict overflow-hidden rounded-lg border bg-muted/20">
-                                    <div className="h-full overflow-y-auto p-3 scrollbar-none">
+                                <div className="h-96 overflow-hidden rounded-lg border bg-muted/20 contain-strict">
+                                    <div className="h-full scrollbar-none overflow-y-auto p-3">
                                         <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
                                             {editionNumbers.map((number) => {
                                                 const isArchived =
@@ -469,7 +535,8 @@ export function ProductFormFields({
                             onChange={(file) => {
                                 setData((current) => ({
                                     ...current,
-                                    primary_image: (file as File | null) ?? null,
+                                    primary_image:
+                                        (file as File | null) ?? null,
                                     remove_primary_image: false,
                                 }));
                             }}

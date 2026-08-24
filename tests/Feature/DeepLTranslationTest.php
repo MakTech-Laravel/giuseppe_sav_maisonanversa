@@ -34,11 +34,18 @@ test('community posts auto-detect the content column and skip status', function 
         ->not->toContain('email');
 });
 
-test('products use the explicit translatable name column', function () {
+test('products use all six explicit translatable columns', function () {
     $product = Product::query()->where('slug', Product::FOUNDING_SLUG)->first();
 
     expect($product->translatableColumns())
-        ->toBe(['name', 'hero_subtitle', 'expected_delivery_label']);
+        ->toBe([
+            'name',
+            'eyebrow',
+            'hero_eyebrow',
+            'hero_subtitle',
+            'description',
+            'expected_delivery_label',
+        ]);
 });
 
 test('deepl uses the free host for keys ending in fx', function () {

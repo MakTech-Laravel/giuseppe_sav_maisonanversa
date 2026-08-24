@@ -26,9 +26,13 @@ export function MaisonSeoHead({
     noIndex = false,
 }: MaisonSeoHeadProps) {
     const { appUrl, seo } = usePage<{
-        appUrl: string;
-        seo: SeoDocument;
+        appUrl?: string;
+        seo?: SeoDocument;
     }>().props;
+
+    if (!appUrl || !seo) {
+        return null;
+    }
 
     const origin = appUrl.replace(/\/+$/, '');
     const title = titleOverride ?? seo.title;
