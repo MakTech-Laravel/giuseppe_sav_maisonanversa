@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreDressingItemRequest;
 use App\Http\Requests\Admin\UpdateDressingItemRequest;
 use App\Models\DressingItem;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -15,15 +16,38 @@ use Inertia\Response;
 
 class DressingItemController extends Controller
 {
+    /** @var list<int> */
+    public const PER_PAGE_OPTIONS = [10, 15, 25, 50, 100];
+
+    public const PER_PAGE_DEFAULT = 15;
+
     public function index(Request $request, string $locale): Response
     {
+        $filters = $this->filters($request);
+
         $items = DressingItem::query()
+            ->when($filters['search'] !== '', function (Builder $query) use ($filters): void {
+                $search = $filters['search'];
+                $query->where(function (Builder $inner) use ($search): void {
+                    $inner->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%")
+                        ->orWhere('category', 'like', "%{$search}%");
+                });
+            })
+            ->when($filters['status'] !== '', function (Builder $query) use ($filters): void {
+                $query->where('status', $filters['status']);
+            })
+            ->when($filters['publication'] === 'published', function (Builder $query): void {
+                $query->where('is_published', true);
+            })
+            ->when($filters['publication'] === 'draft', function (Builder $query): void {
+                $query->where('is_published', false);
+            })
             ->orderBy('sort_order')
             ->orderBy('id')
-            ->get();
-
-        return Inertia::render('admin/dressing-items/index', [
-            'items' => $items->map(fn (DressingItem $item): array => [
+            ->paginate($filters['per_page'])
+            ->withQueryString()
+            ->through(fn (DressingItem $item): array => [
                 'id' => (string) $item->id,
                 'name' => $item->translated('name'),
                 'slug' => $item->slug,
@@ -32,7 +56,12 @@ class DressingItemController extends Controller
                 'sort_order' => $item->sort_order,
                 'is_published' => $item->is_published,
                 'image_url' => $item->resolvedImageUrl(),
-            ]),
+            ]);
+
+        return Inertia::render('admin/dressing-items/index', [
+            'items' => $items,
+            'filters' => $filters,
+            'perPageOptions' => self::PER_PAGE_OPTIONS,
         ]);
     }
 
@@ -146,5 +175,45 @@ class DressingItemController extends Controller
         }
 
         Storage::disk('public')->delete($dressingItem->image_path);
+    }
+
+    /**
+     * @return array{search: string, status: string, publication: string, per_page: int}
+     */
+    private function filters(Request $request): array
+    {
+        $search = trim((string) $request->query('search', ''));
+        $status = trim((string) $request->query('status', ''));
+        $publication = trim((string) $request->query('publication', ''));
+
+        if (! in_array($status, ['coming_soon', 'available'], true)) {
+            $status = '';
+        }
+
+        if (! in_array($publication, ['published', 'draft'], true)) {
+            $publication = '';
+        }
+
+        return [
+            'search' => $search,
+            'status' => $status,
+            'publication' => $publication,
+            'per_page' => $this->perPage($request),
+        ];
+    }
+
+    private function perPage(Request $request): int
+    {
+        $value = $request->query('per_page');
+
+        if (is_numeric($value)) {
+            $perPage = (int) $value;
+
+            if ($perPage > 0 && in_array($perPage, self::PER_PAGE_OPTIONS, true)) {
+                return $perPage;
+            }
+        }
+
+        return self::PER_PAGE_DEFAULT;
     }
 }
