@@ -9,6 +9,7 @@ use App\Models\CommunityPost;
 use App\Models\CommunitySession;
 use App\Models\DressingItem;
 use App\Models\Faq;
+use App\Models\JournalArticle;
 use App\Models\LegalPage;
 use App\Models\PartnerClub;
 use App\Models\Product;
@@ -17,7 +18,6 @@ use App\Services\Edition\EditionInventory;
 use App\Support\CommunityFeed;
 use App\Support\Journal;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -155,28 +155,13 @@ class MaisonController extends Controller
     public function journal(Request $request): Response
     {
         $locale = app()->getLocale();
-        $articles = Journal::articles();
-        $total = count($articles);
-        $perPage = Journal::PER_PAGE;
-        $lastPage = max(1, (int) ceil($total / $perPage));
-        $page = max(1, $request->integer('page', 1));
-
-        if ($page > $lastPage) {
-            abort(404);
-        }
-
-        $slice = array_slice($articles, ($page - 1) * $perPage, $perPage);
-
-        $paginator = new LengthAwarePaginator(
-            array_map(fn (array $article): array => Journal::card($article, $locale), $slice),
-            $total,
-            $perPage,
-            $page,
-            [
-                'path' => route('maison.journal', ['locale' => $locale]),
-                'pageName' => 'page',
-            ],
-        );
+        $paginator = JournalArticle::query()
+            ->published()
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->paginate(Journal::PER_PAGE)
+            ->withQueryString()
+            ->through(fn (JournalArticle $article): array => Journal::card($article->toCatalogArray(), $locale));
 
         return $this->page('journal', [
             'articles' => $paginator,
@@ -185,16 +170,52 @@ class MaisonController extends Controller
 
     public function journalShow(string $locale, string $slug): Response
     {
-        $article = Journal::find($slug);
+        $article = JournalArticle::query()
+            ->published()
+            ->where('slug', $slug)
+            ->first();
 
-        if ($article === null) {
-            abort(404);
-        }
+        abort_if($article === null, 404);
 
         return $this->page('journal/show', [
-            'article' => Journal::localize($article, $locale),
-            'related' => Journal::related($slug, $locale),
+            'article' => Journal::localize($article->toCatalogArray(), $locale),
+            'related' => $this->relatedJournalArticles($article, $locale),
         ]);
+    }
+
+    /**
+     * @return list<array{slug: string, asset: string, image_url: string|null, category: string, title: string, excerpt: string, author: string, date: string, meta: string}>
+     */
+    private function relatedJournalArticles(JournalArticle $article, string $locale): array
+    {
+        $sameCategory = JournalArticle::query()
+            ->published()
+            ->whereKeyNot($article->id)
+            ->when(filled($article->category), fn ($query) => $query->where('category', $article->category))
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->limit(3)
+            ->get();
+
+        $related = $sameCategory
+            ->map(fn (JournalArticle $relatedArticle): array => Journal::card($relatedArticle->toCatalogArray(), $locale));
+
+        if ($related->count() < 3) {
+            $excludeIds = [$article->id, ...$sameCategory->pluck('id')->all()];
+
+            $fallback = JournalArticle::query()
+                ->published()
+                ->whereNotIn('id', $excludeIds)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->limit(3 - $related->count())
+                ->get()
+                ->map(fn (JournalArticle $relatedArticle): array => Journal::card($relatedArticle->toCatalogArray(), $locale));
+
+            $related = $related->concat($fallback);
+        }
+
+        return $related->values()->all();
     }
 
     public function community(Request $request): Response

@@ -24,6 +24,8 @@ class StoreJournalArticleRequest extends FormRequest
             'excerpt' => ['required', 'string', 'max:5000'],
             'body' => ['required', 'string', 'max:100000'],
             'cover_path' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'remove_image' => ['sometimes', 'boolean'],
             'category' => ['nullable', 'string', 'max:255'],
             'author' => ['nullable', 'string', 'max:255'],
             'date_label' => ['nullable', 'string', 'max:255'],
@@ -43,6 +45,7 @@ class StoreJournalArticleRequest extends FormRequest
             return $data;
         }
 
+        $data['remove_image'] = (bool) ($data['remove_image'] ?? false);
         $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
         $data['slug'] = $data['slug'] ?? null;
         $data['published_at'] = $data['published_at'] ?? null;

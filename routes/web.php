@@ -345,6 +345,10 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
                 Route::put('journal/{article}', 'update')->name('journal.update')
                     ->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
+                Route::put('journal/{article}/translations', 'updateTranslations')->name('journal.translations.update')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
+                Route::post('journal/{article}/translate', 'translate')->name('journal.translate')
+                    ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
                 Route::delete('journal/{article}', 'destroy')->name('journal.destroy')
                     ->middleware('permission:'.PermissionEnum::POSTS_DELETE->value);
             });
