@@ -146,7 +146,7 @@ export function ProductTranslationsDialog({
                 </Button>
             </DialogTrigger>
             <DialogContent
-                className="admin-kit max-h-[90vh] overflow-y-auto border-border bg-card text-card-foreground shadow-[0_12px_40px_rgba(41,28,24,0.55)] sm:max-w-2xl"
+                className="admin-kit max-h-[90vh] overflow-y-auto border-border bg-card text-card-foreground shadow-[0_12px_40px_rgba(41,28,24,0.55)] sm:max-w-4xl"
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
@@ -190,7 +190,7 @@ export function ProductTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-name`}>
-                            {t('Naam')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Naam')}
                         </Label>
                         <Input
                             id={`${activeLocale}-name`}
@@ -212,7 +212,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-eyebrow`}>
-                            {t('Productlabel')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Productlabel')}
                         </Label>
                         <Input
                             id={`${activeLocale}-eyebrow`}
@@ -234,7 +234,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-hero_eyebrow`}>
-                            {t('Hero-eyebrow')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Hero-eyebrow')}
                         </Label>
                         <Input
                             id={`${activeLocale}-hero_eyebrow`}
@@ -256,8 +256,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-hero_subtitle`}>
-                            {t('Hero-ondertitel')} (
-                            {LOCALE_LABELS[activeLocale]})
+                            {t('Hero-ondertitel')}
                         </Label>
                         <Textarea
                             id={`${activeLocale}-hero_subtitle`}
@@ -280,8 +279,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-description`}>
-                            {t('Productbeschrijving')} (
-                            {LOCALE_LABELS[activeLocale]})
+                            {t('Productbeschrijving')}
                         </Label>
                         <Textarea
                             id={`${activeLocale}-description`}
@@ -306,8 +304,7 @@ export function ProductTranslationsDialog({
                         <Label
                             htmlFor={`${activeLocale}-expected_delivery_label`}
                         >
-                            {t('Verwachte levering')} (
-                            {LOCALE_LABELS[activeLocale]})
+                            {t('Verwachte levering')}
                         </Label>
                         <Input
                             id={`${activeLocale}-expected_delivery_label`}
