@@ -117,9 +117,7 @@ export function ProductFormFields({
             value: ProductFormData[K],
         ): void;
         (data: ProductFormData): void;
-        (
-            updater: (current: ProductFormData) => ProductFormData,
-        ): void;
+        (updater: (current: ProductFormData) => ProductFormData): void;
     };
     existingPrimary?: ExistingFile | null;
     existingGallery?: ExistingFile[];
@@ -343,6 +341,11 @@ export function ProductFormFields({
                         <InputError message={errors.description} />
                     </div>
                 </div>
+                <p className="mt-5 text-xs text-muted-foreground">
+                    {t(
+                        'Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan. Pas per taal aan via Vertalingen.',
+                    )}
+                </p>
             </AdminPanel>
 
             <AdminPanel
@@ -449,8 +452,8 @@ export function ProductFormFields({
                                     </p>
                                 </div>
                                 {/* contain-strict: Chromium otherwise lets this tall grid inflate page scrollHeight */}
-                                <div className="h-96 contain-strict overflow-hidden rounded-lg border bg-muted/20">
-                                    <div className="h-full overflow-y-auto p-3 scrollbar-none">
+                                <div className="h-96 overflow-hidden rounded-lg border bg-muted/20 contain-strict">
+                                    <div className="h-full scrollbar-none overflow-y-auto p-3">
                                         <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
                                             {editionNumbers.map((number) => {
                                                 const isArchived =
@@ -532,7 +535,8 @@ export function ProductFormFields({
                             onChange={(file) => {
                                 setData((current) => ({
                                     ...current,
-                                    primary_image: (file as File | null) ?? null,
+                                    primary_image:
+                                        (file as File | null) ?? null,
                                     remove_primary_image: false,
                                 }));
                             }}

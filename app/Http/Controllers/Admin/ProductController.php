@@ -6,7 +6,9 @@ use App\Enums\EditionPieceStatus;
 use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
+use App\Http\Requests\Admin\TranslateProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
+use App\Http\Requests\Admin\UpdateProductTranslationsRequest;
 use App\Models\EditionPiece;
 use App\Models\Product;
 use App\Services\Edition\EditionInventory;
@@ -29,6 +31,24 @@ class ProductController extends Controller
     public const CATALOG_PER_PAGE_OPTIONS = [10, 15, 25, 50, 100];
 
     public const CATALOG_PER_PAGE_DEFAULT = 15;
+
+    /** @var list<string> */
+    private const TRANSLATION_COLUMNS = [
+        'name',
+        'eyebrow',
+        'hero_eyebrow',
+        'hero_subtitle',
+        'description',
+        'expected_delivery_label',
+    ];
+
+    /**
+     * @return list<string>
+     */
+    private function translationLocales(): array
+    {
+        return config('maison.locales');
+    }
 
     public function index(Request $request, string $locale): Response
     {
@@ -62,7 +82,7 @@ class ProductController extends Controller
             ->withQueryString()
             ->through(fn (Product $product): array => [
                 'id' => $product->id,
-                'name' => $product->name,
+                'name' => $product->translated('name'),
                 'slug' => $product->slug,
                 'type' => $product->type->value,
                 'amount' => (string) $product->amount,
@@ -90,8 +110,13 @@ class ProductController extends Controller
 
     public function show(string $locale, Product $product): Response
     {
+        $product->loadMissing('translations');
+
         return Inertia::render('admin/products/show', [
-            'product' => $this->formProduct($product),
+            'product' => $this->translatedProduct($product),
+            'locales' => $this->translationLocales(),
+            'translations' => $this->translationBundle($product),
+            'translationStatus' => $this->translationStatus($product),
         ]);
     }
 
@@ -101,11 +126,14 @@ class ProductController extends Controller
         $payload = $this->payload($validated);
         $payload['gallery'] = $this->syncGallery([], $validated, $request);
 
-        Product::query()->create($payload);
+        $product = Product::query()->create($payload);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product aangemaakt.')]);
 
-        return redirect()->route('admin.products.index', ['locale' => $locale]);
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
     }
 
     public function edit(string $locale, Product $product): Response
@@ -125,7 +153,67 @@ class ProductController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product bijgewerkt.')]);
 
-        return redirect()->route('admin.products.edit', ['product' => $product]);
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
+    }
+
+    public function updateTranslations(
+        UpdateProductTranslationsRequest $request,
+        string $locale,
+        Product $product,
+    ): RedirectResponse {
+        $data = $request->validated();
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            foreach (self::TRANSLATION_COLUMNS as $column) {
+                $product->translations()->updateOrCreate(
+                    [
+                        'locale' => $targetLocale,
+                        'column' => $column,
+                    ],
+                    [
+                        'value' => $data[$targetLocale][$column],
+                        'source_hash' => $product->translationSourceHash($column),
+                    ],
+                );
+            }
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
+    }
+
+    public function translate(TranslateProductRequest $request, string $locale, Product $product): RedirectResponse
+    {
+        $targetLocale = $request->validated('target_locale');
+
+        if (filled($targetLocale)) {
+            $product->translations()
+                ->where('locale', $targetLocale)
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $product->dispatchDeepLTranslation([$targetLocale]);
+        } else {
+            $product->translations()
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $product->dispatchDeepLTranslation();
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
     }
 
     public function destroy(string $locale, Product $product): RedirectResponse
@@ -474,6 +562,62 @@ class ProductController extends Controller
                 $extraPaths,
             ))),
         ];
+    }
+
+    /**
+     * Locale-resolved copy for the show page: same shape as formProduct(),
+     * with the translatable text columns swapped for the active locale's value.
+     *
+     * @return array<string, mixed>
+     */
+    private function translatedProduct(Product $product): array
+    {
+        $data = $this->formProduct($product);
+
+        foreach (self::TRANSLATION_COLUMNS as $column) {
+            $data[$column] = $product->translated($column);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return array<string, array<string, string>>
+     */
+    private function translationBundle(Product $product): array
+    {
+        $bundle = [];
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            $bundle[$targetLocale] = collect(self::TRANSLATION_COLUMNS)
+                ->mapWithKeys(fn (string $column): array => [
+                    $column => $product->translated($column, $targetLocale),
+                ])
+                ->all();
+        }
+
+        return $bundle;
+    }
+
+    /**
+     * @return array<string, array<string, bool>>
+     */
+    private function translationStatus(Product $product): array
+    {
+        $status = [];
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            $status[$targetLocale] = collect(self::TRANSLATION_COLUMNS)
+                ->mapWithKeys(fn (string $column): array => [
+                    $column => $product->translations->contains(
+                        fn ($translation): bool => $translation->locale === $targetLocale
+                            && $translation->column === $column,
+                    ),
+                ])
+                ->all();
+        }
+
+        return $status;
     }
 
     /**
