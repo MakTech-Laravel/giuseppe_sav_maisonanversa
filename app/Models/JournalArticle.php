@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Models\Concerns\TranslatesWithDeepL;
+use App\Support\Imagery;
 use App\Support\Journal;
 use Database\Factories\JournalArticleFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class JournalArticle extends Model
 {
@@ -31,6 +33,7 @@ class JournalArticle extends Model
     protected array $translationExcept = [
         'author',
         'cover_path',
+        'image_path',
         'slug',
     ];
 
@@ -43,6 +46,7 @@ class JournalArticle extends Model
         'excerpt',
         'body',
         'cover_path',
+        'image_path',
         'category',
         'author',
         'date_label',
@@ -72,11 +76,40 @@ class JournalArticle extends Model
     }
 
     /**
+     * @return list<string>
+     */
+    public function translationTargetLocales(): array
+    {
+        return config('maison.locales');
+    }
+
+    public function translationUsesAutoDetect(): bool
+    {
+        return true;
+    }
+
+    public function translated(string $column, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+        $source = (string) ($this->getAttribute($column) ?? '');
+
+        $this->loadMissing('translations');
+
+        $row = $this->translations->first(
+            fn (Translation $translation): bool => $translation->locale === $locale
+                && $translation->column === $column,
+        );
+
+        return filled($row?->value) ? (string) $row->value : $source;
+    }
+
+    /**
      * Catalog shape consumed by {@see Journal}.
      *
      * @return array{
      *     slug: string,
-     *     asset: string,
+     *     asset: string|null,
+     *     image_url: string|null,
      *     category: array{nl: string, en: string, fr: string},
      *     title: array{nl: string, en: string, fr: string},
      *     excerpt: array{nl: string, en: string, fr: string},
@@ -89,7 +122,10 @@ class JournalArticle extends Model
     {
         return [
             'slug' => $this->slug,
-            'asset' => $this->cover_path ?? 'antwerp-cityscape',
+            'asset' => $this->cover_path,
+            'image_url' => $this->image_path !== null && $this->image_path !== ''
+                ? Storage::disk('public')->url($this->image_path)
+                : null,
             'category' => $this->localeCopy('category'),
             'title' => $this->localeCopy('title'),
             'excerpt' => $this->localeCopy('excerpt'),
@@ -97,6 +133,19 @@ class JournalArticle extends Model
             'date' => $this->localeCopy('date_label'),
             'body' => $this->localeCopy('body'),
         ];
+    }
+
+    public function resolvedImageUrl(): ?string
+    {
+        if ($this->image_path !== null && $this->image_path !== '') {
+            return Storage::disk('public')->url($this->image_path);
+        }
+
+        if ($this->cover_path !== null && $this->cover_path !== '') {
+            return Imagery::assetUrl($this->cover_path);
+        }
+
+        return null;
     }
 
     /**

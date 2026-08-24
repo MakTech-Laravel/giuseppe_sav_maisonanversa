@@ -15,14 +15,22 @@ export function JournalCard({ entry }: { entry: JournalCardData }) {
         <Reveal className="group">
             <MaisonLink href={href} className="block">
                 <div className="relative mb-4 aspect-4/3 overflow-hidden bg-choc2">
-                    <PlaceholderImage
-                        asset={entry.asset}
-                        ratio={null}
-                        alt={entry.title}
-                        captioned={false}
-                        overlay="linear-gradient(to top, rgba(41,28,24,0.5), rgba(41,28,24,0.1))"
-                        className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
+                    {entry.image_url ? (
+                        <img
+                            src={entry.image_url}
+                            alt={entry.title}
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        />
+                    ) : (
+                        <PlaceholderImage
+                            asset={entry.asset}
+                            ratio={null}
+                            alt={entry.title}
+                            captioned={false}
+                            overlay="linear-gradient(to top, rgba(41,28,24,0.5), rgba(41,28,24,0.1))"
+                            className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                        />
+                    )}
                 </div>
                 <span className="mb-2 block font-sans text-[9px] tracking-[0.22em] text-gold2 uppercase">
                     {entry.category}

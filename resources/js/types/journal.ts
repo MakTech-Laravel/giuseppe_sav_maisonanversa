@@ -3,6 +3,7 @@ import type { ImageAssetName } from '@/lib/imagery';
 export type JournalCard = {
     slug: string;
     asset: ImageAssetName;
+    image_url: string | null;
     category: string;
     title: string;
     excerpt: string;
