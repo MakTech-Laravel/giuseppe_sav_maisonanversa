@@ -4,6 +4,7 @@ use App\Enums\PermissionEnum;
 use App\Http\Controllers\Admin\CommerceSettingController;
 use App\Http\Controllers\Admin\CommunityCourtController;
 use App\Http\Controllers\Admin\CommunityEventController;
+use App\Http\Controllers\Admin\CommunityPostController;
 use App\Http\Controllers\Admin\CommunitySessionController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -277,6 +278,15 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
             });
 
+            Route::controller(CommunityPostController::class)->group(function () {
+                Route::put('community/posts/{communityPost}', 'update')->name('community.posts.update')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::put('community/posts/{communityPost}/translations', 'updateTranslations')->name('community.posts.translations.update')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::post('community/posts/{communityPost}/translate', 'translate')->name('community.posts.translate')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+            });
+
             Route::controller(CommunityEventController::class)->group(function () {
                 Route::get('events', 'index')->name('events.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
@@ -312,6 +322,10 @@ Route::prefix('{locale}')
                 Route::get('courts/{court}/edit', 'edit')->name('courts.edit')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::put('courts/{court}', 'update')->name('courts.update')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::put('courts/{court}/translations', 'updateTranslations')->name('courts.translations.update')
+                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
+                Route::post('courts/{court}/translate', 'translate')->name('courts.translate')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
                 Route::delete('courts/{court}', 'destroy')->name('courts.destroy')
                     ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);

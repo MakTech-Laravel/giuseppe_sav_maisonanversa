@@ -17,8 +17,6 @@ class CommunityEvent extends Model
     use HasFactory, TranslatesWithDeepL;
 
     /**
-     * Dutch source columns translated to en/fr via TranslateModelJob.
-     *
      * @var list<string>
      */
     protected array $translatable = [
@@ -82,5 +80,33 @@ class CommunityEvent extends Model
         $value = $status instanceof CommunityEventStatus ? $status->value : $status;
 
         return $query->where('status', $value);
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function translationTargetLocales(): array
+    {
+        return config('maison.locales');
+    }
+
+    public function translationUsesAutoDetect(): bool
+    {
+        return true;
+    }
+
+    public function translated(string $column, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+        $source = (string) ($this->getAttribute($column) ?? '');
+
+        $this->loadMissing('translations');
+
+        $row = $this->translations->first(
+            fn (Translation $translation): bool => $translation->locale === $locale
+                && $translation->column === $column,
+        );
+
+        return filled($row?->value) ? (string) $row->value : $source;
     }
 }

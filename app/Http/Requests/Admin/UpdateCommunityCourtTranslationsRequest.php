@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCommunityEventTranslationsRequest extends FormRequest
+class UpdateCommunityCourtTranslationsRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,14 +19,14 @@ class UpdateCommunityEventTranslationsRequest extends FormRequest
     {
         return [
             'nl.title' => ['required', 'string', 'max:255'],
-            'nl.description' => ['required', 'string', 'max:5000'],
-            'nl.location' => ['required', 'string', 'max:255'],
+            'nl.body' => ['nullable', 'string', 'max:10000'],
+            'nl.location' => ['nullable', 'string', 'max:255'],
             'en.title' => ['required', 'string', 'max:255'],
-            'en.description' => ['required', 'string', 'max:5000'],
-            'en.location' => ['required', 'string', 'max:255'],
+            'en.body' => ['nullable', 'string', 'max:10000'],
+            'en.location' => ['nullable', 'string', 'max:255'],
             'fr.title' => ['required', 'string', 'max:255'],
-            'fr.description' => ['required', 'string', 'max:5000'],
-            'fr.location' => ['required', 'string', 'max:255'],
+            'fr.body' => ['nullable', 'string', 'max:10000'],
+            'fr.location' => ['nullable', 'string', 'max:255'],
         ];
     }
 }
