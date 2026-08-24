@@ -23,7 +23,90 @@ test('staff can view the dressing items index', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/dressing-items/index')
-            ->has('items', 6)
+            ->has('items.data', 6)
+            ->where('filters.search', '')
+            ->where('filters.status', '')
+            ->where('filters.publication', '')
+            ->where('filters.per_page', 15)
+            ->has('perPageOptions', 5)
+        );
+});
+
+test('staff can search dressing items by name', function () {
+    DressingItem::factory()->create([
+        'name' => 'Unique Polo Search',
+        'slug' => 'unique-polo-search',
+        'status' => 'available',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.dressing-items.index', [
+            'locale' => 'nl',
+            'search' => 'Unique Polo',
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/dressing-items/index')
+            ->has('items.data', 1)
+            ->where('items.data.0.name', 'Unique Polo Search')
+            ->where('filters.search', 'Unique Polo')
+        );
+});
+
+test('staff can filter dressing items by status and publication', function () {
+    DressingItem::factory()->create([
+        'name' => 'Available Published',
+        'status' => 'available',
+        'is_published' => true,
+    ]);
+    DressingItem::factory()->create([
+        'name' => 'Coming Soon Draft',
+        'status' => 'coming_soon',
+        'is_published' => false,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.dressing-items.index', [
+            'locale' => 'nl',
+            'status' => 'available',
+            'publication' => 'published',
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.status', 'available')
+            ->where('filters.publication', 'published')
+            ->where('items.data', fn ($items) => collect($items)->every(
+                fn ($item) => $item['status'] === 'available' && $item['is_published'] === true,
+            ))
+            ->where('items.data', fn ($items) => collect($items)->contains(
+                fn ($item) => $item['name'] === 'Available Published',
+            ))
+            ->where('items.data', fn ($items) => collect($items)->doesntContain(
+                fn ($item) => $item['name'] === 'Coming Soon Draft',
+            ))
+        );
+});
+
+test('staff can paginate dressing items with a whitelisted per page value', function () {
+    $this->actingAs($this->admin)
+        ->get(route('admin.dressing-items.index', [
+            'locale' => 'nl',
+            'per_page' => 10,
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.per_page', 10)
+            ->where('items.per_page', 10)
+        );
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.dressing-items.index', [
+            'locale' => 'nl',
+            'per_page' => 999,
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.per_page', 15)
         );
 });
 
