@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 test('product page uses dynamic content and faq props', function () {
     Artisan::call('app:import-static-content-command');
 
-    $this->get(localized('maison.product'))
+    $this->get(localized('maison.products.show', ['product' => Product::FOUNDING_SLUG]))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('product.slug', Product::FOUNDING_SLUG)

@@ -84,7 +84,8 @@ Route::prefix('{locale}')
         Route::controller(MaisonController::class)->group(function () {
             Route::get('/', 'home')->name('home');
             Route::get('huis', 'house')->name('house');
-            Route::get('product', 'product')->name('product');
+            Route::get('products', 'products')->name('products');
+            Route::get('products/{product:slug}', 'productShow')->name('products.show');
             Route::get('story', 'story')->name('story');
             Route::get('circle', 'circle')->name('circle');
             Route::get('dressing', 'dressing')->name('dressing');

@@ -257,7 +257,7 @@ class Product extends Model
     }
 
     /**
-     * @return array{id: int, slug: string, name: string, status: string, hero_subtitle: string, cover_asset: string|null}
+     * @return array{id: int, slug: string, name: string, status: string, hero_subtitle: string, cover_asset: string|null, amount: string, display_amount: string, currency: string, type: string}
      */
     public function toCardShare(): array
     {
@@ -270,6 +270,10 @@ class Product extends Model
             'status' => ($this->status ?? ProductStatus::Active)->value,
             'hero_subtitle' => $this->translated('hero_subtitle'),
             'cover_asset' => $gallery[0] ?? null,
+            'amount' => (string) $this->amount,
+            'display_amount' => Money::format((string) $this->amount),
+            'currency' => $this->currency,
+            'type' => $this->type->value,
         ];
     }
 
@@ -325,13 +329,15 @@ class Product extends Model
     }
 
     /**
-     * Shared checkout display for Inertia (public storefront = founding SKU).
+     * Shared checkout display for Inertia. Defaults to the founding SKU
+     * (global storefront CTAs); pass a specific product for per-product
+     * checkout contexts such as the products catalog detail page.
      *
-     * @return array{productId: int|null, currency: string, amount: string, displayAmount: string, productName: string, deliveryLabel: string|null}
+     * @return array{productId: int|null, currency: string, amount: string, displayAmount: string, productName: string, deliveryLabel: string|null, productType: string}
      */
-    public static function checkoutShare(): array
+    public static function checkoutShare(?self $product = null): array
     {
-        $product = static::founding();
+        $product ??= static::founding();
         $amount = $product?->amount;
         $deliveryLabel = $product !== null
             ? ($product->translated('expected_delivery_label')
@@ -346,6 +352,7 @@ class Product extends Model
                 'displayAmount' => '',
                 'productName' => '',
                 'deliveryLabel' => $deliveryLabel,
+                'productType' => $product?->type?->value ?? ProductType::LimitedEdition->value,
             ];
         }
 
@@ -356,6 +363,7 @@ class Product extends Model
             'displayAmount' => Money::format((string) $amount),
             'productName' => $product->translated('name'),
             'deliveryLabel' => $deliveryLabel,
+            'productType' => $product->type->value,
         ];
     }
 }

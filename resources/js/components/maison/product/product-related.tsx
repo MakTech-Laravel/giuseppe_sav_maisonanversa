@@ -5,9 +5,11 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
+import { useLocale } from '@/hooks/use-locale';
 import type { ImageAssetName } from '@/lib/imagery';
 import { IMAGE_ASSETS } from '@/lib/imagery';
 import type { MaisonPage } from '@/lib/maison-navigation';
+import { maisonUrl } from '@/lib/maison-navigation';
 
 type RelatedEdition = {
     cover_asset: string | null;
@@ -60,6 +62,7 @@ function RelatedCover({ src, alt }: { src: string | null; alt: string }) {
 
 export function ProductRelated({ related }: { related: RelatedEdition[] }) {
     const { t } = useTranslation();
+    const { locale } = useLocale();
     const cards = [
         ...related,
         {
@@ -126,7 +129,12 @@ export function ProductRelated({ related }: { related: RelatedEdition[] }) {
                                         {body}
                                     </MaisonLink>
                                 ) : (
-                                    body
+                                    <MaisonLink
+                                        href={`${maisonUrl('products', locale)}/${card.slug}`}
+                                        className="block transition-opacity hover:opacity-90"
+                                    >
+                                        {body}
+                                    </MaisonLink>
                                 )}
                             </Reveal>
                         );
