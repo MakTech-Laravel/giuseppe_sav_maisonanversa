@@ -18,6 +18,7 @@ function ProductCover({ src, alt }: { src: string | null; alt: string }) {
                 ratio={null}
                 alt={alt}
                 captioned={false}
+                objectPosition="center 15%"
                 className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-[1.03]"
             />
         );
@@ -33,6 +34,7 @@ function ProductCover({ src, alt }: { src: string | null; alt: string }) {
                 src={value}
                 alt={alt}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                style={{ objectPosition: 'center 15%' }}
             />
         );
     }
@@ -43,6 +45,7 @@ function ProductCover({ src, alt }: { src: string | null; alt: string }) {
             ratio={null}
             alt={alt}
             captioned={false}
+            objectPosition="center 15%"
             className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-[1.03]"
         />
     );
@@ -70,22 +73,22 @@ export function ProductCatalogCard({ product }: { product: ProductCardData }) {
                 href={href}
                 className="group block h-full border border-gold/10 bg-white/3 transition-colors hover:border-gold/25 hover:bg-gold/5"
             >
-                <div className="relative aspect-4/5 overflow-hidden bg-choc2">
+                <div className="relative aspect-square overflow-hidden bg-choc2">
                     <ProductCover src={product.cover_asset} alt={product.name} />
                     <span className="absolute top-2 left-2 rounded-full bg-choc/80 px-2 py-1 font-sans text-[8px] tracking-[0.18em] text-gold uppercase">
                         {statusLabel(t, product.status)}
                     </span>
                 </div>
-                <div className="px-4 pt-4 pb-6">
-                    <h3 className="mb-1.5 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
+                <div className="px-4 pt-3 pb-4">
+                    <h3 className="mb-1 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
                         {product.name}
                     </h3>
                     {product.hero_subtitle ? (
-                        <p className="mb-2 text-[13px] leading-[1.5] text-choc3">
+                        <p className="mb-1.5 line-clamp-2 text-[13px] leading-[1.5] text-choc3">
                             {t(product.hero_subtitle)}
                         </p>
                     ) : null}
-                    <p className="font-serif text-[20px] font-light text-choc lining-nums">
+                    <p className="font-serif text-[18px] font-light text-choc lining-nums">
                         {`€ ${product.display_amount}`}
                     </p>
                 </div>

@@ -16,6 +16,8 @@ type PlaceholderImageProps = {
     captioned?: boolean;
     /** Layered over the image, matching the prototype's scrims. */
     overlay?: string;
+    /** CSS `object-position`, for crops where the subject sits off-centre. */
+    objectPosition?: string;
     className?: string;
     loading?: 'eager' | 'lazy';
     fetchPriority?: 'high' | 'low' | 'auto';
@@ -33,6 +35,7 @@ export function PlaceholderImage({
     alt,
     captioned = true,
     overlay,
+    objectPosition,
     className,
     loading = 'lazy',
     fetchPriority,
@@ -89,6 +92,7 @@ export function PlaceholderImage({
                         loading={loading}
                         fetchPriority={fetchPriority}
                         className="h-full w-full object-cover"
+                        style={objectPosition ? { objectPosition } : undefined}
                     />
                 </picture>
             ) : (
