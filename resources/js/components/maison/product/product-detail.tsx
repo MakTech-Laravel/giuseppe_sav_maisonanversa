@@ -6,7 +6,8 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import type { Edition } from '@/types/edition';
-import type { ProductPageData } from '@/pages/maison/products/show';
+import type { ProductPageData } from '@/types/product';
+import { productSectionItems } from '@/types/product';
 
 export function ProductDetail({
     edition,
@@ -24,6 +25,8 @@ export function ProductDetail({
     const isSoldOut = edition.soldOut || product.status === 'archived';
     const isComingSoon = product.status === 'coming_soon';
     const canReserve = !isSoldOut && !isComingSoon;
+    const specs = productSectionItems(product.sections, 'specs');
+    const guarantees = productSectionItems(product.sections, 'guarantees');
 
     return (
         <Section tone="cream" className="py-18">
@@ -37,7 +40,7 @@ export function ProductDetail({
                     <div>
                         {product.eyebrow ? (
                             <span className="mb-3 block font-sans text-[9px] tracking-[0.28em] text-gold uppercase">
-                                {t(product.eyebrow)}
+                                {product.eyebrow}
                             </span>
                         ) : null}
                         <p className="mb-1.5 font-serif text-[clamp(28px,3.5vw,48px)] leading-[1.1] font-medium [&_em]:text-gold [&_em]:italic">
@@ -64,25 +67,22 @@ export function ProductDetail({
                         </div>
                         {product.description ? (
                             <p className="mb-7 border-b border-gold/20 pb-7 text-[15px] leading-[1.85] text-choc3">
-                                {t(product.description)}
+                                {product.description}
                             </p>
                         ) : null}
 
-                        {product.specs.length > 0 ? (
+                        {specs.length > 0 ? (
                             <div className="mb-8 flex flex-col">
-                                {product.specs.map((spec) => (
+                                {specs.map((spec) => (
                                     <div
-                                        key={spec.label}
+                                        key={spec.id}
                                         className="flex items-baseline justify-between gap-4 border-b border-gold/12 py-3"
                                     >
                                         <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                                            {t(spec.label)}
+                                            {spec.title}
                                         </span>
                                         <span className="text-right font-serif text-[15px] font-medium text-choc">
-                                            {spec.value === '3K Carbon' ||
-                                            spec.value === 'EVA Soft'
-                                                ? spec.value
-                                                : t(spec.value)}
+                                            {spec.body}
                                         </span>
                                     </div>
                                 ))}
@@ -118,13 +118,10 @@ export function ProductDetail({
                             </MaisonButton>
                         )}
 
-                        {product.guarantees.length > 0 ? (
+                        {guarantees.length > 0 ? (
                             <div className="mt-6 grid grid-cols-1 gap-4 border-t border-gold/15 pt-6 sm:grid-cols-3">
-                                {product.guarantees.map((item) => (
-                                    <div
-                                        key={item.text}
-                                        className="text-center"
-                                    >
+                                {guarantees.map((item) => (
+                                    <div key={item.id} className="text-center">
                                         <div
                                             aria-hidden="true"
                                             className="mb-1.5 text-lg text-gold2"
@@ -132,7 +129,7 @@ export function ProductDetail({
                                             {item.icon}
                                         </div>
                                         <div className="font-sans text-[9px] leading-[1.5] tracking-[0.15em] text-stone uppercase">
-                                            {t(item.text)}
+                                            {item.title}
                                         </div>
                                     </div>
                                 ))}

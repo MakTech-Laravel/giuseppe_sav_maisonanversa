@@ -370,6 +370,12 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('products/{product}', 'update')->name('products.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+                Route::post('products/{product}/media', 'updateMedia')->name('products.media.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('products/{product}/sections', 'updateSections')->name('products.sections.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('products/{product}/faqs', 'updateFaqs')->name('products.faqs.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('products/{product}/translations', 'updateTranslations')->name('products.translations.update')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::post('products/{product}/translate', 'translate')->name('products.translate')

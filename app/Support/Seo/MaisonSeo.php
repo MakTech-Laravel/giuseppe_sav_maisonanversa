@@ -539,7 +539,7 @@ final class MaisonSeo
 
         if ($page === 'products' && $product !== null) {
             $graph[] = self::productSchema($canonical, $description, $ogImage, $organizationId, $product);
-            $productFaqs = self::publishedFaqItems(FaqContext::Product);
+            $productFaqs = self::publishedProductFaqItems($product);
 
             if ($productFaqs !== []) {
                 $graph[] = self::faqSchema($productFaqs);
@@ -595,6 +595,20 @@ final class MaisonSeo
             'brand' => ['@id' => $organizationId],
             'offers' => $offer,
         ];
+    }
+
+    /**
+     * @return list<array{question: string, answer: string}>
+     */
+    private static function publishedProductFaqItems(Product $product): array
+    {
+        return array_map(
+            fn (array $faq): array => [
+                'question' => $faq['question'],
+                'answer' => $faq['answer'],
+            ],
+            $product->publishedFaqShare(),
+        );
     }
 
     /**

@@ -10,6 +10,7 @@ import type { ImageAssetName } from '@/lib/imagery';
 import { IMAGE_ASSETS } from '@/lib/imagery';
 import type { MaisonPage } from '@/lib/maison-navigation';
 import { maisonUrl } from '@/lib/maison-navigation';
+import type { ProductSection } from '@/types/product';
 
 type RelatedEdition = {
     cover_asset: string | null;
@@ -18,6 +19,22 @@ type RelatedEdition = {
     hero_subtitle: string;
     status: string;
     to?: MaisonPage;
+};
+
+type RelatedCard = {
+    key: string;
+    cover: string | null;
+    title: string;
+    subtitle: string;
+    note: string;
+    to?: MaisonPage;
+    href?: string;
+};
+
+const STATUS_LABELS: Record<string, string> = {
+    active: 'Beschikbaar',
+    coming_soon: 'Binnenkort',
+    archived: 'Uitverkocht',
 };
 
 function RelatedCover({ src, alt }: { src: string | null; alt: string }) {
@@ -60,30 +77,53 @@ function RelatedCover({ src, alt }: { src: string | null; alt: string }) {
     );
 }
 
-export function ProductRelated({ related }: { related: RelatedEdition[] }) {
+export function ProductRelated({
+    related,
+    section,
+}: {
+    related: RelatedEdition[];
+    section?: ProductSection;
+}) {
     const { t } = useTranslation();
     const { locale } = useLocale();
-    const cards = [
-        ...related,
-        {
-            cover_asset: 'atelier-workshop',
-            slug: 'house',
-            name: 'Het Huis',
-            hero_subtitle: 'Meer van ons',
-            status: 'Ontdek het volledige verhaal van Maison Anversa',
-            to: 'house' as MaisonPage,
-        },
-    ];
+
+    const cards: RelatedCard[] = related.map((item) => ({
+        key: item.slug,
+        cover: item.cover_asset,
+        title: item.name,
+        subtitle: item.hero_subtitle,
+        note: t(STATUS_LABELS[item.status] ?? item.status),
+        href: `${maisonUrl('products', locale)}/${item.slug}`,
+    }));
+
+    if (section?.include_house_card) {
+        cards.push({
+            key: 'house',
+            cover: 'atelier-workshop',
+            title: t('Het Huis'),
+            subtitle: t('Meer van ons'),
+            note: t('Ontdek het volledige verhaal van Maison Anversa'),
+            to: 'house',
+        });
+    }
+
+    if (cards.length === 0) {
+        return null;
+    }
 
     return (
         <Section tone="dark">
             <Wrap>
                 <Reveal className="mb-13 text-center">
-                    <Eyebrow>{t('Volgende Hoofdstukken')}</Eyebrow>
+                    {section?.eyebrow ? (
+                        <Eyebrow>{section.eyebrow}</Eyebrow>
+                    ) : null}
                     <GoldRule center className="mx-auto" />
-                    <h2 className="font-serif text-[clamp(28px,3.5vw,42px)] font-medium tracking-[0.04em] text-cream uppercase">
-                        {t('De volgende nummers.')}
-                    </h2>
+                    {section?.heading ? (
+                        <h2 className="font-serif text-[clamp(28px,3.5vw,42px)] font-medium tracking-[0.04em] text-cream uppercase">
+                            {section.heading}
+                        </h2>
+                    ) : null}
                 </Reveal>
 
                 <div className="grid gap-6 md:grid-cols-3">
@@ -92,8 +132,8 @@ export function ProductRelated({ related }: { related: RelatedEdition[] }) {
                             <>
                                 <div className="relative aspect-4/5 overflow-hidden">
                                     <RelatedCover
-                                        src={card.cover_asset}
-                                        alt={card.name}
+                                        src={card.cover}
+                                        alt={card.title}
                                     />
                                     <div
                                         aria-hidden="true"
@@ -102,15 +142,13 @@ export function ProductRelated({ related }: { related: RelatedEdition[] }) {
                                 </div>
                                 <div className="px-6.5 py-7.5">
                                     <div className="font-sans text-[9px] tracking-[0.25em] text-gold uppercase">
-                                        {card.name === 'Het Huis'
-                                            ? t(card.name)
-                                            : card.name}
+                                        {card.title}
                                     </div>
                                     <div className="my-2 font-serif text-[25px] text-cream">
-                                        {t(card.hero_subtitle)}
+                                        {card.subtitle}
                                     </div>
                                     <div className="text-xs leading-[1.6] text-sand">
-                                        {t(card.status)}
+                                        {card.note}
                                     </div>
                                 </div>
                             </>
@@ -118,7 +156,7 @@ export function ProductRelated({ related }: { related: RelatedEdition[] }) {
 
                         return (
                             <Reveal
-                                key={card.slug}
+                                key={card.key}
                                 className="overflow-hidden bg-choc2"
                             >
                                 {card.to ? (
@@ -130,7 +168,7 @@ export function ProductRelated({ related }: { related: RelatedEdition[] }) {
                                     </MaisonLink>
                                 ) : (
                                     <MaisonLink
-                                        href={`${maisonUrl('products', locale)}/${card.slug}`}
+                                        href={card.href ?? '#'}
                                         className="block transition-opacity hover:opacity-90"
                                     >
                                         {body}

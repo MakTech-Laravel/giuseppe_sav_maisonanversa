@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProductSectionKey;
 use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\Concerns\TranslatesWithDeepL;
@@ -55,12 +56,6 @@ class Product extends Model
         'expected_delivery_label',
         'sold_out_behavior',
         'gallery',
-        'specs',
-        'materials',
-        'unboxing_steps',
-        'includes',
-        'guarantees',
-        'trust_badges',
         'eyebrow',
         'hero_eyebrow',
         'hero_subtitle',
@@ -81,12 +76,6 @@ class Product extends Model
             'edition_total' => 'integer',
             'archive_edition_numbers' => 'array',
             'gallery' => 'array',
-            'specs' => 'array',
-            'materials' => 'array',
-            'unboxing_steps' => 'array',
-            'includes' => 'array',
-            'guarantees' => 'array',
-            'trust_badges' => 'array',
             'stock_quantity' => 'integer',
             'is_published' => 'boolean',
             'grants_founding_circle' => 'boolean',
@@ -108,6 +97,26 @@ class Product extends Model
     public function editionPieces(): HasMany
     {
         return $this->hasMany(EditionPiece::class);
+    }
+
+    /**
+     * @return HasMany<ProductSection, $this>
+     */
+    public function sections(): HasMany
+    {
+        return $this->hasMany(ProductSection::class)
+            ->orderBy('sort_order')
+            ->orderBy('id');
+    }
+
+    /**
+     * @return HasMany<ProductFaq, $this>
+     */
+    public function faqs(): HasMany
+    {
+        return $this->hasMany(ProductFaq::class)
+            ->orderBy('sort_order')
+            ->orderBy('id');
     }
 
     public static function founding(): ?self
@@ -218,42 +227,82 @@ class Product extends Model
      *     status: string,
      *     sort_order: int,
      *     gallery: array<int, string>,
-     *     specs: array<int, array{label: string, value: string}>,
-     *     materials: array<int, array{num: string, name: string, desc: string}>,
-     *     unboxing_steps: array<int, array{num: string, title: string, desc: string}>,
-     *     includes: array<int, string>,
-     *     guarantees: array<int, array{icon: string, text: string}>,
-     *     trust_badges: array<int, array{icon: string, text: string}>,
+     *     sections: array<int, array<string, mixed>>,
+     *     faqs: array<int, array{id: int, question: string, answer: string}>,
      *     amount: string,
      *     currency: string,
      *     expected_delivery_label: string,
      *     edition_total: int|null
      * }
      */
-    public function toPageShare(): array
+    public function toPageShare(?string $locale = null): array
     {
         return [
             'id' => $this->id,
             'slug' => $this->slug,
-            'name' => $this->translated('name'),
-            'eyebrow' => $this->translated('eyebrow'),
-            'hero_eyebrow' => $this->translated('hero_eyebrow'),
-            'hero_subtitle' => $this->translated('hero_subtitle'),
-            'description' => $this->translated('description'),
+            'name' => $this->translated('name', $locale),
+            'eyebrow' => $this->translated('eyebrow', $locale),
+            'hero_eyebrow' => $this->translated('hero_eyebrow', $locale),
+            'hero_subtitle' => $this->translated('hero_subtitle', $locale),
+            'description' => $this->translated('description', $locale),
             'status' => ($this->status ?? ProductStatus::Active)->value,
             'sort_order' => $this->sort_order ?? 0,
             'gallery' => $this->resolvedGallery(),
-            'specs' => $this->specs ?? [],
-            'materials' => $this->materials ?? [],
-            'unboxing_steps' => $this->unboxing_steps ?? [],
-            'includes' => $this->includes ?? [],
-            'guarantees' => $this->guarantees ?? [],
-            'trust_badges' => $this->trust_badges ?? [],
+            'sections' => $this->visibleSectionShare($locale),
+            'faqs' => $this->publishedFaqShare($locale),
             'amount' => (string) $this->amount,
             'currency' => $this->currency,
-            'expected_delivery_label' => $this->translated('expected_delivery_label'),
+            'expected_delivery_label' => $this->translated('expected_delivery_label', $locale),
             'edition_total' => $this->edition_total,
         ];
+    }
+
+    /**
+     * Visible sections in render order, keyed by section key for the frontend.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function visibleSectionShare(?string $locale = null): array
+    {
+        $this->loadMissing('sections.items');
+
+        return $this->sections
+            ->filter(fn (ProductSection $section): bool => $section->is_visible)
+            ->sortBy([['sort_order', 'asc'], ['id', 'asc']])
+            ->map(fn (ProductSection $section): array => $section->toPageShare($locale))
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return list<array{id: int, question: string, answer: string}>
+     */
+    public function publishedFaqShare(?string $locale = null): array
+    {
+        $this->loadMissing('faqs');
+
+        return $this->faqs
+            ->filter(fn (ProductFaq $faq): bool => $faq->is_published)
+            ->sortBy([['sort_order', 'asc'], ['id', 'asc']])
+            ->map(fn (ProductFaq $faq): array => $faq->toPageShare($locale))
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Items of a single section, regardless of its visibility flag.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function sectionItemShare(ProductSectionKey $key, ?string $locale = null): array
+    {
+        $this->loadMissing('sections.items');
+
+        $section = $this->sections->first(
+            fn (ProductSection $section): bool => $section->key === $key,
+        );
+
+        return $section?->toPageShare($locale)['items'] ?? [];
     }
 
     /**

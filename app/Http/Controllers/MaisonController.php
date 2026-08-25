@@ -56,7 +56,13 @@ class MaisonController extends Controller
                 $search = $filters['search'];
                 $query->where(function ($inner) use ($search): void {
                     $inner->where('name', 'like', "%{$search}%")
-                        ->orWhere('slug', 'like', "%{$search}%");
+                        ->orWhere('slug', 'like', "%{$search}%")
+                        ->orWhereHas('translations', function ($translations) use ($search): void {
+                            $translations
+                                ->where('column', 'name')
+                                ->where('locale', app()->getLocale())
+                                ->where('value', 'like', "%{$search}%");
+                        });
                 });
             })
             ->when($filters['status'] !== '', function ($query) use ($filters): void {
@@ -101,19 +107,14 @@ class MaisonController extends Controller
                 ->get();
         }
 
+        $product->loadMissing('sections.items', 'faqs');
+
         return $this->page('products/show', [
             'product' => $product->toPageShare(),
             'productCheckout' => Product::checkoutShare($product),
             'productEdition' => app(EditionInventory::class)->snapshot($product),
             'related' => $related
                 ->map(fn (Product $item): array => $item->toCardShare())
-                ->values()
-                ->all(),
-            'faqs' => Faq::publishedFor(FaqContext::Product)
-                ->map(fn (Faq $faq): array => [
-                    'question' => $faq->translated('question'),
-                    'answer' => $faq->translated('answer'),
-                ])
                 ->values()
                 ->all(),
         ]);
