@@ -1,22 +1,29 @@
 import { useTranslation } from 'react-i18next';
 import { ProductGallery } from '@/components/maison/product/product-gallery';
+import type { OrderProductContext } from '@/components/maison/shell/shell-actions';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import type { Edition } from '@/types/edition';
-import type { ProductPageData } from '@/pages/maison/product';
+import type { ProductPageData } from '@/pages/maison/products/show';
 
 export function ProductDetail({
     edition,
     product,
+    checkout,
 }: {
     edition: Edition;
     product: ProductPageData;
+    /** Per-product checkout context; omitted falls back to the founding SKU. */
+    checkout?: OrderProductContext;
 }) {
     const { t } = useTranslation();
     const { openOrder, openNewsletter } = useShellActions();
-    const { priceLabel, deliveryLabel } = useCheckoutDisplay();
+    const { priceLabel, deliveryLabel } = useCheckoutDisplay(checkout);
+    const isSoldOut = edition.soldOut || product.status === 'archived';
+    const isComingSoon = product.status === 'coming_soon';
+    const canReserve = !isSoldOut && !isComingSoon;
 
     return (
         <Section tone="cream" className="py-18">
@@ -82,7 +89,16 @@ export function ProductDetail({
                             </div>
                         ) : null}
 
-                        {edition.soldOut ? (
+                        {canReserve ? (
+                            <MaisonButton
+                                variant="filled"
+                                block
+                                onClick={() => openOrder(checkout)}
+                                className="mb-3"
+                            >
+                                {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
+                            </MaisonButton>
+                        ) : (
                             <MaisonButton
                                 variant="filled"
                                 block
@@ -91,17 +107,8 @@ export function ProductDetail({
                             >
                                 {t('Schrijf in voor Heritage Letter')}
                             </MaisonButton>
-                        ) : (
-                            <MaisonButton
-                                variant="filled"
-                                block
-                                onClick={openOrder}
-                                className="mb-3"
-                            >
-                                {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
-                            </MaisonButton>
                         )}
-                        {!edition.soldOut && (
+                        {canReserve && (
                             <MaisonButton
                                 variant="outlineChoc"
                                 block

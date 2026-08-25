@@ -3,6 +3,7 @@
 use App\Enums\FaqContext;
 use App\Enums\RoleEnum;
 use App\Models\Faq;
+use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -365,7 +366,7 @@ test('public faq pages serve translated copy for the active locale', function ()
         'answer' => 'Locale product antwoord',
     ]);
 
-    $this->get(route('maison.product', ['locale' => 'en']))
+    $this->get(route('maison.products.show', ['locale' => 'en', 'product' => Product::FOUNDING_SLUG]))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('faqs', fn ($faqs) => collect($faqs)->contains(
@@ -417,10 +418,10 @@ test('public product and contact pages only expose published faqs', function () 
         'answer' => 'Niet zichtbaar',
     ]);
 
-    $this->get(route('maison.product', ['locale' => 'nl']))
+    $this->get(route('maison.products.show', ['locale' => 'nl', 'product' => Product::FOUNDING_SLUG]))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('maison/product')
+            ->component('maison/products/show')
             ->where('faqs', fn ($faqs) => collect($faqs)->pluck('question')->doesntContain('Verborgen product FAQ'))
         );
 

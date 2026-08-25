@@ -5,6 +5,8 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
+import { useLocale } from '@/hooks/use-locale';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 
 type HomeProductData = {
     materials?: Array<{ name: string } | string>;
@@ -22,6 +24,7 @@ function badgeLabel(item: { text: string } | string): string {
 
 export function HomeProduct({ product }: { product?: HomeProductData | null }) {
     const { t } = useTranslation();
+    const { locale } = useLocale();
     const specs = [
         ...(product?.materials ?? []).map(materialLabel),
         ...(product?.trust_badges ?? []).map(badgeLabel),
@@ -67,7 +70,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                         <MaisonButton
                             as={MaisonLink}
                             variant="choc"
-                            to="product"
+                            href={foundingProductUrl(locale)}
                         >
                             {t('Ontdek het Racket →')}
                         </MaisonButton>

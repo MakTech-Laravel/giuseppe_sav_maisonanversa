@@ -10,7 +10,7 @@ import { PageHero } from '@/components/maison/ui/page-hero';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { useLocale } from '@/hooks/use-locale';
-import { maisonUrl } from '@/lib/maison-navigation';
+import { foundingProductUrl, maisonUrl } from '@/lib/maison-navigation';
 
 type DressingItemCard = {
     name: string;
@@ -87,7 +87,7 @@ export default function DressingShow({
                                 <MaisonButton
                                     as={MaisonLink}
                                     variant="choc"
-                                    to="product"
+                                    href={foundingProductUrl(locale)}
                                     className="w-fit"
                                 >
                                     {t('Ontdek Heritage No.001 →')}

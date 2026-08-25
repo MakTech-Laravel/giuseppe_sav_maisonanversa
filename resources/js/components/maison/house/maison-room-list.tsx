@@ -1,9 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
+import { useLocale } from '@/hooks/use-locale';
 import type { MaisonPage } from '@/lib/maison-navigation';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 
 type Room = {
-    to: MaisonPage;
+    /** Omitted for the Heritage No.001 room, which links to the founding product instead. */
+    to?: MaisonPage;
     num: string;
     name: string;
     /** When set, the name is left alone — French room titles stay as brand. */
@@ -30,7 +33,6 @@ const FLOORS: readonly Floor[] = [
                 sub: 'Onthaal · Home',
             },
             {
-                to: 'product',
                 num: '02',
                 name: 'Galerie',
                 sub: 'Heritage No.001',
@@ -93,6 +95,7 @@ const FLOORS: readonly Floor[] = [
  */
 export function MaisonRoomList() {
     const { t } = useTranslation();
+    const { locale } = useLocale();
 
     return (
         <div className="mx-auto max-w-140 min-[641px]:hidden">
@@ -101,29 +104,47 @@ export function MaisonRoomList() {
                     <p className="mt-6.5 mb-1.5 font-sans text-[8px] tracking-[0.3em] text-gold/70 uppercase first:mt-0">
                         {t(floor.label)}
                     </p>
-                    {floor.rooms.map((room) => (
-                        <MaisonLink
-                            key={room.num}
-                            to={room.to}
-                            className="flex items-center gap-4.5 border-b border-gold/14 py-5.5 transition-[padding] active:pl-3.5"
-                        >
-                            <span className="w-7.5 font-serif text-[13px] tracking-[0.1em] text-gold">
-                                {room.num}
-                            </span>
-                            <span className="flex-1 font-serif text-[21px] text-cream transition-colors hover:text-gold">
-                                {room.brand ? room.name : t(room.name)}
-                            </span>
-                            <span className="font-sans text-[9px] tracking-[0.2em] text-sand uppercase">
-                                {room.brandSub ? room.sub : t(room.sub)}
-                            </span>
-                            <span
-                                aria-hidden="true"
-                                className="text-base text-gold"
+                    {floor.rooms.map((room) => {
+                        const body = (
+                            <>
+                                <span className="w-7.5 font-serif text-[13px] tracking-[0.1em] text-gold">
+                                    {room.num}
+                                </span>
+                                <span className="flex-1 font-serif text-[21px] text-cream transition-colors hover:text-gold">
+                                    {room.brand ? room.name : t(room.name)}
+                                </span>
+                                <span className="font-sans text-[9px] tracking-[0.2em] text-sand uppercase">
+                                    {room.brandSub ? room.sub : t(room.sub)}
+                                </span>
+                                <span
+                                    aria-hidden="true"
+                                    className="text-base text-gold"
+                                >
+                                    →
+                                </span>
+                            </>
+                        );
+                        const className =
+                            'flex items-center gap-4.5 border-b border-gold/14 py-5.5 transition-[padding] active:pl-3.5';
+
+                        return room.to ? (
+                            <MaisonLink
+                                key={room.num}
+                                to={room.to}
+                                className={className}
                             >
-                                →
-                            </span>
-                        </MaisonLink>
-                    ))}
+                                {body}
+                            </MaisonLink>
+                        ) : (
+                            <MaisonLink
+                                key={room.num}
+                                href={foundingProductUrl(locale)}
+                                className={className}
+                            >
+                                {body}
+                            </MaisonLink>
+                        );
+                    })}
                 </div>
             ))}
         </div>

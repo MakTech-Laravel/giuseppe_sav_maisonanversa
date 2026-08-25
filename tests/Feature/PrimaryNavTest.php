@@ -20,7 +20,7 @@ test('the primary navigation connects all nine menu pages to live routes', funct
 
     $expected = [
         'house' => 'Het Huis',
-        'product' => 'Heritage No.001',
+        'products' => 'Producten',
         'story' => 'Ons Verhaal',
         'circle' => 'Founding Circle',
         'dressing' => 'Kleedkamer',

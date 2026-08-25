@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import type { OrderProductContext } from '@/components/maison/shell/shell-actions';
 import { ProductCraft } from '@/components/maison/product/product-craft';
 import { ProductDetail } from '@/components/maison/product/product-detail';
 import { ProductFaq } from '@/components/maison/product/product-faq';
@@ -16,6 +17,7 @@ export type ProductPageData = {
     hero_eyebrow: string;
     hero_subtitle: string;
     description: string;
+    status: string;
     gallery: string[];
     specs: Array<{ label: string; value: string }>;
     materials: Array<{ num: string; name: string; desc: string }>;
@@ -36,16 +38,19 @@ type ProductCard = {
     status: string;
     hero_subtitle: string;
     cover_asset: string | null;
+    slug: string;
 };
 
-export default function Product({
-    edition,
+export default function ProductShow({
+    productEdition,
     product,
+    productCheckout,
     faqs,
     related,
 }: {
-    edition: Edition;
+    productEdition: Edition;
     product: ProductPageData;
+    productCheckout: OrderProductContext;
     faqs: ProductFaqItem[];
     related: ProductCard[];
 }) {
@@ -69,7 +74,11 @@ export default function Product({
                 }
             />
 
-            <ProductDetail edition={edition} product={product} />
+            <ProductDetail
+                edition={productEdition}
+                product={product}
+                checkout={productCheckout}
+            />
             <ProductUnboxing steps={product.unboxing_steps} />
             <ProductCraft materials={product.materials} />
             <ProductTrust badges={product.trust_badges} />

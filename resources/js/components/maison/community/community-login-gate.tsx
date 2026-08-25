@@ -4,6 +4,8 @@ import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
+import { useLocale } from '@/hooks/use-locale';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 
 /**
  * Gate for guests. Opens the real Maison auth modal — Community access
@@ -12,6 +14,7 @@ import { Section, Wrap } from '@/components/maison/ui/section';
 export function CommunityLoginGate() {
     const { t } = useTranslation();
     const { openAuth } = useShellActions();
+    const { locale } = useLocale();
 
     return (
         <Section tone="cream" padded className="py-30 text-center">
@@ -75,7 +78,7 @@ export function CommunityLoginGate() {
                 </p>
 
                 <MaisonLink
-                    to="product"
+                    href={foundingProductUrl(locale)}
                     className="inline-block font-sans text-[10px] tracking-[0.2em] text-choc3 uppercase underline-offset-4 hover:text-choc hover:underline"
                 >
                     {t('Bekijk Heritage No.001 →')}
