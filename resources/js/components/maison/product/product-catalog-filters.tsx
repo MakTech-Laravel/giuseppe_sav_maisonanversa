@@ -14,7 +14,10 @@ import { maisonUrl } from '@/lib/maison-navigation';
 export type ProductCatalogFiltersState = {
     search: string;
     status: string;
+    per_page?: number;
 };
+
+const DEFAULT_PER_PAGE = 12;
 
 const fieldClassName =
     'w-full border border-gold/20 bg-cream px-4 py-3 font-serif text-base text-choc outline-none transition-colors focus:border-gold2';
@@ -43,6 +46,10 @@ export function ProductCatalogFilters({
                 {
                     search: search || undefined,
                     status: status === 'all' ? undefined : status,
+                    per_page:
+                        filters.per_page && filters.per_page !== DEFAULT_PER_PAGE
+                            ? filters.per_page
+                            : undefined,
                 },
                 { preserveState: true, preserveScroll: true, replace: true },
             );
@@ -50,7 +57,7 @@ export function ProductCatalogFilters({
 
         return () => clearTimeout(timeout);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, status]);
+    }, [search, status, filters.per_page]);
 
     return (
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center">
