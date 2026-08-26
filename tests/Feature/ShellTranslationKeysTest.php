@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ProductSectionKey;
 use Illuminate\Support\Facades\File;
 
 /*
@@ -35,10 +36,15 @@ function maisonTranslationKeys(): array
     $keys = [];
 
     $files = collect(File::allFiles(resource_path('js')))
-        ->filter(fn ($file) => str_contains(
-            str_replace('\\', '/', $file->getPathname()),
-            '/maison'
-        ))
+        ->filter(function ($file): bool {
+            $path = str_replace('\\', '/', $file->getPathname());
+
+            return str_contains($path, '/maison')
+                || str_contains($path, '/pages/admin/products/')
+                || str_contains($path, '/components/admin/product')
+                || str_contains($path, '/components/admin/form-stepper')
+                || str_contains($path, '/components/admin/repeater-field');
+        })
         ->filter(fn ($file) => in_array($file->getExtension(), ['ts', 'tsx'], true));
 
     foreach ($files as $file) {
@@ -59,15 +65,33 @@ function maisonTranslationKeys(): array
          * Labels and headings in the navigation manifest are passed to `t()`
          * indirectly, so the literal never appears beside a `t(` to be matched.
          */
-        preg_match_all("/(?:label|heading):\s*'((?:[^'\\\\]|\\\\.)*)'/", $contents, $manifest);
+        preg_match_all("/(?:label|heading|description):\s*'((?:[^'\\\\]|\\\\.)*)'/", $contents, $manifest);
 
         foreach ($manifest[1] as $key) {
             $found[] = stripcslashes($key);
         }
 
-        if ($found !== []) {
-            $keys[$file->getFilename()] = array_values(array_unique($found));
+        preg_match_all('/(?:addLabel|emptyLabel)="((?:[^"\\\\]|\\\\.)*)"/', $contents, $repeater);
+
+        foreach ($repeater[1] as $key) {
+            $found[] = stripcslashes($key);
         }
+
+        $found = array_values(array_filter(
+            array_unique($found),
+            fn (string $key): bool => $key !== '',
+        ));
+
+        if ($found !== []) {
+            $keys[$file->getFilename()] = $found;
+        }
+    }
+
+    foreach (ProductSectionKey::cases() as $section) {
+        $keys['ProductSectionKey::'.$section->name] = [
+            $section->label(),
+            $section->description(),
+        ];
     }
 
     return $keys;
