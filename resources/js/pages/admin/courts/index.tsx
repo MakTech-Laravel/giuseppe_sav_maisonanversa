@@ -292,11 +292,11 @@ export default function CourtsIndex({
                                                 <Link
                                                     href={courtsRoutes.show({
                                                         locale,
-                                                        court: court.id,
-                                                    })}
-                                                >
-                                                    <Eye className="h-4 w-4" />
-                                                    {t('Bekijken')}
+                                        court: Number(court.id),
+                                    })}
+                                >
+                                    <Eye className="h-4 w-4" />
+                                    {t('Bekijken')}
                                                 </Link>
                                             </Button>
                                             <Button
@@ -307,11 +307,11 @@ export default function CourtsIndex({
                                                 <Link
                                                     href={courtsRoutes.edit({
                                                         locale,
-                                                        court: court.id,
-                                                    })}
-                                                >
-                                                    <Pencil className="h-4 w-4" />
-                                                    {t('Bewerken')}
+                                        court: Number(court.id),
+                                    })}
+                                >
+                                    <Pencil className="h-4 w-4" />
+                                    {t('Bewerken')}
                                                 </Link>
                                             </Button>
                                             <ConfirmDeleteDialog
@@ -320,10 +320,10 @@ export default function CourtsIndex({
                                                 )}
                                                 onConfirm={() =>
                                                     router.delete(
-                                                        courtsRoutes.destroy({
-                                                            locale,
-                                                            court: court.id,
-                                                        }).url,
+                                    courtsRoutes.destroy({
+                                        locale,
+                                        court: Number(court.id),
+                                    }).url,
                                                     )
                                                 }
                                             >

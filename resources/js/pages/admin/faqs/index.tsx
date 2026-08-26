@@ -287,7 +287,7 @@ export default function FaqsIndex({
                                                 <Link
                                                     href={faqs.show({
                                                         locale,
-                                                        faq: faq.id,
+                                                        faq: Number(faq.id),
                                                     })}
                                                 >
                                                     <Eye className="h-4 w-4" />
@@ -302,7 +302,7 @@ export default function FaqsIndex({
                                                 <Link
                                                     href={faqs.edit({
                                                         locale,
-                                                        faq: faq.id,
+                                                        faq: Number(faq.id),
                                                     })}
                                                 >
                                                     <Pencil className="h-4 w-4" />
@@ -317,7 +317,9 @@ export default function FaqsIndex({
                                                     router.delete(
                                                         faqs.destroy({
                                                             locale,
-                                                            faq: faq.id,
+                                                            faq: Number(
+                                                                faq.id,
+                                                            ),
                                                         }).url,
                                                     )
                                                 }

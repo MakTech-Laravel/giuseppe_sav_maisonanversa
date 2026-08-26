@@ -66,7 +66,7 @@ export function PostTranslationsDialog({
     const form = useForm(
         communityPostsRoutes.translations.update({
             locale,
-            communityPost: postId,
+            communityPost: Number(postId),
         }),
         initialFormData(translations),
     );
@@ -91,8 +91,10 @@ export function PostTranslationsDialog({
     function retranslate(targetLocale?: PostLocale) {
         setTranslating(true);
         router.post(
-            communityPostsRoutes.translate({ locale, communityPost: postId })
-                .url,
+            communityPostsRoutes.translate({
+                locale,
+                communityPost: Number(postId),
+            }).url,
             targetLocale ? { target_locale: targetLocale } : {},
             {
                 preserveScroll: true,

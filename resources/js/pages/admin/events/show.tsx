@@ -122,7 +122,7 @@ export default function EventShow({
         router.patch(
             eventsRoutes.status({
                 locale: wayfinderLocale(),
-                event: event.id,
+                event: Number(event.id),
             }).url,
             { status: nextStatus },
             { preserveScroll: true },
@@ -148,7 +148,7 @@ export default function EventShow({
                         <Link
                             href={eventsRoutes.edit({
                                 locale: wayfinderLocale(),
-                                event: event.id,
+                                event: Number(event.id),
                             })}
                         >
                             <Pencil className="h-4 w-4" /> {t('Bewerken')}

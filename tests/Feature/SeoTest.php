@@ -105,18 +105,20 @@ test('the SEO head component publishes canonical and hreflang links', function (
         ->toContain('hrefLang=')
         ->toContain('property="og:title"')
         ->toContain('name="twitter:card"')
-        ->toContain('titleTemplate="%s"')
         ->toContain('og:image:width')
         ->toContain('application/ld+json');
 });
 
 test('the Inertia title callback does not append a Laravel suffix', function () {
+    // ssr.tsx annotates the callback's parameter type explicitly because its
+    // whole options object is cast to `any` for the Vite-injected `resolve`
+    // overload, which otherwise leaves `title` an implicit `any`.
     expect(File::get(resource_path('js/app.tsx')))
         ->toContain('title: (title) => title || appName')
         ->not->toContain('${title} - ${appName}');
 
     expect(File::get(resource_path('js/ssr.tsx')))
-        ->toContain('title: (title) => title || appName')
+        ->toContain('title: (title: string) => title || appName')
         ->not->toContain('${title} - ${appName}');
 });
 

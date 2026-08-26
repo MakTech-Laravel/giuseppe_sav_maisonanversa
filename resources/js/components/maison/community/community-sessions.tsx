@@ -256,8 +256,10 @@ function SessionPlannerForm({ onCreate }: SessionPlannerFormProps) {
     const { locale } = usePage().props;
     const [date, setDate] = useState('2027-02-08');
     const [time, setTime] = useState('10:00');
-    const [location, setLocation] = useState(SESSION_LOCATIONS[0] ?? 'Antwerp');
-    const [level, setLevel] = useState(SESSION_LEVELS[0] ?? '');
+    const [location, setLocation] = useState<string>(
+        SESSION_LOCATIONS[0] ?? 'Antwerp',
+    );
+    const [level, setLevel] = useState<string>(SESSION_LEVELS[0] ?? '');
     const [capacity, setCapacity] = useState('4');
     const [notes, setNotes] = useState('');
 

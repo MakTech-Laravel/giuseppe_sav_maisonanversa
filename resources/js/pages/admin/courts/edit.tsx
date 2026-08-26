@@ -28,7 +28,7 @@ export default function EditCourt({ court }: CourtEditProps) {
     const form = useForm(
         courtsRoutes.update({
             locale: wayfinderLocale(),
-            court: court.id,
+            court: Number(court.id),
         }),
         {
             title: court.title,
@@ -67,7 +67,7 @@ export default function EditCourt({ court }: CourtEditProps) {
                         <Link
                             href={courtsRoutes.show({
                                 locale: wayfinderLocale(),
-                                court: court.id,
+                                court: Number(court.id),
                             })}
                         >
                             <ArrowLeft className="h-4 w-4" /> {t('Terug')}

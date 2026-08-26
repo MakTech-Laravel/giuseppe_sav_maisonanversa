@@ -125,6 +125,6 @@ return [
     |
     */
 
-    'bureau_address' => env('BUREAU_MAIL_ADDRESS', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+    'bureau_address' => env('BUREAU_MAIL_ADDRESS') ?: env('MAIL_FROM_ADDRESS', 'hello@example.com'),
 
 ];
