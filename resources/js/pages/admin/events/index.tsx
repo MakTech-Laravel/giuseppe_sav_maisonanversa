@@ -133,7 +133,7 @@ export default function EventsIndex({
         router.delete(
             eventsRoutes.destroy({
                 locale: wayfinderLocale(),
-                event: eventId,
+                event: Number(eventId),
             }).url,
         );
     }
@@ -145,7 +145,7 @@ export default function EventsIndex({
         router.patch(
             eventsRoutes.status({
                 locale: wayfinderLocale(),
-                event: eventId,
+                event: Number(eventId),
             }).url,
             { status: nextStatus },
             { preserveScroll: true },
@@ -331,7 +331,9 @@ export default function EventsIndex({
                                                 <Link
                                                     href={eventsRoutes.show({
                                                         locale: wayfinderLocale(),
-                                                        event: event.id,
+                                                        event: Number(
+                                                            event.id,
+                                                        ),
                                                     })}
                                                     title={t(
                                                         'Boekingen bekijken',
@@ -348,7 +350,9 @@ export default function EventsIndex({
                                                 <Link
                                                     href={eventsRoutes.edit({
                                                         locale: wayfinderLocale(),
-                                                        event: event.id,
+                                                        event: Number(
+                                                            event.id,
+                                                        ),
                                                     })}
                                                     title={t('Bewerken')}
                                                 >

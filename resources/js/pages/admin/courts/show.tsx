@@ -105,7 +105,7 @@ export default function CourtShow({
                         <Link
                             href={courtsRoutes.edit({
                                 locale,
-                                court: court.id,
+                                court: Number(court.id),
                             })}
                         >
                             <Pencil className="h-4 w-4" /> {t('Bewerken')}
@@ -132,7 +132,7 @@ export default function CourtShow({
                                     <Link
                                         href={courtsRoutes.edit({
                                             locale,
-                                            court: court.id,
+                                            court: Number(court.id),
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
@@ -157,7 +157,7 @@ export default function CourtShow({
                                         router.delete(
                                             courtsRoutes.destroy({
                                                 locale,
-                                                court: court.id,
+                                                court: Number(court.id),
                                             }).url,
                                         )
                                     }

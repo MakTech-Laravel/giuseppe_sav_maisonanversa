@@ -92,7 +92,14 @@ export default function EditProduct({
     const { t } = useTranslation();
     const routeArgs = { locale: wayfinderLocale(), product: product.id };
 
-    const form = useForm(products.update(routeArgs), {
+    /**
+     * Typed explicitly (rather than via `satisfies`) so every field widens to
+     * its declared type — `satisfies` only checks compatibility, it does not
+     * stop e.g. `remove_primary_image: false` from being inferred as the
+     * literal `false` instead of `boolean`, which then fails to structurally
+     * match `ProductFormData` wherever `form.data` is passed around.
+     */
+    const initialData: ProductFormData = {
         name: product.name,
         slug: product.slug,
         type: product.type,
@@ -111,15 +118,17 @@ export default function EditProduct({
         hero_eyebrow: product.hero_eyebrow ?? '',
         hero_subtitle: product.hero_subtitle ?? '',
         description: product.description ?? '',
-        primary_image: null as File | null,
-        gallery_images: null as File[] | null,
+        primary_image: null,
+        gallery_images: null,
         remove_primary_image: false,
         gallery_keep: (product.gallery_images ?? []).map((file) =>
             String(file.id),
         ),
         sections: buildSectionForm(sectionCatalogue, product.sections ?? []),
         faqs: product.faqs ?? [],
-    } satisfies ProductFormData);
+    };
+
+    const form = useForm(products.update(routeArgs), initialData);
 
     /**
      * Each tab narrows the payload to the keys its endpoint owns, so saving one

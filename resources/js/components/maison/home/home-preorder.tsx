@@ -182,7 +182,7 @@ export function HomePreorder({
                                 <MaisonButton
                                     variant="gold"
                                     block
-                                    onClick={openOrder}
+                                    onClick={() => openOrder()}
                                     className="mb-3"
                                 >
                                     {t('Reserveer Uw Nummer')}

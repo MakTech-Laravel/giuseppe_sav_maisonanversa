@@ -218,7 +218,7 @@ test('staff can view an event detail', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/events/show')
             ->where('event.id', (string) $event->id)
-            ->has('event.guest_list')
+            ->has('event.bookings')
         );
 });
 

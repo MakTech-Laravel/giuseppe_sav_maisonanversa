@@ -32,7 +32,7 @@ export function PostEditDialog({ postId, content }: PostEditDialogProps) {
     const form = useForm(
         communityPostsRoutes.update({
             locale,
-            communityPost: postId,
+            communityPost: Number(postId),
         }),
         { content },
     );

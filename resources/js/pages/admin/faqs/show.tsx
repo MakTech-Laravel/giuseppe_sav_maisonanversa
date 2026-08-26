@@ -103,7 +103,7 @@ export default function ShowFaq({
                         <Link
                             href={faqs.edit({
                                 locale,
-                                faq: faq.id,
+                                faq: Number(faq.id),
                             })}
                         >
                             <Pencil className="h-4 w-4" /> {t('Bewerken')}
@@ -130,7 +130,7 @@ export default function ShowFaq({
                                     <Link
                                         href={faqs.edit({
                                             locale,
-                                            faq: faq.id,
+                                            faq: Number(faq.id),
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
@@ -155,7 +155,7 @@ export default function ShowFaq({
                                         router.delete(
                                             faqs.destroy({
                                                 locale,
-                                                faq: faq.id,
+                                                faq: Number(faq.id),
                                             }).url,
                                         )
                                     }

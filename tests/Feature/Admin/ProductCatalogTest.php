@@ -250,8 +250,8 @@ test('staff can open inventory for a limited product', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/heritage/index')
             ->where('inventory.total', 100)
-            ->where('inventory.rows.0.sku', $product->formatEditionSku(1))
-            ->where('inventory.rows.0.label', $product->formatEditionLabel(1))
+            ->where('pieces.data.0.sku', $product->formatEditionSku(1))
+            ->where('pieces.data.0.label', $product->formatEditionLabel(1))
         );
 });
 
@@ -319,7 +319,126 @@ test('staff can view a product details page', function () {
             ->where('product.primary_image.url', '/images/product/heritage-001-front.png')
             ->has('product.gallery_images', 3)
             ->where('product.gallery_images.0.url', '/images/product/heritage-001-detail-gravure.png')
+            ->has('product.sections', 9)
+            ->has('product.faqs', 4)
+            ->has('sectionCatalogue', 9)
         );
+});
+
+test('staff can save product sections independently from the edit form', function () {
+    $product = Product::factory()->create([
+        'name' => 'Section Test Product',
+        'slug' => 'section-test-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.sections.update', ['product' => $product->id]), [
+            'sections' => [
+                [
+                    'key' => 'specs',
+                    'eyebrow' => '',
+                    'heading' => 'Specificaties',
+                    'subheading' => '',
+                    'intro' => '',
+                    'image_key' => '',
+                    'is_visible' => true,
+                    'include_house_card' => true,
+                    'sort_order' => 0,
+                    'items' => [
+                        ['number_label' => '', 'icon' => '', 'title' => 'Gewicht', 'body' => '340 gram'],
+                    ],
+                ],
+                [
+                    'key' => 'craft',
+                    'eyebrow' => '',
+                    'heading' => 'Vakmanschap',
+                    'subheading' => '',
+                    'intro' => 'Handgemaakt in Antwerpen.',
+                    'image_key' => '',
+                    'is_visible' => false,
+                    'include_house_card' => true,
+                    'sort_order' => 1,
+                    'items' => [],
+                ],
+            ],
+        ])
+        ->assertRedirect();
+
+    $product->refresh()->loadMissing('sections.items');
+
+    $specs = $product->sections->firstWhere('key', 'specs');
+    $craft = $product->sections->firstWhere('key', 'craft');
+
+    expect($specs)->not->toBeNull()
+        ->and($specs->heading)->toBe('Specificaties')
+        ->and($specs->items)->toHaveCount(1)
+        ->and($specs->items->first()->title)->toBe('Gewicht')
+        ->and($craft)->not->toBeNull()
+        ->and($craft->is_visible)->toBeFalse();
+});
+
+test('staff can save product faqs independently from the edit form', function () {
+    $product = Product::factory()->create([
+        'name' => 'Faq Test Product',
+        'slug' => 'faq-test-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.faqs.update', ['product' => $product->id]), [
+            'faqs' => [
+                [
+                    'question' => 'Kan ik ruilen?',
+                    'answer' => 'Ja, binnen 30 dagen.',
+                    'is_published' => true,
+                ],
+                [
+                    'question' => 'Nog een concept vraag?',
+                    'answer' => 'Nog niet gepubliceerd.',
+                    'is_published' => false,
+                ],
+            ],
+        ])
+        ->assertRedirect();
+
+    $product->refresh()->loadMissing('faqs');
+
+    expect($product->faqs)->toHaveCount(2)
+        ->and($product->faqs->firstWhere('question', 'Kan ik ruilen?')?->is_published)->toBeTrue()
+        ->and($product->faqs->firstWhere('question', 'Nog een concept vraag?')?->is_published)->toBeFalse()
+        ->and($product->publishedFaqShare())->toHaveCount(1);
+});
+
+test('staff can save product media independently from the edit form', function () {
+    Storage::fake('public');
+
+    $product = Product::factory()->create([
+        'name' => 'Media Test Product',
+        'slug' => 'media-test-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+        'gallery' => [],
+    ]);
+
+    $galleryImage = UploadedFile::fake()->image('gallery.jpg', 800, 1000);
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.media.update', ['product' => $product->id]), [
+            'gallery_images' => [$galleryImage],
+            'gallery_keep' => [],
+        ])
+        ->assertRedirect();
+
+    $product->refresh();
+
+    expect($product->gallery)->toHaveCount(1);
+    Storage::disk('public')->assertExists($product->gallery[0]);
 });
 
 test('product display media urls resolve imagery asset keys for admin previews', function () {
@@ -330,6 +449,11 @@ test('product display media urls resolve imagery asset keys for admin previews',
 });
 
 test('viewers cannot create products', function () {
+    // The temporary AdminTypePermissionBypass grants every staff account full
+    // access while granular permission UI is hidden; disable it here so this
+    // test exercises real permission enforcement for the viewer role.
+    config(['maison.admin_type_grants_all_permissions' => false]);
+
     $viewer = User::factory()->admin()->create();
     $viewer->assignRole(RoleEnum::VIEWER->value);
     $viewer->syncTypeFromRoles();
