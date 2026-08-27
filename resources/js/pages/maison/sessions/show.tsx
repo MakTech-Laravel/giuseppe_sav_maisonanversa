@@ -98,7 +98,7 @@ export default function SessionShow({ session }: SessionShowProps) {
                         <div className="flex flex-wrap gap-3 border-b border-gold/15 px-7 py-5">
                             <Pill label={t(session.court_status_label)} />
                             {session.club?.is_partner && (
-                                <Pill label={t('Partner Club')} accent />
+                                <Pill label={t('Partnerclub')} accent />
                             )}
                             {session.is_cancelled && (
                                 <Pill label={t('Geannuleerd')} />

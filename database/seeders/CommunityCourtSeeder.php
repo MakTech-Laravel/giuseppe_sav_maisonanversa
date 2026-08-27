@@ -12,7 +12,7 @@ class CommunityCourtSeeder extends Seeder
         $courts = [
             [
                 'title' => 'Padel Club Antwerpen',
-                'body' => "Founding Club Corner · Demo racket beschikbaar\n\n8 courts · 24 MA leden · 4 sessies/week",
+                'body' => "Founding Club Corner · Demo racket beschikbaar\n\n8 banen · 24 MA-leden · 4 sessies/week",
                 'location' => 'Antwerpen, België',
                 'lat' => 51.2194,
                 'lng' => 4.4025,
@@ -21,7 +21,7 @@ class CommunityCourtSeeder extends Seeder
             ],
             [
                 'title' => 'Padel One Brussels',
-                'body' => "Club Corner · Heritage Paspoorten beschikbaar\n\n6 courts · 18 MA leden · 2 sessies/week",
+                'body' => "Club Corner · Heritage-paspoorten beschikbaar\n\n6 banen · 18 MA-leden · 2 sessies/week",
                 'location' => 'Brussel, België',
                 'lat' => 50.8503,
                 'lng' => 4.3517,

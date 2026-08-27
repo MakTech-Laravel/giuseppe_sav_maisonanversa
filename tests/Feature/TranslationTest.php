@@ -80,11 +80,20 @@ test('laravel resolves the translated copy for a known key', function () {
     expect(__('Het Huis'))->toBe('The House');
     expect(__('Catalogus'))->toBe('Product');
     expect(__('Product'))->toBe('Product');
+    expect(__('Producten'))->toBe('Products');
+    expect(__('Open evenementen'))->toBe('Open events');
+    expect(__('Alleen leden'))->toBe('Members only');
+    expect(__('Partnerclub'))->toBe('Partner club');
 
     App::setLocale('fr');
     expect(__('Het Huis'))->toBe('La Maison');
     expect(__('Catalogus'))->toBe('Produit');
     expect(__('Product'))->toBe('Produit');
+    expect(__('Producten'))->toBe('Produits');
+    expect(__('Open evenementen'))->toBe('Événements ouverts');
+    expect(__('Alleen leden'))->toBe('Membres uniquement');
+    expect(__('Partnerclub'))->toBe('Club partenaire');
+    expect(__('Georganiseerd door Maison Anversa.'))->toBe('Organisés par Maison Anversa.');
 });
 
 test('an untranslated key falls back to its dutch source text', function (string $locale) {

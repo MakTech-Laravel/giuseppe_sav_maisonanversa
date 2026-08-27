@@ -38,7 +38,7 @@ export function CommunityTabs() {
         },
         {
             id: 'courts',
-            label: 'Club Corners & Courts',
+            label: 'Club Corners & banen',
             href: maison.community.url(locale, { query: { tab: 'courts' } }),
         },
         {
@@ -48,7 +48,7 @@ export function CommunityTabs() {
         },
         {
             id: 'events',
-            label: 'Exclusieve Events',
+            label: 'Exclusieve Evenementen',
             href: eventRoutes.index.url(locale),
         },
     ];
