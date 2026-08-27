@@ -274,7 +274,7 @@ export default function EditProduct({
 EditProduct.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Catalogus', href: products.index(wayfinderLocale()) },
+        { title: 'Product', href: products.index(wayfinderLocale()) },
         { title: 'Bewerken', href: products.index(wayfinderLocale()) },
     ],
 };

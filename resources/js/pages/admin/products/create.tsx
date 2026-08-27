@@ -231,7 +231,7 @@ export default function CreateProduct({
 CreateProduct.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Catalogus', href: products.index(wayfinderLocale()) },
+        { title: 'Product', href: products.index(wayfinderLocale()) },
         { title: 'Aanmaken', href: products.create(wayfinderLocale()) },
     ],
 };

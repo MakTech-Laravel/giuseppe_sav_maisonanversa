@@ -614,7 +614,7 @@ export default function ShowProduct({
 ShowProduct.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Catalogus', href: products.index(wayfinderLocale()) },
+        { title: 'Product', href: products.index(wayfinderLocale()) },
         { title: 'Bekijken', href: products.index(wayfinderLocale()) },
     ],
 };
