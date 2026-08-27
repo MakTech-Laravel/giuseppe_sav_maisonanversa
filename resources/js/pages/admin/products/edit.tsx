@@ -198,7 +198,7 @@ export default function EditProduct({
                     <Button variant="outline" asChild>
                         <Link href={products.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar catalogus')}
+                            {t('Terug naar product')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
