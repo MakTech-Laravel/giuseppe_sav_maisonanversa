@@ -4,6 +4,7 @@ namespace App\Http\Responses;
 
 use App\Models\User;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Services\Newsletter\HeritageLetterSubscription;
 use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
@@ -11,12 +12,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginResponse implements LoginResponseContract
 {
-    public function __construct(public PostLoginRedirectService $redirects) {}
+    public function __construct(
+        public PostLoginRedirectService $redirects,
+        public HeritageLetterSubscription $heritageLetter,
+    ) {}
 
     public function toResponse($request): Response
     {
         /** @var User $user */
         $user = $request->user();
+
+        $this->heritageLetter->claimForUser($user);
 
         Inertia::flash('toast', [
             'type' => 'success',

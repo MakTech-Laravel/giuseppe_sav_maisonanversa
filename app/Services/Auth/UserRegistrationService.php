@@ -6,10 +6,13 @@ use App\Enums\GuardEnum;
 use App\Enums\RoleEnum;
 use App\Enums\UserType;
 use App\Models\User;
+use App\Services\Newsletter\HeritageLetterSubscription;
 use Spatie\Permission\Models\Role;
 
 class UserRegistrationService
 {
+    public function __construct(public HeritageLetterSubscription $heritageLetter) {}
+
     /**
      * Create a new customer account.
      *
@@ -28,6 +31,8 @@ class UserRegistrationService
 
         Role::findOrCreate(RoleEnum::USER->value, GuardEnum::WEB->value);
         $user->assignRole(RoleEnum::USER->value);
+
+        $this->heritageLetter->claimForUser($user);
 
         return $user;
     }

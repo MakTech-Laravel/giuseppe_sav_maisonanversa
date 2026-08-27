@@ -137,11 +137,30 @@ class DashboardController extends Controller implements HasMiddleware
 
     public function letter(Request $request, string $locale, HeritageLetterSubscription $subscription): Response
     {
+        $subscriptions = $subscription->subscriptionsFor($request->user())
+            ->map(fn (NewsletterSubscriber $subscriber): array => [
+                'id' => $subscriber->id,
+                'email' => $subscriber->email,
+                'source' => $subscriber->source->value,
+                'status' => $subscriber->status->value,
+                'preferences' => $subscriber->topicPreferences(),
+                'joined_at' => $subscriber->consent_at?->toDateString()
+                    ?? $subscriber->created_at?->toDateString(),
+            ])
+            ->values();
+
+        return Inertia::render('member/letter', [
+            'subscriptions' => $subscriptions,
+        ]);
+    }
+
+    public function emailPreferences(Request $request, string $locale, HeritageLetterSubscription $subscription): Response
+    {
         $subscriber = NewsletterSubscriber::query()
             ->where('email', Str::lower($request->user()->email))
             ->first();
 
-        return Inertia::render('member/letter', [
+        return Inertia::render('member/email-preferences', [
             'preferences' => $subscriber
                 ? $subscription->normalizePreferences($subscriber->preferences ?? [])
                 : [
@@ -153,7 +172,7 @@ class DashboardController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function updateLetter(
+    public function updateEmailPreferences(
         UpdateLetterPreferencesRequest $request,
         string $locale,
         HeritageLetterSubscription $subscription,
