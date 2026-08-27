@@ -49,9 +49,9 @@ final class MaisonSeo
             'title' => 'Het Huis — Maison Anversa',
             'description' => 'Ontdek het Huis van Maison Anversa — acht kamers, één erfgoedverhaal, geworteld in Antwerpen.',
         ],
-        'product' => [
-            'title' => 'Heritage No.001 — Maison Anversa',
-            'description' => 'Heritage No.001 — het eerste hoofdstuk van Maison Anversa. Beperkt tot 100 genummerde stuks wereldwijd.',
+        'products' => [
+            'title' => 'Producten — Maison Anversa',
+            'description' => 'Ontdek de collectie van Maison Anversa — Heritage No.001 en de volgende hoofdstukken van het huis.',
         ],
         'story' => [
             'title' => 'Ons Verhaal — Maison Anversa',
@@ -147,10 +147,11 @@ final class MaisonSeo
         $routeName = Route::currentRouteName();
         $page = self::pageKey($routeName);
         $article = self::journalArticle($request, $routeName);
-        $indexable = self::isIndexable($routeName, $article);
-        $canonical = self::canonical($request, $routeName, $locale, $origin, $article);
-        $copy = self::copy($page, $article, $routeName);
-        $hreflang = self::hreflang($routeName, $article);
+        $product = self::productForSeo($request, $routeName);
+        $indexable = self::isIndexable($routeName, $article, $product);
+        $canonical = self::canonical($request, $routeName, $locale, $origin, $article, $product);
+        $copy = self::copy($page, $article, $routeName, $product);
+        $hreflang = self::hreflang($routeName, $article, $product);
         $ogImage = self::absoluteUrl($origin, (string) config('maison.seo.image'));
 
         return [
@@ -175,6 +176,7 @@ final class MaisonSeo
                 $origin,
                 $article,
                 $locale,
+                $product,
             ),
             'articlePublishedTime' => $article?->published_at?->toIso8601String(),
             'articleModifiedTime' => $article?->updated_at?->toIso8601String(),
@@ -208,6 +210,10 @@ final class MaisonSeo
             return 'journal';
         }
 
+        if ($routeName === 'maison.products.show') {
+            return 'products';
+        }
+
         if (is_string($routeName) && str_starts_with($routeName, 'maison.')) {
             $key = substr($routeName, strlen('maison.'));
 
@@ -217,10 +223,14 @@ final class MaisonSeo
         return null;
     }
 
-    private static function isIndexable(?string $routeName, ?JournalArticle $article): bool
+    private static function isIndexable(?string $routeName, ?JournalArticle $article, ?Product $product): bool
     {
         if ($routeName === 'maison.journal.show') {
             return $article !== null;
+        }
+
+        if ($routeName === 'maison.products.show') {
+            return $product !== null;
         }
 
         $page = self::pageKey($routeName);
@@ -246,10 +256,32 @@ final class MaisonSeo
             ->first();
     }
 
+    private static function productForSeo(Request $request, ?string $routeName): ?Product
+    {
+        if ($routeName !== 'maison.products.show') {
+            return null;
+        }
+
+        $product = $request->route('product');
+
+        if ($product instanceof Product) {
+            return $product->is_published ? $product : null;
+        }
+
+        if (! is_string($product) || $product === '') {
+            return null;
+        }
+
+        return Product::query()
+            ->where('slug', $product)
+            ->where('is_published', true)
+            ->first();
+    }
+
     /**
      * @return array{title: string, description: string}
      */
-    private static function copy(?string $page, ?JournalArticle $article, ?string $routeName): array
+    private static function copy(?string $page, ?JournalArticle $article, ?string $routeName, ?Product $product = null): array
     {
         if ($article !== null) {
             $title = $article->translated('title') ?: (string) $article->title;
@@ -257,6 +289,15 @@ final class MaisonSeo
             return [
                 'title' => $title.' — Maison Anversa',
                 'description' => $article->translated('excerpt') ?: (string) $article->excerpt,
+            ];
+        }
+
+        if ($product !== null) {
+            $title = $product->translated('name') ?: (string) $product->name;
+
+            return [
+                'title' => $title.' — Maison Anversa',
+                'description' => $product->translated('description') ?: (string) $product->description,
             ];
         }
 
@@ -308,11 +349,19 @@ final class MaisonSeo
         string $locale,
         string $origin,
         ?JournalArticle $article,
+        ?Product $product = null,
     ): string {
         if ($routeName === 'maison.journal.show' && $article !== null) {
             return route('maison.journal.show', [
                 'locale' => $locale,
                 'slug' => $article->slug,
+            ]);
+        }
+
+        if ($routeName === 'maison.products.show' && $product !== null) {
+            return route('maison.products.show', [
+                'locale' => $locale,
+                'product' => $product->slug,
             ]);
         }
 
@@ -336,7 +385,7 @@ final class MaisonSeo
     /**
      * @return list<HreflangLink>
      */
-    private static function hreflang(?string $routeName, ?JournalArticle $article): array
+    private static function hreflang(?string $routeName, ?JournalArticle $article, ?Product $product = null): array
     {
         if (! is_string($routeName) || ! Route::has($routeName)) {
             return [];
@@ -354,6 +403,10 @@ final class MaisonSeo
 
         if ($article !== null) {
             $parameters['slug'] = $article->slug;
+        }
+
+        if ($product !== null) {
+            $parameters['product'] = $product->slug;
         }
 
         $links = [];
@@ -407,6 +460,7 @@ final class MaisonSeo
         string $origin,
         ?JournalArticle $article,
         string $locale,
+        ?Product $product = null,
     ): array {
         if ($page === null && $article === null) {
             return [];
@@ -483,9 +537,9 @@ final class MaisonSeo
             ];
         }
 
-        if ($page === 'product') {
-            $graph[] = self::productSchema($canonical, $description, $ogImage, $organizationId);
-            $productFaqs = self::publishedFaqItems(FaqContext::Product);
+        if ($page === 'products' && $product !== null) {
+            $graph[] = self::productSchema($canonical, $description, $ogImage, $organizationId, $product);
+            $productFaqs = self::publishedProductFaqItems($product);
 
             if ($productFaqs !== []) {
                 $graph[] = self::faqSchema($productFaqs);
@@ -514,9 +568,10 @@ final class MaisonSeo
         string $description,
         string $ogImage,
         string $organizationId,
+        Product $product,
     ): array {
-        $checkout = Product::checkoutShare();
-        $snapshot = app(EditionInventory::class)->snapshot(Product::founding());
+        $checkout = Product::checkoutShare($product);
+        $snapshot = app(EditionInventory::class)->snapshot($product);
         $availability = ($snapshot['soldOut'] ?? false)
             ? 'https://schema.org/SoldOut'
             : 'https://schema.org/PreOrder';
@@ -534,12 +589,26 @@ final class MaisonSeo
 
         return [
             '@type' => 'Product',
-            'name' => $checkout['productName'] !== '' ? $checkout['productName'] : 'Heritage No.001',
+            'name' => $checkout['productName'] !== '' ? $checkout['productName'] : $product->name,
             'description' => $description,
             'image' => $ogImage,
             'brand' => ['@id' => $organizationId],
             'offers' => $offer,
         ];
+    }
+
+    /**
+     * @return list<array{question: string, answer: string}>
+     */
+    private static function publishedProductFaqItems(Product $product): array
+    {
+        return array_map(
+            fn (array $faq): array => [
+                'question' => $faq['question'],
+                'answer' => $faq['answer'],
+            ],
+            $product->publishedFaqShare(),
+        );
     }
 
     /**

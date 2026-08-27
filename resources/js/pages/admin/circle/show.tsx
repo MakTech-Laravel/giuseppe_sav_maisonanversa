@@ -45,7 +45,7 @@ export default function CircleShow({
         router.delete(
             circleRoutes.remove({
                 locale: wayfinderLocale(),
-                member: member.id,
+                member: Number(member.id),
             }).url,
             {
                 onSuccess: () => {

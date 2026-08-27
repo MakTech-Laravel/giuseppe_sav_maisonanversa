@@ -15,7 +15,10 @@ beforeEach(function () {
 });
 
 test('site settings are shared globally', function () {
-    SiteSetting::query()->create([
+    // SiteSetting is a singleton row: the global test suite seeder already
+    // creates it, so this test updates the existing record rather than
+    // inserting a second one that SiteSetting::current() would never read.
+    SiteSetting::current()->update([
         'phone' => '+32123456789',
         'whatsapp' => '32123456789',
         'email_hello' => 'hello@test.com',

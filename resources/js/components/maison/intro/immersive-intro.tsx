@@ -26,6 +26,7 @@ import {
     removeBootCover,
     ROOM_COUNT,
 } from '@/lib/maison-intro';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 import { cn } from '@/lib/utils';
 
 /** The prototype's `setTimeout(..., 15000)`, restarted on every advance. */
@@ -474,7 +475,9 @@ function IntroStage({ onDismissed }: { onDismissed: () => void }) {
                             <MaisonButton
                                 as={MaisonLink}
                                 variant="intro"
-                                to={destination}
+                                {...(destination === 'founding-product'
+                                    ? { href: foundingProductUrl(locale) }
+                                    : { to: destination })}
                                 onClick={markSeen}
                             >
                                 {t('Betreed kamer →')}

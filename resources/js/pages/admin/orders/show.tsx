@@ -40,7 +40,7 @@ export default function ShowOrder({ order }: { order: Order }) {
         router.patch(
             orders.update({
                 locale: wayfinderLocale(),
-                order: order.id,
+                order: Number(order.id),
             }).url,
             { status },
             { preserveScroll: true },

@@ -31,7 +31,7 @@ function multipartUpdateEndpoint(
 ): { url: string; method: 'post' } {
     const formDef = eventsRoutes.update.form({
         locale,
-        event: eventId,
+        event: Number(eventId),
     });
 
     return {
@@ -90,7 +90,7 @@ export default function EditEvent({ event }: EventEditProps) {
                         <Link
                             href={eventsRoutes.show({
                                 locale: wayfinderLocale(),
-                                event: event.id,
+                                event: Number(event.id),
                             })}
                         >
                             <ArrowLeft className="h-4 w-4" /> {t('Terug')}

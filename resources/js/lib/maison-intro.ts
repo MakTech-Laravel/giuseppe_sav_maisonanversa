@@ -21,9 +21,12 @@ export type IntroSlide = {
     room: ImageAssetName;
     /**
      * Where "enter this room" leads. The entrance hall is an arrival rather
-     * than a room, so it offers nothing to enter.
+     * than a room, so it offers nothing to enter. `'founding-product'` is the
+     * Atelier room's special case: it links straight to Heritage No.001
+     * rather than to the products catalog, so it carries a slug and is
+     * resolved via `foundingProductUrl()` instead of `maisonUrl()`.
      */
-    destination: MaisonPage | null;
+    destination: MaisonPage | 'founding-product' | null;
     copy: Record<Locale, RoomCopy>;
 };
 
@@ -84,7 +87,7 @@ export const INTRO_SLIDES: readonly IntroSlide[] = [
     },
     {
         room: 'room-atelier',
-        destination: 'product',
+        destination: 'founding-product',
         copy: {
             nl: {
                 eyebrow: 'Kamer II',

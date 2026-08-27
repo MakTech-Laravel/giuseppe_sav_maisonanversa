@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Admin\Concerns;
 
+use App\Enums\ProductSectionKey;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Str;
@@ -13,6 +15,12 @@ trait PreparesProductPayload
 {
     protected function prepareProductPayload(): void
     {
+        // `gallery_keep` doubles as the "this request carries media" marker, so
+        // it must not be synthesized when the client never sent it.
+        if ($this->has('gallery_keep')) {
+            $this->merge(['gallery_keep' => $this->parsedGalleryKeep()]);
+        }
+
         $this->merge([
             'is_published' => $this->boolean('is_published'),
             'grants_founding_circle' => $this->boolean('grants_founding_circle'),
@@ -28,7 +36,11 @@ trait PreparesProductPayload
             'description' => $this->nullableTrimmed('description'),
             'expected_delivery_label' => $this->nullableTrimmed('expected_delivery_label'),
             'archive_edition_numbers' => $this->parsedArchiveNumbers(),
-            'gallery_keep' => $this->parsedGalleryKeep(),
+            'sort_order' => (int) $this->input('sort_order', 0),
+            'status' => filled($this->input('status'))
+                ? (string) $this->input('status')
+                : ProductStatus::Active->value,
+            ...$this->normalizedProductContent(),
         ]);
     }
 
@@ -47,6 +59,8 @@ trait PreparesProductPayload
         return [
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', Rule::enum(ProductType::class)],
+            'status' => ['required', Rule::enum(ProductStatus::class)],
+            'sort_order' => ['required', 'integer', 'min:0', 'max:100000'],
             'amount' => ['required', 'numeric', 'decimal:0,2', 'gt:0'],
             'edition_total' => [
                 'nullable',
@@ -78,7 +92,99 @@ trait PreparesProductPayload
             'remove_primary_image' => ['sometimes', 'boolean'],
             'gallery_keep' => ['nullable', 'array'],
             'gallery_keep.*' => ['string', 'max:255'],
+            ...$this->productContentRules(),
         ];
+    }
+
+    /**
+     * Nested section / item / FAQ rules shared by store and the partial-save
+     * endpoints.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    protected function productContentRules(): array
+    {
+        return [
+            'sections' => ['nullable', 'array', 'max:'.count(ProductSectionKey::cases())],
+            'sections.*.key' => ['required', Rule::enum(ProductSectionKey::class)],
+            'sections.*.eyebrow' => ['nullable', 'string', 'max:255'],
+            'sections.*.heading' => ['nullable', 'string', 'max:255'],
+            'sections.*.subheading' => ['nullable', 'string', 'max:255'],
+            'sections.*.intro' => ['nullable', 'string', 'max:5000'],
+            'sections.*.image_key' => ['nullable', 'string', 'max:255'],
+            'sections.*.is_visible' => ['required', 'boolean'],
+            'sections.*.include_house_card' => ['required', 'boolean'],
+            'sections.*.sort_order' => ['required', 'integer', 'min:0', 'max:100'],
+            'sections.*.items' => ['nullable', 'array', 'max:50'],
+            'sections.*.items.*.number_label' => ['nullable', 'string', 'max:40'],
+            'sections.*.items.*.icon' => ['nullable', 'string', 'max:40'],
+            'sections.*.items.*.title' => ['nullable', 'string', 'max:255'],
+            'sections.*.items.*.body' => ['nullable', 'string', 'max:5000'],
+            'faqs' => ['nullable', 'array', 'max:50'],
+            'faqs.*.question' => ['required', 'string', 'max:1000'],
+            'faqs.*.answer' => ['required', 'string', 'max:10000'],
+            'faqs.*.is_published' => ['required', 'boolean'],
+        ];
+    }
+
+    /**
+     * Normalizes booleans inside the nested section / FAQ arrays, which arrive
+     * as "0"/"1" strings when the form is submitted as multipart.
+     *
+     * @return array<string, mixed>
+     */
+    protected function normalizedProductContent(): array
+    {
+        $sections = $this->input('sections');
+        $faqs = $this->input('faqs');
+
+        $payload = [];
+
+        if (is_array($sections)) {
+            $payload['sections'] = array_values(array_map(
+                function (mixed $section): array {
+                    $section = is_array($section) ? $section : [];
+                    $section['is_visible'] = filter_var(
+                        $section['is_visible'] ?? true,
+                        FILTER_VALIDATE_BOOLEAN,
+                    );
+                    $section['include_house_card'] = filter_var(
+                        $section['include_house_card'] ?? true,
+                        FILTER_VALIDATE_BOOLEAN,
+                    );
+                    $section['sort_order'] = (int) ($section['sort_order'] ?? 0);
+                    $section['items'] = array_values(array_filter(
+                        is_array($section['items'] ?? null) ? $section['items'] : [],
+                        fn (mixed $item): bool => is_array($item)
+                            && (filled($item['title'] ?? null) || filled($item['body'] ?? null)),
+                    ));
+
+                    return $section;
+                },
+                $sections,
+            ));
+        }
+
+        if (is_array($faqs)) {
+            $payload['faqs'] = array_values(array_map(
+                function (mixed $faq): array {
+                    $faq = is_array($faq) ? $faq : [];
+                    $faq['is_published'] = filter_var(
+                        $faq['is_published'] ?? true,
+                        FILTER_VALIDATE_BOOLEAN,
+                    );
+
+                    return $faq;
+                },
+                array_filter(
+                    $faqs,
+                    fn (mixed $faq): bool => is_array($faq)
+                        && (filled($faq['question'] ?? null) || filled($faq['answer'] ?? null)),
+                ),
+            ));
+        }
+
+        return $payload;
     }
 
     protected function withProductValidator(Validator $validator): void

@@ -11,7 +11,7 @@ import { PageHero } from '@/components/maison/ui/page-hero';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { useLocale } from '@/hooks/use-locale';
-import { maisonUrl } from '@/lib/maison-navigation';
+import { foundingProductUrl, maisonUrl } from '@/lib/maison-navigation';
 
 const VALUES = [
     {
@@ -240,7 +240,11 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                             'Founding Circle leden krijgen 48 uur exclusieve toegang tot de Kleedkamer collectie vóór de openbare release.',
                         )}
                     </p>
-                    <MaisonButton as={MaisonLink} variant="choc" to="product">
+                    <MaisonButton
+                        as={MaisonLink}
+                        variant="choc"
+                        href={foundingProductUrl(locale)}
+                    >
                         {t('Ontdek Heritage No.001 →')}
                     </MaisonButton>
                 </Wrap>

@@ -3,19 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\EditionPieceStatus;
+use App\Enums\ProductSectionKey;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\TranslateProductRequest;
+use App\Http\Requests\Admin\UpdateProductFaqsRequest;
+use App\Http\Requests\Admin\UpdateProductMediaRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
+use App\Http\Requests\Admin\UpdateProductSectionsRequest;
 use App\Http\Requests\Admin\UpdateProductTranslationsRequest;
 use App\Models\EditionPiece;
 use App\Models\Product;
+use App\Models\ProductFaq;
+use App\Models\ProductSection;
+use App\Models\ProductSectionItem;
 use App\Services\Edition\EditionInventory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -105,28 +114,39 @@ class ProductController extends Controller
 
     public function create(string $locale): Response
     {
-        return Inertia::render('admin/products/create');
+        return Inertia::render('admin/products/create', [
+            'sectionCatalogue' => ProductSectionKey::catalogue(),
+        ]);
     }
 
     public function show(string $locale, Product $product): Response
     {
-        $product->loadMissing('translations');
+        $product->loadMissing('translations', 'sections.items', 'faqs');
 
         return Inertia::render('admin/products/show', [
             'product' => $this->translatedProduct($product, $locale),
             'locales' => $this->translationLocales(),
             'translations' => $this->translationBundle($product),
             'translationStatus' => $this->translationStatus($product),
+            'sectionCatalogue' => ProductSectionKey::catalogue(),
         ]);
     }
 
     public function store(StoreProductRequest $request, string $locale): RedirectResponse
     {
         $validated = $request->validated();
-        $payload = $this->payload($validated);
-        $payload['gallery'] = $this->syncGallery([], $validated, $request);
 
-        $product = Product::query()->create($payload);
+        $product = DB::transaction(function () use ($validated, $request): Product {
+            $payload = $this->payload($validated);
+            $payload['gallery'] = $this->syncGallery([], $validated, $request);
+
+            $product = Product::query()->create($payload);
+
+            $this->syncSections($product, $validated['sections'] ?? []);
+            $this->syncFaqs($product, $validated['faqs'] ?? []);
+
+            return $product;
+        });
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product aangemaakt.')]);
 
@@ -138,18 +158,37 @@ class ProductController extends Controller
 
     public function edit(string $locale, Product $product): Response
     {
+        $product->loadMissing('sections.items', 'faqs');
+
         return Inertia::render('admin/products/edit', [
             'product' => $this->formProduct($product),
+            'sectionCatalogue' => ProductSectionKey::catalogue(),
         ]);
     }
 
     public function update(UpdateProductRequest $request, string $locale, Product $product): RedirectResponse
     {
         $validated = $request->validated();
-        $payload = $this->payload($validated);
-        $payload['gallery'] = $this->syncGallery($product->gallery ?? [], $validated, $request);
 
-        $product->update($payload);
+        DB::transaction(function () use ($validated, $request, $product): void {
+            $payload = $this->payload($validated);
+
+            // Tabbed edit screen saves media separately; leave the gallery
+            // untouched when this request carries no media fields at all.
+            if ($this->carriesMedia($request, $validated)) {
+                $payload['gallery'] = $this->syncGallery($product->gallery ?? [], $validated, $request);
+            }
+
+            $product->update($payload);
+
+            if (array_key_exists('sections', $validated)) {
+                $this->syncSections($product, $validated['sections'] ?? []);
+            }
+
+            if (array_key_exists('faqs', $validated)) {
+                $this->syncFaqs($product, $validated['faqs'] ?? []);
+            }
+        });
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Product bijgewerkt.')]);
 
@@ -157,6 +196,144 @@ class ProductController extends Controller
             'locale' => $locale,
             'product' => $product->id,
         ]);
+    }
+
+    /**
+     * Media tab of the edit screen: gallery only, so nothing else is touched.
+     */
+    public function updateMedia(UpdateProductMediaRequest $request, string $locale, Product $product): RedirectResponse
+    {
+        $product->update([
+            'gallery' => $this->syncGallery($product->gallery ?? [], $request->validated(), $request),
+        ]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Afbeeldingen bijgewerkt.')]);
+
+        return back();
+    }
+
+    public function updateSections(
+        UpdateProductSectionsRequest $request,
+        string $locale,
+        Product $product,
+    ): RedirectResponse {
+        DB::transaction(fn () => $this->syncSections($product, $request->validated('sections') ?? []));
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Secties opgeslagen.')]);
+
+        return back();
+    }
+
+    public function updateFaqs(
+        UpdateProductFaqsRequest $request,
+        string $locale,
+        Product $product,
+    ): RedirectResponse {
+        DB::transaction(fn () => $this->syncFaqs($product, $request->validated('faqs') ?? []));
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Veelgestelde vragen opgeslagen.')]);
+
+        return back();
+    }
+
+    /**
+     * Replaces the product's sections with the submitted set. Sections keep
+     * their row (and therefore their translations) when the key already
+     * exists; items are rewritten because they carry no stable client id.
+     *
+     * @param  array<int, array<string, mixed>>  $sections
+     */
+    private function syncSections(Product $product, array $sections): void
+    {
+        $keptKeys = [];
+
+        foreach (array_values($sections) as $index => $section) {
+            $key = ProductSectionKey::from((string) $section['key']);
+            $keptKeys[] = $key->value;
+
+            /** @var ProductSection $model */
+            $model = $product->sections()->updateOrCreate(
+                ['key' => $key->value],
+                [
+                    'eyebrow' => $section['eyebrow'] ?? null,
+                    'heading' => $section['heading'] ?? null,
+                    'subheading' => $section['subheading'] ?? null,
+                    'intro' => $section['intro'] ?? null,
+                    'image_key' => $section['image_key'] ?? null,
+                    'is_visible' => (bool) ($section['is_visible'] ?? true),
+                    'include_house_card' => (bool) ($section['include_house_card'] ?? true),
+                    'sort_order' => (int) ($section['sort_order'] ?? $index),
+                ],
+            );
+
+            $this->syncSectionItems($model, $section['items'] ?? []);
+        }
+
+        $product->sections()
+            ->whereNotIn('key', $keptKeys)
+            ->get()
+            ->each(fn (ProductSection $section) => $section->delete());
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $items
+     */
+    private function syncSectionItems(ProductSection $section, array $items): void
+    {
+        $existing = $section->items()->get()->values();
+
+        foreach (array_values($items) as $index => $item) {
+            $attributes = [
+                'number_label' => $item['number_label'] ?? null,
+                'icon' => $item['icon'] ?? null,
+                'title' => $item['title'] ?? null,
+                'body' => $item['body'] ?? null,
+                'sort_order' => $index,
+            ];
+
+            $current = $existing->get($index);
+
+            if ($current instanceof ProductSectionItem) {
+                $current->update($attributes);
+
+                continue;
+            }
+
+            $section->items()->create($attributes);
+        }
+
+        $existing->slice(count($items))
+            ->each(fn (ProductSectionItem $item) => $item->delete());
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $faqs
+     */
+    private function syncFaqs(Product $product, array $faqs): void
+    {
+        $existing = $product->faqs()->get()->values();
+
+        foreach (array_values($faqs) as $index => $faq) {
+            $attributes = [
+                'question' => (string) $faq['question'],
+                'answer' => (string) $faq['answer'],
+                'is_published' => (bool) ($faq['is_published'] ?? true),
+                'sort_order' => $index,
+            ];
+
+            $current = $existing->get($index);
+
+            if ($current instanceof ProductFaq) {
+                $current->update($attributes);
+
+                continue;
+            }
+
+            $product->faqs()->create($attributes);
+        }
+
+        $existing->slice(count($faqs))
+            ->each(fn (ProductFaq $faq) => $faq->delete());
     }
 
     public function updateTranslations(
@@ -435,6 +612,8 @@ class ProductController extends Controller
             'name' => $validated['name'],
             'slug' => $validated['slug'],
             'type' => $type,
+            'status' => ProductStatus::from($validated['status'] ?? ProductStatus::Active->value),
+            'sort_order' => (int) ($validated['sort_order'] ?? 0),
             'amount' => $validated['amount'],
             'currency' => 'eur',
             'edition_total' => $type === ProductType::LimitedEdition ? $validated['edition_total'] : null,
@@ -457,6 +636,17 @@ class ProductController extends Controller
             'description' => $validated['description'] ?? null,
             'sold_out_behavior' => 'keep_page',
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function carriesMedia(Request $request, array $validated): bool
+    {
+        return $request->hasFile('primary_image')
+            || $request->hasFile('gallery_images')
+            || $request->has('gallery_keep')
+            || ($validated['remove_primary_image'] ?? false) === true;
     }
 
     /**
@@ -541,6 +731,8 @@ class ProductController extends Controller
             'name' => $product->name,
             'slug' => $product->slug,
             'type' => $product->type->value,
+            'status' => ($product->status ?? ProductStatus::Active)->value,
+            'sort_order' => $product->sort_order ?? 0,
             'amount' => (string) $product->amount,
             'currency' => $product->currency,
             'edition_total' => $product->edition_total,
@@ -561,7 +753,65 @@ class ProductController extends Controller
                 fn (string $path): ?array => $this->existingMediaFile($path),
                 $extraPaths,
             ))),
+            'sections' => $this->formSections($product),
+            'faqs' => $this->formFaqs($product),
         ];
+    }
+
+    /**
+     * Source-language section rows for the admin form. Content is never
+     * localized here: the form edits the Dutch source that DeepL translates.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function formSections(Product $product): array
+    {
+        $product->loadMissing('sections.items');
+
+        return $product->sections
+            ->map(fn (ProductSection $section): array => [
+                'id' => $section->id,
+                'key' => $section->key->value,
+                'eyebrow' => $section->eyebrow ?? '',
+                'heading' => $section->heading ?? '',
+                'subheading' => $section->subheading ?? '',
+                'intro' => $section->intro ?? '',
+                'image_key' => $section->image_key ?? '',
+                'is_visible' => (bool) $section->is_visible,
+                'include_house_card' => (bool) $section->include_house_card,
+                'sort_order' => $section->sort_order ?? 0,
+                'items' => $section->items
+                    ->map(fn (ProductSectionItem $item): array => [
+                        'uid' => 'item-'.$item->id,
+                        'number_label' => $item->number_label ?? '',
+                        'icon' => $item->icon ?? '',
+                        'title' => $item->title ?? '',
+                        'body' => $item->body ?? '',
+                    ])
+                    ->values()
+                    ->all(),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function formFaqs(Product $product): array
+    {
+        $product->loadMissing('faqs');
+
+        return $product->faqs
+            ->map(fn (ProductFaq $faq): array => [
+                'uid' => 'faq-'.$faq->id,
+                'id' => $faq->id,
+                'question' => $faq->question,
+                'answer' => $faq->answer,
+                'is_published' => (bool) $faq->is_published,
+            ])
+            ->values()
+            ->all();
     }
 
     /**

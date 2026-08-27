@@ -77,7 +77,7 @@ export function FaqTranslationsDialog({
     const form = useForm(
         faqs.translations.update({
             locale,
-            faq: faqId,
+            faq: Number(faqId),
         }),
         initialFormData(translations),
     );
@@ -102,7 +102,7 @@ export function FaqTranslationsDialog({
     function retranslate(targetLocale?: FaqLocale) {
         setTranslating(true);
         router.post(
-            faqs.translate({ locale, faq: faqId }).url,
+            faqs.translate({ locale, faq: Number(faqId) }).url,
             targetLocale ? { target_locale: targetLocale } : {},
             {
                 preserveScroll: true,

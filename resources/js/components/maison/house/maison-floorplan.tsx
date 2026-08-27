@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { FloorplanRoom } from '@/components/maison/house/floorplan-room';
+import { useLocale } from '@/hooks/use-locale';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 
 /**
  * The eight-room elevation drawing. Geometry is taken verbatim from the
@@ -7,6 +9,7 @@ import { FloorplanRoom } from '@/components/maison/house/floorplan-room';
  */
 export function MaisonFloorplan() {
     const { t } = useTranslation();
+    const { locale } = useLocale();
 
     return (
         <svg
@@ -303,7 +306,7 @@ export function MaisonFloorplan() {
                     {t('Onthaal · Home')}
                 </text>
             </FloorplanRoom>
-            <FloorplanRoom to="product">
+            <FloorplanRoom href={foundingProductUrl(locale)}>
                 <rect
                     className="room-fill"
                     x="400"

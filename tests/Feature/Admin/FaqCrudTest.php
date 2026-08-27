@@ -3,6 +3,8 @@
 use App\Enums\FaqContext;
 use App\Enums\RoleEnum;
 use App\Models\Faq;
+use App\Models\Product;
+use App\Models\ProductFaq;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -360,15 +362,20 @@ test('staff can queue deepl retranslation for all faq locales', function () {
 test('public faq pages serve translated copy for the active locale', function () {
     fakeDeepLTranslations();
 
-    Faq::factory()->product()->published()->create([
-        'question' => 'Locale product vraag',
-        'answer' => 'Locale product antwoord',
-    ]);
+    // Product FAQs now live per-product on `ProductFaq` (surfaced as
+    // `product.faqs`) rather than the generic `Faq` model's `product`
+    // context, which is no longer rendered on the product page.
+    ProductFaq::factory()
+        ->for(Product::founding())
+        ->create([
+            'question' => 'Locale product vraag',
+            'answer' => 'Locale product antwoord',
+        ]);
 
-    $this->get(route('maison.product', ['locale' => 'en']))
+    $this->get(route('maison.products.show', ['locale' => 'en', 'product' => Product::FOUNDING_SLUG]))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('faqs', fn ($faqs) => collect($faqs)->contains(
+            ->where('product.faqs', fn ($faqs) => collect($faqs)->contains(
                 fn ($item) => $item['question'] === 'EN Locale product vraag'
                     && $item['answer'] === 'EN Locale product antwoord',
             ))
@@ -407,21 +414,27 @@ test('create and edit faq pages render', function () {
 });
 
 test('public product and contact pages only expose published faqs', function () {
-    Faq::factory()->product()->draft()->create([
-        'question' => 'Verborgen product FAQ',
-        'answer' => 'Niet zichtbaar',
-    ]);
+    // Product FAQs now live per-product on `ProductFaq` (surfaced as
+    // `product.faqs`) rather than the generic `Faq` model's `product`
+    // context, which is no longer rendered on the product page.
+    ProductFaq::factory()
+        ->for(Product::founding())
+        ->draft()
+        ->create([
+            'question' => 'Verborgen product FAQ',
+            'answer' => 'Niet zichtbaar',
+        ]);
 
     Faq::factory()->contact()->draft()->create([
         'question' => 'Verborgen contact FAQ',
         'answer' => 'Niet zichtbaar',
     ]);
 
-    $this->get(route('maison.product', ['locale' => 'nl']))
+    $this->get(route('maison.products.show', ['locale' => 'nl', 'product' => Product::FOUNDING_SLUG]))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('maison/product')
-            ->where('faqs', fn ($faqs) => collect($faqs)->pluck('question')->doesntContain('Verborgen product FAQ'))
+            ->component('maison/products/show')
+            ->where('product.faqs', fn ($faqs) => collect($faqs)->pluck('question')->doesntContain('Verborgen product FAQ'))
         );
 
     $this->get(route('maison.contact', ['locale' => 'nl']))

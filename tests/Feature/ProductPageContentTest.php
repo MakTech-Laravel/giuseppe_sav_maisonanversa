@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 test('product page uses dynamic content and faq props', function () {
     Artisan::call('app:import-static-content-command');
 
-    $this->get(localized('maison.product'))
+    $this->get(localized('maison.products.show', ['product' => Product::FOUNDING_SLUG]))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('product.slug', Product::FOUNDING_SLUG)
@@ -19,12 +19,19 @@ test('product page uses dynamic content and faq props', function () {
             ->where('product.hero_eyebrow', 'Founding Edition · 100 Stuks Wereldwijd')
             ->where('product.description', 'Heritage No.001 is niet zomaar een padelracket. Het is het eerste object van een huis dat wordt gebouwd voor de lange termijn. Elk van de 100 stuks is individueel genummerd en wordt vergezeld van een volledige Heritage ervaring.')
             ->has('product.gallery', 4)
-            ->has('product.specs', 7)
-            ->has('product.materials', 4)
-            ->has('product.unboxing_steps', 6)
-            ->has('product.trust_badges', 4)
-            ->has('related')
-            ->has('faqs'));
+            // Sections are ordered by sort_order (ProductSectionKey::defaultSortOrder()):
+            // specs=0, includes=1, guarantees=2, unboxing=3, craft=4, trust=5, service=6, faq=7, related=8.
+            ->has('product.sections', 9)
+            ->where('product.sections.0.key', 'specs')
+            ->has('product.sections.0.items', 7)
+            ->where('product.sections.3.key', 'unboxing')
+            ->has('product.sections.3.items', 6)
+            ->where('product.sections.4.key', 'craft')
+            ->has('product.sections.4.items', 4)
+            ->where('product.sections.5.key', 'trust')
+            ->has('product.sections.5.items', 4)
+            ->has('product.faqs')
+            ->has('related'));
 });
 
 test('staff can update product storefront copy fields', function () {
