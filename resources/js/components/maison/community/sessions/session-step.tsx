@@ -85,7 +85,7 @@ export function ChoiceGroup<T extends string | number>({
                         aria-checked={active}
                         onClick={() => onChange(option.value)}
                         className={cn(
-                            'cursor-pointer border px-4 py-3 font-sans text-[10px] font-medium tracking-[0.16em] uppercase transition-colors',
+                            'cursor-pointer border px-2 py-3 text-center font-sans text-[10px] font-medium tracking-[0.08em] break-words whitespace-normal uppercase transition-colors sm:px-3',
                             active
                                 ? 'border-choc bg-choc text-cream'
                                 : 'border-gold/25 bg-cream text-choc hover:border-gold hover:bg-gold/8',

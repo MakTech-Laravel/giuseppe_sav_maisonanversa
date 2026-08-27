@@ -215,13 +215,10 @@ class SessionController extends Controller
             'levels' => SessionLevel::options(),
             'genders' => SessionGender::options(),
             'court_statuses' => SessionCourtStatus::options(),
-            'durations' => [
-                ['value' => 60, 'label' => '60 min'],
-                ['value' => 90, 'label' => '90 min'],
-                ['value' => 120, 'label' => '120 min'],
-                ['value' => 150, 'label' => '150 min'],
-                ['value' => 180, 'label' => '180 min'],
-            ],
+            'durations' => array_map(
+                fn (int $minutes): array => ['value' => $minutes, 'label' => $minutes.' min'],
+                CommunitySession::DURATION_MINUTES,
+            ),
             'capacities' => [2, 4, 6, 8],
             'partner_clubs' => Club::query()
                 ->approved()

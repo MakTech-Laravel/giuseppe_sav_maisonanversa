@@ -221,6 +221,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                     onChange={(value) =>
                                         form.setData('level', value)
                                     }
+                                    columns="grid-cols-2"
                                 />
                             </SessionStep>
                         </div>
@@ -292,11 +293,6 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                         )}
                                         className={fieldClassName}
                                     />
-                                    <span className="font-sans text-[11px] text-stone">
-                                        {t(
-                                            'Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan.',
-                                        )}
-                                    </span>
                                 </label>
                             </SessionStep>
                         </div>

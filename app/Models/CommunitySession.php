@@ -27,6 +27,9 @@ class CommunitySession extends Model
     /** @use HasFactory<CommunitySessionFactory> */
     use HasFactory, TranslatesWithDeepL;
 
+    /** @var list<int> */
+    public const DURATION_MINUTES = [20, 40, 60, 80, 90, 120, 150, 180];
+
     /** @var list<string> */
     protected array $translatable = ['notes'];
 

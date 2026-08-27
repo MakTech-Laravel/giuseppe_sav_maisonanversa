@@ -43,6 +43,44 @@ test('creating a session seats the host in the first slot', function () {
         ->and($session->openSlots())->toBe(3);
 });
 
+test('a session can last twenty or forty minutes', function () {
+    $host = User::factory()->create();
+    $club = Club::factory()->create();
+
+    $this->actingAs($host)
+        ->post(route('community.sessions.store', ['locale' => 'nl']), sessionPayload($club, [
+            'duration_minutes' => 20,
+        ]))
+        ->assertRedirect();
+
+    $session = CommunitySession::query()->firstOrFail();
+
+    expect($session->duration_minutes)->toBe(20)
+        ->and($session->ends_at->toDateTimeString())
+        ->toBe($session->starts_at->copy()->addMinutes(20)->toDateTimeString());
+});
+
+test('session duration must be one of the offered lengths', function () {
+    $host = User::factory()->create();
+    $club = Club::factory()->create();
+
+    $this->actingAs($host)
+        ->post(route('community.sessions.store', ['locale' => 'nl']), sessionPayload($club, [
+            'duration_minutes' => 25,
+        ]))
+        ->assertSessionHasErrors('duration_minutes');
+});
+
+test('the create form offers twenty and forty minute durations', function () {
+    $this->actingAs(User::factory()->create())
+        ->get(route('community.sessions.create', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('options.durations.0.value', 20)
+            ->where('options.durations.1.value', 40)
+        );
+});
+
 test('a session cannot be attached to a club that is still pending', function () {
     $host = User::factory()->create();
     $club = Club::factory()->pending()->create();
