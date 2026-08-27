@@ -1,5 +1,3 @@
-import type { CommunityTab } from '@/components/maison/community/community-tabs';
-
 export type FeedComment = {
     id: string;
     name: string;
@@ -39,9 +37,3 @@ export type CommunityCourtPayload = {
     pin_left: string | null;
     coming: boolean;
 };
-
-export function tabFromIndex(index: number): CommunityTab {
-    const tabs: CommunityTab[] = ['feed', 'courts'];
-
-    return tabs[index] ?? 'feed';
-}

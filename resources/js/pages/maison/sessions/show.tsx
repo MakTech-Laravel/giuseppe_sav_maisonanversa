@@ -1,12 +1,11 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarDays, Clock, Gauge, Timer, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { CommunityTabs } from '@/components/maison/community/community-tabs';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
-import { SessionBreadcrumb } from '@/components/maison/community/sessions/session-breadcrumb';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Wrap } from '@/components/maison/ui/section';
-import * as maisonRoutes from '@/routes/maison';
 import * as sessionRoutes from '@/routes/community/sessions';
 import * as participantRoutes from '@/routes/community/sessions/participants';
 import {
@@ -62,19 +61,10 @@ export default function SessionShow({ session }: SessionShowProps) {
                 }
             />
 
-            <SessionBreadcrumb
-                crumbs={[
-                    {
-                        label: 'Community',
-                        href: maisonRoutes.community.url(locale),
-                    },
-                    { label: 'Sessies', href: sessionRoutes.index.url(locale) },
-                    { label: session.club?.name ?? 'Sessie' },
-                ]}
-            />
+            <CommunityTabs />
 
             <div className="bg-cream py-12">
-                <Wrap className="max-w-4xl px-6 md:px-10">
+                <Wrap className="px-6 md:px-10 lg:px-20">
                     <div className="border border-gold/15 bg-cream2">
                         <div className="flex flex-wrap gap-x-8 gap-y-4 border-b border-gold/15 px-7 py-6 font-sans text-[11px] tracking-[0.08em] text-stone">
                             <Meta

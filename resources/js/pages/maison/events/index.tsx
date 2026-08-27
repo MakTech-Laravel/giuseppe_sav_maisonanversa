@@ -1,14 +1,13 @@
 import { InfiniteScroll, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { EventCard } from '@/components/maison/community/community-events';
-import { SessionBreadcrumb } from '@/components/maison/community/sessions/session-breadcrumb';
+import { CommunityTabs } from '@/components/maison/community/community-tabs';
 import { SessionTabs } from '@/components/maison/community/sessions/session-tabs';
 import type { TabDefinition } from '@/components/maison/community/sessions/session-tabs';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Wrap } from '@/components/maison/ui/section';
 import * as eventRoutes from '@/routes/community/events';
-import * as maisonRoutes from '@/routes/maison';
 import type { Paginated } from '@/types/admin';
 import type { EventCard as EventCardData, SessionTab } from '@/types/session';
 
@@ -50,15 +49,7 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
                 )}
             />
 
-            <SessionBreadcrumb
-                crumbs={[
-                    {
-                        label: 'Community',
-                        href: maisonRoutes.community.url(locale),
-                    },
-                    { label: 'Exclusieve Events' },
-                ]}
-            />
+            <CommunityTabs />
 
             <div className="min-h-150 bg-cream pb-20">
                 <Wrap className="px-6 md:px-10 lg:px-20">

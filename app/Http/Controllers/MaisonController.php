@@ -257,6 +257,9 @@ class MaisonController extends Controller
             ];
         }
 
+        $tab = $request->string('tab')->toString();
+        $props['tab'] = $tab === 'courts' ? 'courts' : 'feed';
+
         return $this->page('community', $props);
     }
 

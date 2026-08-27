@@ -3,37 +3,54 @@ import { useTranslation } from 'react-i18next';
 import { Wrap } from '@/components/maison/ui/section';
 import * as eventRoutes from '@/routes/community/events';
 import * as sessionRoutes from '@/routes/community/sessions';
+import * as maison from '@/routes/maison';
 import { cn } from '@/lib/utils';
 
-export type CommunityTab = 'feed' | 'courts';
+export type CommunitySection = 'feed' | 'courts' | 'sessions' | 'events';
 
-const TABS: { id: CommunityTab; label: string }[] = [
-    { id: 'feed', label: 'Feed' },
-    { id: 'courts', label: 'Club Corners & Courts' },
-];
-
-type CommunityTabsProps = {
-    activeTab: CommunityTab;
-    onTabChange: (tab: CommunityTab) => void;
+type TabLink = {
+    id: CommunitySection;
+    label: string;
+    href: string;
 };
 
 const tabClassName =
-    'relative shrink-0 cursor-pointer bg-transparent px-5 py-4 font-sans text-[10px] tracking-[0.22em] uppercase transition-colors md:px-7';
+    'relative shrink-0 px-5 py-4 font-sans text-[10px] tracking-[0.22em] uppercase transition-colors md:px-7';
 
 const activeClassName =
     'font-medium text-choc after:absolute after:right-5 after:bottom-0 after:left-5 after:h-0.5 after:bg-choc md:after:right-7 md:after:left-7';
 
 /**
- * Sticky community sub-nav. Sessions and events are full pages of their own,
- * so they sit here as links rather than in-page tabs.
+ * Sticky community sub-nav. Every item is a real URL so Feed, Club Corners,
+ * Sessions and Events can be bookmarked and shared.
  */
-export function CommunityTabs({ activeTab, onTabChange }: CommunityTabsProps) {
+export function CommunityTabs() {
     const { t } = useTranslation();
     const { locale } = usePage().props;
+    const { url } = usePage();
+    const active = activeSection(url);
 
-    const links = [
-        { href: sessionRoutes.index.url(locale), label: 'Sessies' },
-        { href: eventRoutes.index.url(locale), label: 'Exclusieve Events' },
+    const tabs: TabLink[] = [
+        {
+            id: 'feed',
+            label: 'Feed',
+            href: maison.community.url(locale),
+        },
+        {
+            id: 'courts',
+            label: 'Club Corners & Courts',
+            href: maison.community.url(locale, { query: { tab: 'courts' } }),
+        },
+        {
+            id: 'sessions',
+            label: 'Sessies',
+            href: sessionRoutes.index.url(locale),
+        },
+        {
+            id: 'events',
+            label: 'Exclusieve Events',
+            href: eventRoutes.index.url(locale),
+        },
     ];
 
     return (
@@ -44,16 +61,16 @@ export function CommunityTabs({ activeTab, onTabChange }: CommunityTabsProps) {
                     aria-label={t('Community')}
                     className="flex gap-1 overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 >
-                    {TABS.map((tab) => {
-                        const isActive = activeTab === tab.id;
+                    {tabs.map((tab) => {
+                        const isActive = tab.id === active;
 
                         return (
-                            <button
+                            <Link
                                 key={tab.id}
-                                type="button"
+                                href={tab.href}
                                 role="tab"
                                 aria-selected={isActive}
-                                onClick={() => onTabChange(tab.id)}
+                                preserveScroll
                                 className={cn(
                                     tabClassName,
                                     isActive
@@ -62,24 +79,30 @@ export function CommunityTabs({ activeTab, onTabChange }: CommunityTabsProps) {
                                 )}
                             >
                                 {t(tab.label)}
-                            </button>
+                            </Link>
                         );
                     })}
-
-                    {links.map((link) => (
-                        <Link
-                            key={link.label}
-                            href={link.href}
-                            className={cn(
-                                tabClassName,
-                                'text-stone hover:text-choc',
-                            )}
-                        >
-                            {t(link.label)}
-                        </Link>
-                    ))}
                 </div>
             </Wrap>
         </div>
     );
+}
+
+export function activeSection(url: string): CommunitySection {
+    const [path, query = ''] = url.split('?');
+    const params = new URLSearchParams(query);
+
+    if (path.includes('/community/sessions')) {
+        return 'sessions';
+    }
+
+    if (path.includes('/community/events')) {
+        return 'events';
+    }
+
+    if (params.get('tab') === 'courts') {
+        return 'courts';
+    }
+
+    return 'feed';
 }

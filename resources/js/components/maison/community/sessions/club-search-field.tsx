@@ -3,6 +3,7 @@ import { Check, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ClubSubmitDialog } from '@/components/maison/community/sessions/club-submit-dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import * as clubRoutes from '@/routes/community/clubs';
 import { cn } from '@/lib/utils';
 import type { ClubCard } from '@/types/session';
@@ -11,12 +12,13 @@ type ClubSearchFieldProps = {
     sport: string;
     selected: ClubCard | null;
     onSelect: (club: ClubCard | null) => void;
-    /** Shown before the member types anything, so the field is never empty. */
+    /** Shown before the member types two letters. */
     suggestions: ClubCard[];
     error?: string;
 };
 
 const DEBOUNCE_MS = 300;
+const MIN_QUERY_LENGTH = 2;
 
 export function ClubSearchField({
     sport,
@@ -34,6 +36,17 @@ export function ClubSearchField({
     const abortRef = useRef<AbortController | null>(null);
 
     useEffect(() => {
+        const query = term.trim();
+
+        if (query.length < MIN_QUERY_LENGTH) {
+            abortRef.current?.abort();
+            setResults(suggestions);
+            setSearching(false);
+            setSearched(false);
+
+            return;
+        }
+
         const controller = new AbortController();
         abortRef.current?.abort();
         abortRef.current = controller;
@@ -42,7 +55,7 @@ export function ClubSearchField({
             setSearching(true);
 
             const url = clubRoutes.search.url(locale, {
-                query: { q: term, sport },
+                query: { q: query, sport },
             });
 
             fetch(url, {
@@ -64,7 +77,7 @@ export function ClubSearchField({
             window.clearTimeout(timer);
             controller.abort();
         };
-    }, [term, sport, locale]);
+    }, [term, sport, locale, suggestions]);
 
     if (selected) {
         return (
@@ -81,7 +94,10 @@ export function ClubSearchField({
         );
     }
 
+    const query = term.trim();
+    const waitingForQuery = query.length > 0 && query.length < MIN_QUERY_LENGTH;
     const showEmptyState = searched && !searching && results.length === 0;
+    const clubs = waitingForQuery ? [] : results;
 
     return (
         <div className="space-y-3">
@@ -107,29 +123,39 @@ export function ClubSearchField({
                 <p className="font-sans text-[11px] text-red-800">{error}</p>
             )}
 
-            <div className="space-y-2">
-                {results.map((club) => (
-                    <button
-                        key={club.id}
-                        type="button"
-                        onClick={() => onSelect(club)}
-                        className="flex w-full cursor-pointer items-center gap-4 border border-gold/15 bg-cream2 p-3 text-left transition-colors hover:border-gold/40"
-                    >
-                        <ClubThumbnail club={club} />
+            {waitingForQuery && (
+                <p className="font-sans text-[11px] text-stone">
+                    {t('Typ minstens 2 letters om te zoeken.')}
+                </p>
+            )}
 
-                        <span className="min-w-0 flex-1">
-                            <span className="block truncate font-serif text-base text-choc">
-                                {club.name}
-                            </span>
-                            <span className="block truncate font-sans text-[11px] text-stone">
-                                {club.address}
-                            </span>
-                        </span>
+            {clubs.length > 0 && (
+                <ScrollArea className="h-64 border border-gold/15">
+                    <div className="space-y-2 p-2">
+                        {clubs.map((club) => (
+                            <button
+                                key={club.id}
+                                type="button"
+                                onClick={() => onSelect(club)}
+                                className="flex w-full cursor-pointer items-center gap-4 border border-gold/15 bg-cream p-3 text-left transition-colors hover:border-gold/40"
+                            >
+                                <ClubThumbnail club={club} />
 
-                        {club.is_partner && <PartnerBadge />}
-                    </button>
-                ))}
-            </div>
+                                <span className="min-w-0 flex-1">
+                                    <span className="block truncate font-serif text-base text-choc">
+                                        {club.name}
+                                    </span>
+                                    <span className="block truncate font-sans text-[11px] text-stone">
+                                        {club.address}
+                                    </span>
+                                </span>
+
+                                {club.is_partner && <PartnerBadge />}
+                            </button>
+                        ))}
+                    </div>
+                </ScrollArea>
+            )}
 
             {showEmptyState && (
                 <p className="font-sans text-[11px] text-stone">

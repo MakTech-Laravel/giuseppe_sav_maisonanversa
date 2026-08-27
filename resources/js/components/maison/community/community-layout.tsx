@@ -1,5 +1,4 @@
 import { router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CommunityCourts } from '@/components/maison/community/community-courts';
 import type {
@@ -8,7 +7,6 @@ import type {
 } from '@/components/maison/community/community-data';
 import { CommunityFeed } from '@/components/maison/community/community-feed';
 import { CommunityTabs } from '@/components/maison/community/community-tabs';
-import type { CommunityTab } from '@/components/maison/community/community-tabs';
 import type { useCommunityToast } from '@/components/maison/community/community-toast';
 import * as eventRoutes from '@/routes/community/events';
 import type { Paginated } from '@/types/admin';
@@ -17,23 +15,25 @@ type CommunityLayoutProps = {
     toast: ReturnType<typeof useCommunityToast>;
     posts: Paginated<FeedPostData>;
     courts: CommunityCourtPayload[];
+    tab: 'feed' | 'courts';
 };
 
-export function CommunityLayout({ toast, posts, courts }: CommunityLayoutProps) {
+export function CommunityLayout({
+    toast,
+    posts,
+    courts,
+    tab,
+}: CommunityLayoutProps) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
-    const [activeTab, setActiveTab] = useState<CommunityTab>('feed');
-
-    function handleTabChange(tab: CommunityTab): void {
-        setActiveTab(tab);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
 
     return (
         <div className="min-h-150 bg-cream">
-            <CommunityTabs activeTab={activeTab} onTabChange={handleTabChange} />
+            <CommunityTabs />
 
-            {activeTab === 'feed' && (
+            {tab === 'courts' ? (
+                <CommunityCourts courts={courts} />
+            ) : (
                 <CommunityFeed
                     posts={posts}
                     onViewEvents={() =>
@@ -44,8 +44,6 @@ export function CommunityLayout({ toast, posts, courts }: CommunityLayoutProps) 
                     }
                 />
             )}
-
-            {activeTab === 'courts' && <CommunityCourts courts={courts} />}
         </div>
     );
 }

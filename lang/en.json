@@ -1766,5 +1766,10 @@
     "Ingediend door": "Submitted by",
     "Partner": "Partner",
     "Beëindigd": "Ended",
-    "Alle clubs": "All clubs"
+    "Alle clubs": "All clubs",
+    "Kies een datum": "Choose a date",
+    "Kies een tijdstip": "Choose a time",
+    "Typ minstens 2 letters om te zoeken.": "Type at least 2 letters to search.",
+    "Uur": "Hour",
+    "Minuten": "Minutes"
 }

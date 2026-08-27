@@ -2,9 +2,11 @@ import { Link, useForm, usePage } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CommunityTabs } from '@/components/maison/community/community-tabs';
 import { ClubSearchField } from '@/components/maison/community/sessions/club-search-field';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
-import { SessionBreadcrumb } from '@/components/maison/community/sessions/session-breadcrumb';
+import { SessionDraftPreview } from '@/components/maison/community/sessions/session-draft-preview';
+import { SessionScheduleFields } from '@/components/maison/community/sessions/session-schedule-fields';
 import {
     ChoiceGroup,
     SessionStep,
@@ -12,7 +14,6 @@ import {
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Wrap } from '@/components/maison/ui/section';
-import * as maisonRoutes from '@/routes/maison';
 import * as sessionRoutes from '@/routes/community/sessions';
 import {
     combineDateAndTime,
@@ -114,19 +115,11 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                 )}
             />
 
-            <SessionBreadcrumb
-                crumbs={[
-                    {
-                        label: 'Community',
-                        href: maisonRoutes.community.url(locale),
-                    },
-                    { label: 'Sessies', href: sessionRoutes.index.url(locale) },
-                    { label: 'Sessie aanmaken' },
-                ]}
-            />
+            <CommunityTabs />
 
             <div className="bg-cream py-12">
-                <Wrap className="max-w-4xl px-6 md:px-10">
+                <Wrap className="px-6 md:px-10 lg:px-20">
+                    <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
                     <form
                         onSubmit={handleSubmit}
                         className="border border-gold/15 bg-cream2"
@@ -172,60 +165,23 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                 title={t('Wanneer')}
                                 description={t('Datum, tijd en duur')}
                             >
-                                <div className="grid gap-3 sm:grid-cols-3">
-                                    <input
-                                        type="date"
-                                        value={form.data.date}
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'date',
-                                                event.target.value,
-                                            )
-                                        }
-                                        aria-label={t('Datum')}
-                                        className={fieldClassName}
-                                        required
-                                    />
-                                    <input
-                                        type="time"
-                                        value={form.data.time}
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'time',
-                                                event.target.value,
-                                            )
-                                        }
-                                        aria-label={t('Tijdstip')}
-                                        className={fieldClassName}
-                                        required
-                                    />
-                                    <select
-                                        value={form.data.duration_minutes}
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'duration_minutes',
-                                                Number(event.target.value),
-                                            )
-                                        }
-                                        aria-label={t('Duur')}
-                                        className={fieldClassName}
-                                    >
-                                        {options.durations.map((duration) => (
-                                            <option
-                                                key={duration.value}
-                                                value={duration.value}
-                                            >
-                                                {duration.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {startsAtError && (
-                                    <p className="mt-2 font-sans text-[11px] text-red-800">
-                                        {startsAtError}
-                                    </p>
-                                )}
+                                <SessionScheduleFields
+                                    date={form.data.date}
+                                    time={form.data.time}
+                                    durationMinutes={form.data.duration_minutes}
+                                    durations={options.durations}
+                                    locale={locale}
+                                    onDateChange={(value) =>
+                                        form.setData('date', value)
+                                    }
+                                    onTimeChange={(value) =>
+                                        form.setData('time', value)
+                                    }
+                                    onDurationChange={(value) =>
+                                        form.setData('duration_minutes', value)
+                                    }
+                                    error={startsAtError}
+                                />
                             </SessionStep>
                         </div>
 
@@ -388,6 +344,24 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                             )}
                         </p>
                     </form>
+
+                    <SessionDraftPreview
+                        sport={form.data.sport}
+                        club={club}
+                        startsAt={combineDateAndTime(
+                            form.data.date,
+                            form.data.time,
+                        )}
+                        durationMinutes={form.data.duration_minutes}
+                        level={form.data.level}
+                        courtStatus={form.data.court_status}
+                        gender={form.data.gender}
+                        capacity={form.data.capacity}
+                        host={host}
+                        options={options}
+                        locale={locale}
+                    />
+                    </div>
                 </Wrap>
             </div>
         </>
