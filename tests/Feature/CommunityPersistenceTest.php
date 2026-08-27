@@ -1,6 +1,11 @@
 <?php
 
 use App\Enums\RoleEnum;
+use App\Enums\SessionCourtStatus;
+use App\Enums\SessionGender;
+use App\Enums\SessionLevel;
+use App\Enums\SessionSport;
+use App\Models\Club;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
 use App\Models\User;
@@ -24,18 +29,21 @@ test('founding circle members can publish a community post', function () {
     expect(CommunityPost::query()->where('content', 'Hello from the circle.')->exists())->toBeTrue();
 });
 
-test('founding circle members can create and join a session', function () {
+test('verified members can create and join a session', function () {
     $host = User::factory()->create();
-    $host->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
     $guest = User::factory()->create();
-    $guest->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+    $club = Club::factory()->create();
 
     $this->actingAs($host)
         ->post(route('community.sessions.store', ['locale' => 'nl']), [
+            'sport' => SessionSport::Padel->value,
+            'club_id' => $club->id,
             'starts_at' => now()->addDay()->toDateTimeString(),
-            'location' => 'Antwerp',
+            'duration_minutes' => 90,
+            'court_status' => SessionCourtStatus::Booked->value,
+            'level' => SessionLevel::OpenToAll->value,
+            'gender' => SessionGender::Everyone->value,
             'capacity' => 2,
-            'level' => 'open',
         ])
         ->assertRedirect();
 

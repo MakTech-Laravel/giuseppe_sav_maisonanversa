@@ -92,14 +92,21 @@ test('the feed composer renders user text safely without innerHTML', function ()
         ->not->toContain('Delen');
 });
 
-test('community tabs use react state instead of switchCommTab onclick strings', function () {
-    $tabsSource = file_get_contents(resource_path('js/components/maison/community/community-tabs.tsx'));
-    $layoutSource = file_get_contents(resource_path('js/components/maison/community/community-layout.tsx'));
+test('community tabs are url based links', function () {
+    $tabsSource = File::get(resource_path('js/components/maison/community/community-tabs.tsx'));
+    $layoutSource = File::get(resource_path('js/components/maison/community/community-layout.tsx'));
 
-    expect($tabsSource.$layoutSource)
-        ->toContain('useState')
-        ->toContain('activeTab')
+    expect($tabsSource)
+        ->toContain("query: { tab: 'courts' }")
+        ->toContain('sessionRoutes.index')
+        ->toContain('eventRoutes.index')
+        ->toContain('aria-selected')
+        ->not->toContain('onTabChange')
         ->not->toContain('switchCommTab');
+
+    expect($layoutSource)
+        ->toContain('tab === \'courts\'')
+        ->not->toContain('useState');
 });
 
 test('a community toast helper exists for member feedback', function () {
@@ -127,13 +134,45 @@ test('community courts use a stacked layout without a side column', function () 
         ->not->toContain('lg:grid-cols-[1fr_420px]');
 });
 
-test('community sessions open the planner in a sheet', function () {
-    $source = File::get(resource_path('js/components/maison/community/community-sessions.tsx'));
+test('sessions live on their own page with three tabs', function () {
+    $index = File::get(resource_path('js/pages/maison/sessions/index.tsx'));
+    $tabs = File::get(resource_path('js/components/maison/community/sessions/session-tabs.tsx'));
 
-    expect($source)
-        ->toContain('Sheet')
-        ->toContain('Plan een sessie')
-        ->not->toContain('lg:grid-cols-[1fr_380px]');
+    expect($index)
+        ->toContain('SessionCard')
+        ->toContain('SessionTabs')
+        ->and($tabs)
+        ->toContain('role="tablist"');
+
+    expect(File::exists(resource_path('js/components/maison/community/community-sessions.tsx')))->toBeFalse();
+});
+
+test('create session uses community tabs, schedule pickers and a live preview', function () {
+    $create = File::get(resource_path('js/pages/maison/sessions/create.tsx'));
+
+    expect($create)
+        ->toContain('CommunityTabs')
+        ->toContain('SessionScheduleFields')
+        ->toContain('SessionDraftPreview')
+        ->toContain('lg:grid-cols-[minmax(0,1fr)_20rem]')
+        ->not->toContain('SessionBreadcrumb')
+        ->not->toContain('DeepL vult NL, EN en FR');
+});
+
+test('session schedule pickers show every minute and keep selected calendar days readable', function () {
+    $schedule = File::get(resource_path('js/components/maison/community/sessions/session-schedule-fields.tsx'));
+    $calendar = File::get(resource_path('js/components/ui/calendar.tsx'));
+    $steps = File::get(resource_path('js/components/maison/community/sessions/session-step.tsx'));
+
+    expect($schedule)
+        ->toContain('length: 60')
+        ->not->toContain("['00', '15', '30', '45']");
+
+    expect($calendar)
+        ->toContain('[&_button]:bg-choc')
+        ->toContain('[&_button]:text-cream');
+
+    expect($steps)->toContain('whitespace-normal');
 });
 
 test('the community feed uses a circle sheet instead of an inline sidebar column', function () {
