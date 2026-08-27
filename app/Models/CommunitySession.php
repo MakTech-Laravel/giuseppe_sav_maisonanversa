@@ -6,6 +6,7 @@ use App\Enums\SessionCourtStatus;
 use App\Enums\SessionGender;
 use App\Enums\SessionLevel;
 use App\Enums\SessionSport;
+use App\Models\Concerns\TranslatesWithDeepL;
 use Database\Factories\CommunitySessionFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,13 +18,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * A member-hosted game looking for players.
  *
- * Deliberately does NOT use TranslatesWithDeepL: sessions are ephemeral
- * user content and translating every note would burn the DeepL quota.
+ * Notes follow the FAQ / community-post pattern: DeepL auto-detects the
+ * language the host typed and fills nl, en and fr. Club names stay off
+ * DeepL because they are proper nouns.
  */
 class CommunitySession extends Model
 {
     /** @use HasFactory<CommunitySessionFactory> */
-    use HasFactory;
+    use HasFactory, TranslatesWithDeepL;
+
+    /** @var list<string> */
+    protected array $translatable = ['notes'];
 
     protected $fillable = [
         'host_id',
@@ -140,5 +145,33 @@ class CommunitySession extends Model
     public function openSlots(): int
     {
         return max(0, $this->capacity - $this->participantsCount());
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function translationTargetLocales(): array
+    {
+        return config('maison.locales');
+    }
+
+    public function translationUsesAutoDetect(): bool
+    {
+        return true;
+    }
+
+    public function translated(string $column, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+        $source = (string) ($this->getAttribute($column) ?? '');
+
+        $this->loadMissing('translations');
+
+        $row = $this->translations->first(
+            fn (Translation $translation): bool => $translation->locale === $locale
+                && $translation->column === $column,
+        );
+
+        return filled($row?->value) ? (string) $row->value : $source;
     }
 }

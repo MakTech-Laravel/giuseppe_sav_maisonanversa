@@ -78,7 +78,7 @@ final class SessionFeed
     public static function base(): Builder
     {
         return CommunitySession::query()
-            ->with(['host', 'club', 'participants.user'])
+            ->with(['host', 'club', 'participants.user', 'translations'])
             ->withCount('participants');
     }
 
@@ -86,10 +86,10 @@ final class SessionFeed
      * @param  Collection<int, CommunitySession>  $sessions
      * @return list<array<string, mixed>>
      */
-    public static function present(Collection $sessions, User $viewer): array
+    public static function present(Collection $sessions, User $viewer, string $locale): array
     {
         return $sessions
-            ->map(fn (CommunitySession $session): array => self::toCard($session, $viewer))
+            ->map(fn (CommunitySession $session): array => self::toCard($session, $viewer, $locale))
             ->values()
             ->all();
     }
@@ -97,7 +97,7 @@ final class SessionFeed
     /**
      * @return array<string, mixed>
      */
-    public static function toCard(CommunitySession $session, User $viewer): array
+    public static function toCard(CommunitySession $session, User $viewer, string $locale): array
     {
         $players = $session->participants
             ->map(fn ($participant): array => self::player($participant->user, $session->host_id))
@@ -126,7 +126,7 @@ final class SessionFeed
             'participants_count' => $session->participantsCount(),
             'open_slots' => $session->openSlots(),
             'players' => $players,
-            'notes' => $session->notes,
+            'notes' => $session->translated('notes', $locale),
             'host' => self::player($session->host, $session->host_id),
             'is_full' => $session->isFull(),
             'is_past' => $isPast,

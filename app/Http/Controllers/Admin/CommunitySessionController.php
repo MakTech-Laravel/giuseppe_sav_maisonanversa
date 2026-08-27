@@ -66,7 +66,7 @@ class CommunitySessionController extends Controller
 
     public function show(Request $request, string $locale, CommunitySession $communitySession): Response
     {
-        $communitySession->load(['host', 'club', 'participants.user'])->loadCount('participants');
+        $communitySession->load(['host', 'club', 'participants.user', 'translations'])->loadCount('participants');
 
         return Inertia::render('admin/community-sessions/show', [
             'session' => [
@@ -75,7 +75,7 @@ class CommunitySessionController extends Controller
                 'gender_label' => $communitySession->gender->label(),
                 'duration_minutes' => $communitySession->duration_minutes,
                 'ends_at' => $communitySession->ends_at?->toIso8601String(),
-                'notes' => $communitySession->notes,
+                'notes' => $communitySession->translated('notes'),
                 'club' => $communitySession->club?->toCardArray(),
                 'host_id' => $communitySession->host_id,
                 'players' => $communitySession->participants
