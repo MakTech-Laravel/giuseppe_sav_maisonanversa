@@ -88,3 +88,15 @@ test('guests do not receive courts props', function () {
             ->missing('courts')
         );
 });
+
+test('authenticated members can open club corners via the tab query', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('maison.community', ['locale' => 'nl', 'tab' => 'courts']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('maison/community')
+            ->where('tab', 'courts')
+        );
+});

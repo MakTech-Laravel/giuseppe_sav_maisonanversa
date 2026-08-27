@@ -22,7 +22,9 @@ export function MemberNav() {
             label: t('Founding Circle'),
             href: `/${locale}/member/circle`,
         },
-        { label: t('Gemeenschap'), href: `/${locale}/community` },
+        { label: t('Gemeenschap'), href: `/${locale}/community`, exact: true },
+        { label: t('Sessies'), href: `/${locale}/community/sessions` },
+        { label: t('Events'), href: `/${locale}/community/events` },
         {
             label: t('Heritage Letter'),
             href: `/${locale}/member/letter`,
