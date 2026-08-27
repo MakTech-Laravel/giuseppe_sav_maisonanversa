@@ -78,9 +78,13 @@ test('dutch is the source language and needs no dictionary file', function () {
 test('laravel resolves the translated copy for a known key', function () {
     App::setLocale('en');
     expect(__('Het Huis'))->toBe('The House');
+    expect(__('Catalogus'))->toBe('Product');
+    expect(__('Product'))->toBe('Product');
 
     App::setLocale('fr');
     expect(__('Het Huis'))->toBe('La Maison');
+    expect(__('Catalogus'))->toBe('Produit');
+    expect(__('Product'))->toBe('Produit');
 });
 
 test('an untranslated key falls back to its dutch source text', function (string $locale) {
