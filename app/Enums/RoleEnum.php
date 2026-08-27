@@ -97,10 +97,7 @@ enum RoleEnum: string
                 PermissionEnum::POSTS_VIEW,
             ],
 
-            self::USER => [
-                PermissionEnum::DASHBOARD_VIEW,
-                PermissionEnum::POSTS_VIEW,
-            ],
+            self::USER => [],
 
             self::FOUNDING_CIRCLE => [
                 PermissionEnum::HERITAGE_VIEW,
