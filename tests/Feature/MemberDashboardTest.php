@@ -70,6 +70,7 @@ test('members can view heritage, orders, passport, circle and letter shells', fu
     ['member.passport', 'member/passport'],
     ['member.circle', 'member/circle'],
     ['member.letter', 'member/letter'],
+    ['member.email-preferences', 'member/email-preferences'],
     ['member.profile', 'member/profile'],
     ['member.security', 'member/security'],
 ]);
@@ -179,6 +180,7 @@ test('the member nav includes the client feedback sections', function () {
         "t('Founding Circle')",
         "t('Gemeenschap')",
         "t('Heritage Letter')",
+        "t('E-mailvoorkeuren')",
         "t('Profiel & account')",
         "t('Beveiliging')",
         "t('Uitloggen')",

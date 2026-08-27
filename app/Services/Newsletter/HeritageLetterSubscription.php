@@ -9,6 +9,7 @@ use App\Mail\WaitlistConfirmation;
 use App\Models\NewsletterSubscriber;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -40,6 +41,7 @@ class HeritageLetterSubscription
         ]);
 
         $this->ensureUnsubscribeToken($subscriber);
+        $this->assignOwner($subscriber, $request->user());
         $subscriber->save();
 
         $this->dispatchSync($subscriber, sendWelcome: ! $wasSubscribed);
@@ -84,6 +86,7 @@ class HeritageLetterSubscription
         }
 
         $this->ensureUnsubscribeToken($subscriber);
+        $this->assignOwner($subscriber, $user);
         $subscriber->save();
 
         $this->dispatchSync($subscriber, sendWelcome: $wantsList && ! $wasSubscribed);
@@ -130,6 +133,7 @@ class HeritageLetterSubscription
                     'email' => $newEmail,
                     'name' => $user->name,
                     'locale' => $user->locale ?? $from->locale,
+                    'user_id' => $user->id,
                 ])->save();
 
                 return [
@@ -150,6 +154,7 @@ class HeritageLetterSubscription
                 'consent_ip' => $to->consent_ip ?? $from->consent_ip,
                 'consent_user_agent' => $to->consent_user_agent ?? $from->consent_user_agent,
                 'brevo_contact_id' => $to->brevo_contact_id ?? $from->brevo_contact_id,
+                'user_id' => $user->id,
             ])->save();
 
             $from->delete();
@@ -165,6 +170,30 @@ class HeritageLetterSubscription
         }
 
         $this->dispatchSync($payload['subscriber'], removeEmail: $payload['removeEmail']);
+    }
+
+    public function claimForUser(User $user): void
+    {
+        NewsletterSubscriber::query()
+            ->where('email', Str::lower($user->email))
+            ->whereNull('user_id')
+            ->update(['user_id' => $user->id]);
+    }
+
+    /**
+     * @return Collection<int, NewsletterSubscriber>
+     */
+    public function subscriptionsFor(User $user): Collection
+    {
+        $email = Str::lower($user->email);
+
+        return NewsletterSubscriber::query()
+            ->where(function ($query) use ($user, $email): void {
+                $query->where('user_id', $user->id)
+                    ->orWhere('email', $email);
+            })
+            ->latest('id')
+            ->get();
     }
 
     /**
@@ -222,6 +251,17 @@ class HeritageLetterSubscription
             'productUpdates' => $left['productUpdates'] || $right['productUpdates'],
             'events' => $left['events'] || $right['events'],
         ];
+    }
+
+    private function assignOwner(NewsletterSubscriber $subscriber, ?User $user): void
+    {
+        if ($user === null || ! $user->isCustomer()) {
+            return;
+        }
+
+        if ($subscriber->user_id === null || $subscriber->user_id === $user->id) {
+            $subscriber->user_id = $user->id;
+        }
     }
 
     private function ensureUnsubscribeToken(NewsletterSubscriber $subscriber): void

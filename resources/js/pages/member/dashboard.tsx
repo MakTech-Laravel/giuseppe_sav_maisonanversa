@@ -42,6 +42,11 @@ export default function MemberDashboard({
         {
             href: `/${locale}/member/letter`,
             label: t('Heritage Letter'),
+            hint: t('Uw inschrijvingen'),
+        },
+        {
+            href: `/${locale}/member/email-preferences`,
+            label: t('E-mailvoorkeuren'),
             hint: t('Voorkeuren'),
         },
     ] as const;
