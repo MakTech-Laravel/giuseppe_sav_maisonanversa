@@ -316,7 +316,9 @@ export default function JournalIndex({
                                                     <Link
                                                         href={journalRoutes.show({
                                                             locale,
-                                                            article: article.id,
+                                                            article: Number(
+                                                                article.id,
+                                                            ),
                                                         })}
                                                     >
                                                         <Eye className="h-4 w-4" />
@@ -330,7 +332,9 @@ export default function JournalIndex({
                                                     <Link
                                                         href={journalRoutes.edit({
                                                             locale,
-                                                            article: article.id,
+                                                            article: Number(
+                                                                article.id,
+                                                            ),
                                                         })}
                                                     >
                                                         <Pencil className="h-4 w-4" />
@@ -344,7 +348,9 @@ export default function JournalIndex({
                                                         router.delete(
                                                             journalRoutes.destroy({
                                                                 locale,
-                                                                article: article.id,
+                                                                article: Number(
+                                                                    article.id,
+                                                                ),
                                                             }).url,
                                                         )
                                                     }

@@ -81,9 +81,9 @@ export function CourtTranslationsDialog({
     const [activeLocale, setActiveLocale] = useState<CourtLocale>('nl');
 
     const form = useForm(
-        courtsRoutes.translations.update.form({
+        courtsRoutes.translations.update({
             locale,
-            court: courtId,
+            court: Number(courtId),
         }),
         initialFormData(translations),
     );
@@ -108,7 +108,7 @@ export function CourtTranslationsDialog({
     function retranslate(targetLocale?: CourtLocale) {
         setTranslating(true);
         router.post(
-            courtsRoutes.translate({ locale, court: courtId }).url,
+            courtsRoutes.translate({ locale, court: Number(courtId) }).url,
             targetLocale ? { target_locale: targetLocale } : {},
             {
                 preserveScroll: true,

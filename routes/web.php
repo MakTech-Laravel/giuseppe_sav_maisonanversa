@@ -89,7 +89,8 @@ Route::prefix('{locale}')
         Route::controller(MaisonController::class)->group(function () {
             Route::get('/', 'home')->name('home');
             Route::get('huis', 'house')->name('house');
-            Route::get('product', 'product')->name('product');
+            Route::get('products', 'products')->name('products');
+            Route::get('products/{product:slug}', 'productShow')->name('products.show');
             Route::get('story', 'story')->name('story');
             Route::get('circle', 'circle')->name('circle');
             Route::get('dressing', 'dressing')->name('dressing');
@@ -397,6 +398,12 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('products/{product}', 'update')->name('products.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+                Route::post('products/{product}/media', 'updateMedia')->name('products.media.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('products/{product}/sections', 'updateSections')->name('products.sections.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('products/{product}/faqs', 'updateFaqs')->name('products.faqs.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('products/{product}/translations', 'updateTranslations')->name('products.translations.update')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::post('products/{product}/translate', 'translate')->name('products.translate')

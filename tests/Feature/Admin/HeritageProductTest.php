@@ -49,6 +49,11 @@ test('staff can update the founding product name and amount', function () {
 });
 
 test('viewers cannot update the heritage product', function () {
+    // The temporary AdminTypePermissionBypass grants every staff account full
+    // access while granular permission UI is hidden; disable it here so this
+    // test exercises real permission enforcement for the viewer role.
+    config(['maison.admin_type_grants_all_permissions' => false]);
+
     $viewer = User::factory()->admin()->create();
     $viewer->assignRole(RoleEnum::VIEWER->value);
     $viewer->syncTypeFromRoles();

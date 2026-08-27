@@ -9,6 +9,7 @@ export type CheckoutShared = {
     displayAmount: string;
     productName: string;
     deliveryLabel: string | null;
+    productType?: 'limited_edition' | 'simple';
 };
 
 export type SiteShared = {

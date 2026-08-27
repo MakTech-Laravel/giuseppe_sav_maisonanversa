@@ -1,45 +1,143 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft, Loader2, PackagePlus } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2, PackagePlus } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { ProductFormFields } from '@/components/admin/product-form-fields';
+import { FormStepper } from '@/components/admin/form-stepper';
+import type { FormStep } from '@/components/admin/form-stepper';
+import {
+    ProductBasicsFields,
+    ProductFaqFields,
+    ProductMediaFields,
+    ProductPricingFields,
+    ProductPublishFields,
+    ProductSectionFields,
+} from '@/components/admin/product-form-fields';
 import type { ProductFormData } from '@/components/admin/product-form-fields';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import products from '@/routes/admin/products';
+import type { ProductSectionCatalogueEntry } from '@/types/admin-product';
+import { buildSectionForm } from '@/types/admin-product';
 
-const defaults: ProductFormData = {
-    name: '',
-    slug: '',
-    type: 'simple',
-    amount: '',
-    edition_total: '100',
-    edition_number_prefix: '',
-    edition_number_postfix: '',
-    archive_edition_numbers: [],
-    stock_quantity: '0',
-    is_published: true,
-    grants_founding_circle: false,
-    expected_delivery_label: '',
-    eyebrow: '',
-    hero_eyebrow: '',
-    hero_subtitle: '',
-    description: '',
-    primary_image: null,
-    gallery_images: null,
-    remove_primary_image: false,
-    gallery_keep: [],
+const STEPS: FormStep[] = [
+    { id: 'basics', label: 'Basis', description: 'Naam, slug en herotekst' },
+    { id: 'pricing', label: 'Prijs', description: 'Prijs, editie en voorraad' },
+    { id: 'media', label: 'Beeld', description: 'Cover en galerij' },
+    { id: 'sections', label: 'Secties', description: 'Inhoud van de pagina' },
+    { id: 'faq', label: 'FAQ', description: 'Vragen bij dit product' },
+    { id: 'review', label: 'Publiceren', description: 'Controleer en publiceer' },
+];
+
+/** Fields Precognition validates before each step may be left. */
+const STEP_FIELDS: Record<string, (keyof ProductFormData)[]> = {
+    basics: [
+        'name',
+        'slug',
+        'type',
+        'status',
+        'sort_order',
+        'eyebrow',
+        'hero_eyebrow',
+        'hero_subtitle',
+        'description',
+    ],
+    pricing: [
+        'amount',
+        'expected_delivery_label',
+        'grants_founding_circle',
+        'edition_total',
+        'edition_number_prefix',
+        'edition_number_postfix',
+        'archive_edition_numbers',
+        'stock_quantity',
+    ],
+    media: [],
+    sections: ['sections'],
+    faq: ['faqs'],
+    review: ['is_published'],
 };
 
-export default function CreateProduct() {
+export default function CreateProduct({
+    sectionCatalogue,
+}: {
+    sectionCatalogue: ProductSectionCatalogueEntry[];
+}) {
     const { t } = useTranslation();
+    const [stepIndex, setStepIndex] = useState(0);
+    const [furthestIndex, setFurthestIndex] = useState(0);
+
+    const defaults: ProductFormData = useMemo(
+        () => ({
+            name: '',
+            slug: '',
+            type: 'simple',
+            status: 'active',
+            sort_order: '0',
+            amount: '',
+            edition_total: '100',
+            edition_number_prefix: '',
+            edition_number_postfix: '',
+            archive_edition_numbers: [],
+            stock_quantity: '0',
+            is_published: true,
+            grants_founding_circle: false,
+            expected_delivery_label: '',
+            eyebrow: '',
+            hero_eyebrow: '',
+            hero_subtitle: '',
+            description: '',
+            primary_image: null,
+            gallery_images: null,
+            remove_primary_image: false,
+            gallery_keep: [],
+            sections: buildSectionForm(sectionCatalogue),
+            faqs: [],
+        }),
+        [sectionCatalogue],
+    );
+
     const form = useForm(products.store(wayfinderLocale()), defaults);
+    const step = STEPS[stepIndex];
+    const isLastStep = stepIndex === STEPS.length - 1;
+
+    /**
+     * Gates forward navigation on the same server rules that guard the final
+     * submit, scoped to the current step's fields. File inputs are excluded so
+     * the validate-only request stays a plain JSON round trip.
+     */
+    const goNext = () => {
+        const fields = STEP_FIELDS[step.id];
+
+        if (fields.length === 0) {
+            advance();
+
+            return;
+        }
+
+        form.withoutFileValidation().validate({
+            only: fields,
+            onSuccess: advance,
+        });
+    };
+
+    const advance = () => {
+        const next = Math.min(stepIndex + 1, STEPS.length - 1);
+        setStepIndex(next);
+        setFurthestIndex((current) => Math.max(current, next));
+    };
 
     const submit = (event: FormEvent) => {
         event.preventDefault();
         form.submit({ forceFormData: true });
+    };
+
+    const shared = {
+        data: form.data,
+        errors: form.errors,
+        setData: form.setData,
     };
 
     return (
@@ -48,7 +146,7 @@ export default function CreateProduct() {
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={t('Product aanmaken')}
-                    description={t('Voeg een catalogusproduct toe.')}
+                    description={t('Voeg een catalogusproduct toe in zes stappen.')}
                     icon={PackagePlus}
                 >
                     <Button variant="outline" asChild>
@@ -58,21 +156,72 @@ export default function CreateProduct() {
                         </Link>
                     </Button>
                 </AdminPageHeader>
+
+                <FormStepper
+                    steps={STEPS}
+                    currentIndex={stepIndex}
+                    furthestIndex={furthestIndex}
+                    onSelect={setStepIndex}
+                />
+
                 <form onSubmit={submit} className="w-full space-y-6">
-                    <ProductFormFields
-                        data={form.data}
-                        errors={form.errors}
-                        setData={form.setData}
-                        isUploading={form.processing}
-                        uploadProgress={form.progress?.percentage ?? null}
-                        onCancelUpload={() => form.cancel()}
-                    />
-                    <Button type="submit" disabled={form.processing}>
-                        {form.processing && (
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                    {step.id === 'basics' ? (
+                        <ProductBasicsFields {...shared} />
+                    ) : null}
+                    {step.id === 'pricing' ? (
+                        <ProductPricingFields {...shared} />
+                    ) : null}
+                    {step.id === 'media' ? (
+                        <ProductMediaFields
+                            {...shared}
+                            isUploading={form.processing}
+                            uploadProgress={form.progress?.percentage ?? null}
+                            onCancelUpload={() => form.cancel()}
+                        />
+                    ) : null}
+                    {step.id === 'sections' ? (
+                        <ProductSectionFields
+                            {...shared}
+                            catalogue={sectionCatalogue}
+                        />
+                    ) : null}
+                    {step.id === 'faq' ? <ProductFaqFields {...shared} /> : null}
+                    {step.id === 'review' ? (
+                        <ProductPublishFields {...shared} />
+                    ) : null}
+
+                    <div className="flex items-center justify-between gap-3">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            disabled={stepIndex === 0}
+                            onClick={() => setStepIndex(stepIndex - 1)}
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                            {t('Vorige')}
+                        </Button>
+
+                        {isLastStep ? (
+                            <Button type="submit" disabled={form.processing}>
+                                {form.processing && (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                )}
+                                {t('Product aanmaken')}
+                            </Button>
+                        ) : (
+                            <Button
+                                type="button"
+                                disabled={form.validating}
+                                onClick={goNext}
+                            >
+                                {form.validating && (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                )}
+                                {t('Volgende')}
+                                <ArrowRight className="h-4 w-4" />
+                            </Button>
                         )}
-                        {t('Product aanmaken')}
-                    </Button>
+                    </div>
                 </form>
             </div>
         </>

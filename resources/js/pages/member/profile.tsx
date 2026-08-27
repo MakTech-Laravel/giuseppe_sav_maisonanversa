@@ -29,6 +29,11 @@ export default function MemberProfile({
 }) {
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
+    const user = auth.user;
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <>
@@ -57,9 +62,9 @@ export default function MemberProfile({
                                 )}
                             />
                             <ProfileAvatarField
-                                name={auth.user.name}
-                                email={auth.user.email}
-                                avatarUrl={auth.user.avatar_url}
+                                name={user.name}
+                                email={user.email}
+                                avatarUrl={user.avatar_url}
                                 error={errors.avatar}
                             />
                         </MemberPanel>
@@ -82,7 +87,7 @@ export default function MemberProfile({
                                     <Input
                                         id="name"
                                         name="name"
-                                        defaultValue={auth.user.name}
+                                        defaultValue={user.name}
                                         required
                                         autoComplete="name"
                                         className={memberFieldClassName}
@@ -100,7 +105,7 @@ export default function MemberProfile({
                                     <Input
                                         id="username"
                                         name="username"
-                                        defaultValue={auth.user.username}
+                                        defaultValue={user.username}
                                         required
                                         autoComplete="username"
                                         className={memberFieldClassName}
@@ -119,7 +124,7 @@ export default function MemberProfile({
                                         id="email"
                                         type="email"
                                         name="email"
-                                        defaultValue={auth.user.email}
+                                        defaultValue={user.email}
                                         required
                                         autoComplete="email"
                                         className={memberFieldClassName}
@@ -129,7 +134,7 @@ export default function MemberProfile({
                             </div>
 
                             {mustVerifyEmail &&
-                                auth.user.email_verified_at === null && (
+                                user.email_verified_at === null && (
                                     <p className="mt-4 text-sm text-sand">
                                         {t('Uw e-mail is niet geverifieerd.')}{' '}
                                         <Link

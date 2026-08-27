@@ -41,35 +41,109 @@ class MaisonController extends Controller
         return $this->page('house');
     }
 
-    public function product(): Response
+    /** @var list<int> */
+    private const PRODUCTS_PER_PAGE_OPTIONS = [12, 24, 48];
+
+    private const PRODUCTS_PER_PAGE_DEFAULT = 12;
+
+    public function products(Request $request): Response
     {
-        $product = Product::founding();
+        $filters = $this->productCatalogFilters($request);
 
-        if ($product === null) {
-            abort(404);
-        }
-
-        $related = Product::query()
-            ->where('id', '!=', $product->id)
-            ->where('status', 'coming_soon')
+        $products = Product::query()
+            ->where('is_published', true)
+            ->when($filters['search'] !== '', function ($query) use ($filters): void {
+                $search = $filters['search'];
+                $query->where(function ($inner) use ($search): void {
+                    $inner->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%")
+                        ->orWhereHas('translations', function ($translations) use ($search): void {
+                            $translations
+                                ->where('column', 'name')
+                                ->where('locale', app()->getLocale())
+                                ->where('value', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->when($filters['status'] !== '', function ($query) use ($filters): void {
+                $query->where('status', $filters['status']);
+            })
             ->orderBy('sort_order')
             ->orderBy('id')
-            ->get()
-            ->map(fn (Product $item): array => $item->toCardShare())
-            ->values()
-            ->all();
+            ->paginate($filters['per_page'])
+            ->withQueryString()
+            ->through(fn (Product $product): array => $product->toCardShare());
 
-        return $this->page('product', [
+        return $this->page('products/index', [
+            'products' => $products,
+            'filters' => [
+                'search' => $filters['search'],
+                'status' => $filters['status'],
+                'per_page' => $filters['per_page'],
+            ],
+        ]);
+    }
+
+    public function productShow(string $locale, Product $product): Response
+    {
+        abort_unless($product->is_published, 404);
+
+        $related = Product::query()
+            ->where('is_published', true)
+            ->where('id', '!=', $product->id)
+            ->where('type', $product->type)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->limit(3)
+            ->get();
+
+        if ($related->isEmpty()) {
+            $related = Product::query()
+                ->where('is_published', true)
+                ->where('id', '!=', $product->id)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->limit(3)
+                ->get();
+        }
+
+        $product->loadMissing('sections.items', 'faqs');
+
+        return $this->page('products/show', [
             'product' => $product->toPageShare(),
-            'related' => $related,
-            'faqs' => Faq::publishedFor(FaqContext::Product)
-                ->map(fn (Faq $faq): array => [
-                    'question' => $faq->translated('question'),
-                    'answer' => $faq->translated('answer'),
-                ])
+            'productCheckout' => Product::checkoutShare($product),
+            'productEdition' => app(EditionInventory::class)->snapshot($product),
+            'related' => $related
+                ->map(fn (Product $item): array => $item->toCardShare())
                 ->values()
                 ->all(),
         ]);
+    }
+
+    /**
+     * @return array{search: string, status: string, per_page: int}
+     */
+    private function productCatalogFilters(Request $request): array
+    {
+        $search = trim((string) $request->query('search', ''));
+        $status = trim((string) $request->query('status', ''));
+
+        if (! in_array($status, ['active', 'coming_soon'], true)) {
+            $status = '';
+        }
+
+        $perPage = $request->query('per_page');
+        $perPage = is_numeric($perPage) ? (int) $perPage : null;
+
+        if ($perPage === null || ! in_array($perPage, self::PRODUCTS_PER_PAGE_OPTIONS, true)) {
+            $perPage = self::PRODUCTS_PER_PAGE_DEFAULT;
+        }
+
+        return [
+            'search' => $search,
+            'status' => $status,
+            'per_page' => $perPage,
+        ];
     }
 
     public function story(): Response

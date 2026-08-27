@@ -4,6 +4,8 @@ import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { TextLink } from '@/components/maison/ui/text-link';
+import { useLocale } from '@/hooks/use-locale';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 
 const STEPS = [
     {
@@ -40,6 +42,7 @@ const STEPS = [
 
 export function HomeUnboxing() {
     const { t } = useTranslation();
+    const { locale } = useLocale();
 
     return (
         <Section tone="dark">
@@ -59,7 +62,11 @@ export function HomeUnboxing() {
                                 'Elk Heritage No.001 pakket is een volledige ervaring. Elk element is intentioneel gekozen. De volgorde is nooit toevallig.',
                             )}
                         </p>
-                        <TextLink as={MaisonLink} tone="light" to="product">
+                        <TextLink
+                            as={MaisonLink}
+                            tone="light"
+                            href={foundingProductUrl(locale)}
+                        >
                             {t('Ontdek de volledige ervaring →')}
                         </TextLink>
                     </div>

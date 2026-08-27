@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\SeoMeta;
 use App\Support\Seo\MaisonSeo;
 use Illuminate\Http\Request;
 
@@ -25,8 +26,17 @@ test('public maison pages receive unique titles and indexable robots', function 
 });
 
 test('english house copy is translated in the seo document', function () {
+    // Every page has an admin-editable SeoMeta override (seeded with the
+    // Dutch default), which takes precedence over the static __() copy and
+    // is translated per-locale through the DeepL pipeline, not Laravel's
+    // translation files.
+    fakeDeepLTranslations();
+
+    $meta = SeoMeta::query()->where('page_key', 'house')->firstOrFail();
+    $meta->update(['title' => 'Het Huis — vertaald']);
+
     $this->get('/en/huis')->assertOk()->assertInertia(fn ($page) => $page
-        ->where('seo.title', __('Het Huis — Maison Anversa'))
+        ->where('seo.title', 'EN Het Huis — vertaald')
         ->where('seo.canonical', url('/en/huis'))
     );
 });

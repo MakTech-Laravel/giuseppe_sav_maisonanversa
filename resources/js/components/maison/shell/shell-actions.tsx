@@ -1,6 +1,13 @@
 import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 import type { AuthView } from '@/components/maison/modals/auth-modal';
+import type { CheckoutShared } from '@/types/global';
+
+/**
+ * Per-product checkout context for the order modal. Optional: pages that
+ * call `openOrder()` without one keep buying the global (founding) SKU.
+ */
+export type OrderProductContext = CheckoutShared;
 
 /**
  * The shell owns the modals, so any page that needs to open one reaches through
@@ -8,7 +15,7 @@ import type { AuthView } from '@/components/maison/modals/auth-modal';
  */
 export type ShellActions = {
     openNewsletter: () => void;
-    openOrder: () => void;
+    openOrder: (product?: OrderProductContext) => void;
     openCertificate: () => void;
     openAuth: (view?: AuthView) => void;
 };

@@ -85,7 +85,7 @@ test('public journal uses uploaded cover images when present', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('article.slug', 'uploaded-cover-story')
-            ->where('article.image_url', 'http://localhost:8000/storage/journal/example.jpg')
+            ->where('article.image_url', config('app.url').'/storage/journal/example.jpg')
             ->where('article.asset', 'antwerp-cityscape')
         );
 });

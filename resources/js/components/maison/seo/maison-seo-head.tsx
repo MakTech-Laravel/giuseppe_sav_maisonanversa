@@ -43,7 +43,7 @@ export function MaisonSeoHead({
         : seo.ogImage;
 
     return (
-        <Head title={title} titleTemplate="%s">
+        <Head title={title}>
             {robots && (
                 <meta head-key="robots" name="robots" content={robots} />
             )}

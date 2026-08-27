@@ -15,19 +15,22 @@ createServer((page) => {
 
     syncWayfinderLocale(locale);
 
+    // The `@inertiajs/vite` plugin injects a `resolve` option into the
+    // `createInertiaApp` call below at build time, so tsc (which never sees
+    // that transform) can't match this call against the SSR overload.
     return createI18nForLocale(locale).then((i18n) =>
         createInertiaApp({
             page,
             render: ReactDOMServer.renderToString,
-            title: (title) => title || appName,
+            title: (title: string) => title || appName,
             layout: resolvePageLayout,
-            setup: ({ App, props }) => (
+            setup: ({ App, props }: { App: any; props: any }) => (
                 <I18nProvider i18n={i18n}>
                     <TooltipProvider delayDuration={0}>
                         <App {...props} />
                     </TooltipProvider>
                 </I18nProvider>
             ),
-        }),
+        } as any),
     );
 });
