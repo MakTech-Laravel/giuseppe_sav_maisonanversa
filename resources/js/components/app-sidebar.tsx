@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import {
     BookOpen,
+    Building2,
     CalendarDays,
     CircleHelp,
     FileText,
@@ -38,6 +39,7 @@ import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
 import adminCircle from '@/routes/admin/circle';
+import adminClubs from '@/routes/admin/clubs';
 import adminCommerce from '@/routes/admin/commerce';
 import adminSiteSettings from '@/routes/admin/site-settings';
 import adminCommunity from '@/routes/admin/community';
@@ -152,10 +154,16 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
+                    title: t('Clubs'),
+                    href: adminClubs.index(locale),
+                    icon: Building2,
+                    permissions: [PERMISSIONS.CLUBS.MANAGE],
+                },
+                {
                     title: t('Sessies'),
                     href: adminSessions.index(locale),
                     icon: CalendarDays,
-                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                    permissions: [PERMISSIONS.SESSIONS.MANAGE],
                 },
                 {
                     title: t('Gemeenschap'),

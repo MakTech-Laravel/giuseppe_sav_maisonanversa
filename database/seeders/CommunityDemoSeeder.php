@@ -2,9 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Enums\SessionCourtStatus;
+use App\Enums\SessionGender;
+use App\Enums\SessionLevel;
+use App\Enums\SessionSport;
+use App\Models\Club;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
+use App\Models\CommunitySessionParticipant;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -31,10 +37,23 @@ class CommunityDemoSeeder extends Seeder
             'starts_at' => now()->addWeek(),
         ]);
 
-        CommunitySession::factory()->create([
+        $club = Club::query()->approved()->first() ?? Club::factory()->create();
+
+        $session = CommunitySession::query()->create([
             'host_id' => $host->id,
-            'location' => 'Padel Club Antwerpen',
-            'starts_at' => now()->addDays(3),
+            'sport' => SessionSport::Padel,
+            'club_id' => $club->id,
+            'starts_at' => now()->addDays(3)->setTime(10, 30),
+            'duration_minutes' => 90,
+            'court_status' => SessionCourtStatus::NotBooked,
+            'capacity' => 4,
+            'level' => SessionLevel::Intermediate,
+            'gender' => SessionGender::Everyone,
+        ]);
+
+        CommunitySessionParticipant::query()->firstOrCreate([
+            'community_session_id' => $session->id,
+            'user_id' => $host->id,
         ]);
     }
 }
