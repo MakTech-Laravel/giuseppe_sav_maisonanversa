@@ -65,6 +65,30 @@ test('post login redirect sends admin users to the admin dashboard', function ()
     expect($redirects->urlFor($user, $request))->toBe(route('admin.dashboard', ['locale' => config('maison.default_locale')], absolute: false));
 });
 
+test('intended admin destinations are ignored for customers', function () {
+    $user = User::factory()->customer()->create();
+    $redirects = app(PostLoginRedirectService::class);
+    $request = Request::create('/', 'GET', server: [
+        'HTTP_ACCEPT_LANGUAGE' => config('maison.default_locale'),
+    ]);
+    $request->setLaravelSession(app('session.store'));
+    $request->session()->put('url.intended', localized('admin.dashboard', absolute: false));
+
+    expect($redirects->intendedUrlFor($user, $request))->toBe(route('member.dashboard', ['locale' => config('maison.default_locale')], absolute: false));
+});
+
+test('intended member destinations are ignored for admins', function () {
+    $user = User::factory()->admin()->create();
+    $redirects = app(PostLoginRedirectService::class);
+    $request = Request::create('/', 'GET', server: [
+        'HTTP_ACCEPT_LANGUAGE' => config('maison.default_locale'),
+    ]);
+    $request->setLaravelSession(app('session.store'));
+    $request->session()->put('url.intended', localized('member.dashboard', absolute: false));
+
+    expect($redirects->intendedUrlFor($user, $request))->toBe(route('admin.dashboard', ['locale' => config('maison.default_locale')], absolute: false));
+});
+
 test('registration creates a customer account', function () {
     $response = $this->post(route('register.store'), [
         'name' => 'New Member',

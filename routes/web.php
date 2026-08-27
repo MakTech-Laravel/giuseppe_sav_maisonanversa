@@ -38,6 +38,7 @@ use App\Http\Controllers\RobotsTxtController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\SitemapController;
+use App\Models\User;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Services\Locale\LocalePreferenceService;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
@@ -145,11 +146,12 @@ Route::prefix('{locale}')
         ]))->middleware('guest')->name('password.reset');
 
         Route::get('email/verify', function (Request $request) {
-            if ($request->user()?->hasVerifiedEmail()) {
-                $home = app(PostLoginRedirectService::class)
-                    ->urlFor($request->user(), $request);
+            $user = $request->user();
 
-                return redirect()->intended($home);
+            if ($user instanceof User && $user->hasVerifiedEmail()) {
+                return redirect()->to(
+                    app(PostLoginRedirectService::class)->intendedUrlFor($user, $request)
+                );
             }
 
             return Inertia::render('auth/verify-email', [
@@ -173,12 +175,16 @@ Route::prefix('{locale}')
 Route::prefix('{locale}')
     ->middleware(['locale', 'auth', 'verified'])
     ->group(function () {
-        Route::get('dashboard', function (string $locale) {
-            return redirect()->route('admin.dashboard', ['locale' => $locale]);
+        Route::get('dashboard', function (Request $request) {
+            $user = $request->user();
+            abort_unless($user instanceof User, 403);
+
+            return redirect()->to(app(PostLoginRedirectService::class)->urlFor($user, $request));
         });
 
         Route::prefix('member')
             ->name('member.')
+            ->middleware('customer')
             ->controller(DashboardController::class)
             ->group(function () {
                 Route::get('/', 'index')->name('dashboard');
@@ -224,7 +230,7 @@ Route::prefix('{locale}')
             ->name('posts.update')->middleware('permission:'.PermissionEnum::POSTS_EDIT->value);
 
         // ── Admin: access management ──────────────────────────────────────────────
-        Route::prefix('admin')->name('admin.')->group(function () {
+        Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
             Route::get('dashboard', AdminDashboardController::class)
                 ->name('dashboard')
                 ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
