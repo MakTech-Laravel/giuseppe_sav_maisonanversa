@@ -12,15 +12,11 @@ use App\Models\CommunityLike;
 use App\Models\CommunityPost;
 use App\Models\CommunityPostHide;
 use App\Models\CommunityReport;
-use App\Models\CommunitySession;
-use App\Models\CommunitySessionParticipant;
 use App\Models\EventRsvp;
 use App\Models\User;
 use App\Notifications\ReportFiledNotification;
-use App\Notifications\SessionJoinedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
@@ -114,78 +110,6 @@ class CommunityController extends Controller
         }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht gemeld.')]);
-
-        return back();
-    }
-
-    public function storeSession(Request $request, string $locale): RedirectResponse
-    {
-        abort_unless($request->user()->isFoundingCircle(), 403);
-
-        $data = $request->validate([
-            'starts_at' => ['required', 'date', 'after:now'],
-            'location' => ['required', 'string', 'max:255'],
-            'capacity' => ['nullable', 'integer', 'min:1', 'max:50'],
-            'level' => ['nullable', 'string', 'max:50'],
-            'notes' => ['nullable', 'string', 'max:500'],
-        ]);
-
-        $session = CommunitySession::query()->create([
-            ...$data,
-            'host_id' => $request->user()->id,
-        ]);
-
-        CommunitySessionParticipant::query()->create([
-            'community_session_id' => $session->id,
-            'user_id' => $request->user()->id,
-        ]);
-
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie aangemaakt.')]);
-
-        return back();
-    }
-
-    public function joinSession(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
-    {
-        abort_unless($request->user()->isFoundingCircle(), 403);
-
-        DB::transaction(function () use ($request, $communitySession): void {
-            $locked = CommunitySession::query()->whereKey($communitySession->id)->lockForUpdate()->firstOrFail();
-
-            $already = CommunitySessionParticipant::query()->where([
-                'community_session_id' => $locked->id,
-                'user_id' => $request->user()->id,
-            ])->exists();
-
-            if ($already) {
-                return;
-            }
-
-            if ($locked->capacity !== null) {
-                $count = CommunitySessionParticipant::query()
-                    ->where('community_session_id', $locked->id)
-                    ->count();
-
-                abort_if($count >= $locked->capacity, 422, __('Deze sessie is vol.'));
-            }
-
-            CommunitySessionParticipant::query()->create([
-                'community_session_id' => $locked->id,
-                'user_id' => $request->user()->id,
-            ]);
-
-            $locked->host->notify(new SessionJoinedNotification($locked, $request->user()->name));
-        });
-
-        return back();
-    }
-
-    public function leaveSession(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
-    {
-        CommunitySessionParticipant::query()
-            ->where('community_session_id', $communitySession->id)
-            ->where('user_id', $request->user()->id)
-            ->delete();
 
         return back();
     }

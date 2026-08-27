@@ -1,36 +1,27 @@
+import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CommunityCourts } from '@/components/maison/community/community-courts';
 import type {
     CommunityCourtPayload,
-    CommunityEventPayload,
-    CommunitySessionPayload,
     FeedPostData,
 } from '@/components/maison/community/community-data';
-import { CommunityEvents } from '@/components/maison/community/community-events';
 import { CommunityFeed } from '@/components/maison/community/community-feed';
-import { CommunitySessions } from '@/components/maison/community/community-sessions';
 import { CommunityTabs } from '@/components/maison/community/community-tabs';
 import type { CommunityTab } from '@/components/maison/community/community-tabs';
 import type { useCommunityToast } from '@/components/maison/community/community-toast';
+import * as eventRoutes from '@/routes/community/events';
 import type { Paginated } from '@/types/admin';
 
 type CommunityLayoutProps = {
     toast: ReturnType<typeof useCommunityToast>;
     posts: Paginated<FeedPostData>;
-    sessions: CommunitySessionPayload[];
-    events: CommunityEventPayload[];
     courts: CommunityCourtPayload[];
 };
 
-export function CommunityLayout({
-    toast,
-    posts,
-    sessions,
-    events,
-    courts,
-}: CommunityLayoutProps) {
+export function CommunityLayout({ toast, posts, courts }: CommunityLayoutProps) {
     const { t } = useTranslation();
+    const { locale } = usePage().props;
     const [activeTab, setActiveTab] = useState<CommunityTab>('feed');
 
     function handleTabChange(tab: CommunityTab): void {
@@ -45,7 +36,9 @@ export function CommunityLayout({
             {activeTab === 'feed' && (
                 <CommunityFeed
                     posts={posts}
-                    onViewEvents={() => handleTabChange('events')}
+                    onViewEvents={() =>
+                        router.visit(eventRoutes.index.url(locale))
+                    }
                     onPostPublished={() =>
                         toast.show(t('Post geplaatst in de Community.'))
                     }
@@ -53,28 +46,6 @@ export function CommunityLayout({
             )}
 
             {activeTab === 'courts' && <CommunityCourts courts={courts} />}
-
-            {activeTab === 'sessions' && (
-                <CommunitySessions
-                    sessions={sessions}
-                    onJoin={() =>
-                        toast.show(t('U bent aangemeld voor de sessie.'))
-                    }
-                />
-            )}
-
-            {activeTab === 'events' && (
-                <CommunityEvents
-                    events={events}
-                    onRsvp={() =>
-                        toast.show(
-                            t(
-                                'U bent aangemeld. U ontvangt een bevestiging per e-mail.',
-                            ),
-                        )
-                    }
-                />
-            )}
         </div>
     );
 }

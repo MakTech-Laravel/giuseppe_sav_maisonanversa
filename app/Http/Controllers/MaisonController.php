@@ -228,47 +228,7 @@ class MaisonController extends Controller
             $props['posts'] = Inertia::scroll(
                 fn () => CommunityFeed::paginate($request),
             );
-            $props['sessions'] = CommunitySession::query()
-                ->with(['host', 'participants.user'])
-                ->where('starts_at', '>=', now()->subDay())
-                ->orderBy('starts_at')
-                ->get()
-                ->map(fn (CommunitySession $session) => [
-                    'id' => (string) $session->id,
-                    'location' => $session->translated('location'),
-                    'starts_at' => $session->starts_at->toIso8601String(),
-                    'capacity' => $session->capacity,
-                    'level' => $session->level,
-                    'notes' => $session->translated('notes'),
-                    'host' => $session->host->name,
-                    'joined' => $session->participants->contains('user_id', $request->user()->id),
-                    'spots' => $session->capacity === null
-                        ? null
-                        : max(0, $session->capacity - $session->participants->count()),
-                    'players' => $session->participants->map(fn ($p) => strtoupper(substr($p->user->name, 0, 2)))->all(),
-                ]);
-            $props['events'] = CommunityEvent::query()
-                ->with('rsvps.user')
-                ->withCount('rsvps')
-                ->where('starts_at', '>=', now()->subDay())
-                ->orderBy('starts_at')
-                ->get()
-                ->map(fn (CommunityEvent $event) => [
-                    'id' => (string) $event->id,
-                    'title' => $event->translated('title'),
-                    'description' => $event->translated('description'),
-                    'starts_at' => $event->starts_at->toIso8601String(),
-                    'location' => $event->translated('location'),
-                    'capacity' => $event->capacity,
-                    'thumbnail_url' => $event->thumbnailUrl(),
-                    'joined' => $event->rsvps->contains('user_id', $request->user()->id),
-                    'is_full' => $event->isFull(),
-                    'rsvp_count' => $event->rsvps->count(),
-                    'attendees' => $event->rsvps
-                        ->take(3)
-                        ->map(fn ($rsvp) => strtoupper(substr($rsvp->user->name, 0, 2)))
-                        ->all(),
-                ]);
+            // Sessions and events each have their own page now.
             $props['courts'] = CommunityCourt::query()
                 ->published()
                 ->with('translations')

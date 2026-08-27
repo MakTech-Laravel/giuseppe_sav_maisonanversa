@@ -2,8 +2,6 @@ import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import type {
     CommunityCourtPayload,
-    CommunityEventPayload,
-    CommunitySessionPayload,
     FeedPostData,
 } from '@/components/maison/community/community-data';
 import { CommunityLayout } from '@/components/maison/community/community-layout';
@@ -18,17 +16,10 @@ import type { Paginated } from '@/types/admin';
 
 type CommunityPageProps = {
     posts?: Paginated<FeedPostData>;
-    sessions?: CommunitySessionPayload[];
-    events?: CommunityEventPayload[];
     courts?: CommunityCourtPayload[];
 };
 
-export default function Community({
-    posts,
-    sessions = [],
-    events = [],
-    courts = [],
-}: CommunityPageProps) {
+export default function Community({ posts, courts = [] }: CommunityPageProps) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
     const toast = useCommunityToast();
@@ -47,13 +38,7 @@ export default function Community({
             />
 
             {isAuthenticated && posts ? (
-                <CommunityLayout
-                    toast={toast}
-                    posts={posts}
-                    sessions={sessions}
-                    events={events}
-                    courts={courts}
-                />
+                <CommunityLayout toast={toast} posts={posts} courts={courts} />
             ) : (
                 <CommunityLoginGate />
             )}
