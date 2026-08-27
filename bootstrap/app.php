@@ -2,6 +2,8 @@
 
 use App\Http\Middleware\AddSecurityHeaders;
 use App\Http\Middleware\EnsureFoundingCircle;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsCustomer;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SetLocale;
 use App\Services\Auth\PostLoginRedirectService;
@@ -53,6 +55,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'founding-circle' => EnsureFoundingCircle::class,
+            'admin' => EnsureUserIsAdmin::class,
+            'customer' => EnsureUserIsCustomer::class,
         ]);
 
         $middleware->redirectGuestsTo(function ($request) {
