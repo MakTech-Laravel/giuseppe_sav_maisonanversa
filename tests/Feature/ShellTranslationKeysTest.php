@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\File;
  */
 const MAISON_UNTRANSLATED_BRAND_TERMS = [
     'Club Corner',
-    'Community',
     'Founding Circle',
     'Founding Edition',
     'Heritage No.001',
