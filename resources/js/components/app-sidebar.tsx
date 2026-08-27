@@ -105,7 +105,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Catalogus'),
+                    title: t('Product'),
                     href: adminProducts.index(locale),
                     icon: Store,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],

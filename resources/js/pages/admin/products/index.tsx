@@ -124,10 +124,10 @@ export default function ProductsIndex({
 
     return (
         <>
-            <Head title={t('Catalogus')} />
+            <Head title={t('Product')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Catalogus')}
+                    title={t('Product')}
                     description={t(
                         'Beheer limited editions en eenvoudige voorraadproducten.',
                     )}
@@ -372,6 +372,6 @@ export default function ProductsIndex({
 ProductsIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
-        { title: 'Catalogus', href: products.index(wayfinderLocale()) },
+        { title: 'Product', href: products.index(wayfinderLocale()) },
     ],
 };
