@@ -35,23 +35,6 @@ export type CommerceShared = {
     pricesIncludeTax: boolean;
 };
 
-export type SharedNotificationItem = {
-    id: string;
-    type: string;
-    data: {
-        title?: string;
-        body?: string;
-        [key: string]: unknown;
-    };
-    read_at: string | null;
-    created_at: string | null;
-};
-
-export type SharedNotifications = {
-    unread_count: number;
-    recent: SharedNotificationItem[];
-};
-
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface InputHTMLAttributes<T> {
@@ -72,7 +55,6 @@ declare module '@inertiajs/core' {
             commerce: CommerceShared;
             site: SiteShared;
             seo: SeoDocument;
-            notifications: SharedNotifications | null;
             [key: string]: unknown;
         };
     }

@@ -18,8 +18,6 @@ class LoginResponse implements LoginResponseContract
         /** @var User $user */
         $user = $request->user();
 
-        $home = $this->redirects->urlFor($user, $request);
-
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => __('U bent succesvol ingelogd.'),
@@ -31,7 +29,7 @@ class LoginResponse implements LoginResponseContract
          * on the login modal (no navigation, no toast).
          */
         if ($request->header('X-Inertia') || ! $request->wantsJson()) {
-            return redirect()->intended($home);
+            return redirect()->to($this->redirects->intendedUrlFor($user, $request));
         }
 
         return new JsonResponse(['two_factor' => false], 200);
