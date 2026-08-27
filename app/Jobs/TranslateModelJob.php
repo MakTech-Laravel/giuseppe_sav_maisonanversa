@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Log;
 
 class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 {
@@ -40,6 +41,22 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 
     public function handle(DeepLTranslator $translator): void
     {
+        try {
+            $modelClassIsValid = class_exists($this->modelClass)
+                && is_subclass_of($this->modelClass, Model::class);
+        } catch (\Throwable) {
+            $modelClassIsValid = false;
+        }
+
+        if (! $modelClassIsValid) {
+            Log::warning('TranslateModelJob skipped missing or invalid model class.', [
+                'model_class' => $this->modelClass,
+                'model_id' => $this->modelId,
+            ]);
+
+            return;
+        }
+
         $model = $this->modelClass::query()->find($this->modelId);
 
         if ($model === null || ! in_array(TranslatesWithDeepL::class, class_uses_recursive($model), true)) {
