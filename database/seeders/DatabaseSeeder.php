@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             SiteSettingSeeder::class,
             JournalArticleSeeder::class,
             CommunityCourtSeeder::class,
+            ClubSeeder::class,
             CommunityDemoSeeder::class,
         ]);
         app()[PermissionRegistrar::class]->forgetCachedPermissions();

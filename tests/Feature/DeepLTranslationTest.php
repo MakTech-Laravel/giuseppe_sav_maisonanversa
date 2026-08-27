@@ -5,11 +5,13 @@ use App\Enums\OrderStatus;
 use App\Enums\RoleEnum;
 use App\Jobs\TranslateModelJob;
 use App\Mail\OrderConfirmation;
+use App\Models\Club;
 use App\Models\CommunityComment;
 use App\Models\CommunityCourt;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
+use App\Models\Concerns\TranslatesWithDeepL;
 use App\Models\EditionPiece;
 use App\Models\JournalArticle;
 use App\Models\Order;
@@ -364,13 +366,18 @@ test('journal articles translate title excerpt body category and date label', fu
         ->not->toContain('cover_path');
 });
 
-test('community sessions translate notes and location but not level', function () {
-    $session = CommunitySession::factory()->create();
+test('sessions and clubs stay out of DeepL entirely', function () {
+    fakeDeepLTranslations();
 
-    expect($session->translatableColumns())
-        ->toEqualCanonicalizing(['location', 'notes'])
-        ->not->toContain('level')
-        ->not->toContain('url');
+    $session = CommunitySession::factory()->create(['notes' => 'Kom 15 minuten eerder.']);
+
+    expect(class_uses_recursive($session))->not->toContain(TranslatesWithDeepL::class)
+        ->and($session->notes)->toBe('Kom 15 minuten eerder.');
+
+    $club = Club::factory()->create(['name' => 'Padel Ganda']);
+
+    expect(class_uses_recursive($club))->not->toContain(TranslatesWithDeepL::class)
+        ->and($club->name)->toBe('Padel Ganda');
 });
 
 test('community comments are translated for all locales like faqs', function () {

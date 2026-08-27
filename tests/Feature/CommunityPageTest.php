@@ -127,13 +127,17 @@ test('community courts use a stacked layout without a side column', function () 
         ->not->toContain('lg:grid-cols-[1fr_420px]');
 });
 
-test('community sessions open the planner in a sheet', function () {
-    $source = File::get(resource_path('js/components/maison/community/community-sessions.tsx'));
+test('sessions live on their own page with three tabs', function () {
+    $index = File::get(resource_path('js/pages/maison/sessions/index.tsx'));
+    $tabs = File::get(resource_path('js/components/maison/community/sessions/session-tabs.tsx'));
 
-    expect($source)
-        ->toContain('Sheet')
-        ->toContain('Plan een sessie')
-        ->not->toContain('lg:grid-cols-[1fr_380px]');
+    expect($index)
+        ->toContain('SessionCard')
+        ->toContain('SessionTabs')
+        ->and($tabs)
+        ->toContain('role="tablist"');
+
+    expect(File::exists(resource_path('js/components/maison/community/community-sessions.tsx')))->toBeFalse();
 });
 
 test('the community feed uses a circle sheet instead of an inline sidebar column', function () {
