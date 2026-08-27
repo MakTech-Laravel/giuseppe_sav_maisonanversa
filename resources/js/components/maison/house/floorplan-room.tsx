@@ -5,9 +5,8 @@ import { maisonUrl } from '@/lib/maison-navigation';
 import type { MaisonPage } from '@/lib/maison-navigation';
 
 type FloorplanRoomProps = {
-    to: MaisonPage;
     children: ReactNode;
-};
+} & ({ to: MaisonPage; href?: undefined } | { to?: undefined; href: string });
 
 /**
  * An SVG `<a>` that navigates through the cinematic page transition.
@@ -16,10 +15,10 @@ type FloorplanRoomProps = {
  * a foreignObject would break the hover fill, and a `div` with an onclick (as
  * the prototype used) is neither crawlable nor keyboard-reachable.
  */
-export function FloorplanRoom({ to, children }: FloorplanRoomProps) {
+export function FloorplanRoom({ to, href: hrefProp, children }: FloorplanRoomProps) {
     const { locale } = useLocale();
     const navigate = usePageTransition();
-    const href = maisonUrl(to, locale);
+    const href = to ? maisonUrl(to, locale) : hrefProp;
 
     function onClick(event: MouseEvent<HTMLAnchorElement>) {
         const opensElsewhere =

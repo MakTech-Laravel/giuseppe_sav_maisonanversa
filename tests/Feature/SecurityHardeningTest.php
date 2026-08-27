@@ -32,6 +32,11 @@ test('heritage letter submissions are rate limited', function () {
 });
 
 test('viewers cannot manage orders', function () {
+    // The temporary AdminTypePermissionBypass grants every staff account full
+    // access while granular permission UI is hidden; disable it here so this
+    // test exercises real permission enforcement for the viewer role.
+    config(['maison.admin_type_grants_all_permissions' => false]);
+
     $viewer = User::factory()->admin()->create();
     $viewer->syncRoles(RoleEnum::VIEWER->value);
     $viewer->syncTypeFromRoles();

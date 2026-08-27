@@ -8,10 +8,13 @@ test('the house page renders eight crawlable room links', function () {
     $source = file_get_contents(resource_path('js/components/maison/house/maison-floorplan.tsx'));
     $list = file_get_contents(resource_path('js/components/maison/house/maison-room-list.tsx'));
 
-    foreach (['home', 'product', 'contact', 'story', 'community', 'circle', 'journal', 'corner'] as $page) {
+    foreach (['home', 'contact', 'story', 'community', 'circle', 'journal', 'corner'] as $page) {
         expect($source)->toContain("to=\"{$page}\"")
             ->and($list)->toContain("to: '{$page}'");
     }
+
+    expect($source)->toContain('foundingProductUrl')
+        ->and($list)->toContain('foundingProductUrl');
 });
 
 test('rooms are SVG anchors rather than onclick handlers on groups', function () {

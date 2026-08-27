@@ -9,29 +9,12 @@ use Illuminate\Database\Seeder;
 class FaqSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Contact FAQs only. Product FAQs are owned by each product and seeded
+     * through ProductSeeder into `product_faqs`.
      */
     public function run(): void
     {
         $rows = [
-            FaqContext::Product->value => [
-                [
-                    'question' => 'Wanneer wordt mijn racket geleverd?',
-                    'answer' => 'De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie. Verwachte levering is Q1 2027. U ontvangt tussentijds updates over de voortgang.',
-                ],
-                [
-                    'question' => 'Hoe weet ik dat mijn nummer uniek is?',
-                    'answer' => 'Elk racket is individueel gestempeld (001–100) en vergezeld van een Heritage Certificaat met hetzelfde nummer en het oprichterzegel. Het nummer staat ook in ons register.',
-                ],
-                [
-                    'question' => 'Kan ik mijn nummer kiezen?',
-                    'answer' => 'Binnen de beschikbare nummers kunt u een voorkeur opgeven bij reservering. Leden van de Founding Circle hebben voorrang op lagere nummers.',
-                ],
-                [
-                    'question' => 'Wordt Heritage No.001 opnieuw gemaakt?',
-                    'answer' => 'Nee. De Founding Edition wordt niet herhaald — 100 stuks, eenmalig. Heritage No.001 kan daarna als reguliere collectie beschikbaar blijven. Toekomstige releases dragen andere nummers (No.002, No.003).',
-                ],
-            ],
             FaqContext::Contact->value => [
                 [
                     'question' => 'Wanneer levert Heritage No.001?',

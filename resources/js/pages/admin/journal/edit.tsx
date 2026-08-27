@@ -33,7 +33,7 @@ export default function EditJournalArticle({ article }: ArticleEditProps) {
 
     const formDef = journalRoutes.update.form({
         locale,
-        article: article.id,
+        article: Number(article.id),
     });
 
     const form = useForm(
@@ -80,7 +80,7 @@ export default function EditJournalArticle({ article }: ArticleEditProps) {
                         <Link
                             href={journalRoutes.show({
                                 locale: wayfinderLocale(),
-                                article: article.id,
+                                article: Number(article.id),
                             })}
                         >
                             <ArrowLeft className="h-4 w-4" /> {t('Terug')}

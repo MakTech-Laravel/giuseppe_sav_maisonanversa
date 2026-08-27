@@ -32,7 +32,7 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
     const form = useForm(
         faqs.update({
             locale,
-            faq: faq.id,
+            faq: Number(faq.id),
         }),
         {
             context: faq.context,
@@ -65,7 +65,7 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
                         <Link
                             href={faqs.show({
                                 locale,
-                                faq: faq.id,
+                                faq: Number(faq.id),
                             })}
                         >
                             <ArrowLeft className="h-4 w-4" /> {t('Terug')}
@@ -106,7 +106,7 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
                             <Link
                                 href={faqs.show({
                                     locale,
-                                    faq: faq.id,
+                                    faq: Number(faq.id),
                                 })}
                             >
                                 {t('Annuleren')}

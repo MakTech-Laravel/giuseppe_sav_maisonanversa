@@ -109,7 +109,7 @@ export default function JournalShow({
                         <Link
                             href={journalRoutes.edit({
                                 locale: wayfinderLocale(),
-                                article: article.id,
+                                article: Number(article.id),
                             })}
                         >
                             <Pencil className="h-4 w-4" /> {t('Bewerken')}
@@ -130,7 +130,7 @@ export default function JournalShow({
                                     <Link
                                         href={journalRoutes.edit({
                                             locale,
-                                            article: article.id,
+                                            article: Number(article.id),
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />
@@ -161,7 +161,7 @@ export default function JournalShow({
                                         router.delete(
                                             journalRoutes.destroy({
                                                 locale,
-                                                article: article.id,
+                                                article: Number(article.id),
                                             }).url,
                                         )
                                     }

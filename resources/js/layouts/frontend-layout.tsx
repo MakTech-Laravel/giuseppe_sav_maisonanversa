@@ -10,7 +10,10 @@ import { MaisonModals } from '@/components/maison/modals/maison-modals';
 import { ContactDock } from '@/components/maison/shell/contact-dock';
 import { EtchingBand } from '@/components/maison/shell/etching-band';
 import { ShellActionsProvider } from '@/components/maison/shell/shell-actions';
-import type { ShellActions } from '@/components/maison/shell/shell-actions';
+import type {
+    OrderProductContext,
+    ShellActions,
+} from '@/components/maison/shell/shell-actions';
 import { SiteFooter } from '@/components/maison/shell/site-footer';
 import { SiteNav } from '@/components/maison/shell/site-nav';
 import { SiteTopbar } from '@/components/maison/shell/site-topbar';
@@ -61,6 +64,9 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const [userModal, setUserModal] = useState<ModalKind>(null);
+    const [orderProduct, setOrderProduct] = useState<
+        OrderProductContext | undefined
+    >(undefined);
     const [userAuthView, setUserAuthView] = useState<AuthView>('login');
     const [dismissedAuthPromptKey, setDismissedAuthPromptKey] = useState<
         string | null
@@ -86,7 +92,10 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     const actions = useMemo<ShellActions>(
         () => ({
             openNewsletter: () => setUserModal('newsletter'),
-            openOrder: () => setUserModal('order'),
+            openOrder: (product?: OrderProductContext) => {
+                setOrderProduct(product);
+                setUserModal('order');
+            },
             openCertificate: () => setUserModal('certificate'),
             openAuth: (view: AuthView = 'login') => {
                 setUserAuthView(view);
@@ -102,6 +111,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         }
 
         setUserModal(null);
+        setOrderProduct(undefined);
     }
 
     return (
@@ -140,6 +150,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                         <MaisonModals
                             kind={modal}
                             authView={authView}
+                            orderProduct={orderProduct}
                             onAuthViewChange={setUserAuthView}
                             onClose={closeModal}
                         />

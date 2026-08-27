@@ -86,7 +86,7 @@ export default function OrdersIndex({ orders }: { orders: Order[] }) {
                                             <Link
                                                 href={ordersRoutes.show({
                                                     locale: wayfinderLocale(),
-                                                    order: order.id,
+                                                    order: Number(order.id),
                                                 })}
                                                 title={t('Bestelling bekijken')}
                                             >

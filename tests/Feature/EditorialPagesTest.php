@@ -50,7 +50,7 @@ test('dressing CTAs use shell actions or maison links', function () {
     expect($dressing)
         ->toContain('openNewsletter')
         ->toContain('MaisonLink')
-        ->toContain('to="product"')
+        ->toContain('foundingProductUrl')
         ->not->toContain('onclick=');
 });
 

@@ -302,7 +302,9 @@ export default function DressingItemsIndex({
                                                 <Link
                                                     href={dressingItems.show({
                                                         locale,
-                                                        dressingItem: item.id,
+                                                        dressingItem: Number(
+                                                            item.id,
+                                                        ),
                                                     })}
                                                 >
                                                     <Eye className="h-4 w-4" />
@@ -317,7 +319,9 @@ export default function DressingItemsIndex({
                                                 <Link
                                                     href={dressingItems.edit({
                                                         locale,
-                                                        dressingItem: item.id,
+                                                        dressingItem: Number(
+                                                            item.id,
+                                                        ),
                                                     })}
                                                 >
                                                     <Pencil className="h-4 w-4" />
@@ -333,7 +337,9 @@ export default function DressingItemsIndex({
                                                         dressingItems.destroy({
                                                             locale,
                                                             dressingItem:
-                                                                item.id,
+                                                                Number(
+                                                                    item.id,
+                                                                ),
                                                         }).url,
                                                     )
                                                 }

@@ -15,7 +15,7 @@ function maisonPages(): array
     return [
         'maison.home' => ['', 'maison/home'],
         'maison.house' => ['huis', 'maison/house'],
-        'maison.product' => ['product', 'maison/product'],
+        'maison.products' => ['products', 'maison/products/index'],
         'maison.story' => ['story', 'maison/story'],
         'maison.circle' => ['circle', 'maison/circle'],
         'maison.dressing' => ['dressing', 'maison/dressing'],
@@ -109,7 +109,7 @@ test('every page is registered under a locale-prefixed named route', function (
 })->with(array_keys(maisonPages()));
 
 test('the edition figures reach every page from inventory', function () {
-    $this->get('/nl/product')->assertInertia(fn ($page) => $page
+    $this->get('/nl/products/heritage-no-001')->assertInertia(fn ($page) => $page
         ->where('edition.reserved', 0)
         ->where('edition.total', 100)
         ->where('edition.available', 99)
@@ -123,7 +123,7 @@ test('sold-out inventory reports zero available pieces', function () {
 
     app(EditionInventory::class)->bust();
 
-    $this->get('/nl/product')
+    $this->get('/nl/products/heritage-no-001')
         ->assertInertia(fn ($page) => $page->where('edition.available', 0)->where('edition.soldOut', true));
 });
 
@@ -132,5 +132,5 @@ test('an unknown page under a valid locale is not found', function () {
 });
 
 test('a valid page under an unsupported locale is not found', function () {
-    $this->get('/de/product')->assertNotFound();
+    $this->get('/de/products/heritage-no-001')->assertNotFound();
 });
