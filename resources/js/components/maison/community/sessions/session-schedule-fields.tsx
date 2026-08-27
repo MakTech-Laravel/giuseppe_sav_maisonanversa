@@ -39,7 +39,9 @@ type SessionScheduleFieldsProps = {
 const HOURS = Array.from({ length: 17 }, (_, index) =>
     String(index + 6).padStart(2, '0'),
 );
-const MINUTES = ['00', '15', '30', '45'];
+const MINUTES = Array.from({ length: 60 }, (_, index) =>
+    String(index).padStart(2, '0'),
+);
 
 const fieldClassName =
     'flex w-full cursor-pointer items-center justify-between gap-3 border border-gold/20 bg-cream px-4 py-3 text-left font-serif text-base text-choc outline-none transition-colors hover:border-gold/40 focus:border-gold2';
@@ -150,7 +152,7 @@ export function SessionScheduleFields({
                                 />
                                 <TimeColumn
                                     label={t('Minuten')}
-                                    values={ensureMinute(minute)}
+                                    values={MINUTES}
                                     selected={minute}
                                     onSelect={(nextMinute) => {
                                         onTimeChange(`${hour}:${nextMinute}`);
@@ -245,8 +247,4 @@ function TimeColumn({
             </ScrollArea>
         </div>
     );
-}
-
-function ensureMinute(minute: string): string[] {
-    return MINUTES.includes(minute) ? MINUTES : [...MINUTES, minute].sort();
 }

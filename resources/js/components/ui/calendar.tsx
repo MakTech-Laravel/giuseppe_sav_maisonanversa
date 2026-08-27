@@ -29,14 +29,12 @@ function Calendar({
                     'flex-1 py-1 text-center font-sans text-[9px] tracking-[0.14em] text-stone uppercase',
                 week: 'mt-1 flex w-full',
                 day: 'relative size-9 p-0 text-center',
-                day_button: cn(
+                day_button:
                     'size-9 cursor-pointer font-serif text-sm text-choc transition-colors hover:bg-gold/15',
-                    'aria-selected:bg-choc aria-selected:text-cream',
-                ),
-                selected: 'bg-choc text-cream',
+                selected: '[&_button]:bg-choc [&_button]:text-cream',
                 today: 'font-medium ring-1 ring-gold/40 ring-inset',
-                outside: 'text-stone/50',
-                disabled: 'pointer-events-none text-stone/30',
+                outside: '[&_button]:text-stone/50',
+                disabled: 'pointer-events-none [&_button]:text-stone/30',
                 hidden: 'invisible',
                 ...classNames,
             }}

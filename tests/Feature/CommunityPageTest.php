@@ -155,7 +155,24 @@ test('create session uses community tabs, schedule pickers and a live preview', 
         ->toContain('SessionScheduleFields')
         ->toContain('SessionDraftPreview')
         ->toContain('lg:grid-cols-[minmax(0,1fr)_20rem]')
-        ->not->toContain('SessionBreadcrumb');
+        ->not->toContain('SessionBreadcrumb')
+        ->not->toContain('DeepL vult NL, EN en FR');
+});
+
+test('session schedule pickers show every minute and keep selected calendar days readable', function () {
+    $schedule = File::get(resource_path('js/components/maison/community/sessions/session-schedule-fields.tsx'));
+    $calendar = File::get(resource_path('js/components/ui/calendar.tsx'));
+    $steps = File::get(resource_path('js/components/maison/community/sessions/session-step.tsx'));
+
+    expect($schedule)
+        ->toContain('length: 60')
+        ->not->toContain("['00', '15', '30', '45']");
+
+    expect($calendar)
+        ->toContain('[&_button]:bg-choc')
+        ->toContain('[&_button]:text-cream');
+
+    expect($steps)->toContain('whitespace-normal');
 });
 
 test('the community feed uses a circle sheet instead of an inline sidebar column', function () {
