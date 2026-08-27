@@ -59,7 +59,7 @@ test('users without dashboard permission are forbidden', function () {
         ->assertForbidden();
 });
 
-test('legacy dashboard path redirects to the admin dashboard', function () {
+test('legacy dashboard path redirects staff to the admin dashboard', function () {
     $user = User::factory()->admin()->create();
     $user->assignRole(RoleEnum::SUPER_ADMIN->value);
     $user->syncTypeFromRoles();

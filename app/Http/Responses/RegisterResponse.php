@@ -2,6 +2,7 @@
 
 namespace App\Http\Responses;
 
+use App\Models\User;
 use App\Services\Auth\PostLoginRedirectService;
 use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
@@ -14,7 +15,8 @@ class RegisterResponse implements RegisterResponseContract
 
     public function toResponse($request): Response
     {
-        $home = $this->redirects->urlFor($request->user(), $request);
+        /** @var User $user */
+        $user = $request->user();
 
         Inertia::flash('toast', [
             'type' => 'success',
@@ -22,7 +24,7 @@ class RegisterResponse implements RegisterResponseContract
         ]);
 
         if ($request->header('X-Inertia') || ! $request->wantsJson()) {
-            return redirect()->intended($home);
+            return redirect()->to($this->redirects->intendedUrlFor($user, $request));
         }
 
         return new JsonResponse('', 201);

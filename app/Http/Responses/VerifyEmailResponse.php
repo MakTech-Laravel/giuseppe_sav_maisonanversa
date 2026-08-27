@@ -20,11 +20,13 @@ class VerifyEmailResponse implements VerifyEmailResponseContract
 
         $user = $request->user();
         $home = $user instanceof User
-            ? $this->redirects->urlFor($user, $request)
+            ? $this->redirects->intendedUrlFor($user, $request)
             : route('maison.home', [
                 'locale' => $this->redirects->resolveLocale($request),
             ], absolute: false);
 
-        return redirect()->intended($home.'?verified=1');
+        $separator = str_contains($home, '?') ? '&' : '?';
+
+        return redirect()->to($home.$separator.'verified=1');
     }
 }
