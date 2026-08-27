@@ -246,7 +246,7 @@ export function ClubForm({
                         form.setData('is_partner', checked === true)
                     }
                 />
-                {t('Partner Club')}
+                {t('Partnerclub')}
             </label>
 
             <Button type="submit" disabled={form.processing}>

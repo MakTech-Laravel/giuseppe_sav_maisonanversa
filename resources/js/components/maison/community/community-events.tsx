@@ -54,7 +54,7 @@ export function EventCard({ event, variant }: EventCardProps) {
                     </span>
                 )}
                 <span className="absolute top-3.5 left-4 border border-gold/30 bg-choc/80 px-2.5 py-1 font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                    {t('Leden only')}
+                    {t('Alleen leden')}
                 </span>
             </div>
 
@@ -88,7 +88,13 @@ export function EventCard({ event, variant }: EventCardProps) {
                         ))}
                     </div>
                     <div className="font-sans text-[10px] tracking-[0.1em] text-stone">
-                        {event.rsvp_count} {t('leden gaan')}
+                        {event.rsvp_count === 0
+                            ? t('Nog niemand heeft geboekt.')
+                            : event.rsvp_count === 1
+                              ? t('1 lid gaat')
+                              : t('{{count}} leden gaan', {
+                                    count: event.rsvp_count,
+                                })}
                     </div>
                 </div>
 
@@ -116,7 +122,7 @@ function EventAction({
     if (event.is_past) {
         return (
             <span className="block w-full border border-gold/15 bg-gold/5 px-3 py-3 text-center font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
-                {t('Event afgelopen')}
+                {t('Evenement afgelopen')}
             </span>
         );
     }

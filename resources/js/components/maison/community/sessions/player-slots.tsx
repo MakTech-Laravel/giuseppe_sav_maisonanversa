@@ -90,7 +90,7 @@ export function PlayerSlots({
 
                     {withLabels && (
                         <span className="font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
-                            {t('Open')}
+                            {t('Vrij')}
                         </span>
                     )}
                 </div>
