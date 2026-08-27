@@ -3,9 +3,12 @@ import { MaisonLink } from '@/components/maison/maison-link';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { PageHero } from '@/components/maison/ui/page-hero';
+import { useLocale } from '@/hooks/use-locale';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 
 export default function CheckoutCancel() {
     const { t } = useTranslation();
+    const { locale } = useLocale();
 
     return (
         <>
@@ -24,7 +27,11 @@ export default function CheckoutCancel() {
             />
 
             <section className="mx-auto max-w-xl px-6 pb-24 text-center">
-                <MaisonButton as={MaisonLink} to="product" variant="choc">
+                <MaisonButton
+                    as={MaisonLink}
+                    href={foundingProductUrl(locale)}
+                    variant="choc"
+                >
                     {t('Terug naar het product')}
                 </MaisonButton>
             </section>

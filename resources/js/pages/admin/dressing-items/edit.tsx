@@ -32,7 +32,7 @@ export default function EditDressingItem({
     const form = useForm(
         dressingItems.update({
             locale: wayfinderLocale(),
-            dressingItem: item.id,
+            dressingItem: Number(item.id),
         }),
         {
             name: item.name,

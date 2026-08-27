@@ -149,8 +149,15 @@ test('reduced motion is shown in rather than left staring at a still slide', fun
 });
 
 test('the overlay decides whether to run before the first paint', function () {
-    expect(File::get(resource_path('js/components/maison/intro/immersive-intro.tsx')))
-        ->toContain('typeof window === \'undefined\' ? false : shouldRun()');
+    $source = File::get(resource_path('js/components/maison/intro/immersive-intro.tsx'));
+
+    // Initial render always starts closed so SSR markup matches the first
+    // client paint; shouldRun() is then resolved inside a layout effect,
+    // before the browser paints, rather than inline during render.
+    expect($source)
+        ->toContain('useState(false)')
+        ->toContain('useLayoutEffect')
+        ->toContain('const next = shouldRun();');
 });
 
 test('the boot cover stays until the curtain lifts or the visitor skips', function () {

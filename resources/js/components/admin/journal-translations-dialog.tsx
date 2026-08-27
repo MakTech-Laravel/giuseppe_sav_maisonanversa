@@ -85,7 +85,7 @@ export function JournalTranslationsDialog({
     const form = useForm(
         journalRoutes.translations.update({
             locale,
-            article: articleId,
+            article: Number(articleId),
         }),
         initialFormData(translations),
     );
@@ -112,7 +112,7 @@ export function JournalTranslationsDialog({
         router.post(
             journalRoutes.translate({
                 locale,
-                article: articleId,
+                article: Number(articleId),
             }).url,
             targetLocale ? { target_locale: targetLocale } : {},
             {

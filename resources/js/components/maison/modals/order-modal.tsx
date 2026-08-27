@@ -9,6 +9,7 @@ import {
     modalInputClassName,
     modalNoteClassName,
 } from '@/components/maison/modals/maison-modal';
+import type { OrderProductContext } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import { useLocale } from '@/hooks/use-locale';
@@ -16,26 +17,31 @@ import { cn } from '@/lib/utils';
 
 type OrderModalProps = {
     onClose: () => void;
+    /** Per-product checkout context; omitted falls back to the founding SKU. */
+    product?: OrderProductContext;
 };
 
 type Step = 1 | 2 | 3;
 
 /**
- * The three-step reservation flow: details, preferred number (1–100) with an
- * optional monogram, then payment summary. Submits to Cashier Checkout (EUR).
+ * The reservation flow: details, then (for numbered limited editions only) a
+ * preferred-number/monogram step, then payment summary. Simple-type products
+ * skip the monogram step entirely. Submits to Cashier Checkout (EUR).
  */
-export function OrderModal({ onClose }: OrderModalProps) {
+export function OrderModal({ onClose, product }: OrderModalProps) {
     const { t } = useTranslation();
     const { locale } = useLocale();
     const {
         productId,
         priceLabel,
         productName,
+        productType,
         deliveryLabel,
         shippingEuIncluded,
         shippingEstimateMin,
         shippingEstimateMax,
-    } = useCheckoutDisplay();
+    } = useCheckoutDisplay(product);
+    const isLimitedEdition = productType !== 'simple';
     const [step, setStep] = useState<Step>(1);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -48,12 +54,17 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
     const steps = useMemo(
         () =>
-            [
-                { n: 1, label: t('Gegevens') },
-                { n: 2, label: t('Monogram') },
-                { n: 3, label: t('Betaling') },
-            ] as const,
-        [t],
+            (isLimitedEdition
+                ? [
+                      { n: 1, label: t('Gegevens') },
+                      { n: 2, label: t('Monogram') },
+                      { n: 3, label: t('Betaling') },
+                  ]
+                : [
+                      { n: 1, label: t('Gegevens') },
+                      { n: 3, label: t('Betaling') },
+                  ]) as { n: Step; label: string }[],
+        [t, isLimitedEdition],
     );
 
     function onStepOne(event: FormEvent<HTMLFormElement>): void {
@@ -66,7 +77,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
             return;
         }
 
-        setStep(2);
+        setStep(isLimitedEdition ? 2 : 3);
     }
 
     function onPay(): void {
@@ -114,19 +125,21 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
     return (
         <MaisonModal
-            label="Reserveer Uw Nummer"
+            label={
+                isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu'
+            }
             onClose={onClose}
             panelClassName="max-w-[480px]"
         >
             <h2 className="mb-1.5 font-serif text-[32px] font-medium text-choc">
-                {t('Reserveer Uw Nummer')}
+                {t(isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu')}
             </h2>
             <span className="mb-4 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
                 {`${productName} · ${priceLabel}`}
             </span>
 
             <div className="mb-5 flex gap-2">
-                {steps.map(({ n, label }) => (
+                {steps.map(({ n, label }, index) => (
                     <div
                         key={n}
                         className={cn(
@@ -142,7 +155,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
                                 step > n && 'opacity-55',
                             )}
                         >
-                            {n}
+                            {index + 1}
                         </span>
                         {label}
                     </div>
@@ -196,7 +209,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
                     )}
 
                     <MaisonButton type="submit" variant="filled" block>
-                        {t('Volgende — Monogram')}
+                        {isLimitedEdition
+                            ? t('Volgende — Monogram')
+                            : t('Volgende — Betaling')}
                     </MaisonButton>
                 </form>
             ) : step === 2 ? (
@@ -254,6 +269,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
             ) : (
                 <div>
                     <OrderSummary
+                        product={product}
                         name={name}
                         email={email}
                         phone={phone}
@@ -313,7 +329,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
                         <MaisonButton
                             type="button"
                             variant="outlineChoc"
-                            onClick={() => setStep(2)}
+                            onClick={() => setStep(isLimitedEdition ? 2 : 1)}
                             disabled={processing}
                         >
                             {t('← Terug')}
@@ -370,6 +386,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
 }
 
 function OrderSummary({
+    product,
     name,
     email,
     phone,
@@ -377,6 +394,7 @@ function OrderSummary({
     giftWrap,
     giftMessage,
 }: {
+    product?: OrderProductContext;
     name: string;
     email: string;
     phone: string;
@@ -385,7 +403,9 @@ function OrderSummary({
     giftMessage: string;
 }) {
     const { t } = useTranslation();
-    const { priceLabel, productName } = useCheckoutDisplay();
+    const { priceLabel, productName, productType } =
+        useCheckoutDisplay(product);
+    const isLimitedEdition = productType !== 'simple';
     const mono = monogram.trim().toUpperCase();
     const trimmedPhone = phone.trim();
     const trimmedMessage = giftMessage.trim();
@@ -394,10 +414,12 @@ function OrderSummary({
         <div className="mb-4 rounded border border-gold/22 bg-black/3 p-4.5">
             <SummaryRow label={t('Product')} value={productName} />
             <SummaryRow label={t('Houder')} value={name.trim()} />
-            <SummaryRow
-                label={t('Editienummer')}
-                value={t('Toegewezen na betaling')}
-            />
+            {isLimitedEdition && (
+                <SummaryRow
+                    label={t('Editienummer')}
+                    value={t('Toegewezen na betaling')}
+                />
+            )}
             {mono && <SummaryRow label={t('Monogram')} value={mono} />}
             <SummaryRow label={t('E-mail')} value={email.trim()} />
             {trimmedPhone && (
@@ -418,11 +440,13 @@ function OrderSummary({
                 </>
             )}
             <SummaryRow label={t('Totaal')} value={priceLabel} total />
-            <p className="mt-2.5 font-sans text-[10px] leading-[1.6] tracking-[0.1em] text-choc3 uppercase">
-                {t(
-                    'Het editienummer wordt toegewezen na bevestigde betaling. No. 001 blijft in het Maison Anversa-archief.',
-                )}
-            </p>
+            {isLimitedEdition && (
+                <p className="mt-2.5 font-sans text-[10px] leading-[1.6] tracking-[0.1em] text-choc3 uppercase">
+                    {t(
+                        'Het editienummer wordt toegewezen na bevestigde betaling. No. 001 blijft in het Maison Anversa-archief.',
+                    )}
+                </p>
+            )}
         </div>
     );
 }

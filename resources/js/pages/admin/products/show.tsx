@@ -16,6 +16,11 @@ import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import products from '@/routes/admin/products';
+import type {
+    ProductFaqFormData,
+    ProductSectionCatalogueEntry,
+    ProductSectionFormData,
+} from '@/types/admin-product';
 
 interface ProductDetails {
     id: number;
@@ -39,6 +44,8 @@ interface ProductDetails {
     stripe_price_id: string | null;
     primary_image: ExistingFile | null;
     gallery_images: ExistingFile[];
+    sections: ProductSectionFormData[];
+    faqs: ProductFaqFormData[];
 }
 
 type LocaleCopy = {
@@ -90,11 +97,13 @@ export default function ShowProduct({
     locales,
     translations,
     translationStatus,
+    sectionCatalogue,
 }: {
     product: ProductDetails;
     locales: string[];
     translations: Record<string, LocaleCopy>;
     translationStatus: Record<string, TranslationStatus>;
+    sectionCatalogue: ProductSectionCatalogueEntry[];
 }) {
     const { t } = useTranslation();
     const { locale: currentLocale } = useLocale();
@@ -468,6 +477,108 @@ export default function ShowProduct({
                             </div>
                         </AdminPanel>
                     )}
+
+                    <AdminPanel
+                        title={t('Paginasecties')}
+                        description={t(
+                            'Overzicht van de secties op de publieke productpagina. Bewerk de inhoud via het tabblad Secties.',
+                        )}
+                    >
+                        {product.sections.length > 0 ? (
+                            <div className="grid gap-3">
+                                {product.sections.map((section) => {
+                                    const entry = sectionCatalogue.find(
+                                        (candidate) =>
+                                            candidate.key === section.key,
+                                    );
+
+                                    return (
+                                        <div
+                                            key={section.key}
+                                            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/20 px-4 py-3"
+                                        >
+                                            <div className="min-w-0">
+                                                <p className="truncate text-sm font-medium">
+                                                    {entry?.label ??
+                                                        section.key}
+                                                </p>
+                                                {entry?.uses_items ? (
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {t(
+                                                            '{{count}} onderdelen',
+                                                            {
+                                                                count: section
+                                                                    .items
+                                                                    .length,
+                                                            },
+                                                        )}
+                                                    </p>
+                                                ) : null}
+                                            </div>
+                                            <Badge
+                                                variant={
+                                                    section.is_visible
+                                                        ? 'secondary'
+                                                        : 'outline'
+                                                }
+                                            >
+                                                {section.is_visible
+                                                    ? t('Zichtbaar')
+                                                    : t('Verborgen')}
+                                            </Badge>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-muted-foreground">
+                                {t('Nog geen secties voor dit product.')}
+                            </p>
+                        )}
+                    </AdminPanel>
+
+                    <AdminPanel
+                        title={t('Veelgestelde vragen')}
+                        description={t(
+                            'Vragen en antwoorden die alleen op dit product worden getoond.',
+                        )}
+                    >
+                        {product.faqs.length > 0 ? (
+                            <div className="grid gap-4">
+                                {product.faqs.map((faq) => (
+                                    <div
+                                        key={faq.uid}
+                                        className="rounded-lg border bg-muted/20 p-4"
+                                    >
+                                        <div className="mb-1.5 flex items-start justify-between gap-3">
+                                            <p className="text-sm font-medium">
+                                                {faq.question}
+                                            </p>
+                                            <Badge
+                                                variant={
+                                                    faq.is_published
+                                                        ? 'secondary'
+                                                        : 'outline'
+                                                }
+                                                className="shrink-0"
+                                            >
+                                                {faq.is_published
+                                                    ? t('Gepubliceerd')
+                                                    : t('Concept')}
+                                            </Badge>
+                                        </div>
+                                        <p className="text-sm break-words text-muted-foreground">
+                                            {faq.answer}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-muted-foreground">
+                                {t('Nog geen vragen voor dit product.')}
+                            </p>
+                        )}
+                    </AdminPanel>
 
                     <AdminPanel
                         title={t('Publicatie')}

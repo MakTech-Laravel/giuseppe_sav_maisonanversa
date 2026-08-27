@@ -24,6 +24,11 @@ export default function Profile({
 }) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
+    const user = auth.user;
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <>
@@ -46,9 +51,9 @@ export default function Profile({
                             )}
                         >
                             <ProfileAvatarField
-                                name={auth.user.name}
-                                email={auth.user.email}
-                                avatarUrl={auth.user.avatar_url}
+                                name={user.name}
+                                email={user.email}
+                                avatarUrl={user.avatar_url}
                                 error={errors.avatar}
                             />
                         </SettingsPanel>
@@ -65,7 +70,7 @@ export default function Profile({
                                     <Input
                                         id="name"
                                         className="w-full"
-                                        defaultValue={auth.user.name}
+                                        defaultValue={user.name}
                                         name="name"
                                         required
                                         autoComplete="name"
@@ -81,7 +86,7 @@ export default function Profile({
                                     <Input
                                         id="username"
                                         className="w-full"
-                                        defaultValue={auth.user.username}
+                                        defaultValue={user.username}
                                         name="username"
                                         required
                                         autoComplete="username"
@@ -98,7 +103,7 @@ export default function Profile({
                                         id="email"
                                         type="email"
                                         className="w-full"
-                                        defaultValue={auth.user.email}
+                                        defaultValue={user.email}
                                         name="email"
                                         required
                                         autoComplete="email"
@@ -109,7 +114,7 @@ export default function Profile({
                             </div>
 
                             {mustVerifyEmail &&
-                                auth.user.email_verified_at === null && (
+                                user.email_verified_at === null && (
                                     <div className="mt-5 rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
                                         {t(
                                             'Uw e-mailadres is niet geverifieerd.',

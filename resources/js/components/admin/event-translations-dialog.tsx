@@ -83,7 +83,7 @@ export function EventTranslationsDialog({
     const form = useForm(
         eventsRoutes.translations.update({
             locale,
-            event: eventId,
+            event: Number(eventId),
         }),
         initialFormData(translations),
     );
@@ -108,7 +108,7 @@ export function EventTranslationsDialog({
     function retranslate(targetLocale?: EventLocale) {
         setTranslating(true);
         router.post(
-            eventsRoutes.translate({ locale, event: eventId }).url,
+            eventsRoutes.translate({ locale, event: Number(eventId) }).url,
             targetLocale ? { target_locale: targetLocale } : {},
             {
                 preserveScroll: true,

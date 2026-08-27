@@ -83,7 +83,7 @@ export default function ShowDressingItem({
                         <Link
                             href={dressingItems.edit({
                                 locale,
-                                dressingItem: item.id,
+                                dressingItem: Number(item.id),
                             })}
                         >
                             <Pencil className="h-4 w-4" /> {t('Bewerken')}
@@ -104,7 +104,7 @@ export default function ShowDressingItem({
                                     <Link
                                         href={dressingItems.edit({
                                             locale,
-                                            dressingItem: item.id,
+                                            dressingItem: Number(item.id),
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
@@ -129,7 +129,7 @@ export default function ShowDressingItem({
                                         router.delete(
                                             dressingItems.destroy({
                                                 locale,
-                                                dressingItem: item.id,
+                                                dressingItem: Number(item.id),
                                             }).url,
                                         )
                                     }

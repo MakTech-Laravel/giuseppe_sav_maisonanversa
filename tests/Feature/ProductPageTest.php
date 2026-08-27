@@ -1,12 +1,19 @@
 <?php
 
+use App\Models\Product;
+use Illuminate\Support\Facades\Artisan;
+
 test('the product page receives the edition figures from inventory', function () {
-    $this->get('/nl/product')->assertOk()->assertInertia(fn ($page) => $page
-        ->component('maison/product')
-        ->where('edition.reserved', 0)
-        ->where('edition.total', 100)
-        ->where('edition.available', 99)
-    );
+    Artisan::call('app:import-static-content-command');
+
+    $this->get(localized('maison.products.show', ['product' => Product::FOUNDING_SLUG]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('maison/products/show')
+            ->where('productEdition.reserved', 0)
+            ->where('productEdition.total', 100)
+            ->where('productEdition.available', 99)
+        );
 });
 
 test('the product stock line reads available, not a hardcoded remainder', function () {

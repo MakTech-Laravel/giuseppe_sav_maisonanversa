@@ -3,6 +3,8 @@ import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
+import { useLocale } from '@/hooks/use-locale';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 import type { Edition } from '@/types/edition';
 
 /**
@@ -13,6 +15,7 @@ import type { Edition } from '@/types/edition';
 export function HomeHero({ edition }: { edition: Edition }) {
     const { t } = useTranslation();
     const { openNewsletter } = useShellActions();
+    const { locale } = useLocale();
 
     return (
         <section className="relative flex min-h-[calc(100vh-var(--topbar-h)-var(--nav-h))] items-end overflow-hidden bg-choc">
@@ -68,7 +71,11 @@ export function HomeHero({ edition }: { edition: Edition }) {
                 </p>
 
                 <div className="flex flex-wrap items-center gap-5">
-                    <MaisonButton as={MaisonLink} variant="hero" to="product">
+                    <MaisonButton
+                        as={MaisonLink}
+                        variant="hero"
+                        href={foundingProductUrl(locale)}
+                    >
                         {t('Ontdek Heritage No.001 →')}
                     </MaisonButton>
                     <MaisonButton as={MaisonLink} variant="ghost" to="house">

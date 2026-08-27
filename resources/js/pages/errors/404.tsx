@@ -3,9 +3,12 @@ import { MaisonLink } from '@/components/maison/maison-link';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { PageHero } from '@/components/maison/ui/page-hero';
+import { useLocale } from '@/hooks/use-locale';
+import { foundingProductUrl } from '@/lib/maison-navigation';
 
 export default function Error404() {
     const { t } = useTranslation();
+    const { locale } = useLocale();
 
     return (
         <>
@@ -29,7 +32,11 @@ export default function Error404() {
                     <MaisonButton as={MaisonLink} to="home" variant="hero">
                         {t('Terug naar huis')}
                     </MaisonButton>
-                    <MaisonButton as={MaisonLink} to="product" variant="ghost">
+                    <MaisonButton
+                        as={MaisonLink}
+                        href={foundingProductUrl(locale)}
+                        variant="ghost"
+                    >
                         {t('Ontdek Heritage No.001 →')}
                     </MaisonButton>
                     <MaisonButton as={MaisonLink} to="journal" variant="ghost">

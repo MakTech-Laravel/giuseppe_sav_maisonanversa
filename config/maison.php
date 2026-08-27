@@ -44,7 +44,7 @@ return [
     'pages' => [
         'home' => '',
         'house' => 'huis',
-        'product' => 'product',
+        'products' => 'products',
         'story' => 'story',
         'circle' => 'circle',
         'dressing' => 'dressing',

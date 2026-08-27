@@ -9,7 +9,7 @@ import type { Locale } from '@/types/locale';
 export const MAISON_PAGES = [
     'home',
     'house',
-    'product',
+    'products',
     'story',
     'circle',
     'dressing',
@@ -29,12 +29,20 @@ export function maisonUrl(page: MaisonPage, locale: Locale): string {
     return maison[page].url(locale);
 }
 
+/** Heritage No.001's product slug — the founding SKU, always shown first in the catalog. */
+export const FOUNDING_PRODUCT_SLUG = 'heritage-no-001';
+
+/** For CTAs that specifically mean "go look at Heritage No.001", not "browse products". */
+export function foundingProductUrl(locale: Locale): string {
+    return `${maisonUrl('products', locale)}/${FOUNDING_PRODUCT_SLUG}`;
+}
+
 export type NavItem = { page: MaisonPage; label: string; hash?: string };
 
 /** The nine links in the header, in the prototype's order. */
 export const PRIMARY_NAV: readonly NavItem[] = [
     { page: 'house', label: 'Het Huis' },
-    { page: 'product', label: 'Heritage No.001' },
+    { page: 'products', label: 'Producten' },
     { page: 'story', label: 'Ons Verhaal' },
     { page: 'circle', label: 'Founding Circle' },
     { page: 'dressing', label: 'Kleedkamer' },
@@ -53,7 +61,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
     {
         heading: 'Verkennen',
         items: [
-            { page: 'product', label: 'Heritage No.001' },
+            { page: 'products', label: 'Producten' },
             { page: 'story', label: 'Ons Verhaal' },
             { page: 'circle', label: 'Founding Circle' },
             { page: 'dressing', label: 'Kleedkamer' },

@@ -52,14 +52,15 @@ export default function CircleIndex({
 
     function submitAssign(event: FormEvent) {
         event.preventDefault();
-        form
-            .transform((data) => ({
-                email: data.email || null,
-                user_id: data.user_id === '' ? null : Number(data.user_id),
-            }))
-            .submit({
-                onSuccess: () => form.reset(),
-            });
+
+        form.transform((data) => ({
+            email: data.email || null,
+            user_id: data.user_id === '' ? null : Number(data.user_id),
+        }));
+
+        form.submit({
+            onSuccess: () => form.reset(),
+        });
     }
 
     function removeMember(memberId: string) {
@@ -70,7 +71,7 @@ export default function CircleIndex({
         router.delete(
             circleRoutes.remove({
                 locale: wayfinderLocale(),
-                member: memberId,
+                member: Number(memberId),
             }).url,
         );
     }
@@ -177,7 +178,9 @@ export default function CircleIndex({
                                             <Link
                                                 href={circleRoutes.show({
                                                     locale: wayfinderLocale(),
-                                                    member: member.id,
+                                                    member: Number(
+                                                        member.id,
+                                                    ),
                                                 })}
                                                 title={t('Lid bekijken')}
                                             >
