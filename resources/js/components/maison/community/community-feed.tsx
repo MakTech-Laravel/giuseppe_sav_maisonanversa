@@ -74,7 +74,7 @@ export function CommunityFeed({
 
     return (
         <>
-            <Wrap className="mx-auto max-w-3xl px-6 py-12 md:px-10 lg:px-20">
+            <Wrap className="px-6 py-12 md:px-10 lg:px-20">
                 <FeedCompose
                     initials={userInitials}
                     onPublish={handlePublish}

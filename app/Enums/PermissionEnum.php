@@ -55,6 +55,7 @@ enum PermissionEnum: string
     case COMMUNITY_OFFICIAL = 'community.official';
     case COMMUNITY_PARTICIPATE = 'community.participate';
     case SESSIONS_MANAGE = 'sessions.manage';
+    case CLUBS_MANAGE = 'clubs.manage';
 
     // -------------------------------------------------------------------------
     // group() — returns the display group for the `group` DB column.
@@ -107,7 +108,8 @@ enum PermissionEnum: string
             self::COMMUNITY_MODERATE,
             self::COMMUNITY_OFFICIAL,
             self::COMMUNITY_PARTICIPATE,
-            self::SESSIONS_MANAGE => 'Community',
+            self::SESSIONS_MANAGE,
+            self::CLUBS_MANAGE => 'Community',
         };
     }
 

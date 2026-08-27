@@ -5,7 +5,10 @@ Before planning or editing, find the row whose globs match the file's path and r
 | Applies to | Rule file |
 | --- | --- |
 | app/Http/Controllers/Admin/CommunityEventController.php | .ai/rules/admin.md |
+| app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
 | resources/js/pages/admin/letter/**/*.tsx | .ai/rules/letter.md |
+| resources/js/components/maison/community/** | .ai/rules/maison-community.md |
+| app/Models/*.php | .ai/rules/models.md |
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
 | routes/web.php | .ai/rules/routes.md |
 | app/Services/Translation/** | .ai/rules/translation.md |

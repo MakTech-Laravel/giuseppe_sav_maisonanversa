@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PermissionEnum;
+use App\Http\Controllers\Admin\ClubController as AdminClubController;
 use App\Http\Controllers\Admin\CommerceSettingController;
 use App\Http\Controllers\Admin\CommunityCourtController;
 use App\Http\Controllers\Admin\CommunityEventController;
@@ -22,7 +23,10 @@ use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
+use App\Http\Controllers\Community\ClubController;
 use App\Http\Controllers\Community\CommunityController;
+use App\Http\Controllers\Community\EventController as CommunityEventPageController;
+use App\Http\Controllers\Community\SessionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
@@ -203,17 +207,35 @@ Route::prefix('{locale}')
                 Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
             });
 
-        Route::prefix('community')->name('community.')->controller(CommunityController::class)->group(function () {
-            Route::post('posts', 'storePost')->name('posts.store');
-            Route::post('posts/{communityPost}/comments', 'storeComment')->name('posts.comments.store');
-            Route::post('posts/{communityPost}/like', 'toggleLike')->name('posts.like');
-            Route::post('posts/{communityPost}/hide', 'hidePost')->name('posts.hide');
-            Route::post('posts/{communityPost}/report', 'reportPost')->name('posts.report');
-            Route::post('sessions', 'storeSession')->name('sessions.store');
-            Route::post('sessions/{communitySession}/join', 'joinSession')->name('sessions.join');
-            Route::delete('sessions/{communitySession}/leave', 'leaveSession')->name('sessions.leave');
-            Route::post('events/{communityEvent}/rsvp', 'rsvpEvent')->name('events.rsvp');
-            Route::delete('events/{communityEvent}/rsvp', 'cancelRsvp')->name('events.rsvp.cancel');
+        Route::prefix('community')->name('community.')->group(function () {
+            Route::controller(CommunityController::class)->group(function () {
+                Route::post('posts', 'storePost')->name('posts.store');
+                Route::post('posts/{communityPost}/comments', 'storeComment')->name('posts.comments.store');
+                Route::post('posts/{communityPost}/like', 'toggleLike')->name('posts.like');
+                Route::post('posts/{communityPost}/hide', 'hidePost')->name('posts.hide');
+                Route::post('posts/{communityPost}/report', 'reportPost')->name('posts.report');
+                Route::post('events/{communityEvent}/rsvp', 'rsvpEvent')->name('events.rsvp');
+                Route::delete('events/{communityEvent}/rsvp', 'cancelRsvp')->name('events.rsvp.cancel');
+            });
+
+            Route::get('events', [CommunityEventPageController::class, 'index'])->name('events.index');
+
+            Route::controller(SessionController::class)->group(function () {
+                Route::get('sessions', 'index')->name('sessions.index');
+                Route::get('sessions/create', 'create')->name('sessions.create');
+                Route::post('sessions', 'store')->name('sessions.store');
+                Route::get('sessions/{communitySession}', 'show')->name('sessions.show');
+                Route::delete('sessions/{communitySession}', 'destroy')->name('sessions.destroy');
+                Route::post('sessions/{communitySession}/join', 'join')->name('sessions.join');
+                Route::delete('sessions/{communitySession}/leave', 'leave')->name('sessions.leave');
+                Route::delete('sessions/{communitySession}/participants/{user}', 'removeParticipant')
+                    ->name('sessions.participants.destroy');
+            });
+
+            Route::controller(ClubController::class)->group(function () {
+                Route::get('clubs/search', 'search')->name('clubs.search');
+                Route::post('clubs', 'store')->name('clubs.store');
+            });
         });
 
         // ── Demo landing page ─────────────────────────────────────────────────────
@@ -470,20 +492,31 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
-            Route::controller(CommunitySessionController::class)->group(function () {
-                Route::get('sessions', 'index')->name('community-sessions.index')
-                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
-                Route::get('sessions/create', 'create')->name('community-sessions.create')
-                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
-                Route::post('sessions', 'store')->name('community-sessions.store')
-                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
-                Route::get('sessions/{communitySession}/edit', 'edit')->name('community-sessions.edit')
-                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
-                Route::put('sessions/{communitySession}', 'update')->name('community-sessions.update')
-                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
-                Route::delete('sessions/{communitySession}', 'destroy')->name('community-sessions.destroy')
-                    ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value);
-            });
+            Route::controller(CommunitySessionController::class)
+                ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value)
+                ->group(function () {
+                    Route::get('sessions', 'index')->name('community-sessions.index');
+                    Route::get('sessions/{communitySession}', 'show')->name('community-sessions.show');
+                    Route::patch('sessions/{communitySession}/cancel', 'cancel')->name('community-sessions.cancel');
+                    Route::delete('sessions/{communitySession}/participants/{user}', 'removeParticipant')
+                        ->name('community-sessions.participants.destroy');
+                    Route::delete('sessions/{communitySession}', 'destroy')->name('community-sessions.destroy');
+                });
+
+            Route::controller(AdminClubController::class)
+                ->middleware('permission:'.PermissionEnum::CLUBS_MANAGE->value)
+                ->group(function () {
+                    Route::get('clubs', 'index')->name('clubs.index');
+                    Route::get('clubs/create', 'create')->name('clubs.create');
+                    Route::post('clubs', 'store')->name('clubs.store');
+                    Route::get('clubs/{club}', 'show')->name('clubs.show');
+                    Route::get('clubs/{club}/edit', 'edit')->name('clubs.edit');
+                    Route::put('clubs/{club}', 'update')->name('clubs.update');
+                    Route::patch('clubs/{club}/approve', 'approve')->name('clubs.approve');
+                    Route::patch('clubs/{club}/reject', 'reject')->name('clubs.reject');
+                    Route::post('clubs/{club}/merge', 'merge')->name('clubs.merge');
+                    Route::delete('clubs/{club}', 'destroy')->name('clubs.destroy');
+                });
 
             // Admins — staff accounts (Access Control).
             Route::controller(UserController::class)->group(function () {
