@@ -100,22 +100,6 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'open_auth_modal' => fn () => $request->session()->get('open_auth_modal'),
             ],
-            'notifications' => fn (): ?array => $user ? [
-                'unread_count' => $user->unreadNotifications()->count(),
-                'recent' => $user->notifications()
-                    ->latest()
-                    ->limit(8)
-                    ->get()
-                    ->map(fn ($notification): array => [
-                        'id' => $notification->id,
-                        'type' => class_basename($notification->type),
-                        'data' => $notification->data,
-                        'read_at' => $notification->read_at?->toIso8601String(),
-                        'created_at' => $notification->created_at?->toIso8601String(),
-                    ])
-                    ->values()
-                    ->all(),
-            ] : null,
         ];
     }
 }
