@@ -179,6 +179,16 @@ test('a missing deepl key keeps dutch and does not call the api', function () {
     Http::assertNothingSent();
 });
 
+test('translate model job skips a missing model class without calling deepl', function () {
+    config(['services.deepl.key' => 'test-key:fx']);
+    Http::fake();
+
+    $job = new TranslateModelJob('App\\Models\\ProductSection', 1);
+    $job->handle(app(DeepLTranslator::class));
+
+    Http::assertNothingSent();
+});
+
 test('deepl retries after a 429 and then stores the translation', function () {
     config(['services.deepl.key' => 'test-key:fx']);
 
