@@ -74,7 +74,7 @@ class SessionController extends Controller
 
         $sessions->setCollection(
             $sessions->getCollection()->map(
-                fn (CommunitySession $session): array => SessionFeed::toCard($session, $user),
+                fn (CommunitySession $session): array => SessionFeed::toCard($session, $user, $locale),
             ),
         );
 
@@ -115,10 +115,10 @@ class SessionController extends Controller
 
     public function show(Request $request, string $locale, CommunitySession $communitySession): Response
     {
-        $communitySession->load(['host', 'club', 'participants.user'])->loadCount('participants');
+        $communitySession->load(['host', 'club', 'participants.user', 'translations'])->loadCount('participants');
 
         return Inertia::render('maison/sessions/show', [
-            'session' => SessionFeed::toCard($communitySession, $request->user()),
+            'session' => SessionFeed::toCard($communitySession, $request->user(), $locale),
         ]);
     }
 

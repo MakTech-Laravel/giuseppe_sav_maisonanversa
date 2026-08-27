@@ -1771,5 +1771,6 @@
     "Kies een tijdstip": "Choose a time",
     "Typ minstens 2 letters om te zoeken.": "Type at least 2 letters to search.",
     "Uur": "Hour",
-    "Minuten": "Minutes"
+    "Minuten": "Minutes",
+    "Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan.": "Text on this form is the source. DeepL fills NL, EN, and FR after saving."
 }

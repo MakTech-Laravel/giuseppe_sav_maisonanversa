@@ -3,6 +3,10 @@
 use App\Enums\EditionPieceStatus;
 use App\Enums\OrderStatus;
 use App\Enums\RoleEnum;
+use App\Enums\SessionCourtStatus;
+use App\Enums\SessionGender;
+use App\Enums\SessionLevel;
+use App\Enums\SessionSport;
 use App\Jobs\TranslateModelJob;
 use App\Mail\OrderConfirmation;
 use App\Models\Club;
@@ -366,18 +370,77 @@ test('journal articles translate title excerpt body category and date label', fu
         ->not->toContain('cover_path');
 });
 
-test('sessions and clubs stay out of DeepL entirely', function () {
+test('clubs stay out of DeepL entirely', function () {
     fakeDeepLTranslations();
-
-    $session = CommunitySession::factory()->create(['notes' => 'Kom 15 minuten eerder.']);
-
-    expect(class_uses_recursive($session))->not->toContain(TranslatesWithDeepL::class)
-        ->and($session->notes)->toBe('Kom 15 minuten eerder.');
 
     $club = Club::factory()->create(['name' => 'Padel Ganda']);
 
     expect(class_uses_recursive($club))->not->toContain(TranslatesWithDeepL::class)
         ->and($club->name)->toBe('Padel Ganda');
+});
+
+test('session notes auto-detect and translate to all locales', function () {
+    fakeDeepLTranslations();
+
+    $host = User::factory()->create();
+    $club = Club::factory()->create();
+
+    $this->actingAs($host)
+        ->post(route('community.sessions.store', ['locale' => 'nl']), [
+            'sport' => SessionSport::Padel->value,
+            'club_id' => $club->id,
+            'starts_at' => now()->addDay()->toDateTimeString(),
+            'duration_minutes' => 90,
+            'court_status' => SessionCourtStatus::NotBooked->value,
+            'level' => SessionLevel::Intermediate->value,
+            'gender' => SessionGender::Everyone->value,
+            'capacity' => 4,
+            'notes' => 'Please arrive 15 minutes early.',
+        ])
+        ->assertRedirect();
+
+    $session = CommunitySession::query()->firstOrFail();
+
+    expect(class_uses_recursive($session))->toContain(TranslatesWithDeepL::class)
+        ->and($session->translatableColumns())->toBe(['notes'])
+        ->and($session->notes)->toBe('Please arrive 15 minutes early.')
+        ->and($session->translations()->count())->toBe(3)
+        ->and($session->translated('notes', 'nl'))->toBe('NL Please arrive 15 minutes early.')
+        ->and($session->translated('notes', 'en'))->toBe('EN Please arrive 15 minutes early.')
+        ->and($session->translated('notes', 'fr'))->toBe('FR Please arrive 15 minutes early.');
+});
+
+test('empty session notes skip DeepL', function () {
+    fakeDeepLTranslations();
+
+    $session = CommunitySession::factory()->create(['notes' => null]);
+
+    expect($session->translations()->count())->toBe(0)
+        ->and($session->translated('notes', 'en'))->toBe('');
+});
+
+test('session index and show expose translated notes for the request locale', function () {
+    fakeDeepLTranslations();
+
+    $viewer = User::factory()->create();
+    $session = CommunitySession::factory()->create(['notes' => 'Kom 15 minuten eerder.']);
+
+    $this->actingAs($viewer)
+        ->get(route('community.sessions.index', ['locale' => 'en']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('sessions.data.0.notes', 'EN Kom 15 minuten eerder.')
+        );
+
+    $this->actingAs($viewer)
+        ->get(route('community.sessions.show', [
+            'locale' => 'fr',
+            'communitySession' => $session->id,
+        ]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('session.notes', 'FR Kom 15 minuten eerder.')
+        );
 });
 
 test('community comments are translated for all locales like faqs', function () {
