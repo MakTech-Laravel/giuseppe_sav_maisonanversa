@@ -59,4 +59,18 @@ class NewsletterSubscriber extends Model
     {
         return $this->status === SubscriberStatus::Subscribed;
     }
+
+    /**
+     * @return array{heritageLetter: bool, productUpdates: bool, events: bool}
+     */
+    public function topicPreferences(): array
+    {
+        $preferences = $this->preferences ?? [];
+
+        return [
+            'heritageLetter' => (bool) ($preferences['heritageLetter'] ?? false),
+            'productUpdates' => (bool) ($preferences['productUpdates'] ?? false),
+            'events' => (bool) ($preferences['events'] ?? false),
+        ];
+    }
 }

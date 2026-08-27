@@ -1,8 +1,14 @@
 import { Head, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
+import { updateLetter } from '@/actions/App/Http/Controllers/Member/DashboardController';
+import {
+    MemberPageHeader,
+    MemberPanel,
+    MemberStatusPill,
+} from '@/components/member/member-ui';
 import { Button } from '@/components/ui/button';
+import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 
 type Preferences = {
     heritageLetter: boolean;
@@ -12,15 +18,17 @@ type Preferences = {
 
 export default function MemberLetter({
     preferences,
+    status,
 }: {
     preferences: Preferences;
+    status: string | null;
 }) {
     const { t } = useTranslation();
-    const form = useForm(preferences);
+    const form = useForm(updateLetter(wayfinderLocale()), preferences);
 
     function onSubmit(event: FormEvent) {
         event.preventDefault();
-        form.patch(`/${window.location.pathname.split('/')[1]}/member/letter`);
+        form.submit();
     }
 
     const options = [
@@ -29,6 +37,8 @@ export default function MemberLetter({
         ['events', t('Sessies & events')] as const,
     ];
 
+    const isSubscribed = status === 'subscribed';
+
     return (
         <>
             <Head title={t('Heritage Letter')} />
@@ -36,11 +46,19 @@ export default function MemberLetter({
                 eyebrow={t('Correspondentie')}
                 title={t('Heritage Letter-voorkeuren')}
                 description={t(
-                    'Kies wat u bereikt. Wijzigingen zijn prototype tot de lijstprovider is aangesloten.',
+                    'Kies welke berichten u ontvangt. Wijzigingen worden meteen bewaard.',
                 )}
             />
 
             <MemberPanel className="max-w-xl">
+                <div className="mb-6 flex items-center gap-3">
+                    <MemberStatusPill tone={isSubscribed ? 'success' : 'warn'}>
+                        {isSubscribed
+                            ? t('U staat op de lijst.')
+                            : t('U staat niet op de lijst.')}
+                    </MemberStatusPill>
+                </div>
+
                 <form onSubmit={onSubmit} className="space-y-5">
                     {options.map(([key, label]) => (
                         <label

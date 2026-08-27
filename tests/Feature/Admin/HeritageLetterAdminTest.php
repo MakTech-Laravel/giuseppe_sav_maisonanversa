@@ -36,6 +36,29 @@ test('staff can view letter subscribers with filters and pagination', function (
         );
 });
 
+test('staff see topic preferences on each subscriber row', function () {
+    NewsletterSubscriber::factory()->create([
+        'email' => 'topics@example.com',
+        'name' => 'Topic Person',
+        'preferences' => [
+            'heritageLetter' => true,
+            'productUpdates' => false,
+            'events' => true,
+        ],
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(localized('admin.letter.index', ['search' => 'topics@']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('subscribers.data', 1)
+            ->where('subscribers.data.0.email', 'topics@example.com')
+            ->where('subscribers.data.0.preferences.heritageLetter', true)
+            ->where('subscribers.data.0.preferences.productUpdates', false)
+            ->where('subscribers.data.0.preferences.events', true)
+        );
+});
+
 test('staff can paginate every subscriber without a 200 cap', function () {
     NewsletterSubscriber::factory()->count(21)->create();
 
@@ -161,7 +184,19 @@ test('staff can export filtered letter subscribers', function () {
         $emails = $export->collection()->pluck('email');
 
         return $emails->contains('keep@example.com')
-            && ! $emails->contains('drop@example.com');
+            && ! $emails->contains('drop@example.com')
+            && $export->headings() === [
+                'Email',
+                'Name',
+                'Locale',
+                'Source',
+                'Status',
+                'Heritage Letter',
+                'Product Updates',
+                'Events',
+                'Consent At',
+                'Synced At',
+            ];
     });
 });
 
