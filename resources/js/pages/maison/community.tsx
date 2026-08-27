@@ -17,9 +17,14 @@ import type { Paginated } from '@/types/admin';
 type CommunityPageProps = {
     posts?: Paginated<FeedPostData>;
     courts?: CommunityCourtPayload[];
+    tab?: 'feed' | 'courts';
 };
 
-export default function Community({ posts, courts = [] }: CommunityPageProps) {
+export default function Community({
+    posts,
+    courts = [],
+    tab = 'feed',
+}: CommunityPageProps) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
     const toast = useCommunityToast();
@@ -38,7 +43,12 @@ export default function Community({ posts, courts = [] }: CommunityPageProps) {
             />
 
             {isAuthenticated && posts ? (
-                <CommunityLayout toast={toast} posts={posts} courts={courts} />
+                <CommunityLayout
+                    toast={toast}
+                    posts={posts}
+                    courts={courts}
+                    tab={tab}
+                />
             ) : (
                 <CommunityLoginGate />
             )}

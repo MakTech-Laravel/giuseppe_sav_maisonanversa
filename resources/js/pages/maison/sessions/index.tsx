@@ -2,14 +2,13 @@ import { InfiniteScroll, Link, router, usePage } from '@inertiajs/react';
 import { Plus, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SessionBreadcrumb } from '@/components/maison/community/sessions/session-breadcrumb';
+import { CommunityTabs } from '@/components/maison/community/community-tabs';
 import { SessionCard } from '@/components/maison/community/sessions/session-card';
 import { SessionTabs } from '@/components/maison/community/sessions/session-tabs';
 import type { TabDefinition } from '@/components/maison/community/sessions/session-tabs';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Wrap } from '@/components/maison/ui/section';
-import * as maisonRoutes from '@/routes/maison';
 import * as sessionRoutes from '@/routes/community/sessions';
 import { cn } from '@/lib/utils';
 import type { Paginated } from '@/types/admin';
@@ -97,12 +96,7 @@ export default function SessionsIndex({
                 )}
             />
 
-            <SessionBreadcrumb
-                crumbs={[
-                    { label: 'Community', href: maisonRoutes.community.url(locale) },
-                    { label: 'Sessies' },
-                ]}
-            />
+            <CommunityTabs />
 
             <div className="min-h-150 bg-cream pb-20">
                 <Wrap className="px-6 md:px-10 lg:px-20">

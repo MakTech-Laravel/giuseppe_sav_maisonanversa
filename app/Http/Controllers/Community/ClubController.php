@@ -17,14 +17,22 @@ class ClubController extends Controller
 {
     private const SEARCH_LIMIT = 8;
 
+    private const MIN_QUERY_LENGTH = 2;
+
     /**
      * Autocomplete for the session composer. Only approved clubs are bookable.
      */
     public function search(Request $request, string $locale): JsonResponse
     {
+        $term = trim($request->string('q')->toString());
+
+        if (mb_strlen($term) < self::MIN_QUERY_LENGTH) {
+            return response()->json(['clubs' => []]);
+        }
+
         $query = Club::query()
             ->approved()
-            ->matching($request->string('q')->toString())
+            ->matching($term)
             ->orderByDesc('is_partner')
             ->orderBy('name')
             ->limit(self::SEARCH_LIMIT);

@@ -106,6 +106,17 @@ test('member submitted clubs get a unique slug', function () {
     expect(Club::query()->where('slug', 'padel-zuid-2')->exists())->toBeTrue();
 });
 
+test('club search ignores queries shorter than two characters', function () {
+    $user = User::factory()->create();
+
+    Club::factory()->create(['name' => 'Padel Ganda', 'city' => 'Gent']);
+
+    $this->actingAs($user)
+        ->getJson(route('community.clubs.search', ['locale' => 'nl', 'q' => 'P']))
+        ->assertOk()
+        ->assertJsonCount(0, 'clubs');
+});
+
 test('guests cannot search or submit clubs', function () {
     $this->get(route('community.clubs.search', ['locale' => 'nl', 'q' => 'padel']))
         ->assertRedirect();
