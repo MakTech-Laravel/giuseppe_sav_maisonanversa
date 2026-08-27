@@ -73,6 +73,7 @@ enum RoleEnum: string
                 PermissionEnum::COMMUNITY_MODERATE,
                 PermissionEnum::COMMUNITY_OFFICIAL,
                 PermissionEnum::SESSIONS_MANAGE,
+                PermissionEnum::CLUBS_MANAGE,
             ],
 
             self::EDITOR => [

@@ -62,6 +62,12 @@ export const PERMISSIONS = {
         OFFICIAL: 'community.official',
         PARTICIPATE: 'community.participate',
     },
+    SESSIONS: {
+        MANAGE: 'sessions.manage',
+    },
+    CLUBS: {
+        MANAGE: 'clubs.manage',
+    },
 } as const;
 
 // Auto-derived union type from the const above.

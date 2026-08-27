@@ -101,11 +101,9 @@ test('admin hidden posts stay on the authors wall but disappear for others', fun
         );
 });
 
-test('founding circle members can leave a session', function () {
+test('joined members can leave a session', function () {
     $host = User::factory()->create();
-    $host->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
     $guest = User::factory()->create();
-    $guest->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
 
     $session = CommunitySession::factory()->create(['host_id' => $host->id, 'capacity' => 4]);
 
