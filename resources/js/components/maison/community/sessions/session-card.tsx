@@ -52,7 +52,7 @@ export function SessionCard({ session }: SessionCardProps) {
 
                 {session.club?.is_partner && (
                     <span className="mt-2 inline-flex items-center gap-1.5 border border-gold/25 bg-gold/8 px-2.5 py-1 font-sans text-[9px] tracking-[0.16em] text-gold2 uppercase">
-                        {t('Partner Club')}
+                        {t('Partnerclub')}
                     </span>
                 )}
 
