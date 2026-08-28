@@ -85,7 +85,7 @@ export function EditionPickerModal({
 
     useEffect(() => {
         const handle = window.setTimeout(() => {
-            setSearch(searchInput.replace(/\D+/g, ''));
+            setSearch(searchInput.trim().toUpperCase());
         }, 250);
 
         return () => window.clearTimeout(handle);
@@ -207,7 +207,6 @@ export function EditionPickerModal({
             <input
                 id="edition-search"
                 type="search"
-                inputMode="numeric"
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
                 placeholder={t('Zoek op editienummer')}

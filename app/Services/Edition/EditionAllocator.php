@@ -301,7 +301,7 @@ class EditionAllocator
 
         $order->forceFill([
             'edition_piece_id' => $piece->id,
-            'edition_number' => $piece->edition_number,
+            'edition_number' => $piece->sequenceNumber(),
         ])->save();
 
         app(EditionInventory::class)->bust($order->product);

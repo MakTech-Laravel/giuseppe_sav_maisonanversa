@@ -18,8 +18,7 @@ test('preferred edition hold reserves the chosen available piece', function () {
     $product = Product::founding();
     $piece = EditionPiece::query()
         ->where('product_id', $product->id)
-        ->where('status', EditionPieceStatus::Available)
-        ->where('edition_number', 10)
+        ->where('edition_number', $product->formatEditionLabel(10))
         ->firstOrFail();
 
     $order = Order::factory()->create(['product_id' => $product->id]);
@@ -34,7 +33,7 @@ test('preferred hold rejects unavailable pieces without fallback', function () {
     $product = Product::founding();
     $piece = EditionPiece::query()
         ->where('product_id', $product->id)
-        ->where('edition_number', 1)
+        ->where('edition_number', $product->formatEditionLabel(1))
         ->firstOrFail();
 
     $order = Order::factory()->create(['product_id' => $product->id]);
@@ -54,14 +53,13 @@ test('limited edition checkout requires edition_piece_id', function () {
 test('checkout holds the preferred edition piece', function () {
     config(['cashier.secret' => 'sk_test_fake']);
 
-    actingAsCheckoutUser();
-
     $product = Product::founding();
     $piece = EditionPiece::query()
         ->where('product_id', $product->id)
-        ->where('status', EditionPieceStatus::Available)
-        ->where('edition_number', 12)
+        ->where('edition_number', $product->formatEditionLabel(12))
         ->firstOrFail();
+
+    actingAsCheckoutUser();
 
     $this->mock(ProductCheckout::class, function (MockInterface $mock) {
         $mock->shouldReceive('create')
