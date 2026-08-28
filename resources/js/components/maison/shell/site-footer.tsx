@@ -3,7 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
 import type { SiteShared } from '@/components/maison/contact/contact-data';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
-import { FOOTER_COLUMNS, isNavItem } from '@/lib/maison-navigation';
+import {
+    FOOTER_COLUMNS,
+    isNavItem,
+    type FooterExternalItem,
+} from '@/lib/maison-navigation';
+
+function footerItemHref(item: FooterExternalItem, site: SiteShared): string {
+    if (item.channel === 'instagram') {
+        return site.instagramUrl;
+    }
+
+    if (item.channel === 'press') {
+        return site.emailPressHref;
+    }
+
+    return item.href;
+}
 
 /**
  * Rendered once by the layout.
@@ -58,48 +74,60 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                         </p>
 
                         <ul className="flex flex-col gap-2.5">
-                            {column.items.map((item) => (
-                                <li key={item.label}>
-                                    {isNavItem(item) ? (
-                                        <MaisonLink
-                                            to={item.page}
-                                            hash={item.hash}
-                                            className="flex min-h-11 items-center py-1.5 font-sans text-[11px] font-light tracking-[0.08em] text-stone transition-colors hover:text-cream md:min-h-0 md:py-0"
-                                        >
-                                            {t(item.label)}
-                                        </MaisonLink>
-                                    ) : item.label === 'Heritage Letter' ? (
-                                        <button
-                                            type="button"
-                                            onClick={onNewsletter}
-                                            className="flex min-h-11 items-center py-1.5 font-sans text-[11px] font-light tracking-[0.08em] text-stone transition-colors hover:text-cream md:min-h-0 md:py-0"
-                                        >
-                                            {t('Heritage Letter')}
-                                        </button>
-                                    ) : (
+                            {column.items.map((item) => {
+                                const className =
+                                    'flex min-h-11 items-center py-1.5 font-sans text-[11px] font-light tracking-[0.08em] text-stone transition-colors hover:text-cream md:min-h-0 md:py-0';
+
+                                if (isNavItem(item)) {
+                                    return (
+                                        <li key={item.label}>
+                                            <MaisonLink
+                                                to={item.page}
+                                                hash={item.hash}
+                                                className={className}
+                                            >
+                                                {t(item.label)}
+                                            </MaisonLink>
+                                        </li>
+                                    );
+                                }
+
+                                if (item.label === 'Heritage Letter') {
+                                    return (
+                                        <li key={item.label}>
+                                            <button
+                                                type="button"
+                                                onClick={onNewsletter}
+                                                className={className}
+                                            >
+                                                {t('Heritage Letter')}
+                                            </button>
+                                        </li>
+                                    );
+                                }
+
+                                const href = footerItemHref(item, site);
+                                const isHttp = href.startsWith('http');
+
+                                return (
+                                    <li key={item.label}>
                                         <a
-                                            href={
-                                                item.label === 'Instagram'
-                                                    ? site.instagramUrl
-                                                    : item.href
-                                            }
+                                            href={href}
                                             target={
-                                                item.href.startsWith('http')
-                                                    ? '_blank'
-                                                    : undefined
+                                                isHttp ? '_blank' : undefined
                                             }
                                             rel={
-                                                item.href.startsWith('http')
+                                                isHttp
                                                     ? 'noopener noreferrer'
                                                     : undefined
                                             }
-                                            className="flex min-h-11 items-center py-1.5 font-sans text-[11px] font-light tracking-[0.08em] text-stone transition-colors hover:text-cream md:min-h-0 md:py-0"
+                                            className={className}
                                         >
                                             {t(item.label)}
                                         </a>
-                                    )}
-                                </li>
-                            ))}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </div>
                 ))}

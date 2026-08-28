@@ -61,7 +61,8 @@ class SiteSetting extends Model
      *     boutiqueMapSrc: string,
      *     whatsappHref: string,
      *     phoneHref: string,
-     *     emailHelloHref: string
+     *     emailHelloHref: string,
+     *     emailPressHref: string
      * }
      */
     public function toShare(): array
@@ -85,6 +86,7 @@ class SiteSetting extends Model
             'whatsappHref' => 'https://wa.me/'.$this->whatsapp,
             'phoneHref' => 'tel:'.$this->phone,
             'emailHelloHref' => 'mailto:'.$this->email_hello,
+            'emailPressHref' => 'mailto:'.$this->email_press,
         ];
     }
 }

@@ -33,6 +33,9 @@ test('site settings are shared globally', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('site.emailHello', 'hello@test.com')
+            ->where('site.emailPress', 'press@test.com')
+            ->where('site.emailPressHref', 'mailto:press@test.com')
+            ->where('site.instagramUrl', 'https://www.instagram.com/maison')
             ->where('site.phone', '+32123456789')
             ->where('site.whatsappHref', 'https://wa.me/32123456789')
             ->missing('site.announcementText'));
@@ -70,4 +73,21 @@ test('staff can open the site settings form', function () {
             ->missing('settings.announcement_text')
             ->missing('translations')
             ->missing('translationStatus'));
+});
+
+test('organization structured data uses site settings contact channels', function () {
+    SiteSetting::current()->update([
+        'phone' => '+32 3 999 00 11',
+        'email_hello' => 'hello@maisonanversa.test',
+        'instagram_url' => 'https://www.instagram.com/maison-anversa-test/',
+    ]);
+
+    $this->get('/nl')->assertOk()->assertInertia(function ($page): void {
+        $graphs = $page->toArray()['props']['seo']['jsonLd'][0]['@graph'];
+        $organization = collect($graphs)->firstWhere('@type', 'Organization');
+
+        expect($organization['telephone'])->toBe('+32 3 999 00 11')
+            ->and($organization['email'])->toBe('hello@maisonanversa.test')
+            ->and($organization['sameAs'])->toBe(['https://www.instagram.com/maison-anversa-test/']);
+    });
 });
