@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
 class HeritageLetterWelcome extends Mailable implements ShouldQueue
 {
@@ -30,6 +31,12 @@ class HeritageLetterWelcome extends Mailable implements ShouldQueue
     {
         return new Content(
             markdown: 'emails.heritage-letter-welcome',
+            with: [
+                'unsubscribeUrl' => URL::signedRoute('maison.heritage-letter.unsubscribe', [
+                    'locale' => $this->subscriber->locale,
+                    'subscriber' => $this->subscriber,
+                ]),
+            ],
         );
     }
 }

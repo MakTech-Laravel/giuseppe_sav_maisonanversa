@@ -7,5 +7,7 @@
 
 {{ __('Uitschrijven kan altijd via de link in onze berichten.') }}
 
+[{{ __('Uitschrijven') }}]({{ $unsubscribeUrl }})
+
 {{ config('app.name') }}
 </x-mail::message>

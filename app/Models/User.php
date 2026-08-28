@@ -90,6 +90,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return HasMany<NewsletterSubscriber, $this>
+     */
+    public function newsletterSubscribers(): HasMany
+    {
+        return $this->hasMany(NewsletterSubscriber::class);
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array

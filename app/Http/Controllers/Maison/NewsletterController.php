@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Maison;
 
-use App\Enums\SubscriberStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maison\NewsletterSubscribeRequest;
 use App\Models\NewsletterSubscriber;
@@ -29,13 +28,15 @@ class NewsletterController extends Controller
         return back();
     }
 
-    public function unsubscribe(Request $request, string $locale, NewsletterSubscriber $subscriber): Response
-    {
+    public function unsubscribe(
+        Request $request,
+        string $locale,
+        NewsletterSubscriber $subscriber,
+        HeritageLetterSubscription $subscription,
+    ): Response {
         abort_unless($request->hasValidSignature(), 403);
 
-        $subscriber->forceFill([
-            'status' => SubscriberStatus::Unsubscribed,
-        ])->save();
+        $subscription->unsubscribe($subscriber);
 
         return Inertia::render('maison/newsletter-unsubscribed');
     }
