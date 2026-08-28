@@ -73,6 +73,15 @@ test('legal cross-links use maison links instead of hash onclick handlers', func
         ->toContain('to="shipping"');
 });
 
+test('the legal editor rebinds tailwind color tokens for the cream surface in admin', function () {
+    $css = file_get_contents(resource_path('css/app.css'));
+
+    expect($css)
+        ->toContain('.legal-editor {')
+        ->toContain('--color-background: var(--background)')
+        ->toContain('--color-foreground: var(--foreground)');
+});
+
 test('the legal pages admin index shows translated titles instead of slugs', function () {
     $index = file_get_contents(resource_path('js/pages/admin/legal-pages/index.tsx'));
     $titles = file_get_contents(resource_path('js/components/admin/legal-page-titles.ts'));

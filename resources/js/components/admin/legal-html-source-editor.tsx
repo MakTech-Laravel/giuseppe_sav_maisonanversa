@@ -1,4 +1,5 @@
 import type { KeyboardEvent } from 'react';
+import { Wand2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -43,8 +44,10 @@ export function LegalHtmlSourceEditor({
                     type="button"
                     variant="outline"
                     size="sm"
+                    className="border-border bg-cream2 text-choc shadow-xs hover:bg-cream2/80 hover:text-choc"
                     onClick={() => onChange(prettyPrintLegalHtml(value))}
                 >
+                    <Wand2 className="size-3.5" />
                     {t('Opmaken')}
                 </Button>
             </div>
