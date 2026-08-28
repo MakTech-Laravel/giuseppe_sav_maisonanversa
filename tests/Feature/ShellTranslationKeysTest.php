@@ -40,7 +40,9 @@ function maisonTranslationKeys(): array
 
             return str_contains($path, '/maison')
                 || str_contains($path, '/pages/admin/products/')
+                || str_contains($path, '/pages/admin/legal-pages/')
                 || str_contains($path, '/components/admin/product')
+                || str_contains($path, '/components/admin/legal')
                 || str_contains($path, '/components/admin/form-stepper')
                 || str_contains($path, '/components/admin/repeater-field');
         })
@@ -57,6 +59,12 @@ function maisonTranslationKeys(): array
         preg_match_all("/\bt\(\s*'((?:[^'\\\\]|\\\\.)*)'/", $contents, $calls);
 
         foreach ($calls[1] as $key) {
+            $found[] = stripcslashes($key);
+        }
+
+        preg_match_all('/\bt\(\s*"((?:[^"\\\\]|\\\\.)*)"/', $contents, $doubleQuoted);
+
+        foreach ($doubleQuoted[1] as $key) {
             $found[] = stripcslashes($key);
         }
 

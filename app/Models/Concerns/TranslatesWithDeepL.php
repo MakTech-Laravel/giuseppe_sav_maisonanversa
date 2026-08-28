@@ -178,6 +178,11 @@ trait TranslatesWithDeepL
         return false;
     }
 
+    public function translationUsesHtml(): bool
+    {
+        return false;
+    }
+
     /**
      * @param  list<string>|null  $onlyLocales
      */
