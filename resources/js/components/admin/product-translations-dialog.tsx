@@ -28,6 +28,9 @@ type LocaleCopy = {
     hero_subtitle: string;
     description: string;
     expected_delivery_label: string;
+    meta_title: string;
+    meta_description: string;
+    meta_keywords: string;
 };
 
 type TranslationStatus = {
@@ -37,6 +40,9 @@ type TranslationStatus = {
     hero_subtitle: boolean;
     description: boolean;
     expected_delivery_label: boolean;
+    meta_title: boolean;
+    meta_description: boolean;
+    meta_keywords: boolean;
 };
 
 type ProductLocale = 'nl' | 'en' | 'fr';
@@ -62,6 +68,9 @@ function emptyLocaleCopy(): LocaleCopy {
         hero_subtitle: '',
         description: '',
         expected_delivery_label: '',
+        meta_title: '',
+        meta_description: '',
+        meta_keywords: '',
     };
 }
 
@@ -133,7 +142,10 @@ export function ProductTranslationsDialog({
             !status?.hero_eyebrow ||
             !status?.hero_subtitle ||
             !status?.description ||
-            !status?.expected_delivery_label
+            !status?.expected_delivery_label ||
+            !status?.meta_title ||
+            !status?.meta_description ||
+            !status?.meta_keywords
         );
     });
 
@@ -323,6 +335,77 @@ export function ProductTranslationsDialog({
                             message={
                                 form.errors[
                                     `${activeLocale}.expected_delivery_label` as keyof typeof form.errors
+                                ]
+                            }
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor={`${activeLocale}-meta_title`}>
+                            {t('Meta-titel')}
+                        </Label>
+                        <Input
+                            id={`${activeLocale}-meta_title`}
+                            value={form.data[activeLocale]?.meta_title ?? ''}
+                            onChange={(event) =>
+                                form.setData(
+                                    `${activeLocale}.meta_title`,
+                                    event.target.value,
+                                )
+                            }
+                        />
+                        <InputError
+                            message={
+                                form.errors[
+                                    `${activeLocale}.meta_title` as keyof typeof form.errors
+                                ]
+                            }
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor={`${activeLocale}-meta_description`}>
+                            {t('Meta-beschrijving')}
+                        </Label>
+                        <Textarea
+                            id={`${activeLocale}-meta_description`}
+                            value={
+                                form.data[activeLocale]?.meta_description ?? ''
+                            }
+                            onChange={(event) =>
+                                form.setData(
+                                    `${activeLocale}.meta_description`,
+                                    event.target.value,
+                                )
+                            }
+                            className="min-h-24 resize-y"
+                        />
+                        <InputError
+                            message={
+                                form.errors[
+                                    `${activeLocale}.meta_description` as keyof typeof form.errors
+                                ]
+                            }
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor={`${activeLocale}-meta_keywords`}>
+                            {t('Meta-keywords')}
+                        </Label>
+                        <Input
+                            id={`${activeLocale}-meta_keywords`}
+                            value={
+                                form.data[activeLocale]?.meta_keywords ?? ''
+                            }
+                            onChange={(event) =>
+                                form.setData(
+                                    `${activeLocale}.meta_keywords`,
+                                    event.target.value,
+                                )
+                            }
+                        />
+                        <InputError
+                            message={
+                                form.errors[
+                                    `${activeLocale}.meta_keywords` as keyof typeof form.errors
                                 ]
                             }
                         />

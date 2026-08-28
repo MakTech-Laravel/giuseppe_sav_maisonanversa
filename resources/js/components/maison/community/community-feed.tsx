@@ -1,7 +1,6 @@
 import { InfiniteScroll, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { CommunityCirclePanel } from '@/components/maison/community/community-circle-panel';
 import type { FeedPostData } from '@/components/maison/community/community-data';
 import { FeedCompose } from '@/components/maison/community/feed-compose';
 import { FeedPostCard } from '@/components/maison/community/feed-post-card';
@@ -10,7 +9,6 @@ import type { Paginated } from '@/types/admin';
 
 type CommunityFeedProps = {
     posts: Paginated<FeedPostData>;
-    onViewEvents: () => void;
     onPostPublished: () => void;
 };
 
@@ -32,7 +30,6 @@ function initialsFromName(name: string): string {
 
 export function CommunityFeed({
     posts,
-    onViewEvents,
     onPostPublished,
 }: CommunityFeedProps) {
     const page = usePage();
@@ -88,8 +85,6 @@ export function CommunityFeed({
                     feed
                 )}
             </Wrap>
-
-            <CommunityCirclePanel onViewEvents={onViewEvents} />
         </>
     );
 }

@@ -12,6 +12,7 @@ import {
     ProductPricingFields,
     ProductPublishFields,
     ProductSectionFields,
+    ProductSeoFields,
 } from '@/components/admin/product-form-fields';
 import type { ProductFormData } from '@/components/admin/product-form-fields';
 import { Button } from '@/components/ui/button';
@@ -34,6 +35,9 @@ const STEP_FIELDS: Record<string, (keyof ProductFormData)[]> = {
         'hero_eyebrow',
         'hero_subtitle',
         'description',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ],
     pricing: [
         'amount',
@@ -80,6 +84,11 @@ export default function CreateProduct({
             hero_eyebrow: '',
             hero_subtitle: '',
             description: '',
+            meta_title: '',
+            meta_description: '',
+            meta_keywords: '',
+            og_image: null,
+            remove_og_image: false,
             primary_image: null,
             gallery_images: null,
             remove_primary_image: false,
@@ -157,7 +166,10 @@ export default function CreateProduct({
 
                 <form onSubmit={submit} className="w-full space-y-6">
                     {step.id === 'basics' ? (
-                        <ProductBasicsFields {...shared} />
+                        <>
+                            <ProductBasicsFields {...shared} />
+                            <ProductSeoFields {...shared} />
+                        </>
                     ) : null}
                     {step.id === 'pricing' ? (
                         <ProductPricingFields {...shared} />

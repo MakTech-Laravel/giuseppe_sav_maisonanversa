@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
  * @phpstan-type SeoDocument array{
  *     title: string,
  *     description: string,
+ *     keywords: string|null,
  *     canonical: string,
  *     robots: string|null,
  *     ogType: string,
@@ -129,6 +130,7 @@ final class MaisonSeo
             return [
                 'title' => __('Pagina niet gevonden'),
                 'description' => __('Deze pagina bestaat niet. Keer terug naar Maison Anversa.'),
+                'keywords' => null,
                 'canonical' => $origin.$request->getPathInfo(),
                 'robots' => 'noindex, nofollow',
                 'ogType' => 'website',
@@ -155,17 +157,19 @@ final class MaisonSeo
         $canonical = self::canonical($request, $routeName, $locale, $origin, $article, $product, $dressingItem);
         $copy = self::copy($page, $article, $routeName, $product, $dressingItem);
         $hreflang = self::hreflang($routeName, $article, $product, $dressingItem);
-        $ogImage = self::absoluteUrl($origin, (string) config('maison.seo.image'));
+        $ogImage = self::ogImage($origin, $product);
+        $usingDefaultOg = $ogImage === self::absoluteUrl($origin, (string) config('maison.seo.image'));
 
         return [
             'title' => $copy['title'],
             'description' => $copy['description'],
+            'keywords' => $copy['keywords'] ?? null,
             'canonical' => $canonical,
             'robots' => $indexable ? null : 'noindex, nofollow',
             'ogType' => $article !== null ? 'article' : 'website',
             'ogImage' => $ogImage,
-            'ogImageWidth' => self::ogImageWidth(),
-            'ogImageHeight' => self::ogImageHeight(),
+            'ogImageWidth' => $usingDefaultOg ? self::ogImageWidth() : null,
+            'ogImageHeight' => $usingDefaultOg ? self::ogImageHeight() : null,
             'siteName' => 'Maison Anversa',
             'locale' => self::OG_LOCALE[$locale] ?? 'nl_BE',
             'localeAlternates' => self::localeAlternates($locale),
@@ -312,7 +316,7 @@ final class MaisonSeo
     }
 
     /**
-     * @return array{title: string, description: string}
+     * @return array{title: string, description: string, keywords?: string|null}
      */
     private static function copy(?string $page, ?JournalArticle $article, ?string $routeName, ?Product $product = null, ?DressingItem $dressingItem = null): array
     {
@@ -326,11 +330,17 @@ final class MaisonSeo
         }
 
         if ($product !== null) {
-            $title = $product->translated('name') ?: (string) $product->name;
+            $metaTitle = trim($product->translated('meta_title'));
+            $metaDescription = trim($product->translated('meta_description'));
+            $metaKeywords = trim($product->translated('meta_keywords'));
+            $name = $product->translated('name') ?: (string) $product->name;
 
             return [
-                'title' => $title.' — Maison Anversa',
-                'description' => $product->translated('description') ?: (string) $product->description,
+                'title' => $metaTitle !== '' ? $metaTitle : $name.' — Maison Anversa',
+                'description' => $metaDescription !== ''
+                    ? $metaDescription
+                    : ($product->translated('description') ?: (string) $product->description),
+                'keywords' => $metaKeywords !== '' ? $metaKeywords : null,
             ];
         }
 
@@ -710,6 +720,17 @@ final class MaisonSeo
                 ],
             ], $items),
         ];
+    }
+
+    private static function ogImage(string $origin, ?Product $product): string
+    {
+        $productImage = $product?->resolvedOgImageUrl();
+
+        if (filled($productImage)) {
+            return self::absoluteUrl($origin, (string) $productImage);
+        }
+
+        return self::absoluteUrl($origin, (string) config('maison.seo.image'));
     }
 
     private static function ogImageWidth(): ?int

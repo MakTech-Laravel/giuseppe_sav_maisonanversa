@@ -35,6 +35,9 @@ class Product extends Model
         'hero_subtitle',
         'description',
         'expected_delivery_label',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ];
 
     /**
@@ -60,6 +63,10 @@ class Product extends Model
         'hero_eyebrow',
         'hero_subtitle',
         'description',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'og_image',
         'status',
         'sort_order',
     ];
@@ -336,6 +343,26 @@ class Product extends Model
             'currency' => $this->currency,
             'type' => $this->type->value,
         ];
+    }
+
+    /**
+     * Public URL for the product Open Graph image, or null when neither an
+     * explicit OG file nor a gallery cover exists. MaisonSeo applies the house
+     * default image when this returns null.
+     */
+    public function resolvedOgImageUrl(): ?string
+    {
+        $path = filled($this->og_image)
+            ? (string) $this->og_image
+            : (string) (($this->gallery ?? [])[0] ?? '');
+
+        if ($path === '') {
+            return null;
+        }
+
+        $url = self::resolveDisplayMediaUrl($path);
+
+        return $url !== '' ? $url : null;
     }
 
     /**

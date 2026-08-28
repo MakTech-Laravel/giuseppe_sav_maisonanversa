@@ -69,3 +69,58 @@ test('a published product detail page renders its own checkout context', functio
             ->has('productEdition')
             ->has('related'));
 });
+
+test('empty product seo fields fall back to name description and gallery on the storefront', function () {
+    $product = Product::factory()->create([
+        'name' => 'Fallback Pouch',
+        'description' => 'Catalog description for fallback.',
+        'gallery' => ['heritage-001-front'],
+    ]);
+
+    $this->get(localized('maison.products.show', ['product' => $product->slug]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('seo.title', 'Fallback Pouch — Maison Anversa')
+            ->where('seo.description', 'Catalog description for fallback.')
+            ->where('seo.keywords', null)
+            ->where('seo.ogImage', url('/images/product/heritage-001-front.png'))
+            ->where('seo.ogImageWidth', null)
+            ->where('seo.ogImageHeight', null));
+});
+
+test('custom product seo fields are used on the storefront without copying into empty keywords', function () {
+    $product = Product::factory()->create([
+        'name' => 'Named Pouch',
+        'description' => 'Should not appear in meta.',
+        'meta_title' => 'Buy the Named Pouch',
+        'meta_description' => 'Custom pouch meta description',
+        'meta_keywords' => 'pouch, accessory',
+        'gallery' => ['heritage-001-front'],
+        'og_image' => 'products/custom-og.jpg',
+    ]);
+
+    $this->get(localized('maison.products.show', ['product' => $product->slug]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('seo.title', 'Buy the Named Pouch')
+            ->where('seo.description', 'Custom pouch meta description')
+            ->where('seo.keywords', 'pouch, accessory')
+            ->where('seo.ogImage', url('/storage/products/custom-og.jpg')));
+});
+
+test('a product without seo or gallery uses the house default open graph image', function () {
+    $product = Product::factory()->create([
+        'name' => 'Plain Product',
+        'description' => 'No gallery.',
+        'gallery' => [],
+    ]);
+
+    $this->get(localized('maison.products.show', ['product' => $product->slug]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('seo.title', 'Plain Product — Maison Anversa')
+            ->where('seo.keywords', null)
+            ->where('seo.ogImage', url((string) config('maison.seo.image')))
+            ->where('seo.ogImageWidth', 1024)
+            ->where('seo.ogImageHeight', 682));
+});

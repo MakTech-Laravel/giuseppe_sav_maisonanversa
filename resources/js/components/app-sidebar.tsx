@@ -15,7 +15,6 @@ import {
     ShoppingBag,
     Shirt,
     Store,
-    Truck,
     UserRoundCog,
     Users,
     UsersRound,
@@ -40,7 +39,6 @@ import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
 import adminCircle from '@/routes/admin/circle';
 import adminClubs from '@/routes/admin/clubs';
-import adminCommerce from '@/routes/admin/commerce';
 import adminSiteSettings from '@/routes/admin/site-settings';
 import adminCommunity from '@/routes/admin/community';
 import adminCourts from '@/routes/admin/courts';
@@ -116,12 +114,6 @@ function buildNavGroups(
                     title: t('Editievoorraad'),
                     href: adminHeritage.index(locale),
                     icon: Package,
-                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
-                },
-                {
-                    title: t('Handelsinstellingen'),
-                    href: adminCommerce.edit(locale),
-                    icon: Truck,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
             ],

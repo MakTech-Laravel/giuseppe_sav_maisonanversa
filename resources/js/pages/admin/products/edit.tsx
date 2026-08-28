@@ -12,6 +12,7 @@ import {
     ProductPricingFields,
     ProductPublishFields,
     ProductSectionFields,
+    ProductSeoFields,
 } from '@/components/admin/product-form-fields';
 import type { ProductFormData } from '@/components/admin/product-form-fields';
 import type { ExistingFile } from '@/components/file-upload';
@@ -47,7 +48,11 @@ interface CatalogProduct {
     hero_eyebrow?: string | null;
     hero_subtitle?: string | null;
     description?: string | null;
+    meta_title?: string | null;
+    meta_description?: string | null;
+    meta_keywords?: string | null;
     primary_image: ExistingFile | null;
+    og_image: ExistingFile | null;
     gallery_images: ExistingFile[];
     sections: ProductSectionFormData[];
     faqs: ProductFaqFormData[];
@@ -73,6 +78,11 @@ const DETAIL_FIELDS = [
     'hero_eyebrow',
     'hero_subtitle',
     'description',
+    'meta_title',
+    'meta_description',
+    'meta_keywords',
+    'og_image',
+    'remove_og_image',
 ] as const satisfies readonly (keyof ProductFormData)[];
 
 export default function EditProduct({
@@ -113,6 +123,11 @@ export default function EditProduct({
         hero_eyebrow: product.hero_eyebrow ?? '',
         hero_subtitle: product.hero_subtitle ?? '',
         description: product.description ?? '',
+        meta_title: product.meta_title ?? '',
+        meta_description: product.meta_description ?? '',
+        meta_keywords: product.meta_keywords ?? '',
+        og_image: null,
+        remove_og_image: false,
         primary_image: null,
         gallery_images: null,
         remove_primary_image: false,
@@ -137,7 +152,17 @@ export default function EditProduct({
                 DETAIL_FIELDS.map((field) => [field, data[field]]),
             ),
         );
-        form.submit(products.update(routeArgs), { preserveScroll: true });
+        form.submit(products.update(routeArgs), {
+            preserveScroll: true,
+            forceFormData: Boolean(form.data.og_image) || form.data.remove_og_image,
+            onSuccess: () => {
+                form.setData((current) => ({
+                    ...current,
+                    og_image: null,
+                    remove_og_image: false,
+                }));
+            },
+        });
     };
 
     const saveMedia = (event: FormEvent) => {
@@ -219,6 +244,10 @@ export default function EditProduct({
                 {step.id === 'basics' ? (
                     <form onSubmit={saveDetails} className="space-y-6">
                         <ProductBasicsFields {...shared} />
+                        <ProductSeoFields
+                            {...shared}
+                            existingOgImage={product.og_image}
+                        />
                         {saveButton('Wijzigingen opslaan')}
                     </form>
                 ) : null}

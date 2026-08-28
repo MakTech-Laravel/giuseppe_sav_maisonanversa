@@ -2062,5 +2062,17 @@
     "Zie ook het": "Voir aussi le",
     "en het": "et le",
     "{{count}} regels": "{{count}} lignes",
-    "zorg- en garantiebeleid": "politique d'entretien et de garantie"
+    "zorg- en garantiebeleid": "politique d'entretien et de garantie",
+    "SEO": "SEO",
+    "Optionele zoek- en social metadata. Lege velden vallen op de winkel terug op naam, beschrijving en productfoto — ze worden niet automatisch ingevuld.": "Métadonnées de recherche et de réseaux sociaux facultatives. Les champs vides reprennent sur la boutique le nom, la description et la photo produit — ils ne sont pas remplis automatiquement.",
+    "Meta-titel": "Titre meta",
+    "Meta-beschrijving": "Description meta",
+    "Meta-keywords": "Mots-clés meta",
+    "OG-afbeelding": "Image OG",
+    "Leeg laten om de productnaam te gebruiken": "Laisser vide pour utiliser le nom du produit",
+    "Leeg laten om de productbeschrijving te gebruiken": "Laisser vide pour utiliser la description du produit",
+    "Komma-gescheiden, optioneel": "Séparés par des virgules, facultatif",
+    "Sleep een social-afbeelding hierheen of klik om te bladeren": "Déposez une image sociale ici ou cliquez pour parcourir",
+    "PNG, JPG of WEBP. Leeg laten om de productfoto te gebruiken.": "PNG, JPG ou WEBP. Laisser vide pour utiliser la photo du produit.",
+    "Primaire coverfoto, OG-afbeelding en galerijbeelden.": "Photo de couverture principale, image OG et images de galerie."
 }
