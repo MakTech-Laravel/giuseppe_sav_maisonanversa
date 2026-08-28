@@ -18,12 +18,16 @@ export type ProductSectionItemFormData = {
 };
 
 export type ProductSectionFormData = {
+    id?: number;
     key: string;
     eyebrow: string;
     heading: string;
     subheading: string;
     intro: string;
     image_key: string;
+    image: File | null;
+    remove_image: boolean;
+    existing_image: string | null;
     is_visible: boolean;
     include_house_card: boolean;
     sort_order: number;
@@ -32,6 +36,7 @@ export type ProductSectionFormData = {
 
 export type ProductFaqFormData = {
     uid: string;
+    id?: number;
     question: string;
     answer: string;
     is_published: boolean;
@@ -84,6 +89,9 @@ export function buildSectionForm(
                 subheading: existing?.subheading ?? '',
                 intro: existing?.intro ?? '',
                 image_key: existing?.image_key ?? '',
+                image: null,
+                remove_image: false,
+                existing_image: existing?.existing_image ?? null,
                 is_visible: existing?.is_visible ?? true,
                 include_house_card: existing?.include_house_card ?? true,
                 sort_order: existing?.sort_order ?? entry.sort_order,

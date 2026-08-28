@@ -163,6 +163,7 @@ export default function EditProduct({
         event.preventDefault();
         form.transform((data) => ({ sections: data.sections }));
         form.submit(products.sections.update(routeArgs), {
+            forceFormData: true,
             preserveScroll: true,
         });
     };

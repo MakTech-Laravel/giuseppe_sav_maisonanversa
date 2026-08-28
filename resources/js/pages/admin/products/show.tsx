@@ -7,6 +7,8 @@ import {
     AdminPanel,
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
+import { ProductFaqTranslationsDialog } from '@/components/admin/product-faq-translations-dialog';
+import { ProductSectionTranslationsDialog } from '@/components/admin/product-section-translations-dialog';
 import { ProductTranslationsDialog } from '@/components/admin/product-translations-dialog';
 import type { ExistingFile } from '@/components/file-upload';
 import { Badge } from '@/components/ui/badge';
@@ -92,17 +94,70 @@ function Field({
     );
 }
 
+type FaqLocaleCopy = {
+    question: string;
+    answer: string;
+};
+
+type FaqTranslationStatus = {
+    question: boolean;
+    answer: boolean;
+};
+
+type SectionItemCopy = {
+    title: string;
+    body: string;
+};
+
+type SectionCopy = {
+    key?: string;
+    eyebrow: string;
+    heading: string;
+    subheading: string;
+    intro: string;
+    items: Record<string, SectionItemCopy>;
+};
+
+type SectionLocalePayload = {
+    sections: Record<string, SectionCopy>;
+};
+
+type SectionItemStatus = {
+    title: boolean;
+    body: boolean;
+};
+
+type SectionStatus = {
+    eyebrow: boolean;
+    heading: boolean;
+    subheading: boolean;
+    intro: boolean;
+    items: Record<string, SectionItemStatus>;
+};
+
+type SectionLocaleStatusPayload = {
+    sections: Record<string, SectionStatus>;
+};
+
 export default function ShowProduct({
     product,
     locales,
     translations,
     translationStatus,
+    faqTranslations,
+    faqTranslationStatus,
+    sectionTranslations,
+    sectionTranslationStatus,
     sectionCatalogue,
 }: {
     product: ProductDetails;
     locales: string[];
     translations: Record<string, LocaleCopy>;
     translationStatus: Record<string, TranslationStatus>;
+    faqTranslations: Record<number, Record<string, FaqLocaleCopy>>;
+    faqTranslationStatus: Record<number, Record<string, FaqTranslationStatus>>;
+    sectionTranslations: Record<string, SectionLocalePayload>;
+    sectionTranslationStatus: Record<string, SectionLocaleStatusPayload>;
     sectionCatalogue: ProductSectionCatalogueEntry[];
 }) {
     const { t } = useTranslation();
@@ -499,8 +554,9 @@ export default function ShowProduct({
                                         >
                                             <div className="min-w-0">
                                                 <p className="truncate text-sm font-medium">
-                                                    {entry?.label ??
-                                                        section.key}
+                                                    {entry?.label
+                                                        ? t(entry.label)
+                                                        : section.key}
                                                 </p>
                                                 {entry?.uses_items ? (
                                                     <p className="text-xs text-muted-foreground">
@@ -515,17 +571,44 @@ export default function ShowProduct({
                                                     </p>
                                                 ) : null}
                                             </div>
-                                            <Badge
-                                                variant={
-                                                    section.is_visible
-                                                        ? 'secondary'
-                                                        : 'outline'
-                                                }
-                                            >
-                                                {section.is_visible
-                                                    ? t('Zichtbaar')
-                                                    : t('Verborgen')}
-                                            </Badge>
+                                            <div className="flex shrink-0 items-center gap-2">
+                                                {section.id ? (
+                                                    <ProductSectionTranslationsDialog
+                                                        productId={product.id}
+                                                        sectionId={section.id}
+                                                        sectionLabel={
+                                                            entry?.label
+                                                                ? t(entry.label)
+                                                                : section.key
+                                                        }
+                                                        usesHeading={
+                                                            entry?.uses_heading ??
+                                                            false
+                                                        }
+                                                        locales={locales}
+                                                        catalogue={
+                                                            sectionCatalogue
+                                                        }
+                                                        translations={
+                                                            sectionTranslations
+                                                        }
+                                                        translationStatus={
+                                                            sectionTranslationStatus
+                                                        }
+                                                    />
+                                                ) : null}
+                                                <Badge
+                                                    variant={
+                                                        section.is_visible
+                                                            ? 'secondary'
+                                                            : 'outline'
+                                                    }
+                                                >
+                                                    {section.is_visible
+                                                        ? t('Zichtbaar')
+                                                        : t('Verborgen')}
+                                                </Badge>
+                                            </div>
                                         </div>
                                     );
                                 })}
@@ -554,18 +637,63 @@ export default function ShowProduct({
                                             <p className="text-sm font-medium">
                                                 {faq.question}
                                             </p>
-                                            <Badge
-                                                variant={
-                                                    faq.is_published
-                                                        ? 'secondary'
-                                                        : 'outline'
-                                                }
-                                                className="shrink-0"
-                                            >
-                                                {faq.is_published
-                                                    ? t('Gepubliceerd')
-                                                    : t('Concept')}
-                                            </Badge>
+                                            <div className="flex shrink-0 items-center gap-2">
+                                                {faq.id ? (
+                                                    <ProductFaqTranslationsDialog
+                                                        productId={product.id}
+                                                        faqId={faq.id}
+                                                        locales={locales}
+                                                        translations={
+                                                            faqTranslations[
+                                                                faq.id
+                                                            ] ?? {
+                                                                nl: {
+                                                                    question: '',
+                                                                    answer: '',
+                                                                },
+                                                                en: {
+                                                                    question: '',
+                                                                    answer: '',
+                                                                },
+                                                                fr: {
+                                                                    question: '',
+                                                                    answer: '',
+                                                                },
+                                                            }
+                                                        }
+                                                        translationStatus={
+                                                            faqTranslationStatus[
+                                                                faq.id
+                                                            ] ?? {
+                                                                nl: {
+                                                                    question: false,
+                                                                    answer: false,
+                                                                },
+                                                                en: {
+                                                                    question: false,
+                                                                    answer: false,
+                                                                },
+                                                                fr: {
+                                                                    question: false,
+                                                                    answer: false,
+                                                                },
+                                                            }
+                                                        }
+                                                    />
+                                                ) : null}
+                                                <Badge
+                                                    variant={
+                                                        faq.is_published
+                                                            ? 'secondary'
+                                                            : 'outline'
+                                                    }
+                                                    className="shrink-0"
+                                                >
+                                                    {faq.is_published
+                                                        ? t('Gepubliceerd')
+                                                        : t('Concept')}
+                                                </Badge>
+                                            </div>
                                         </div>
                                         <p className="text-sm break-words text-muted-foreground">
                                             {faq.answer}

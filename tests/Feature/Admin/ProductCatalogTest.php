@@ -505,3 +505,254 @@ test('staff cannot delete a product that has orders', function () {
 
     expect(Product::query()->find($product->id))->not->toBeNull();
 });
+
+test('staff can save lucide icon keys on guarantee section items', function () {
+    $product = Product::factory()->create([
+        'name' => 'Icon Test Product',
+        'slug' => 'icon-test-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.sections.update', ['product' => $product->id]), [
+            'sections' => [
+                [
+                    'key' => 'guarantees',
+                    'eyebrow' => '',
+                    'heading' => '',
+                    'subheading' => '',
+                    'intro' => '',
+                    'image_key' => '',
+                    'is_visible' => true,
+                    'include_house_card' => true,
+                    'sort_order' => 0,
+                    'items' => [
+                        [
+                            'number_label' => '',
+                            'icon' => 'shield-check',
+                            'title' => 'Levenslange garantie',
+                            'body' => '',
+                        ],
+                    ],
+                ],
+            ],
+        ])
+        ->assertRedirect();
+
+    $product->refresh()->loadMissing('sections.items');
+    $guarantees = $product->sections->firstWhere('key', 'guarantees');
+
+    expect($guarantees)->not->toBeNull()
+        ->and($guarantees->items)->toHaveCount(1)
+        ->and($guarantees->items->first()->icon)->toBe('shield-check')
+        ->and($guarantees->items->first()->title)->toBe('Levenslange garantie');
+});
+
+test('staff can upload a craft section image into image_path', function () {
+    Storage::fake('public');
+
+    $product = Product::factory()->create([
+        'name' => 'Craft Image Product',
+        'slug' => 'craft-image-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $image = UploadedFile::fake()->image('atelier.jpg', 1200, 800);
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.sections.update', ['product' => $product->id]), [
+            'sections' => [
+                [
+                    'key' => 'craft',
+                    'eyebrow' => 'Vakmanschap',
+                    'heading' => 'Materieel',
+                    'subheading' => '',
+                    'intro' => 'Handwerk.',
+                    'image_key' => '',
+                    'remove_image' => false,
+                    'is_visible' => true,
+                    'include_house_card' => true,
+                    'sort_order' => 0,
+                    'items' => [],
+                    'image' => $image,
+                ],
+            ],
+        ])
+        ->assertRedirect();
+
+    $product->refresh()->loadMissing('sections');
+    $craft = $product->sections->firstWhere('key', 'craft');
+
+    expect($craft)->not->toBeNull()
+        ->and($craft->image_path)->not->toBeNull()
+        ->and($craft->resolvedImage())->not->toBeNull();
+
+    Storage::disk('public')->assertExists($craft->image_path);
+});
+
+test('craft section ignores invalid legacy image_key values', function () {
+    $product = Product::factory()->create([
+        'name' => 'Invalid Craft Key Product',
+        'slug' => 'invalid-craft-key-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $section = $product->sections()->create([
+        'key' => 'craft',
+        'eyebrow' => 'Eyebrow',
+        'heading' => 'Heading copy pasted by mistake',
+        'image_key' => 'Heading copy pasted by mistake',
+        'is_visible' => true,
+        'include_house_card' => true,
+        'sort_order' => 0,
+    ]);
+
+    expect($section->resolvedImage())->toBeNull();
+});
+
+test('staff can manually store product faq translations', function () {
+    $product = Product::factory()->create([
+        'name' => 'Faq Translation Product',
+        'slug' => 'faq-translation-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $faq = $product->faqs()->create([
+        'question' => 'Nederlandse vraag?',
+        'answer' => 'Nederlands antwoord.',
+        'is_published' => true,
+        'sort_order' => 0,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.products.faqs.translations.update', [
+            'locale' => 'nl',
+            'product' => $product->id,
+            'faq' => $faq->id,
+        ]), [
+            'nl' => [
+                'question' => 'Nederlandse vraag?',
+                'answer' => 'Nederlands antwoord.',
+            ],
+            'en' => [
+                'question' => 'English question?',
+                'answer' => 'English answer.',
+            ],
+            'fr' => [
+                'question' => 'Question française ?',
+                'answer' => 'Réponse française.',
+            ],
+        ])
+        ->assertRedirect(route('admin.products.show', [
+            'locale' => 'nl',
+            'product' => $product->id,
+        ]));
+
+    $faq->refresh()->loadMissing('translations');
+
+    expect($faq->translated('question', 'en'))->toBe('English question?')
+        ->and($faq->translated('answer', 'fr'))->toBe('Réponse française.');
+});
+
+test('staff can manually store product section translations', function () {
+    $product = Product::factory()->create([
+        'name' => 'Section Translation Product',
+        'slug' => 'section-translation-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $section = $product->sections()->create([
+        'key' => 'service',
+        'eyebrow' => 'Service eyebrow',
+        'heading' => 'Service titel',
+        'subheading' => 'Tweede regel',
+        'intro' => 'Intro tekst',
+        'is_visible' => true,
+        'include_house_card' => true,
+        'sort_order' => 0,
+    ]);
+
+    $item = $section->items()->create([
+        'number_label' => '',
+        'icon' => 'truck',
+        'title' => 'Verzending',
+        'body' => 'Wereldwijd',
+        'sort_order' => 0,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.products.sections.translations.update', [
+            'locale' => 'nl',
+            'product' => $product->id,
+        ]), [
+            'nl' => [
+                'sections' => [
+                    (string) $section->id => [
+                        'eyebrow' => 'Service eyebrow',
+                        'heading' => 'Service titel',
+                        'subheading' => 'Tweede regel',
+                        'intro' => 'Intro tekst',
+                        'items' => [
+                            (string) $item->id => [
+                                'title' => 'Verzending',
+                                'body' => 'Wereldwijd',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'en' => [
+                'sections' => [
+                    (string) $section->id => [
+                        'eyebrow' => 'Service eyebrow EN',
+                        'heading' => 'Service title',
+                        'subheading' => 'Second line',
+                        'intro' => 'Intro text',
+                        'items' => [
+                            (string) $item->id => [
+                                'title' => 'Shipping',
+                                'body' => 'Worldwide',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'fr' => [
+                'sections' => [
+                    (string) $section->id => [
+                        'eyebrow' => 'Service eyebrow FR',
+                        'heading' => 'Titre service',
+                        'subheading' => 'Deuxième ligne',
+                        'intro' => 'Texte intro',
+                        'items' => [
+                            (string) $item->id => [
+                                'title' => 'Livraison',
+                                'body' => 'Mondial',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ])
+        ->assertRedirect(route('admin.products.show', [
+            'locale' => 'nl',
+            'product' => $product->id,
+        ]));
+
+    $section->refresh()->loadMissing('translations', 'items.translations');
+    $item->refresh()->loadMissing('translations');
+
+    expect($section->translated('heading', 'en'))->toBe('Service title')
+        ->and($item->translated('title', 'fr'))->toBe('Livraison')
+        ->and($item->translated('body', 'en'))->toBe('Worldwide');
+});
