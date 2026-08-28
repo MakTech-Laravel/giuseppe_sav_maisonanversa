@@ -19,7 +19,7 @@ class LegalPageFactory extends Factory
     {
         return [
             'slug' => fake()->unique()->slug(),
-            'body' => fake()->paragraphs(4, true),
+            'body' => '<p>'.e(fake()->paragraphs(4, true)).'</p>',
             'is_published' => true,
         ];
     }

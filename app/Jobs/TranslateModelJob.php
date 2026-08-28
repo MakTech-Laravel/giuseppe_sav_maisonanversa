@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Concerns\TranslatesWithDeepL;
 use App\Services\Translation\DeepLTranslator;
+use App\Support\Html\LegalHtml;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -63,9 +64,10 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        /** @var Model&object{translatableColumns: callable, translations: mixed, translationTargetLocales: callable, translationUsesAutoDetect: callable} $model */
+        /** @var Model&object{translatableColumns: callable, translations: mixed, translationTargetLocales: callable, translationUsesAutoDetect: callable, translationUsesHtml: callable} $model */
         $columns = $model->translatableColumns();
         $targets = collect($model->translationTargetLocales());
+        $usesHtml = $model->translationUsesHtml();
 
         if ($this->onlyLocales !== null) {
             $targets = $targets->intersect($this->onlyLocales)->values();
@@ -89,6 +91,14 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
 
                 if ($source === '') {
                     continue;
+                }
+
+                if ($usesHtml) {
+                    $source = LegalHtml::sanitize($source);
+
+                    if (LegalHtml::isBlank($source)) {
+                        continue;
+                    }
                 }
 
                 $hash = $model->translationSourceHash($column);
@@ -118,6 +128,7 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
                     array_values($pending),
                     $translator->targetLang($locale),
                     $sourceLocale,
+                    $usesHtml,
                 );
             } catch (RequestException $exception) {
                 if ($exception->response?->status() === 456) {
@@ -132,13 +143,19 @@ class TranslateModelJob implements ShouldBeUnique, ShouldQueue
             $index = 0;
 
             foreach (array_keys($pending) as $column) {
+                $value = $translated[$index] ?? $pending[$column];
+
+                if ($usesHtml) {
+                    $value = LegalHtml::sanitize($value);
+                }
+
                 $model->translations()->updateOrCreate(
                     [
                         'locale' => $locale,
                         'column' => $column,
                     ],
                     [
-                        'value' => $translated[$index] ?? $pending[$column],
+                        'value' => $value,
                         'source_hash' => $model->translationSourceHash($column),
                     ],
                 );
