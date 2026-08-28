@@ -492,6 +492,10 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('site-settings', 'update')->name('site-settings.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+                Route::put('site-settings/translations', 'updateTranslations')->name('site-settings.translations.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('site-settings/translate', 'translate')->name('site-settings.translate')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
             Route::controller(LegalPageController::class)->group(function () {
@@ -512,9 +516,15 @@ Route::prefix('{locale}')
             Route::controller(SeoMetaController::class)->group(function () {
                 Route::get('seo-metas', 'index')->name('seo-metas.index')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('seo-metas/{seoMeta}', 'show')->name('seo-metas.show')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('seo-metas/{seoMeta}/edit', 'edit')->name('seo-metas.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('seo-metas/{seoMeta}', 'update')->name('seo-metas.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('seo-metas/{seoMeta}/translations', 'updateTranslations')->name('seo-metas.translations.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('seo-metas/{seoMeta}/translate', 'translate')->name('seo-metas.translate')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
