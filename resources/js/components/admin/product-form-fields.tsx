@@ -677,11 +677,20 @@ export function ProductMediaFields({
     );
 }
 
+type StoredProductSection = {
+    key: string;
+    existing_image?: string | null;
+};
+
 export function ProductSectionFields({
     data,
     setData,
     catalogue,
-}: SharedProps & { catalogue: ProductSectionCatalogueEntry[] }) {
+    storedSections = [],
+}: SharedProps & {
+    catalogue: ProductSectionCatalogueEntry[];
+    storedSections?: StoredProductSection[];
+}) {
     const { t } = useTranslation();
 
     const patchSection = (
@@ -735,6 +744,11 @@ export function ProductSectionFields({
                             key={section.key}
                             entry={entry}
                             section={section}
+                            storedExistingImage={
+                                storedSections.find(
+                                    (stored) => stored.key === section.key,
+                                )?.existing_image ?? null
+                            }
                             onChange={(patch) => patchSection(section.key, patch)}
                             onMove={(direction) => moveSection(index, direction)}
                             canMoveUp={index > 0}
