@@ -28,4 +28,22 @@ class UpdateSiteSettingRequest extends FormRequest
             'announcement_text' => ['nullable', 'string', 'max:255'],
         ];
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function validated($key = null, $default = null): mixed
+    {
+        $data = parent::validated($key, $default);
+
+        if ($key !== null) {
+            return $data;
+        }
+
+        $data['announcement_text'] = filled($data['announcement_text'] ?? null)
+            ? $data['announcement_text']
+            : null;
+
+        return $data;
+    }
 }

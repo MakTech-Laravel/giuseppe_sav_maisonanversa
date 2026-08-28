@@ -44,6 +44,8 @@ test('published dressing item detail page renders with description and status', 
             ->where('item.name', 'Show Detail Item')
             ->where('item.description', 'Uitgebreide beschrijving van dit stuk.')
             ->where('item.status', 'available')
+            ->where('seo.title', 'Show Detail Item — Maison Anversa')
+            ->where('seo.description', 'Uitgebreide beschrijving van dit stuk.')
         );
 });
 

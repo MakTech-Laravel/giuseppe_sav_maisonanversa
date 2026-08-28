@@ -3,6 +3,7 @@
 namespace App\Support\Seo;
 
 use App\Enums\FaqContext;
+use App\Models\DressingItem;
 use App\Models\Faq;
 use App\Models\JournalArticle;
 use App\Models\Product;
@@ -148,10 +149,11 @@ final class MaisonSeo
         $page = self::pageKey($routeName);
         $article = self::journalArticle($request, $routeName);
         $product = self::productForSeo($request, $routeName);
-        $indexable = self::isIndexable($routeName, $article, $product);
-        $canonical = self::canonical($request, $routeName, $locale, $origin, $article, $product);
-        $copy = self::copy($page, $article, $routeName, $product);
-        $hreflang = self::hreflang($routeName, $article, $product);
+        $dressingItem = self::dressingItemForSeo($request, $routeName);
+        $indexable = self::isIndexable($routeName, $article, $product, $dressingItem);
+        $canonical = self::canonical($request, $routeName, $locale, $origin, $article, $product, $dressingItem);
+        $copy = self::copy($page, $article, $routeName, $product, $dressingItem);
+        $hreflang = self::hreflang($routeName, $article, $product, $dressingItem);
         $ogImage = self::absoluteUrl($origin, (string) config('maison.seo.image'));
 
         return [
@@ -214,6 +216,10 @@ final class MaisonSeo
             return 'products';
         }
 
+        if ($routeName === 'maison.dressing.show') {
+            return 'dressing';
+        }
+
         if (is_string($routeName) && str_starts_with($routeName, 'maison.')) {
             $key = substr($routeName, strlen('maison.'));
 
@@ -223,7 +229,7 @@ final class MaisonSeo
         return null;
     }
 
-    private static function isIndexable(?string $routeName, ?JournalArticle $article, ?Product $product): bool
+    private static function isIndexable(?string $routeName, ?JournalArticle $article, ?Product $product, ?DressingItem $dressingItem = null): bool
     {
         if ($routeName === 'maison.journal.show') {
             return $article !== null;
@@ -231,6 +237,10 @@ final class MaisonSeo
 
         if ($routeName === 'maison.products.show') {
             return $product !== null;
+        }
+
+        if ($routeName === 'maison.dressing.show') {
+            return $dressingItem !== null;
         }
 
         $page = self::pageKey($routeName);
@@ -278,10 +288,32 @@ final class MaisonSeo
             ->first();
     }
 
+    private static function dressingItemForSeo(Request $request, ?string $routeName): ?DressingItem
+    {
+        if ($routeName !== 'maison.dressing.show') {
+            return null;
+        }
+
+        $item = $request->route('dressingItem');
+
+        if ($item instanceof DressingItem) {
+            return $item->is_published ? $item : null;
+        }
+
+        if (! is_string($item) || $item === '') {
+            return null;
+        }
+
+        return DressingItem::query()
+            ->where('slug', $item)
+            ->where('is_published', true)
+            ->first();
+    }
+
     /**
      * @return array{title: string, description: string}
      */
-    private static function copy(?string $page, ?JournalArticle $article, ?string $routeName, ?Product $product = null): array
+    private static function copy(?string $page, ?JournalArticle $article, ?string $routeName, ?Product $product = null, ?DressingItem $dressingItem = null): array
     {
         if ($article !== null) {
             $title = $article->translated('title') ?: (string) $article->title;
@@ -298,6 +330,15 @@ final class MaisonSeo
             return [
                 'title' => $title.' — Maison Anversa',
                 'description' => $product->translated('description') ?: (string) $product->description,
+            ];
+        }
+
+        if ($dressingItem !== null) {
+            $title = $dressingItem->translated('name') ?: (string) $dressingItem->name;
+
+            return [
+                'title' => $title.' — Maison Anversa',
+                'description' => $dressingItem->translated('description') ?: (string) $dressingItem->description,
             ];
         }
 
@@ -350,6 +391,7 @@ final class MaisonSeo
         string $origin,
         ?JournalArticle $article,
         ?Product $product = null,
+        ?DressingItem $dressingItem = null,
     ): string {
         if ($routeName === 'maison.journal.show' && $article !== null) {
             return route('maison.journal.show', [
@@ -362,6 +404,13 @@ final class MaisonSeo
             return route('maison.products.show', [
                 'locale' => $locale,
                 'product' => $product->slug,
+            ]);
+        }
+
+        if ($routeName === 'maison.dressing.show' && $dressingItem !== null) {
+            return route('maison.dressing.show', [
+                'locale' => $locale,
+                'dressingItem' => $dressingItem->slug,
             ]);
         }
 
@@ -385,7 +434,7 @@ final class MaisonSeo
     /**
      * @return list<HreflangLink>
      */
-    private static function hreflang(?string $routeName, ?JournalArticle $article, ?Product $product = null): array
+    private static function hreflang(?string $routeName, ?JournalArticle $article, ?Product $product = null, ?DressingItem $dressingItem = null): array
     {
         if (! is_string($routeName) || ! Route::has($routeName)) {
             return [];
@@ -407,6 +456,10 @@ final class MaisonSeo
 
         if ($product !== null) {
             $parameters['product'] = $product->slug;
+        }
+
+        if ($dressingItem !== null) {
+            $parameters['dressingItem'] = $dressingItem->slug;
         }
 
         $links = [];

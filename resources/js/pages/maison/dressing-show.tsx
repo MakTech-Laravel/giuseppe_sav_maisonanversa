@@ -40,7 +40,7 @@ export default function DressingShow({
 
     return (
         <>
-            <MaisonSeoHead title={item.name} description={item.description} />
+            <MaisonSeoHead />
 
             <PageHero
                 eyebrow={item.category}
