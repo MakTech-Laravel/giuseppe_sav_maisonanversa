@@ -65,6 +65,12 @@ class DashboardController extends Controller implements HasMiddleware
                 ['label' => __('Bestelling'), 'value' => $heritage ? $orders->statusLabel($heritage->status) : __('Geen'), 'hint' => $heritage?->created_at?->toDateString() ?? ''],
                 ['label' => __('Circle'), 'value' => $user->isFoundingCircle() ? __('Lid') : __('Nog niet'), 'hint' => __('Founding Circle')],
             ],
+            'recentOrders' => $user->orders()
+                ->latest()
+                ->limit(5)
+                ->get()
+                ->map(fn (Order $order) => $orders->summary($order))
+                ->values(),
         ]);
     }
 

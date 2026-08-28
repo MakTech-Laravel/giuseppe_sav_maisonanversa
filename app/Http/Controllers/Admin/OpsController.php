@@ -3,26 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Enums\ProductType;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignCircleMemberRequest;
 use App\Http\Requests\Admin\ResolveCommunityReportRequest;
 use App\Http\Requests\Admin\UpdateHeritageProductRequest;
-use App\Mail\ShippingNotification;
 use App\Models\CommunityPost;
 use App\Models\CommunityReport;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use App\Services\Checkout\OrderFulfillment;
+use App\Services\Checkout\OrderStatusService;
 use App\Services\Edition\EditionInventory;
 use App\Support\CommunityPostPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Stripe\Exception\ApiErrorException;
@@ -31,26 +31,115 @@ class OpsController extends Controller
 {
     private const COMMUNITY_POSTS_PER_PAGE = 15;
 
+    private const ORDERS_PER_PAGE_DEFAULT = 15;
+
+    /** @var list<int> */
+    private const ORDERS_PER_PAGE_OPTIONS = [10, 15, 25, 50, 100];
+
     public function orders(Request $request, string $locale, OrderPresenter $presenter): Response
     {
+        $filters = $this->orderFilters($request);
+
         $orders = Order::query()
+            ->with(['product', 'user:id,name,email', 'latestPayment'])
+            ->when($filters['search'] !== '', function ($query) use ($filters): void {
+                $search = $filters['search'];
+                $query->where(function ($inner) use ($search): void {
+                    $inner->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhereHas('product', fn ($product) => $product->where('name', 'like', "%{$search}%"));
+
+                    if (ctype_digit($search)) {
+                        $inner->orWhere('id', (int) $search);
+                    } elseif (preg_match('/(?:MA-)?\d{0,4}-?0*(\d+)$/i', $search, $matches) === 1) {
+                        $inner->orWhere('id', (int) $matches[1]);
+                    }
+                });
+            })
+            ->when(
+                $filters['status'] !== null,
+                fn ($query) => $query->where('status', $filters['status']),
+            )
+            ->when(
+                $filters['payment_status'] !== null,
+                fn ($query) => $query->whereHas(
+                    'latestPayment',
+                    fn ($payment) => $payment->where('status', $filters['payment_status']),
+                ),
+            )
             ->latest()
-            ->limit(100)
-            ->get()
-            ->map(fn (Order $order) => [
-                ...$presenter->summary($order),
-                'customer' => $order->name,
-            ]);
+            ->paginate($filters['per_page'])
+            ->withQueryString()
+            ->through(function (Order $order) use ($presenter): array {
+                $summary = $presenter->summary($order);
+                $payment = $order->latestPayment;
+
+                return [
+                    ...$summary,
+                    'product_name' => $order->product?->translated('name') ?? __('Product'),
+                    'customer' => $order->name,
+                    'customer_email' => $order->email,
+                    'user_id' => $order->user_id,
+                    'payment_status' => $payment !== null
+                        ? $presenter->paymentStatusLabel($payment->status)
+                        : null,
+                    'payment_status_key' => $payment?->status->value,
+                ];
+            });
 
         return Inertia::render('admin/orders/index', [
             'orders' => $orders,
+            'filters' => [
+                'search' => $filters['search'],
+                'status' => $filters['status']?->value ?? '',
+                'payment_status' => $filters['payment_status']?->value ?? '',
+                'per_page' => $filters['per_page'],
+            ],
+            'statusOptions' => collect(OrderStatus::cases())
+                ->map(fn (OrderStatus $status) => [
+                    'value' => $status->value,
+                    'label' => $presenter->statusLabel($status),
+                ])
+                ->values()
+                ->all(),
+            'paymentStatusOptions' => collect(PaymentStatus::cases())
+                ->map(fn (PaymentStatus $status) => [
+                    'value' => $status->value,
+                    'label' => $presenter->paymentStatusLabel($status),
+                ])
+                ->values()
+                ->all(),
+            'perPageOptions' => self::ORDERS_PER_PAGE_OPTIONS,
         ]);
+    }
+
+    /**
+     * @return array{search: string, status: OrderStatus|null, payment_status: PaymentStatus|null, per_page: int}
+     */
+    private function orderFilters(Request $request): array
+    {
+        $search = trim((string) $request->query('search', ''));
+        $statusValue = trim((string) $request->query('status', ''));
+        $paymentStatusValue = trim((string) $request->query('payment_status', ''));
+        $perPage = (int) $request->query('per_page', self::ORDERS_PER_PAGE_DEFAULT);
+
+        if (! in_array($perPage, self::ORDERS_PER_PAGE_OPTIONS, true)) {
+            $perPage = self::ORDERS_PER_PAGE_DEFAULT;
+        }
+
+        return [
+            'search' => $search,
+            'status' => OrderStatus::tryFrom($statusValue),
+            'payment_status' => PaymentStatus::tryFrom($paymentStatusValue),
+            'per_page' => $perPage,
+        ];
     }
 
     public function orderShow(Request $request, string $locale, Order $order, OrderPresenter $presenter): Response
     {
         $detail = $presenter->detail($order);
         $detail['customer'] = $order->name;
+        $detail['user_id'] = $order->user_id;
 
         return Inertia::render('admin/orders/show', [
             'order' => $detail,
@@ -61,43 +150,32 @@ class OpsController extends Controller
         Request $request,
         string $locale,
         Order $order,
-        OrderFulfillment $fulfillment,
+        OrderStatusService $statusService,
     ): RedirectResponse {
         $data = $request->validate([
-            'status' => ['required', 'in:shipped,delivered,refunded'],
+            'status' => ['required', 'in:processing,shipped,delivered,refunded,canceled'],
+            'message' => ['required', 'string', 'max:2000'],
         ]);
 
         $status = OrderStatus::from($data['status']);
 
-        if ($status === OrderStatus::Refunded) {
-            try {
-                $fulfillment->refund($order);
-            } catch (ApiErrorException) {
-                Inertia::flash('toast', [
-                    'type' => 'error',
-                    'message' => __('Stripe-terugbetaling mislukt. Probeer opnieuw.'),
-                ]);
-
-                return back();
-            }
-
-            Inertia::flash('toast', ['type' => 'success', 'message' => __('Bestelstatus bijgewerkt.')]);
+        try {
+            $statusService->transition(
+                $order,
+                $status,
+                $data['message'],
+                $request->user(),
+            );
+        } catch (ApiErrorException) {
+            Inertia::flash('toast', [
+                'type' => 'error',
+                'message' => __('Stripe-terugbetaling mislukt. Probeer opnieuw.'),
+            ]);
 
             return back();
+        } catch (ValidationException $exception) {
+            throw $exception;
         }
-
-        $order->fill(['status' => $status]);
-
-        if ($status === OrderStatus::Shipped && $order->shipped_at === null) {
-            $order->shipped_at = now();
-            Mail::to($order->email)->locale($order->locale)->queue(new ShippingNotification($order));
-        }
-
-        if ($status === OrderStatus::Delivered && $order->delivered_at === null) {
-            $order->delivered_at = now();
-        }
-
-        $order->save();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Bestelstatus bijgewerkt.')]);
 

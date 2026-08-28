@@ -33,7 +33,7 @@ export function HomePreorder({
     const items = includes && includes.length > 0 ? includes : DEFAULT_INCLUDES;
 
     const { t } = useTranslation();
-    const { openOrder, openCertificate, openNewsletter } = useShellActions();
+    const { openPurchase, openCertificate, openNewsletter } = useShellActions();
     const { priceLabel, deliveryLabel } = useCheckoutDisplay();
     const section = useRef<HTMLDivElement>(null);
     const [shown, setShown] = useState(0);
@@ -182,7 +182,7 @@ export function HomePreorder({
                                 <MaisonButton
                                     variant="gold"
                                     block
-                                    onClick={() => openOrder()}
+                                    onClick={() => openPurchase()}
                                     className="mb-3"
                                 >
                                     {t('Reserveer Uw Nummer')}

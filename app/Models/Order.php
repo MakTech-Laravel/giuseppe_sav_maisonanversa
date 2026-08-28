@@ -7,6 +7,8 @@ use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -25,6 +27,11 @@ class Order extends Model
         'email',
         'locale',
         'phone',
+        'shipping_line1',
+        'shipping_line2',
+        'shipping_city',
+        'shipping_postal_code',
+        'shipping_country',
         'edition_number',
         'monogram',
         'gift_wrap',
@@ -33,6 +40,7 @@ class Order extends Model
         'amount',
         'stripe_checkout_session_id',
         'stripe_payment_intent_id',
+        'processing_at',
         'shipped_at',
         'delivered_at',
         'follow_up_sent_at',
@@ -48,6 +56,7 @@ class Order extends Model
             'edition_number' => 'integer',
             'gift_wrap' => 'boolean',
             'amount' => 'decimal:2',
+            'processing_at' => 'datetime',
             'shipped_at' => 'datetime',
             'delivered_at' => 'datetime',
             'follow_up_sent_at' => 'datetime',
@@ -78,13 +87,47 @@ class Order extends Model
         return $this->belongsTo(EditionPiece::class);
     }
 
+    /**
+     * @return HasMany<OrderStatusEvent, $this>
+     */
+    public function statusEvents(): HasMany
+    {
+        return $this->hasMany(OrderStatusEvent::class)->orderBy('created_at');
+    }
+
+    /**
+     * @return HasMany<Payment, $this>
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class)->latest('id');
+    }
+
+    /**
+     * @return HasOne<Payment, $this>
+     */
+    public function latestPayment(): HasOne
+    {
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
     public function isPaid(): bool
     {
-        return in_array($this->status, [
-            OrderStatus::Paid,
-            OrderStatus::Shipped,
-            OrderStatus::Delivered,
-        ], true);
+        return $this->status->isFulfillment();
+    }
+
+    /**
+     * @return array{line1: string, line2: string|null, city: string, postal_code: string, country: string}
+     */
+    public function shippingAddress(): array
+    {
+        return [
+            'line1' => (string) ($this->shipping_line1 ?? ''),
+            'line2' => $this->shipping_line2,
+            'city' => (string) ($this->shipping_city ?? ''),
+            'postal_code' => (string) ($this->shipping_postal_code ?? ''),
+            'country' => (string) ($this->shipping_country ?? ''),
+        ];
     }
 
     public function reference(): string

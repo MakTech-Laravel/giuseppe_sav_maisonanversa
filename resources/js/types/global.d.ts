@@ -4,12 +4,16 @@ import type { SeoDocument } from '@/types/seo';
 
 export type CheckoutShared = {
     productId: number | null;
+    productSlug?: string | null;
     currency: string;
     amount: string;
     displayAmount: string;
     productName: string;
     deliveryLabel: string | null;
     productType?: 'limited_edition' | 'simple';
+    editionPieceId?: number | null;
+    editionNumber?: number | null;
+    editionLabel?: string | null;
 };
 
 export type SiteShared = {

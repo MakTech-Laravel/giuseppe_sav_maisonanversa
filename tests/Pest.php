@@ -1,5 +1,9 @@
 <?php
 
+use App\Enums\EditionPieceStatus;
+use App\Models\EditionPiece;
+use App\Models\Product;
+use App\Models\User;
 use Database\Seeders\DressingItemSeeder;
 use Database\Seeders\EditionPieceSeeder;
 use Database\Seeders\FaqSeeder;
@@ -75,6 +79,45 @@ function defaultLocale(): string
 function localized(string $name, array $parameters = [], bool $absolute = true): string
 {
     return route($name, ['locale' => defaultLocale(), ...$parameters], $absolute);
+}
+
+/**
+ * @param  array<string, mixed>  $overrides
+ * @return array<string, mixed>
+ */
+function actingAsCheckoutUser(array $attributes = []): User
+{
+    $user = User::factory()->create($attributes);
+    test()->actingAs($user);
+
+    return $user;
+}
+
+/**
+ * @param  array<string, mixed>  $overrides
+ * @return array<string, mixed>
+ */
+function checkoutPayload(array $overrides = []): array
+{
+    $product = Product::founding();
+
+    $editionPieceId = $overrides['edition_piece_id'] ?? EditionPiece::query()
+        ->where('product_id', $product?->id)
+        ->where('status', EditionPieceStatus::Available)
+        ->orderBy('edition_number')
+        ->value('id');
+
+    return [
+        'name' => 'Test Buyer',
+        'email' => 'buyer@example.com',
+        'shipping_line1' => 'Meir 1',
+        'shipping_city' => 'Antwerpen',
+        'shipping_postal_code' => '2000',
+        'shipping_country' => 'BE',
+        'edition_piece_id' => $editionPieceId,
+        'gift_wrap' => false,
+        ...$overrides,
+    ];
 }
 
 function fakeDeepLTranslations(): void

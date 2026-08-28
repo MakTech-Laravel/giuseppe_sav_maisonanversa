@@ -3,20 +3,20 @@
 namespace App\Mail;
 
 use App\Models\Order;
+use App\Support\MailLocale;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderConfirmation extends Mailable implements ShouldQueue
+class OrderConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
     public function __construct(public Order $order)
     {
-        $this->locale($order->locale);
+        $this->locale(MailLocale::resolve($order->locale));
     }
 
     public function envelope(): Envelope
@@ -41,6 +41,8 @@ class OrderConfirmation extends Mailable implements ShouldQueue
     {
         $this->order->loadMissing('product');
 
-        return $this->order->product?->translated('name', $this->order->locale) ?? __('Product');
+        $locale = MailLocale::resolve($this->order->locale);
+
+        return $this->order->product?->translated('name', $locale) ?? __('Product');
     }
 }
