@@ -24,7 +24,6 @@ export type SiteShared = {
     whatsappHref: string;
     phoneHref: string;
     emailHelloHref: string;
-    announcementText: string | null;
 };
 
 export type BureauPanelId =
