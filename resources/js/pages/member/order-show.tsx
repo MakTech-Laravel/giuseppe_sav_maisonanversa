@@ -9,6 +9,7 @@ import {
 
 type OrderDetail = {
     id: string;
+    reference?: string;
     label: string;
     date: string;
     amount: string;
@@ -17,8 +18,21 @@ type OrderDetail = {
     method: string;
     summary: string;
     items: { name: string; qty: number; price: string }[];
-    billing: { name: string; email: string; address: string };
+    billing: { name: string; email: string; phone?: string; address?: string };
+    shipping?: {
+        line1: string;
+        line2?: string | null;
+        city: string;
+        postal_code: string;
+        country: string;
+    };
     timeline: { label: string; at: string; done: boolean }[];
+    events?: {
+        id: string;
+        status: string;
+        message: string | null;
+        at: string;
+    }[];
 };
 
 export default function MemberOrderShow({ order }: { order: OrderDetail }) {
@@ -27,7 +41,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
 
     return (
         <>
-            <Head title={`${t('Bestelling')} ${order.id}`} />
+            <Head title={`${t('Bestelling')} ${order.reference ?? order.id}`} />
             <div className="mb-6">
                 <Link
                     href={`/${locale}/member/orders`}
@@ -46,13 +60,17 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
             <div className="mb-6 flex flex-wrap items-center gap-3">
                 <MemberStatusPill
                     tone={
-                        order.status_key === 'paid' ? 'success' : 'neutral'
+                        ['paid', 'processing', 'shipped', 'delivered'].includes(
+                            order.status_key,
+                        )
+                            ? 'success'
+                            : 'neutral'
                     }
                 >
                     {order.status}
                 </MemberStatusPill>
                 <p className="font-sans text-[11px] tracking-[0.14em] text-sand uppercase">
-                    {order.id}
+                    {order.reference ?? order.id}
                 </p>
                 <p className="font-sans text-[11px] tracking-[0.14em] text-stone uppercase">
                     {order.date}
@@ -116,7 +134,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                     </MemberPanel>
 
                     <MemberPanel>
-                        <MemberSectionTitle title={t('Facturatie')} />
+                        <MemberSectionTitle title={t('Koper')} />
                         <dl className="space-y-3 text-[14px] text-sand">
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
@@ -134,24 +152,36 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                             </div>
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    {t('Adres')}
+                                    {t('Telefoon')}
                                 </dt>
                                 <dd className="mt-1">
-                                    {order.billing.address}
+                                    {order.billing.phone ?? '—'}
                                 </dd>
                             </div>
                         </dl>
                     </MemberPanel>
+
+                    {order.shipping && (
+                        <MemberPanel>
+                            <MemberSectionTitle title={t('Verzendadres')} />
+                            <p className="text-[14px] text-sand">
+                                {order.shipping.line1}
+                                {order.shipping.line2
+                                    ? `, ${order.shipping.line2}`
+                                    : ''}
+                                <br />
+                                {order.shipping.postal_code}{' '}
+                                {order.shipping.city}
+                                <br />
+                                {order.shipping.country}
+                            </p>
+                        </MemberPanel>
+                    )}
                 </div>
             </div>
 
             <MemberPanel className="mt-6">
-                <MemberSectionTitle
-                    title={t('Tijdlijn')}
-                    description={t(
-                        'Prototype mijlpalen tot de fulfilment is aangesloten.',
-                    )}
-                />
+                <MemberSectionTitle title={t('Tijdlijn')} />
                 <ol className="space-y-4">
                     {order.timeline.map((step) => (
                         <li
@@ -171,13 +201,39 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                                     {step.label}
                                 </p>
                                 <p className="mt-0.5 font-sans text-[11px] tracking-[0.12em] text-stone uppercase">
-                                    {step.at}
+                                    {step.at || '—'}
                                 </p>
                             </div>
                         </li>
                     ))}
                 </ol>
             </MemberPanel>
+
+            {order.events && order.events.length > 0 && (
+                <MemberPanel className="mt-6">
+                    <MemberSectionTitle title={t('Updates')} />
+                    <ul className="space-y-4">
+                        {order.events.map((event) => (
+                            <li
+                                key={event.id}
+                                className="border-b border-gold/10 pb-4 last:border-0 last:pb-0"
+                            >
+                                <div className="flex items-center justify-between gap-3">
+                                    <p className="font-sans text-[11px] tracking-[0.14em] text-gold uppercase">
+                                        {event.status}
+                                    </p>
+                                    <p className="font-sans text-[11px] text-stone">
+                                        {event.at}
+                                    </p>
+                                </div>
+                                <p className="mt-2 text-[14px] text-sand">
+                                    {event.message || '—'}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                </MemberPanel>
+            )}
         </>
     );
 }

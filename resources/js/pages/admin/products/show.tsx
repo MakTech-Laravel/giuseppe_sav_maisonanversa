@@ -155,7 +155,7 @@ export default function ShowProduct({
                     <Button variant="outline" asChild>
                         <Link href={products.index(locale)}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar catalogus')}
+                            {t('Terug naar product')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -197,7 +197,7 @@ export default function ShowProduct({
                                 >
                                     <Link href={products.index(locale)}>
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug naar catalogus')}
+                                        {t('Terug naar product')}
                                     </Link>
                                 </Button>
                                 <ProductTranslationsDialog

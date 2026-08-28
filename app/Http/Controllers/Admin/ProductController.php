@@ -427,16 +427,20 @@ class ProductController extends Controller
 
         $pieces = EditionPiece::query()
             ->where('product_id', $product->id)
-            ->tap(fn ($query) => $this->applyInventoryFilters($query, $filters))
+            ->with(['order:id,name,email'])
+            ->tap(fn ($query) => $this->applyInventoryFilters($query, $product, $filters))
             ->orderBy('edition_number')
             ->paginate($filters['per_page'])
             ->withQueryString()
             ->through(fn (EditionPiece $piece) => [
-                'sku' => $product->formatEditionSku($piece->edition_number),
-                'label' => $product->formatEditionLabel($piece->edition_number),
+                'sku' => $product->formatEditionSkuForLabel($piece->edition_number),
+                'label' => $piece->edition_number,
                 'status' => $piece->status->value,
                 'status_key' => $piece->status->value,
                 'notes' => $piece->notes ?? '',
+                'order_id' => $piece->order_id,
+                'purchaser_name' => $piece->order?->name,
+                'purchaser_email' => $piece->order?->email,
             ]);
 
         return Inertia::render('admin/heritage/index', [
@@ -547,33 +551,50 @@ class ProductController extends Controller
      * @param  Builder<EditionPiece>  $query
      * @param  array{search: string, number_from: int|null, number_to: int|null, status: EditionPieceStatus|null, per_page: int}  $filters
      */
-    private function applyInventoryFilters($query, array $filters): void
+    private function applyInventoryFilters($query, Product $product, array $filters): void
     {
         $query
-            ->when($filters['number_from'] !== null, fn ($inner) => $inner->where(
-                'edition_number',
-                '>=',
-                $filters['number_from'],
-            ))
-            ->when($filters['number_to'] !== null, fn ($inner) => $inner->where(
-                'edition_number',
-                '<=',
-                $filters['number_to'],
-            ))
+            ->when(
+                $filters['number_from'] !== null,
+                fn ($inner) => $inner->where(
+                    'edition_number',
+                    '>=',
+                    $product->formatEditionLabel($filters['number_from']),
+                ),
+            )
+            ->when(
+                $filters['number_to'] !== null,
+                fn ($inner) => $inner->where(
+                    'edition_number',
+                    '<=',
+                    $product->formatEditionLabel($filters['number_to']),
+                ),
+            )
             ->when($filters['status'] !== null, fn ($inner) => $inner->where(
                 'status',
                 $filters['status']->value,
             ))
-            ->when($filters['search'] !== '', function ($inner) use ($filters): void {
-                $search = $filters['search'];
+            ->when($filters['search'] !== '', function ($inner) use ($filters, $product): void {
+                $search = strtoupper(trim($filters['search']));
 
-                $inner->where(function ($group) use ($search): void {
-                    $group->where('notes', 'like', "%{$search}%");
+                $skuLabels = EditionPiece::query()
+                    ->where('product_id', $product->id)
+                    ->pluck('edition_number')
+                    ->filter(function (string $label) use ($product, $search): bool {
+                        return str_starts_with(
+                            strtoupper($product->formatEditionSkuForLabel($label)),
+                            $search,
+                        );
+                    })
+                    ->values()
+                    ->all();
 
-                    $digits = preg_replace('/\D+/', '', $search) ?? '';
+                $inner->where(function ($group) use ($search, $skuLabels): void {
+                    $group->where('notes', 'like', "%{$search}%")
+                        ->orWhere('edition_number', 'like', $search.'%');
 
-                    if ($digits !== '') {
-                        $group->orWhere('edition_number', (int) $digits);
+                    if ($skuLabels !== []) {
+                        $group->orWhereIn('edition_number', $skuLabels);
                     }
 
                     $status = EditionPieceStatus::tryFrom(strtolower($search));

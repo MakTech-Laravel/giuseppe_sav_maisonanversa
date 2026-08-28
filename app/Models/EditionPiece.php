@@ -35,7 +35,6 @@ class EditionPiece extends Model
     {
         return [
             'status' => EditionPieceStatus::class,
-            'edition_number' => 'integer',
             'reserved_until' => 'datetime',
             'allocated_at' => 'datetime',
         ];
@@ -73,10 +72,25 @@ class EditionPiece extends Model
 
     public function formattedNumber(): string
     {
-        $width = $this->product !== null
-            ? $this->product->editionNumberPadWidth()
-            : max(3, strlen((string) $this->edition_number));
+        if ($this->product !== null) {
+            $sequence = $this->product->parseEditionSequence($this->edition_number);
 
-        return str_pad((string) $this->edition_number, $width, '0', STR_PAD_LEFT);
+            if ($this->edition_number === $this->product->formatEditionLabel($sequence)) {
+                return $this->edition_number;
+            }
+
+            return $this->product->formatEditionDigits($sequence);
+        }
+
+        return (string) $this->edition_number;
+    }
+
+    public function sequenceNumber(): int
+    {
+        if ($this->product !== null) {
+            return $this->product->parseEditionSequence($this->edition_number);
+        }
+
+        return (int) preg_replace('/\D+/', '', $this->edition_number);
     }
 }

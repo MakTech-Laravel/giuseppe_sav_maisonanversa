@@ -18,10 +18,14 @@ class EditionPieceFactory extends Factory
      */
     public function definition(): array
     {
+        $product = Product::query()->where('slug', Product::FOUNDING_SLUG)->first()
+            ?? Product::factory()->founding()->create();
+
+        $number = fake()->unique()->numberBetween(2, 100);
+
         return [
-            'product_id' => Product::query()->where('slug', Product::FOUNDING_SLUG)->value('id')
-                ?? Product::factory()->founding(),
-            'edition_number' => fake()->unique()->numberBetween(2, 100),
+            'product_id' => $product->id,
+            'edition_number' => $product->formatEditionLabel($number),
             'status' => EditionPieceStatus::Available,
             'verification_token' => (string) Str::uuid(),
         ];
@@ -29,11 +33,15 @@ class EditionPieceFactory extends Factory
 
     public function archive(): static
     {
-        return $this->state(fn (): array => [
-            'edition_number' => 1,
-            'status' => EditionPieceStatus::Archive,
-            'notes' => 'Maison Anversa Archive — not for sale',
-        ]);
+        return $this->state(function (array $attributes): array {
+            $product = Product::query()->find($attributes['product_id']);
+
+            return [
+                'edition_number' => $product?->formatEditionLabel(1) ?? '001',
+                'status' => EditionPieceStatus::Archive,
+                'notes' => 'Maison Anversa Archive — not for sale',
+            ];
+        });
     }
 
     public function allocated(): static

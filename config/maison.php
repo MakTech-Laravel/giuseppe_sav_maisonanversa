@@ -97,6 +97,17 @@ return [
         'currency' => 'eur',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Order admin notifications
+    |--------------------------------------------------------------------------
+    |
+    | New paid orders are emailed here in the default Maison locale (nl).
+    |
+    */
+
+    'order_admin_email' => env('ORDER_ADMIN_EMAIL', env('MAIL_FROM_ADDRESS')),
+
     'corner_form_options' => [
         'court_options' => ['4-6 courts', '7-10 courts', '10+ courts'],
         'format_options' => [

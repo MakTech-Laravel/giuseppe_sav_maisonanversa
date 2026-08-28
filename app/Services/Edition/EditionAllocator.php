@@ -3,17 +3,22 @@
 namespace App\Services\Edition;
 
 use App\Enums\EditionPieceStatus;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Exceptions\EditionSoldOutException;
+use App\Exceptions\EditionUnavailableException;
 use App\Models\EditionPiece;
 use App\Models\Order;
+use App\Models\OrderStatusEvent;
+use App\Models\Payment;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class EditionAllocator
 {
-    public function hold(Order $order): EditionPiece
+    public function hold(Order $order, ?int $editionPieceId = null): EditionPiece
     {
-        return DB::transaction(function () use ($order): EditionPiece {
+        return DB::transaction(function () use ($order, $editionPieceId): EditionPiece {
             $lockedOrder = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
 
             if ($lockedOrder->edition_piece_id !== null) {
@@ -37,16 +42,9 @@ class EditionAllocator
                 }
             }
 
-            $piece = EditionPiece::query()
-                ->where('product_id', $lockedOrder->product_id)
-                ->where('status', EditionPieceStatus::Available)
-                ->orderBy('edition_number')
-                ->lockForUpdate()
-                ->first();
-
-            if ($piece === null) {
-                throw new EditionSoldOutException;
-            }
+            $piece = $editionPieceId !== null
+                ? $this->lockPreferredAvailable($lockedOrder, $editionPieceId)
+                : $this->lockLowestAvailable($lockedOrder);
 
             $piece->fill([
                 'status' => EditionPieceStatus::Reserved,
@@ -214,10 +212,36 @@ class EditionAllocator
                     ])->save();
 
                     if ($orderId !== null) {
-                        Order::query()
+                        /** @var Order|null $lockedOrder */
+                        $lockedOrder = Order::query()
                             ->whereKey($orderId)
-                            ->whereNull('edition_number')
-                            ->update(['edition_piece_id' => null]);
+                            ->lockForUpdate()
+                            ->first();
+
+                        if ($lockedOrder !== null && $lockedOrder->status === OrderStatus::Incomplete) {
+                            $lockedOrder->fill([
+                                'status' => OrderStatus::Canceled,
+                                'edition_piece_id' => null,
+                            ])->save();
+
+                            Payment::query()
+                                ->where('order_id', $lockedOrder->id)
+                                ->where('status', PaymentStatus::Pending)
+                                ->update(['status' => PaymentStatus::Canceled->value]);
+
+                            OrderStatusEvent::query()->firstOrCreate(
+                                [
+                                    'order_id' => $lockedOrder->id,
+                                    'status' => OrderStatus::Canceled,
+                                ],
+                                [
+                                    'message' => __('Reservering verlopen. De editie is opnieuw beschikbaar.'),
+                                    'user_id' => null,
+                                ],
+                            );
+                        } elseif ($lockedOrder !== null && $lockedOrder->edition_number === null) {
+                            $lockedOrder->forceFill(['edition_piece_id' => null])->save();
+                        }
                     }
 
                     $released++;
@@ -235,6 +259,37 @@ class EditionAllocator
         return $released;
     }
 
+    private function lockPreferredAvailable(Order $order, int $editionPieceId): EditionPiece
+    {
+        $piece = EditionPiece::query()
+            ->whereKey($editionPieceId)
+            ->where('product_id', $order->product_id)
+            ->lockForUpdate()
+            ->first();
+
+        if ($piece === null || $piece->status !== EditionPieceStatus::Available) {
+            throw new EditionUnavailableException;
+        }
+
+        return $piece;
+    }
+
+    private function lockLowestAvailable(Order $order): EditionPiece
+    {
+        $piece = EditionPiece::query()
+            ->where('product_id', $order->product_id)
+            ->where('status', EditionPieceStatus::Available)
+            ->orderBy('edition_number')
+            ->lockForUpdate()
+            ->first();
+
+        if ($piece === null) {
+            throw new EditionSoldOutException;
+        }
+
+        return $piece;
+    }
+
     private function markAllocated(Order $order, EditionPiece $piece): EditionPiece
     {
         $piece->fill([
@@ -246,7 +301,7 @@ class EditionAllocator
 
         $order->forceFill([
             'edition_piece_id' => $piece->id,
-            'edition_number' => $piece->edition_number,
+            'edition_number' => $piece->sequenceNumber(),
         ])->save();
 
         app(EditionInventory::class)->bust($order->product);
