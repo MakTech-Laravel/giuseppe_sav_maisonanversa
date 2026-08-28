@@ -25,25 +25,6 @@ class UpdateSiteSettingRequest extends FormRequest
             'instagram_url' => ['required', 'url', 'max:255'],
             'boutique_lat' => ['required', 'numeric', 'between:-90,90'],
             'boutique_lng' => ['required', 'numeric', 'between:-180,180'],
-            'announcement_text' => ['nullable', 'string', 'max:255'],
         ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function validated($key = null, $default = null): mixed
-    {
-        $data = parent::validated($key, $default);
-
-        if ($key !== null) {
-            return $data;
-        }
-
-        $data['announcement_text'] = filled($data['announcement_text'] ?? null)
-            ? $data['announcement_text']
-            : null;
-
-        return $data;
     }
 }
