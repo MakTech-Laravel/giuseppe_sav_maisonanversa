@@ -8,11 +8,15 @@ use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
+use App\Http\Requests\Admin\TranslateProductFaqRequest;
 use App\Http\Requests\Admin\TranslateProductRequest;
+use App\Http\Requests\Admin\TranslateProductSectionsRequest;
 use App\Http\Requests\Admin\UpdateProductFaqsRequest;
+use App\Http\Requests\Admin\UpdateProductFaqTranslationsRequest;
 use App\Http\Requests\Admin\UpdateProductMediaRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Http\Requests\Admin\UpdateProductSectionsRequest;
+use App\Http\Requests\Admin\UpdateProductSectionTranslationsRequest;
 use App\Http\Requests\Admin\UpdateProductTranslationsRequest;
 use App\Models\EditionPiece;
 use App\Models\Product;
@@ -49,6 +53,23 @@ class ProductController extends Controller
         'hero_subtitle',
         'description',
         'expected_delivery_label',
+    ];
+
+    private const FAQ_TRANSLATION_COLUMNS = [
+        'question',
+        'answer',
+    ];
+
+    private const SECTION_TRANSLATION_COLUMNS = [
+        'eyebrow',
+        'heading',
+        'subheading',
+        'intro',
+    ];
+
+    private const SECTION_ITEM_TRANSLATION_COLUMNS = [
+        'title',
+        'body',
     ];
 
     /**
@@ -121,13 +142,22 @@ class ProductController extends Controller
 
     public function show(string $locale, Product $product): Response
     {
-        $product->loadMissing('translations', 'sections.items', 'faqs');
+        $product->loadMissing([
+            'translations',
+            'sections.items.translations',
+            'sections.translations',
+            'faqs.translations',
+        ]);
 
         return Inertia::render('admin/products/show', [
             'product' => $this->translatedProduct($product, $locale),
             'locales' => $this->translationLocales(),
             'translations' => $this->translationBundle($product),
             'translationStatus' => $this->translationStatus($product),
+            'faqTranslations' => $this->faqTranslationBundles($product),
+            'faqTranslationStatus' => $this->faqTranslationStatuses($product),
+            'sectionTranslations' => $this->sectionTranslationBundle($product),
+            'sectionTranslationStatus' => $this->sectionTranslationStatus($product),
             'sectionCatalogue' => ProductSectionKey::catalogue(),
         ]);
     }
@@ -259,20 +289,47 @@ class ProductController extends Controller
                     'heading' => $section['heading'] ?? null,
                     'subheading' => $section['subheading'] ?? null,
                     'intro' => $section['intro'] ?? null,
-                    'image_key' => $section['image_key'] ?? null,
                     'is_visible' => (bool) ($section['is_visible'] ?? true),
                     'include_house_card' => (bool) ($section['include_house_card'] ?? true),
                     'sort_order' => (int) ($section['sort_order'] ?? $index),
                 ],
             );
 
+            $this->syncSectionImage($model, $section, $index);
             $this->syncSectionItems($model, $section['items'] ?? []);
         }
 
         $product->sections()
             ->whereNotIn('key', $keptKeys)
             ->get()
-            ->each(fn (ProductSection $section) => $section->delete());
+            ->each(function (ProductSection $section): void {
+                $this->deleteStoredMedia($section->image_path);
+                $section->delete();
+            });
+    }
+
+    /**
+     * @param  array<string, mixed>  $section
+     */
+    private function syncSectionImage(ProductSection $model, array $section, int $index): void
+    {
+        $remove = (bool) ($section['remove_image'] ?? false);
+
+        if ($remove) {
+            $this->deleteStoredMedia($model->image_path);
+            $model->update(['image_path' => null]);
+
+            return;
+        }
+
+        $file = request()->file("sections.{$index}.image");
+
+        if ($file instanceof UploadedFile) {
+            $this->deleteStoredMedia($model->image_path);
+            $model->update([
+                'image_path' => $file->store('products/sections', 'public'),
+            ]);
+        }
     }
 
     /**
@@ -383,6 +440,200 @@ class ProductController extends Controller
                 ->delete();
 
             $product->dispatchDeepLTranslation();
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
+    }
+
+    public function updateFaqTranslations(
+        UpdateProductFaqTranslationsRequest $request,
+        string $locale,
+        Product $product,
+        ProductFaq $faq,
+    ): RedirectResponse {
+        abort_unless($faq->product_id === $product->id, 404);
+
+        $data = $request->validated();
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            foreach (self::FAQ_TRANSLATION_COLUMNS as $column) {
+                $faq->translations()->updateOrCreate(
+                    [
+                        'locale' => $targetLocale,
+                        'column' => $column,
+                    ],
+                    [
+                        'value' => $data[$targetLocale][$column],
+                        'source_hash' => $faq->translationSourceHash($column),
+                    ],
+                );
+            }
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
+    }
+
+    public function translateFaq(
+        TranslateProductFaqRequest $request,
+        string $locale,
+        Product $product,
+        ProductFaq $faq,
+    ): RedirectResponse {
+        abort_unless($faq->product_id === $product->id, 404);
+
+        $targetLocale = $request->validated('target_locale');
+
+        if (filled($targetLocale)) {
+            $faq->translations()
+                ->where('locale', $targetLocale)
+                ->whereIn('column', self::FAQ_TRANSLATION_COLUMNS)
+                ->delete();
+
+            $faq->dispatchDeepLTranslation([$targetLocale]);
+        } else {
+            $faq->translations()
+                ->whereIn('column', self::FAQ_TRANSLATION_COLUMNS)
+                ->delete();
+
+            $faq->dispatchDeepLTranslation();
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
+    }
+
+    public function updateSectionTranslations(
+        UpdateProductSectionTranslationsRequest $request,
+        string $locale,
+        Product $product,
+    ): RedirectResponse {
+        $data = $request->validated();
+        $product->loadMissing('sections.items');
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            $sectionsPayload = $data[$targetLocale]['sections'] ?? [];
+
+            if (! is_array($sectionsPayload)) {
+                continue;
+            }
+
+            foreach ($product->sections as $section) {
+                $sectionData = $sectionsPayload[(string) $section->id] ?? null;
+
+                if (! is_array($sectionData)) {
+                    continue;
+                }
+
+                foreach (self::SECTION_TRANSLATION_COLUMNS as $column) {
+                    if (! array_key_exists($column, $sectionData)) {
+                        continue;
+                    }
+
+                    $section->translations()->updateOrCreate(
+                        [
+                            'locale' => $targetLocale,
+                            'column' => $column,
+                        ],
+                        [
+                            'value' => (string) ($sectionData[$column] ?? ''),
+                            'source_hash' => $section->translationSourceHash($column),
+                        ],
+                    );
+                }
+
+                $itemsPayload = is_array($sectionData['items'] ?? null)
+                    ? $sectionData['items']
+                    : [];
+
+                foreach ($section->items as $item) {
+                    $itemData = $itemsPayload[(string) $item->id] ?? null;
+
+                    if (! is_array($itemData)) {
+                        continue;
+                    }
+
+                    foreach (self::SECTION_ITEM_TRANSLATION_COLUMNS as $column) {
+                        if (! array_key_exists($column, $itemData)) {
+                            continue;
+                        }
+
+                        $item->translations()->updateOrCreate(
+                            [
+                                'locale' => $targetLocale,
+                                'column' => $column,
+                            ],
+                            [
+                                'value' => (string) ($itemData[$column] ?? ''),
+                                'source_hash' => $item->translationSourceHash($column),
+                            ],
+                        );
+                    }
+                }
+            }
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+
+        return redirect()->route('admin.products.show', [
+            'locale' => $locale,
+            'product' => $product->id,
+        ]);
+    }
+
+    public function translateSections(
+        TranslateProductSectionsRequest $request,
+        string $locale,
+        Product $product,
+    ): RedirectResponse {
+        $targetLocale = $request->validated('target_locale');
+        $product->loadMissing('sections.items');
+
+        foreach ($product->sections as $section) {
+            if (filled($targetLocale)) {
+                $section->translations()
+                    ->where('locale', $targetLocale)
+                    ->whereIn('column', self::SECTION_TRANSLATION_COLUMNS)
+                    ->delete();
+
+                $section->dispatchDeepLTranslation([$targetLocale]);
+            } else {
+                $section->translations()
+                    ->whereIn('column', self::SECTION_TRANSLATION_COLUMNS)
+                    ->delete();
+
+                $section->dispatchDeepLTranslation();
+            }
+
+            foreach ($section->items as $item) {
+                if (filled($targetLocale)) {
+                    $item->translations()
+                        ->where('locale', $targetLocale)
+                        ->whereIn('column', self::SECTION_ITEM_TRANSLATION_COLUMNS)
+                        ->delete();
+
+                    $item->dispatchDeepLTranslation([$targetLocale]);
+                } else {
+                    $item->translations()
+                        ->whereIn('column', self::SECTION_ITEM_TRANSLATION_COLUMNS)
+                        ->delete();
+
+                    $item->dispatchDeepLTranslation();
+                }
+            }
         }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
@@ -800,6 +1051,9 @@ class ProductController extends Controller
                 'subheading' => $section->subheading ?? '',
                 'intro' => $section->intro ?? '',
                 'image_key' => $section->image_key ?? '',
+                'existing_image' => filled($section->image_path)
+                    ? Product::resolveDisplayMediaUrl((string) $section->image_path)
+                    : null,
                 'is_visible' => (bool) $section->is_visible,
                 'include_house_card' => (bool) $section->include_house_card,
                 'sort_order' => $section->sort_order ?? 0,
@@ -888,6 +1142,153 @@ class ProductController extends Controller
                     ),
                 ])
                 ->all();
+        }
+
+        return $status;
+    }
+
+    /**
+     * @return array<int, array<string, array{question: string, answer: string}>>
+     */
+    private function faqTranslationBundles(Product $product): array
+    {
+        $bundles = [];
+
+        foreach ($product->faqs as $faq) {
+            $faq->loadMissing('translations');
+            $bundle = [];
+
+            foreach ($this->translationLocales() as $targetLocale) {
+                $bundle[$targetLocale] = [
+                    'question' => $faq->translated('question', $targetLocale),
+                    'answer' => $faq->translated('answer', $targetLocale),
+                ];
+            }
+
+            $bundles[$faq->id] = $bundle;
+        }
+
+        return $bundles;
+    }
+
+    /**
+     * @return array<int, array<string, array{question: bool, answer: bool}>>
+     */
+    private function faqTranslationStatuses(Product $product): array
+    {
+        $statuses = [];
+
+        foreach ($product->faqs as $faq) {
+            $faq->loadMissing('translations');
+            $status = [];
+
+            foreach ($this->translationLocales() as $targetLocale) {
+                $status[$targetLocale] = [
+                    'question' => $faq->translations->contains(
+                        fn ($translation): bool => $translation->locale === $targetLocale
+                            && $translation->column === 'question',
+                    ),
+                    'answer' => $faq->translations->contains(
+                        fn ($translation): bool => $translation->locale === $targetLocale
+                            && $translation->column === 'answer',
+                    ),
+                ];
+            }
+
+            $statuses[$faq->id] = $status;
+        }
+
+        return $statuses;
+    }
+
+    /**
+     * @return array<string, array{sections: array<string, array<string, mixed>>}>
+     */
+    private function sectionTranslationBundle(Product $product): array
+    {
+        $bundle = [];
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            $sections = [];
+
+            foreach ($product->sections as $section) {
+                $section->loadMissing('translations', 'items.translations');
+
+                $items = [];
+
+                foreach ($section->items as $item) {
+                    $items[(string) $item->id] = [
+                        'title' => $item->translated('title', $targetLocale),
+                        'body' => $item->translated('body', $targetLocale),
+                    ];
+                }
+
+                $sections[(string) $section->id] = [
+                    'key' => $section->key->value,
+                    'eyebrow' => $section->translated('eyebrow', $targetLocale),
+                    'heading' => $section->translated('heading', $targetLocale),
+                    'subheading' => $section->translated('subheading', $targetLocale),
+                    'intro' => $section->translated('intro', $targetLocale),
+                    'items' => $items,
+                ];
+            }
+
+            $bundle[$targetLocale] = ['sections' => $sections];
+        }
+
+        return $bundle;
+    }
+
+    /**
+     * @return array<string, array{sections: array<string, array<string, mixed>>}>
+     */
+    private function sectionTranslationStatus(Product $product): array
+    {
+        $status = [];
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            $sections = [];
+
+            foreach ($product->sections as $section) {
+                $section->loadMissing('translations', 'items.translations');
+
+                $items = [];
+
+                foreach ($section->items as $item) {
+                    $items[(string) $item->id] = [
+                        'title' => $item->translations->contains(
+                            fn ($translation): bool => $translation->locale === $targetLocale
+                                && $translation->column === 'title',
+                        ),
+                        'body' => $item->translations->contains(
+                            fn ($translation): bool => $translation->locale === $targetLocale
+                                && $translation->column === 'body',
+                        ),
+                    ];
+                }
+
+                $sections[(string) $section->id] = [
+                    'eyebrow' => $section->translations->contains(
+                        fn ($translation): bool => $translation->locale === $targetLocale
+                            && $translation->column === 'eyebrow',
+                    ),
+                    'heading' => $section->translations->contains(
+                        fn ($translation): bool => $translation->locale === $targetLocale
+                            && $translation->column === 'heading',
+                    ),
+                    'subheading' => $section->translations->contains(
+                        fn ($translation): bool => $translation->locale === $targetLocale
+                            && $translation->column === 'subheading',
+                    ),
+                    'intro' => $section->translations->contains(
+                        fn ($translation): bool => $translation->locale === $targetLocale
+                            && $translation->column === 'intro',
+                    ),
+                    'items' => $items,
+                ];
+            }
+
+            $status[$targetLocale] = ['sections' => $sections];
         }
 
         return $status;

@@ -1,3 +1,4 @@
+import { SectionIcon } from '@/components/maison/product/section-icon';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { Reveal } from '@/components/maison/ui/reveal';
@@ -35,11 +36,8 @@ export function ProductService({ section }: { section?: ProductSection }) {
                     {items.map((item) => (
                         <Reveal key={item.id} className="bg-cream px-8.5 py-11">
                             {item.icon ? (
-                                <div
-                                    aria-hidden="true"
-                                    className="mb-4 text-2xl text-gold2"
-                                >
-                                    {item.icon}
+                                <div className="mb-4 text-2xl text-gold2">
+                                    <SectionIcon icon={item.icon} />
                                 </div>
                             ) : null}
                             <h3 className="mb-3 font-serif text-[21px] text-choc">

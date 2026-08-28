@@ -8,6 +8,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |
 | app/Support/Html/** | .ai/rules/html.md |
+| resources/js/components/admin/product-section-editor.tsx | .ai/rules/components-admin.md |
 | app/Jobs/TranslateModelJob.php | .ai/rules/jobs.md |
 | resources/js/pages/admin/legal-pages/**/*.tsx | .ai/rules/legal-pages.md |
 | resources/js/pages/admin/letter/**/*.tsx | .ai/rules/letter.md |
