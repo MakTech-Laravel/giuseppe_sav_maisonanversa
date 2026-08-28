@@ -53,7 +53,7 @@ export default function SiteSettingsEdit({
                 <AdminPageHeader
                     title={t('Site-instellingen')}
                     description={t(
-                        'Contactkanalen, socialemedia-links en de locatie van de boutique voor het hele huis.',
+                        'Telefoon, e-mail, Instagram en de atelierkaart voor de hele site.',
                     )}
                     icon={Globe}
                 />
@@ -77,9 +77,9 @@ export default function SiteSettingsEdit({
                         }
                     >
                         <AdminPanel
-                            title={t('Contact')}
+                            title={t('Contactgegevens')}
                             description={t(
-                                'Telefoon, WhatsApp en e-mailadressen voor het huis.',
+                                'Telefoon, WhatsApp en e-mailadressen die bezoekers zien.',
                             )}
                         >
                             <div className="grid gap-5">
@@ -185,15 +185,15 @@ export default function SiteSettingsEdit({
                         </AdminPanel>
 
                         <AdminPanel
-                            title={t('Boutique-locatie')}
+                            title={t('Atelier')}
                             description={t(
-                                'Coördinaten voor de boutique-kaart op de contactpagina.',
+                                'Pin voor de kaart op de contactpagina.',
                             )}
                         >
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="boutique_lat">
-                                        {t('Breedtegraad van de boutique')}
+                                        {t('Breedtegraad')}
                                     </Label>
                                     <Input
                                         id="boutique_lat"
@@ -211,7 +211,7 @@ export default function SiteSettingsEdit({
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="boutique_lng">
-                                        {t('Lengtegraad van de boutique')}
+                                        {t('Lengtegraad')}
                                     </Label>
                                     <Input
                                         id="boutique_lng"
