@@ -15,6 +15,7 @@ use App\Models\PartnerClub;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
+use App\Services\Inquiry\InquiryDeviceCookie;
 use App\Support\CommunityFeed;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
@@ -357,8 +358,10 @@ class MaisonController extends Controller
         ]);
     }
 
-    public function contact(): Response
+    public function contact(InquiryDeviceCookie $deviceCookie): Response
     {
+        $deviceCookie->remember(request());
+
         return $this->page('contact', [
             'faqs' => Faq::publishedFor(FaqContext::Contact)
                 ->map(fn (Faq $faq): array => [

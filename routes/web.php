@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DressingItemController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\HeritageLetterController;
+use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\OpsController;
@@ -444,6 +445,26 @@ Route::prefix('{locale}')
                 Route::post('faqs/{faq}/translate', 'translate')->name('faqs.translate')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::delete('faqs/{faq}', 'destroy')->name('faqs.destroy')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(AdminInquiryController::class)->group(function () {
+                Route::get('appointments', 'appointmentsIndex')->name('appointments.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('appointments/{inquiry}', 'appointmentsShow')->name('appointments.show')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::patch('appointments/{inquiry}/seen', 'updateSeen')->name('appointments.seen')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::delete('appointments/{inquiry}', 'destroy')->name('appointments.destroy')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+
+                Route::get('feedback', 'feedbackIndex')->name('feedback.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('feedback/{inquiry}', 'feedbackShow')->name('feedback.show')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::patch('feedback/{inquiry}/seen', 'updateSeen')->name('feedback.seen')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::delete('feedback/{inquiry}', 'destroy')->name('feedback.destroy')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
