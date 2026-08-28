@@ -13,12 +13,22 @@ type Member = {
 
 type Stat = { label: string; value: string; hint: string };
 
+type RecentOrder = {
+    id: string;
+    reference?: string;
+    label: string;
+    status: string;
+    amount: string;
+};
+
 export default function MemberDashboard({
     member,
     stats,
+    recentOrders = [],
 }: {
     member: Member;
     stats: Stat[];
+    recentOrders?: RecentOrder[];
 }) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
@@ -70,6 +80,46 @@ export default function MemberDashboard({
                     </MemberPanel>
                 ))}
             </div>
+
+            {recentOrders.length > 0 && (
+                <MemberPanel className="mb-10">
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                        <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
+                            {t('Recente bestellingen')}
+                        </p>
+                        <Link
+                            href={`/${locale}/member/orders`}
+                            className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline hover:text-cream"
+                        >
+                            {t('Alles bekijken')}
+                        </Link>
+                    </div>
+                    <ul className="divide-y divide-gold/10">
+                        {recentOrders.map((order) => (
+                            <li
+                                key={order.id}
+                                className="flex items-center justify-between gap-3 py-3"
+                            >
+                                <div className="min-w-0">
+                                    <p className="truncate text-[15px] text-cream">
+                                        {order.label}
+                                    </p>
+                                    <p className="mt-1 font-sans text-[11px] text-stone">
+                                        {order.reference ?? order.id} ·{' '}
+                                        {order.status}
+                                    </p>
+                                </div>
+                                <Link
+                                    href={`/${locale}/member/orders/${order.id}`}
+                                    className="shrink-0 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline hover:text-cream"
+                                >
+                                    {t('Bekijken')}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </MemberPanel>
+            )}
 
             <div className="grid gap-4 md:grid-cols-2">
                 {links.map((link) => (

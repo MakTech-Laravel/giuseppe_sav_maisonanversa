@@ -396,6 +396,7 @@ class Product extends Model
         if ($amount === null) {
             return [
                 'productId' => $product?->id,
+                'productSlug' => $product?->slug,
                 'currency' => 'eur',
                 'amount' => '',
                 'displayAmount' => '',
@@ -407,6 +408,7 @@ class Product extends Model
 
         return [
             'productId' => $product->id,
+            'productSlug' => $product->slug,
             'currency' => $product->currency,
             'amount' => (string) $amount,
             'displayAmount' => Money::format((string) $amount),

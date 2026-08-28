@@ -2,9 +2,12 @@
 
 use App\Enums\EditionPieceStatus;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Exceptions\EditionSoldOutException;
 use App\Models\EditionPiece;
 use App\Models\Order;
+use App\Models\OrderStatusEvent;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Services\Checkout\OrderFulfillment;
 use App\Services\Edition\EditionAllocator;
@@ -42,13 +45,21 @@ test('allocate is idempotent for the same order', function () {
 
 test('expired holds return to available stock', function () {
     $order = Order::factory()->create();
+    Payment::factory()->forOrder($order)->pending()->create();
     $allocator = app(EditionAllocator::class);
     $held = $allocator->hold($order);
 
     $held->update(['reserved_until' => now()->subMinute()]);
 
     expect($allocator->releaseExpiredHolds())->toBe(1)
-        ->and($held->fresh()->status)->toBe(EditionPieceStatus::Available);
+        ->and($held->fresh()->status)->toBe(EditionPieceStatus::Available)
+        ->and($order->fresh()->status)->toBe(OrderStatus::Canceled)
+        ->and($order->fresh()->edition_piece_id)->toBeNull()
+        ->and($order->fresh()->latestPayment->status)->toBe(PaymentStatus::Canceled)
+        ->and(OrderStatusEvent::query()
+            ->where('order_id', $order->id)
+            ->where('status', OrderStatus::Canceled)
+            ->exists())->toBeTrue();
 });
 
 test('the live counter matches allocated pieces', function () {
@@ -71,11 +82,12 @@ test('checkout is rejected when sold out', function () {
 
     app(EditionInventory::class)->bust();
 
+    actingAsCheckoutUser();
+
     $this->from(localized('maison.home'))
-        ->post(localized('maison.checkout.store'), [
-            'name' => 'Buyer',
-            'email' => 'soldout@example.com',
-        ])
+        ->post(localized('maison.checkout.store'), checkoutPayload([
+            'edition_piece_id' => null,
+        ]))
         ->assertSessionHasErrors('checkout');
 });
 

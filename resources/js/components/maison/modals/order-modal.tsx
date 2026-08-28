@@ -1,6 +1,6 @@
 import { router } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
-import type {FormEvent} from 'react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { store as checkoutStore } from '@/actions/App/Http/Controllers/Maison/CheckoutController';
 import { MaisonLink } from '@/components/maison/maison-link';
@@ -21,12 +21,11 @@ type OrderModalProps = {
     product?: OrderProductContext;
 };
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2;
 
 /**
- * The reservation flow: details, then (for numbered limited editions only) a
- * preferred-number/monogram step, then payment summary. Simple-type products
- * skip the monogram step entirely. Submits to Cashier Checkout (EUR).
+ * Checkout flow: contact + shipping details, then payment summary.
+ * Limited editions expect an edition selected upstream in the picker.
  */
 export function OrderModal({ onClose, product }: OrderModalProps) {
     const { t } = useTranslation();
@@ -42,11 +41,20 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
         shippingEstimateMax,
     } = useCheckoutDisplay(product);
     const isLimitedEdition = productType !== 'simple';
+    const selectedEditionLabel =
+        product?.editionLabel ??
+        (product?.editionNumber != null
+            ? `No.${String(product.editionNumber).padStart(3, '0')}`
+            : null);
     const [step, setStep] = useState<Step>(1);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [monogram, setMonogram] = useState('');
+    const [shippingLine1, setShippingLine1] = useState('');
+    const [shippingLine2, setShippingLine2] = useState('');
+    const [shippingCity, setShippingCity] = useState('');
+    const [shippingPostalCode, setShippingPostalCode] = useState('');
+    const [shippingCountry, setShippingCountry] = useState('BE');
     const [giftWrap, setGiftWrap] = useState(false);
     const [giftMessage, setGiftMessage] = useState('');
     const [processing, setProcessing] = useState(false);
@@ -54,34 +62,41 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
 
     const steps = useMemo(
         () =>
-            (isLimitedEdition
-                ? [
-                      { n: 1, label: t('Gegevens') },
-                      { n: 2, label: t('Monogram') },
-                      { n: 3, label: t('Betaling') },
-                  ]
-                : [
-                      { n: 1, label: t('Gegevens') },
-                      { n: 3, label: t('Betaling') },
-                  ]) as { n: Step; label: string }[],
-        [t, isLimitedEdition],
+            [
+                { n: 1 as Step, label: t('Gegevens') },
+                { n: 2 as Step, label: t('Betaling') },
+            ] as const,
+        [t],
     );
 
     function onStepOne(event: FormEvent<HTMLFormElement>): void {
         event.preventDefault();
         setError(null);
 
-        if (!name.trim() || !email.trim()) {
-            setError(t('Vul a.u.b. uw naam en e-mailadres in.'));
+        if (
+            !name.trim() ||
+            !email.trim() ||
+            !shippingLine1.trim() ||
+            !shippingCity.trim() ||
+            !shippingPostalCode.trim() ||
+            !shippingCountry.trim()
+        ) {
+            setError(t('Vul a.u.b. uw contact- en verzendgegevens in.'));
 
             return;
         }
 
-        setStep(isLimitedEdition ? 2 : 3);
+        setStep(2);
     }
 
     function onPay(): void {
         if (processing) {
+            return;
+        }
+
+        if (isLimitedEdition && !product?.editionPieceId) {
+            setError(t('Kies a.u.b. een beschikbaar editienummer.'));
+
             return;
         }
 
@@ -92,10 +107,17 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
             checkoutStore.url(locale),
             {
                 ...(productId !== null ? { product_id: productId } : {}),
+                ...(product?.editionPieceId
+                    ? { edition_piece_id: product.editionPieceId }
+                    : {}),
                 name: name.trim(),
                 email: email.trim(),
                 phone: phone.trim() || null,
-                monogram: monogram.trim().toUpperCase() || null,
+                shipping_line1: shippingLine1.trim(),
+                shipping_line2: shippingLine2.trim() || null,
+                shipping_city: shippingCity.trim(),
+                shipping_postal_code: shippingPostalCode.trim(),
+                shipping_country: shippingCountry.trim().toUpperCase(),
                 gift_wrap: giftWrap,
                 gift_message: giftMessage.trim() || null,
             },
@@ -103,6 +125,8 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                 onError: (errors) => {
                     const message =
                         errors.checkout ||
+                        errors.edition_piece_id ||
+                        errors.shipping_line1 ||
                         errors.email ||
                         errors.name ||
                         Object.values(errors)[0];
@@ -129,13 +153,14 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                 isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu'
             }
             onClose={onClose}
-            panelClassName="max-w-[480px]"
+            panelClassName="max-w-[640px]"
         >
             <h2 className="mb-1.5 font-serif text-[32px] font-medium text-choc">
                 {t(isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu')}
             </h2>
             <span className="mb-4 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
                 {`${productName} · ${priceLabel}`}
+                {selectedEditionLabel ? ` · ${selectedEditionLabel}` : ''}
             </span>
 
             <div className="mb-5 flex gap-2">
@@ -164,9 +189,6 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
 
             {step === 1 ? (
                 <form onSubmit={onStepOne} className="flex flex-col gap-3.5">
-                    <label className="sr-only" htmlFor="ord-name">
-                        {t('Volledige naam')}
-                    </label>
                     <input
                         id="ord-name"
                         type="text"
@@ -176,10 +198,6 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         placeholder={t('Volledige naam')}
                         className={modalInputClassName}
                     />
-
-                    <label className="sr-only" htmlFor="ord-email">
-                        {t('E-mailadres')}
-                    </label>
                     <input
                         id="ord-email"
                         type="email"
@@ -189,16 +207,64 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         placeholder={t('E-mailadres')}
                         className={modalInputClassName}
                     />
-
-                    <label className="sr-only" htmlFor="ord-phone">
-                        {t('Telefoonnummer (optioneel)')}
-                    </label>
                     <input
                         id="ord-phone"
                         type="tel"
                         value={phone}
                         onChange={(event) => setPhone(event.target.value)}
                         placeholder={t('Telefoonnummer (optioneel)')}
+                        className={modalInputClassName}
+                    />
+
+                    <p className="mt-1 font-sans text-[10px] tracking-[0.16em] text-choc3 uppercase">
+                        {t('Verzendadres')}
+                    </p>
+                    <input
+                        type="text"
+                        required
+                        value={shippingLine1}
+                        onChange={(event) => setShippingLine1(event.target.value)}
+                        placeholder={t('Straat en huisnummer')}
+                        className={modalInputClassName}
+                    />
+                    <input
+                        type="text"
+                        value={shippingLine2}
+                        onChange={(event) => setShippingLine2(event.target.value)}
+                        placeholder={t('Adresregel 2 (optioneel)')}
+                        className={modalInputClassName}
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                        <input
+                            type="text"
+                            required
+                            value={shippingPostalCode}
+                            onChange={(event) =>
+                                setShippingPostalCode(event.target.value)
+                            }
+                            placeholder={t('Postcode')}
+                            className={modalInputClassName}
+                        />
+                        <input
+                            type="text"
+                            required
+                            value={shippingCity}
+                            onChange={(event) => setShippingCity(event.target.value)}
+                            placeholder={t('Stad')}
+                            className={modalInputClassName}
+                        />
+                    </div>
+                    <input
+                        type="text"
+                        required
+                        maxLength={2}
+                        value={shippingCountry}
+                        onChange={(event) =>
+                            setShippingCountry(
+                                event.target.value.toUpperCase().slice(0, 2),
+                            )
+                        }
+                        placeholder={t('Land (ISO, bv. BE)')}
                         className={modalInputClassName}
                     />
 
@@ -209,63 +275,9 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                     )}
 
                     <MaisonButton type="submit" variant="filled" block>
-                        {isLimitedEdition
-                            ? t('Volgende — Monogram')
-                            : t('Volgende — Betaling')}
+                        {t('Volgende — Betaling')}
                     </MaisonButton>
                 </form>
-            ) : step === 2 ? (
-                <div>
-                    <p className="mb-3.5 text-[13px] leading-[1.6] text-choc3">
-                        {t(
-                            'Uw editienummer wordt automatisch toegewezen na succesvolle betaling. No. 001 blijft in het archief.',
-                        )}
-                    </p>
-
-                    <div className="mb-4">
-                        <label
-                            htmlFor="ord-mono"
-                            className="mb-2 block font-sans text-[10px] tracking-[0.18em] text-choc3 uppercase"
-                        >
-                            {t(
-                                'Monogram in het leder (optioneel, max 3 letters)',
-                            )}
-                        </label>
-                        <input
-                            id="ord-mono"
-                            type="text"
-                            maxLength={3}
-                            value={monogram}
-                            onChange={(event) =>
-                                setMonogram(
-                                    event.target.value
-                                        .replace(/[^a-zA-Z]/g, '')
-                                        .toUpperCase(),
-                                )
-                            }
-                            placeholder="MA"
-                            className={modalInputClassName}
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-2.5">
-                        <MaisonButton
-                            type="button"
-                            variant="outlineChoc"
-                            onClick={() => setStep(1)}
-                        >
-                            {t('← Terug')}
-                        </MaisonButton>
-                        <MaisonButton
-                            type="button"
-                            variant="filled"
-                            block
-                            onClick={() => setStep(3)}
-                        >
-                            {t('Volgende — Betaling')}
-                        </MaisonButton>
-                    </div>
-                </div>
             ) : (
                 <div>
                     <OrderSummary
@@ -273,9 +285,14 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         name={name}
                         email={email}
                         phone={phone}
-                        monogram={monogram}
+                        shippingLine1={shippingLine1}
+                        shippingLine2={shippingLine2}
+                        shippingCity={shippingCity}
+                        shippingPostalCode={shippingPostalCode}
+                        shippingCountry={shippingCountry}
                         giftWrap={giftWrap}
                         giftMessage={giftMessage}
+                        editionLabel={selectedEditionLabel}
                     />
 
                     <label className="mb-4 flex cursor-pointer items-start gap-3">
@@ -308,14 +325,9 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                                 }
                                 className={cn(
                                     modalInputClassName,
-                                    'min-h-[72px] resize-y font-sans text-[13px]',
+                                    'min-h-[72px] w-full max-w-full resize-y break-words font-sans text-[13px]',
                                 )}
                             />
-                            <p className="mt-2.5 font-sans text-[9px] tracking-[0.12em] text-choc3 uppercase">
-                                {t(
-                                    'Luxe cadeauverpakking · handgeschreven kaart · geen prijs op de pakbon',
-                                )}
-                            </p>
                         </div>
                     )}
 
@@ -329,7 +341,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         <MaisonButton
                             type="button"
                             variant="outlineChoc"
-                            onClick={() => setStep(isLimitedEdition ? 2 : 1)}
+                            onClick={() => setStep(1)}
                             disabled={processing}
                         >
                             {t('← Terug')}
@@ -390,41 +402,55 @@ function OrderSummary({
     name,
     email,
     phone,
-    monogram,
+    shippingLine1,
+    shippingLine2,
+    shippingCity,
+    shippingPostalCode,
+    shippingCountry,
     giftWrap,
     giftMessage,
+    editionLabel,
 }: {
     product?: OrderProductContext;
     name: string;
     email: string;
     phone: string;
-    monogram: string;
+    shippingLine1: string;
+    shippingLine2: string;
+    shippingCity: string;
+    shippingPostalCode: string;
+    shippingCountry: string;
     giftWrap: boolean;
     giftMessage: string;
+    editionLabel: string | null;
 }) {
     const { t } = useTranslation();
     const { priceLabel, productName, productType } =
         useCheckoutDisplay(product);
     const isLimitedEdition = productType !== 'simple';
-    const mono = monogram.trim().toUpperCase();
     const trimmedPhone = phone.trim();
     const trimmedMessage = giftMessage.trim();
+    const shippingValue = [
+        shippingLine1.trim(),
+        shippingLine2.trim(),
+        `${shippingPostalCode.trim()} ${shippingCity.trim()}`.trim(),
+        shippingCountry.trim().toUpperCase(),
+    ]
+        .filter(Boolean)
+        .join(', ');
 
     return (
-        <div className="mb-4 rounded border border-gold/22 bg-black/3 p-4.5">
+        <div className="mb-4 overflow-hidden rounded border border-gold/22 bg-black/3 p-4.5">
             <SummaryRow label={t('Product')} value={productName} />
             <SummaryRow label={t('Houder')} value={name.trim()} />
-            {isLimitedEdition && (
-                <SummaryRow
-                    label={t('Editienummer')}
-                    value={t('Toegewezen na betaling')}
-                />
+            {isLimitedEdition && editionLabel && (
+                <SummaryRow label={t('Editienummer')} value={editionLabel} />
             )}
-            {mono && <SummaryRow label={t('Monogram')} value={mono} />}
             <SummaryRow label={t('E-mail')} value={email.trim()} />
             {trimmedPhone && (
                 <SummaryRow label={t('Telefoon')} value={trimmedPhone} />
             )}
+            <SummaryRow label={t('Verzendadres')} value={shippingValue} />
             {giftWrap && (
                 <>
                     <SummaryRow
@@ -440,13 +466,6 @@ function OrderSummary({
                 </>
             )}
             <SummaryRow label={t('Totaal')} value={priceLabel} total />
-            {isLimitedEdition && (
-                <p className="mt-2.5 font-sans text-[10px] leading-[1.6] tracking-[0.1em] text-choc3 uppercase">
-                    {t(
-                        'Het editienummer wordt toegewezen na bevestigde betaling. No. 001 blijft in het Maison Anversa-archief.',
-                    )}
-                </p>
-            )}
         </div>
     );
 }
@@ -467,10 +486,10 @@ function SummaryRow({
                 total && 'border-b-0 pt-3',
             )}
         >
-            <span>{label}</span>
+            <span className="shrink-0">{label}</span>
             <strong
                 className={cn(
-                    'text-right font-medium text-choc',
+                    'min-w-0 flex-1 break-words text-right font-medium text-choc',
                     total && 'font-serif text-lg text-gold',
                 )}
             >

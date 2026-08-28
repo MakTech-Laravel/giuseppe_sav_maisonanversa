@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Services\Checkout\OrderFulfillment;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Events\WebhookReceived;
 
 class StripeEventListener
@@ -19,6 +20,17 @@ class StripeEventListener
         if (! is_string($type)) {
             return;
         }
+
+        $object = $event->payload['data']['object'] ?? [];
+        $sessionId = is_array($object) ? ($object['id'] ?? null) : null;
+        $metadata = is_array($object) ? ($object['metadata'] ?? []) : [];
+
+        Log::info('Stripe webhook received.', [
+            'type' => $type,
+            'session_id' => is_string($sessionId) ? $sessionId : null,
+            'order_id' => is_array($metadata) ? ($metadata['order_id'] ?? null) : null,
+            'payment_id' => is_array($metadata) ? ($metadata['payment_id'] ?? null) : null,
+        ]);
 
         match ($type) {
             'checkout.session.completed',
@@ -42,10 +54,20 @@ class StripeEventListener
         }
 
         if (($session->payment_status ?? null) !== 'paid') {
+            Log::info('Stripe checkout session ignored (not paid).', [
+                'session_id' => $session->id ?? null,
+                'payment_status' => $session->payment_status ?? null,
+            ]);
+
             return;
         }
 
-        $this->fulfillment->markPaidFromSession($session);
+        $order = $this->fulfillment->markPaidFromSession($session);
+
+        Log::info('Stripe checkout session marked paid.', [
+            'session_id' => $session->id ?? null,
+            'order_id' => $order?->id,
+        ]);
     }
 
     /**
@@ -59,7 +81,12 @@ class StripeEventListener
             return;
         }
 
-        $this->fulfillment->markFailedFromSession($session);
+        $order = $this->fulfillment->markFailedFromSession($session);
+
+        Log::info('Stripe checkout session marked failed.', [
+            'session_id' => $session->id ?? null,
+            'order_id' => $order?->id,
+        ]);
     }
 
     /**
@@ -73,7 +100,12 @@ class StripeEventListener
             return;
         }
 
-        $this->fulfillment->markExpiredBySessionId($session->id ?? null);
+        $order = $this->fulfillment->markExpiredBySessionId($session->id ?? null);
+
+        Log::info('Stripe checkout session marked expired/canceled.', [
+            'session_id' => $session->id ?? null,
+            'order_id' => $order?->id,
+        ]);
     }
 
     /**
@@ -93,7 +125,12 @@ class StripeEventListener
             return;
         }
 
-        $this->fulfillment->markRefundedFromPaymentIntent($paymentIntent);
+        $order = $this->fulfillment->markRefundedFromPaymentIntent($paymentIntent);
+
+        Log::info('Stripe charge marked refunded.', [
+            'payment_intent' => $paymentIntent,
+            'order_id' => $order?->id,
+        ]);
     }
 
     /**

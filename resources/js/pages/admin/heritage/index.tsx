@@ -61,6 +61,9 @@ interface InventoryRow {
     status: string;
     status_key: string;
     notes: string;
+    order_id?: number | null;
+    purchaser_name?: string | null;
+    purchaser_email?: string | null;
 }
 
 interface InventoryFilters {
@@ -361,6 +364,12 @@ export default function HeritageIndex({
                                 <TableHead className="h-11 px-4">
                                     {t('Status')}
                                 </TableHead>
+                                <TableHead className="hidden h-11 px-4 lg:table-cell">
+                                    {t('Koper')}
+                                </TableHead>
+                                <TableHead className="hidden h-11 px-4 md:table-cell">
+                                    {t('Bestelling')}
+                                </TableHead>
                                 <TableHead className="hidden h-11 px-4 md:table-cell">
                                     {t('Notities')}
                                 </TableHead>
@@ -370,7 +379,7 @@ export default function HeritageIndex({
                             {pieces.data.length === 0 ? (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={4}
+                                        colSpan={6}
                                         className="px-4 py-10 text-center text-sm text-muted-foreground"
                                     >
                                         {t('Geen editienummers gevonden.')}
@@ -392,6 +401,12 @@ export default function HeritageIndex({
                                                     t,
                                                 )}
                                             </Badge>
+                                        </TableCell>
+                                        <TableCell className="hidden px-4 py-3 align-middle text-sm lg:table-cell">
+                                            {row.purchaser_name || '—'}
+                                        </TableCell>
+                                        <TableCell className="hidden px-4 py-3 align-middle text-sm md:table-cell">
+                                            {row.order_id ?? '—'}
                                         </TableCell>
                                         <TableCell className="hidden px-4 py-3 align-middle text-muted-foreground md:table-cell">
                                             {row.notes || '—'}

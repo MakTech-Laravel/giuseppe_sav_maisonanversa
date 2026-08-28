@@ -22,9 +22,18 @@ import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
 import { activePage } from '@/lib/maison-navigation';
 
-type ModalKind = 'newsletter' | 'order' | 'certificate' | 'auth' | null;
+type ModalKind =
+    | 'newsletter'
+    | 'order'
+    | 'edition-picker'
+    | 'certificate'
+    | 'auth'
+    | null;
 
 type PageProps = {
+    auth?: {
+        user: Record<string, unknown> | null;
+    };
     flash?: {
         open_auth_modal?: AuthView;
     };
@@ -60,7 +69,7 @@ function authPromptKey(
 
 export default function FrontendLayout({ children }: { children: ReactNode }) {
     const main = useRef<HTMLElement>(null);
-    const { url, props } = usePage<PageProps>();
+    const { url, props } = usePage<PageProps & { checkout: OrderProductContext }>();
     const { locale } = useLocale();
     const { t } = useTranslation();
     const [userModal, setUserModal] = useState<ModalKind>(null);
@@ -89,11 +98,45 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
 
     useReveal(main);
 
+    const requireAuthForCheckout = (): boolean => {
+        if (props.auth?.user) {
+            return true;
+        }
+
+        setUserAuthView('login');
+        setUserModal('auth');
+
+        return false;
+    };
+
     const actions = useMemo<ShellActions>(
         () => ({
             openNewsletter: () => setUserModal('newsletter'),
             openOrder: (product?: OrderProductContext) => {
+                if (!requireAuthForCheckout()) {
+                    return;
+                }
+
                 setOrderProduct(product);
+                setUserModal('order');
+            },
+            openPurchase: (product?: OrderProductContext) => {
+                if (!requireAuthForCheckout()) {
+                    return;
+                }
+
+                const context = product ?? props.checkout;
+                const isLimited =
+                    (context?.productType ?? 'limited_edition') !== 'simple';
+
+                setOrderProduct(context);
+
+                if (isLimited && !context?.editionPieceId) {
+                    setUserModal('edition-picker');
+
+                    return;
+                }
+
                 setUserModal('order');
             },
             openCertificate: () => setUserModal('certificate'),
@@ -102,7 +145,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 setUserModal('auth');
             },
         }),
-        [],
+        [props.auth?.user, props.checkout],
     );
 
     function closeModal(): void {
@@ -112,6 +155,11 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
 
         setUserModal(null);
         setOrderProduct(undefined);
+    }
+
+    function onEditionSelected(product: OrderProductContext): void {
+        setOrderProduct(product);
+        setUserModal('order');
     }
 
     return (
@@ -153,6 +201,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                             orderProduct={orderProduct}
                             onAuthViewChange={setUserAuthView}
                             onClose={closeModal}
+                            onEditionSelected={onEditionSelected}
                         />
                     )}
                 </div>

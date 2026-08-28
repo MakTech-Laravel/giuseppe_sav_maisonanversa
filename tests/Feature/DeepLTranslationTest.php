@@ -303,11 +303,13 @@ test('checkout sold-out errors use the translated product name', function () {
 
     app(EditionInventory::class)->bust();
 
+    actingAsCheckoutUser();
+
     $this->from(route('maison.home', ['locale' => 'en']))
-        ->post(route('maison.checkout.store', ['locale' => 'en']), [
+        ->post(route('maison.checkout.store', ['locale' => 'en']), checkoutPayload([
             'name' => 'Buyer',
             'email' => 'soldout@example.com',
-        ])
+        ]))
         ->assertSessionHasErrors('checkout');
 
     expect(session('errors')->first('checkout'))->toContain('EN '.$product->name);

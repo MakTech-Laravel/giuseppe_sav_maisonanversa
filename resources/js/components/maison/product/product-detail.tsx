@@ -20,7 +20,7 @@ export function ProductDetail({
     checkout?: OrderProductContext;
 }) {
     const { t } = useTranslation();
-    const { openOrder, openNewsletter } = useShellActions();
+    const { openPurchase, openNewsletter } = useShellActions();
     const { priceLabel, deliveryLabel } = useCheckoutDisplay(checkout);
     const isSoldOut = edition.soldOut || product.status === 'archived';
     const isComingSoon = product.status === 'coming_soon';
@@ -93,7 +93,7 @@ export function ProductDetail({
                             <MaisonButton
                                 variant="filled"
                                 block
-                                onClick={() => openOrder(checkout)}
+                                onClick={() => openPurchase(checkout)}
                                 className="mb-3"
                             >
                                 {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}

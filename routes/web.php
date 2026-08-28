@@ -32,6 +32,7 @@ use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
 use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
+use App\Http\Controllers\Maison\ProductEditionController;
 use App\Http\Controllers\Maison\VerificationController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
@@ -108,6 +109,9 @@ Route::prefix('{locale}')
             Route::get('care', 'care')->name('care');
         });
 
+        Route::get('products/{product:slug}/editions', [ProductEditionController::class, 'index'])
+            ->name('products.editions');
+
         Route::controller(InquiryController::class)->group(function () {
             Route::post('contact', 'storeContact')
                 ->middleware('throttle:5,1')
@@ -130,7 +134,7 @@ Route::prefix('{locale}')
 
         Route::controller(CheckoutController::class)->group(function () {
             Route::post('checkout', 'store')
-                ->middleware('throttle:10,1')
+                ->middleware(['auth', 'throttle:10,1'])
                 ->name('checkout.store');
             Route::get('checkout/success', 'success')->name('checkout.success');
             Route::get('checkout/cancel', 'cancel')->name('checkout.cancel');
