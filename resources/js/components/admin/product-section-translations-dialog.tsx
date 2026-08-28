@@ -345,6 +345,7 @@ export function ProductSectionTranslationsDialog({
                                 <Label>{t('Introductietekst')}</Label>
                                 <Textarea
                                     value={activeSection.intro ?? ''}
+                                    maxLength={120}
                                     onChange={(event) =>
                                         updateSectionField(
                                             'intro',
@@ -353,6 +354,11 @@ export function ProductSectionTranslationsDialog({
                                     }
                                     className="min-h-20 resize-y"
                                 />
+                                <p className="text-[11px] text-muted-foreground">
+                                    {t('{{count}}/120 tekens', {
+                                        count: (activeSection.intro ?? '').length,
+                                    })}
+                                </p>
                             </div>
                         </div>
                     ) : null}

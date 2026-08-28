@@ -27,7 +27,7 @@ class UpdateProductSectionTranslationsRequest extends FormRequest
             '*.sections.*.eyebrow' => ['nullable', 'string', 'max:255'],
             '*.sections.*.heading' => ['nullable', 'string', 'max:255'],
             '*.sections.*.subheading' => ['nullable', 'string', 'max:255'],
-            '*.sections.*.intro' => ['nullable', 'string', 'max:5000'],
+            '*.sections.*.intro' => ['nullable', 'string', 'max:120'],
             '*.sections.*.items' => ['nullable', 'array'],
             '*.sections.*.items.*.title' => ['nullable', 'string', 'max:255'],
             '*.sections.*.items.*.body' => ['nullable', 'string', 'max:5000'],

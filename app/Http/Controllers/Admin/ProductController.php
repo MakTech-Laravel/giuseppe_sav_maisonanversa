@@ -24,6 +24,7 @@ use App\Models\ProductFaq;
 use App\Models\ProductSection;
 use App\Models\ProductSectionItem;
 use App\Services\Edition\EditionInventory;
+use App\Support\Imagery;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -322,14 +323,56 @@ class ProductController extends Controller
             return;
         }
 
-        $file = request()->file("sections.{$index}.image");
+        $file = $this->sectionImageUpload($section, $index);
 
         if ($file instanceof UploadedFile) {
             $this->deleteStoredMedia($model->image_path);
-            $model->update([
+
+            $updates = [
                 'image_path' => $file->store('products/sections', 'public'),
-            ]);
+            ];
+
+            if (filled($model->image_key) && Imagery::assetPath((string) $model->image_key) === null) {
+                $updates['image_key'] = null;
+            }
+
+            $model->update($updates);
         }
+    }
+
+    /**
+     * Resolve a section image upload by index, falling back to a key match so
+     * reordered section arrays still bind the file to the correct row.
+     *
+     * @param  array<string, mixed>  $section
+     */
+    private function sectionImageUpload(array $section, int $index): ?UploadedFile
+    {
+        $file = request()->file("sections.{$index}.image");
+
+        if ($file instanceof UploadedFile) {
+            return $file;
+        }
+
+        $key = (string) ($section['key'] ?? '');
+
+        if ($key === '') {
+            return null;
+        }
+
+        foreach (array_values(request()->input('sections', [])) as $at => $row) {
+            if (! is_array($row) || (string) ($row['key'] ?? '') !== $key) {
+                continue;
+            }
+
+            $candidate = request()->file("sections.{$at}.image");
+
+            if ($candidate instanceof UploadedFile) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
 
     /**

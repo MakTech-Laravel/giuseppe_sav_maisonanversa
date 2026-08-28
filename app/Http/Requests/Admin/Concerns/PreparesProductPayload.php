@@ -110,7 +110,7 @@ trait PreparesProductPayload
             'sections.*.eyebrow' => ['nullable', 'string', 'max:255'],
             'sections.*.heading' => ['nullable', 'string', 'max:255'],
             'sections.*.subheading' => ['nullable', 'string', 'max:255'],
-            'sections.*.intro' => ['nullable', 'string', 'max:5000'],
+            'sections.*.intro' => ['nullable', 'string', 'max:120'],
             'sections.*.image_key' => ['nullable', 'string', 'max:255'],
             'sections.*.image' => ['nullable', 'image', 'max:10240'],
             'sections.*.remove_image' => ['sometimes', 'boolean'],
