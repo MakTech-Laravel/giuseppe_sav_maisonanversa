@@ -17,11 +17,14 @@ export function FormStepper({
     currentIndex,
     furthestIndex,
     onSelect,
+    allowFreeNavigation = false,
 }: {
     steps: FormStep[];
     currentIndex: number;
     furthestIndex: number;
     onSelect: (index: number) => void;
+    /** Edit screens jump freely between tabs; create wizard gates forward steps. */
+    allowFreeNavigation?: boolean;
 }) {
     const { t } = useTranslation();
 
@@ -29,8 +32,10 @@ export function FormStepper({
         <ol className="flex w-full gap-1 overflow-x-auto scrollbar-none">
             {steps.map((step, index) => {
                 const isCurrent = index === currentIndex;
-                const isComplete = index < furthestIndex;
-                const isLocked = index > furthestIndex;
+                const isComplete =
+                    !allowFreeNavigation && index < furthestIndex;
+                const isLocked =
+                    !allowFreeNavigation && index > furthestIndex;
 
                 return (
                     <li key={step.id} className="min-w-0 flex-1">

@@ -1,8 +1,10 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Loader2, Pencil } from 'lucide-react';
+import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { FormStepper } from '@/components/admin/form-stepper';
 import {
     ProductBasicsFields,
     ProductFaqFields,
@@ -14,7 +16,6 @@ import {
 import type { ProductFormData } from '@/components/admin/product-form-fields';
 import type { ExistingFile } from '@/components/file-upload';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import products from '@/routes/admin/products';
@@ -24,6 +25,7 @@ import type {
     ProductSectionFormData,
 } from '@/types/admin-product';
 import { buildSectionForm } from '@/types/admin-product';
+import { PRODUCT_FORM_STEPS } from '@/pages/admin/products/product-form-steps';
 
 interface CatalogProduct {
     id: number;
@@ -50,15 +52,6 @@ interface CatalogProduct {
     sections: ProductSectionFormData[];
     faqs: ProductFaqFormData[];
 }
-
-const TABS = [
-    { id: 'basics', label: 'Basis' },
-    { id: 'pricing', label: 'Prijs & voorraad' },
-    { id: 'media', label: 'Afbeeldingen' },
-    { id: 'sections', label: 'Secties' },
-    { id: 'faq', label: 'FAQ' },
-    { id: 'publish', label: 'Publicatie' },
-] as const;
 
 /** Product columns the details endpoint owns; media and content are separate. */
 const DETAIL_FIELDS = [
@@ -90,7 +83,9 @@ export default function EditProduct({
     sectionCatalogue: ProductSectionCatalogueEntry[];
 }) {
     const { t } = useTranslation();
+    const [stepIndex, setStepIndex] = useState(0);
     const routeArgs = { locale: wayfinderLocale(), product: product.id };
+    const step = PRODUCT_FORM_STEPS[stepIndex];
 
     /**
      * Typed explicitly (rather than via `satisfies`) so every field widens to
@@ -165,6 +160,15 @@ export default function EditProduct({
         form.submit(products.sections.update(routeArgs), {
             forceFormData: true,
             preserveScroll: true,
+            onSuccess: () => {
+                form.setData('sections', (sections) =>
+                    sections.map((section) => ({
+                        ...section,
+                        image: null,
+                        remove_image: false,
+                    })),
+                );
+            },
         });
     };
 
@@ -204,69 +208,66 @@ export default function EditProduct({
                     </Button>
                 </AdminPageHeader>
 
-                <Tabs defaultValue="basics" className="w-full">
-                    <TabsList>
-                        {TABS.map((tab) => (
-                            <TabsTrigger key={tab.id} value={tab.id}>
-                                {t(tab.label)}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
+                <FormStepper
+                    steps={PRODUCT_FORM_STEPS}
+                    currentIndex={stepIndex}
+                    furthestIndex={PRODUCT_FORM_STEPS.length - 1}
+                    onSelect={setStepIndex}
+                    allowFreeNavigation
+                />
 
-                    <TabsContent value="basics">
-                        <form onSubmit={saveDetails} className="space-y-6">
-                            <ProductBasicsFields {...shared} />
-                            {saveButton('Wijzigingen opslaan')}
-                        </form>
-                    </TabsContent>
+                {step.id === 'basics' ? (
+                    <form onSubmit={saveDetails} className="space-y-6">
+                        <ProductBasicsFields {...shared} />
+                        {saveButton('Wijzigingen opslaan')}
+                    </form>
+                ) : null}
 
-                    <TabsContent value="pricing">
-                        <form onSubmit={saveDetails} className="space-y-6">
-                            <ProductPricingFields {...shared} />
-                            {saveButton('Wijzigingen opslaan')}
-                        </form>
-                    </TabsContent>
+                {step.id === 'pricing' ? (
+                    <form onSubmit={saveDetails} className="space-y-6">
+                        <ProductPricingFields {...shared} />
+                        {saveButton('Wijzigingen opslaan')}
+                    </form>
+                ) : null}
 
-                    <TabsContent value="media">
-                        <form onSubmit={saveMedia} className="space-y-6">
-                            <ProductMediaFields
-                                {...shared}
-                                existingPrimary={product.primary_image}
-                                existingGallery={product.gallery_images}
-                                isUploading={form.processing}
-                                uploadProgress={
-                                    form.progress?.percentage ?? null
-                                }
-                                onCancelUpload={() => form.cancel()}
-                            />
-                            {saveButton('Afbeeldingen opslaan')}
-                        </form>
-                    </TabsContent>
+                {step.id === 'media' ? (
+                    <form onSubmit={saveMedia} className="space-y-6">
+                        <ProductMediaFields
+                            {...shared}
+                            existingPrimary={product.primary_image}
+                            existingGallery={product.gallery_images}
+                            isUploading={form.processing}
+                            uploadProgress={form.progress?.percentage ?? null}
+                            onCancelUpload={() => form.cancel()}
+                        />
+                        {saveButton('Afbeeldingen opslaan')}
+                    </form>
+                ) : null}
 
-                    <TabsContent value="sections">
-                        <form onSubmit={saveSections} className="space-y-6">
-                            <ProductSectionFields
-                                {...shared}
-                                catalogue={sectionCatalogue}
-                            />
-                            {saveButton('Secties opslaan')}
-                        </form>
-                    </TabsContent>
+                {step.id === 'sections' ? (
+                    <form onSubmit={saveSections} className="space-y-6">
+                        <ProductSectionFields
+                            {...shared}
+                            catalogue={sectionCatalogue}
+                            storedSections={product.sections}
+                        />
+                        {saveButton('Secties opslaan')}
+                    </form>
+                ) : null}
 
-                    <TabsContent value="faq">
-                        <form onSubmit={saveFaqs} className="space-y-6">
-                            <ProductFaqFields {...shared} />
-                            {saveButton('Vragen opslaan')}
-                        </form>
-                    </TabsContent>
+                {step.id === 'faq' ? (
+                    <form onSubmit={saveFaqs} className="space-y-6">
+                        <ProductFaqFields {...shared} />
+                        {saveButton('Vragen opslaan')}
+                    </form>
+                ) : null}
 
-                    <TabsContent value="publish">
-                        <form onSubmit={saveDetails} className="space-y-6">
-                            <ProductPublishFields {...shared} />
-                            {saveButton('Publicatie opslaan')}
-                        </form>
-                    </TabsContent>
-                </Tabs>
+                {step.id === 'publish' ? (
+                    <form onSubmit={saveDetails} className="space-y-6">
+                        <ProductPublishFields {...shared} />
+                        {saveButton('Publicatie opslaan')}
+                    </form>
+                ) : null}
             </div>
         </>
     );

@@ -64,3 +64,11 @@ test('the related house card is a crawlable maison link', function () {
         ->toContain("to: 'house'")
         ->not->toContain('onclick=');
 });
+
+test('related product cards truncate long product titles', function () {
+    $source = file_get_contents(resource_path('js/components/maison/product/product-related.tsx'));
+
+    expect($source)
+        ->toContain('RELATED_PRODUCT_TITLE_MAX = 40')
+        ->toContain('truncateWithEllipsis(item.name, RELATED_PRODUCT_TITLE_MAX)');
+});

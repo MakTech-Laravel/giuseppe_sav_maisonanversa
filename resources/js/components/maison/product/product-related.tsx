@@ -25,6 +25,7 @@ type RelatedCard = {
     key: string;
     cover: string | null;
     title: string;
+    imageAlt: string;
     subtitle: string;
     note: string;
     to?: MaisonPage;
@@ -36,6 +37,16 @@ const STATUS_LABELS: Record<string, string> = {
     coming_soon: 'Binnenkort',
     archived: 'Uitverkocht',
 };
+
+const RELATED_PRODUCT_TITLE_MAX = 40;
+
+function truncateWithEllipsis(text: string, maxLength: number): string {
+    if (text.length <= maxLength) {
+        return text;
+    }
+
+    return `${text.slice(0, maxLength).trimEnd()}...`;
+}
 
 function RelatedCover({ src, alt }: { src: string | null; alt: string }) {
     const value = src ?? 'heritage-001-front';
@@ -90,7 +101,8 @@ export function ProductRelated({
     const cards: RelatedCard[] = related.map((item) => ({
         key: item.slug,
         cover: item.cover_asset,
-        title: item.name,
+        title: truncateWithEllipsis(item.name, RELATED_PRODUCT_TITLE_MAX),
+        imageAlt: item.name,
         subtitle: item.hero_subtitle,
         note: t(STATUS_LABELS[item.status] ?? item.status),
         href: `${maisonUrl('products', locale)}/${item.slug}`,
@@ -101,6 +113,7 @@ export function ProductRelated({
             key: 'house',
             cover: 'atelier-workshop',
             title: t('Het Huis'),
+            imageAlt: t('Het Huis'),
             subtitle: t('Meer van ons'),
             note: t('Ontdek het volledige verhaal van Maison Anversa'),
             to: 'house',
@@ -133,7 +146,7 @@ export function ProductRelated({
                                 <div className="relative aspect-4/5 overflow-hidden">
                                     <RelatedCover
                                         src={card.cover}
-                                        alt={card.title}
+                                        alt={card.imageAlt}
                                     />
                                     <div
                                         aria-hidden="true"
