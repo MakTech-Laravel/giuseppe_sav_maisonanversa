@@ -16,3 +16,9 @@ CommunitySession stores `ends_at` (indexed) and the model's `booted()` hook keep
 
 ## Only LegalPage translates HTML bodies
 LegalPage is the only model that returns translationUsesHtml() true so DeepL uses tag_handling=html. Other translatable models stay plain text.
+
+## Product SEO is never auto-filled
+meta_title, meta_description, meta_keywords, and og_image are optional. Never copy name, description, or gallery into those columns on save. MaisonSeo applies fallbacks at render time only: title from name, description from catalog copy, OG image from the first gallery image then the house default, and omitted keywords.
+
+## Product SEO is never auto-filled
+Product SEO columns stay empty when unset. Do not copy name, description, or gallery into them. MaisonSeo applies fallbacks at render time only.

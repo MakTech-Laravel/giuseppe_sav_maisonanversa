@@ -1,6 +1,9 @@
 @if (! empty($seo) && is_array($seo))
     <title>{{ $seo['title'] }}</title>
     <meta name="description" content="{{ $seo['description'] }}">
+    @if (! empty($seo['keywords']))
+        <meta name="keywords" content="{{ $seo['keywords'] }}">
+    @endif
     @if (! empty($seo['robots']))
         <meta name="robots" content="{{ $seo['robots'] }}">
     @endif

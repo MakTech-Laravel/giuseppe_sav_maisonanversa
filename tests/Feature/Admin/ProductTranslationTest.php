@@ -256,3 +256,107 @@ test('staff can queue deepl retranslation for all product locales', function () 
 
     expect($product->fresh()->translations()->count())->toBe(18);
 });
+
+test('staff can manually store product seo translations independently', function () {
+    $product = Product::factory()->create([
+        'name' => 'Bron naam',
+        'description' => 'Bron beschrijving',
+        'meta_title' => 'Bron meta titel',
+        'meta_description' => 'Bron meta beschrijving',
+        'meta_keywords' => 'bron, keywords',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.products.translations.update', ['locale' => 'nl', 'product' => $product->id]), [
+            'nl' => [
+                'name' => 'NL name',
+                'eyebrow' => '',
+                'hero_eyebrow' => '',
+                'hero_subtitle' => '',
+                'description' => 'NL description',
+                'expected_delivery_label' => '',
+                'meta_title' => 'NL meta title',
+                'meta_description' => 'NL meta description',
+                'meta_keywords' => 'nl, keywords',
+            ],
+            'en' => [
+                'name' => 'EN name',
+                'eyebrow' => '',
+                'hero_eyebrow' => '',
+                'hero_subtitle' => '',
+                'description' => 'EN description',
+                'expected_delivery_label' => '',
+                'meta_title' => 'EN meta title',
+                'meta_description' => 'EN meta description',
+                'meta_keywords' => 'en, keywords',
+            ],
+            'fr' => [
+                'name' => 'FR name',
+                'eyebrow' => '',
+                'hero_eyebrow' => '',
+                'hero_subtitle' => '',
+                'description' => 'FR description',
+                'expected_delivery_label' => '',
+                'meta_title' => 'FR meta title',
+                'meta_description' => 'FR meta description',
+                'meta_keywords' => 'fr, keywords',
+            ],
+        ])
+        ->assertRedirect(route('admin.products.show', ['locale' => 'nl', 'product' => $product->id]));
+
+    $product->refresh();
+
+    expect($product->meta_title)->toBe('Bron meta titel')
+        ->and($product->translated('meta_title', 'en'))->toBe('EN meta title')
+        ->and($product->translated('meta_description', 'fr'))->toBe('FR meta description')
+        ->and($product->translated('meta_keywords', 'nl'))->toBe('nl, keywords');
+});
+
+test('empty seo source is not deepl translated and does not inflate translation counts', function () {
+    fakeDeepLTranslations();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.store', ['locale' => 'nl']), [
+            'name' => 'Empty Seo Product',
+            'slug' => 'empty-seo-product',
+            'type' => ProductType::Simple->value,
+            'amount' => '19.00',
+            'stock_quantity' => 1,
+            'is_published' => true,
+            'grants_founding_circle' => false,
+            'description' => 'Catalog copy only',
+        ])
+        ->assertRedirect();
+
+    $product = Product::query()->where('slug', 'empty-seo-product')->firstOrFail();
+
+    expect($product->meta_title)->toBeNull()
+        ->and($product->translations()->whereIn('column', ['meta_title', 'meta_description', 'meta_keywords'])->count())->toBe(0)
+        ->and($product->translated('name', 'en'))->toBe('EN Empty Seo Product');
+});
+
+test('filled seo source is deepl translated per locale', function () {
+    fakeDeepLTranslations();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.store', ['locale' => 'nl']), [
+            'name' => 'Filled Seo Product',
+            'slug' => 'filled-seo-product',
+            'type' => ProductType::Simple->value,
+            'amount' => '21.00',
+            'stock_quantity' => 1,
+            'is_published' => true,
+            'grants_founding_circle' => false,
+            'meta_title' => 'Seo Title Source',
+            'meta_description' => 'Seo Description Source',
+            'meta_keywords' => 'seo, keywords',
+        ])
+        ->assertRedirect();
+
+    $product = Product::query()->where('slug', 'filled-seo-product')->firstOrFail();
+
+    expect($product->translated('meta_title', 'en'))->toBe('EN Seo Title Source')
+        ->and($product->translated('meta_description', 'fr'))->toBe('FR Seo Description Source')
+        ->and($product->translated('meta_keywords', 'nl'))->toBe('NL seo, keywords')
+        ->and($product->translations()->whereIn('column', ['meta_title', 'meta_description', 'meta_keywords'])->count())->toBe(9);
+});

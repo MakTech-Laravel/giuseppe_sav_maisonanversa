@@ -175,18 +175,12 @@ test('session schedule pickers show every minute and keep selected calendar days
     expect($steps)->toContain('whitespace-normal');
 });
 
-test('the community feed uses a circle sheet instead of an inline sidebar column', function () {
+test('the community feed does not render the circle featured panel', function () {
     $feed = File::get(resource_path('js/components/maison/community/community-feed.tsx'));
-    $panel = File::get(resource_path('js/components/maison/community/community-circle-panel.tsx'));
 
     expect($feed)
-        ->toContain('CommunityCirclePanel')
+        ->not->toContain('CommunityCirclePanel')
         ->not->toContain('lg:grid-cols-[1fr_360px]');
-
-    expect($panel)
-        ->toContain('Sheet')
-        ->toContain('Uw Circle')
-        ->toContain('FeedSidebar');
 });
 
 test('the community feed includes excerpt metadata for long posts', function () {
