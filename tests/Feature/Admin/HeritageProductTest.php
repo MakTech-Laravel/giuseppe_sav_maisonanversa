@@ -4,8 +4,10 @@ use App\Contracts\StripeCatalogGateway;
 use App\Enums\EditionPieceStatus;
 use App\Enums\RoleEnum;
 use App\Models\EditionPiece;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\Edition\EditionAllocator;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -136,5 +138,28 @@ test('staff can search heritage inventory by sku digits and notes', function () 
             ->component('admin/heritage/index')
             ->has('pieces.data', 1)
             ->where('pieces.data.0.label', '042')
+        );
+});
+
+test('heritage inventory exposes order reference and purchaser for allocated pieces', function () {
+    $product = Product::founding();
+    $user = User::factory()->create();
+    $order = Order::factory()->forUser($user)->create(['name' => 'Heritage Buyer']);
+    app(EditionAllocator::class)->allocate($order);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.heritage.index', ['product' => $product->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/heritage/index')
+            ->where(
+                'pieces.data',
+                fn ($rows) => collect($rows)->contains(
+                    fn (array $row) => $row['order_id'] === $order->id
+                        && $row['order_reference'] === $order->reference()
+                        && $row['purchaser_user_id'] === $user->id
+                        && $row['purchaser_name'] === 'Heritage Buyer',
+                ),
+            )
         );
 });
