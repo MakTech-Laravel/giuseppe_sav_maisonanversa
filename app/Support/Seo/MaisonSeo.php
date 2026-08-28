@@ -8,6 +8,7 @@ use App\Models\Faq;
 use App\Models\JournalArticle;
 use App\Models\Product;
 use App\Models\SeoMeta;
+use App\Models\SiteSetting;
 use App\Services\Edition\EditionInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -521,15 +522,29 @@ final class MaisonSeo
 
         $organizationId = $origin.'/#organization';
         $websiteId = $origin.'/#website';
+        $settings = SiteSetting::current();
+        $organization = [
+            '@type' => 'Organization',
+            '@id' => $organizationId,
+            'name' => 'Maison Anversa',
+            'url' => $origin,
+            'logo' => $ogImage,
+        ];
+
+        if (filled($settings->phone)) {
+            $organization['telephone'] = $settings->phone;
+        }
+
+        if (filled($settings->email_hello)) {
+            $organization['email'] = $settings->email_hello;
+        }
+
+        if (filled($settings->instagram_url)) {
+            $organization['sameAs'] = [$settings->instagram_url];
+        }
 
         $graph = [
-            [
-                '@type' => 'Organization',
-                '@id' => $organizationId,
-                'name' => 'Maison Anversa',
-                'url' => $origin,
-                'logo' => $ogImage,
-            ],
+            $organization,
             [
                 '@type' => 'WebSite',
                 '@id' => $websiteId,

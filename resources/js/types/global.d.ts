@@ -28,6 +28,7 @@ export type SiteShared = {
     whatsappHref: string;
     phoneHref: string;
     emailHelloHref: string;
+    emailPressHref: string;
 };
 
 export type CommerceShared = {

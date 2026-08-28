@@ -27,6 +27,19 @@ test('the footer support column includes faq between care and privacy', function
         ->toContain("label: 'Heritage Letter'");
 });
 
+test('the footer follow column reads instagram and press from site settings', function () {
+    $navigation = file_get_contents(resource_path('js/lib/maison-navigation.ts'));
+    $footer = file_get_contents(resource_path('js/components/maison/shell/site-footer.tsx'));
+
+    expect($navigation)
+        ->toContain("channel: 'instagram'")
+        ->toContain("channel: 'press'");
+
+    expect($footer)
+        ->toContain('site.instagramUrl')
+        ->toContain('site.emailPressHref');
+});
+
 test('the antwerp etching band sits below the site footer', function () {
     $source = file_get_contents(resource_path('js/layouts/frontend-layout.tsx'));
 
