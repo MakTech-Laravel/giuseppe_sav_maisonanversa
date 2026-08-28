@@ -1,4 +1,4 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import { Loader2, Package, Search, X } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -28,7 +28,9 @@ import {
 import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
+import customers from '@/routes/admin/customers';
 import heritageRoutes from '@/routes/admin/heritage';
+import orders from '@/routes/admin/orders';
 import type { Paginated } from '@/types/admin';
 
 interface HeritageProduct {
@@ -62,6 +64,8 @@ interface InventoryRow {
     status_key: string;
     notes: string;
     order_id?: number | null;
+    order_reference?: string | null;
+    purchaser_user_id?: number | null;
     purchaser_name?: string | null;
     purchaser_email?: string | null;
 }
@@ -130,6 +134,7 @@ export default function HeritageIndex({
     perPageOptions?: number[];
 }) {
     const { t } = useTranslation();
+    const locale = wayfinderLocale();
     const [search, setSearch] = useState(filters.search ?? '');
     const [numberFrom, setNumberFrom] = useState(filters.number_from ?? '');
     const [numberTo, setNumberTo] = useState(filters.number_to ?? '');
@@ -403,10 +408,39 @@ export default function HeritageIndex({
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="hidden px-4 py-3 align-middle text-sm lg:table-cell">
-                                            {row.purchaser_name || '—'}
+                                            {row.purchaser_name ? (
+                                                row.purchaser_user_id ? (
+                                                    <Link
+                                                        href={customers.show({
+                                                            locale,
+                                                            user: row.purchaser_user_id,
+                                                        })}
+                                                        className="font-medium text-foreground underline-offset-2 hover:underline"
+                                                    >
+                                                        {row.purchaser_name}
+                                                    </Link>
+                                                ) : (
+                                                    row.purchaser_name
+                                                )
+                                            ) : (
+                                                '—'
+                                            )}
                                         </TableCell>
                                         <TableCell className="hidden px-4 py-3 align-middle text-sm md:table-cell">
-                                            {row.order_id ?? '—'}
+                                            {row.order_id ? (
+                                                <Link
+                                                    href={orders.show({
+                                                        locale,
+                                                        order: row.order_id,
+                                                    })}
+                                                    className="font-medium text-foreground underline-offset-2 hover:underline"
+                                                >
+                                                    {row.order_reference ??
+                                                        row.order_id}
+                                                </Link>
+                                            ) : (
+                                                '—'
+                                            )}
                                         </TableCell>
                                         <TableCell className="hidden px-4 py-3 align-middle text-muted-foreground md:table-cell">
                                             {row.notes || '—'}

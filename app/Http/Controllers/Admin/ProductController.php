@@ -427,7 +427,7 @@ class ProductController extends Controller
 
         $pieces = EditionPiece::query()
             ->where('product_id', $product->id)
-            ->with(['order:id,name,email'])
+            ->with(['order:id,name,email,user_id,created_at'])
             ->tap(fn ($query) => $this->applyInventoryFilters($query, $product, $filters))
             ->orderBy('edition_number')
             ->paginate($filters['per_page'])
@@ -439,6 +439,8 @@ class ProductController extends Controller
                 'status_key' => $piece->status->value,
                 'notes' => $piece->notes ?? '',
                 'order_id' => $piece->order_id,
+                'order_reference' => $piece->order?->reference(),
+                'purchaser_user_id' => $piece->order?->user_id,
                 'purchaser_name' => $piece->order?->name,
                 'purchaser_email' => $piece->order?->email,
             ]);
