@@ -7,6 +7,7 @@ import {
     AdminPanel,
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
+import { legalPageTitle } from '@/components/admin/legal-page-titles';
 import { LegalRichTextEditor } from '@/components/admin/legal-rich-text-editor';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -43,20 +44,13 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
         form.submit();
     }
 
-    const slugLabels: Record<string, string> = {
-        privacy: t('Privacybeleid'),
-        terms: t('Algemene voorwaarden'),
-        shipping: t('Verzending & Retour'),
-        care: t('Zorg & Garantie'),
-    };
-
     return (
         <>
             <Head title={t('Juridische pagina bewerken')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={t('Juridische pagina bewerken')}
-                    description={slugLabels[page.slug] ?? page.slug}
+                    description={legalPageTitle(page.slug, t)}
                     icon={FileText}
                 >
                     <Button variant="outline" asChild>

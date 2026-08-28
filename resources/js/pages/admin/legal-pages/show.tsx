@@ -3,6 +3,7 @@ import { ArrowLeft, FileText, Pencil } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { legalPageTitle, legalPageTitleKey } from '@/components/admin/legal-page-titles';
 import { LegalPageTranslationsDialog } from '@/components/admin/legal-page-translations-dialog';
 import {
     AdminPanel,
@@ -35,13 +36,6 @@ interface ShowLegalPageProps {
     translationStatus: Record<string, TranslationStatus>;
 }
 
-const SLUG_TITLES: Record<string, string> = {
-    privacy: 'Privacybeleid',
-    terms: 'Algemene voorwaarden',
-    shipping: 'Verzending & Retour',
-    care: 'Zorg & Garantie',
-};
-
 const LOCALE_LABELS: Record<string, string> = {
     nl: 'Nederlands',
     en: 'English',
@@ -59,15 +53,16 @@ export default function ShowLegalPage({
     const [previewLocale, setPreviewLocale] = useState(
         locales.includes(locale) ? locale : (locales[0] ?? 'nl'),
     );
-    const title = SLUG_TITLES[page.slug] ?? page.slug;
+    const titleKey = legalPageTitleKey(page.slug);
+    const title = legalPageTitle(page.slug, t);
     const previewBody = translations[previewLocale]?.body ?? '';
 
     return (
         <>
-            <Head title={t(title)} />
+            <Head title={title} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t(title)}
+                    title={title}
                     description={t(
                         'Bekijk deze juridische pagina zoals bezoekers die zien.',
                     )}
@@ -160,7 +155,7 @@ export default function ShowLegalPage({
                         </div>
                         <div className="legal-preview-surface overflow-hidden rounded-xl border">
                             <LegalPageLayout
-                                title={title}
+                                title={titleKey}
                                 body={previewBody}
                                 preview
                             >
