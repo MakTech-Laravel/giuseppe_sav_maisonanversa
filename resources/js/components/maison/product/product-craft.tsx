@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
@@ -9,14 +10,31 @@ import type { ProductSection } from '@/types/product';
 const CLASS_NAME = 'min-h-[300px] md:min-h-[440px]';
 const OVERLAY = 'linear-gradient(to top, rgba(41,28,24,0.4), transparent)';
 
+function isUploadedImageSrc(src: string): boolean {
+    return (
+        src.startsWith('/') ||
+        src.startsWith('http://') ||
+        src.startsWith('https://')
+    );
+}
+
 function CraftImage({ src, alt }: { src: string | null; alt: string }) {
-    if (src && !(src in IMAGE_ASSETS)) {
+    const [failed, setFailed] = useState(false);
+
+    const useUploaded =
+        Boolean(src) &&
+        !failed &&
+        !(src! in IMAGE_ASSETS) &&
+        isUploadedImageSrc(src!);
+
+    if (useUploaded) {
         return (
             <div className={`relative overflow-hidden ${CLASS_NAME}`}>
                 <img
-                    src={src}
+                    src={src!}
                     alt={alt}
                     className="absolute inset-0 h-full w-full object-cover"
+                    onError={() => setFailed(true)}
                 />
                 <div
                     aria-hidden="true"
@@ -27,9 +45,12 @@ function CraftImage({ src, alt }: { src: string | null; alt: string }) {
         );
     }
 
+    const assetKey =
+        src && src in IMAGE_ASSETS ? (src as ImageAssetName) : 'atelier-workshop';
+
     return (
         <PlaceholderImage
-            asset={(src ?? 'atelier-workshop') as ImageAssetName}
+            asset={assetKey}
             ratio={null}
             alt={alt}
             captioned={false}

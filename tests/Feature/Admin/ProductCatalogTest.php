@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ProductSectionKey;
 use App\Enums\ProductType;
 use App\Enums\RoleEnum;
 use App\Models\EditionPiece;
@@ -389,6 +390,37 @@ test('staff can save product sections independently from the edit form', functio
         ->and($craft->is_visible)->toBeFalse();
 });
 
+test('section intro text is limited to 120 characters', function () {
+    $product = Product::factory()->create([
+        'name' => 'Intro Limit Product',
+        'slug' => 'intro-limit-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->from(route('admin.products.edit', ['product' => $product->id]))
+        ->post(route('admin.products.sections.update', ['product' => $product->id]), [
+            'sections' => [
+                [
+                    'key' => 'craft',
+                    'eyebrow' => '',
+                    'heading' => '',
+                    'subheading' => '',
+                    'intro' => str_repeat('a', 121),
+                    'image_key' => '',
+                    'is_visible' => true,
+                    'include_house_card' => true,
+                    'sort_order' => 0,
+                    'items' => [],
+                ],
+            ],
+        ])
+        ->assertRedirect()
+        ->assertSessionHasErrors('sections.0.intro');
+});
+
 test('staff can save product faqs independently from the edit form', function () {
     $product = Product::factory()->create([
         'name' => 'Faq Test Product',
@@ -614,6 +646,65 @@ test('craft section ignores invalid legacy image_key values', function () {
     ]);
 
     expect($section->resolvedImage())->toBeNull();
+});
+
+test('craft section upload clears invalid legacy image_key values', function () {
+    Storage::fake('public');
+
+    $product = Product::factory()->create([
+        'name' => 'Craft Upload Clears Key Product',
+        'slug' => 'craft-upload-clears-key-product',
+        'type' => ProductType::Simple->value,
+        'amount' => '49.00',
+        'is_published' => true,
+    ]);
+
+    $product->sections()->create([
+        'key' => 'craft',
+        'eyebrow' => 'Vakmanschap',
+        'heading' => 'Materieel',
+        'image_key' => 'Heading copy pasted by mistake',
+        'is_visible' => true,
+        'include_house_card' => true,
+        'sort_order' => 4,
+    ]);
+
+    $image = UploadedFile::fake()->image('craft-cover.jpg', 1200, 800);
+
+    $sections = collect(ProductSectionKey::catalogue())
+        ->map(fn (array $entry): array => [
+            'key' => $entry['key'],
+            'eyebrow' => '',
+            'heading' => '',
+            'subheading' => '',
+            'intro' => '',
+            'image_key' => '',
+            'remove_image' => false,
+            'is_visible' => true,
+            'include_house_card' => true,
+            'sort_order' => $entry['sort_order'],
+            'items' => [],
+        ])
+        ->all();
+
+    $sections[4]['key'] = 'craft';
+    $sections[4]['eyebrow'] = 'Vakmanschap';
+    $sections[4]['image'] = $image;
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.sections.update', ['product' => $product->id]), [
+            'sections' => $sections,
+        ])
+        ->assertRedirect();
+
+    $craft = $product->refresh()->sections->firstWhere('key', 'craft');
+
+    expect($craft)->not->toBeNull()
+        ->and($craft->image_path)->not->toBeNull()
+        ->and($craft->image_key)->toBeNull()
+        ->and($craft->resolvedImage())->not->toBeNull();
+
+    Storage::disk('public')->assertExists($craft->image_path);
 });
 
 test('staff can manually store product faq translations', function () {

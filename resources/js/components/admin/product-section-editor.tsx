@@ -131,6 +131,7 @@ function ItemFields({
 export function ProductSectionEditor({
     entry,
     section,
+    storedExistingImage = null,
     onChange,
     onMove,
     canMoveUp,
@@ -138,6 +139,8 @@ export function ProductSectionEditor({
 }: {
     entry: ProductSectionCatalogueEntry;
     section: ProductSectionFormData;
+    /** Saved upload URL from server props — not form state — so previews survive tab saves. */
+    storedExistingImage?: string | null;
     onChange: (patch: Partial<ProductSectionFormData>) => void;
     onMove: (direction: -1 | 1) => void;
     canMoveUp: boolean;
@@ -146,12 +149,17 @@ export function ProductSectionEditor({
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
 
-    const existingImageFiles: ExistingFile[] = section.existing_image
+    const showStoredImage =
+        Boolean(storedExistingImage) &&
+        !section.image &&
+        !section.remove_image;
+
+    const existingImageFiles: ExistingFile[] = showStoredImage
         ? [
               {
                   id: `${section.key}-image`,
-                  path: section.existing_image,
-                  url: section.existing_image,
+                  path: storedExistingImage!,
+                  url: storedExistingImage!,
                   mime_type: 'image/jpeg',
                   name: t('Sectieafbeelding'),
               },
@@ -311,11 +319,17 @@ export function ProductSectionEditor({
                                 </Label>
                                 <Textarea
                                     value={section.intro}
+                                    maxLength={120}
                                     onChange={(event) =>
                                         onChange({ intro: event.target.value })
                                     }
                                     className="min-h-20 resize-y"
                                 />
+                                <p className="text-[11px] text-muted-foreground">
+                                    {t('{{count}}/120 tekens', {
+                                        count: section.intro.length,
+                                    })}
+                                </p>
                             </div>
                         </div>
                     ) : null}

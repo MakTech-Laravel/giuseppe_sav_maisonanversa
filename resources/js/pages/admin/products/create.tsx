@@ -5,7 +5,6 @@ import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { FormStepper } from '@/components/admin/form-stepper';
-import type { FormStep } from '@/components/admin/form-stepper';
 import {
     ProductBasicsFields,
     ProductFaqFields,
@@ -21,15 +20,7 @@ import { dashboard } from '@/routes/admin';
 import products from '@/routes/admin/products';
 import type { ProductSectionCatalogueEntry } from '@/types/admin-product';
 import { buildSectionForm } from '@/types/admin-product';
-
-const STEPS: FormStep[] = [
-    { id: 'basics', label: 'Basis', description: 'Naam, slug en herotekst' },
-    { id: 'pricing', label: 'Prijs', description: 'Prijs, editie en voorraad' },
-    { id: 'media', label: 'Beeld', description: 'Cover en galerij' },
-    { id: 'sections', label: 'Secties', description: 'Inhoud van de pagina' },
-    { id: 'faq', label: 'FAQ', description: 'Vragen bij dit product' },
-    { id: 'review', label: 'Publiceren', description: 'Controleer en publiceer' },
-];
+import { PRODUCT_FORM_STEPS } from '@/pages/admin/products/product-form-steps';
 
 /** Fields Precognition validates before each step may be left. */
 const STEP_FIELDS: Record<string, (keyof ProductFormData)[]> = {
@@ -57,7 +48,7 @@ const STEP_FIELDS: Record<string, (keyof ProductFormData)[]> = {
     media: [],
     sections: ['sections'],
     faq: ['faqs'],
-    review: ['is_published'],
+    publish: ['is_published'],
 };
 
 export default function CreateProduct({
@@ -100,8 +91,8 @@ export default function CreateProduct({
     );
 
     const form = useForm(products.store(wayfinderLocale()), defaults);
-    const step = STEPS[stepIndex];
-    const isLastStep = stepIndex === STEPS.length - 1;
+    const step = PRODUCT_FORM_STEPS[stepIndex];
+    const isLastStep = stepIndex === PRODUCT_FORM_STEPS.length - 1;
 
     /**
      * Gates forward navigation on the same server rules that guard the final
@@ -124,7 +115,7 @@ export default function CreateProduct({
     };
 
     const advance = () => {
-        const next = Math.min(stepIndex + 1, STEPS.length - 1);
+        const next = Math.min(stepIndex + 1, PRODUCT_FORM_STEPS.length - 1);
         setStepIndex(next);
         setFurthestIndex((current) => Math.max(current, next));
     };
@@ -158,7 +149,7 @@ export default function CreateProduct({
                 </AdminPageHeader>
 
                 <FormStepper
-                    steps={STEPS}
+                    steps={PRODUCT_FORM_STEPS}
                     currentIndex={stepIndex}
                     furthestIndex={furthestIndex}
                     onSelect={setStepIndex}
@@ -186,7 +177,7 @@ export default function CreateProduct({
                         />
                     ) : null}
                     {step.id === 'faq' ? <ProductFaqFields {...shared} /> : null}
-                    {step.id === 'review' ? (
+                    {step.id === 'publish' ? (
                         <ProductPublishFields {...shared} />
                     ) : null}
 
