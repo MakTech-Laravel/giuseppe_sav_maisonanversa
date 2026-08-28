@@ -22,22 +22,28 @@ class LegalHtml
      * @var list<string>
      */
     private const ALLOWED_TAGS = [
-        'a', 'blockquote', 'br', 'em', 'h2', 'h3', 'h4', 'hr', 'i', 'li',
-        'mark', 'ol', 'p', 's', 'span', 'strong', 'b', 'table', 'tbody',
-        'td', 'th', 'thead', 'tr', 'u', 'ul',
+        'a', 'blockquote', 'br', 'details', 'em', 'h1', 'h2', 'h3', 'h4', 'h5',
+        'h6', 'hr', 'i', 'li', 'mark', 'ol', 'p', 's', 'span', 'strong', 'b',
+        'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'th', 'thead', 'tr', 'u',
+        'ul',
     ];
 
     /**
      * @var array<string, list<string>>
      */
     private const ALLOWED_ATTRIBUTES = [
-        'a' => ['href', 'rel', 'target', 'class'],
-        'h2' => ['class', 'style'],
-        'h3' => ['class', 'style'],
-        'h4' => ['class', 'style'],
-        'mark' => ['class'],
-        'p' => ['class', 'style'],
-        'span' => ['class'],
+        'a' => ['href', 'rel', 'target', 'class', 'id'],
+        'details' => ['class', 'style', 'id', 'open'],
+        'h1' => ['class', 'style', 'id'],
+        'h2' => ['class', 'style', 'id'],
+        'h3' => ['class', 'style', 'id'],
+        'h4' => ['class', 'style', 'id'],
+        'h5' => ['class', 'style', 'id'],
+        'h6' => ['class', 'style', 'id'],
+        'mark' => ['class', 'style', 'data-color'],
+        'p' => ['class', 'style', 'id'],
+        'span' => ['class', 'style'],
+        'summary' => ['class', 'style', 'id'],
         'td' => ['class', 'colspan', 'rowspan', 'style'],
         'th' => ['class', 'colspan', 'rowspan', 'style'],
     ];
@@ -94,7 +100,7 @@ class LegalHtml
     {
         $text = trim(html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
-        return $text === '' && ! preg_match('/<(hr|table|ul|ol)\b/i', $html);
+        return $text === '' && ! preg_match('/<(hr|table|ul|ol|details)\b/i', $html);
     }
 
     public static function looksLikeHtml(string $value): bool
@@ -240,13 +246,39 @@ class LegalHtml
                 continue;
             }
 
+            if ($lower === 'id' && ! self::isSafeId($value)) {
+                $element->removeAttribute($name);
+
+                continue;
+            }
+
+            if ($lower === 'open' && ! in_array(strtolower($value), ['', 'open'], true)) {
+                $element->removeAttribute($name);
+
+                continue;
+            }
+
             if (in_array($lower, ['colspan', 'rowspan'], true) && ! ctype_digit($value)) {
                 $element->removeAttribute($name);
 
                 continue;
             }
 
-            if ($lower === 'style' && ! self::isSafeStyle($value)) {
+            if ($lower === 'style') {
+                $clean = self::sanitizeStyle($value);
+
+                if ($clean === '') {
+                    $element->removeAttribute($name);
+
+                    continue;
+                }
+
+                $element->setAttribute('style', $clean);
+
+                continue;
+            }
+
+            if ($lower === 'data-color' && ! self::isSafeCssColor($value)) {
                 $element->removeAttribute($name);
             }
         }
@@ -301,8 +333,82 @@ class LegalHtml
         return (bool) preg_match('/^[a-zA-Z0-9_\-\s]+$/', $class);
     }
 
-    private static function isSafeStyle(string $style): bool
+    private static function isSafeId(string $id): bool
     {
-        return (bool) preg_match('/^\s*text-align:\s*(left|center|right|justify)\s*;?\s*$/i', $style);
+        return (bool) preg_match('/^[A-Za-z][A-Za-z0-9_.:-]*$/', $id);
+    }
+
+    private static function sanitizeStyle(string $style): string
+    {
+        $safe = [];
+
+        foreach (explode(';', $style) as $declaration) {
+            $declaration = trim($declaration);
+
+            if ($declaration === '' || ! str_contains($declaration, ':')) {
+                continue;
+            }
+
+            [$property, $value] = array_map('trim', explode(':', $declaration, 2));
+            $property = strtolower($property);
+
+            if (preg_match('/url\s*\(|expression\s*\(|javascript:|!important/i', $value) === 1) {
+                continue;
+            }
+
+            $kept = match ($property) {
+                'text-align' => preg_match('/^(left|center|right|justify)$/i', $value) === 1 ? strtolower($value) : null,
+                'color' => strcasecmp($value, 'inherit') === 0 || self::isSafeCssColor($value) ? $value : null,
+                'background-color' => self::isSafeCssColor($value) ? $value : null,
+                'font-size' => self::isSafeFontSize($value) ? $value : null,
+                'font-family' => self::isSafeFontFamily($value) ? $value : null,
+                'line-height' => preg_match('/^[1-3](\.\d+)?$/', $value) === 1 ? $value : null,
+                default => null,
+            };
+
+            if ($kept !== null) {
+                $safe[] = $property.': '.$kept;
+            }
+        }
+
+        return implode('; ', $safe);
+    }
+
+    private static function isSafeCssColor(string $value): bool
+    {
+        return (bool) preg_match('/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i', $value)
+            || (bool) preg_match('/^rgb\(\s*(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\s*,\s*(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\s*,\s*(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\s*\)$/i', $value);
+    }
+
+    private static function isSafeFontSize(string $value): bool
+    {
+        if (preg_match('/^(\d+(?:\.\d+)?)px$/i', $value, $matches) === 1) {
+            $px = (float) $matches[1];
+
+            return $px >= 10 && $px <= 32;
+        }
+
+        if (preg_match('/^(\d+(?:\.\d+)?)(?:rem|em)$/i', $value, $matches) === 1) {
+            $em = (float) $matches[1];
+
+            return $em >= 0.75 && $em <= 2.5;
+        }
+
+        return false;
+    }
+
+    private static function isSafeFontFamily(string $value): bool
+    {
+        $allowed = ['montserrat', 'baskervville', 'georgia', 'ui-sans-serif', 'sans-serif', 'serif', 'system-ui'];
+
+        foreach (explode(',', $value) as $family) {
+            $token = strtolower(trim($family, " \t\"'"));
+
+            if ($token === '' || ! in_array($token, $allowed, true)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

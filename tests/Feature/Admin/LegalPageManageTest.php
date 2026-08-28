@@ -104,14 +104,16 @@ test('staff can update a legal page with html', function () {
 
     $this->actingAs($this->admin)
         ->put(route('admin.legal-pages.update', ['locale' => 'nl', 'legalPage' => $page->id]), [
-            'body' => '<h2>Privacybeleid</h2><p>Bijgewerkte tekst.</p>',
+            'body' => '<h2>Privacybeleid</h2><p style="color:#291c18;font-family:Montserrat, sans-serif;font-size:16px">Bijgewerkte tekst.</p>',
             'is_published' => true,
         ])
         ->assertRedirect(route('admin.legal-pages.show', ['locale' => 'nl', 'legalPage' => $page->id]));
 
     expect($page->fresh()->body)
         ->toContain('<h2>Privacybeleid</h2>')
-        ->toContain('<p>Bijgewerkte tekst.</p>');
+        ->toContain('Bijgewerkte tekst.')
+        ->toContain('#291c18')
+        ->toContain('Montserrat, sans-serif');
 });
 
 test('xss is stripped on save and empty payloads are rejected', function () {
