@@ -1,4 +1,4 @@
-import { Form } from '@inertiajs/react';
+import { Form, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
@@ -6,19 +6,22 @@ import { SuccessPanel } from '@/components/maison/ui/success-panel';
 import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
 import { store as storeContact } from '@/routes/maison/contact';
+import type { Auth } from '@/types';
 
 const fieldClassName =
     'w-full rounded border border-gold/25 bg-black/30 px-3.5 py-3 font-sans text-[13px] text-cream outline-none focus:border-gold';
 
+export type BureauFormKind = 'appointment' | 'consult' | 'feedback';
+
 type BureauFormProps = {
-    subject: string;
+    kind: BureauFormKind;
     submitLabel: string;
     children: ReactNode;
     className?: string;
 };
 
 export function BureauForm({
-    subject,
+    kind,
     submitLabel,
     children,
     className,
@@ -44,7 +47,7 @@ export function BureauForm({
                     </SuccessPanel>
                 ) : (
                     <>
-                        <input type="hidden" name="subject" value={t(subject)} />
+                        <input type="hidden" name="kind" value={kind} />
                         <input
                             type="text"
                             name="website"
@@ -54,9 +57,15 @@ export function BureauForm({
                             defaultValue=""
                         />
                         {children}
-                        {(errors.name || errors.email || errors.message) && (
+                        {(errors.name ||
+                            errors.email ||
+                            errors.message ||
+                            errors.kind) && (
                             <p role="alert" className="text-[13px] text-gold">
-                                {errors.name || errors.email || errors.message}
+                                {errors.kind ||
+                                    errors.name ||
+                                    errors.email ||
+                                    errors.message}
                             </p>
                         )}
                         <MaisonButton
@@ -82,12 +91,7 @@ export function BureauFieldRow({
     className?: string;
 }) {
     return (
-        <div
-            className={cn(
-                'grid gap-3 ma-sm:grid-cols-2',
-                className,
-            )}
-        >
+        <div className={cn('grid gap-3 ma-sm:grid-cols-2', className)}>
             {children}
         </div>
     );
@@ -98,11 +102,13 @@ export function BureauInput({
     type = 'text',
     placeholder,
     required = false,
+    defaultValue,
 }: {
     name: string;
     type?: 'text' | 'email' | 'date';
     placeholder: string;
     required?: boolean;
+    defaultValue?: string;
 }) {
     const { t } = useTranslation();
 
@@ -112,6 +118,7 @@ export function BureauInput({
             name={name}
             required={required}
             placeholder={t(placeholder)}
+            defaultValue={defaultValue}
             className={fieldClassName}
         />
     );
@@ -158,4 +165,13 @@ export function BureauTextarea({
             className={cn(fieldClassName, 'col-span-full resize-y')}
         />
     );
+}
+
+export function useBureauVisitor(): { name: string; email: string } {
+    const { auth } = usePage<{ auth: Auth }>().props;
+
+    return {
+        name: auth.user?.name ?? '',
+        email: auth.user?.email ?? '',
+    };
 }

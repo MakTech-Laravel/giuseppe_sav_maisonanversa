@@ -1,6 +1,7 @@
 ---
 paths:
   - 'app/Models/*.php'
+  - app/Models/Inquiry.php
 ---
 
 # Models
@@ -22,3 +23,6 @@ meta_title, meta_description, meta_keywords, and og_image are optional. Never co
 
 ## Product SEO is never auto-filled
 Product SEO columns stay empty when unset. Do not copy name, description, or gallery into them. MaisonSeo applies fallbacks at render time only.
+
+## Inquiries are not DeepL-translated
+Contact booking, consult, and feedback share the Inquiry model. Do not add TranslatesWithDeepL. Store a stable Dutch subject from InquiryType, not the translated heading. Cap is 2 submissions per type per 24 hours, matching IP or device cookie or user_id.
