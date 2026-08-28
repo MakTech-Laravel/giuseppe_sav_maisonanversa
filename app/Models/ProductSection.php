@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProductSectionKey;
 use App\Models\Concerns\TranslatesWithDeepL;
+use App\Support\Imagery;
 use Database\Factories\ProductSectionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -107,10 +108,14 @@ class ProductSection extends Model
     public function resolvedImage(): ?string
     {
         if (filled($this->image_path)) {
-            return Product::resolveMediaUrl((string) $this->image_path);
+            return Product::resolveDisplayMediaUrl((string) $this->image_path);
         }
 
-        return filled($this->image_key) ? (string) $this->image_key : null;
+        if (filled($this->image_key)) {
+            return Imagery::assetUrl((string) $this->image_key);
+        }
+
+        return null;
     }
 
     /**

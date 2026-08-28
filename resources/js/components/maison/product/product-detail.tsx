@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ProductGallery } from '@/components/maison/product/product-gallery';
+import { SectionIcon } from '@/components/maison/product/section-icon';
 import type { OrderProductContext } from '@/components/maison/shell/shell-actions';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
@@ -122,11 +123,8 @@ export function ProductDetail({
                             <div className="mt-6 grid grid-cols-1 gap-4 border-t border-gold/15 pt-6 sm:grid-cols-3">
                                 {guarantees.map((item) => (
                                     <div key={item.id} className="text-center">
-                                        <div
-                                            aria-hidden="true"
-                                            className="mb-1.5 text-lg text-gold2"
-                                        >
-                                            {item.icon}
+                                        <div className="mb-1.5 text-lg text-gold2">
+                                            <SectionIcon icon={item.icon} />
                                         </div>
                                         <div className="font-sans text-[9px] leading-[1.5] tracking-[0.15em] text-stone uppercase">
                                             {item.title}

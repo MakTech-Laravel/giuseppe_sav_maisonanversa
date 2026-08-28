@@ -1,11 +1,15 @@
 import { ChevronDownIcon, EyeIcon, EyeOffIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RepeaterField } from '@/components/admin/repeater-field';
+import FileUpload from '@/components/file-upload';
+import type { ExistingFile } from '@/components/file-upload';
+import { LucideIconPicker } from '@/components/icons/lucide-icon-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { isValidLucideIconKey } from '@/lib/icons';
 import { cn } from '@/lib/utils';
 import type {
     ProductSectionCatalogueEntry,
@@ -21,6 +25,13 @@ const ITEM_FIELD_LABELS: Record<string, string> = {
     body: 'Tekst',
 };
 
+const ADMIN_ICON_PICKER_CLASS_NAMES = {
+    dialogContent:
+        'admin-kit border-border bg-background text-foreground',
+    sheetContent:
+        'admin-kit border-border bg-background text-foreground',
+};
+
 function ItemFields({
     fields,
     row,
@@ -33,6 +44,24 @@ function ItemFields({
     const { t } = useTranslation();
     const compact = fields.filter((field) => field !== 'body');
 
+    const iconLabels = useMemo(
+        () => ({
+            search: t('Zoek iconen'),
+            recent: t('Recent'),
+            clearRecents: t('Wis recent'),
+            selected: t('Geselecteerd'),
+            preview: t('Voorbeeld'),
+            cancel: t('Annuleren'),
+            confirm: t('Bevestigen'),
+            copyKey: t('Kopieer sleutel'),
+            copied: t('Gekopieerd'),
+            invalidValue: t('Ongeldig icoon'),
+            empty: t('Geen iconen gevonden'),
+            loading: t('Iconen laden…'),
+        }),
+        [t],
+    );
+
     return (
         <div className="grid gap-3">
             {compact.length > 0 ? (
@@ -42,16 +71,42 @@ function ItemFields({
                             <Label className="text-xs">
                                 {t(ITEM_FIELD_LABELS[field] ?? field)}
                             </Label>
-                            <Input
-                                value={
-                                    row[
-                                        field as keyof ProductSectionItemFormData
-                                    ] as string
-                                }
-                                onChange={(event) =>
-                                    update({ [field]: event.target.value })
-                                }
-                            />
+                            {field === 'icon' ? (
+                                <LucideIconPicker
+                                    mode="dialog"
+                                    triggerVariant="field"
+                                    value={
+                                        isValidLucideIconKey(row.icon)
+                                            ? row.icon
+                                            : undefined
+                                    }
+                                    onChange={(icon) => update({ icon })}
+                                    label={t('Zoek iconen')}
+                                    description={t('Kies een Lucide-icoon')}
+                                    dialogTitle={t('Icoon kiezen')}
+                                    dialogDescription={t(
+                                        'Blader, filter en bevestig een Lucide-icoon.',
+                                    )}
+                                    placeholder={t('Selecteer een icoon')}
+                                    labels={iconLabels}
+                                    confirmSelection
+                                    showCopyKey={false}
+                                    classNames={ADMIN_ICON_PICKER_CLASS_NAMES}
+                                />
+                            ) : (
+                                <Input
+                                    value={
+                                        row[
+                                            field as keyof ProductSectionItemFormData
+                                        ] as string
+                                    }
+                                    onChange={(event) =>
+                                        update({
+                                            [field]: event.target.value,
+                                        })
+                                    }
+                                />
+                            )}
                         </div>
                     ))}
                 </div>
@@ -62,7 +117,9 @@ function ItemFields({
                     <Label className="text-xs">{t('Tekst')}</Label>
                     <Textarea
                         value={row.body}
-                        onChange={(event) => update({ body: event.target.value })}
+                        onChange={(event) =>
+                            update({ body: event.target.value })
+                        }
                         className="min-h-20 resize-y"
                     />
                 </div>
@@ -88,6 +145,18 @@ export function ProductSectionEditor({
 }) {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
+
+    const existingImageFiles: ExistingFile[] = section.existing_image
+        ? [
+              {
+                  id: `${section.key}-image`,
+                  path: section.existing_image,
+                  url: section.existing_image,
+                  mime_type: 'image/jpeg',
+                  name: t('Sectieafbeelding'),
+              },
+          ]
+        : [];
 
     return (
         <div
@@ -205,16 +274,34 @@ export function ProductSectionEditor({
                             {entry.uses_image ? (
                                 <div className="grid gap-1.5">
                                     <Label className="text-xs">
-                                        {t('Afbeeldingssleutel')}
+                                        {t('Coverafbeelding')}
                                     </Label>
-                                    <Input
-                                        value={section.image_key}
-                                        onChange={(event) =>
+                                    <FileUpload
+                                        accept="image/png,image/jpeg,image/webp"
+                                        maxSize={false}
+                                        value={section.image}
+                                        onChange={(file) => {
                                             onChange({
-                                                image_key: event.target.value,
+                                                image:
+                                                    (file as File | null) ?? null,
+                                                remove_image: false,
+                                            });
+                                        }}
+                                        existingFiles={
+                                            section.remove_image
+                                                ? []
+                                                : existingImageFiles
+                                        }
+                                        onRemoveExisting={() =>
+                                            onChange({
+                                                remove_image: true,
+                                                image: null,
                                             })
                                         }
-                                        placeholder="atelier-workshop"
+                                        placeholder={t(
+                                            'Sleep een afbeelding hierheen of klik om te bladeren',
+                                        )}
+                                        hint={t('PNG, JPG of WEBP')}
                                     />
                                 </div>
                             ) : null}

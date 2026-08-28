@@ -112,12 +112,14 @@ trait PreparesProductPayload
             'sections.*.subheading' => ['nullable', 'string', 'max:255'],
             'sections.*.intro' => ['nullable', 'string', 'max:5000'],
             'sections.*.image_key' => ['nullable', 'string', 'max:255'],
+            'sections.*.image' => ['nullable', 'image', 'max:10240'],
+            'sections.*.remove_image' => ['sometimes', 'boolean'],
             'sections.*.is_visible' => ['required', 'boolean'],
             'sections.*.include_house_card' => ['required', 'boolean'],
             'sections.*.sort_order' => ['required', 'integer', 'min:0', 'max:100'],
             'sections.*.items' => ['nullable', 'array', 'max:50'],
             'sections.*.items.*.number_label' => ['nullable', 'string', 'max:40'],
-            'sections.*.items.*.icon' => ['nullable', 'string', 'max:40'],
+            'sections.*.items.*.icon' => ['nullable', 'string', 'max:80'],
             'sections.*.items.*.title' => ['nullable', 'string', 'max:255'],
             'sections.*.items.*.body' => ['nullable', 'string', 'max:5000'],
             'faqs' => ['nullable', 'array', 'max:50'],
@@ -152,11 +154,20 @@ trait PreparesProductPayload
                         $section['include_house_card'] ?? true,
                         FILTER_VALIDATE_BOOLEAN,
                     );
+                    $section['remove_image'] = filter_var(
+                        $section['remove_image'] ?? false,
+                        FILTER_VALIDATE_BOOLEAN,
+                    );
                     $section['sort_order'] = (int) ($section['sort_order'] ?? 0);
                     $section['items'] = array_values(array_filter(
                         is_array($section['items'] ?? null) ? $section['items'] : [],
                         fn (mixed $item): bool => is_array($item)
-                            && (filled($item['title'] ?? null) || filled($item['body'] ?? null)),
+                            && (
+                                filled($item['title'] ?? null)
+                                || filled($item['body'] ?? null)
+                                || filled($item['icon'] ?? null)
+                                || filled($item['number_label'] ?? null)
+                            ),
                     ));
 
                     return $section;
