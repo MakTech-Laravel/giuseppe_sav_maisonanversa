@@ -25,7 +25,7 @@ const PANEL_TITLES: Record<BureauPanelId, string> = {
     care: 'Maison Care',
     afspraak: 'Boek een afspraak',
     concierge: 'Privé consult',
-    boutique: 'Vind uw Boutique',
+    atelier: 'Vind ons atelier',
     faq: 'Veelgestelde vragen',
     feedback: 'Uw mening',
 };
@@ -280,7 +280,7 @@ function BureauPanelBody({
                     </BureauNote>
                 </>
             );
-        case 'boutique':
+        case 'atelier':
             return (
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
@@ -351,7 +351,8 @@ function BureauPanelBody({
 }
 
 function panelIdFromHash(hash: string): BureauPanelId | null {
-    const id = hash.replace(/^#/, '') as BureauPanelId;
+    const raw = hash.replace(/^#/, '');
+    const id = (raw === 'boutique' ? 'atelier' : raw) as BureauPanelId;
 
     return BUREAU_PANEL_IDS.includes(id) ? id : null;
 }
