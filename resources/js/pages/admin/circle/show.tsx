@@ -84,7 +84,7 @@ export default function CircleShow({
                         {t('Verwijderen')}
                     </Button>
                 </AdminPageHeader>
-                <div className="grid max-w-4xl gap-6 lg:grid-cols-3">
+                <div className="grid w-full gap-6 lg:grid-cols-3">
                     <dl className="space-y-4 rounded-xl border bg-card p-6 text-sm shadow-sm">
                         <Detail label={t('Referentie')} value={member.id} />
                         <Detail label={t('Naam')} value={member.name} />

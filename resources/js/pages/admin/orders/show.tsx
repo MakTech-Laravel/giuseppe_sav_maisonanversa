@@ -197,7 +197,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                     </div>
                 </div>
 
-                <div className="grid max-w-4xl gap-6 lg:grid-cols-3">
+                <div className="grid w-full gap-6 lg:grid-cols-3">
                     <div className="space-y-6 lg:col-span-2">
                         <div className="rounded-xl border bg-card p-6 shadow-sm">
                             <h2 className="mb-4 text-sm font-semibold">

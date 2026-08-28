@@ -48,7 +48,7 @@ interface ProductTranslationsDialogProps {
     translationStatus: Record<string, TranslationStatus>;
 }
 
-const LOCALE_LABELS: Record<string, string> = {
+const LOCALE_LABEL_KEYS: Record<string, string> = {
     nl: 'Nederlands',
     en: 'English',
     fr: 'Français',
@@ -182,7 +182,7 @@ export function ProductTranslationsDialog({
                                 setActiveLocale(code as ProductLocale)
                             }
                         >
-                            {LOCALE_LABELS[code] ?? code.toUpperCase()}
+                            {t(LOCALE_LABEL_KEYS[code] ?? code.toUpperCase())}
                         </Button>
                     ))}
                 </div>
@@ -342,7 +342,7 @@ export function ProductTranslationsDialog({
                                     <RefreshCw className="h-4 w-4" />
                                 )}
                                 {t('Opnieuw vertalen ({{locale}})', {
-                                    locale: LOCALE_LABELS[activeLocale],
+                                    locale: t(LOCALE_LABEL_KEYS[activeLocale]),
                                 })}
                             </Button>
                             <Button

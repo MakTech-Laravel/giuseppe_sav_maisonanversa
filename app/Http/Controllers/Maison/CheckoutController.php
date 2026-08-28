@@ -44,7 +44,7 @@ class CheckoutController extends Controller
         if ($product === null || $inventory->snapshot($product)['available'] === 0) {
             throw ValidationException::withMessages([
                 'checkout' => __(':product is uitverkocht.', [
-                    'product' => $product?->translated('name') ?? 'Heritage No.001',
+                    'product' => $product?->translated('name') ?? __('Heritage No.001'),
                 ]),
             ]);
         }
