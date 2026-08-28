@@ -15,7 +15,7 @@ class OrderPresenter
     {
         $order->loadMissing('product');
 
-        $amount = Money::format((string) $order->amount).' €';
+        $amount = Money::format((string) $order->amount).__(' €');
         $name = $order->product?->translated('name') ?? __('Product');
         $number = $order->edition_number !== null
             ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
@@ -33,7 +33,7 @@ class OrderPresenter
             'amount' => $amount,
             'status' => $this->statusLabel($order->status),
             'status_key' => $order->status->value,
-            'method' => 'Stripe',
+            'method' => __('Stripe'),
         ];
     }
 
@@ -50,7 +50,7 @@ class OrderPresenter
         $total = (int) ($order->product?->edition_total ?? 0);
         $number = $order->edition_number !== null
             ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
-            : '—';
+            : __('—');
 
         $editionSummary = $total > 0 && $order->edition_number !== null
             ? __(':product · No. :number / :total', [
@@ -77,14 +77,14 @@ class OrderPresenter
             'billing' => [
                 'name' => $order->name,
                 'email' => $order->email,
-                'phone' => $order->phone ?: '—',
+                'phone' => $order->phone ?: __('—'),
             ],
             'shipping' => [
-                'line1' => $shipping['line1'] !== '' ? $shipping['line1'] : '—',
+                'line1' => $shipping['line1'] !== '' ? $shipping['line1'] : __('—'),
                 'line2' => $shipping['line2'] ?: null,
-                'city' => $shipping['city'] !== '' ? $shipping['city'] : '—',
-                'postal_code' => $shipping['postal_code'] !== '' ? $shipping['postal_code'] : '—',
-                'country' => $shipping['country'] !== '' ? $shipping['country'] : '—',
+                'city' => $shipping['city'] !== '' ? $shipping['city'] : __('—'),
+                'postal_code' => $shipping['postal_code'] !== '' ? $shipping['postal_code'] : __('—'),
+                'country' => $shipping['country'] !== '' ? $shipping['country'] : __('—'),
             ],
             'payment' => $payment === null ? null : [
                 'id' => (string) $payment->id,
@@ -93,7 +93,7 @@ class OrderPresenter
                 'provider' => $payment->provider,
                 'stripe_checkout_session_id' => $payment->stripe_checkout_session_id,
                 'stripe_payment_intent_id' => $payment->stripe_payment_intent_id,
-                'amount' => Money::format((string) $payment->amount).' €',
+                'amount' => Money::format((string) $payment->amount).__(' €'),
             ],
             'timeline' => $this->timeline($order),
             'events' => $order->statusEvents

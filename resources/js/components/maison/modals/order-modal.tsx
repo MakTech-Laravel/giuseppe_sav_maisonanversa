@@ -44,7 +44,9 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
     const selectedEditionLabel =
         product?.editionLabel ??
         (product?.editionNumber != null
-            ? `No.${String(product.editionNumber).padStart(3, '0')}`
+            ? t('Nr. {{number}}', {
+                  number: String(product.editionNumber).padStart(3, '0'),
+              })
             : null);
     const [step, setStep] = useState<Step>(1);
     const [name, setName] = useState('');
@@ -149,9 +151,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
 
     return (
         <MaisonModal
-            label={
-                isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu'
-            }
+            label={t(isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu')}
             onClose={onClose}
             panelClassName="max-w-[640px]"
         >
