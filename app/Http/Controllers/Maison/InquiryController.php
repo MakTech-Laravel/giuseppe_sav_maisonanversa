@@ -6,8 +6,11 @@ use App\Enums\InquiryType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maison\StoreContactInquiryRequest;
 use App\Http\Requests\Maison\StoreCornerInquiryRequest;
+use App\Mail\InquiryConfirmation;
 use App\Mail\InquiryReceived;
 use App\Models\Inquiry;
+use App\Services\Inquiry\InquiryDeviceCookie;
+use App\Support\MailLocale;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Mail;
@@ -15,23 +18,29 @@ use Inertia\Inertia;
 
 class InquiryController extends Controller
 {
+    public function __construct(private InquiryDeviceCookie $deviceCookie) {}
+
     public function storeContact(StoreContactInquiryRequest $request, string $locale): RedirectResponse
     {
         $validated = $request->validated();
+        $kind = InquiryType::from($validated['kind']);
+        $deviceToken = $this->deviceCookie->remember($request);
 
         $inquiry = Inquiry::query()->create([
-            'type' => InquiryType::Contact,
+            'type' => $kind,
+            'user_id' => $request->user()?->id,
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
-            'subject' => $validated['subject'] ?? null,
+            'subject' => $kind->subject(),
             'message' => $validated['message'] ?? '',
             'meta' => $this->nullableMeta(Arr::only($validated, ['datum', 'moment', 'soort', 'ervaring'])),
             'locale' => $locale,
             'ip' => $request->ip(),
+            'device_token' => $deviceToken,
         ]);
 
-        $this->queueBureauMail($inquiry);
+        $this->queueMails($inquiry);
 
         Inertia::flash('toast', [
             'type' => 'success',
@@ -47,10 +56,11 @@ class InquiryController extends Controller
 
         $inquiry = Inquiry::query()->create([
             'type' => InquiryType::Corner,
+            'user_id' => $request->user()?->id,
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
-            'subject' => 'Club Corner partnership',
+            'subject' => InquiryType::Corner->subject(),
             'message' => $validated['message'],
             'meta' => [
                 'club_name' => $validated['club_name'],
@@ -62,7 +72,9 @@ class InquiryController extends Controller
             'ip' => $request->ip(),
         ]);
 
-        $this->queueBureauMail($inquiry);
+        Mail::to(config('mail.bureau_address', config('mail.from.address')))
+            ->locale(MailLocale::resolve($locale))
+            ->queue(new InquiryReceived($inquiry));
 
         Inertia::flash('toast', [
             'type' => 'success',
@@ -72,10 +84,17 @@ class InquiryController extends Controller
         return back();
     }
 
-    private function queueBureauMail(Inquiry $inquiry): void
+    private function queueMails(Inquiry $inquiry): void
     {
+        $mailLocale = MailLocale::resolve($inquiry->locale);
+
         Mail::to(config('mail.bureau_address', config('mail.from.address')))
+            ->locale($mailLocale)
             ->queue(new InquiryReceived($inquiry));
+
+        Mail::to($inquiry->email)
+            ->locale($mailLocale)
+            ->queue(new InquiryConfirmation($inquiry));
     }
 
     /**
