@@ -129,7 +129,7 @@ class HeritageLetterController extends Controller
     }
 
     /**
-     * @return array{id: int, email: string, name: string, status: string, source: string, locale: string, joined_at: string|null, synced_at: string|null}
+     * @return array{id: int, email: string, name: string, status: string, source: string, locale: string, joined_at: string|null, synced_at: string|null, preferences: array{heritageLetter: bool, productUpdates: bool, events: bool}}
      */
     private function row(NewsletterSubscriber $subscriber): array
     {
@@ -142,6 +142,7 @@ class HeritageLetterController extends Controller
             'locale' => $subscriber->locale,
             'joined_at' => $subscriber->consent_at?->toDateString() ?? $subscriber->created_at?->toDateString(),
             'synced_at' => $subscriber->synced_at?->toDateTimeString(),
+            'preferences' => $subscriber->topicPreferences(),
         ];
     }
 }

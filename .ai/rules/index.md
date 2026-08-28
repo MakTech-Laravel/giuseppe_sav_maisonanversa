@@ -10,6 +10,10 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/pages/admin/letter/**/*.tsx | .ai/rules/letter.md |
 | resources/js/components/maison/community/** | .ai/rules/maison-community.md |
 | app/Models/*.php | .ai/rules/models.md |
+| app/Services/Newsletter/** | .ai/rules/newsletter.md |
+| app/Http/Controllers/Member/DashboardController.php | .ai/rules/newsletter.md |
+| resources/js/pages/member/letter.tsx | .ai/rules/newsletter.md |
+| resources/js/pages/member/email-preferences.tsx | .ai/rules/newsletter.md |
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
 | routes/web.php | .ai/rules/routes.md |
 | app/Services/Translation/** | .ai/rules/translation.md |

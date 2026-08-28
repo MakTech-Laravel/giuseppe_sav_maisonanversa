@@ -29,7 +29,7 @@ class NewsletterSubscribersExport implements FromCollection, ShouldAutoSize, Wit
      */
     public function headings(): array
     {
-        return ['Email', 'Name', 'Locale', 'Source', 'Status', 'Consent At', 'Synced At'];
+        return ['Email', 'Name', 'Locale', 'Source', 'Status', 'Heritage Letter', 'Product Updates', 'Events', 'Consent At', 'Synced At'];
     }
 
     /**
@@ -38,12 +38,17 @@ class NewsletterSubscribersExport implements FromCollection, ShouldAutoSize, Wit
      */
     public function map($subscriber): array
     {
+        $preferences = $subscriber->topicPreferences();
+
         return [
             $subscriber->email,
             $subscriber->name,
             $subscriber->locale,
             $subscriber->source->value,
             $subscriber->status->value,
+            $preferences['heritageLetter'] ? 'yes' : 'no',
+            $preferences['productUpdates'] ? 'yes' : 'no',
+            $preferences['events'] ? 'yes' : 'no',
             $subscriber->consent_at?->toDateTimeString(),
             $subscriber->synced_at?->toDateTimeString(),
         ];

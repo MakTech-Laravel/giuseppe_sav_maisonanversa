@@ -33,6 +33,7 @@ class NewsletterSubscriberFactory extends Factory
                 'productUpdates' => true,
                 'events' => false,
             ],
+            'user_id' => null,
         ];
     }
 }

@@ -30,6 +30,10 @@ export function MemberNav() {
             href: `/${locale}/member/letter`,
         },
         {
+            label: t('E-mailvoorkeuren'),
+            href: `/${locale}/member/email-preferences`,
+        },
+        {
             label: t('Profiel & account'),
             href: `/${locale}/member/profile`,
         },

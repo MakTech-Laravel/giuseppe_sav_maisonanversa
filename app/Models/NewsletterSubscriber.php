@@ -7,6 +7,7 @@ use App\Enums\SubscriberStatus;
 use Database\Factories\NewsletterSubscriberFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class NewsletterSubscriber extends Model
@@ -30,6 +31,7 @@ class NewsletterSubscriber extends Model
         'synced_at',
         'unsubscribe_token',
         'preferences',
+        'user_id',
     ];
 
     /**
@@ -58,5 +60,27 @@ class NewsletterSubscriber extends Model
     public function isSubscribed(): bool
     {
         return $this->status === SubscriberStatus::Subscribed;
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return array{heritageLetter: bool, productUpdates: bool, events: bool}
+     */
+    public function topicPreferences(): array
+    {
+        $preferences = $this->preferences ?? [];
+
+        return [
+            'heritageLetter' => (bool) ($preferences['heritageLetter'] ?? false),
+            'productUpdates' => (bool) ($preferences['productUpdates'] ?? false),
+            'events' => (bool) ($preferences['events'] ?? false),
+        ];
     }
 }

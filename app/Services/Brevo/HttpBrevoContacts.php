@@ -15,11 +15,16 @@ class HttpBrevoContacts implements BrevoContacts
         $listId = (int) config('services.brevo.list_heritage_letter');
         $apiKey = (string) config('services.brevo.api_key');
 
+        $preferences = $subscriber->topicPreferences();
+
         $payload = [
             'email' => $subscriber->email,
             'attributes' => [
                 'LANGUAGE' => strtoupper($subscriber->locale),
                 'FIRSTNAME' => $subscriber->name ?? '',
+                'HERITAGE_LETTER' => $preferences['heritageLetter'],
+                'PRODUCT_UPDATES' => $preferences['productUpdates'],
+                'EVENTS' => $preferences['events'],
             ],
             'updateEnabled' => true,
         ];
