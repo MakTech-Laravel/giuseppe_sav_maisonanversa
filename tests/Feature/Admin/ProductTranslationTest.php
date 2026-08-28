@@ -41,6 +41,10 @@ test('staff can view a product detail page with translation props', function () 
             ->has('translationStatus.nl')
             ->has('translationStatus.en')
             ->has('translationStatus.fr')
+            ->has('faqTranslations')
+            ->has('faqTranslationStatus')
+            ->has('sectionTranslations.nl')
+            ->has('sectionTranslationStatus.nl')
         );
 });
 
