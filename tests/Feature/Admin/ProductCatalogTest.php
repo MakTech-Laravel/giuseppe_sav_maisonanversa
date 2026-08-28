@@ -847,3 +847,95 @@ test('staff can manually store product section translations', function () {
         ->and($item->translated('title', 'fr'))->toBe('Livraison')
         ->and($item->translated('body', 'en'))->toBe('Worldwide');
 });
+
+test('staff can store optional product seo fields without copying name or description', function () {
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.store'), [
+            'name' => 'SEO Source Product',
+            'slug' => 'seo-source-product',
+            'type' => ProductType::Simple->value,
+            'amount' => '49.00',
+            'stock_quantity' => 4,
+            'is_published' => true,
+            'grants_founding_circle' => false,
+            'description' => 'Storefront beschrijving',
+            'meta_title' => 'Custom meta title',
+            'meta_description' => 'Custom meta description',
+            'meta_keywords' => 'padel, heritage, antwerpen',
+        ])
+        ->assertRedirect();
+
+    $product = Product::query()->where('slug', 'seo-source-product')->firstOrFail();
+
+    expect($product->meta_title)->toBe('Custom meta title')
+        ->and($product->meta_description)->toBe('Custom meta description')
+        ->and($product->meta_keywords)->toBe('padel, heritage, antwerpen')
+        ->and($product->og_image)->toBeNull();
+});
+
+test('creating a product without seo fields leaves them empty instead of copying catalog copy', function () {
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.store'), [
+            'name' => 'No Seo Product',
+            'slug' => 'no-seo-product',
+            'type' => ProductType::Simple->value,
+            'amount' => '29.00',
+            'stock_quantity' => 2,
+            'is_published' => true,
+            'grants_founding_circle' => false,
+            'description' => 'Catalog description that must not become meta',
+        ])
+        ->assertRedirect();
+
+    $product = Product::query()->where('slug', 'no-seo-product')->firstOrFail();
+
+    expect($product->meta_title)->toBeNull()
+        ->and($product->meta_description)->toBeNull()
+        ->and($product->meta_keywords)->toBeNull()
+        ->and($product->og_image)->toBeNull();
+});
+
+test('staff can upload and remove a product og image without touching the gallery', function () {
+    Storage::fake('public');
+
+    $product = Product::factory()->create([
+        'gallery' => ['products/cover.jpg'],
+    ]);
+
+    $ogImage = UploadedFile::fake()->image('og.jpg', 1200, 630);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.products.update', ['locale' => 'nl', 'product' => $product->id]), [
+            'name' => $product->name,
+            'slug' => $product->slug,
+            'type' => $product->type->value,
+            'amount' => (string) $product->amount,
+            'stock_quantity' => $product->stock_quantity,
+            'is_published' => true,
+            'grants_founding_circle' => false,
+            'og_image' => $ogImage,
+        ])
+        ->assertRedirect();
+
+    $product->refresh();
+
+    expect($product->og_image)->not->toBeNull()
+        ->and($product->gallery)->toBe(['products/cover.jpg']);
+
+    Storage::disk('public')->assertExists($product->og_image);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.products.update', ['locale' => 'nl', 'product' => $product->id]), [
+            'name' => $product->name,
+            'slug' => $product->slug,
+            'type' => $product->type->value,
+            'amount' => (string) $product->amount,
+            'stock_quantity' => $product->stock_quantity,
+            'is_published' => true,
+            'grants_founding_circle' => false,
+            'remove_og_image' => true,
+        ])
+        ->assertRedirect();
+
+    expect($product->fresh()->og_image)->toBeNull();
+});

@@ -43,8 +43,12 @@ interface ProductDetails {
     hero_eyebrow?: string | null;
     hero_subtitle?: string | null;
     description?: string | null;
+    meta_title?: string | null;
+    meta_description?: string | null;
+    meta_keywords?: string | null;
     stripe_price_id: string | null;
     primary_image: ExistingFile | null;
+    og_image: ExistingFile | null;
     gallery_images: ExistingFile[];
     sections: ProductSectionFormData[];
     faqs: ProductFaqFormData[];
@@ -57,6 +61,9 @@ type LocaleCopy = {
     hero_subtitle: string;
     description: string;
     expected_delivery_label: string;
+    meta_title: string;
+    meta_description: string;
+    meta_keywords: string;
 };
 
 type TranslationStatus = {
@@ -66,6 +73,9 @@ type TranslationStatus = {
     hero_subtitle: boolean;
     description: boolean;
     expected_delivery_label: boolean;
+    meta_title: boolean;
+    meta_description: boolean;
+    meta_keywords: boolean;
 };
 
 function Field({
@@ -185,6 +195,11 @@ export default function ShowProduct({
                 localized?.expected_delivery_label ||
                 product.expected_delivery_label ||
                 '',
+            meta_title: localized?.meta_title || product.meta_title || '',
+            meta_description:
+                localized?.meta_description || product.meta_description || '',
+            meta_keywords:
+                localized?.meta_keywords || product.meta_keywords || '',
         };
     }, [currentLocale, translations, product]);
 
@@ -325,6 +340,22 @@ export default function ShowProduct({
                                     value={display.description || t('Geen')}
                                 />
                             </div>
+                            <div className="md:col-span-2">
+                                <Field
+                                    label={t('Meta-titel')}
+                                    value={display.meta_title || t('Geen')}
+                                />
+                            </div>
+                            <div className="md:col-span-2">
+                                <Field
+                                    label={t('Meta-beschrijving')}
+                                    value={display.meta_description || t('Geen')}
+                                />
+                            </div>
+                            <Field
+                                label={t('Meta-keywords')}
+                                value={display.meta_keywords || t('Geen')}
+                            />
                             <Field
                                 label={t('Stripe price ID')}
                                 value={product.stripe_price_id ?? t('Geen')}
@@ -467,11 +498,12 @@ export default function ShowProduct({
                     </AdminPanel>
 
                     {(product.primary_image ||
+                        product.og_image ||
                         product.gallery_images.length > 0) && (
                         <AdminPanel
                             title={t('Afbeeldingen')}
                             description={t(
-                                'Primaire coverfoto en galerijbeelden.',
+                                'Primaire coverfoto, OG-afbeelding en galerijbeelden.',
                             )}
                         >
                             <div className="grid gap-8">
@@ -493,6 +525,26 @@ export default function ShowProduct({
                                             </div>
                                             <p className="truncate px-3 py-2 text-xs text-muted-foreground">
                                                 {product.primary_image.name}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : null}
+
+                                {product.og_image ? (
+                                    <div className="grid gap-2">
+                                        <p className="text-xs tracking-wide text-muted-foreground uppercase">
+                                            {t('OG-afbeelding')}
+                                        </p>
+                                        <div className="w-full max-w-sm overflow-hidden rounded-lg border bg-card">
+                                            <div className="flex aspect-4/3 max-h-64 w-full items-center justify-center bg-muted">
+                                                <img
+                                                    src={product.og_image.url}
+                                                    alt={t('OG-afbeelding')}
+                                                    className="max-h-full max-w-full object-contain"
+                                                />
+                                            </div>
+                                            <p className="truncate px-3 py-2 text-xs text-muted-foreground">
+                                                {product.og_image.name}
                                             </p>
                                         </div>
                                     </div>

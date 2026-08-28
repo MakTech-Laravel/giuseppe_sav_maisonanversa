@@ -54,6 +54,16 @@ class ProductController extends Controller
         'hero_subtitle',
         'description',
         'expected_delivery_label',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    /** @var list<string> */
+    private const SEO_TRANSLATION_COLUMNS = [
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ];
 
     private const FAQ_TRANSLATION_COLUMNS = [
@@ -170,6 +180,7 @@ class ProductController extends Controller
         $product = DB::transaction(function () use ($validated, $request): Product {
             $payload = $this->payload($validated);
             $payload['gallery'] = $this->syncGallery([], $validated, $request);
+            $payload['og_image'] = $this->syncOgImage(null, $validated, $request);
 
             $product = Product::query()->create($payload);
 
@@ -208,6 +219,10 @@ class ProductController extends Controller
             // untouched when this request carries no media fields at all.
             if ($this->carriesMedia($request, $validated)) {
                 $payload['gallery'] = $this->syncGallery($product->gallery ?? [], $validated, $request);
+            }
+
+            if ($this->carriesOgImage($request, $validated)) {
+                $payload['og_image'] = $this->syncOgImage($product->og_image, $validated, $request);
             }
 
             $product->update($payload);
@@ -451,7 +466,7 @@ class ProductController extends Controller
                         'column' => $column,
                     ],
                     [
-                        'value' => $data[$targetLocale][$column],
+                        'value' => $data[$targetLocale][$column] ?? '',
                         'source_hash' => $product->translationSourceHash($column),
                     ],
                 );
@@ -951,8 +966,39 @@ class ProductController extends Controller
             'hero_eyebrow' => $validated['hero_eyebrow'] ?? null,
             'hero_subtitle' => $validated['hero_subtitle'] ?? null,
             'description' => $validated['description'] ?? null,
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+            'meta_keywords' => $validated['meta_keywords'] ?? null,
             'sold_out_behavior' => 'keep_page',
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function carriesOgImage(Request $request, array $validated): bool
+    {
+        return $request->hasFile('og_image')
+            || ($validated['remove_og_image'] ?? false) === true;
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function syncOgImage(?string $current, array $validated, Request $request): ?string
+    {
+        if (($validated['remove_og_image'] ?? false) === true) {
+            $this->deleteStoredMedia($current);
+            $current = null;
+        }
+
+        if ($request->hasFile('og_image')) {
+            $this->deleteStoredMedia($current);
+            $stored = $request->file('og_image')?->store('products', 'public');
+            $current = is_string($stored) && $stored !== '' ? $stored : null;
+        }
+
+        return $current;
     }
 
     /**
@@ -1064,8 +1110,12 @@ class ProductController extends Controller
             'hero_eyebrow' => $product->hero_eyebrow ?? '',
             'hero_subtitle' => $product->hero_subtitle ?? '',
             'description' => $product->description ?? '',
+            'meta_title' => $product->meta_title ?? '',
+            'meta_description' => $product->meta_description ?? '',
+            'meta_keywords' => $product->meta_keywords ?? '',
             'stripe_price_id' => $product->stripe_price_id,
             'primary_image' => $this->existingMediaFile($primaryPath),
+            'og_image' => $this->existingMediaFile($product->og_image),
             'gallery_images' => array_values(array_filter(array_map(
                 fn (string $path): ?array => $this->existingMediaFile($path),
                 $extraPaths,
@@ -1178,12 +1228,17 @@ class ProductController extends Controller
 
         foreach ($this->translationLocales() as $targetLocale) {
             $status[$targetLocale] = collect(self::TRANSLATION_COLUMNS)
-                ->mapWithKeys(fn (string $column): array => [
-                    $column => $product->translations->contains(
-                        fn ($translation): bool => $translation->locale === $targetLocale
-                            && $translation->column === $column,
-                    ),
-                ])
+                ->mapWithKeys(function (string $column) use ($product, $targetLocale): array {
+                    $sourceEmpty = in_array($column, self::SEO_TRANSLATION_COLUMNS, true)
+                        && blank($product->getAttribute($column));
+
+                    return [
+                        $column => $sourceEmpty || $product->translations->contains(
+                            fn ($translation): bool => $translation->locale === $targetLocale
+                                && $translation->column === $column,
+                        ),
+                    ];
+                })
                 ->all();
         }
 
