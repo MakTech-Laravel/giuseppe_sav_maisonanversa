@@ -38,6 +38,11 @@ interface SubscriberRow {
     locale: string;
     joined_at: string | null;
     synced_at: string | null;
+    preferences: {
+        heritageLetter: boolean;
+        productUpdates: boolean;
+        events: boolean;
+    };
 }
 
 interface LetterFilters {
@@ -102,6 +107,25 @@ function translateSubscriberSource(
     const match = SOURCE_OPTIONS.find((option) => option.value === source);
 
     return t(match?.label ?? source);
+}
+
+function preferenceBadges(
+    preferences: SubscriberRow['preferences'],
+    t: (key: string) => string,
+): { key: string; label: string }[] {
+    const badges = [
+        preferences.heritageLetter
+            ? { key: 'heritageLetter', label: t('Heritage Letter') }
+            : null,
+        preferences.productUpdates
+            ? { key: 'productUpdates', label: t('Productupdates') }
+            : null,
+        preferences.events ? { key: 'events', label: t('Sessies & events') } : null,
+    ];
+
+    return badges.filter(
+        (badge): badge is { key: string; label: string } => badge !== null,
+    );
 }
 
 export default function LetterIndex({
@@ -331,6 +355,9 @@ export default function LetterIndex({
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead>{t('Abonnee')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
+                                <TableHead className="hidden lg:table-cell">
+                                    {t('Onderwerpen')}
+                                </TableHead>
                                 <TableHead className="hidden md:table-cell">
                                     {t('Bron')}
                                 </TableHead>
@@ -349,7 +376,7 @@ export default function LetterIndex({
                             {paginated.data.length === 0 ? (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={6}
+                                        colSpan={7}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
                                         {hasActiveFilters
@@ -358,7 +385,13 @@ export default function LetterIndex({
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                paginated.data.map((subscriber) => (
+                                paginated.data.map((subscriber) => {
+                                    const topics = preferenceBadges(
+                                        subscriber.preferences,
+                                        t,
+                                    );
+
+                                    return (
                                     <TableRow key={subscriber.id}>
                                         <TableCell>
                                             <span className="font-medium">
@@ -375,6 +408,20 @@ export default function LetterIndex({
                                                     t,
                                                 )}
                                             </Badge>
+                                        </TableCell>
+                                        <TableCell className="hidden lg:table-cell">
+                                            <div className="flex flex-wrap gap-1">
+                                                {topics.length === 0
+                                                    ? '—'
+                                                    : topics.map((badge) => (
+                                                          <Badge
+                                                              key={badge.key}
+                                                              variant="outline"
+                                                          >
+                                                              {badge.label}
+                                                          </Badge>
+                                                      ))}
+                                            </div>
                                         </TableCell>
                                         <TableCell className="hidden md:table-cell">
                                             {translateSubscriberSource(
@@ -400,7 +447,8 @@ export default function LetterIndex({
                                                 : '—'}
                                         </TableCell>
                                     </TableRow>
-                                ))
+                                    );
+                                })
                             )}
                         </TableBody>
                     </Table>

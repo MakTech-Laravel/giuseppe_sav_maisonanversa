@@ -24,9 +24,9 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
     const hasScrollProp = page.scrollProps?.events != null;
 
     const tabs: TabDefinition<SessionTab>[] = [
-        { id: 'open', label: 'Open events', count: counts.open },
-        { id: 'mine', label: 'Mijn events', count: counts.mine },
-        { id: 'past', label: 'Afgelopen events', count: counts.past },
+        { id: 'open', label: 'Open evenementen', count: counts.open },
+        { id: 'mine', label: 'Mijn evenementen', count: counts.mine },
+        { id: 'past', label: 'Afgelopen evenementen', count: counts.past },
     ];
 
     const cards = (events?.data ?? []).map((event, index) => (
@@ -43,7 +43,7 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
 
             <PageHero
                 eyebrow={t('Community')}
-                title={t('Exclusieve Events')}
+                title={t('Exclusieve Evenementen')}
                 subtitle={t(
                     'Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.',
                 )}
@@ -55,7 +55,7 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
                 <Wrap className="px-6 md:px-10 lg:px-20">
                     <div className="py-10">
                         <h2 className="font-serif text-[28px] font-medium text-choc">
-                            {t('Exclusieve Events')}
+                            {t('Exclusieve Evenementen')}
                         </h2>
                         <p className="mt-1 font-sans text-sm text-choc3">
                             {t('Georganiseerd door Maison Anversa.')}
@@ -65,7 +65,7 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
                     <SessionTabs
                         tabs={tabs}
                         activeTab={tab}
-                        ariaLabel={t('Exclusieve Events')}
+                        ariaLabel={t('Exclusieve Evenementen')}
                         hrefFor={(next) =>
                             eventRoutes.index.url(locale, {
                                 query: { tab: next },
@@ -114,9 +114,9 @@ function EmptyState({ tab }: { tab: SessionTab }) {
     const { t } = useTranslation();
 
     const copy: Record<SessionTab, string> = {
-        open: 'Nog geen events gepland.',
-        mine: 'U bent nog niet aangemeld voor een event.',
-        past: 'U heeft nog geen afgelopen events.',
+        open: 'Nog geen evenementen gepland.',
+        mine: 'U bent nog niet aangemeld voor een evenement.',
+        past: 'U heeft nog geen afgelopen evenementen.',
     };
 
     return (

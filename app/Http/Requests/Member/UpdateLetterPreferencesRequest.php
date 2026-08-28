@@ -12,6 +12,15 @@ class UpdateLetterPreferencesRequest extends FormRequest
         return $this->user() !== null;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'heritageLetter' => $this->boolean('heritageLetter'),
+            'productUpdates' => $this->boolean('productUpdates'),
+            'events' => $this->boolean('events'),
+        ]);
+    }
+
     /**
      * @return array<string, ValidationRule|array<mixed>|string>
      */

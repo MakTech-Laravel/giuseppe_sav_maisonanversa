@@ -203,7 +203,8 @@ Route::prefix('{locale}')
                 Route::get('passport.pdf', PassportPdfController::class)->name('passport.pdf');
                 Route::get('circle', 'circle')->name('circle');
                 Route::get('letter', 'letter')->name('letter');
-                Route::patch('letter', 'updateLetter')->name('letter.update');
+                Route::get('email-preferences', 'emailPreferences')->name('email-preferences');
+                Route::patch('email-preferences', 'updateEmailPreferences')->name('email-preferences.update');
                 Route::get('profile', 'profile')->name('profile');
                 Route::patch('profile', 'updateProfile')->name('profile.update');
                 Route::get('security', 'security')->name('security');
