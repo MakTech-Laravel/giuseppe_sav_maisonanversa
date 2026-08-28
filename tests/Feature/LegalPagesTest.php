@@ -16,9 +16,11 @@ test('the legal pages share a layout component and avoid onclick navigation', fu
 
     expect($layout)
         ->toContain('PageHero')
+        ->toContain('LegalHtml')
         ->toContain('Section')
         ->toContain('Wrap')
         ->toContain('useTranslation')
+        ->not->toContain('whitespace-pre-line')
         ->not->toContain('onclick=');
 
     foreach (['privacy', 'terms', 'shipping', 'care'] as $page) {
@@ -26,18 +28,38 @@ test('the legal pages share a layout component and avoid onclick navigation', fu
 
         expect($source)
             ->toContain('LegalPageLayout')
-            ->toContain('useTranslation')
             ->not->toContain('PageScaffold')
             ->not->toContain('onclick=');
     }
 });
 
-test('legal cross-links use maison links instead of hash onclick handlers', function () {
-    $privacy = file_get_contents(resource_path('js/pages/maison/legal/privacy.tsx'));
-    $terms = file_get_contents(resource_path('js/pages/maison/legal/terms.tsx'));
-    $care = file_get_contents(resource_path('js/pages/maison/legal/care.tsx'));
+test('the legal editor defaults to tiptap with an html toggle and preview', function () {
+    $editor = file_get_contents(resource_path('js/components/admin/legal-rich-text-editor.tsx'));
+    $source = file_get_contents(resource_path('js/components/admin/legal-html-source-editor.tsx'));
+    $edit = file_get_contents(resource_path('js/pages/admin/legal-pages/edit.tsx'));
 
-    expect($privacy)->toContain('MaisonLink')->toContain("to=\"contact\"")
-        ->and($terms)->toContain("to=\"care\"")->toContain("to=\"shipping\"")
-        ->and($care)->toContain("to=\"contact\"");
+    expect($editor)
+        ->toContain('immediatelyRender: false')
+        ->toContain("t('HTML')")
+        ->toContain("t('Voorbeeld')")
+        ->toContain('sanitizeLegalHtml')
+        ->toContain('handlePaste')
+        ->toContain('LegalHtmlSourceEditor')
+        ->toContain("t('Opmaak wissen')")
+        ->and($source)
+        ->toContain("t('Opmaken')")
+        ->toContain('prettyPrintLegalHtml')
+        ->and($edit)
+        ->toContain('LegalRichTextEditor')
+        ->not->toContain('form.transform(');
+});
+
+test('legal cross-links use maison links instead of hash onclick handlers', function () {
+    $links = file_get_contents(resource_path('js/components/maison/legal/legal-page-links.tsx'));
+
+    expect($links)
+        ->toContain('MaisonLink')
+        ->toContain('to="contact"')
+        ->toContain('to="care"')
+        ->toContain('to="shipping"');
 });

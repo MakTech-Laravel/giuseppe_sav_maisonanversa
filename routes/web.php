@@ -489,9 +489,15 @@ Route::prefix('{locale}')
             Route::controller(LegalPageController::class)->group(function () {
                 Route::get('legal-pages', 'index')->name('legal-pages.index')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('legal-pages/{legalPage}', 'show')->name('legal-pages.show')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('legal-pages/{legalPage}/edit', 'edit')->name('legal-pages.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::put('legal-pages/{legalPage}', 'update')->name('legal-pages.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('legal-pages/{legalPage}/translations', 'updateTranslations')->name('legal-pages.translations.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('legal-pages/{legalPage}/translate', 'translate')->name('legal-pages.translate')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
