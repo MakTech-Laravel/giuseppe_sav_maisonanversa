@@ -14,12 +14,15 @@ import {
     AlignJustify,
     AlignLeft,
     AlignRight,
+    ALargeSmall,
+    AlignVerticalSpaceAround,
     Bold,
     Code2,
     ChevronsDownUp,
     Columns3,
     Eraser,
     Eye,
+    Heading,
     Highlighter,
     Italic,
     Link as LinkIcon,
@@ -36,6 +39,7 @@ import {
     Superscript as SuperscriptIcon,
     Table,
     Trash2,
+    Type,
     Underline as UnderlineIcon,
     Undo2,
 } from 'lucide-react';
@@ -49,13 +53,6 @@ import {
 import { LegalHtml } from '@/components/maison/legal/legal-html';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Toggle } from '@/components/ui/toggle';
 import {
     Tooltip,
@@ -135,6 +132,78 @@ function ToolbarButton({
             </TooltipTrigger>
             <TooltipContent>{label}</TooltipContent>
         </Tooltip>
+    );
+}
+
+function ToolbarDivider() {
+    return (
+        <div
+            className="mx-0.5 hidden h-6 w-px shrink-0 bg-border sm:block"
+            aria-hidden
+        />
+    );
+}
+
+function ToolbarChoicePopover({
+    label,
+    icon,
+    value,
+    defaultValue,
+    options,
+    onSelect,
+}: {
+    label: string;
+    icon: ReactNode;
+    value: string;
+    defaultValue: string;
+    options: { value: string; label: string }[];
+    onSelect: (value: string) => void;
+}) {
+    const active = value !== defaultValue;
+    const currentLabel =
+        options.find((option) => option.value === value)?.label ?? label;
+
+    return (
+        <Popover>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <PopoverTrigger asChild>
+                        <Toggle
+                            size="sm"
+                            pressed={active}
+                            aria-label={label}
+                            className="size-8"
+                        >
+                            {icon}
+                        </Toggle>
+                    </PopoverTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                    {active ? `${label}: ${currentLabel}` : label}
+                </TooltipContent>
+            </Tooltip>
+            <PopoverContent className="w-52 p-2">
+                <p className="px-2 pb-1 text-xs font-medium text-choc">
+                    {label}
+                </p>
+                <div className="flex flex-col gap-0.5">
+                    {options.map((option) => (
+                        <Button
+                            key={option.value}
+                            type="button"
+                            variant={
+                                option.value === value ? 'secondary' : 'ghost'
+                            }
+                            size="sm"
+                            className="h-8 w-full justify-start px-2 text-sm"
+                            onClick={() => onSelect(option.value)}
+                        >
+                            {option.label}
+                        </Button>
+                    ))}
+                </div>
+            </PopoverContent>
+        </Popover>
     );
 }
 
@@ -379,6 +448,32 @@ export function LegalRichTextEditor({
         editor.chain().focus().setHeading({ level }).run();
     }
 
+    const headingOptions = [
+        { value: 'p', label: t('Paragraaf') },
+        ...HEADING_LEVELS.map((level) => ({
+            value: String(level),
+            label: t(`Kop ${level}`),
+        })),
+    ];
+
+    const fontFamilyOptions = [
+        { value: '__default', label: t('Standaard') },
+        ...FONT_FAMILIES.map((family) => ({
+            value: family.value,
+            label: family.name,
+        })),
+    ];
+
+    const fontSizeOptions = [
+        { value: '__default', label: t('Standaard') },
+        ...FONT_SIZES.map((size) => ({ value: size, label: size })),
+    ];
+
+    const lineHeightOptions = [
+        { value: '__default', label: t('Standaard') },
+        ...LINE_HEIGHTS.map((height) => ({ value: height, label: height })),
+    ];
+
     return (
         <TooltipProvider>
             <div className="space-y-3">
@@ -459,51 +554,30 @@ export function LegalRichTextEditor({
                                     >
                                         <Redo2 />
                                     </ToolbarButton>
-                                    <Select
+                                    <ToolbarDivider />
+                                    <ToolbarChoicePopover
+                                        label={t('Kop')}
+                                        icon={<Heading className="size-4" />}
                                         value={
                                             headingValue
                                                 ? String(headingValue)
                                                 : 'p'
                                         }
-                                        onValueChange={applyHeading}
-                                    >
-                                        <SelectTrigger
-                                            size="sm"
-                                            aria-label={t('Kop')}
-                                            className="h-8 min-w-28"
-                                        >
-                                            <SelectValue placeholder={t('Kop')} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="p">
-                                                {t('Paragraaf')}
-                                            </SelectItem>
-                                            <SelectItem value="1">
-                                                {t('Kop 1')}
-                                            </SelectItem>
-                                            <SelectItem value="2">
-                                                {t('Kop 2')}
-                                            </SelectItem>
-                                            <SelectItem value="3">
-                                                {t('Kop 3')}
-                                            </SelectItem>
-                                            <SelectItem value="4">
-                                                {t('Kop 4')}
-                                            </SelectItem>
-                                            <SelectItem value="5">
-                                                {t('Kop 5')}
-                                            </SelectItem>
-                                            <SelectItem value="6">
-                                                {t('Kop 6')}
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <Select
+                                        defaultValue="p"
+                                        options={headingOptions}
+                                        onSelect={applyHeading}
+                                    />
+                                    <ToolbarChoicePopover
+                                        label={t('Lettertype')}
+                                        icon={<Type className="size-4" />}
                                         value={
-                                            (textStyle.fontFamily as string | undefined) ??
-                                            '__default'
+                                            (textStyle.fontFamily as
+                                                | string
+                                                | undefined) ?? '__default'
                                         }
-                                        onValueChange={(next) => {
+                                        defaultValue="__default"
+                                        options={fontFamilyOptions}
+                                        onSelect={(next) => {
                                             if (next === '__default') {
                                                 editor
                                                     .chain()
@@ -519,34 +593,18 @@ export function LegalRichTextEditor({
                                                 .setFontFamily(next)
                                                 .run();
                                         }}
-                                    >
-                                        <SelectTrigger
-                                            size="sm"
-                                            aria-label={t('Lettertype')}
-                                            className="h-8 min-w-36"
-                                        >
-                                            <SelectValue placeholder={t('Lettertype')} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="__default">
-                                                {t('Standaard')}
-                                            </SelectItem>
-                                            {FONT_FAMILIES.map((family) => (
-                                                <SelectItem
-                                                    key={family.value}
-                                                    value={family.value}
-                                                >
-                                                    {family.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <Select
+                                    />
+                                    <ToolbarChoicePopover
+                                        label={t('Tekstgrootte')}
+                                        icon={<ALargeSmall className="size-4" />}
                                         value={
-                                            (textStyle.fontSize as string | undefined) ??
-                                            '__default'
+                                            (textStyle.fontSize as
+                                                | string
+                                                | undefined) ?? '__default'
                                         }
-                                        onValueChange={(next) => {
+                                        defaultValue="__default"
+                                        options={fontSizeOptions}
+                                        onSelect={(next) => {
                                             if (next === '__default') {
                                                 editor
                                                     .chain()
@@ -562,31 +620,20 @@ export function LegalRichTextEditor({
                                                 .setFontSize(next)
                                                 .run();
                                         }}
-                                    >
-                                        <SelectTrigger
-                                            size="sm"
-                                            aria-label={t('Tekstgrootte')}
-                                            className="h-8 min-w-24"
-                                        >
-                                            <SelectValue placeholder={t('Tekstgrootte')} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="__default">
-                                                {t('Standaard')}
-                                            </SelectItem>
-                                            {FONT_SIZES.map((size) => (
-                                                <SelectItem key={size} value={size}>
-                                                    {size}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <Select
-                                        value={
-                                            (textStyle.lineHeight as string | undefined) ??
-                                            '__default'
+                                    />
+                                    <ToolbarChoicePopover
+                                        label={t('Regelafstand')}
+                                        icon={
+                                            <AlignVerticalSpaceAround className="size-4" />
                                         }
-                                        onValueChange={(next) => {
+                                        value={
+                                            (textStyle.lineHeight as
+                                                | string
+                                                | undefined) ?? '__default'
+                                        }
+                                        defaultValue="__default"
+                                        options={lineHeightOptions}
+                                        onSelect={(next) => {
                                             if (next === '__default') {
                                                 editor
                                                     .chain()
@@ -602,25 +649,8 @@ export function LegalRichTextEditor({
                                                 .setLineHeight(next)
                                                 .run();
                                         }}
-                                    >
-                                        <SelectTrigger
-                                            size="sm"
-                                            aria-label={t('Regelafstand')}
-                                            className="h-8 min-w-24"
-                                        >
-                                            <SelectValue placeholder={t('Regelafstand')} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="__default">
-                                                {t('Standaard')}
-                                            </SelectItem>
-                                            {LINE_HEIGHTS.map((height) => (
-                                                <SelectItem key={height} value={height}>
-                                                    {height}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    />
+                                    <ToolbarDivider />
                                     <ColorPopover
                                         label={t('Tekstkleur')}
                                         value={textStyle.color as string | undefined}
@@ -657,6 +687,7 @@ export function LegalRichTextEditor({
                                     >
                                         <PaintBucket />
                                     </ColorPopover>
+                                    <ToolbarDivider />
                                     <ToolbarButton
                                         label={t('Vet')}
                                         pressed={editor.isActive('bold')}
@@ -752,6 +783,7 @@ export function LegalRichTextEditor({
                                     >
                                         <Highlighter />
                                     </ColorPopover>
+                                    <ToolbarDivider />
                                     <ToolbarButton
                                         label={t('Lijst')}
                                         pressed={editor.isActive('bulletList')}
@@ -893,6 +925,7 @@ export function LegalRichTextEditor({
                                             </ToolbarButton>
                                         </>
                                     ) : null}
+                                    <ToolbarDivider />
                                     <ToolbarButton
                                         label={t('Links uitlijnen')}
                                         pressed={editor.isActive({

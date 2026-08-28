@@ -31,6 +31,19 @@ test('staff can open the legal page preview', function () {
             ->has('translations.fr.body'));
 });
 
+test('staff can open the legal pages index', function () {
+    $this->actingAs($this->admin)
+        ->get(route('admin.legal-pages.index', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $inertia) => $inertia
+            ->component('admin/legal-pages/index')
+            ->has('pages', 4)
+            ->where('pages.0.slug', 'privacy')
+            ->where('pages.1.slug', 'terms')
+            ->where('pages.2.slug', 'shipping')
+            ->where('pages.3.slug', 'care'));
+});
+
 test('staff can update legal page translations without overwriting source via deepl', function () {
     $page = LegalPage::query()->where('slug', 'privacy')->firstOrFail();
     $source = '<h2>Privacybeleid</h2><p>Nederlandse bron.</p>';

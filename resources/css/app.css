@@ -758,6 +758,15 @@
     pointer-events: none;
 }
 
+.legal-editor [data-slot='toggle'] {
+    color: var(--color-choc);
+}
+
+.legal-editor [data-slot='toggle'][data-state='on'] {
+    background: color-mix(in oklab, var(--color-gold) 22%, var(--color-cream2));
+    color: var(--color-choc);
+}
+
 .legal-preview-surface {
     color-scheme: light;
     background: var(--color-cream);

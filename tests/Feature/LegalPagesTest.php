@@ -52,8 +52,9 @@ test('the legal editor defaults to tiptap with an html toggle and preview', func
         ->toContain('setFontFamily')
         ->toContain('setFontSize')
         ->toContain('heading: { levels: [1, 2, 3, 4, 5, 6] }')
-        ->toContain("t('Kop 1')")
-        ->toContain("t('Uitklapbaar')")
+        ->toContain('ToolbarChoicePopover')
+        ->toContain('headingOptions')
+        ->not->toContain("from '@/components/ui/select'")
         ->and($source)
         ->toContain("t('Opmaken')")
         ->toContain('prettyPrintLegalHtml')
@@ -70,4 +71,20 @@ test('legal cross-links use maison links instead of hash onclick handlers', func
         ->toContain('to="contact"')
         ->toContain('to="care"')
         ->toContain('to="shipping"');
+});
+
+test('the legal pages admin index shows translated titles instead of slugs', function () {
+    $index = file_get_contents(resource_path('js/pages/admin/legal-pages/index.tsx'));
+    $titles = file_get_contents(resource_path('js/components/admin/legal-page-titles.ts'));
+
+    expect($index)
+        ->toContain("t('Titel')")
+        ->toContain('legalPageTitle(page.slug, t)')
+        ->not->toContain('{page.slug}');
+
+    expect($titles)
+        ->toContain("'Privacybeleid'")
+        ->toContain("'Algemene voorwaarden'")
+        ->toContain("'Verzending & Retour'")
+        ->toContain("'Zorg & Garantie'");
 });
