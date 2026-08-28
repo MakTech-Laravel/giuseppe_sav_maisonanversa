@@ -47,6 +47,11 @@ export type ProductFormData = {
     hero_eyebrow: string;
     hero_subtitle: string;
     description: string;
+    meta_title: string;
+    meta_description: string;
+    meta_keywords: string;
+    og_image: File | null;
+    remove_og_image: boolean;
     primary_image: File | null;
     gallery_images: File[] | null;
     remove_primary_image: boolean;
@@ -281,6 +286,102 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                     'Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan. Pas per taal aan via Vertalingen.',
                 )}
             </p>
+        </AdminPanel>
+    );
+}
+
+export function ProductSeoFields({
+    data,
+    errors,
+    setData,
+    existingOgImage = null,
+}: SharedProps & {
+    existingOgImage?: ExistingFile | null;
+}) {
+    const { t } = useTranslation();
+    const showExistingOgImage =
+        Boolean(existingOgImage) && !data.og_image && !data.remove_og_image;
+
+    return (
+        <AdminPanel
+            title={t('SEO')}
+            description={t(
+                'Optionele zoek- en social metadata. Lege velden vallen op de winkel terug op naam, beschrijving en productfoto — ze worden niet automatisch ingevuld.',
+            )}
+        >
+            <div className="grid items-start gap-5 md:grid-cols-2">
+                <div className="grid min-w-0 gap-2 md:col-span-2">
+                    <Label htmlFor="meta_title">{t('Meta-titel')}</Label>
+                    <Input
+                        id="meta_title"
+                        value={data.meta_title}
+                        onChange={(event) =>
+                            setData('meta_title', event.target.value)
+                        }
+                        placeholder={t('Leeg laten om de productnaam te gebruiken')}
+                    />
+                    <InputError message={errors.meta_title} />
+                </div>
+                <div className="grid min-w-0 gap-2 md:col-span-2">
+                    <Label htmlFor="meta_description">
+                        {t('Meta-beschrijving')}
+                    </Label>
+                    <Textarea
+                        id="meta_description"
+                        value={data.meta_description}
+                        onChange={(event) =>
+                            setData('meta_description', event.target.value)
+                        }
+                        className="min-h-24 resize-y"
+                        placeholder={t(
+                            'Leeg laten om de productbeschrijving te gebruiken',
+                        )}
+                    />
+                    <InputError message={errors.meta_description} />
+                </div>
+                <div className="grid min-w-0 gap-2 md:col-span-2">
+                    <Label htmlFor="meta_keywords">{t('Meta-keywords')}</Label>
+                    <Input
+                        id="meta_keywords"
+                        value={data.meta_keywords}
+                        onChange={(event) =>
+                            setData('meta_keywords', event.target.value)
+                        }
+                        placeholder={t('Komma-gescheiden, optioneel')}
+                    />
+                    <InputError message={errors.meta_keywords} />
+                </div>
+                <div className="grid min-w-0 gap-2 md:col-span-2">
+                    <Label>{t('OG-afbeelding')}</Label>
+                    <FileUpload
+                        accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
+                        maxSize={5}
+                        value={data.og_image}
+                        onChange={(file) => {
+                            setData((current) => ({
+                                ...current,
+                                og_image: (file as File | null) ?? null,
+                                remove_og_image: false,
+                            }));
+                        }}
+                        existingFiles={
+                            showExistingOgImage && existingOgImage
+                                ? [existingOgImage]
+                                : []
+                        }
+                        onRemoveExisting={() =>
+                            setData('remove_og_image', true)
+                        }
+                        placeholder={t(
+                            'Sleep een social-afbeelding hierheen of klik om te bladeren',
+                        )}
+                        hint={t(
+                            'PNG, JPG of WEBP. Leeg laten om de productfoto te gebruiken.',
+                        )}
+                        error={errors.og_image}
+                    />
+                </div>
+            </div>
         </AdminPanel>
     );
 }
