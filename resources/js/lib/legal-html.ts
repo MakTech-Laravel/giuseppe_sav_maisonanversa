@@ -25,10 +25,14 @@ const ALLOWED_TAGS = new Set([
     'A',
     'BLOCKQUOTE',
     'BR',
+    'DETAILS',
     'EM',
+    'H1',
     'H2',
     'H3',
     'H4',
+    'H5',
+    'H6',
     'HR',
     'I',
     'LI',
@@ -39,6 +43,9 @@ const ALLOWED_TAGS = new Set([
     'SPAN',
     'STRONG',
     'B',
+    'SUB',
+    'SUMMARY',
+    'SUP',
     'TABLE',
     'TBODY',
     'TD',
@@ -50,13 +57,18 @@ const ALLOWED_TAGS = new Set([
 ]);
 
 const ALLOWED_ATTRIBUTES: Record<string, Set<string>> = {
-    A: new Set(['href', 'rel', 'target', 'class']),
-    H2: new Set(['class', 'style']),
-    H3: new Set(['class', 'style']),
-    H4: new Set(['class', 'style']),
-    MARK: new Set(['class']),
-    P: new Set(['class', 'style']),
-    SPAN: new Set(['class']),
+    A: new Set(['href', 'rel', 'target', 'class', 'id']),
+    DETAILS: new Set(['class', 'style', 'id', 'open']),
+    H1: new Set(['class', 'style', 'id']),
+    H2: new Set(['class', 'style', 'id']),
+    H3: new Set(['class', 'style', 'id']),
+    H4: new Set(['class', 'style', 'id']),
+    H5: new Set(['class', 'style', 'id']),
+    H6: new Set(['class', 'style', 'id']),
+    MARK: new Set(['class', 'style', 'data-color']),
+    P: new Set(['class', 'style', 'id']),
+    SPAN: new Set(['class', 'style']),
+    SUMMARY: new Set(['class', 'style', 'id']),
     TD: new Set(['class', 'colspan', 'rowspan', 'style']),
     TH: new Set(['class', 'colspan', 'rowspan', 'style']),
 };
@@ -93,10 +105,101 @@ function isSafeClass(value: string): boolean {
     return /^[a-zA-Z0-9_\-\s]+$/.test(value);
 }
 
-function isSafeStyle(value: string): boolean {
-    return /^\s*text-align:\s*(left|center|right|justify)\s*;?\s*$/i.test(
-        value,
+function isSafeId(value: string): boolean {
+    return /^[A-Za-z][A-Za-z0-9_.:-]*$/.test(value);
+}
+
+const SAFE_FONT_FAMILIES = new Set([
+    'montserrat',
+    'baskervville',
+    'georgia',
+    'ui-sans-serif',
+    'sans-serif',
+    'serif',
+    'system-ui',
+]);
+
+function isUnsafeCssValue(value: string): boolean {
+    return /url\s*\(|expression\s*\(|javascript:|!important/i.test(value);
+}
+
+function isSafeCssColor(value: string): boolean {
+    return (
+        /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(value) ||
+        /^rgb\(\s*(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\s*,\s*(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\s*,\s*(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\s*\)$/i.test(
+            value,
+        )
     );
+}
+
+function isSafeFontSize(value: string): boolean {
+    const px = /^(\d+(?:\.\d+)?)px$/i.exec(value);
+
+    if (px) {
+        const size = Number(px[1]);
+
+        return size >= 10 && size <= 32;
+    }
+
+    const em = /^(\d+(?:\.\d+)?)(?:rem|em)$/i.exec(value);
+
+    if (em) {
+        const size = Number(em[1]);
+
+        return size >= 0.75 && size <= 2.5;
+    }
+
+    return false;
+}
+
+function isSafeFontFamily(value: string): boolean {
+    return value.split(',').every((family) => {
+        const token = family.trim().replace(/^['"]|['"]$/g, '').toLowerCase();
+
+        return token !== '' && SAFE_FONT_FAMILIES.has(token);
+    });
+}
+
+function sanitizeStyle(style: string): string {
+    const safe: string[] = [];
+
+    for (const declaration of style.split(';')) {
+        const trimmed = declaration.trim();
+        const separator = trimmed.indexOf(':');
+
+        if (trimmed === '' || separator === -1) {
+            continue;
+        }
+
+        const property = trimmed.slice(0, separator).trim().toLowerCase();
+        const value = trimmed.slice(separator + 1).trim();
+
+        if (isUnsafeCssValue(value)) {
+            continue;
+        }
+
+        let kept: string | null = null;
+
+        if (property === 'text-align' && /^(left|center|right|justify)$/i.test(value)) {
+            kept = value.toLowerCase();
+        } else if (property === 'color') {
+            kept = /^inherit$/i.test(value) || isSafeCssColor(value) ? value : null;
+        } else if (property === 'background-color') {
+            kept = isSafeCssColor(value) ? value : null;
+        } else if (property === 'font-size') {
+            kept = isSafeFontSize(value) ? value : null;
+        } else if (property === 'font-family') {
+            kept = isSafeFontFamily(value) ? value : null;
+        } else if (property === 'line-height' && /^[1-3](\.\d+)?$/.test(value)) {
+            kept = value;
+        }
+
+        if (kept !== null) {
+            safe.push(`${property}: ${kept}`);
+        }
+    }
+
+    return safe.join('; ');
 }
 
 function sanitizeElement(element: Element): void {
@@ -179,6 +282,20 @@ function sanitizeAttributes(element: Element, tag: string): void {
             continue;
         }
 
+        if (lower === 'id' && !isSafeId(value)) {
+            element.removeAttribute(name);
+            continue;
+        }
+
+        if (
+            lower === 'open' &&
+            value !== '' &&
+            value.toLowerCase() !== 'open'
+        ) {
+            element.removeAttribute(name);
+            continue;
+        }
+
         if (
             (lower === 'colspan' || lower === 'rowspan') &&
             !/^\d+$/.test(value)
@@ -187,7 +304,19 @@ function sanitizeAttributes(element: Element, tag: string): void {
             continue;
         }
 
-        if (lower === 'style' && !isSafeStyle(value)) {
+        if (lower === 'style') {
+            const clean = sanitizeStyle(value);
+
+            if (clean === '') {
+                element.removeAttribute(name);
+            } else {
+                element.setAttribute('style', clean);
+            }
+
+            continue;
+        }
+
+        if (lower === 'data-color' && !isSafeCssColor(value)) {
             element.removeAttribute(name);
         }
     }
@@ -204,7 +333,7 @@ function sanitizeAttributes(element: Element, tag: string): void {
 export function isBlankLegalHtml(html: string): boolean {
     const text = html.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
 
-    return text === '' && !/<(hr|table|ul|ol)\b/i.test(html);
+    return text === '' && !/<(hr|table|ul|ol|details)\b/i.test(html);
 }
 
 export function sanitizeLegalHtml(html: string): string {

@@ -604,15 +604,22 @@
     color: var(--color-choc3);
 }
 
+.legal-prose h1,
 .legal-prose h2,
 .legal-prose h3,
-.legal-prose h4 {
+.legal-prose h4,
+.legal-prose h5,
+.legal-prose h6 {
     font-family: var(--font-serif);
     color: var(--color-choc);
     font-weight: 500;
     margin-top: 1.75em;
     margin-bottom: 0.6em;
     line-height: 1.2;
+}
+
+.legal-prose h1 {
+    font-size: 2rem;
 }
 
 .legal-prose h2 {
@@ -625,6 +632,16 @@
 
 .legal-prose h4 {
     font-size: 1.15rem;
+}
+
+.legal-prose h5 {
+    font-size: 1.05rem;
+}
+
+.legal-prose h6 {
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .legal-prose p,
@@ -681,6 +698,31 @@
 .legal-prose mark {
     background: color-mix(in oklab, var(--color-gold) 28%, transparent);
     color: inherit;
+}
+
+.legal-prose mark[style] {
+    background: unset;
+}
+
+.legal-prose details {
+    margin-bottom: 1em;
+    border: 1px solid color-mix(in oklab, var(--color-gold) 30%, transparent);
+    padding: 0.65em 0.85em;
+}
+
+.legal-prose summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--color-choc);
+}
+
+.legal-prose details[open] summary {
+    margin-bottom: 0.65em;
+}
+
+.legal-prose sub,
+.legal-prose sup {
+    font-size: 0.75em;
 }
 
 .legal-editor {
