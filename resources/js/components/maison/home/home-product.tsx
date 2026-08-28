@@ -44,7 +44,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
             <Wrap>
                 <div className="grid items-center gap-10 ma-md:grid-cols-2 ma-md:gap-12 ma-lg:grid-cols-[1fr_1.3fr_1fr] ma-lg:gap-15">
                     <Reveal>
-                        <Eyebrow tone="gold2">Heritage No.001</Eyebrow>
+                        <Eyebrow tone="gold2">{t('Heritage No.001')}</Eyebrow>
                         <h2 className="mt-3 mb-4 font-serif text-[clamp(28px,3.5vw,46px)] leading-[1.15] font-medium tracking-[0.06em] uppercase">
                             {t('Het Eerste.')}
                             <br />
@@ -80,7 +80,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                         <PlaceholderImage
                             asset="heritage-001-front"
                             ratio={null}
-                            alt="Heritage No.001"
+                            alt={t('Heritage No.001')}
                             captioned={false}
                             overlay="linear-gradient(to top, rgba(41,28,24,0.55) 0%, rgba(41,28,24,0.05) 45%, rgba(41,28,24,0.05) 100%)"
                             className="absolute inset-0 h-full w-full [&_img]:object-cover [&_img]:object-center"
@@ -90,9 +90,9 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_40%_35%,rgba(141,112,90,0.05)_0%,transparent_60%)]"
                         />
                         <div className="absolute top-6 right-6 text-right font-serif text-[10px] tracking-[0.2em] text-gold/55 uppercase">
-                            Heritage No.001
+                            {t('Heritage No.001')}
                             <br />
-                            Founding Edition
+                            {t('Founding Edition')}
                         </div>
                         <div className="absolute bottom-6 left-6 flex items-center gap-3">
                             <div className="flex size-10 items-center justify-center overflow-hidden border border-gold">
@@ -107,7 +107,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                             <p className="font-sans text-[7px] leading-[1.8] tracking-[0.18em] text-sand uppercase">
                                 Maison Anversa
                                 <br />
-                                Antwerp · Belgium
+                                {t('Antwerp · Belgium')}
                             </p>
                         </div>
                     </Reveal>

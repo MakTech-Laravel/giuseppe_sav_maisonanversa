@@ -20,30 +20,30 @@ enum ProductSectionKey: string
     public function label(): string
     {
         return match ($this) {
-            self::Specs => 'Specificaties',
-            self::Includes => 'Inbegrepen',
-            self::Guarantees => 'Garanties',
-            self::Unboxing => 'Wat in de doos zit',
-            self::Craft => 'Vakmanschap',
-            self::Trust => 'Vertrouwensbadges',
-            self::Service => 'Service & veiligheid',
-            self::Faq => 'Veelgestelde vragen',
-            self::Related => 'Volgende hoofdstukken',
+            self::Specs => __('Specificaties'),
+            self::Includes => __('Inbegrepen'),
+            self::Guarantees => __('Garanties'),
+            self::Unboxing => __('Wat in de doos zit'),
+            self::Craft => __('Vakmanschap'),
+            self::Trust => __('Vertrouwensbadges'),
+            self::Service => __('Service & veiligheid'),
+            self::Faq => __('Veelgestelde vragen'),
+            self::Related => __('Volgende hoofdstukken'),
         };
     }
 
     public function description(): string
     {
         return match ($this) {
-            self::Specs => 'Specificatietabel naast de productgalerij.',
-            self::Includes => 'Lijst met inbegrepen onderdelen, ook getoond op de homepagina.',
-            self::Guarantees => 'Garantieblok onder de bestelknoppen.',
-            self::Unboxing => 'Genummerd raster met de volledige uitpakervaring.',
-            self::Craft => 'Materialenblok met afbeelding en toelichting.',
-            self::Trust => 'Compacte strook met vertrouwensbadges.',
-            self::Service => 'Kaarten met verzending, retour en reserveringsbeleid.',
-            self::Faq => 'Veelgestelde vragen voor dit product.',
-            self::Related => 'Verwante producten onderaan de pagina.',
+            self::Specs => __('Specificatietabel naast de productgalerij.'),
+            self::Includes => __('Lijst met inbegrepen onderdelen, ook getoond op de homepagina.'),
+            self::Guarantees => __('Garantieblok onder de bestelknoppen.'),
+            self::Unboxing => __('Genummerd raster met de volledige uitpakervaring.'),
+            self::Craft => __('Materialenblok met afbeelding en toelichting.'),
+            self::Trust => __('Compacte strook met vertrouwensbadges.'),
+            self::Service => __('Kaarten met verzending, retour en reserveringsbeleid.'),
+            self::Faq => __('Veelgestelde vragen voor dit product.'),
+            self::Related => __('Verwante producten onderaan de pagina.'),
         };
     }
 

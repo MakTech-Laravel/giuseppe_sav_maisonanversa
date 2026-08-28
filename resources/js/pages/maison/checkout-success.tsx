@@ -19,7 +19,9 @@ export default function CheckoutSuccess({
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
     const numberLabel = editionNumber
-        ? `No.${String(editionNumber).padStart(3, '0')}`
+        ? t('Nr. {{number}}', {
+              number: String(editionNumber).padStart(3, '0'),
+          })
         : null;
     const memberOrderHref =
         auth?.user && orderId

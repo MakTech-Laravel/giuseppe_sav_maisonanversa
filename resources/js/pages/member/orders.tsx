@@ -8,6 +8,7 @@ import {
 
 type Order = {
     id: string;
+    reference?: string;
     label: string;
     date: string;
     amount: string;
@@ -15,6 +16,13 @@ type Order = {
     status_key: string;
     method: string;
 };
+
+function orderDetailHref(locale: string, orderId: string): string {
+    return `/${locale}/member/orders/${orderId}`;
+}
+
+const orderReferenceLinkClassName =
+    'font-sans text-[12px] text-sand underline-offset-2 no-underline transition-colors hover:text-gold hover:underline';
 
 export default function MemberOrders({ orders }: { orders: Order[] }) {
     const { t } = useTranslation();
@@ -41,7 +49,16 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                         {order.label}
                                     </p>
                                     <p className="mt-1 font-sans text-[11px] text-stone">
-                                        {order.id} · {order.method}
+                                        <Link
+                                            href={orderDetailHref(
+                                                locale,
+                                                order.id,
+                                            )}
+                                            className="text-sand underline-offset-2 no-underline transition-colors hover:text-gold hover:underline"
+                                        >
+                                            {order.reference ?? order.id}
+                                        </Link>{' '}
+                                        · {order.method}
                                     </p>
                                 </div>
                                 <p className="shrink-0 font-serif text-[18px] text-cream">
@@ -64,7 +81,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                     </p>
                                 </div>
                                 <Link
-                                    href={`/${locale}/member/orders/${order.id}`}
+                                    href={orderDetailHref(locale, order.id)}
                                     className="inline-flex min-h-9 items-center border border-gold/40 px-3 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline transition-colors hover:bg-gold hover:text-choc"
                                 >
                                     {t('Bekijken')}
@@ -103,8 +120,13 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                 key={order.id}
                                 className="border-b border-gold/10 last:border-0"
                             >
-                                <td className="px-6 py-4 font-sans text-[12px] text-sand">
-                                    {order.id}
+                                <td className="px-6 py-4">
+                                    <Link
+                                        href={orderDetailHref(locale, order.id)}
+                                        className={orderReferenceLinkClassName}
+                                    >
+                                        {order.reference ?? order.id}
+                                    </Link>
                                 </td>
                                 <td className="px-6 py-4">
                                     <p className="text-[15px] text-cream">
@@ -133,7 +155,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                 </td>
                                 <td className="px-6 py-4 text-right">
                                     <Link
-                                        href={`/${locale}/member/orders/${order.id}`}
+                                        href={orderDetailHref(locale, order.id)}
                                         className="inline-flex min-h-9 items-center border border-gold/40 px-3 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline transition-colors hover:bg-gold hover:text-choc"
                                     >
                                         {t('Bekijken')}

@@ -136,6 +136,21 @@ test('members can view an order detail page', function () {
         );
 });
 
+test('member orders list exposes the MA reference for each order', function () {
+    $user = User::factory()->create();
+    $order = Order::factory()->forUser($user)->create();
+
+    $this->actingAs($user)
+        ->get(localized('member.orders'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('member/orders')
+            ->has('orders', 1)
+            ->where('orders.0.id', (string) $order->id)
+            ->where('orders.0.reference', $order->reference())
+        );
+});
+
 test('unknown member orders return not found', function () {
     $user = User::factory()->create();
 

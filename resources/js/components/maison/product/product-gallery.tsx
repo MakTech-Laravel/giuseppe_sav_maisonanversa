@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, MouseEvent, PointerEvent as ReactPointerEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import type { ImageAssetName } from '@/lib/imagery';
 import { IMAGE_ASSETS } from '@/lib/imagery';
@@ -120,11 +121,13 @@ function scrollThumbIntoStrip(
  */
 export function ProductGallery({
     gallery = [],
-    productName = 'Heritage No.001',
+    productName,
 }: {
     gallery?: string[];
     productName?: string;
 }) {
+    const { t } = useTranslation();
+    const resolvedProductName = productName ?? t('Heritage No.001');
     const slides = useMemo(
         () => (gallery.length > 0 ? gallery : [...DEFAULT_GALLERY]),
         [gallery],
@@ -147,10 +150,10 @@ export function ProductGallery({
     const hasOverflow = slides.length > 4;
 
     const editionMark = useMemo(() => {
-        const match = productName.match(/(\d{3})/);
+        const match = resolvedProductName.match(/(\d{3})/);
 
         return match?.[1] ?? '001';
-    }, [productName]);
+    }, [resolvedProductName]);
 
     useEffect(() => {
         const media = window.matchMedia(
@@ -329,7 +332,7 @@ export function ProductGallery({
                 <div className="absolute inset-0" style={zoomStyle}>
                     <ProductMedia
                         src={slides[active] ?? slides[0]}
-                        alt={productName}
+                        alt={resolvedProductName}
                         loading="eager"
                         fetchPriority="high"
                         overlay="linear-gradient(to top, rgba(41,28,24,0.5) 0%, rgba(41,28,24,0.05) 45%)"
@@ -351,7 +354,7 @@ export function ProductGallery({
                     hasOverflow && 'cursor-grab active:cursor-grabbing',
                 )}
                 role="tablist"
-                aria-label={productName}
+                aria-label={resolvedProductName}
                 onPointerDown={handleStripPointerDown}
                 onPointerMove={handleStripPointerMove}
                 onPointerUp={finishStripDrag}
@@ -366,7 +369,7 @@ export function ProductGallery({
                         type="button"
                         role="tab"
                         aria-selected={index === active}
-                        aria-label={`${productName} ${index + 1}`}
+                        aria-label={`${resolvedProductName} ${index + 1}`}
                         onClick={() => setActive(index)}
                         className={cn(
                             'aspect-square shrink-0 basis-[calc((100%-1.5rem)/4)] overflow-hidden border transition-colors select-none',
