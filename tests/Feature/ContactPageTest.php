@@ -44,7 +44,7 @@ test('the contact bureau exposes seven collapsible panels including a map embed'
         ->and($dataSource)->toContain("'care'")
         ->and($dataSource)->toContain("'afspraak'")
         ->and($dataSource)->toContain("'concierge'")
-        ->and($dataSource)->toContain("'boutique'")
+        ->and($dataSource)->toContain("'atelier'")
         ->and($dataSource)->toContain("'faq'")
         ->and($dataSource)->toContain("'feedback'")
         ->and($source)->toContain('<iframe')

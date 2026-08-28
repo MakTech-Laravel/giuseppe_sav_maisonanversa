@@ -1,6 +1,4 @@
-import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import type { SiteShared } from '@/components/maison/contact/contact-data';
 import { AuthMenu } from '@/components/maison/shell/auth-menu';
 
 /**
@@ -12,8 +10,6 @@ import { AuthMenu } from '@/components/maison/shell/auth-menu';
  */
 export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
     const { t } = useTranslation();
-    const announcement = usePage<{ site: SiteShared }>().props.site
-        ?.announcementText;
 
     return (
         <div className="fixed inset-x-0 top-0 z-[200] flex h-[var(--topbar-h)] items-center justify-between gap-3 border-b border-gold/20 bg-choc px-4 ma-lg:px-12">
@@ -22,7 +18,7 @@ export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
             </span>
 
             <span className="min-w-0 truncate text-center font-serif text-[10px] font-medium tracking-[0.12em] text-gold uppercase ma-lg:text-[13px] ma-lg:tracking-[0.2em]">
-                {announcement || t('Eerste Editie — Beperkt tot 100 Stuks')}
+                {t('Eerste Editie — Beperkt tot 100 Stuks')}
             </span>
 
             <div className="hidden items-center gap-6 ma-lg:flex">

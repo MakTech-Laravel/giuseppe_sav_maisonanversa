@@ -52,9 +52,17 @@ export const PRIMARY_NAV: readonly NavItem[] = [
     { page: 'contact', label: 'Contact' },
 ];
 
+export type FooterChannel = 'instagram' | 'press';
+
+export type FooterExternalItem = {
+    href: string;
+    label: string;
+    channel?: FooterChannel;
+};
+
 export type FooterColumn = {
     heading: string;
-    items: readonly (NavItem | { href: string; label: string })[];
+    items: readonly (NavItem | FooterExternalItem)[];
 };
 
 export const FOOTER_COLUMNS: readonly FooterColumn[] = [
@@ -84,15 +92,23 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
     {
         heading: 'Volg Ons',
         items: [
-            { href: 'https://www.instagram.com/', label: 'Instagram' },
+            {
+                href: 'https://www.instagram.com/',
+                label: 'Instagram',
+                channel: 'instagram',
+            },
             { href: '#heritage-letter', label: 'Heritage Letter' },
-            { href: 'mailto:press@maisonanversa.com', label: 'Pers' },
+            {
+                href: 'mailto:press@maisonanversa.com',
+                label: 'Pers',
+                channel: 'press',
+            },
         ],
     },
 ];
 
 export function isNavItem(
-    item: NavItem | { href: string; label: string },
+    item: NavItem | FooterExternalItem,
 ): item is NavItem {
     return 'page' in item;
 }
