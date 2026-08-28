@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Maison;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Exceptions\EditionSoldOutException;
+use App\Exceptions\EditionUnavailableException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maison\CheckoutRequest;
 use App\Models\Order;
-use App\Models\Product;
+use App\Models\Payment;
 use App\Services\Checkout\OrderFulfillment;
 use App\Services\Checkout\ProductCheckout;
 use App\Services\Edition\EditionAllocator;
@@ -37,7 +39,7 @@ class CheckoutController extends Controller
         EditionAllocator $allocator,
         EditionInventory $inventory,
     ): SymfonyResponse {
-        $product = $this->resolveCheckoutProduct($request);
+        $product = $request->resolveProduct();
 
         if ($product === null || $inventory->snapshot($product)['available'] === 0) {
             throw ValidationException::withMessages([
@@ -52,14 +54,19 @@ class CheckoutController extends Controller
                 $data = $request->validated();
 
                 $order = Order::query()->create([
-                    'user_id' => $request->user()?->id,
+                    'user_id' => $request->user()->id,
                     'product_id' => $product->id,
                     'status' => OrderStatus::Incomplete,
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'locale' => $locale,
                     'phone' => $data['phone'] ?? null,
-                    'monogram' => $data['monogram'] ?? null,
+                    'shipping_line1' => $data['shipping_line1'],
+                    'shipping_line2' => $data['shipping_line2'] ?? null,
+                    'shipping_city' => $data['shipping_city'],
+                    'shipping_postal_code' => $data['shipping_postal_code'],
+                    'shipping_country' => $data['shipping_country'],
+                    'monogram' => null,
                     'gift_wrap' => (bool) ($data['gift_wrap'] ?? false),
                     'gift_message' => $data['gift_message'] ?? null,
                     'currency' => $product->currency,
@@ -67,12 +74,24 @@ class CheckoutController extends Controller
                 ]);
 
                 if ($product->isLimitedEdition()) {
-                    $allocator->hold($order);
+                    $allocator->hold($order, isset($data['edition_piece_id']) ? (int) $data['edition_piece_id'] : null);
                 } else {
                     app(SimpleStock::class)->reserve($product);
                 }
 
-                $session = $checkout->create($order, $locale, $request->user());
+                $payment = Payment::query()->create([
+                    'order_id' => $order->id,
+                    'status' => PaymentStatus::Pending,
+                    'amount' => $product->amount,
+                    'currency' => $product->currency,
+                    'provider' => 'stripe',
+                ]);
+
+                $session = $checkout->create($order, $locale, $request->user(), $payment);
+
+                $payment->update([
+                    'stripe_checkout_session_id' => $session['session_id'],
+                ]);
 
                 $order->update([
                     'stripe_checkout_session_id' => $session['session_id'],
@@ -86,23 +105,13 @@ class CheckoutController extends Controller
                     'product' => $product->translated('name'),
                 ]),
             ]);
+        } catch (EditionUnavailableException) {
+            throw ValidationException::withMessages([
+                'edition_piece_id' => __('Dit editienummer is niet meer beschikbaar. Kies een ander nummer.'),
+            ]);
         }
 
         return Inertia::location($checkoutUrl);
-    }
-
-    private function resolveCheckoutProduct(CheckoutRequest $request): ?Product
-    {
-        $productId = $request->validated('product_id');
-
-        if ($productId !== null) {
-            return Product::query()
-                ->whereKey($productId)
-                ->where('is_published', true)
-                ->first();
-        }
-
-        return Product::founding();
     }
 
     /**
@@ -128,11 +137,15 @@ class CheckoutController extends Controller
                     $orderId = $session->metadata['order_id'] ?? null;
                     $order = $orderId
                         ? Order::query()->find($orderId)
-                        : Order::query()->where('stripe_checkout_session_id', $sessionId)->first();
+                        : Order::query()
+                            ->where('stripe_checkout_session_id', $sessionId)
+                            ->orWhereHas('payments', fn ($query) => $query->where('stripe_checkout_session_id', $sessionId))
+                            ->first();
                 }
             } catch (ApiErrorException|Throwable) {
                 $order = Order::query()
                     ->where('stripe_checkout_session_id', $sessionId)
+                    ->orWhereHas('payments', fn ($query) => $query->where('stripe_checkout_session_id', $sessionId))
                     ->first();
             }
         }
@@ -143,6 +156,7 @@ class CheckoutController extends Controller
                 ? (string) $order->edition_number
                 : null,
             'orderId' => $order?->id,
+            'orderReference' => $order?->reference(),
         ]);
     }
 

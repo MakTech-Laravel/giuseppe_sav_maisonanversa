@@ -3,6 +3,7 @@
 namespace App\Services\Checkout;
 
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Stripe\StripeCatalog;
@@ -22,7 +23,7 @@ class FoundingEditionCheckout
      *
      * @return array{url: string, session_id: string}
      */
-    public function create(Order $order, string $locale, ?User $user = null): array
+    public function create(Order $order, string $locale, ?User $user = null, ?Payment $payment = null): array
     {
         $this->ensureEuroOnly();
 
@@ -49,25 +50,34 @@ class FoundingEditionCheckout
             ]);
         }
 
+        $payment ??= $order->latestPayment;
+
+        $metadata = [
+            'order_id' => (string) $order->id,
+            'product_id' => (string) $product->id,
+            'product' => $product->slug,
+            'currency' => 'eur',
+            'edition_number' => (string) $order->edition_number,
+        ];
+
+        if ($payment !== null) {
+            $metadata['payment_id'] = (string) $payment->id;
+        }
+
         $sessionOptions = [
             'mode' => 'payment',
             'payment_method_types' => ['card', 'bancontact'],
             'success_url' => route('maison.checkout.success', ['locale' => $locale]).'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('maison.checkout.cancel', ['locale' => $locale]).'?session_id={CHECKOUT_SESSION_ID}',
             'adaptive_pricing' => ['enabled' => false],
-            'metadata' => [
-                'order_id' => (string) $order->id,
-                'product_id' => (string) $product->id,
-                'product' => $product->slug,
-                'currency' => 'eur',
-                'edition_number' => (string) $order->edition_number,
-            ],
+            'metadata' => $metadata,
             'payment_intent_data' => [
-                'metadata' => [
+                'metadata' => array_filter([
                     'order_id' => (string) $order->id,
+                    'payment_id' => $payment !== null ? (string) $payment->id : null,
                     'product_id' => (string) $product->id,
                     'edition_number' => (string) $order->edition_number,
-                ],
+                ]),
             ],
         ];
 

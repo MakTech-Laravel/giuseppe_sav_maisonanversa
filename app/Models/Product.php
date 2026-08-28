@@ -171,6 +171,18 @@ class Product extends Model
         return ($this->edition_number_prefix ?? '').$this->formatEditionDigits($number).($this->edition_number_postfix ?? '');
     }
 
+    public function parseEditionSequence(string $label): int
+    {
+        $digits = preg_replace('/\D+/', '', $label) ?? '';
+
+        return $digits !== '' ? (int) $digits : 0;
+    }
+
+    public function formatEditionSkuForLabel(string $label): string
+    {
+        return $this->formatEditionSku($this->parseEditionSequence($label));
+    }
+
     public function formatEditionSku(int $number): string
     {
         $label = $this->formatEditionLabel($number);
@@ -396,6 +408,7 @@ class Product extends Model
         if ($amount === null) {
             return [
                 'productId' => $product?->id,
+                'productSlug' => $product?->slug,
                 'currency' => 'eur',
                 'amount' => '',
                 'displayAmount' => '',
@@ -407,6 +420,7 @@ class Product extends Model
 
         return [
             'productId' => $product->id,
+            'productSlug' => $product->slug,
             'currency' => $product->currency,
             'amount' => (string) $amount,
             'displayAmount' => Money::format((string) $amount),

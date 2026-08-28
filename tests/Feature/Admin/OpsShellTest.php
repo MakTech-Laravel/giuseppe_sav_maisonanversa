@@ -2,19 +2,21 @@
 
 use App\Enums\EditionPieceStatus;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Enums\RoleEnum;
+use App\Jobs\Orders\SendOrderStatusUpdatedBuyerMail;
 use App\Listeners\StripeEventListener;
-use App\Mail\ShippingNotification;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionAllocator;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Cashier\Events\WebhookReceived;
 use Maatwebsite\Excel\Facades\Excel;
@@ -30,19 +32,136 @@ beforeEach(function () {
 });
 
 test('staff can view orders', function () {
-    Order::factory()->create();
+    $customer = User::factory()->create(['name' => 'Order Buyer']);
+    $product = Product::factory()->create(['name' => 'Court Bag']);
+    $order = Order::factory()->create([
+        'user_id' => $customer->id,
+        'product_id' => $product->id,
+        'name' => $customer->name,
+        'email' => $customer->email,
+    ]);
+    Payment::factory()->forOrder($order)->create([
+        'status' => PaymentStatus::Pending,
+    ]);
 
     $this->actingAs($this->admin)
         ->get(route('admin.orders.index'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/orders/index')
-            ->has('orders')
+            ->has('orders.data', 1)
+            ->where('orders.data.0.product_name', 'Court Bag')
+            ->where('orders.data.0.customer', 'Order Buyer')
+            ->where('orders.data.0.user_id', $customer->id)
+            ->where('orders.data.0.payment_status_key', 'pending')
+            ->has('filters')
+            ->has('statusOptions')
+            ->has('paymentStatusOptions')
+            ->has('perPageOptions')
         );
+});
+
+test('staff can filter orders by search and status', function () {
+    $matching = Order::factory()->create([
+        'name' => 'Alice Matching',
+        'email' => 'alice@example.com',
+        'status' => OrderStatus::Paid,
+    ]);
+    Order::factory()->create([
+        'name' => 'Bob Other',
+        'email' => 'bob@example.com',
+        'status' => OrderStatus::Incomplete,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.orders.index', [
+            'search' => 'Alice',
+            'status' => OrderStatus::Paid->value,
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/orders/index')
+            ->has('orders.data', 1)
+            ->where('orders.data.0.id', (string) $matching->id)
+            ->where('filters.search', 'Alice')
+            ->where('filters.status', OrderStatus::Paid->value)
+        );
+});
+
+test('staff can filter orders by payment status', function () {
+    $pendingOrder = Order::factory()->incomplete()->create();
+    Payment::factory()->forOrder($pendingOrder)->create([
+        'status' => PaymentStatus::Pending,
+    ]);
+
+    $paidOrder = Order::factory()->paid()->create();
+    Payment::factory()->forOrder($paidOrder)->paid()->create();
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.orders.index', [
+            'payment_status' => PaymentStatus::Pending->value,
+        ]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/orders/index')
+            ->has('orders.data', 1)
+            ->where('orders.data.0.id', (string) $pendingOrder->id)
+            ->where('orders.data.0.payment_status_key', 'pending')
+            ->where('filters.payment_status', PaymentStatus::Pending->value)
+        );
+});
+
+test('staff can cancel an incomplete order and restore simple stock', function () {
+    Bus::fake([SendOrderStatusUpdatedBuyerMail::class]);
+
+    $product = Product::factory()->create(['stock_quantity' => 4]);
+    $order = Order::factory()->incomplete()->create([
+        'product_id' => $product->id,
+        'amount' => $product->amount,
+    ]);
+    Payment::factory()->forOrder($order)->create([
+        'status' => PaymentStatus::Pending,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->patch(route('admin.orders.update', ['order' => $order->id]), [
+            'status' => 'canceled',
+            'message' => 'Bestelling geannuleerd door admin.',
+        ])
+        ->assertRedirect();
+
+    expect($order->fresh()->status)->toBe(OrderStatus::Canceled)
+        ->and($order->fresh()->latestPayment?->status)->toBe(PaymentStatus::Canceled)
+        ->and($product->fresh()->stock_quantity)->toBe(5)
+        ->and($order->statusEvents()->count())->toBe(1);
+
+    Bus::assertDispatched(SendOrderStatusUpdatedBuyerMail::class);
+});
+
+test('staff cannot cancel a paid order', function () {
+    Bus::fake([SendOrderStatusUpdatedBuyerMail::class]);
+
+    $order = Order::factory()->paid()->create();
+
+    $this->actingAs($this->admin)
+        ->from(route('admin.orders.show', ['order' => $order->id]))
+        ->patch(route('admin.orders.update', ['order' => $order->id]), [
+            'status' => 'canceled',
+            'message' => 'Should not work.',
+        ])
+        ->assertRedirect()
+        ->assertSessionHasErrors('status');
+
+    expect($order->fresh()->status)->toBe(OrderStatus::Paid);
+    Bus::assertNotDispatched(SendOrderStatusUpdatedBuyerMail::class);
 });
 
 test('staff can view an order detail', function () {
     $order = Order::factory()->create();
+    $payment = Payment::factory()->forOrder($order)->create([
+        'status' => PaymentStatus::Pending,
+        'stripe_checkout_session_id' => 'cs_test_admin_detail',
+    ]);
 
     $this->actingAs($this->admin)
         ->get(route('admin.orders.show', ['order' => $order->id]))
@@ -50,6 +169,9 @@ test('staff can view an order detail', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/orders/show')
             ->where('order.id', (string) $order->id)
+            ->where('order.payment.id', (string) $payment->id)
+            ->where('order.payment.status_key', 'pending')
+            ->where('order.payment.stripe_checkout_session_id', 'cs_test_admin_detail')
         );
 });
 
@@ -60,24 +182,27 @@ test('missing order returns not found', function () {
 });
 
 test('staff can update order status to shipped', function () {
-    Mail::fake();
+    Bus::fake([SendOrderStatusUpdatedBuyerMail::class]);
 
     $order = Order::factory()->paid()->create();
 
     $this->actingAs($this->admin)
         ->patch(route('admin.orders.update', ['order' => $order->id]), [
             'status' => 'shipped',
+            'message' => 'Uw pakket is onderweg.',
         ])
         ->assertRedirect();
 
     expect($order->fresh()->status)->toBe(OrderStatus::Shipped)
-        ->and($order->fresh()->shipped_at)->not->toBeNull();
+        ->and($order->fresh()->shipped_at)->not->toBeNull()
+        ->and($order->statusEvents()->count())->toBe(1);
 
-    Mail::assertQueued(ShippingNotification::class);
+    Bus::assertDispatched(SendOrderStatusUpdatedBuyerMail::class);
 });
 
 test('staff can refund a paid order via stripe and restore simple stock', function () {
     config(['cashier.secret' => 'sk_test_fake']);
+    Bus::fake([SendOrderStatusUpdatedBuyerMail::class]);
 
     $product = Product::factory()->create(['stock_quantity' => 4]);
     $order = Order::factory()->paid()->create([
@@ -99,6 +224,7 @@ test('staff can refund a paid order via stripe and restore simple stock', functi
     $this->actingAs($this->admin)
         ->patch(route('admin.orders.update', ['order' => $order->id]), [
             'status' => 'refunded',
+            'message' => 'Terugbetaling verwerkt.',
         ])
         ->assertRedirect();
 
@@ -108,6 +234,7 @@ test('staff can refund a paid order via stripe and restore simple stock', functi
 
 test('staff can refund a paid limited edition order and release the piece', function () {
     config(['cashier.secret' => 'sk_test_fake']);
+    Bus::fake([SendOrderStatusUpdatedBuyerMail::class]);
 
     $order = Order::factory()->paid()->create([
         'stripe_payment_intent_id' => 'pi_refund_edition',
@@ -128,6 +255,7 @@ test('staff can refund a paid limited edition order and release the piece', func
     $this->actingAs($this->admin)
         ->patch(route('admin.orders.update', ['order' => $order->id]), [
             'status' => 'refunded',
+            'message' => 'Terugbetaling verwerkt.',
         ])
         ->assertRedirect();
 

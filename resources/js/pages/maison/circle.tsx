@@ -42,7 +42,7 @@ const BENEFITS = [
 
 export default function Circle() {
     const { t } = useTranslation();
-    const { openOrder } = useShellActions();
+    const { openPurchase } = useShellActions();
 
     return (
         <>
@@ -110,7 +110,7 @@ export default function Circle() {
                     <div className="mt-10 text-center">
                         <MaisonButton
                             variant="choc"
-                            onClick={() => openOrder()}
+                            onClick={() => openPurchase()}
                             className="max-w-full px-4 text-center whitespace-normal"
                         >
                             {t('Word Founding Member — Bekijk Heritage No.001')}

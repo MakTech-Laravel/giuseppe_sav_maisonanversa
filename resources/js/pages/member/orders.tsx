@@ -27,7 +27,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                 eyebrow={t('Account')}
                 title={t('Bestellingen & betalingen')}
                 description={t(
-                    'Prototypegeschiedenis tot Stripe is aangesloten — bedragen alleen voor de layout.',
+                    'Uw aankopen, betalingen en verzendstatus in één overzicht.',
                 )}
             />
 

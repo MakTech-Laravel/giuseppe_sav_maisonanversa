@@ -116,7 +116,7 @@ test('staff can search heritage inventory by sku digits and notes', function () 
 
     EditionPiece::query()
         ->where('product_id', $product->id)
-        ->where('edition_number', 1)
+        ->where('edition_number', $product->formatEditionLabel(1))
         ->update(['notes' => 'Maison Anversa Archive — not for sale']);
 
     $this->actingAs($this->admin)

@@ -5,7 +5,7 @@ import type { CheckoutShared } from '@/types/global';
 
 /**
  * Per-product checkout context for the order modal. Optional: pages that
- * call `openOrder()` without one keep buying the global (founding) SKU.
+ * call `openOrder()` without one keep buying the global (founding SKU).
  */
 export type OrderProductContext = CheckoutShared;
 
@@ -16,6 +16,7 @@ export type OrderProductContext = CheckoutShared;
 export type ShellActions = {
     openNewsletter: () => void;
     openOrder: (product?: OrderProductContext) => void;
+    openPurchase: (product?: OrderProductContext) => void;
     openCertificate: () => void;
     openAuth: (view?: AuthView) => void;
 };
