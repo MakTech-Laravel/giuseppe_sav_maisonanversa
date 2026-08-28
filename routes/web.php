@@ -2,7 +2,6 @@
 
 use App\Enums\PermissionEnum;
 use App\Http\Controllers\Admin\ClubController as AdminClubController;
-use App\Http\Controllers\Admin\CommerceSettingController;
 use App\Http\Controllers\Admin\CommunityCourtController;
 use App\Http\Controllers\Admin\CommunityEventController;
 use App\Http\Controllers\Admin\CommunityPostController;
@@ -425,13 +424,6 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::get('products/{product}/inventory', 'inventory')->name('products.inventory')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-            });
-
-            Route::controller(CommerceSettingController::class)->group(function () {
-                Route::get('commerce', 'edit')->name('commerce.edit')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-                Route::patch('commerce', 'update')->name('commerce.update')
-                    ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
             });
 
             Route::controller(FaqController::class)->group(function () {
