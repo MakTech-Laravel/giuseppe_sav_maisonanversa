@@ -16,5 +16,6 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Services/Newsletter/**, app/Http/Controllers/Member/DashboardController.php, resources/js/pages/member/letter.tsx, resources/js/pages/member/email-preferences.tsx | .ai/rules/newsletter.md |
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
 | routes/web.php | .ai/rules/routes.md |
+| resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
 | app/Support/Seo/** | .ai/rules/seo.md |
 | app/Services/Translation/** | .ai/rules/translation.md |

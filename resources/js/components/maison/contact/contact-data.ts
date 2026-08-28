@@ -24,7 +24,7 @@ export type SiteShared = {
     whatsappHref: string;
     phoneHref: string;
     emailHelloHref: string;
-    announcementText: string | null;
+    emailPressHref: string;
 };
 
 export type BureauPanelId =
@@ -32,7 +32,7 @@ export type BureauPanelId =
     | 'care'
     | 'afspraak'
     | 'concierge'
-    | 'boutique'
+    | 'atelier'
     | 'faq'
     | 'feedback';
 
@@ -108,9 +108,9 @@ export function buildBureauBubbles(site: SiteShared): BureauBubble[] {
         {
             kind: 'panel',
             icon: MapPin,
-            name: 'Vind uw Boutique',
+            name: 'Vind ons atelier',
             sub: 'Antwerpen',
-            panel: 'boutique',
+            panel: 'atelier',
         },
         {
             kind: 'panel',
@@ -141,7 +141,7 @@ export function buildContactDockItems(site: SiteShared): Array<
         { icon: Heart, label: 'Maison Care', panel: 'care' },
         { icon: CalendarDays, label: 'Boek een afspraak', panel: 'afspraak' },
         { icon: Video, label: 'Privé consult', panel: 'concierge' },
-        { icon: MapPin, label: 'Vind uw Boutique', panel: 'boutique' },
+        { icon: MapPin, label: 'Vind ons atelier', panel: 'atelier' },
         { icon: HelpCircle, label: 'Veelgestelde vragen', panel: 'faq' },
         { icon: MessageSquare, label: 'Uw mening', panel: 'feedback' },
     ];
@@ -152,7 +152,7 @@ export const BUREAU_PANEL_IDS: readonly BureauPanelId[] = [
     'care',
     'afspraak',
     'concierge',
-    'boutique',
+    'atelier',
     'faq',
     'feedback',
 ] as const;
