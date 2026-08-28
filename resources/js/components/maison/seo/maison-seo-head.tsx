@@ -52,6 +52,13 @@ export function MaisonSeoHead({
                 name="description"
                 content={description}
             />
+            {seo.keywords && (
+                <meta
+                    head-key="keywords"
+                    name="keywords"
+                    content={seo.keywords}
+                />
+            )}
             <link head-key="canonical" rel="canonical" href={seo.canonical} />
             {seo.hreflang.map((alternate) => (
                 <link

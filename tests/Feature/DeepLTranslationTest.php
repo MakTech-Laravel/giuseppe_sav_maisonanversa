@@ -40,7 +40,7 @@ test('community posts auto-detect the content column and skip status', function 
         ->not->toContain('email');
 });
 
-test('products use all six explicit translatable columns', function () {
+test('products use all nine explicit translatable columns', function () {
     $product = Product::query()->where('slug', Product::FOUNDING_SLUG)->first();
 
     expect($product->translatableColumns())
@@ -51,6 +51,9 @@ test('products use all six explicit translatable columns', function () {
             'hero_subtitle',
             'description',
             'expected_delivery_label',
+            'meta_title',
+            'meta_description',
+            'meta_keywords',
         ]);
 });
 
