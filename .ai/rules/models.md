@@ -13,3 +13,6 @@ CommunitySession uses TranslatesWithDeepL with `$translatable = ['notes']`, auto
 
 ## Session "past" reads the stored ends_at column
 CommunitySession stores `ends_at` (indexed) and the model's `booted()` hook keeps it derived from `starts_at + duration_minutes` on every save. Scopes `upcoming()` and `past()`, `SessionFeed`, and the admin lifecycle filter all compare that column so the query stays an indexed comparison. Never re-derive an end time from `starts_at` in a query, and never write `ends_at` by hand.
+
+## Only LegalPage translates HTML bodies
+LegalPage is the only model that returns translationUsesHtml() true so DeepL uses tag_handling=html. Other translatable models stay plain text.

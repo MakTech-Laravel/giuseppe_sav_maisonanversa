@@ -596,3 +596,128 @@
 .maison-svg .room-tint {
     pointer-events: none;
 }
+
+.legal-prose {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--color-choc3);
+}
+
+.legal-prose h2,
+.legal-prose h3,
+.legal-prose h4 {
+    font-family: var(--font-serif);
+    color: var(--color-choc);
+    font-weight: 500;
+    margin-top: 1.75em;
+    margin-bottom: 0.6em;
+    line-height: 1.2;
+}
+
+.legal-prose h2 {
+    font-size: 1.65rem;
+}
+
+.legal-prose h3 {
+    font-size: 1.35rem;
+}
+
+.legal-prose h4 {
+    font-size: 1.15rem;
+}
+
+.legal-prose p,
+.legal-prose ul,
+.legal-prose ol,
+.legal-prose blockquote,
+.legal-prose table {
+    margin-bottom: 1em;
+}
+
+.legal-prose ul,
+.legal-prose ol {
+    padding-left: 1.35em;
+}
+
+.legal-prose ul {
+    list-style: disc;
+}
+
+.legal-prose ol {
+    list-style: decimal;
+}
+
+.legal-prose a {
+    color: var(--color-gold2);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+
+.legal-prose blockquote {
+    border-left: 2px solid color-mix(in oklab, var(--color-gold) 45%, transparent);
+    padding-left: 1em;
+    color: var(--color-stone);
+}
+
+.legal-prose hr {
+    border: 0;
+    border-top: 1px solid color-mix(in oklab, var(--color-gold) 30%, transparent);
+    margin: 1.75em 0;
+}
+
+.legal-prose table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.legal-prose th,
+.legal-prose td {
+    border: 1px solid color-mix(in oklab, var(--color-gold) 30%, transparent);
+    padding: 0.45em 0.65em;
+    text-align: left;
+}
+
+.legal-prose mark {
+    background: color-mix(in oklab, var(--color-gold) 28%, transparent);
+    color: inherit;
+}
+
+.legal-editor {
+    color-scheme: light;
+    --background: var(--color-cream);
+    --foreground: var(--color-choc);
+    --card: var(--color-cream);
+    --card-foreground: var(--color-choc);
+    --muted: var(--color-cream2);
+    --muted-foreground: var(--color-stone);
+    --border: color-mix(in oklab, var(--color-gold) 28%, var(--color-cream2));
+    --input: var(--color-cream);
+    --ring: var(--color-gold);
+    --accent: var(--color-cream2);
+    --accent-foreground: var(--color-choc);
+    --primary: var(--color-choc);
+    --primary-foreground: var(--color-cream);
+    background: var(--color-cream);
+    color: var(--color-choc);
+}
+
+.legal-editor .tiptap {
+    min-height: 22rem;
+    outline: none;
+    color: var(--color-choc);
+}
+
+.legal-editor .tiptap p.is-editor-empty:first-child::before {
+    color: var(--color-stone);
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+
+.legal-preview-surface {
+    color-scheme: light;
+    background: var(--color-cream);
+    color: var(--color-choc3);
+}

@@ -16,6 +16,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
 use App\Support\CommunityFeed;
+use App\Support\Html\LegalHtml;
 use App\Support\Journal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -422,7 +423,7 @@ class MaisonController extends Controller
         return $this->page("legal/{$slug}", [
             'legalPage' => [
                 'slug' => $slug,
-                'body' => $body,
+                'body' => LegalHtml::sanitize($body),
             ],
         ]);
     }
@@ -502,12 +503,14 @@ class MaisonController extends Controller
 
     private function fallbackLegalBody(string $slug): string
     {
-        return match ($slug) {
-            'privacy' => 'Privacybeleid van Maison Anversa.',
-            'terms' => 'Algemene voorwaarden van Maison Anversa.',
-            'shipping' => 'Verzending en retourinformatie van Maison Anversa.',
-            'care' => 'Zorg- en garantiebeleid van Maison Anversa.',
+        $body = match ($slug) {
+            'privacy' => '<p>Privacybeleid van Maison Anversa.</p>',
+            'terms' => '<p>Algemene voorwaarden van Maison Anversa.</p>',
+            'shipping' => '<p>Verzending en retourinformatie van Maison Anversa.</p>',
+            'care' => '<p>Zorg- en garantiebeleid van Maison Anversa.</p>',
             default => '',
         };
+
+        return LegalHtml::sanitize($body);
     }
 }

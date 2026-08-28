@@ -58,7 +58,7 @@ class DeepLTranslator
      * @param  list<string>  $texts
      * @return list<string>
      */
-    public function translateMany(array $texts, string $target, ?string $source = 'NL'): array
+    public function translateMany(array $texts, string $target, ?string $source = 'NL', bool $html = false): array
     {
         if ($texts === []) {
             return [];
@@ -77,6 +77,10 @@ class DeepLTranslator
             'target_lang' => $this->normalizeTarget($target),
             'preserve_formatting' => true,
         ];
+
+        if ($html) {
+            $payload['tag_handling'] = 'html';
+        }
 
         if ($source !== null) {
             $payload['source_lang'] = strtoupper($source);
@@ -119,9 +123,9 @@ class DeepLTranslator
         );
     }
 
-    public function translate(string $text, string $target, ?string $source = 'NL'): string
+    public function translate(string $text, string $target, ?string $source = 'NL', bool $html = false): string
     {
-        return $this->translateMany([$text], $target, $source)[0] ?? $text;
+        return $this->translateMany([$text], $target, $source, $html)[0] ?? $text;
     }
 
     private function normalizeTarget(string $target): string

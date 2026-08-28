@@ -1,10 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
-import { FileText, Pencil } from 'lucide-react';
+import { Eye, FileText, Pencil } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useLocale } from '@/hooks/use-locale';
+import legalPages from '@/routes/admin/legal-pages';
 
 interface LegalPageRow {
     id: string;
@@ -37,7 +38,24 @@ export default function LegalPagesIndex({ pages }: { pages: LegalPageRow[] }) {
                                     <TableCell>{page.is_published ? t('Gepubliceerd') : t('Concept')}</TableCell>
                                     <TableCell className="text-right">
                                         <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/${locale}/admin/legal-pages/${page.id}/edit`} title={t('Bewerken')}>
+                                            <Link
+                                                href={legalPages.show({
+                                                    locale,
+                                                    legalPage: Number(page.id),
+                                                })}
+                                                title={t('Voorbeeld')}
+                                            >
+                                                <Eye className="h-4 w-4" />
+                                            </Link>
+                                        </Button>
+                                        <Button variant="ghost" size="icon" asChild>
+                                            <Link
+                                                href={legalPages.edit({
+                                                    locale,
+                                                    legalPage: Number(page.id),
+                                                })}
+                                                title={t('Bewerken')}
+                                            >
                                                 <Pencil className="h-4 w-4" />
                                             </Link>
                                         </Button>

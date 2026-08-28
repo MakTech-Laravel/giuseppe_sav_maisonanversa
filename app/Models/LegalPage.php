@@ -37,4 +37,9 @@ class LegalPage extends Model
             'is_published' => 'boolean',
         ];
     }
+
+    public function translationUsesHtml(): bool
+    {
+        return true;
+    }
 }
