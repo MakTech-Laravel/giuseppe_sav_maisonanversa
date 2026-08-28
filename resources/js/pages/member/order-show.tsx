@@ -18,7 +18,6 @@ type OrderDetail = {
     method: string;
     summary: string;
     items: { name: string; qty: number; price: string }[];
-    billing: { name: string; email: string; phone?: string; address?: string };
     shipping?: {
         line1: string;
         line2?: string | null;
@@ -128,34 +127,6 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                                 </dt>
                                 <dd className="mt-1 font-serif text-[22px] text-cream">
                                     {order.amount}
-                                </dd>
-                            </div>
-                        </dl>
-                    </MemberPanel>
-
-                    <MemberPanel>
-                        <MemberSectionTitle title={t('Koper')} />
-                        <dl className="space-y-3 text-[14px] text-sand">
-                            <div>
-                                <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    {t('Naam')}
-                                </dt>
-                                <dd className="mt-1 text-cream">
-                                    {order.billing.name}
-                                </dd>
-                            </div>
-                            <div>
-                                <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    {t('E-mail')}
-                                </dt>
-                                <dd className="mt-1">{order.billing.email}</dd>
-                            </div>
-                            <div>
-                                <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    {t('Telefoon')}
-                                </dt>
-                                <dd className="mt-1">
-                                    {order.billing.phone ?? '—'}
                                 </dd>
                             </div>
                         </dl>
