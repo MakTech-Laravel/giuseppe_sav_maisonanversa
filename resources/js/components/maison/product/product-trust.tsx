@@ -1,3 +1,4 @@
+import { SectionIcon } from '@/components/maison/product/section-icon';
 import type { ProductSection } from '@/types/product';
 
 export function ProductTrust({ section }: { section?: ProductSection }) {
@@ -13,11 +14,8 @@ export function ProductTrust({ section }: { section?: ProductSection }) {
                 {items.map((item) => (
                     <div key={item.id} className="text-center">
                         {item.icon ? (
-                            <div
-                                aria-hidden="true"
-                                className="mb-2.5 text-[26px] text-gold"
-                            >
-                                {item.icon}
+                            <div className="mb-2.5 text-[26px] text-gold">
+                                <SectionIcon icon={item.icon} />
                             </div>
                         ) : null}
                         <div className="font-sans text-[9px] tracking-[0.2em] text-sand uppercase">
