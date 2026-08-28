@@ -26,12 +26,17 @@ class LimitedEditionLedger
         }
 
         $archivedNumbers = $product->archiveEditionNumberList();
+        $validLabels = collect(range(1, $total))
+            ->map(fn (int $number): string => $product->formatEditionLabel($number))
+            ->all();
 
         for ($number = 1; $number <= $total; $number++) {
+            $label = $product->formatEditionLabel($number);
+
             $piece = EditionPiece::query()->firstOrCreate(
                 [
                     'product_id' => $product->id,
-                    'edition_number' => $number,
+                    'edition_number' => $label,
                 ],
                 [
                     'status' => in_array($number, $archivedNumbers, true)
@@ -56,8 +61,8 @@ class LimitedEditionLedger
 
         EditionPiece::query()
             ->where('product_id', $product->id)
-            ->where('edition_number', '>', $total)
             ->where('status', EditionPieceStatus::Available)
+            ->whereNotIn('edition_number', $validLabels)
             ->delete();
 
         app(EditionInventory::class)->bust($product);

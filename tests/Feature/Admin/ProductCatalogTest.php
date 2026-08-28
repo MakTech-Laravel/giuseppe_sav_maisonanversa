@@ -152,9 +152,15 @@ test('staff can create a limited edition product and provision pieces', function
         ->and($product->edition_total)->toBe(5)
         ->and($product->archiveEditionNumberList())->toBe([1, 3])
         ->and(EditionPiece::query()->where('product_id', $product->id)->count())->toBe(5)
-        ->and(EditionPiece::query()->where('product_id', $product->id)->where('edition_number', 1)->first()?->status->value)
+        ->and(EditionPiece::query()
+            ->where('product_id', $product->id)
+            ->where('edition_number', $product->formatEditionLabel(1))
+            ->first()?->status->value)
         ->toBe('archive')
-        ->and(EditionPiece::query()->where('product_id', $product->id)->where('edition_number', 3)->first()?->status->value)
+        ->and(EditionPiece::query()
+            ->where('product_id', $product->id)
+            ->where('edition_number', $product->formatEditionLabel(3))
+            ->first()?->status->value)
         ->toBe('archive');
 });
 
@@ -217,7 +223,10 @@ test('staff can update archive numbers via the product edit form', function () {
     $product->refresh();
 
     expect($product->archiveEditionNumberList())->toBe([1, 5])
-        ->and(EditionPiece::query()->where('product_id', $product->id)->where('edition_number', 5)->first()?->status->value)
+        ->and(EditionPiece::query()
+            ->where('product_id', $product->id)
+            ->where('edition_number', $product->formatEditionLabel(5))
+            ->first()?->status->value)
         ->toBe('archive');
 });
 

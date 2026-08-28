@@ -12,14 +12,18 @@ use App\Models\Product;
 use App\Services\Checkout\OrderFulfillment;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
+use App\Services\Edition\LimitedEditionLedger;
 use App\Services\Edition\SimpleStock;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 
 test('number 001 is archived and never allocated', function () {
+    $product = Product::founding();
+    $archiveLabel = $product->formatEditionLabel(1);
+
     $piece = EditionPiece::query()
-        ->where('product_id', Product::founding()->id)
-        ->where('edition_number', 1)
+        ->where('product_id', $product->id)
+        ->where('edition_number', $archiveLabel)
         ->first();
 
     expect($piece)->not->toBeNull()
@@ -28,7 +32,7 @@ test('number 001 is archived and never allocated', function () {
     $order = Order::factory()->create();
     $allocated = app(EditionAllocator::class)->allocate($order);
 
-    expect($allocated->edition_number)->toBe(2)
+    expect($allocated->sequenceNumber())->toBe(2)
         ->and($order->fresh()->edition_number)->toBe(2);
 });
 
@@ -93,16 +97,37 @@ test('checkout is rejected when sold out', function () {
 
 test('a second limited product can reuse edition number 001', function () {
     $second = Product::factory()->limitedEdition(5)->create();
+    app(LimitedEditionLedger::class)->sync($second);
 
-    expect(EditionPiece::query()->where('product_id', $second->id)->where('edition_number', 1)->exists())->toBeTrue()
-        ->and(EditionPiece::query()->where('edition_number', 1)->count())->toBe(2);
+    $secondLabel = $second->formatEditionLabel(1);
+    $founding = Product::founding();
+    $foundingArchiveLabel = $founding->formatEditionLabel(1);
+
+    expect(EditionPiece::query()
+        ->where('product_id', $second->id)
+        ->where('edition_number', $secondLabel)
+        ->exists())->toBeTrue()
+        ->and(EditionPiece::query()
+            ->where('product_id', $second->id)
+            ->where('edition_number', $secondLabel)
+            ->count())->toBe(1);
 
     $order = Order::factory()->create(['product_id' => $second->id]);
+    $firstAvailable = EditionPiece::query()
+        ->where('product_id', $second->id)
+        ->where('status', EditionPieceStatus::Available)
+        ->orderBy('edition_number')
+        ->firstOrFail();
     $allocated = app(EditionAllocator::class)->allocate($order);
 
-    expect($allocated->edition_number)->toBe(1)
+    expect($allocated->id)->toBe($firstAvailable->id)
+        ->and($allocated->edition_number)->toBe($firstAvailable->edition_number)
         ->and($allocated->product_id)->toBe($second->id)
-        ->and(EditionPiece::query()->where('product_id', Product::founding()->id)->where('edition_number', 1)->first()->status)
+        ->and(EditionPiece::query()
+            ->where('product_id', $founding->id)
+            ->where('edition_number', $foundingArchiveLabel)
+            ->first()
+            ->status)
         ->toBe(EditionPieceStatus::Archive);
 });
 
