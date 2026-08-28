@@ -6,6 +6,7 @@ export type SeoHreflangLink = {
 export type SeoDocument = {
     title: string;
     description: string;
+    keywords: string | null;
     canonical: string;
     robots: string | null;
     ogType: string;
