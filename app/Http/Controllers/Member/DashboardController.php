@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Member;
 
-use App\Enums\SubscriberSource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Member\UpdateLetterPreferencesRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
@@ -10,6 +9,7 @@ use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\Newsletter\HeritageLetterSubscription;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -19,6 +19,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -140,33 +141,54 @@ class DashboardController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function letter(Request $request, string $locale): Response
+    public function letter(Request $request, string $locale, HeritageLetterSubscription $subscription): Response
     {
-        $subscriber = NewsletterSubscriber::query()
-            ->where('email', $request->user()->email)
-            ->first();
+        $subscriptions = $subscription->subscriptionsFor($request->user())
+            ->map(fn (NewsletterSubscriber $subscriber): array => [
+                'id' => $subscriber->id,
+                'email' => $subscriber->email,
+                'source' => $subscriber->source->value,
+                'status' => $subscriber->status->value,
+                'preferences' => $subscriber->topicPreferences(),
+                'joined_at' => $subscriber->consent_at?->toDateString()
+                    ?? $subscriber->created_at?->toDateString(),
+            ])
+            ->values();
 
         return Inertia::render('member/letter', [
-            'preferences' => $subscriber?->preferences ?? [
-                'heritageLetter' => false,
-                'productUpdates' => false,
-                'events' => false,
-            ],
+            'subscriptions' => $subscriptions,
         ]);
     }
 
-    public function updateLetter(UpdateLetterPreferencesRequest $request, string $locale): RedirectResponse
+    public function emailPreferences(Request $request, string $locale, HeritageLetterSubscription $subscription): Response
     {
-        $user = $request->user();
-        $subscriber = NewsletterSubscriber::query()->firstOrNew(['email' => $user->email]);
+        $subscriber = NewsletterSubscriber::query()
+            ->where('email', Str::lower($request->user()->email))
+            ->first();
 
-        $subscriber->fill([
-            'name' => $user->name,
-            'locale' => $user->locale ?? $locale,
-            'source' => $subscriber->exists ? $subscriber->source : SubscriberSource::Member,
-            'consent_at' => $subscriber->consent_at ?? now(),
-            'preferences' => $request->validated(),
-        ])->save();
+        return Inertia::render('member/email-preferences', [
+            'preferences' => $subscriber
+                ? $subscription->normalizePreferences($subscriber->preferences ?? [])
+                : [
+                    'heritageLetter' => false,
+                    'productUpdates' => false,
+                    'events' => false,
+                ],
+            'status' => $subscriber?->status->value,
+        ]);
+    }
+
+    public function updateEmailPreferences(
+        UpdateLetterPreferencesRequest $request,
+        string $locale,
+        HeritageLetterSubscription $subscription,
+    ): RedirectResponse {
+        $subscription->applyPreferences(
+            $request->user(),
+            $request->validated(),
+            $request,
+            $locale,
+        );
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Voorkeuren opgeslagen.')]);
 
@@ -181,13 +203,19 @@ class DashboardController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function updateProfile(ProfileUpdateRequest $request, string $locale): RedirectResponse
-    {
+    public function updateProfile(
+        ProfileUpdateRequest $request,
+        string $locale,
+        HeritageLetterSubscription $subscription,
+    ): RedirectResponse {
         $user = $request->user();
+        $previousEmail = $user->email;
 
         $user->fill($request->safe()->only(['name', 'email', 'username']));
 
-        if ($user->isDirty('email')) {
+        $emailChanged = $user->isDirty('email');
+
+        if ($emailChanged) {
             $user->email_verified_at = null;
         }
 
@@ -200,6 +228,10 @@ class DashboardController extends Controller implements HasMiddleware
         }
 
         $user->save();
+
+        if ($emailChanged) {
+            $subscription->rebindEmail($previousEmail, $user);
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Profiel bijgewerkt.')]);
 

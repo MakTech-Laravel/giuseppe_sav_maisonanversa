@@ -80,11 +80,28 @@ test('laravel resolves the translated copy for a known key', function () {
     expect(__('Het Huis'))->toBe('The House');
     expect(__('Catalogus'))->toBe('Product');
     expect(__('Product'))->toBe('Product');
+    expect(__('Producten'))->toBe('Products');
+    expect(__('Open evenementen'))->toBe('Open events');
+    expect(__('Alleen leden'))->toBe('Members only');
+    expect(__('Partnerclub'))->toBe('Partner club');
+    expect(__('Community'))->toBe('Community');
+    expect(__('Contact'))->toBe('Contact');
+    expect(__('Padel'))->toBe('Padel');
+    expect(__('Tennis'))->toBe('Tennis');
 
     App::setLocale('fr');
     expect(__('Het Huis'))->toBe('La Maison');
     expect(__('Catalogus'))->toBe('Produit');
     expect(__('Product'))->toBe('Produit');
+    expect(__('Producten'))->toBe('Produits');
+    expect(__('Open evenementen'))->toBe('Événements ouverts');
+    expect(__('Alleen leden'))->toBe('Membres uniquement');
+    expect(__('Partnerclub'))->toBe('Club partenaire');
+    expect(__('Georganiseerd door Maison Anversa.'))->toBe('Organisés par Maison Anversa.');
+    expect(__('Community'))->toBe('Communauté');
+    expect(__('Contact'))->toBe('Contactez-nous');
+    expect(__('Padel'))->toBe('Le padel');
+    expect(__('Tennis'))->toBe('Le tennis');
 });
 
 test('an untranslated key falls back to its dutch source text', function (string $locale) {

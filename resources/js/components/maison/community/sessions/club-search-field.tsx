@@ -217,7 +217,7 @@ function PartnerBadge() {
 
     return (
         <span className="shrink-0 border border-gold/25 bg-gold/8 px-2.5 py-1 font-sans text-[9px] tracking-[0.14em] text-gold2 uppercase">
-            {t('Partner Club')}
+            {t('Partnerclub')}
         </span>
     );
 }
