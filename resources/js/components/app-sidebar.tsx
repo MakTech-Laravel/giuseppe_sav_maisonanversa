@@ -2,8 +2,10 @@ import { Link } from '@inertiajs/react';
 import {
     BookOpen,
     Building2,
+    CalendarCheck,
     CalendarDays,
     CircleHelp,
+    MessageSquareQuote,
     FileText,
     Globe,
     LayoutGrid,
@@ -45,7 +47,9 @@ import adminCourts from '@/routes/admin/courts';
 import adminCustomers from '@/routes/admin/customers';
 import adminDressingItems from '@/routes/admin/dressing-items';
 import adminEvents from '@/routes/admin/events';
+import adminAppointments from '@/routes/admin/appointments';
 import adminFaqs from '@/routes/admin/faqs';
+import adminFeedback from '@/routes/admin/feedback';
 import adminHeritage from '@/routes/admin/heritage';
 import adminJournal from '@/routes/admin/journal';
 import adminLegalPages from '@/routes/admin/legal-pages';
@@ -172,6 +176,18 @@ function buildNavGroups(
                     title: t('FAQ'),
                     href: adminFaqs.index(locale),
                     icon: CircleHelp,
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                },
+                {
+                    title: t('Afspraken'),
+                    href: adminAppointments.index(locale),
+                    icon: CalendarCheck,
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                },
+                {
+                    title: t('Feedback'),
+                    href: adminFeedback.index(locale),
+                    icon: MessageSquareQuote,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {

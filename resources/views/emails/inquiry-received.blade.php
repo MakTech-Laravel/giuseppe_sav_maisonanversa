@@ -1,7 +1,7 @@
 <x-mail::message>
 # {{ __('Nieuwe aanvraag') }}
 
-**{{ __('Type') }}:** {{ $inquiry->type->value }}
+**{{ __('Type') }}:** {{ $inquiry->type->label() }}
 
 **{{ __('Naam') }}:** {{ $inquiry->name }}
 

@@ -9,6 +9,7 @@ import {
     BureauInput,
     BureauSelect,
     BureauTextarea,
+    useBureauVisitor,
 } from '@/components/maison/contact/bureau-form';
 import {
     BUREAU_PANEL_IDS,
@@ -148,6 +149,7 @@ function BureauPanelBody({
     faqs: Array<{ question: string; answer: string }>;
 }) {
     const { t } = useTranslation();
+    const visitor = useBureauVisitor();
 
     switch (id) {
         case 'bestel':
@@ -185,7 +187,7 @@ function BureauPanelBody({
                         )}
                     </p>
                     <BureauForm
-                        subject="Afspraak aanvraag"
+                        kind="appointment"
                         submitLabel="Aanvraag versturen"
                     >
                         <BureauFieldRow>
@@ -193,12 +195,14 @@ function BureauPanelBody({
                                 name="name"
                                 placeholder="Naam"
                                 required
+                                defaultValue={visitor.name}
                             />
                             <BureauInput
                                 name="email"
                                 type="email"
                                 placeholder="E-mailadres"
                                 required
+                                defaultValue={visitor.email}
                             />
                         </BureauFieldRow>
                         <BureauFieldRow>
@@ -234,7 +238,7 @@ function BureauPanelBody({
                         )}
                     </p>
                     <BureauForm
-                        subject="Privé consult aanvraag"
+                        kind="consult"
                         submitLabel="Consult aanvragen"
                     >
                         <BureauFieldRow>
@@ -242,12 +246,14 @@ function BureauPanelBody({
                                 name="name"
                                 placeholder="Naam"
                                 required
+                                defaultValue={visitor.name}
                             />
                             <BureauInput
                                 name="email"
                                 type="email"
                                 placeholder="E-mailadres"
                                 required
+                                defaultValue={visitor.email}
                             />
                         </BureauFieldRow>
                         <BureauFieldRow>
@@ -310,7 +316,7 @@ function BureauPanelBody({
                         )}
                     </p>
                     <BureauForm
-                        subject="Feedback"
+                        kind="feedback"
                         submitLabel="Verstuur feedback"
                     >
                         <BureauFieldRow>
@@ -318,12 +324,14 @@ function BureauPanelBody({
                                 name="name"
                                 placeholder="Naam"
                                 required
+                                defaultValue={visitor.name}
                             />
                             <BureauInput
                                 name="email"
                                 type="email"
                                 placeholder="E-mailadres"
                                 required
+                                defaultValue={visitor.email}
                             />
                         </BureauFieldRow>
                         <BureauSelect
