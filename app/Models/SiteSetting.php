@@ -2,20 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\TranslatesWithDeepL;
 use Illuminate\Database\Eloquent\Model;
 
 class SiteSetting extends Model
 {
-    use TranslatesWithDeepL;
-
-    /**
-     * @var list<string>
-     */
-    protected array $translatable = [
-        'announcement_text',
-    ];
-
     /**
      * @var list<string>
      */
@@ -27,7 +17,6 @@ class SiteSetting extends Model
         'instagram_url',
         'boutique_lat',
         'boutique_lng',
-        'announcement_text',
     ];
 
     /**
@@ -72,8 +61,7 @@ class SiteSetting extends Model
      *     boutiqueMapSrc: string,
      *     whatsappHref: string,
      *     phoneHref: string,
-     *     emailHelloHref: string,
-     *     announcementText: string|null
+     *     emailHelloHref: string
      * }
      */
     public function toShare(): array
@@ -84,7 +72,6 @@ class SiteSetting extends Model
         $bboxLngMax = number_format($lng + 0.016, 3, '.', '');
         $bboxLatMin = number_format($lat - 0.014, 3, '.', '');
         $bboxLatMax = number_format($lat + 0.014, 3, '.', '');
-        $announcement = trim($this->translated('announcement_text'));
 
         return [
             'phone' => $this->phone,
@@ -98,7 +85,6 @@ class SiteSetting extends Model
             'whatsappHref' => 'https://wa.me/'.$this->whatsapp,
             'phoneHref' => 'tel:'.$this->phone,
             'emailHelloHref' => 'mailto:'.$this->email_hello,
-            'announcementText' => $announcement !== '' ? $announcement : null,
         ];
     }
 }

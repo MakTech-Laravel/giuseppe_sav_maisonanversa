@@ -492,10 +492,6 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('site-settings', 'update')->name('site-settings.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
-                Route::put('site-settings/translations', 'updateTranslations')->name('site-settings.translations.update')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-                Route::post('site-settings/translate', 'translate')->name('site-settings.translate')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
             Route::controller(LegalPageController::class)->group(function () {
