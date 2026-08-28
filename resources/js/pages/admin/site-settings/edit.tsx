@@ -3,6 +3,7 @@ import { Globe, Loader2, Settings2 } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { SiteSettingTranslationsDialog } from '@/components/admin/site-setting-translations-dialog';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,10 +22,24 @@ interface SiteSettingsForm {
     announcement_text: string | null;
 }
 
+type LocaleCopy = {
+    announcement_text: string;
+};
+
+type TranslationStatus = {
+    announcement_text: boolean;
+};
+
 export default function SiteSettingsEdit({
     settings,
+    locales,
+    translations,
+    translationStatus,
 }: {
     settings: SiteSettingsForm;
+    locales: string[];
+    translations: Record<string, LocaleCopy>;
+    translationStatus: Record<string, TranslationStatus>;
 }) {
     const { t } = useTranslation();
     const form = useForm(siteSettings.update(wayfinderLocale()), {
@@ -158,17 +173,29 @@ export default function SiteSettingsEdit({
                                 form.setData('announcement_text', event.target.value)
                             }
                         />
+                        <p className="text-xs text-muted-foreground">
+                            {t(
+                                'Tekst op dit formulier is de Nederlandse bron. DeepL vult EN en FR na opslaan.',
+                            )}
+                        </p>
                         <InputError message={form.errors.announcement_text} />
                     </div>
 
-                    <Button type="submit" disabled={form.processing}>
-                        {form.processing ? (
-                            <Loader2 className="size-4 animate-spin" />
-                        ) : (
-                            <Settings2 className="size-4" />
-                        )}
-                        {t('Opslaan')}
-                    </Button>
+                    <div className="flex flex-wrap items-center gap-3">
+                        <Button type="submit" disabled={form.processing}>
+                            {form.processing ? (
+                                <Loader2 className="size-4 animate-spin" />
+                            ) : (
+                                <Settings2 className="size-4" />
+                            )}
+                            {t('Opslaan')}
+                        </Button>
+                        <SiteSettingTranslationsDialog
+                            locales={locales}
+                            translations={translations}
+                            translationStatus={translationStatus}
+                        />
+                    </div>
                 </form>
             </div>
         </>

@@ -5,6 +5,7 @@ use App\Models\SiteSetting;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
+use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->seed([PermissionSeeder::class, RoleSeeder::class]);
@@ -56,4 +57,95 @@ test('admin can update site settings', function () {
         ->phone->toBe('+32999888777')
         ->email_hello->toBe('contact@maison.test')
         ->announcement_text->toBe('Heritage No.001 — limited edition');
+});
+
+test('staff can open site settings with announcement translations', function () {
+    $this->actingAs($this->admin)
+        ->get(route('admin.site-settings.edit', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/site-settings/edit')
+            ->has('settings.phone')
+            ->has('translations.nl.announcement_text')
+            ->has('translations.en.announcement_text')
+            ->has('translationStatus.fr.announcement_text'));
+});
+
+test('announcement text is shared per locale after deepl', function () {
+    fakeDeepLTranslations();
+
+    SiteSetting::current()->update([
+        'announcement_text' => 'Heritage No.001 — beperkt',
+    ]);
+
+    $this->get('/nl/contact')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('site.announcementText', 'Heritage No.001 — beperkt'));
+
+    $this->get('/en/contact')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('site.announcementText', 'EN Heritage No.001 — beperkt'));
+});
+
+test('staff can manually update announcement translations', function () {
+    $settings = SiteSetting::current();
+    $settings->update([
+        'announcement_text' => 'Nederlandse aankondiging',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.site-settings.translations.update', ['locale' => 'nl']), [
+            'nl' => ['announcement_text' => 'Aangepaste aankondiging'],
+            'en' => ['announcement_text' => 'Custom announcement'],
+            'fr' => ['announcement_text' => 'Annonce personnalisée'],
+        ])
+        ->assertRedirect(route('admin.site-settings.edit', ['locale' => 'nl']));
+
+    $settings->refresh();
+
+    expect($settings->announcement_text)->toBe('Aangepaste aankondiging')
+        ->and($settings->translated('announcement_text', 'en'))->toBe('Custom announcement')
+        ->and($settings->translated('announcement_text', 'fr'))->toBe('Annonce personnalisée');
+
+    $this->get('/en/contact')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('site.announcementText', 'Custom announcement'));
+});
+
+test('staff can retranslate announcement for one locale', function () {
+    fakeDeepLTranslations();
+
+    $settings = SiteSetting::current();
+    $settings->update([
+        'announcement_text' => 'Bron aankondiging',
+    ]);
+    $settings->translations()->updateOrCreate(
+        ['locale' => 'fr', 'column' => 'announcement_text'],
+        ['value' => 'Keep FR announcement', 'source_hash' => $settings->translationSourceHash('announcement_text')],
+    );
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.site-settings.translate', ['locale' => 'nl']), [
+            'target_locale' => 'en',
+        ])
+        ->assertRedirect(route('admin.site-settings.edit', ['locale' => 'nl']));
+
+    $settings->refresh();
+
+    expect($settings->translated('announcement_text', 'en'))->toBe('EN Bron aankondiging')
+        ->and($settings->translated('announcement_text', 'fr'))->toBe('Keep FR announcement');
+});
+
+test('empty announcement is shared as null', function () {
+    SiteSetting::current()->update([
+        'announcement_text' => null,
+    ]);
+
+    $this->get('/nl/contact')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('site.announcementText', null));
 });
