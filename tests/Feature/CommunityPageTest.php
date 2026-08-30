@@ -123,7 +123,9 @@ test('community tabs mark the active tab clearly', function () {
     expect($source)
         ->toContain('aria-selected')
         ->toContain('after:bg-choc')
-        ->toContain('role="tablist"');
+        ->toContain('role="tablist"')
+        ->toContain('flex-col')
+        ->toContain('md:flex-row');
 });
 
 test('community courts use a stacked layout without a side column', function () {
@@ -142,7 +144,9 @@ test('sessions live on their own page with three tabs', function () {
         ->toContain('SessionCard')
         ->toContain('SessionTabs')
         ->and($tabs)
-        ->toContain('role="tablist"');
+        ->toContain('role="tablist"')
+        ->toContain('flex-col')
+        ->toContain('md:flex-row');
 
     expect(File::exists(resource_path('js/components/maison/community/community-sessions.tsx')))->toBeFalse();
 });
