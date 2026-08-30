@@ -20,6 +20,8 @@ type SessionTabsProps<T extends string> = {
 /**
  * Open / My / Past. Rendered as links rather than buttons so a tab can be
  * bookmarked and the browser back button walks between them.
+ *
+ * Stacked vertically below md so labels stay readable; horizontal on md+.
  */
 export function SessionTabs<T extends string>({
     tabs,
@@ -33,7 +35,7 @@ export function SessionTabs<T extends string>({
         <div
             role="tablist"
             aria-label={ariaLabel}
-            className="flex gap-1 overflow-x-auto overflow-y-hidden border-b border-gold/20 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex flex-col border-b border-gold/20 md:flex-row md:gap-1 md:overflow-x-auto md:overflow-y-hidden md:[-ms-overflow-style:none] md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden"
         >
             {tabs.map((tab) => {
                 const isActive = tab.id === activeTab;
@@ -46,7 +48,7 @@ export function SessionTabs<T extends string>({
                         aria-selected={isActive}
                         preserveScroll
                         className={cn(
-                            'relative shrink-0 px-5 py-4 font-sans text-[10px] tracking-[0.22em] uppercase transition-colors md:px-7',
+                            'relative w-full shrink-0 px-5 py-3.5 font-sans text-[10px] tracking-[0.22em] uppercase transition-colors md:w-auto md:px-7 md:py-4',
                             isActive
                                 ? 'font-medium text-choc after:absolute after:right-5 after:bottom-0 after:left-5 after:h-0.5 after:bg-choc md:after:right-7 md:after:left-7'
                                 : 'text-stone hover:text-choc',

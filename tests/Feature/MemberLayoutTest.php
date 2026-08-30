@@ -19,7 +19,11 @@ test('the member layout uses maison brand surfaces', function () {
         ->not->toContain('MemberNotificationBell')
         ->not->toContain('member-notification-bell')
         ->and($nav)
-        ->toContain('md:sticky');
+        ->toContain('md:sticky')
+        ->toContain('Sheet')
+        ->toContain('side="left"')
+        ->toContain("t('Menu')")
+        ->not->toContain('overflow-x-auto');
 });
 
 test('admin theme tokens use the maison palette', function () {
