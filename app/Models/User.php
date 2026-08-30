@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\GuardEnum;
 use App\Enums\RoleEnum;
+use App\Enums\UserGender;
 use App\Enums\UserType;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -18,7 +19,7 @@ use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'username', 'type', 'password', 'avatar', 'locale', 'marketing_consent_at'])]
+#[Fillable(['name', 'email', 'username', 'gender', 'type', 'password', 'avatar', 'locale', 'marketing_consent_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -116,6 +117,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'two_factor_confirmed_at' => 'datetime',
             'marketing_consent_at' => 'datetime',
             'type' => UserType::class,
+            'gender' => UserGender::class,
         ];
     }
 }

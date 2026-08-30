@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserGender;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -15,14 +16,18 @@ test('profile page is displayed', function () {
 });
 
 test('profile information can be updated', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'username' => 'locked_user',
+        'gender' => UserGender::Male,
+    ]);
 
     $response = $this
         ->actingAs($user)
         ->patch(localized('profile.update'), [
             'name' => 'Test User',
-            'username' => 'test_user',
             'email' => 'test@example.com',
+            'gender' => UserGender::Mixed->value,
+            'username' => 'should_not_apply',
         ]);
 
     $response
@@ -32,7 +37,8 @@ test('profile information can be updated', function () {
     $user->refresh();
 
     expect($user->name)->toBe('Test User');
-    expect($user->username)->toBe('test_user');
+    expect($user->username)->toBe('locked_user');
+    expect($user->gender)->toBe(UserGender::Mixed);
     expect($user->email)->toBe('test@example.com');
     expect($user->email_verified_at)->toBeNull();
 });
@@ -44,8 +50,8 @@ test('email verification status is unchanged when the email address is unchanged
         ->actingAs($user)
         ->patch(localized('profile.update'), [
             'name' => 'Test User',
-            'username' => $user->username,
             'email' => $user->email,
+            'gender' => $user->gender->value,
         ]);
 
     $response
@@ -63,8 +69,8 @@ test('profile avatar can be uploaded and removed', function () {
     $this->actingAs($user)
         ->patch(localized('profile.update'), [
             'name' => $user->name,
-            'username' => $user->username,
             'email' => $user->email,
+            'gender' => $user->gender->value,
             'avatar' => UploadedFile::fake()->image('avatar.jpg'),
         ])
         ->assertSessionHasNoErrors()
@@ -78,8 +84,8 @@ test('profile avatar can be uploaded and removed', function () {
     $this->actingAs($user)
         ->patch(localized('profile.update'), [
             'name' => $user->name,
-            'username' => $user->username,
             'email' => $user->email,
+            'gender' => $user->gender->value,
             'remove_avatar' => true,
         ])
         ->assertSessionHasNoErrors()
