@@ -63,31 +63,34 @@ export function SiteNav() {
                 </span>
             </MaisonLink>
 
-            <button
-                type="button"
-                aria-label={t('Menu')}
-                aria-expanded={open}
-                aria-controls="maison-nav-links"
-                onClick={() => setOpenedOn(open ? null : url)}
-                className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25 ma-lg:hidden"
-            >
-                {[0, 1, 2].map((bar) => (
-                    <span
-                        key={bar}
-                        aria-hidden="true"
-                        className={cn(
-                            'block h-[1.6px] w-6 bg-gold transition-transform duration-300',
-                            open &&
-                                bar === 0 &&
-                                'translate-y-[6.6px] rotate-45',
-                            open && bar === 1 && 'opacity-0',
-                            open &&
-                                bar === 2 &&
-                                'translate-y-[-6.6px] -rotate-45',
-                        )}
-                    />
-                ))}
-            </button>
+            <div className="flex shrink-0 items-center gap-1 ma-lg:hidden">
+                <AuthMenu compact />
+                <button
+                    type="button"
+                    aria-label={t('Menu')}
+                    aria-expanded={open}
+                    aria-controls="maison-nav-links"
+                    onClick={() => setOpenedOn(open ? null : url)}
+                    className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25"
+                >
+                    {[0, 1, 2].map((bar) => (
+                        <span
+                            key={bar}
+                            aria-hidden="true"
+                            className={cn(
+                                'block h-[1.6px] w-6 bg-gold transition-transform duration-300',
+                                open &&
+                                    bar === 0 &&
+                                    'translate-y-[6.6px] rotate-45',
+                                open && bar === 1 && 'opacity-0',
+                                open &&
+                                    bar === 2 &&
+                                    'translate-y-[-6.6px] -rotate-45',
+                            )}
+                        />
+                    ))}
+                </button>
+            </div>
 
             <div
                 id="maison-nav-links"
@@ -124,7 +127,6 @@ export function SiteNav() {
 
                 <div className="mt-3 flex items-center gap-4 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:border-t-0 ma-lg:border-l ma-lg:pl-4 ma-lg:pt-0">
                     <LanguageSwitcher className="ma-lg:gap-1 [&_button]:ma-lg:min-h-0 [&_button]:ma-lg:min-w-0 [&_button]:ma-lg:rounded-sm [&_button]:ma-lg:px-1.5 [&_button]:ma-lg:py-1 [&_button]:ma-lg:text-[9px]" />
-                    <AuthMenu compact className="ma-lg:hidden" />
                 </div>
             </div>
         </nav>

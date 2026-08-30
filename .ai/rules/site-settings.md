@@ -14,3 +14,6 @@ Site settings store contact channels, Instagram, and atelier coordinates for the
 
 ## Storefront reads SiteSetting, not placeholders
 Footer Instagram and Pers resolve from `site.instagramUrl` and `site.emailPressHref` via channel markers. Organization JSON-LD uses telephone, hello email, and Instagram `sameAs` from `SiteSetting::current()`. Do not hardcode `press@` or Instagram URLs as the live hrefs.
+
+## Mobile header auth sits beside the menu toggle
+On viewports below `ma-lg`, SiteNav shows AuthMenu (profile initial / login) next to the hamburger. Do not hide auth only inside the opened mobile drawer. Desktop auth stays in SiteTopbar.
