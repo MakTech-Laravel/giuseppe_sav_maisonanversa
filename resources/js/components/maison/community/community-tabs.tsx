@@ -15,7 +15,7 @@ type TabLink = {
 };
 
 const tabClassName =
-    'relative shrink-0 px-5 py-4 font-sans text-[10px] tracking-[0.22em] uppercase transition-colors md:px-7';
+    'relative w-full shrink-0 px-5 py-3.5 font-sans text-[10px] tracking-[0.22em] uppercase transition-colors md:w-auto md:px-7 md:py-4';
 
 const activeClassName =
     'font-medium text-choc after:absolute after:right-5 after:bottom-0 after:left-5 after:h-0.5 after:bg-choc md:after:right-7 md:after:left-7';
@@ -23,6 +23,9 @@ const activeClassName =
 /**
  * Sticky community sub-nav. Every item is a real URL so Feed, Club Corners,
  * Sessions and Events can be bookmarked and shared.
+ *
+ * Stacked vertically below md so long labels (Club Corners, Events) stay
+ * readable; horizontal scroll row on larger screens.
  */
 export function CommunityTabs() {
     const { t } = useTranslation();
@@ -59,7 +62,7 @@ export function CommunityTabs() {
                 <div
                     role="tablist"
                     aria-label={t('Community')}
-                    className="flex gap-1 overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    className="flex flex-col md:flex-row md:gap-1 md:overflow-x-auto md:overflow-y-hidden md:[-ms-overflow-style:none] md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden"
                 >
                     {tabs.map((tab) => {
                         const isActive = tab.id === active;

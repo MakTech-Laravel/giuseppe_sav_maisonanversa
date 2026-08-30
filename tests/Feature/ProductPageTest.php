@@ -72,3 +72,14 @@ test('related product cards truncate long product titles', function () {
         ->toContain('RELATED_PRODUCT_TITLE_MAX = 40')
         ->toContain('truncateWithEllipsis(item.name, RELATED_PRODUCT_TITLE_MAX)');
 });
+
+test('the craft section stays within the mobile viewport for long locale copy', function () {
+    $source = file_get_contents(resource_path('js/components/maison/product/product-craft.tsx'));
+
+    expect($source)
+        ->toContain('overflow-x-clip')
+        ->toContain('min-w-0')
+        ->toContain('wrap-break-word')
+        ->toContain('md:grid-cols-2')
+        ->not->toContain('sm:grid-cols-2');
+});

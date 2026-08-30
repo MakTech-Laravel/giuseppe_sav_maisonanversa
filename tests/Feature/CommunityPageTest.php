@@ -90,6 +90,10 @@ test('the feed composer renders user text safely without innerHTML', function ()
         ->not->toContain('innerHTML')
         ->not->toContain('Melden')
         ->not->toContain('Delen');
+
+    expect($source)
+        ->toContain('useIsMobile')
+        ->toContain('Deel uw ervaring...');
 });
 
 test('community tabs are url based links', function () {
@@ -123,7 +127,9 @@ test('community tabs mark the active tab clearly', function () {
     expect($source)
         ->toContain('aria-selected')
         ->toContain('after:bg-choc')
-        ->toContain('role="tablist"');
+        ->toContain('role="tablist"')
+        ->toContain('flex-col')
+        ->toContain('md:flex-row');
 });
 
 test('community courts use a stacked layout without a side column', function () {
@@ -142,7 +148,9 @@ test('sessions live on their own page with three tabs', function () {
         ->toContain('SessionCard')
         ->toContain('SessionTabs')
         ->and($tabs)
-        ->toContain('role="tablist"');
+        ->toContain('role="tablist"')
+        ->toContain('flex-col')
+        ->toContain('md:flex-row');
 
     expect(File::exists(resource_path('js/components/maison/community/community-sessions.tsx')))->toBeFalse();
 });
