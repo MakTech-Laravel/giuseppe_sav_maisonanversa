@@ -2,6 +2,7 @@
 
 use App\Enums\SubscriberSource;
 use App\Enums\SubscriberStatus;
+use App\Enums\UserGender;
 use App\Jobs\SyncSubscriberToBrevo;
 use App\Models\NewsletterSubscriber;
 use App\Models\User;
@@ -217,7 +218,7 @@ test('changing a member email rebinds the subscriber row', function () {
         ->patch(localized('member.profile.update'), [
             'name' => $user->name,
             'email' => 'new@example.com',
-            'username' => 'letter_member',
+            'gender' => $user->gender->value,
         ])
         ->assertRedirect(localized('member.profile', absolute: false));
 
@@ -265,7 +266,7 @@ test('changing to an email that already has a subscriber merges the rows', funct
         ->patch(localized('member.profile.update'), [
             'name' => $user->name,
             'email' => 'to@example.com',
-            'username' => 'merge_member',
+            'gender' => $user->gender->value,
         ])
         ->assertRedirect(localized('member.profile', absolute: false));
 
@@ -297,6 +298,7 @@ test('registering claims a guest heritage letter row for the same email', functi
     $this->post(route('register.store'), [
         'name' => 'Ada Lovelace',
         'email' => 'ada@example.com',
+        'gender' => UserGender::Female->value,
         'password' => 'password',
         'password_confirmation' => 'password',
     ])->assertRedirect();

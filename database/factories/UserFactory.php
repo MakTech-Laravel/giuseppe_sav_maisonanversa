@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserGender;
 use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,6 +29,7 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'username' => Str::lower(str_replace('.', '_', fake()->unique()->userName())),
+            'gender' => fake()->randomElement(UserGender::cases()),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

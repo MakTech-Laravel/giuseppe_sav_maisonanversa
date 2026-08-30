@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\RoleEnum;
+use App\Enums\UserGender;
 use App\Enums\UserType;
 use App\Models\User;
 use App\Services\Auth\PostLoginRedirectService;
@@ -93,6 +94,7 @@ test('registration creates a customer account', function () {
     $response = $this->post(route('register.store'), [
         'name' => 'New Member',
         'email' => 'newmember@example.com',
+        'gender' => UserGender::Mixed->value,
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
@@ -103,5 +105,6 @@ test('registration creates a customer account', function () {
 
     expect($user)->not->toBeNull()
         ->and($user->type)->toBe(UserType::Customer)
-        ->and($user->username)->not->toBeEmpty();
+        ->and($user->username)->not->toBeEmpty()
+        ->and($user->gender)->toBe(UserGender::Mixed);
 });

@@ -11,8 +11,21 @@ test('the auth menu is wired into the public shell', function () {
         ->not->toContain('isAuthenticated')
         ->not->toContain('MaisonLink');
 
-    expect(File::get(resource_path('js/components/maison/shell/site-nav.tsx')))
-        ->toContain('AuthMenu');
+    $nav = File::get(resource_path('js/components/maison/shell/site-nav.tsx'));
+
+    expect($nav)
+        ->toContain('AuthMenu')
+        ->toContain('ma-lg:hidden')
+        ->toContain("aria-label={t('Menu')}");
+});
+
+test('mobile site nav shows auth beside the menu toggle', function () {
+    $nav = File::get(resource_path('js/components/maison/shell/site-nav.tsx'));
+
+    expect($nav)
+        ->toContain('flex shrink-0 items-center gap-1 ma-lg:hidden')
+        ->toContain('<AuthMenu compact />')
+        ->not->toContain('<AuthMenu compact className="ma-lg:hidden" />');
 });
 
 test('guests visiting home receive auth flash props when redirected from a protected route', function () {
