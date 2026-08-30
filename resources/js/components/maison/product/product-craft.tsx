@@ -68,20 +68,20 @@ export function ProductCraft({ section }: { section?: ProductSection }) {
     }
 
     return (
-        <section className="bg-choc text-cream">
+        <section className="overflow-x-clip bg-choc text-cream">
             <div className="grid md:grid-cols-2">
                 <CraftImage
                     src={section?.image ?? null}
                     alt={section?.eyebrow || section?.heading || ''}
                 />
 
-                <Reveal className="flex flex-col justify-center px-8 py-13 md:px-16 md:py-20">
+                <Reveal className="flex min-w-0 flex-col justify-center px-8 py-13 md:px-16 md:py-20">
                     {section?.eyebrow ? (
                         <Eyebrow>{section.eyebrow}</Eyebrow>
                     ) : null}
                     <GoldRule />
                     {section?.heading || section?.subheading ? (
-                        <h2 className="mb-5.5 font-serif text-[clamp(30px,3.4vw,46px)] leading-[1.1] font-normal tracking-[0.03em] uppercase">
+                        <h2 className="mb-5.5 max-w-full wrap-break-word font-serif text-[clamp(26px,7.2vw,46px)] leading-[1.15] font-normal tracking-[0.02em] uppercase md:tracking-[0.03em]">
                             {section.heading}
                             {section.subheading ? (
                                 <>
@@ -92,23 +92,26 @@ export function ProductCraft({ section }: { section?: ProductSection }) {
                         </h2>
                     ) : null}
                     {section?.intro ? (
-                        <p className="text-[15px] leading-[1.85] text-sand">
+                        <p className="max-w-full text-[15px] leading-[1.85] wrap-break-word text-sand">
                             {section.intro}
                         </p>
                     ) : null}
 
-                    <div className="mt-10 grid grid-cols-1 gap-0.5 bg-gold/15 sm:grid-cols-2">
+                    <div className="mt-10 grid min-w-0 grid-cols-1 gap-0.5 bg-gold/15 md:grid-cols-2">
                         {items.map((item) => (
-                            <div key={item.id} className="bg-choc2 px-6.5 py-7.5">
+                            <div
+                                key={item.id}
+                                className="min-w-0 bg-choc2 px-6.5 py-7.5"
+                            >
                                 {item.number_label ? (
                                     <div className="font-serif text-[13px] tracking-[0.2em] text-gold">
                                         {item.number_label}
                                     </div>
                                 ) : null}
-                                <div className="my-2 font-serif text-[21px] text-cream">
+                                <div className="my-2 font-serif text-[21px] wrap-break-word text-cream">
                                     {item.title}
                                 </div>
-                                <div className="text-[13px] leading-[1.7] text-sand">
+                                <div className="text-[13px] leading-[1.7] wrap-break-word text-sand">
                                     {item.body}
                                 </div>
                             </div>
