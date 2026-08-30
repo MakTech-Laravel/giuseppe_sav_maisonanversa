@@ -1,5 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
+import { GenderSelect } from '@/components/gender-select';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -7,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { USER_GENDER_OPTIONS } from '@/lib/user-gender';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
@@ -64,26 +64,7 @@ export default function Register({ passwordRules }: Props) {
 
                             <div className="grid gap-2">
                                 <Label htmlFor="gender">{t('Geslacht')}</Label>
-                                <select
-                                    id="gender"
-                                    name="gender"
-                                    required
-                                    tabIndex={3}
-                                    defaultValue=""
-                                    className="border-input flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs outline-none"
-                                >
-                                    <option value="" disabled>
-                                        {t('Geslacht')}
-                                    </option>
-                                    {USER_GENDER_OPTIONS.map((option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {t(option.label)}
-                                        </option>
-                                    ))}
-                                </select>
+                                <GenderSelect tabIndex={3} />
                                 <InputError message={errors.gender} />
                             </div>
 

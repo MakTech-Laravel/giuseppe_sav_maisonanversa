@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
+import { GenderSelect } from '@/components/gender-select';
 import InputError from '@/components/input-error';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -100,29 +101,14 @@ export default function Profile({
                                     <Label htmlFor="gender">
                                         {t('Geslacht')}
                                     </Label>
-                                    <select
-                                        id="gender"
-                                        name="gender"
-                                        required
+                                    <GenderSelect
                                         defaultValue={
                                             typeof user.gender === 'string'
                                                 ? user.gender
                                                 : ''
                                         }
-                                        className="border-input flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs outline-none"
-                                    >
-                                        <option value="" disabled>
-                                            {t('Geslacht')}
-                                        </option>
-                                        {genders.map((option) => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {t(option.label)}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        options={genders}
+                                    />
                                     <InputError message={errors.gender} />
                                 </div>
 
