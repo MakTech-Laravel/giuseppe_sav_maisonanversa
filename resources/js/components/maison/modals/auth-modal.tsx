@@ -9,6 +9,7 @@ import {
 } from '@/components/maison/modals/maison-modal';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { SuccessPanel } from '@/components/maison/ui/success-panel';
+import { USER_GENDER_OPTIONS } from '@/lib/user-gender';
 import { store as loginStore } from '@/routes/login';
 import { email as passwordEmail } from '@/routes/password';
 import { store as registerStore } from '@/routes/register';
@@ -235,6 +236,27 @@ export function AuthModal({
                                 <InputError
                                     message={errors.password_confirmation}
                                 />
+
+                                <select
+                                    name="gender"
+                                    required
+                                    defaultValue=""
+                                    aria-label={t('Geslacht')}
+                                    className={modalInputClassName}
+                                >
+                                    <option value="" disabled>
+                                        {t('Geslacht')}
+                                    </option>
+                                    {USER_GENDER_OPTIONS.map((option) => (
+                                        <option
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {t(option.label)}
+                                        </option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.gender} />
 
                                 <MaisonButton
                                     type="submit"

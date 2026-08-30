@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Enums\UserGender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileDeleteRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
@@ -24,6 +25,7 @@ class ProfileController extends Controller
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'genders' => UserGender::options(),
         ]);
     }
 
@@ -34,7 +36,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        $user->fill($request->safe()->only(['name', 'email', 'username']));
+        $user->fill($request->safe()->only(['name', 'email', 'gender']));
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

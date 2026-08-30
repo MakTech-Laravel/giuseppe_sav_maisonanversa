@@ -4,9 +4,11 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Enums\UserGender;
 use App\Models\User;
 use App\Services\Auth\UserRegistrationService;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -24,6 +26,7 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             ...$this->profileRules(),
+            'gender' => ['required', Rule::enum(UserGender::class)],
             'password' => $this->passwordRules(),
         ])->validate();
 

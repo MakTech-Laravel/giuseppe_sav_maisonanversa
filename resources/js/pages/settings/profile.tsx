@@ -18,9 +18,11 @@ import { send } from '@/routes/verification';
 export default function Profile({
     mustVerifyEmail,
     status,
+    genders,
 }: {
     mustVerifyEmail: boolean;
     status?: string;
+    genders: { value: string; label: string }[];
 }) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
@@ -61,7 +63,7 @@ export default function Profile({
                         <SettingsPanel
                             title={t('Profielgegevens')}
                             description={t(
-                                'Werk uw naam, gebruikersnaam en e-mailadres bij.',
+                                'Werk uw naam, geslacht en e-mailadres bij.',
                             )}
                         >
                             <div className="grid gap-5 sm:grid-cols-2">
@@ -87,15 +89,44 @@ export default function Profile({
                                         id="username"
                                         className="w-full"
                                         defaultValue={user.username}
-                                        name="username"
-                                        required
+                                        readOnly
+                                        disabled
                                         autoComplete="username"
                                         placeholder={t('gebruikersnaam')}
                                     />
-                                    <InputError message={errors.username} />
                                 </div>
 
                                 <div className="grid gap-2">
+                                    <Label htmlFor="gender">
+                                        {t('Geslacht')}
+                                    </Label>
+                                    <select
+                                        id="gender"
+                                        name="gender"
+                                        required
+                                        defaultValue={
+                                            typeof user.gender === 'string'
+                                                ? user.gender
+                                                : ''
+                                        }
+                                        className="border-input flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs outline-none"
+                                    >
+                                        <option value="" disabled>
+                                            {t('Geslacht')}
+                                        </option>
+                                        {genders.map((option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {t(option.label)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <InputError message={errors.gender} />
+                                </div>
+
+                                <div className="grid gap-2 sm:col-span-2">
                                     <Label htmlFor="email">
                                         {t('E-mailadres')}
                                     </Label>
