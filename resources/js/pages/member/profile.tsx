@@ -23,9 +23,11 @@ import { send } from '@/routes/verification';
 export default function MemberProfile({
     mustVerifyEmail,
     status,
+    genders,
 }: {
     mustVerifyEmail: boolean;
     status?: string;
+    genders: { value: string; label: string }[];
 }) {
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
@@ -104,13 +106,45 @@ export default function MemberProfile({
                                     </Label>
                                     <Input
                                         id="username"
-                                        name="username"
                                         defaultValue={user.username}
-                                        required
+                                        readOnly
+                                        disabled
                                         autoComplete="username"
                                         className={memberFieldClassName}
                                     />
-                                    <InputError message={errors.username} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label
+                                        htmlFor="gender"
+                                        className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                    >
+                                        {t('Geslacht')}
+                                    </Label>
+                                    <select
+                                        id="gender"
+                                        name="gender"
+                                        required
+                                        defaultValue={
+                                            typeof user.gender === 'string'
+                                                ? user.gender
+                                                : ''
+                                        }
+                                        className={memberFieldClassName}
+                                    >
+                                        <option value="" disabled>
+                                            {t('Geslacht')}
+                                        </option>
+                                        {genders.map((option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {t(option.label)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <InputError message={errors.gender} />
                                 </div>
 
                                 <div className="grid gap-2 md:col-span-2">

@@ -2,6 +2,7 @@
 
 namespace App\Concerns;
 
+use App\Enums\UserGender;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
@@ -22,7 +23,7 @@ trait ProfileValidationRules
     }
 
     /**
-     * Rules for the authenticated profile form, including editable username.
+     * Rules for the authenticated profile form.
      *
      * @return array<string, array<int, ValidationRule|array<mixed>|string>>
      */
@@ -30,7 +31,7 @@ trait ProfileValidationRules
     {
         return [
             ...$this->profileRules($userId),
-            'username' => $this->usernameRules($userId),
+            'gender' => ['required', Rule::enum(UserGender::class)],
             'avatar' => ['nullable', 'image', 'max:2048'],
             'remove_avatar' => ['nullable', 'boolean'],
         ];
