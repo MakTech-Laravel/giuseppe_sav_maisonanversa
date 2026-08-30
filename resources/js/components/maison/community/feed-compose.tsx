@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Monogram } from '@/components/maison/ui/monogram';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type FeedComposeProps = {
     initials: string;
@@ -9,6 +10,7 @@ type FeedComposeProps = {
 
 export function FeedCompose({ initials, onPublish }: FeedComposeProps) {
     const { t } = useTranslation();
+    const isMobile = useIsMobile();
     const [text, setText] = useState('');
 
     function handlePublish() {
@@ -30,7 +32,9 @@ export function FeedCompose({ initials, onPublish }: FeedComposeProps) {
                     value={text}
                     onChange={(event) => setText(event.target.value)}
                     placeholder={t(
-                        'Deel uw ervaring met Heritage No.001, een sessie, een gedachte...',
+                        isMobile
+                            ? 'Deel uw ervaring...'
+                            : 'Deel uw ervaring met Heritage No.001, een sessie, een gedachte...',
                     )}
                     className="h-20 flex-1 resize-none border border-gold/20 bg-cream px-4 py-3 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
                 />
