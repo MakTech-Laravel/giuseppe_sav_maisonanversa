@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
+import { GenderSelect } from '@/components/gender-select';
 import InputError from '@/components/input-error';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -18,9 +19,11 @@ import { send } from '@/routes/verification';
 export default function Profile({
     mustVerifyEmail,
     status,
+    genders,
 }: {
     mustVerifyEmail: boolean;
     status?: string;
+    genders: { value: string; label: string }[];
 }) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
@@ -61,7 +64,7 @@ export default function Profile({
                         <SettingsPanel
                             title={t('Profielgegevens')}
                             description={t(
-                                'Werk uw naam, gebruikersnaam en e-mailadres bij.',
+                                'Werk uw naam, geslacht en e-mailadres bij.',
                             )}
                         >
                             <div className="grid gap-5 sm:grid-cols-2">
@@ -87,15 +90,29 @@ export default function Profile({
                                         id="username"
                                         className="w-full"
                                         defaultValue={user.username}
-                                        name="username"
-                                        required
+                                        readOnly
+                                        disabled
                                         autoComplete="username"
                                         placeholder={t('gebruikersnaam')}
                                     />
-                                    <InputError message={errors.username} />
                                 </div>
 
                                 <div className="grid gap-2">
+                                    <Label htmlFor="gender">
+                                        {t('Geslacht')}
+                                    </Label>
+                                    <GenderSelect
+                                        defaultValue={
+                                            typeof user.gender === 'string'
+                                                ? user.gender
+                                                : ''
+                                        }
+                                        options={genders}
+                                    />
+                                    <InputError message={errors.gender} />
+                                </div>
+
+                                <div className="grid gap-2 sm:col-span-2">
                                     <Label htmlFor="email">
                                         {t('E-mailadres')}
                                     </Label>
