@@ -4,6 +4,7 @@ export type User = {
     id: number;
     name: string;
     username: string;
+    gender?: string | null;
     email: string;
     avatar?: string | null;
     avatar_url?: string | null;

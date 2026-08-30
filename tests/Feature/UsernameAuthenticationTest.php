@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserGender;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -7,6 +8,7 @@ test('registration creates an auto-generated username', function () {
     $this->post(route('register.store'), [
         'name' => 'Yusuf Savran',
         'email' => 'yusuf@example.com',
+        'gender' => UserGender::Male->value,
         'password' => 'password',
         'password_confirmation' => 'password',
     ])->assertRedirect(localized('member.dashboard', absolute: false));
@@ -14,7 +16,8 @@ test('registration creates an auto-generated username', function () {
     $user = User::where('email', 'yusuf@example.com')->sole();
 
     expect($user->username)->not->toBeEmpty()
-        ->and($user->username)->toStartWith('yusuf_savran');
+        ->and($user->username)->toStartWith('yusuf_savran')
+        ->and($user->gender)->toBe(UserGender::Male);
 });
 
 test('users can authenticate with their email', function () {
@@ -47,25 +50,22 @@ test('users can authenticate with their username', function () {
     $this->assertAuthenticatedAs($user);
 });
 
-test('profile username updates must stay unique', function () {
-    $owner = User::factory()->create(['username' => 'owner_one']);
-    User::factory()->create(['username' => 'taken_name']);
+test('profile username stays unchanged when profile is saved', function () {
+    $owner = User::factory()->create([
+        'username' => 'owner_one',
+        'gender' => UserGender::Male,
+    ]);
 
     $this->actingAs($owner)
         ->patch(localized('profile.update'), [
             'name' => $owner->name,
             'email' => $owner->email,
-            'username' => 'taken_name',
+            'gender' => UserGender::Female->value,
+            'username' => 'attempted_change',
         ])
-        ->assertSessionHasErrors('username');
-
-    $this->actingAs($owner)
-        ->patch(localized('profile.update'), [
-            'name' => $owner->name,
-            'email' => $owner->email,
-            'username' => 'owner_two',
-        ])
+        ->assertSessionHasNoErrors()
         ->assertRedirect(localized('profile.edit', absolute: false));
 
-    expect($owner->fresh()->username)->toBe('owner_two');
+    expect($owner->fresh()->username)->toBe('owner_one')
+        ->and($owner->fresh()->gender)->toBe(UserGender::Female);
 });
