@@ -2,6 +2,7 @@
 
 use App\Enums\OrderStatus;
 use App\Enums\RoleEnum;
+use App\Enums\UserGender;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Edition\EditionAllocator;
@@ -75,19 +76,24 @@ test('members can view heritage, orders, passport, circle and letter shells', fu
     ['member.security', 'member/security'],
 ]);
 
-test('members can update their profile and username from the member area', function () {
-    $user = User::factory()->create(['username' => 'old_handle']);
+test('members can update their profile gender from the member area', function () {
+    $user = User::factory()->create([
+        'username' => 'old_handle',
+        'gender' => UserGender::Male,
+    ]);
 
     $this->actingAs($user)
         ->patch(localized('member.profile.update'), [
             'name' => 'Updated Name',
             'email' => $user->email,
+            'gender' => UserGender::Female->value,
             'username' => 'new_handle',
         ])
         ->assertRedirect(localized('member.profile', absolute: false));
 
-    expect($user->fresh()->username)->toBe('new_handle')
-        ->and($user->fresh()->name)->toBe('Updated Name');
+    expect($user->fresh()->username)->toBe('old_handle')
+        ->and($user->fresh()->name)->toBe('Updated Name')
+        ->and($user->fresh()->gender)->toBe(UserGender::Female);
 });
 
 test('members can upload and remove a profile avatar', function () {
@@ -99,7 +105,7 @@ test('members can upload and remove a profile avatar', function () {
         ->patch(localized('member.profile.update'), [
             'name' => $user->name,
             'email' => $user->email,
-            'username' => $user->username,
+            'gender' => $user->gender->value,
             'avatar' => UploadedFile::fake()->image('avatar.jpg'),
         ])
         ->assertRedirect(localized('member.profile', absolute: false));
@@ -113,7 +119,7 @@ test('members can upload and remove a profile avatar', function () {
         ->patch(localized('member.profile.update'), [
             'name' => $user->name,
             'email' => $user->email,
-            'username' => $user->username,
+            'gender' => $user->gender->value,
             'remove_avatar' => true,
         ])
         ->assertRedirect(localized('member.profile', absolute: false));

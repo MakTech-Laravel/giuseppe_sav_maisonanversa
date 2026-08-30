@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Enums\UserGender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Member\UpdateLetterPreferencesRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
@@ -200,6 +201,7 @@ class DashboardController extends Controller implements HasMiddleware
         return Inertia::render('member/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'genders' => UserGender::options(),
         ]);
     }
 
@@ -211,7 +213,7 @@ class DashboardController extends Controller implements HasMiddleware
         $user = $request->user();
         $previousEmail = $user->email;
 
-        $user->fill($request->safe()->only(['name', 'email', 'username']));
+        $user->fill($request->safe()->only(['name', 'email', 'gender']));
 
         $emailChanged = $user->isDirty('email');
 

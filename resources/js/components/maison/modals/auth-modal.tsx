@@ -1,6 +1,7 @@
 import { Form } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { GenderSelect } from '@/components/gender-select';
 import InputError from '@/components/input-error';
 import {
     MaisonModal,
@@ -9,6 +10,7 @@ import {
 } from '@/components/maison/modals/maison-modal';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { SuccessPanel } from '@/components/maison/ui/success-panel';
+import { cn } from '@/lib/utils';
 import { store as loginStore } from '@/routes/login';
 import { email as passwordEmail } from '@/routes/password';
 import { store as registerStore } from '@/routes/register';
@@ -235,6 +237,15 @@ export function AuthModal({
                                 <InputError
                                     message={errors.password_confirmation}
                                 />
+
+                                <GenderSelect
+                                    aria-label={t('Geslacht')}
+                                    triggerClassName={cn(
+                                        modalInputClassName,
+                                        'h-auto rounded-none shadow-none data-[size=default]:h-auto [&_svg]:text-choc3',
+                                    )}
+                                />
+                                <InputError message={errors.gender} />
 
                                 <MaisonButton
                                     type="submit"
