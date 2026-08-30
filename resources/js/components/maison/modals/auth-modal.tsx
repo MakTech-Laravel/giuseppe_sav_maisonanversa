@@ -1,6 +1,7 @@
 import { Form } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { GenderSelect } from '@/components/gender-select';
 import InputError from '@/components/input-error';
 import {
     MaisonModal,
@@ -9,7 +10,7 @@ import {
 } from '@/components/maison/modals/maison-modal';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { SuccessPanel } from '@/components/maison/ui/success-panel';
-import { USER_GENDER_OPTIONS } from '@/lib/user-gender';
+import { cn } from '@/lib/utils';
 import { store as loginStore } from '@/routes/login';
 import { email as passwordEmail } from '@/routes/password';
 import { store as registerStore } from '@/routes/register';
@@ -237,25 +238,13 @@ export function AuthModal({
                                     message={errors.password_confirmation}
                                 />
 
-                                <select
-                                    name="gender"
-                                    required
-                                    defaultValue=""
+                                <GenderSelect
                                     aria-label={t('Geslacht')}
-                                    className={modalInputClassName}
-                                >
-                                    <option value="" disabled>
-                                        {t('Geslacht')}
-                                    </option>
-                                    {USER_GENDER_OPTIONS.map((option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {t(option.label)}
-                                        </option>
-                                    ))}
-                                </select>
+                                    triggerClassName={cn(
+                                        modalInputClassName,
+                                        'h-auto rounded-none shadow-none data-[size=default]:h-auto [&_svg]:text-choc3',
+                                    )}
+                                />
                                 <InputError message={errors.gender} />
 
                                 <MaisonButton

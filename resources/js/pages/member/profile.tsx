@@ -5,6 +5,7 @@ import {
     destroy,
     updateProfile,
 } from '@/actions/App/Http/Controllers/Member/DashboardController';
+import { GenderSelect } from '@/components/gender-select';
 import InputError from '@/components/input-error';
 import {
     MemberPageHeader,
@@ -121,29 +122,18 @@ export default function MemberProfile({
                                     >
                                         {t('Geslacht')}
                                     </Label>
-                                    <select
-                                        id="gender"
-                                        name="gender"
-                                        required
+                                    <GenderSelect
                                         defaultValue={
                                             typeof user.gender === 'string'
                                                 ? user.gender
                                                 : ''
                                         }
-                                        className={memberFieldClassName}
-                                    >
-                                        <option value="" disabled>
-                                            {t('Geslacht')}
-                                        </option>
-                                        {genders.map((option) => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                            >
-                                                {t(option.label)}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        options={genders}
+                                        triggerClassName={cn(
+                                            memberFieldClassName,
+                                            'rounded-none shadow-none [&_svg]:text-sand',
+                                        )}
+                                    />
                                     <InputError message={errors.gender} />
                                 </div>
 
