@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { MaisonFloorplan } from '@/components/maison/house/maison-floorplan';
-import { MaisonRoomList } from '@/components/maison/house/maison-room-list';
+// import { MaisonRoomList } from '@/components/maison/house/maison-room-list';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { GoldRule } from '@/components/maison/ui/gold-rule';
@@ -35,12 +35,12 @@ export default function House() {
             </Section>
 
             <Section tone="dark" padded={false} className="pb-22.5">
-                <Wrap className="max-w-260">
-                    <div className="overflow-x-auto pb-2 max-[640px]:hidden">
-                        <MaisonFloorplan />
-                    </div>
+                <Wrap className="max-w-260 max-[640px]:px-3">
+                    <MaisonFloorplan />
 
+                    {/* Mobile room list — kept as a fallback; the floorplan now shows at every width.
                     <MaisonRoomList />
+                    */}
 
                     <div className="mt-10 flex flex-wrap justify-center gap-x-7 gap-y-3.5">
                         <LegendItem>

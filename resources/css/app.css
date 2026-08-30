@@ -597,6 +597,22 @@
     pointer-events: none;
 }
 
+/*
+ * The elevation drawing scales with its viewBox. On a narrow screen the
+ * user-unit type would shrink to hairlines, so labels step up and tracking
+ * tightens. Furniture stays; rooms remain the tap targets.
+ */
+@media (max-width: 640px) {
+    .maison-svg .room-label-name {
+        font-size: 34px;
+    }
+
+    .maison-svg .room-label-sub {
+        font-size: 14px;
+        letter-spacing: 0.16em;
+    }
+}
+
 .legal-prose {
     font-family: var(--font-sans);
     font-size: 14px;
