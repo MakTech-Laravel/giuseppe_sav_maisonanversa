@@ -90,8 +90,8 @@ const FLOORS: readonly Floor[] = [
 ] as const;
 
 /**
- * The eight rooms as a list, shown below 640px where the elevation drawing is
- * too fine to tap. Same destinations as the SVG, same order as the prototype.
+ * The eight rooms as a list. Kept as a fallback — the elevation drawing is
+ * now the navigation at every width. Same destinations as the SVG.
  */
 export function MaisonRoomList() {
     const { t } = useTranslation();
