@@ -286,7 +286,7 @@ class OpsController extends Controller
         return Inertia::render('admin/circle/show', [
             'member' => [
                 ...$this->circleMemberPayload($member, $passport),
-                'benefits' => [__('Digital Heritage Passport'), __('Founding Circle Card')],
+                'benefits' => [__('Digitaal Heritage Passport'), __('Founding Circle-kaart')],
             ],
         ]);
     }
