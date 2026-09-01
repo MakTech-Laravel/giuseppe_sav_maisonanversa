@@ -41,6 +41,8 @@ function maisonTranslationKeys(): array
             return str_contains($path, '/maison')
                 || str_contains($path, '/pages/admin/products/')
                 || str_contains($path, '/pages/admin/legal-pages/')
+                || str_contains($path, '/pages/member/')
+                || str_contains($path, '/components/member')
                 || str_contains($path, '/components/admin/product')
                 || str_contains($path, '/components/admin/legal')
                 || str_contains($path, '/components/admin/form-stepper')
@@ -149,6 +151,23 @@ test('the brand allowlist only covers terms the dictionary really omits', functi
 
     expect($translatedAfterAll)->toBe([]);
 })->with(['en', 'fr']);
+
+test('the passport Download PDF button translates in every locale', function (string $locale, string $expected) {
+    $dictionary = json_decode(
+        File::get(lang_path("{$locale}.json")),
+        true,
+        flags: JSON_THROW_ON_ERROR
+    );
+
+    $source = File::get(resource_path('js/pages/member/passport.tsx'));
+
+    expect($source)->toContain("t('Download PDF')")
+        ->and($dictionary)->toHaveKey('Download PDF')
+        ->and($dictionary['Download PDF'])->toBe($expected);
+})->with([
+    'en' => ['en', 'Download PDF'],
+    'fr' => ['fr', 'Télécharger le PDF'],
+]);
 
 test('no translation key carries markup, because the dictionary holds plain text', function () {
     $withMarkup = [];

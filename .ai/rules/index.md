@@ -21,4 +21,5 @@ Before planning or editing, find the row whose globs match the file's path and r
 | routes/web.php | .ai/rules/routes.md |
 | app/Support/Seo/** | .ai/rules/seo.md |
 | resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
+| app/Support/PassportPresenter.php | .ai/rules/support.md |
 | app/Services/Translation/** | .ai/rules/translation.md |
