@@ -2,7 +2,11 @@ import { Head } from '@inertiajs/react';
 import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PassportPdfController from '@/actions/App/Http/Controllers/Member/PassportPdfController';
-import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
+import {
+    MemberEmptyState,
+    MemberPageHeader,
+    MemberPanel,
+} from '@/components/member/member-ui';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 
 type PassportPage = { title: string; body: string };
@@ -14,9 +18,26 @@ export default function MemberPassport({
         editionNumber: string;
         pages: PassportPage[];
         verificationUrl?: string;
-    };
+    } | null;
 }) {
     const { t } = useTranslation();
+
+    if (passport === null) {
+        return (
+            <>
+                <Head title={t('Digitaal Heritage Passport')} />
+                <MemberPageHeader
+                    title={t('Digitaal Heritage Passport')}
+                />
+                <MemberEmptyState
+                    title={t('Nog geen editie toegewezen')}
+                    description={t(
+                        'U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                    )}
+                />
+            </>
+        );
+    }
 
     return (
         <>

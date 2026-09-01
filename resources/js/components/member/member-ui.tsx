@@ -55,6 +55,23 @@ export function MemberPanel({
     );
 }
 
+export function MemberEmptyState({
+    title,
+    description,
+}: {
+    title: string;
+    description: string;
+}) {
+    return (
+        <MemberPanel className="mx-auto max-w-lg text-center">
+            <p className="font-serif text-[22px] text-cream">{title}</p>
+            <p className="mt-3 text-[14px] leading-[1.8] text-sand">
+                {description}
+            </p>
+        </MemberPanel>
+    );
+}
+
 export function MemberSectionTitle({
     title,
     description,
