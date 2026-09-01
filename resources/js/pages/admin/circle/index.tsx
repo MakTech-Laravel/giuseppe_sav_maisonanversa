@@ -14,6 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { translateMemberStatus } from '@/lib/circle-member-status';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import circleRoutes from '@/routes/admin/circle';
@@ -25,18 +26,6 @@ interface CircleMember {
     email: string;
     status: string;
     joined_at: string | null;
-}
-
-function translateMemberStatus(
-    status: string,
-    t: (key: string) => string,
-): string {
-    const statusMap: Record<string, string> = {
-        Active: 'Actief',
-        Reserved: 'Gereserveerd',
-    };
-
-    return t(statusMap[status] ?? status);
 }
 
 export default function CircleIndex({
