@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\CommunityComment;
 use App\Models\CommunityPost;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use App\Support\CommunityFeed;
 use App\Support\CommunityPostPresenter;
@@ -214,6 +217,41 @@ test('the community feed includes excerpt metadata for long posts', function () 
                 ->and($long['is_truncated'] ?? null)->toBeTrue()
                 ->and($long['excerpt'] ?? null)->toBe(CommunityPostPresenter::excerpt($longContent))
                 ->and($short['is_truncated'] ?? null)->toBeFalse();
+        });
+});
+
+test('community feed posts and comments show the edition number for founding circle authors only', function () {
+    $product = Product::founding();
+    $member = User::factory()->create();
+    $nonMember = User::factory()->create();
+
+    Order::factory()->forUser($member)->paid()->create([
+        'product_id' => $product?->id,
+        'edition_number' => 7,
+    ]);
+
+    $memberPost = CommunityPost::factory()->create(['author_id' => $member->id]);
+    $otherPost = CommunityPost::factory()->create(['author_id' => $nonMember->id]);
+
+    $memberComment = CommunityComment::factory()->create([
+        'community_post_id' => $otherPost->id,
+        'author_id' => $member->id,
+    ]);
+
+    $this->actingAs($nonMember)
+        ->get(localized('maison.community'))
+        ->assertOk()
+        ->assertInertia(function ($page) use ($memberPost, $otherPost, $memberComment) {
+            $posts = collect($page->toArray()['props']['posts']['data'] ?? []);
+
+            $memberEntry = $posts->firstWhere('id', (string) $memberPost->id);
+            $otherEntry = $posts->firstWhere('id', (string) $otherPost->id);
+            $comments = collect($otherEntry['comments'] ?? []);
+            $memberCommentEntry = $comments->firstWhere('id', (string) $memberComment->id);
+
+            expect($memberEntry['editionNumber'] ?? null)->toBe('007')
+                ->and($otherEntry['editionNumber'] ?? null)->toBeNull()
+                ->and($memberCommentEntry['editionNumber'] ?? null)->toBe('007');
         });
 });
 
