@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { translateMemberStatus } from '@/lib/circle-member-status';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import circleRoutes from '@/routes/admin/circle';
@@ -16,18 +17,6 @@ interface CircleMemberDetail {
     status: string;
     joined_at: string | null;
     benefits: string[];
-}
-
-function translateMemberStatus(
-    status: string,
-    t: (key: string) => string,
-): string {
-    const statusMap: Record<string, string> = {
-        Active: 'Actief',
-        Reserved: 'Gereserveerd',
-    };
-
-    return t(statusMap[status] ?? status);
 }
 
 export default function CircleShow({

@@ -1,11 +1,33 @@
 import { Head } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
+import {
+    MemberEmptyState,
+    MemberPageHeader,
+    MemberPanel,
+} from '@/components/member/member-ui';
 
 type Card = { number: string; name: string; since: string };
 
-export default function MemberCircle({ card }: { card: Card }) {
+export default function MemberCircle({ card }: { card: Card | null }) {
     const { t } = useTranslation();
+
+    if (card === null) {
+        return (
+            <>
+                <Head title={t('Founding Circle')} />
+                <MemberPageHeader
+                    eyebrow={t('Lidmaatschap')}
+                    title={t('Founding Circle-kaart')}
+                />
+                <MemberEmptyState
+                    title={t('Nog geen editie toegewezen')}
+                    description={t(
+                        'U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                    )}
+                />
+            </>
+        );
+    }
 
     return (
         <>

@@ -22,17 +22,13 @@ The remaining 1646 translations are complete.
 - **Dutch source:** Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek 
   - **Cut off:** Envoyez-nous un message et nous vous contacterons personnellement sous 48 heures. Pas de réponses automatiques — une vraie discussion
 
-## Keys added outside the prototype dictionary (11)
+## Keys added outside the prototype dictionary (7)
 
 The prototype gave its icon-only controls no accessible names, so screen readers
 announced them as bare "button". Adding those names meant adding six keys the
 prototype dictionary never had. They are interface affordances rather than brand
 copy, so they are translated here directly — flagged for review in case the house
 prefers different wording.
-
-Five more keys cover the Founding Circle portal alerts and placeholders, which
-the prototype only spoke in Dutch `alert()` / `placeholder` attributes and never
-put through `i18n.js`.
 
 | Key | EN | FR |
 | --- | --- | --- |
@@ -42,14 +38,18 @@ put through `i18n.js`.
 | `Maison Anversa — hulp` | Maison Anversa — help | Maison Anversa — aide |
 | `Vorige kamer` | Previous room | Salle précédente |
 | `Volgende kamer` | Next room | Salle suivante |
-| `Vul uw editienummer en e-mailadres in.` | Enter your edition number and email address. | Entrez votre numéro d'édition et votre adresse e-mail. |
-| `Editienummer moet tussen 1 en 100 liggen.` | Edition number must be between 1 and 100. | Le numéro d'édition doit être entre 1 et 100. |
-| `Link gekopieerd — deel hem met een vriend.` | Link copied — share it with a friend. | Lien copié — partagez-le avec un ami. |
-| `Uitgenodigd door Founding Member` | Invited by Founding Member | Invité par Founding Member |
 | `Editienummer (bijv. 7)` | Edition number (e.g. 7) | Numéro d'édition (ex. 7) |
 
 Because `convert-i18n.mjs` writes `lang/en.json` and `lang/fr.json` from the
 prototype alone, rerunning it drops these keys. Re-add them if that happens.
+
+Four more keys (`Vul uw editienummer en e-mailadres in.`, `Editienummer moet
+tussen 1 en 100 liggen.`, `Link gekopieerd — deel hem met een vriend.`,
+`Uitgenodigd door Founding Member`) covered alerts/placeholders in the legacy
+`resources/js/lib/founding-circle.ts` localStorage prototype. That file was
+removed once the real Spatie-role-based Founding Circle/Passport system
+replaced it, and those four keys had no other call site, so they were removed
+too.
 
 ## Copy the dictionary does not carry: the intro slides
 
