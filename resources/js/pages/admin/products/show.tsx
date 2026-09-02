@@ -349,7 +349,9 @@ export default function ShowProduct({
                             <div className="md:col-span-2">
                                 <Field
                                     label={t('Meta-beschrijving')}
-                                    value={display.meta_description || t('Geen')}
+                                    value={
+                                        display.meta_description || t('Geen')
+                                    }
                                 />
                             </div>
                             <Field
@@ -700,15 +702,18 @@ export default function ShowProduct({
                                                                 faq.id
                                                             ] ?? {
                                                                 nl: {
-                                                                    question: '',
+                                                                    question:
+                                                                        '',
                                                                     answer: '',
                                                                 },
                                                                 en: {
-                                                                    question: '',
+                                                                    question:
+                                                                        '',
                                                                     answer: '',
                                                                 },
                                                                 fr: {
-                                                                    question: '',
+                                                                    question:
+                                                                        '',
                                                                     answer: '',
                                                                 },
                                                             }

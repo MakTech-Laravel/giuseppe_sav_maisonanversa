@@ -129,7 +129,9 @@ export function buildBureauBubbles(site: SiteShared): BureauBubble[] {
     ];
 }
 
-export function buildContactDockItems(site: SiteShared): Array<
+export function buildContactDockItems(
+    site: SiteShared,
+): Array<
     | { icon: LucideIcon; label: string; href: string }
     | { icon: LucideIcon; label: string; panel: BureauPanelId }
 > {

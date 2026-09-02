@@ -12,11 +12,13 @@ use App\Http\Requests\Admin\ResolveCommunityReportRequest;
 use App\Http\Requests\Admin\UpdateHeritageProductRequest;
 use App\Models\CommunityPost;
 use App\Models\CommunityReport;
+use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Checkout\OrderStatusService;
 use App\Services\Edition\EditionInventory;
+use App\Services\FoundingCircle\FoundingCircleRegistrar;
 use App\Support\CommunityPostPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
@@ -281,6 +283,29 @@ class OpsController extends Controller
         ]);
     }
 
+    public function circleRegister(Request $request, string $locale): Response
+    {
+        $entries = FoundingCircleRegisterEntry::query()
+            ->with(['user.roles'])
+            ->orderByRaw('edition_number is null')
+            ->orderBy('edition_number')
+            ->orderBy('joined_at')
+            ->get()
+            ->map(fn (FoundingCircleRegisterEntry $entry) => [
+                'id' => (string) $entry->id,
+                'name' => $entry->name,
+                'edition_number' => $entry->edition_number !== null
+                    ? str_pad((string) $entry->edition_number, 3, '0', STR_PAD_LEFT)
+                    : null,
+                'joined_at' => $entry->joined_at?->toDateString(),
+                'still_member' => $entry->user?->hasRole(RoleEnum::FOUNDING_CIRCLE->value) ?? false,
+            ]);
+
+        return Inertia::render('admin/circle/register', [
+            'entries' => $entries,
+        ]);
+    }
+
     public function circleShow(Request $request, string $locale, User $member, PassportPresenter $passport): Response
     {
         return Inertia::render('admin/circle/show', [
@@ -294,10 +319,12 @@ class OpsController extends Controller
     public function assignCircleMember(
         AssignCircleMemberRequest $request,
         string $locale,
+        FoundingCircleRegistrar $registrar,
     ): RedirectResponse {
         $user = $this->resolveCircleUser($request);
 
         $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+        $registrar->register($user);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Lid toegevoegd aan Founding Circle.')]);
 

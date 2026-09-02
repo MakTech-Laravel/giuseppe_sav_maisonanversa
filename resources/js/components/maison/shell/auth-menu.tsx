@@ -23,7 +23,8 @@ type AuthMenuProps = {
 export function AuthMenu({ compact = false, className }: AuthMenuProps) {
     const { t } = useTranslation();
     const { openAuth } = useShellActions();
-    const { auth, locale } = usePage<{ auth?: SharedAuth; locale: string }>().props;
+    const { auth, locale } = usePage<{ auth?: SharedAuth; locale: string }>()
+        .props;
     const user = auth?.user ?? null;
     const [open, setOpen] = useState(false);
     const root = useRef<HTMLDivElement>(null);

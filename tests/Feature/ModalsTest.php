@@ -29,11 +29,17 @@ test('the scroll lock utility counts holders so nested locks do not unlock early
         ->toContain('export function scrollLockHolders');
 });
 
-test('the order modal assigns the edition number after payment', function () {
+test('the order modal requires an edition selection for limited editions before payment', function () {
     expect(modalSource('order-modal.tsx'))
-        ->toContain('Toegewezen na betaling')
+        ->toContain('Kies a.u.b. een beschikbaar editienummer.')
         ->toContain('product_id')
         ->not->toContain('Array.from({ length: 100 }');
+});
+
+test('the order modal prefills contact details from the logged-in user', function () {
+    expect(modalSource('order-modal.tsx'))
+        ->toContain("useState(auth?.user?.name ?? '')")
+        ->toContain("useState(auth?.user?.email ?? '')");
 });
 
 test('modal components do not use inline onclick handlers', function () {

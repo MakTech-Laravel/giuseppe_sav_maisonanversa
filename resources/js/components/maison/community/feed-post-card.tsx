@@ -19,8 +19,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
     const [draft, setDraft] = useState('');
 
     const displayContent = post.userAuthored ? post.content : t(post.content);
-    const showTruncated =
-        (post.is_truncated ?? false) && ! expanded;
+    const showTruncated = (post.is_truncated ?? false) && !expanded;
     const visibleContent = showTruncated
         ? (post.excerpt ?? displayContent)
         : displayContent;
@@ -96,7 +95,9 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                         </span>
                         {post.editionNumber && (
                             <span className="font-sans text-[9px] tracking-[0.15em] text-gold2 uppercase">
-                                {t('Nr. {{number}}', { number: post.editionNumber })}
+                                {t('Nr. {{number}}', {
+                                    number: post.editionNumber,
+                                })}
                             </span>
                         )}
                     </div>
@@ -125,7 +126,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                 {post.is_truncated && (
                     <button
                         type="button"
-                        onClick={() => setExpanded((value) => ! value)}
+                        onClick={() => setExpanded((value) => !value)}
                         className="mt-1 cursor-pointer border-none bg-transparent font-sans text-[10px] tracking-[0.12em] text-gold2 underline-offset-2 hover:underline"
                     >
                         {expanded ? t('Minder lezen') : t('Meer lezen')}
@@ -197,7 +198,9 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                                         </span>
                                         {comment.editionNumber && (
                                             <span className="font-sans text-[9px] tracking-[0.15em] text-gold2 uppercase">
-                                                {t('Nr. {{number}}', { number: comment.editionNumber })}
+                                                {t('Nr. {{number}}', {
+                                                    number: comment.editionNumber,
+                                                })}
                                             </span>
                                         )}
                                         <span className="font-sans text-[9px] tracking-[0.1em] text-stone">
@@ -216,7 +219,10 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                         onSubmit={submitComment}
                         className="flex flex-col gap-2.5 sm:flex-row sm:items-start"
                     >
-                        <label className="sr-only" htmlFor={`comment-${post.id}`}>
+                        <label
+                            className="sr-only"
+                            htmlFor={`comment-${post.id}`}
+                        >
                             {t('Schrijf een reactie')}
                         </label>
                         <input

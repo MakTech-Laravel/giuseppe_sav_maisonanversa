@@ -26,9 +26,7 @@ export default function MemberPassport({
         return (
             <>
                 <Head title={t('Digitaal Heritage Passport')} />
-                <MemberPageHeader
-                    title={t('Digitaal Heritage Passport')}
-                />
+                <MemberPageHeader title={t('Digitaal Heritage Passport')} />
                 <MemberEmptyState
                     title={t('Nog geen editie toegewezen')}
                     description={t(
@@ -46,7 +44,7 @@ export default function MemberPassport({
                 eyebrow={`No.${passport.editionNumber}`}
                 title={t('Digitaal Heritage Passport')}
                 description={t(
-                    'Vier pagina\'s van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.',
+                    "Vier pagina's van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.",
                 )}
             />
 
@@ -76,7 +74,7 @@ export default function MemberPassport({
                         </p>
                         {page.title === passport.pages[3]?.title &&
                             passport.verificationUrl && (
-                                <p className="mt-4 break-all font-sans text-[11px] text-gold">
+                                <p className="mt-4 font-sans text-[11px] break-all text-gold">
                                     {passport.verificationUrl}
                                 </p>
                             )}

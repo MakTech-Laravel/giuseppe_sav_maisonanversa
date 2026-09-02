@@ -6,13 +6,13 @@ import { PlayerSlots } from '@/components/maison/community/sessions/player-slots
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Wrap } from '@/components/maison/ui/section';
-import * as sessionRoutes from '@/routes/community/sessions';
-import * as participantRoutes from '@/routes/community/sessions/participants';
 import {
     formatDuration,
     formatSessionDateLong,
     formatSessionTime,
 } from '@/lib/session-format';
+import * as sessionRoutes from '@/routes/community/sessions';
+import * as participantRoutes from '@/routes/community/sessions/participants';
 import type { SessionCard, SessionPlayer } from '@/types/session';
 
 type SessionShowProps = {
@@ -85,10 +85,7 @@ export default function SessionShow({ session }: SessionShowProps) {
                                 icon={Timer}
                                 value={formatDuration(session.duration_minutes)}
                             />
-                            <Meta
-                                icon={Gauge}
-                                value={t(session.level_label)}
-                            />
+                            <Meta icon={Gauge} value={t(session.level_label)} />
                             <Meta
                                 icon={Users}
                                 value={t(session.gender_label)}
@@ -110,7 +107,8 @@ export default function SessionShow({ session }: SessionShowProps) {
                                 {t('Spelers')}
                             </h2>
                             <p className="mb-5 font-sans text-[11px] text-stone">
-                                {session.participants_count} / {session.capacity}
+                                {session.participants_count} /{' '}
+                                {session.capacity}
                             </p>
 
                             <PlayerSlots
@@ -119,7 +117,9 @@ export default function SessionShow({ session }: SessionShowProps) {
                                 size="lg"
                                 withLabels
                                 onRemove={
-                                    session.can_manage ? handleRemove : undefined
+                                    session.can_manage
+                                        ? handleRemove
+                                        : undefined
                                 }
                             />
 
@@ -185,9 +185,7 @@ export default function SessionShow({ session }: SessionShowProps) {
 
                         {session.is_full && !session.is_past && (
                             <p className="border-t border-gold/15 bg-gold/6 px-7 py-5 text-center font-sans text-[11px] tracking-[0.08em] text-choc3">
-                                {t(
-                                    'Uw groep is compleet. Tot op de baan!',
-                                )}
+                                {t('Uw groep is compleet. Tot op de baan!')}
                             </p>
                         )}
                     </div>

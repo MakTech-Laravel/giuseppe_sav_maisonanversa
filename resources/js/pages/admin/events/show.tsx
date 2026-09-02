@@ -218,7 +218,10 @@ export default function EventShow({
                                 label={t('Datum')}
                                 value={formatStartsAt(event.starts_at)}
                             />
-                            <Detail label={t('Locatie')} value={event.location} />
+                            <Detail
+                                label={t('Locatie')}
+                                value={event.location}
+                            />
                             <Detail
                                 label={t('Aanwezigen')}
                                 value={

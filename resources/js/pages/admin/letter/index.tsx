@@ -120,7 +120,9 @@ function preferenceBadges(
         preferences.productUpdates
             ? { key: 'productUpdates', label: t('Productupdates') }
             : null,
-        preferences.events ? { key: 'events', label: t('Sessies & events') } : null,
+        preferences.events
+            ? { key: 'events', label: t('Sessies & events') }
+            : null,
     ];
 
     return badges.filter(
@@ -166,8 +168,7 @@ export default function LetterIndex({
                     search,
                     status: status === 'all' ? '' : status,
                     source: source === 'all' ? '' : source,
-                    locale:
-                        subscriberLocale === 'all' ? '' : subscriberLocale,
+                    locale: subscriberLocale === 'all' ? '' : subscriberLocale,
                     per_page: perPage,
                 }),
                 { preserveState: true, preserveScroll: true, replace: true },
@@ -321,10 +322,7 @@ export default function LetterIndex({
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
-                                <SelectItem
-                                    key={option}
-                                    value={String(option)}
-                                >
+                                <SelectItem key={option} value={String(option)}>
                                     {t('{{count}} per pagina', {
                                         count: option,
                                     })}
@@ -392,61 +390,67 @@ export default function LetterIndex({
                                     );
 
                                     return (
-                                    <TableRow key={subscriber.id}>
-                                        <TableCell>
-                                            <span className="font-medium">
-                                                {subscriber.name}
-                                            </span>
-                                            <p className="text-xs text-muted-foreground">
-                                                {subscriber.email}
-                                            </p>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge variant="secondary">
-                                                {translateSubscriberStatus(
-                                                    subscriber.status,
+                                        <TableRow key={subscriber.id}>
+                                            <TableCell>
+                                                <span className="font-medium">
+                                                    {subscriber.name}
+                                                </span>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {subscriber.email}
+                                                </p>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge variant="secondary">
+                                                    {translateSubscriberStatus(
+                                                        subscriber.status,
+                                                        t,
+                                                    )}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="hidden lg:table-cell">
+                                                <div className="flex flex-wrap gap-1">
+                                                    {topics.length === 0
+                                                        ? '—'
+                                                        : topics.map(
+                                                              (badge) => (
+                                                                  <Badge
+                                                                      key={
+                                                                          badge.key
+                                                                      }
+                                                                      variant="outline"
+                                                                  >
+                                                                      {
+                                                                          badge.label
+                                                                      }
+                                                                  </Badge>
+                                                              ),
+                                                          )}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="hidden md:table-cell">
+                                                {translateSubscriberSource(
+                                                    subscriber.source,
                                                     t,
                                                 )}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="hidden lg:table-cell">
-                                            <div className="flex flex-wrap gap-1">
-                                                {topics.length === 0
-                                                    ? '—'
-                                                    : topics.map((badge) => (
-                                                          <Badge
-                                                              key={badge.key}
-                                                              variant="outline"
-                                                          >
-                                                              {badge.label}
-                                                          </Badge>
-                                                      ))}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="hidden md:table-cell">
-                                            {translateSubscriberSource(
-                                                subscriber.source,
-                                                t,
-                                            )}
-                                        </TableCell>
-                                        <TableCell className="hidden uppercase lg:table-cell">
-                                            {subscriber.locale}
-                                        </TableCell>
-                                        <TableCell className="hidden sm:table-cell">
-                                            {subscriber.joined_at
-                                                ? new Date(
-                                                      subscriber.joined_at,
-                                                  ).toLocaleDateString()
-                                                : '—'}
-                                        </TableCell>
-                                        <TableCell className="hidden text-muted-foreground xl:table-cell">
-                                            {subscriber.synced_at
-                                                ? new Date(
-                                                      subscriber.synced_at,
-                                                  ).toLocaleString()
-                                                : '—'}
-                                        </TableCell>
-                                    </TableRow>
+                                            </TableCell>
+                                            <TableCell className="hidden uppercase lg:table-cell">
+                                                {subscriber.locale}
+                                            </TableCell>
+                                            <TableCell className="hidden sm:table-cell">
+                                                {subscriber.joined_at
+                                                    ? new Date(
+                                                          subscriber.joined_at,
+                                                      ).toLocaleDateString()
+                                                    : '—'}
+                                            </TableCell>
+                                            <TableCell className="hidden text-muted-foreground xl:table-cell">
+                                                {subscriber.synced_at
+                                                    ? new Date(
+                                                          subscriber.synced_at,
+                                                      ).toLocaleString()
+                                                    : '—'}
+                                            </TableCell>
+                                        </TableRow>
                                     );
                                 })
                             )}

@@ -93,7 +93,9 @@ export default function ClubShow({
                     <MergeDialog club={club} candidates={mergeCandidates} />
 
                     <Button variant="outline" asChild>
-                        <Link href={clubsRoutes.edit({ locale, club: club.id })}>
+                        <Link
+                            href={clubsRoutes.edit({ locale, club: club.id })}
+                        >
                             <Pencil className="h-4 w-4" /> {t('Bewerken')}
                         </Link>
                     </Button>
@@ -113,10 +115,7 @@ export default function ClubShow({
                                     {t(club.status_label)}
                                 </Badge>
                                 {club.is_partner && (
-                                    <Badge
-                                        variant="secondary"
-                                        className="ml-2"
-                                    >
+                                    <Badge variant="secondary" className="ml-2">
                                         {t('Partner')}
                                     </Badge>
                                 )}

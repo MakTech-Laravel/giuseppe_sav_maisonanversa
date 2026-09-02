@@ -15,6 +15,9 @@ export type InquiryListItem = {
     locale: string;
     created_at: string | null;
     user_id: number | null;
+    priority: boolean;
+    sla_due_at: string | null;
+    sla_breached: boolean;
 };
 
 export type InquiryDetails = InquiryListItem & {

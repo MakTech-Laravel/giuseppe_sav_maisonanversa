@@ -7,7 +7,8 @@ import { TableKit } from '@tiptap/extension-table/kit';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
-import { EditorContent, useEditor, type Editor } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
+import type { Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {
     AlignCenter,
@@ -43,16 +44,21 @@ import {
     Underline as UnderlineIcon,
     Undo2,
 } from 'lucide-react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LegalHtmlSourceEditor } from '@/components/admin/legal-html-source-editor';
 import {
     LegalDetails,
     LegalSummary,
 } from '@/components/admin/legal-details-extension';
+import { LegalHtmlSourceEditor } from '@/components/admin/legal-html-source-editor';
 import { LegalHtml } from '@/components/maison/legal/legal-html';
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
 import { Toggle } from '@/components/ui/toggle';
 import {
     Tooltip,
@@ -60,10 +66,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-    isBlankLegalHtml,
-    sanitizeLegalHtml,
-} from '@/lib/legal-html';
+import { isBlankLegalHtml, sanitizeLegalHtml } from '@/lib/legal-html';
 import { cn } from '@/lib/utils';
 
 const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const;
@@ -74,7 +77,15 @@ const FONT_FAMILIES = [
     { value: 'Georgia, serif', name: 'Georgia' },
 ] as const;
 
-const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px', '28px'] as const;
+const FONT_SIZES = [
+    '12px',
+    '14px',
+    '16px',
+    '18px',
+    '20px',
+    '24px',
+    '28px',
+] as const;
 
 const LINE_HEIGHTS = ['1.2', '1.5', '1.85', '2'] as const;
 
@@ -349,6 +360,7 @@ export function LegalRichTextEditor({
                 }
 
                 instance.commands.insertContent(sanitized);
+
                 return true;
             },
         },
@@ -359,7 +371,9 @@ export function LegalRichTextEditor({
         },
     });
 
-    editorRef.current = editor;
+    useEffect(() => {
+        editorRef.current = editor;
+    }, [editor]);
 
     useEffect(() => {
         if (!editor || htmlMode) {
@@ -389,6 +403,7 @@ export function LegalRichTextEditor({
             setHtmlError(
                 t('De HTML is leeg of ongeldig na beveiligingscontrole.'),
             );
+
             return;
         }
 
@@ -403,7 +418,9 @@ export function LegalRichTextEditor({
             return;
         }
 
-        const previous = editor.getAttributes('link').href as string | undefined;
+        const previous = editor.getAttributes('link').href as
+            | string
+            | undefined;
         const next = window.prompt(t('Link-URL'), previous ?? 'https://');
 
         if (next === null) {
@@ -414,6 +431,7 @@ export function LegalRichTextEditor({
 
         if (trimmed === '') {
             editor.chain().focus().extendMarkRange('link').unsetLink().run();
+
             return;
         }
 
@@ -440,6 +458,7 @@ export function LegalRichTextEditor({
 
         if (next === 'p') {
             editor.chain().focus().setParagraph().run();
+
             return;
         }
 
@@ -485,6 +504,7 @@ export function LegalRichTextEditor({
                             onPressedChange={(next) => {
                                 if (next) {
                                     enterHtmlMode();
+
                                     return;
                                 }
 
@@ -584,6 +604,7 @@ export function LegalRichTextEditor({
                                                     .focus()
                                                     .unsetFontFamily()
                                                     .run();
+
                                                 return;
                                             }
 
@@ -596,7 +617,9 @@ export function LegalRichTextEditor({
                                     />
                                     <ToolbarChoicePopover
                                         label={t('Tekstgrootte')}
-                                        icon={<ALargeSmall className="size-4" />}
+                                        icon={
+                                            <ALargeSmall className="size-4" />
+                                        }
                                         value={
                                             (textStyle.fontSize as
                                                 | string
@@ -611,6 +634,7 @@ export function LegalRichTextEditor({
                                                     .focus()
                                                     .unsetFontSize()
                                                     .run();
+
                                                 return;
                                             }
 
@@ -640,6 +664,7 @@ export function LegalRichTextEditor({
                                                     .focus()
                                                     .unsetLineHeight()
                                                     .run();
+
                                                 return;
                                             }
 
@@ -653,13 +678,25 @@ export function LegalRichTextEditor({
                                     <ToolbarDivider />
                                     <ColorPopover
                                         label={t('Tekstkleur')}
-                                        value={textStyle.color as string | undefined}
+                                        value={
+                                            textStyle.color as
+                                                | string
+                                                | undefined
+                                        }
                                         swatches={TEXT_COLORS}
                                         onChange={(color) =>
-                                            editor.chain().focus().setColor(color).run()
+                                            editor
+                                                .chain()
+                                                .focus()
+                                                .setColor(color)
+                                                .run()
                                         }
                                         onClear={() =>
-                                            editor.chain().focus().unsetColor().run()
+                                            editor
+                                                .chain()
+                                                .focus()
+                                                .unsetColor()
+                                                .run()
                                         }
                                     >
                                         <Palette />
@@ -667,7 +704,9 @@ export function LegalRichTextEditor({
                                     <ColorPopover
                                         label={t('Achtergrondkleur')}
                                         value={
-                                            textStyle.backgroundColor as string | undefined
+                                            textStyle.backgroundColor as
+                                                | string
+                                                | undefined
                                         }
                                         swatches={FILL_COLORS}
                                         onChange={(color) =>
@@ -692,7 +731,11 @@ export function LegalRichTextEditor({
                                         label={t('Vet')}
                                         pressed={editor.isActive('bold')}
                                         onClick={() =>
-                                            editor.chain().focus().toggleBold().run()
+                                            editor
+                                                .chain()
+                                                .focus()
+                                                .toggleBold()
+                                                .run()
                                         }
                                     >
                                         <Bold />
@@ -825,7 +868,9 @@ export function LegalRichTextEditor({
                                     </ToolbarButton>
                                     <ToolbarButton
                                         label={t('Uitklapbaar')}
-                                        pressed={editor.isActive('legalDetails')}
+                                        pressed={editor.isActive(
+                                            'legalDetails',
+                                        )}
                                         onClick={() =>
                                             editor
                                                 .chain()
@@ -838,7 +883,9 @@ export function LegalRichTextEditor({
                                                             content: [
                                                                 {
                                                                     type: 'text',
-                                                                    text: t('Titel'),
+                                                                    text: t(
+                                                                        'Titel',
+                                                                    ),
                                                                 },
                                                             ],
                                                         },

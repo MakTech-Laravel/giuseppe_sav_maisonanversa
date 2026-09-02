@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { HeritageLetterForm } from '@/components/maison/heritage-letter-form';
-import { MaisonModal, modalNoteClassName } from '@/components/maison/modals/maison-modal';
+import {
+    MaisonModal,
+    modalNoteClassName,
+} from '@/components/maison/modals/maison-modal';
 
 type NewsletterModalProps = {
     onClose: () => void;

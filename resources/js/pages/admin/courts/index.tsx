@@ -217,10 +217,7 @@ export default function CourtsIndex({
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
-                                <SelectItem
-                                    key={option}
-                                    value={String(option)}
-                                >
+                                <SelectItem key={option} value={String(option)}>
                                     {t('{{count}} per pagina', {
                                         count: option,
                                     })}
@@ -282,7 +279,9 @@ export default function CourtsIndex({
                                                     : t('Concept')}
                                             </Badge>
                                         </TableCell>
-                                        <TableCell>{court.sort_order}</TableCell>
+                                        <TableCell>
+                                            {court.sort_order}
+                                        </TableCell>
                                         <TableCell className="space-x-2 text-right">
                                             <Button
                                                 variant="outline"
@@ -292,11 +291,11 @@ export default function CourtsIndex({
                                                 <Link
                                                     href={courtsRoutes.show({
                                                         locale,
-                                        court: Number(court.id),
-                                    })}
-                                >
-                                    <Eye className="h-4 w-4" />
-                                    {t('Bekijken')}
+                                                        court: Number(court.id),
+                                                    })}
+                                                >
+                                                    <Eye className="h-4 w-4" />
+                                                    {t('Bekijken')}
                                                 </Link>
                                             </Button>
                                             <Button
@@ -307,11 +306,11 @@ export default function CourtsIndex({
                                                 <Link
                                                     href={courtsRoutes.edit({
                                                         locale,
-                                        court: Number(court.id),
-                                    })}
-                                >
-                                    <Pencil className="h-4 w-4" />
-                                    {t('Bewerken')}
+                                                        court: Number(court.id),
+                                                    })}
+                                                >
+                                                    <Pencil className="h-4 w-4" />
+                                                    {t('Bewerken')}
                                                 </Link>
                                             </Button>
                                             <ConfirmDeleteDialog
@@ -320,10 +319,12 @@ export default function CourtsIndex({
                                                 )}
                                                 onConfirm={() =>
                                                     router.delete(
-                                    courtsRoutes.destroy({
-                                        locale,
-                                        court: Number(court.id),
-                                    }).url,
+                                                        courtsRoutes.destroy({
+                                                            locale,
+                                                            court: Number(
+                                                                court.id,
+                                                            ),
+                                                        }).url,
                                                     )
                                                 }
                                             >

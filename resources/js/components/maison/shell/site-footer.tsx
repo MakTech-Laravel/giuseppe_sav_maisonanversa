@@ -1,13 +1,10 @@
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { MaisonLink } from '@/components/maison/maison-link';
 import type { SiteShared } from '@/components/maison/contact/contact-data';
+import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
-import {
-    FOOTER_COLUMNS,
-    isNavItem,
-    type FooterExternalItem,
-} from '@/lib/maison-navigation';
+import { FOOTER_COLUMNS, isNavItem } from '@/lib/maison-navigation';
+import type { FooterExternalItem } from '@/lib/maison-navigation';
 
 function footerItemHref(item: FooterExternalItem, site: SiteShared): string {
     if (item.channel === 'instagram') {

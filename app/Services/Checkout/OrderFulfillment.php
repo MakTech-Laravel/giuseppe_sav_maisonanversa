@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
 use App\Services\Edition\SimpleStock;
+use App\Services\FoundingCircle\FoundingCircleRegistrar;
 use App\Support\MailLocale;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -30,6 +31,7 @@ class OrderFulfillment
         private EditionAllocator $allocator,
         private EditionInventory $inventory,
         private SimpleStock $simpleStock,
+        private FoundingCircleRegistrar $registrar,
     ) {}
 
     /**
@@ -103,6 +105,7 @@ class OrderFulfillment
             if ($locked->user !== null && $locked->product?->grants_founding_circle) {
                 Role::findOrCreate(RoleEnum::FOUNDING_CIRCLE->value, GuardEnum::WEB->value);
                 $locked->user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+                $this->registrar->register($locked->user, $locked);
             }
 
             return $locked;

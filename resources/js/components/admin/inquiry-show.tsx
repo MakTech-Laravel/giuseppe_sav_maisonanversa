@@ -8,6 +8,7 @@ import {
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
+import { InquirySlaBadge } from '@/components/admin/inquiry-sla-badge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -43,7 +44,7 @@ function Field({
             </p>
             <p
                 className={cn(
-                    'wrap-break-word text-sm font-medium',
+                    'text-sm font-medium wrap-break-word',
                     mono && 'font-mono tabular-nums',
                     pre && 'whitespace-pre-wrap',
                 )}
@@ -102,7 +103,7 @@ export function InquiryShow({
                 icon={Icon}
             >
                 <Button variant="outline" asChild>
-                    <Link href={routes.index(locale)}>
+                    <Link href={routes.index(locale).url}>
                         <ArrowLeft className="h-4 w-4" /> {t('Terug')}
                     </Link>
                 </Button>
@@ -127,12 +128,14 @@ export function InquiryShow({
                                 ) : (
                                     <Eye className="h-4 w-4" />
                                 )}
-                                {inquiry.seen
-                                    ? t('Ongelezen')
-                                    : t('Gezien')}
+                                {inquiry.seen ? t('Ongelezen') : t('Gezien')}
                             </Button>
-                            <Button variant="outline" asChild className="w-full">
-                                <Link href={routes.index(locale)}>
+                            <Button
+                                variant="outline"
+                                asChild
+                                className="w-full"
+                            >
+                                <Link href={routes.index(locale).url}>
                                     <ArrowLeft className="h-4 w-4" />{' '}
                                     {t('Terug')}
                                 </Link>
@@ -170,11 +173,17 @@ export function InquiryShow({
                         <Badge variant="secondary">
                             {t(inquiry.type_label)}
                         </Badge>
-                        <Badge
-                            variant={inquiry.seen ? 'secondary' : 'default'}
-                        >
+                        <Badge variant={inquiry.seen ? 'secondary' : 'default'}>
                             {inquiry.seen ? t('Gezien') : t('Ongelezen')}
                         </Badge>
+                        {inquiry.priority ? (
+                            <InquirySlaBadge
+                                priority={inquiry.priority}
+                                slaDueAt={inquiry.sla_due_at}
+                                slaBreached={inquiry.sla_breached}
+                                seen={inquiry.seen}
+                            />
+                        ) : null}
                     </div>
                     <div className="grid gap-5 sm:grid-cols-2">
                         <Field label={t('Naam')} value={inquiry.name} />
