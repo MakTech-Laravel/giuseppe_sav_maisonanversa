@@ -72,6 +72,15 @@ class CheckoutRequest extends FormRequest
                 return;
             }
 
+            if (! $product->isVisibleTo($this->user())) {
+                $validator->errors()->add(
+                    'product_id',
+                    __('Dit product is nog niet beschikbaar voor checkout.'),
+                );
+
+                return;
+            }
+
             if (! $product->isLimitedEdition()) {
                 return;
             }

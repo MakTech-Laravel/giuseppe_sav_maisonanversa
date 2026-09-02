@@ -1,10 +1,5 @@
-import {
-    Calendar,
-    IdCard,
-    Mail,
-    ShieldCheck,
-    type LucideIcon,
-} from 'lucide-react';
+import { Calendar, IdCard, Mail, ShieldCheck } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { avatarUrl } from '@/types/admin';
@@ -62,7 +57,11 @@ export function AdminUserProfile({ user, idLabel }: AdminUserProfileProps) {
                     label={idLabel}
                     value={`#${user.id}`}
                 />
-                <ProfileRow icon={Mail} label={t('E-mail')} value={user.email} />
+                <ProfileRow
+                    icon={Mail}
+                    label={t('E-mail')}
+                    value={user.email}
+                />
                 <ProfileRow
                     icon={ShieldCheck}
                     label={t('Geverifieerd')}

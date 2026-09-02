@@ -1,10 +1,10 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { Wrap } from '@/components/maison/ui/section';
+import { cn } from '@/lib/utils';
 import * as eventRoutes from '@/routes/community/events';
 import * as sessionRoutes from '@/routes/community/sessions';
 import * as maison from '@/routes/maison';
-import { cn } from '@/lib/utils';
 
 export type CommunitySection = 'feed' | 'courts' | 'sessions' | 'events';
 
@@ -62,7 +62,7 @@ export function CommunityTabs() {
                 <div
                     role="tablist"
                     aria-label={t('Community')}
-                    className="flex flex-col md:flex-row md:gap-1 md:overflow-x-auto md:overflow-y-hidden md:[-ms-overflow-style:none] md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden"
+                    className="flex flex-col md:[scrollbar-width:none] md:flex-row md:gap-1 md:overflow-x-auto md:overflow-y-hidden md:[-ms-overflow-style:none] md:[&::-webkit-scrollbar]:hidden"
                 >
                     {tabs.map((tab) => {
                         const isActive = tab.id === active;

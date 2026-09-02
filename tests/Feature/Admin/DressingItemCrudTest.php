@@ -242,6 +242,67 @@ test('unpublished dressing items are hidden from the public catalog', function (
         );
 });
 
+test('dressing item show exposes stored translation bundle', function () {
+    fakeDeepLTranslations();
+
+    $item = DressingItem::factory()->create([
+        'name' => 'Padel Handdoek',
+        'category' => 'Accessoires',
+        'description' => 'Zachte handdoek met wapenschild.',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.dressing-items.show', ['locale' => 'nl', 'dressingItem' => $item->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/dressing-items/show')
+            ->where('translations.en.name', 'EN Padel Handdoek')
+            ->where('translations.fr.category', 'FR Accessoires')
+            ->has('locales', 3)
+            ->has('translationStatus')
+        );
+});
+
+test('staff can update dressing item translations manually', function () {
+    $item = DressingItem::factory()->create([
+        'name' => 'Bron naam',
+        'category' => 'Bron categorie',
+        'description' => 'Bron beschrijving',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->put(route('admin.dressing-items.translations.update', ['locale' => 'nl', 'dressingItem' => $item->id]), [
+            'nl' => ['name' => 'NL naam', 'category' => 'NL categorie', 'description' => 'NL beschrijving'],
+            'en' => ['name' => 'EN name', 'category' => 'EN category', 'description' => 'EN description'],
+            'fr' => ['name' => 'FR nom', 'category' => 'FR categorie', 'description' => 'FR description'],
+        ])
+        ->assertRedirect(route('admin.dressing-items.show', ['locale' => 'nl', 'dressingItem' => $item->id]));
+
+    expect($item->fresh()->translated('name', 'en'))->toBe('EN name')
+        ->and($item->fresh()->translated('category', 'fr'))->toBe('FR categorie');
+});
+
+test('staff can queue dressing item retranslation', function () {
+    fakeDeepLTranslations();
+
+    $item = DressingItem::factory()->create([
+        'name' => 'Padel Sokken',
+        'category' => 'Accessoires',
+        'description' => 'Ademende sokken.',
+    ]);
+
+    $item->translations()->delete();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.dressing-items.translate', ['locale' => 'nl', 'dressingItem' => $item->id]), [
+            'target_locale' => 'en',
+        ])
+        ->assertRedirect();
+
+    expect($item->fresh()->translated('name', 'en'))->toBe('EN Padel Sokken')
+        ->and($item->fresh()->translated('category', 'en'))->toBe('EN Accessoires');
+});
+
 test('create and edit dressing item pages render', function () {
     $item = DressingItem::factory()->create();
 

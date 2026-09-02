@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { PageHero } from '@/components/maison/ui/page-hero';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
+import { PageHero } from '@/components/maison/ui/page-hero';
 
 export default function Verify({
     piece,
@@ -38,7 +38,9 @@ export default function Verify({
             />
             <section className="mx-auto max-w-xl px-6 pb-24 text-center text-choc3">
                 {piece.owner && (
-                    <p className="font-serif text-2xl text-choc">{piece.owner}</p>
+                    <p className="font-serif text-2xl text-choc">
+                        {piece.owner}
+                    </p>
                 )}
                 {piece.allocatedAt && (
                     <p className="mt-2 text-sm">

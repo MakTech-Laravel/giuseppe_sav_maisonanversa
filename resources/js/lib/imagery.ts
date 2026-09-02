@@ -181,8 +181,13 @@ export function imageVariants(path: string): ImageVariant[] {
     }));
 }
 
-export function srcset(variants: ImageVariant[], format: 'webp' | 'avif'): string {
-    return variants.map((variant) => `/${variant[format]} ${variant.width}w`).join(', ');
+export function srcset(
+    variants: ImageVariant[],
+    format: 'webp' | 'avif',
+): string {
+    return variants
+        .map((variant) => `/${variant[format]} ${variant.width}w`)
+        .join(', ');
 }
 
 export function imageAsset(name: ImageAssetName): ImageAsset {

@@ -48,10 +48,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                 <AdminResourceShell
                     aside={
                         <>
-                            <UserFormAside
-                                isEdit
-                                entityLabel={customer.name}
-                            />
+                            <UserFormAside isEdit entityLabel={customer.name} />
                             <AdminPanel title={t('Account')}>
                                 <dl className="space-y-2 text-sm">
                                     <div className="flex justify-between gap-3">

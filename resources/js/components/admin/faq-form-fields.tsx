@@ -107,9 +107,7 @@ export function FaqFormFields({
                         <Label htmlFor="context">{t('Context')}</Label>
                         <Select
                             value={data.context}
-                            onValueChange={(value) =>
-                                setData('context', value)
-                            }
+                            onValueChange={(value) => setData('context', value)}
                         >
                             <SelectTrigger id="context" className="w-full">
                                 <SelectValue />

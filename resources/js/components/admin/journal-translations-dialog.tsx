@@ -286,7 +286,9 @@ export function JournalTranslationsDialog({
                             </Label>
                             <Input
                                 id={`${activeLocale}-date_label`}
-                                value={form.data[activeLocale]?.date_label ?? ''}
+                                value={
+                                    form.data[activeLocale]?.date_label ?? ''
+                                }
                                 onChange={(event) =>
                                     form.setData(
                                         `${activeLocale}.date_label`,

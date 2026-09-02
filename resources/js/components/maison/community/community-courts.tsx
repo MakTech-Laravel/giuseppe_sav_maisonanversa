@@ -124,7 +124,7 @@ export function CommunityCourts({
                                 )}
 
                                 {court.body && (
-                                    <p className="whitespace-pre-line font-sans text-sm leading-relaxed text-choc3">
+                                    <p className="font-sans text-sm leading-relaxed whitespace-pre-line text-choc3">
                                         {court.body}
                                     </p>
                                 )}

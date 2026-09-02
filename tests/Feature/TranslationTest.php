@@ -50,7 +50,7 @@ test('the translated locales cover the same canonical keys', function () {
     $onlyFr = array_values(array_diff($fr, $en));
 
     expect($onlyFr)->toBeEmpty()
-        ->and($onlyEn)->toBe(['Q2 2027']);
+        ->and($onlyEn)->toBeEmpty();
 });
 
 test('truncated orphan keys remain out of sync between translated locales', function () {

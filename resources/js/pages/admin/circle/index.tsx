@@ -1,5 +1,5 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { Eye, UsersRound } from 'lucide-react';
+import { BookText, Eye, UsersRound } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
@@ -28,11 +28,7 @@ interface CircleMember {
     joined_at: string | null;
 }
 
-export default function CircleIndex({
-    members,
-}: {
-    members: CircleMember[];
-}) {
+export default function CircleIndex({ members }: { members: CircleMember[] }) {
     const { t } = useTranslation();
     const form = useForm(circleRoutes.assign(wayfinderLocale()), {
         email: '',
@@ -75,7 +71,13 @@ export default function CircleIndex({
                         'Bekijk Founding Edition-leden en reserveringen (1–100).',
                     )}
                     icon={UsersRound}
-                />
+                >
+                    <Button variant="outline" asChild>
+                        <Link href={circleRoutes.register(wayfinderLocale())}>
+                            <BookText className="h-4 w-4" /> {t('Naamregister')}
+                        </Link>
+                    </Button>
+                </AdminPageHeader>
                 <form
                     onSubmit={submitAssign}
                     className="flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm sm:flex-row sm:items-end"
@@ -167,9 +169,7 @@ export default function CircleIndex({
                                             <Link
                                                 href={circleRoutes.show({
                                                     locale: wayfinderLocale(),
-                                                    member: Number(
-                                                        member.id,
-                                                    ),
+                                                    member: Number(member.id),
                                                 })}
                                                 title={t('Lid bekijken')}
                                             >

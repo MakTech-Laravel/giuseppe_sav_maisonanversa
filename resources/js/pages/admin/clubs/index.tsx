@@ -193,7 +193,10 @@ export default function ClubsIndex({
                     </Select>
 
                     <Select value={city} onValueChange={setCity}>
-                        <SelectTrigger className="w-full" aria-label={t('Stad')}>
+                        <SelectTrigger
+                            className="w-full"
+                            aria-label={t('Stad')}
+                        >
                             <SelectValue placeholder={t('Alle steden')} />
                         </SelectTrigger>
                         <SelectContent>
@@ -273,10 +276,10 @@ export default function ClubsIndex({
                                                 {club.city}
                                             </span>
                                         </TableCell>
-                                        <TableCell className="hidden md:table-cell text-muted-foreground">
+                                        <TableCell className="hidden text-muted-foreground md:table-cell">
                                             {club.address}
                                         </TableCell>
-                                        <TableCell className="hidden lg:table-cell text-muted-foreground">
+                                        <TableCell className="hidden text-muted-foreground lg:table-cell">
                                             {club.sports
                                                 .map((sport) =>
                                                     t(

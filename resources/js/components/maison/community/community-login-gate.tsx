@@ -42,14 +42,10 @@ export function CommunityLoginGate() {
                 </p>
                 <ul className="mb-9 space-y-2 text-left text-sm leading-[1.7] text-choc3">
                     <li>
-                        {t(
-                            'Plan padelsessies met andere leden van het huis.',
-                        )}
+                        {t('Plan padelsessies met andere leden van het huis.')}
                     </li>
                     <li>
-                        {t(
-                            'Ontdek exclusieve evenementen van Maison Anversa.',
-                        )}
+                        {t('Ontdek exclusieve evenementen van Maison Anversa.')}
                     </li>
                     <li>
                         {t(

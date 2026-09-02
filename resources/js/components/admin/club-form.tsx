@@ -215,7 +215,9 @@ export function ClubForm({
                             form.setData('image', file);
                             form.setData('remove_image', false);
                             setPreview(
-                                file ? URL.createObjectURL(file) : club?.image_url ?? null,
+                                file
+                                    ? URL.createObjectURL(file)
+                                    : (club?.image_url ?? null),
                             );
                         }}
                         className="max-w-sm"
@@ -225,7 +227,10 @@ export function ClubForm({
                             <Checkbox
                                 checked={form.data.remove_image}
                                 onCheckedChange={(checked) => {
-                                    form.setData('remove_image', checked === true);
+                                    form.setData(
+                                        'remove_image',
+                                        checked === true,
+                                    );
 
                                     if (checked === true) {
                                         form.setData('image', null);

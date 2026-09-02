@@ -73,7 +73,11 @@ export function ChoiceGroup<T extends string | number>({
     const { t } = useTranslation();
 
     return (
-        <div role="radiogroup" aria-label={label} className={cn('grid gap-2', columns)}>
+        <div
+            role="radiogroup"
+            aria-label={label}
+            className={cn('grid gap-2', columns)}
+        >
             {options.map((option) => {
                 const active = option.value === value;
 

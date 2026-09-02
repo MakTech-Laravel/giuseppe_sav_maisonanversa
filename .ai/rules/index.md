@@ -7,6 +7,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Http/Controllers/Admin/CommunityEventController.php | .ai/rules/admin.md |
 | app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |
+| app/Services/FoundingCircle/** | .ai/rules/founding-circle.md |
 | resources/js/pages/maison/house.tsx,resources/js/components/maison/house/** | .ai/rules/house.md |
 | app/Support/Html/** | .ai/rules/html.md |
 | app/Jobs/TranslateModelJob.php | .ai/rules/jobs.md |
@@ -15,7 +16,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/components/maison/community/** | .ai/rules/maison-community.md |
 | resources/js/pages/maison/house.tsx | .ai/rules/maison.md |
 | resources/js/components/member/**, resources/js/layouts/member-layout.tsx | .ai/rules/member.md |
-| app/Models/*.php, app/Models/Inquiry.php | .ai/rules/models.md |
+| app/Models/*.php, app/Models/Inquiry.php, app/Models/Product.php | .ai/rules/models.md |
 | app/Services/Newsletter/**, app/Http/Controllers/Member/DashboardController.php, resources/js/pages/member/letter.tsx, resources/js/pages/member/email-preferences.tsx | .ai/rules/newsletter.md |
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
 | routes/web.php | .ai/rules/routes.md |

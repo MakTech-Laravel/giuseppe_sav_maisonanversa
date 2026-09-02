@@ -23,9 +23,7 @@ export default function CreateRole({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={t('Rol aanmaken')}
-                    description={t(
-                        'Geef de rol een naam en ken rechten toe.',
-                    )}
+                    description={t('Geef de rol een naam en ken rechten toe.')}
                     icon={ShieldPlus}
                 >
                     <Button variant="outline" asChild>

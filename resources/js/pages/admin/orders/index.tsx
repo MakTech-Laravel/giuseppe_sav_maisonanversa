@@ -225,9 +225,7 @@ export default function OrdersIndex({
                         </Label>
                         <Select
                             value={String(perPage)}
-                            onValueChange={(value) =>
-                                setPerPage(Number(value))
-                            }
+                            onValueChange={(value) => setPerPage(Number(value))}
                         >
                             <SelectTrigger id="orders-per-page">
                                 <SelectValue />
@@ -343,7 +341,9 @@ export default function OrdersIndex({
                                             <TableCell className="hidden md:table-cell">
                                                 {order.date}
                                             </TableCell>
-                                            <TableCell>{order.amount}</TableCell>
+                                            <TableCell>
+                                                {order.amount}
+                                            </TableCell>
                                             <TableCell>
                                                 <Badge variant="secondary">
                                                     {order.status}

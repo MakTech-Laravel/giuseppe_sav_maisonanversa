@@ -11,6 +11,7 @@ use App\Support\Imagery;
 use App\Support\Money;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -55,6 +56,7 @@ class Product extends Model
         'archive_edition_numbers',
         'stock_quantity',
         'is_published',
+        'public_at',
         'grants_founding_circle',
         'expected_delivery_label',
         'sold_out_behavior',
@@ -85,6 +87,7 @@ class Product extends Model
             'gallery' => 'array',
             'stock_quantity' => 'integer',
             'is_published' => 'boolean',
+            'public_at' => 'datetime',
             'grants_founding_circle' => 'boolean',
             'sort_order' => 'integer',
         ];
@@ -139,6 +142,48 @@ class Product extends Model
     public function isSimple(): bool
     {
         return $this->type === ProductType::Simple;
+    }
+
+    /**
+     * Published products that the given visitor may see on the storefront.
+     * Founding Circle members (and staff) also see products whose `public_at`
+     * is still in the future — the 48-hour early-access window.
+     *
+     * @param  Builder<static>  $query
+     * @return Builder<static>
+     */
+    public function scopeVisibleTo(Builder $query, ?User $user): Builder
+    {
+        $query->where('is_published', true);
+
+        if ($user?->isFoundingCircle()) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $inner): void {
+            $inner->whereNull('public_at')
+                ->orWhere('public_at', '<=', now());
+        });
+    }
+
+    public function isVisibleTo(?User $user): bool
+    {
+        if (! $this->is_published) {
+            return false;
+        }
+
+        if ($this->public_at === null || $this->public_at->lte(now())) {
+            return true;
+        }
+
+        return $user?->isFoundingCircle() ?? false;
+    }
+
+    public function isInEarlyAccess(): bool
+    {
+        return $this->is_published
+            && $this->public_at !== null
+            && $this->public_at->isFuture();
     }
 
     /**

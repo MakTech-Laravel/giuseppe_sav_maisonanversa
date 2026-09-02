@@ -28,7 +28,7 @@ test('the circle portal sits on the cream circle page', function () {
 
     expect($page)
         ->toContain('<CirclePortal />')
-        ->toContain('openOrder')
+        ->toContain('openPurchase')
         ->not->toContain('tone="choc2"')
         ->and($portal)
         ->toContain('bg-cream2')

@@ -15,7 +15,11 @@ type FloorplanRoomProps = {
  * a foreignObject would break the hover fill, and a `div` with an onclick (as
  * the prototype used) is neither crawlable nor keyboard-reachable.
  */
-export function FloorplanRoom({ to, href: hrefProp, children }: FloorplanRoomProps) {
+export function FloorplanRoom({
+    to,
+    href: hrefProp,
+    children,
+}: FloorplanRoomProps) {
     const { locale } = useLocale();
     const navigate = usePageTransition();
     const href = to ? maisonUrl(to, locale) : hrefProp;

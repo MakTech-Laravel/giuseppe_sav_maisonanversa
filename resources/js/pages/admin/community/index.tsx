@@ -198,7 +198,10 @@ export default function CommunityIndex({
         );
     }
 
-    function resolveReport(reportId: string, reportStatus: 'resolved' | 'dismissed') {
+    function resolveReport(
+        reportId: string,
+        reportStatus: 'resolved' | 'dismissed',
+    ) {
         router.patch(
             community.reports.resolve({
                 locale,
@@ -289,9 +292,7 @@ export default function CommunityIndex({
                             <SelectItem value="official">
                                 {t('Officieel')}
                             </SelectItem>
-                            <SelectItem value="member">
-                                {t('Lid')}
-                            </SelectItem>
+                            <SelectItem value="member">{t('Lid')}</SelectItem>
                         </SelectContent>
                     </Select>
                     {hasActiveFilters ? (
@@ -359,7 +360,9 @@ export default function CommunityIndex({
                                                     <>
                                                         <PostEditDialog
                                                             postId={post.id}
-                                                            content={post.content}
+                                                            content={
+                                                                post.content
+                                                            }
                                                         />
                                                         <PostTranslationsDialog
                                                             postId={post.id}
@@ -373,13 +376,16 @@ export default function CommunityIndex({
                                                         />
                                                     </>
                                                 ) : (
-                                                    post.status !== 'hidden' && (
+                                                    post.status !==
+                                                        'hidden' && (
                                                         <Button
                                                             variant="outline"
                                                             size="sm"
                                                             type="button"
                                                             onClick={() =>
-                                                                hidePost(post.id)
+                                                                hidePost(
+                                                                    post.id,
+                                                                )
                                                             }
                                                         >
                                                             {t('Verbergen')}

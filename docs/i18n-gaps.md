@@ -3,24 +3,23 @@
 Generated from the prototype dictionary (`prototype/i18n.js`) by
 `node prototype/convert-i18n.mjs`. Regenerate after any change to that file.
 
-Of 1650 translations (825 Dutch source strings x EN + FR),
-4 are unusable: 3 cut off mid-sentence, 1 empty.
-Each one falls back to the Dutch source text, so a page never renders half a
-sentence. These need a human translation before launch.
+Of 1650 translations (825 Dutch source strings x EN + FR), 1646 are complete.
 
-The remaining 1646 translations are complete.
+**Resolved (Full-Site Completion Plan, Phase 0):** two truncated Dutch-source
+keys — "Eerste sessie vandaag met Heritage No.001. ... onmiddellijk merkbaar. De "
+and "Stuur ons een bericht en wij nemen binnen 48 uur ... een echt gesprek " —
+were dead extraction artifacts of `convert-i18n.mjs` cutting mid-sentence. No
+component ever called `t()` with the truncated text (the full, untruncated
+sentence keys exist separately and are the ones actually rendered), so both
+truncated key/value pairs were removed from `lang/en.json` and `lang/fr.json`
+instead of translated. The canonical `Q2 2027` key (used as literal seeded copy
+in `CommunityCourtSeeder`) was missing its French translation; added as
+`"T2 2027"` matching the existing `Q1 2027` → `T1 2027` convention.
 
-## EN (2)
-
-- **Dutch source:** Eerste sessie vandaag met Heritage No.001. Het verschil in gevoel met een standaard racket is onmiddellijk merkbaar. De 
-  - **Cut off:** First session today with Heritage No.001. The difference in feel with a standard racket is immediately noticeable. The
-- **Dutch source:** Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek 
-  - **Cut off:** Send us a message and we will personally contact you within 48 hours. No automated responses — a real conversation
-
-## FR (1)
-
-- **Dutch source:** Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek 
-  - **Cut off:** Envoyez-nous un message et nous vous contacterons personnellement sous 48 heures. Pas de réponses automatiques — une vraie discussion
+One truncated orphan remains **intentionally**: the "Anvers/Enge" key in
+`tests/Feature/TranslationTest.php` (`TRUNCATED_ANVERS_ORPHAN_KEY`) is a
+deliberate test fixture proving the Dutch-source fallback mechanism works for
+an incomplete dictionary entry. Do not delete it or its translations.
 
 ## Keys added outside the prototype dictionary (7)
 

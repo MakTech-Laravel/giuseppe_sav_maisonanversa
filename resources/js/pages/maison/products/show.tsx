@@ -1,4 +1,5 @@
-import { Fragment, type ReactNode } from 'react';
+import { Fragment } from 'react';
+import type { ReactNode } from 'react';
 import { ProductCraft } from '@/components/maison/product/product-craft';
 import { ProductDetail } from '@/components/maison/product/product-detail';
 import { ProductFaq } from '@/components/maison/product/product-faq';

@@ -1,5 +1,5 @@
-import { useEffect, useRef  } from 'react';
-import type {ReactNode} from 'react';
+import { useEffect, useRef } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { gsap, MAISON_EASE, MEDIA, TRANSITION_EASE, useGSAP } from '@/lib/gsap';
@@ -35,7 +35,9 @@ function useFocusTrap(
         const previous = document.activeElement as HTMLElement | null;
 
         function focusables(): HTMLElement[] {
-            return Array.from(node!.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+            return Array.from(
+                node!.querySelectorAll<HTMLElement>(FOCUSABLE),
+            ).filter(
                 (element) =>
                     !element.hasAttribute('disabled') &&
                     element.tabIndex !== -1,

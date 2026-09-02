@@ -19,11 +19,7 @@ interface CircleMemberDetail {
     benefits: string[];
 }
 
-export default function CircleShow({
-    member,
-}: {
-    member: CircleMemberDetail;
-}) {
+export default function CircleShow({ member }: { member: CircleMemberDetail }) {
     const { t } = useTranslation();
 
     function removeMember() {
@@ -69,7 +65,11 @@ export default function CircleShow({
                             {t('Terug naar Founding Circle')}
                         </Link>
                     </Button>
-                    <Button variant="destructive" type="button" onClick={removeMember}>
+                    <Button
+                        variant="destructive"
+                        type="button"
+                        onClick={removeMember}
+                    >
                         {t('Verwijderen')}
                     </Button>
                 </AdminPageHeader>
