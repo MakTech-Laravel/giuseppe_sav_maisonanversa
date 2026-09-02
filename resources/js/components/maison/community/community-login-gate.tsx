@@ -37,7 +37,7 @@ export function CommunityLoginGate() {
 
                 <p className="mb-9 text-base leading-[1.8] text-choc3">
                     {t(
-                        'De Community is exclusief voor Founding Circle leden en Club Corner partners. Log in om toegang te krijgen.',
+                        'De Community is exclusief voor ingelogde leden. Log in om toegang te krijgen.',
                     )}
                 </p>
                 <ul className="mb-9 space-y-2 text-left text-sm leading-[1.7] text-choc3">
@@ -49,7 +49,7 @@ export function CommunityLoginGate() {
                     </li>
                     <li>
                         {t(
-                            'Vind de courts en clubs waar het huis aanwezig is.',
+                            'Bekijk padel- en tennisclubs waar leden sessies plannen.',
                         )}
                     </li>
                 </ul>

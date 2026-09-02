@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\FaqContext;
-use App\Models\CommunityCourt;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
@@ -19,6 +18,7 @@ use App\Services\Inquiry\InquiryDeviceCookie;
 use App\Support\CommunityFeed;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -26,7 +26,7 @@ use Inertia\Response;
 
 /**
  * The public Maison Anversa site. The Journal pages Eloquent articles via
- * {@see Journal}; community props load live sessions, events and courts.
+ * {@see Journal}; community props load live sessions and events.
  * Edition figures come from each product's inventory.
  */
 class MaisonController extends Controller
@@ -294,47 +294,26 @@ class MaisonController extends Controller
         return $related->values()->all();
     }
 
-    public function community(Request $request): Response
+    public function community(Request $request): Response|RedirectResponse
     {
+        if ($request->string('tab')->toString() === 'courts') {
+            return redirect()->route('community.clubs.index', [
+                'locale' => $request->route('locale'),
+            ]);
+        }
+
         $props = [];
-        $routeLocale = $request->route('locale');
-        $pathLocale = is_string($routeLocale) ? $routeLocale : app()->getLocale();
 
         if ($request->user() !== null) {
             $props['posts'] = Inertia::scroll(
                 fn () => CommunityFeed::paginate($request),
             );
-            // Sessions and events each have their own page now.
-            $props['courts'] = CommunityCourt::query()
-                ->published()
-                ->with('translations')
-                ->orderBy('sort_order')
-                ->orderBy('id')
-                ->get()
-                ->map(function (CommunityCourt $court) use ($pathLocale) {
-                    $pin = $court->mapPinPosition();
-
-                    return [
-                        'id' => (string) $court->id,
-                        'title' => $court->translated('title', $pathLocale),
-                        'body' => $court->translated('body', $pathLocale),
-                        'location' => $court->translated('location', $pathLocale),
-                        'lat' => $court->lat !== null ? (float) $court->lat : null,
-                        'lng' => $court->lng !== null ? (float) $court->lng : null,
-                        'pin_top' => $pin['top'] ?? null,
-                        'pin_left' => $pin['left'] ?? null,
-                        'coming' => $pin === null,
-                    ];
-                });
             $props['sidebar'] = [
                 'profile' => $this->communityProfile((int) $request->user()->id),
                 'recentMembers' => $this->recentMembers(),
                 'nextEvent' => $this->nextEvent(),
             ];
         }
-
-        $tab = $request->string('tab')->toString();
-        $props['tab'] = $tab === 'courts' ? 'courts' : 'feed';
 
         return $this->page('community', $props);
     }

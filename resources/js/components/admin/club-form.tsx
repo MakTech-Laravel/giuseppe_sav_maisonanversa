@@ -244,15 +244,22 @@ export function ClubForm({
                 </div>
             </Field>
 
-            <label className="flex items-center gap-2 text-sm">
-                <Checkbox
-                    checked={form.data.is_partner}
-                    onCheckedChange={(checked) =>
-                        form.setData('is_partner', checked === true)
-                    }
-                />
-                {t('Partnerclub')}
-            </label>
+            <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                        checked={form.data.is_partner}
+                        onCheckedChange={(checked) =>
+                            form.setData('is_partner', checked === true)
+                        }
+                    />
+                    {t('Maison Anversa Partner Club')}
+                </label>
+                <p className="font-sans text-xs text-muted-foreground">
+                    {t(
+                        'Markeer deze club als officiële Maison Anversa-partnerlocatie.',
+                    )}
+                </p>
+            </div>
 
             <Button type="submit" disabled={form.processing}>
                 {submitLabel}

@@ -199,6 +199,7 @@ test('the member nav includes the client feedback sections', function () {
         "t('Dashboard')",
         "t('Bestellingen')",
         "t('Founding Circle')",
+        "t('Lidpaspoort')",
         "t('Gemeenschap')",
         "t('Heritage Letter')",
         "t('E-mailvoorkeuren')",

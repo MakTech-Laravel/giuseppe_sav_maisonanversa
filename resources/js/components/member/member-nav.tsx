@@ -83,6 +83,10 @@ export function MemberNav() {
             label: t('Founding Circle'),
             href: `/${locale}/member/circle`,
         },
+        {
+            label: t('Lidpaspoort'),
+            href: `/${locale}/member/lidpaspoort`,
+        },
         ...(isFoundingCircle
             ? [
                   {

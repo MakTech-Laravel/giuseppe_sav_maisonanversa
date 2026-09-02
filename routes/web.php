@@ -200,6 +200,7 @@ Route::prefix('{locale}')
                 Route::get('orders', 'orders')->name('orders');
                 Route::get('orders/{order}', 'orderShow')->name('orders.show');
                 Route::get('passport', 'passport')->name('passport');
+                Route::get('lidpaspoort', 'lidpaspoort')->name('lidpaspoort');
                 Route::get('passport.pdf', PassportPdfController::class)->name('passport.pdf');
                 Route::get('circle', 'circle')->name('circle');
                 Route::get('letter', 'letter')->name('letter');
@@ -240,7 +241,9 @@ Route::prefix('{locale}')
             });
 
             Route::controller(ClubController::class)->group(function () {
+                Route::get('clubs', 'index')->name('clubs.index');
                 Route::get('clubs/search', 'search')->name('clubs.search');
+                Route::get('clubs/{club}', 'show')->name('clubs.show');
                 Route::post('clubs', 'store')->name('clubs.store');
             });
         });

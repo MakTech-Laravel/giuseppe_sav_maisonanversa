@@ -46,7 +46,6 @@ import adminCircle from '@/routes/admin/circle';
 import adminClubs from '@/routes/admin/clubs';
 import adminCommunity from '@/routes/admin/community';
 import adminSessions from '@/routes/admin/community-sessions';
-import adminCourts from '@/routes/admin/courts';
 import adminCustomers from '@/routes/admin/customers';
 import adminDressingItems from '@/routes/admin/dressing-items';
 import adminEvents from '@/routes/admin/events';
@@ -146,12 +145,6 @@ function buildNavGroups(
                     href: adminEvents.index(locale),
                     icon: CalendarDays,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
-                },
-                {
-                    title: t('Club Corners'),
-                    href: adminCourts.index(locale),
-                    icon: MapPin,
-                    permissions: [PERMISSIONS.COMMUNITY.MODERATE],
                 },
                 {
                     title: t('Founding Circle'),

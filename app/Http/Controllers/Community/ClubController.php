@@ -7,17 +7,52 @@ use App\Enums\SessionSport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\StoreClubRequest;
 use App\Models\Club;
+use App\Support\ClubDirectory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ClubController extends Controller
 {
     private const SEARCH_LIMIT = 8;
 
     private const MIN_QUERY_LENGTH = 2;
+
+    public function index(Request $request, string $locale): Response
+    {
+        $search = $request->string('search')->toString() ?: null;
+        $city = $request->string('city')->toString() ?: null;
+        $sport = $request->string('sport')->toString() ?: null;
+
+        return Inertia::render('maison/clubs/index', [
+            'clubs' => Inertia::scroll(
+                fn () => ClubDirectory::paginate($search, $city, $sport, $locale),
+            ),
+            'filters' => [
+                'search' => $search,
+                'city' => $city,
+                'sport' => $sport,
+            ],
+            'cities' => Club::query()
+                ->approved()
+                ->distinct()
+                ->orderBy('city')
+                ->pluck('city')
+                ->all(),
+        ]);
+    }
+
+    public function show(Request $request, string $locale, Club $club): Response
+    {
+        abort_unless($club->isApproved(), 404);
+
+        return Inertia::render('maison/clubs/show', [
+            'club' => ClubDirectory::toProfile($club, $request->user(), $locale),
+        ]);
+    }
 
     /**
      * Autocomplete for the session composer. Only approved clubs are bookable.
