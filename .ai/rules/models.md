@@ -3,6 +3,7 @@ paths:
   - 'app/Models/*.php'
   - app/Models/Inquiry.php
   - app/Models/Product.php
+  - app/Models/Club.php
 ---
 
 # Models
@@ -36,3 +37,6 @@ Contact and corner inquiries from users with the founding-circle role set Inquir
 
 ## Product public_at is early access
 Nullable products.public_at is the public release time. Until then, published products are visible and buyable only through Product::visibleTo / isVisibleTo for Founding Circle members and staff. Null public_at keeps published equal to public.
+
+## One club database with partner badge
+Session venues live in `clubs` only. Partner status is `clubs.is_partner` with the UI badge copy `Maison Anversa Partner Club`. Do not treat `partner_clubs` (Club Corner marketing CMS) as session venues or merge it into `clubs`. Club must never use TranslatesWithDeepL.

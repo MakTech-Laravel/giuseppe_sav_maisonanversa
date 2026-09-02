@@ -3,6 +3,7 @@ import { Check, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ClubSubmitDialog } from '@/components/maison/community/sessions/club-submit-dialog';
+import { PartnerBadge } from '@/components/maison/community/partner-badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import * as clubRoutes from '@/routes/community/clubs';
@@ -208,15 +209,5 @@ function ClubThumbnail({ club }: { club: ClubCard }) {
         >
             {club.name.slice(0, 1).toUpperCase()}
         </div>
-    );
-}
-
-function PartnerBadge() {
-    const { t } = useTranslation();
-
-    return (
-        <span className="shrink-0 border border-gold/25 bg-gold/8 px-2.5 py-1 font-sans text-[9px] tracking-[0.14em] text-gold2 uppercase">
-            {t('Partnerclub')}
-        </span>
     );
 }

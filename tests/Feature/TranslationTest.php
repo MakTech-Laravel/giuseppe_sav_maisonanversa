@@ -83,7 +83,7 @@ test('laravel resolves the translated copy for a known key', function () {
     expect(__('Producten'))->toBe('Products');
     expect(__('Open evenementen'))->toBe('Open events');
     expect(__('Alleen leden'))->toBe('Members only');
-    expect(__('Partnerclub'))->toBe('Partner club');
+    expect(__('Maison Anversa Partner Club'))->toBe('Maison Anversa Partner Club');
     expect(__('Community'))->toBe('Community');
     expect(__('Contact'))->toBe('Contact');
     expect(__('Padel'))->toBe('Padel');
@@ -96,7 +96,7 @@ test('laravel resolves the translated copy for a known key', function () {
     expect(__('Producten'))->toBe('Produits');
     expect(__('Open evenementen'))->toBe('Événements ouverts');
     expect(__('Alleen leden'))->toBe('Membres uniquement');
-    expect(__('Partnerclub'))->toBe('Club partenaire');
+    expect(__('Maison Anversa Partner Club'))->toBe('Maison Anversa Partner Club');
     expect(__('Georganiseerd door Maison Anversa.'))->toBe('Organisés par Maison Anversa.');
     expect(__('Community'))->toBe('Communauté');
     expect(__('Contact'))->toBe('Contactez-nous');
