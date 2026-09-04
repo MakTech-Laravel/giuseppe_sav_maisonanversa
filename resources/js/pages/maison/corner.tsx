@@ -1,6 +1,6 @@
+import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
 import type { FormEvent } from 'react';
-import { useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
@@ -73,7 +73,6 @@ const CRITERIA = [
     'Een clubmanagement dat gelooft in langdurige partnerships boven kortetermijnwinst',
     'Minimaal 4 courts en een actieve ledenlijst van 200+ leden',
 ] as const;
-
 
 const PROCESS_STEPS = [
     {
@@ -445,7 +444,9 @@ export default function Corner({
                                 </div>
                             </div>
 
-                            <CornerPartnershipForm cornerFormOptions={cornerFormOptions} />
+                            <CornerPartnershipForm
+                                cornerFormOptions={cornerFormOptions}
+                            />
                         </div>
                     </Wrap>
                 </div>
@@ -500,7 +501,9 @@ function CornerPartnershipForm({
                 autoComplete="off"
                 className="hidden"
                 value={form.data.website}
-                onChange={(event) => form.setData('website', event.target.value)}
+                onChange={(event) =>
+                    form.setData('website', event.target.value)
+                }
             />
 
             <div className="flex flex-col gap-1.5">
@@ -542,7 +545,9 @@ function CornerPartnershipForm({
                     type="text"
                     required
                     value={form.data.name}
-                    onChange={(event) => form.setData('name', event.target.value)}
+                    onChange={(event) =>
+                        form.setData('name', event.target.value)
+                    }
                     placeholder={t('Uw naam en functie')}
                     className={fieldClassName}
                 />
@@ -566,7 +571,9 @@ function CornerPartnershipForm({
                     type="email"
                     required
                     value={form.data.email}
-                    onChange={(event) => form.setData('email', event.target.value)}
+                    onChange={(event) =>
+                        form.setData('email', event.target.value)
+                    }
                     placeholder={t('uw@emailadres.be')}
                     className={fieldClassName}
                 />

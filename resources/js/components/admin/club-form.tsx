@@ -215,7 +215,9 @@ export function ClubForm({
                             form.setData('image', file);
                             form.setData('remove_image', false);
                             setPreview(
-                                file ? URL.createObjectURL(file) : club?.image_url ?? null,
+                                file
+                                    ? URL.createObjectURL(file)
+                                    : (club?.image_url ?? null),
                             );
                         }}
                         className="max-w-sm"
@@ -225,7 +227,10 @@ export function ClubForm({
                             <Checkbox
                                 checked={form.data.remove_image}
                                 onCheckedChange={(checked) => {
-                                    form.setData('remove_image', checked === true);
+                                    form.setData(
+                                        'remove_image',
+                                        checked === true,
+                                    );
 
                                     if (checked === true) {
                                         form.setData('image', null);
@@ -239,15 +244,22 @@ export function ClubForm({
                 </div>
             </Field>
 
-            <label className="flex items-center gap-2 text-sm">
-                <Checkbox
-                    checked={form.data.is_partner}
-                    onCheckedChange={(checked) =>
-                        form.setData('is_partner', checked === true)
-                    }
-                />
-                {t('Partnerclub')}
-            </label>
+            <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                        checked={form.data.is_partner}
+                        onCheckedChange={(checked) =>
+                            form.setData('is_partner', checked === true)
+                        }
+                    />
+                    {t('Maison Anversa Partner Club')}
+                </label>
+                <p className="font-sans text-xs text-muted-foreground">
+                    {t(
+                        'Markeer deze club als officiële Maison Anversa-partnerlocatie.',
+                    )}
+                </p>
+            </div>
 
             <Button type="submit" disabled={form.processing}>
                 {submitLabel}

@@ -41,6 +41,7 @@ export type ProductFormData = {
     archive_edition_numbers: number[];
     stock_quantity: string;
     is_published: boolean;
+    public_at: string;
     grants_founding_circle: boolean;
     expected_delivery_label: string;
     eyebrow: string;
@@ -135,7 +136,9 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                     <Input
                         id="name"
                         value={data.name}
-                        onChange={(event) => setData('name', event.target.value)}
+                        onChange={(event) =>
+                            setData('name', event.target.value)
+                        }
                         placeholder={t('bijv. Heritage No.002')}
                         autoFocus
                     />
@@ -195,7 +198,10 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                     <Select
                         value={data.status}
                         onValueChange={(value) =>
-                            setData('status', value as ProductFormData['status'])
+                            setData(
+                                'status',
+                                value as ProductFormData['status'],
+                            )
                         }
                     >
                         <SelectTrigger id="status" className="w-full">
@@ -236,7 +242,9 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                         onChange={(event) =>
                             setData('eyebrow', event.target.value)
                         }
-                        placeholder={t('bijv. Maison Anversa · Founding Edition')}
+                        placeholder={t(
+                            'bijv. Maison Anversa · Founding Edition',
+                        )}
                     />
                     <InputError message={errors.eyebrow} />
                 </div>
@@ -255,7 +263,9 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                     <InputError message={errors.hero_eyebrow} />
                 </div>
                 <div className="grid min-w-0 gap-2 md:col-span-2">
-                    <Label htmlFor="hero_subtitle">{t('Hero-ondertitel')}</Label>
+                    <Label htmlFor="hero_subtitle">
+                        {t('Hero-ondertitel')}
+                    </Label>
                     <Textarea
                         id="hero_subtitle"
                         value={data.hero_subtitle}
@@ -318,7 +328,9 @@ export function ProductSeoFields({
                         onChange={(event) =>
                             setData('meta_title', event.target.value)
                         }
-                        placeholder={t('Leeg laten om de productnaam te gebruiken')}
+                        placeholder={t(
+                            'Leeg laten om de productnaam te gebruiken',
+                        )}
                     />
                     <InputError message={errors.meta_title} />
                 </div>
@@ -749,7 +761,8 @@ export function ProductMediaFields({
                         onChange={(files) =>
                             setData((current) => ({
                                 ...current,
-                                gallery_images: (files as File[] | null) ?? null,
+                                gallery_images:
+                                    (files as File[] | null) ?? null,
                             }))
                         }
                         existingFiles={existingGallery.filter((file) =>
@@ -850,8 +863,12 @@ export function ProductSectionFields({
                                     (stored) => stored.key === section.key,
                                 )?.existing_image ?? null
                             }
-                            onChange={(patch) => patchSection(section.key, patch)}
-                            onMove={(direction) => moveSection(index, direction)}
+                            onChange={(patch) =>
+                                patchSection(section.key, patch)
+                            }
+                            onMove={(direction) =>
+                                moveSection(index, direction)
+                            }
                             canMoveUp={index > 0}
                             canMoveDown={index < data.sections.length - 1}
                         />
@@ -916,7 +933,7 @@ export function ProductFaqFields({ data, setData }: SharedProps) {
     );
 }
 
-export function ProductPublishFields({ data, setData }: SharedProps) {
+export function ProductPublishFields({ data, errors, setData }: SharedProps) {
     const { t } = useTranslation();
     const visibleSections = data.sections.filter(
         (section) => section.is_visible,
@@ -939,13 +956,17 @@ export function ProductPublishFields({ data, setData }: SharedProps) {
                         <dt className="text-xs text-muted-foreground">
                             {t('Slug')}
                         </dt>
-                        <dd className="font-mono text-xs">{data.slug || '—'}</dd>
+                        <dd className="font-mono text-xs">
+                            {data.slug || '—'}
+                        </dd>
                     </div>
                     <div>
                         <dt className="text-xs text-muted-foreground">
                             {t('Bedrag')}
                         </dt>
-                        <dd className="font-medium">{data.amount || '—'} EUR</dd>
+                        <dd className="font-medium">
+                            {data.amount || '—'} EUR
+                        </dd>
                     </div>
                     <div>
                         <dt className="text-xs text-muted-foreground">
@@ -975,10 +996,51 @@ export function ProductPublishFields({ data, setData }: SharedProps) {
                         <OptionCard
                             selected={!data.is_published}
                             title={t('Concept')}
-                            description={t('Alleen zichtbaar in het adminpaneel.')}
+                            description={t(
+                                'Alleen zichtbaar in het adminpaneel.',
+                            )}
                             onSelect={() => setData('is_published', false)}
                         />
                     </div>
+                </div>
+
+                <div className="grid min-w-0 gap-2">
+                    <Label htmlFor="public_at">{t('Openbaar vanaf')}</Label>
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                        <Input
+                            id="public_at"
+                            type="datetime-local"
+                            value={data.public_at}
+                            onChange={(event) =>
+                                setData('public_at', event.target.value)
+                            }
+                        />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => {
+                                const publicAt = new Date(
+                                    Date.now() + 48 * 60 * 60 * 1000,
+                                );
+                                const local = new Date(
+                                    publicAt.getTime() -
+                                        publicAt.getTimezoneOffset() * 60_000,
+                                )
+                                    .toISOString()
+                                    .slice(0, 16);
+
+                                setData('public_at', local);
+                            }}
+                        >
+                            {t('48 uur vanaf nu')}
+                        </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                        {t(
+                            'Early access tot de openbare datum. Alleen Founding Circle ziet dit product tot dan.',
+                        )}
+                    </p>
+                    <InputError message={errors.public_at} />
                 </div>
             </div>
         </AdminPanel>

@@ -262,7 +262,7 @@ export function AuthModal({
                     <div className="mt-5 text-center">
                         <button
                             type="button"
-                            className="text-[13px] font-sans tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
+                            className="font-sans text-[13px] tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
                             onClick={() => switchView('login')}
                         >
                             {t('Al een account? Inloggen')}
@@ -325,7 +325,7 @@ export function AuthModal({
                     <div className="mt-5 text-center">
                         <button
                             type="button"
-                            className="text-[13px] font-sans tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
+                            className="font-sans text-[13px] tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
                             onClick={() => switchView('login')}
                         >
                             {t('Terug naar inloggen')}
@@ -370,9 +370,7 @@ export function AuthModal({
                                             inputMode="numeric"
                                             required
                                             autoFocus
-                                            placeholder={t(
-                                                'Authenticatiecode',
-                                            )}
+                                            placeholder={t('Authenticatiecode')}
                                             className={modalInputClassName}
                                         />
                                         <InputError message={errors.code} />
@@ -390,7 +388,7 @@ export function AuthModal({
 
                                 <button
                                     type="button"
-                                    className="text-[13px] font-sans tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
+                                    className="font-sans text-[13px] tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
                                     onClick={() => {
                                         setShowRecoveryInput(
                                             !showRecoveryInput,
@@ -399,9 +397,7 @@ export function AuthModal({
                                     }}
                                 >
                                     {showRecoveryInput
-                                        ? t(
-                                              'Inloggen met authenticatiecode',
-                                          )
+                                        ? t('Inloggen met authenticatiecode')
                                         : t('Inloggen met herstelcode')}
                                 </button>
                             </>

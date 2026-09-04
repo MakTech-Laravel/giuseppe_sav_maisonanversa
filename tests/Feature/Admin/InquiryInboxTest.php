@@ -140,3 +140,25 @@ test('customers cannot open the appointments inbox', function () {
         ->get(route('admin.appointments.index', ['locale' => 'nl']))
         ->assertForbidden();
 });
+
+test('priority inquiries appear first in the appointments inbox', function () {
+    $olderPriority = Inquiry::factory()->appointment()->priority()->create([
+        'name' => 'Priority Member',
+    ]);
+    $newerRegular = Inquiry::factory()->appointment()->create([
+        'name' => 'Regular Guest',
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.appointments.index', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('inquiries.data', 2)
+            ->where('inquiries.data.0.id', (string) $olderPriority->id)
+            ->where('inquiries.data.0.priority', true)
+            ->has('inquiries.data.0.sla_due_at')
+            ->where('inquiries.data.0.sla_breached', false)
+            ->where('inquiries.data.1.id', (string) $newerRegular->id)
+            ->where('inquiries.data.1.priority', false)
+        );
+});

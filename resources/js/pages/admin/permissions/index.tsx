@@ -60,12 +60,9 @@ export default function PermissionsIndex({
                             <Button variant="outline" asChild>
                                 <a
                                     href={
-                                        permissions.export(
-                                            wayfinderLocale(),
-                                            {
-                                                query: { format: 'csv' },
-                                            },
-                                        ).url
+                                        permissions.export(wayfinderLocale(), {
+                                            query: { format: 'csv' },
+                                        }).url
                                     }
                                 >
                                     <FileText className="h-4 w-4" /> CSV
@@ -74,12 +71,9 @@ export default function PermissionsIndex({
                             <Button asChild>
                                 <a
                                     href={
-                                        permissions.export(
-                                            wayfinderLocale(),
-                                            {
-                                                query: { format: 'xlsx' },
-                                            },
-                                        ).url
+                                        permissions.export(wayfinderLocale(), {
+                                            query: { format: 'xlsx' },
+                                        }).url
                                     }
                                 >
                                     <FileSpreadsheet className="h-4 w-4" />{' '}

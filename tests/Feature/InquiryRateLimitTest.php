@@ -1,9 +1,12 @@
 <?php
 
 use App\Enums\InquiryType;
+use App\Enums\RoleEnum;
 use App\Models\Inquiry;
 use App\Models\User;
 use App\Services\Inquiry\InquiryDeviceCookie;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -109,4 +112,49 @@ test('club corner inquiries do not count toward the contact form cap', function 
 
     $this->post('/nl/contact', contactPayload())
         ->assertSessionHasErrors('kind');
+});
+
+test('founding circle members submit priority contact inquiries', function () {
+    Mail::fake();
+
+    $this->seed([
+        PermissionSeeder::class,
+        RoleSeeder::class,
+    ]);
+
+    $member = User::factory()->create();
+    $member->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    $this->actingAs($member)
+        ->post('/nl/contact', contactPayload())
+        ->assertRedirect();
+
+    $inquiry = Inquiry::query()->latest('id')->first();
+
+    expect($inquiry)->not->toBeNull()
+        ->and($inquiry->priority)->toBeTrue()
+        ->and($inquiry->user_id)->toBe($member->id)
+        ->and($inquiry->slaDueAt()?->equalTo($inquiry->created_at->copy()->addHours(Inquiry::SLA_HOURS)))->toBeTrue();
+});
+
+test('guest contact inquiries are not flagged as priority', function () {
+    Mail::fake();
+
+    $this->post('/nl/contact', contactPayload())->assertRedirect();
+
+    expect(Inquiry::query()->latest('id')->first()?->priority)->toBeFalse();
+});
+
+test('unseen priority inquiries breach the sla after twelve hours', function () {
+    $inquiry = Inquiry::factory()->priority()->create();
+
+    expect($inquiry->isSlaBreached())->toBeFalse();
+
+    $this->travel(13)->hours();
+
+    expect($inquiry->fresh()->isSlaBreached())->toBeTrue();
+
+    $inquiry->markSeen();
+
+    expect($inquiry->fresh()->isSlaBreached())->toBeFalse();
 });

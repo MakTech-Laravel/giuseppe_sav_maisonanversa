@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { HeritageLetterForm } from '@/components/maison/heritage-letter-form';
-import { MaisonLink } from '@/components/maison/maison-link';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { Eyebrow } from '@/components/maison/ui/eyebrow';
 import { PageHero } from '@/components/maison/ui/page-hero';

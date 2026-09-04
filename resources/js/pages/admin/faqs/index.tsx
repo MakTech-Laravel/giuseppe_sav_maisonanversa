@@ -52,7 +52,9 @@ interface ContextOption {
 
 const DEFAULT_PER_PAGE = 15;
 
-function faqQuery(filters: FaqFilters): Record<string, string | number | undefined> {
+function faqQuery(
+    filters: FaqFilters,
+): Record<string, string | number | undefined> {
     return {
         search: filters.search || undefined,
         context: filters.context || undefined,
@@ -209,10 +211,7 @@ export default function FaqsIndex({
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
-                                <SelectItem
-                                    key={option}
-                                    value={String(option)}
-                                >
+                                <SelectItem key={option} value={String(option)}>
                                     {t('{{count}} per pagina', {
                                         count: option,
                                     })}
@@ -317,9 +316,7 @@ export default function FaqsIndex({
                                                     router.delete(
                                                         faqs.destroy({
                                                             locale,
-                                                            faq: Number(
-                                                                faq.id,
-                                                            ),
+                                                            faq: Number(faq.id),
                                                         }).url,
                                                     )
                                                 }

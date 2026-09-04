@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Maison;
 
 use App\Enums\InquiryType;
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maison\StoreContactInquiryRequest;
 use App\Http\Requests\Maison\StoreCornerInquiryRequest;
 use App\Mail\InquiryConfirmation;
 use App\Mail\InquiryReceived;
 use App\Models\Inquiry;
+use App\Models\User;
 use App\Services\Inquiry\InquiryDeviceCookie;
 use App\Support\MailLocale;
 use Illuminate\Http\RedirectResponse;
@@ -29,6 +31,7 @@ class InquiryController extends Controller
         $inquiry = Inquiry::query()->create([
             'type' => $kind,
             'user_id' => $request->user()?->id,
+            'priority' => $this->isPriorityRequester($request->user()),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
@@ -57,6 +60,7 @@ class InquiryController extends Controller
         $inquiry = Inquiry::query()->create([
             'type' => InquiryType::Corner,
             'user_id' => $request->user()?->id,
+            'priority' => $this->isPriorityRequester($request->user()),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
@@ -82,6 +86,11 @@ class InquiryController extends Controller
         ]);
 
         return back();
+    }
+
+    private function isPriorityRequester(?User $user): bool
+    {
+        return $user !== null && $user->hasRole(RoleEnum::FOUNDING_CIRCLE->value);
     }
 
     private function queueMails(Inquiry $inquiry): void

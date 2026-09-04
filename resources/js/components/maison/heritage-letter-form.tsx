@@ -66,7 +66,9 @@ export function HeritageLetterForm({
                 autoComplete="off"
                 className="hidden"
                 value={form.data.website}
-                onChange={(event) => form.setData('website', event.target.value)}
+                onChange={(event) =>
+                    form.setData('website', event.target.value)
+                }
             />
 
             {showName && (

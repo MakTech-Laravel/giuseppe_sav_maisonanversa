@@ -23,6 +23,7 @@ trait PreparesProductPayload
 
         $this->merge([
             'is_published' => $this->boolean('is_published'),
+            'public_at' => filled($this->input('public_at')) ? $this->input('public_at') : null,
             'grants_founding_circle' => $this->boolean('grants_founding_circle'),
             'remove_primary_image' => $this->boolean('remove_primary_image'),
             'slug' => filled($this->input('slug'))
@@ -84,6 +85,7 @@ trait PreparesProductPayload
                 'min:0',
             ],
             'is_published' => ['required', 'boolean'],
+            'public_at' => ['nullable', 'date'],
             'grants_founding_circle' => ['required', 'boolean'],
             'expected_delivery_label' => ['nullable', 'string', 'max:255'],
             'eyebrow' => ['nullable', 'string', 'max:255'],

@@ -77,7 +77,9 @@ function statusLabel(
     }
 }
 
-function eventsQuery(filters: EventFilters): Record<string, string | undefined> {
+function eventsQuery(
+    filters: EventFilters,
+): Record<string, string | undefined> {
     return {
         search: filters.search || undefined,
         status: filters.status || undefined,
@@ -331,9 +333,7 @@ export default function EventsIndex({
                                                 <Link
                                                     href={eventsRoutes.show({
                                                         locale: wayfinderLocale(),
-                                                        event: Number(
-                                                            event.id,
-                                                        ),
+                                                        event: Number(event.id),
                                                     })}
                                                     title={t(
                                                         'Boekingen bekijken',
@@ -350,9 +350,7 @@ export default function EventsIndex({
                                                 <Link
                                                     href={eventsRoutes.edit({
                                                         locale: wayfinderLocale(),
-                                                        event: Number(
-                                                            event.id,
-                                                        ),
+                                                        event: Number(event.id),
                                                     })}
                                                     title={t('Bewerken')}
                                                 >

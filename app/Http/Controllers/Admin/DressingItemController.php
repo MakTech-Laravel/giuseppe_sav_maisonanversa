@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreDressingItemRequest;
+use App\Http\Requests\Admin\TranslateDressingItemRequest;
 use App\Http\Requests\Admin\UpdateDressingItemRequest;
+use App\Http\Requests\Admin\UpdateDressingItemTranslationsRequest;
 use App\Models\DressingItem;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +22,17 @@ class DressingItemController extends Controller
     public const PER_PAGE_OPTIONS = [10, 15, 25, 50, 100];
 
     public const PER_PAGE_DEFAULT = 15;
+
+    /** @var list<string> */
+    private const TRANSLATION_COLUMNS = ['name', 'category', 'description'];
+
+    /**
+     * @return list<string>
+     */
+    private function translationLocales(): array
+    {
+        return config('maison.locales');
+    }
 
     public function index(Request $request, string $locale): Response
     {
@@ -90,8 +103,13 @@ class DressingItemController extends Controller
 
     public function show(string $locale, DressingItem $dressingItem): Response
     {
+        $dressingItem->loadMissing('translations');
+
         return Inertia::render('admin/dressing-items/show', [
             'item' => $this->itemDetails($dressingItem),
+            'locales' => $this->translationLocales(),
+            'translations' => $this->translationBundle($dressingItem),
+            'translationStatus' => $this->translationStatus($dressingItem),
         ]);
     }
 
@@ -128,6 +146,63 @@ class DressingItemController extends Controller
         $dressingItem->update($data);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Dressing item bijgewerkt.')]);
+
+        return redirect()->route('admin.dressing-items.show', [
+            'locale' => $locale,
+            'dressingItem' => $dressingItem->id,
+        ]);
+    }
+
+    public function updateTranslations(
+        UpdateDressingItemTranslationsRequest $request,
+        string $locale,
+        DressingItem $dressingItem,
+    ): RedirectResponse {
+        $data = $request->validated();
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            foreach (self::TRANSLATION_COLUMNS as $column) {
+                $dressingItem->translations()->updateOrCreate(
+                    [
+                        'locale' => $targetLocale,
+                        'column' => $column,
+                    ],
+                    [
+                        'value' => $data[$targetLocale][$column] ?? '',
+                        'source_hash' => $dressingItem->translationSourceHash($column),
+                    ],
+                );
+            }
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+
+        return redirect()->route('admin.dressing-items.show', [
+            'locale' => $locale,
+            'dressingItem' => $dressingItem->id,
+        ]);
+    }
+
+    public function translate(TranslateDressingItemRequest $request, string $locale, DressingItem $dressingItem): RedirectResponse
+    {
+        $targetLocale = $request->validated('target_locale');
+
+        if (filled($targetLocale)) {
+            $dressingItem->translations()
+                ->where('locale', $targetLocale)
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $dressingItem->dispatchDeepLTranslation([$targetLocale]);
+        } else {
+            $dressingItem->translations()
+                ->whereIn('column', self::TRANSLATION_COLUMNS)
+                ->delete();
+
+            $dressingItem->dispatchDeepLTranslation();
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
 
         return redirect()->route('admin.dressing-items.show', [
             'locale' => $locale,
@@ -215,5 +290,54 @@ class DressingItemController extends Controller
         }
 
         return self::PER_PAGE_DEFAULT;
+    }
+
+    /**
+     * @return array<string, array{name: string, category: string, description: string}>
+     */
+    private function translationBundle(DressingItem $dressingItem): array
+    {
+        $bundle = [];
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            $bundle[$targetLocale] = [
+                'name' => $dressingItem->translated('name', $targetLocale),
+                'category' => $dressingItem->translated('category', $targetLocale),
+                'description' => $dressingItem->translated('description', $targetLocale),
+            ];
+        }
+
+        return $bundle;
+    }
+
+    /**
+     * @return array<string, array{name: bool, category: bool, description: bool}>
+     */
+    private function translationStatus(DressingItem $dressingItem): array
+    {
+        $status = [];
+
+        foreach ($this->translationLocales() as $targetLocale) {
+            $columnStatus = [];
+
+            foreach (self::TRANSLATION_COLUMNS as $column) {
+                $source = trim((string) ($dressingItem->getAttribute($column) ?? ''));
+
+                if ($source === '') {
+                    $columnStatus[$column] = true;
+
+                    continue;
+                }
+
+                $columnStatus[$column] = $dressingItem->translations->contains(
+                    fn ($translation): bool => $translation->locale === $targetLocale
+                        && $translation->column === $column,
+                );
+            }
+
+            $status[$targetLocale] = $columnStatus;
+        }
+
+        return $status;
     }
 }

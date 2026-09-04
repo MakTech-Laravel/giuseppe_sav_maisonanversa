@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties, MouseEvent, PointerEvent as ReactPointerEvent } from 'react';
+import type {
+    CSSProperties,
+    MouseEvent,
+    PointerEvent as ReactPointerEvent,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import type { ImageAssetName } from '@/lib/imagery';
@@ -252,11 +256,7 @@ export function ProductGallery({
         const drag = dragState.current;
         const strip = stripRef.current;
 
-        if (
-            !drag.active ||
-            !strip ||
-            event.pointerId !== drag.pointerId
-        ) {
+        if (!drag.active || !strip || event.pointerId !== drag.pointerId) {
             return;
         }
 
@@ -279,11 +279,7 @@ export function ProductGallery({
         const drag = dragState.current;
         const strip = stripRef.current;
 
-        if (
-            !drag.active ||
-            !strip ||
-            event.pointerId !== drag.pointerId
-        ) {
+        if (!drag.active || !strip || event.pointerId !== drag.pointerId) {
             return;
         }
 
@@ -350,7 +346,7 @@ export function ProductGallery({
             <div
                 ref={stripRef}
                 className={cn(
-                    'flex w-full min-w-0 touch-pan-x gap-2 overflow-x-auto overscroll-x-contain scroll-smooth scrollbar-none [-ms-overflow-style:none]',
+                    'flex w-full min-w-0 touch-pan-x scrollbar-none gap-2 overflow-x-auto overscroll-x-contain scroll-smooth [-ms-overflow-style:none]',
                     hasOverflow && 'cursor-grab active:cursor-grabbing',
                 )}
                 role="tablist"
