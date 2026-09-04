@@ -13,7 +13,7 @@ export type SessionPlayer = {
 export type ClubCard = {
     id: number;
     name: string;
-    city: string;
+    city: string | null;
     address: string;
     is_partner: boolean;
     image_url: string | null;

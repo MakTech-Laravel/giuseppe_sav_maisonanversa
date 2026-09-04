@@ -67,6 +67,21 @@ test('club search can be narrowed to a single sport', function () {
         ->and($clubs[0]['name'])->toBe('Padel Only Club');
 });
 
+test('club search hides clubs that are not session venues', function () {
+    $user = User::factory()->create();
+
+    Club::factory()->create([
+        'name' => 'Marketing Only',
+        'city' => 'Gent',
+        'is_session_venue' => false,
+    ]);
+
+    $this->actingAs($user)
+        ->getJson(route('community.clubs.search', ['locale' => 'nl', 'q' => 'Marketing']))
+        ->assertOk()
+        ->assertJsonCount(0, 'clubs');
+});
+
 test('a member submitted club lands in the pending queue', function () {
     $user = User::factory()->create();
 
@@ -86,6 +101,7 @@ test('a member submitted club lands in the pending queue', function () {
     expect($club->status)->toBe(ClubStatus::Pending)
         ->and($club->submitted_by_id)->toBe($user->id)
         ->and($club->slug)->toBe('padel-zuid')
+        ->and($club->is_session_venue)->toBeTrue()
         ->and($club->approved_at)->toBeNull();
 });
 

@@ -2,7 +2,6 @@
 
 use App\Enums\PermissionEnum;
 use App\Http\Controllers\Admin\ClubController as AdminClubController;
-use App\Http\Controllers\Admin\CommunityCourtController;
 use App\Http\Controllers\Admin\CommunityEventController;
 use App\Http\Controllers\Admin\CommunityPostController;
 use App\Http\Controllers\Admin\CommunitySessionController;
@@ -15,7 +14,6 @@ use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\OpsController;
-use App\Http\Controllers\Admin\PartnerClubController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
@@ -348,27 +346,6 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
             });
 
-            Route::controller(CommunityCourtController::class)->group(function () {
-                Route::get('courts', 'index')->name('courts.index')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::get('courts/create', 'create')->name('courts.create')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::post('courts', 'store')->name('courts.store')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::get('courts/{court}', 'show')->name('courts.show')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::get('courts/{court}/edit', 'edit')->name('courts.edit')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::put('courts/{court}', 'update')->name('courts.update')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::put('courts/{court}/translations', 'updateTranslations')->name('courts.translations.update')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::post('courts/{court}/translate', 'translate')->name('courts.translate')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-                Route::delete('courts/{court}', 'destroy')->name('courts.destroy')
-                    ->middleware('permission:'.PermissionEnum::COMMUNITY_MODERATE->value);
-            });
-
             Route::controller(JournalArticleController::class)->group(function () {
                 Route::get('journal', 'index')->name('journal.index')
                     ->middleware('permission:'.PermissionEnum::POSTS_VIEW->value);
@@ -485,21 +462,6 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
-            Route::controller(PartnerClubController::class)->group(function () {
-                Route::get('partner-clubs', 'index')->name('partner-clubs.index')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-                Route::get('partner-clubs/create', 'create')->name('partner-clubs.create')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-                Route::post('partner-clubs', 'store')->name('partner-clubs.store')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-                Route::get('partner-clubs/{partnerClub}/edit', 'edit')->name('partner-clubs.edit')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-                Route::put('partner-clubs/{partnerClub}', 'update')->name('partner-clubs.update')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-                Route::delete('partner-clubs/{partnerClub}', 'destroy')->name('partner-clubs.destroy')
-                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
-            });
-
             Route::controller(SiteSettingController::class)->group(function () {
                 Route::get('site-settings', 'edit')->name('site-settings.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
@@ -557,6 +519,8 @@ Route::prefix('{locale}')
                     Route::get('clubs/{club}', 'show')->name('clubs.show');
                     Route::get('clubs/{club}/edit', 'edit')->name('clubs.edit');
                     Route::put('clubs/{club}', 'update')->name('clubs.update');
+                    Route::put('clubs/{club}/translations', 'updateTranslations')->name('clubs.translations.update');
+                    Route::post('clubs/{club}/translate', 'translate')->name('clubs.translate');
                     Route::patch('clubs/{club}/approve', 'approve')->name('clubs.approve');
                     Route::patch('clubs/{club}/reject', 'reject')->name('clubs.reject');
                     Route::post('clubs/{club}/merge', 'merge')->name('clubs.merge');

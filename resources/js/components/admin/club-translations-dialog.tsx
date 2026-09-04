@@ -19,27 +19,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
-import courtsRoutes from '@/routes/admin/courts';
+import clubsRoutes from '@/routes/admin/clubs';
+import type {
+    ClubCornerLocaleCopy,
+    ClubCornerTranslationStatus,
+} from '@/types/club';
 
-type LocaleCopy = {
-    title: string;
-    body: string;
-    location: string;
-};
+type ClubLocale = 'nl' | 'en' | 'fr';
 
-type TranslationStatus = {
-    title: boolean;
-    body: boolean;
-    location: boolean;
-};
-
-type CourtLocale = 'nl' | 'en' | 'fr';
-
-interface CourtTranslationsDialogProps {
-    courtId: string;
+interface ClubTranslationsDialogProps {
+    clubId: number;
     locales: string[];
-    translations: Record<string, LocaleCopy>;
-    translationStatus: Record<string, TranslationStatus>;
+    translations: Record<string, ClubCornerLocaleCopy>;
+    translationStatus: Record<string, ClubCornerTranslationStatus>;
 }
 
 const LOCALE_LABELS: Record<string, string> = {
@@ -48,54 +40,54 @@ const LOCALE_LABELS: Record<string, string> = {
     fr: 'Français',
 };
 
-function initialFormData(translations: Record<string, LocaleCopy>) {
+function initialFormData(translations: Record<string, ClubCornerLocaleCopy>) {
     return {
         nl: {
-            title: translations.nl?.title ?? '',
-            body: translations.nl?.body ?? '',
-            location: translations.nl?.location ?? '',
+            corner_title: translations.nl?.corner_title ?? '',
+            corner_body: translations.nl?.corner_body ?? '',
+            corner_location: translations.nl?.corner_location ?? '',
         },
         en: {
-            title: translations.en?.title ?? '',
-            body: translations.en?.body ?? '',
-            location: translations.en?.location ?? '',
+            corner_title: translations.en?.corner_title ?? '',
+            corner_body: translations.en?.corner_body ?? '',
+            corner_location: translations.en?.corner_location ?? '',
         },
         fr: {
-            title: translations.fr?.title ?? '',
-            body: translations.fr?.body ?? '',
-            location: translations.fr?.location ?? '',
+            corner_title: translations.fr?.corner_title ?? '',
+            corner_body: translations.fr?.corner_body ?? '',
+            corner_location: translations.fr?.corner_location ?? '',
         },
     };
 }
 
-export function CourtTranslationsDialog({
-    courtId,
+export function ClubTranslationsDialog({
+    clubId,
     locales,
     translations,
     translationStatus,
-}: CourtTranslationsDialogProps) {
+}: ClubTranslationsDialogProps) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const [open, setOpen] = useState(false);
     const [translating, setTranslating] = useState(false);
-    const [activeLocale, setActiveLocale] = useState<CourtLocale>('nl');
+    const [activeLocale, setActiveLocale] = useState<ClubLocale>('nl');
 
     const form = useForm(
-        courtsRoutes.translations.update({
+        clubsRoutes.translations.update({
             locale,
-            court: Number(courtId),
+            club: clubId,
         }),
         initialFormData(translations),
     );
 
     useEffect(() => {
-        if (! open) {
+        if (!open) {
             return;
         }
 
-        setActiveLocale((locales[0] as CourtLocale | undefined) ?? 'nl');
+        setActiveLocale((locales[0] as ClubLocale | undefined) ?? 'nl');
         form.setData(initialFormData(translations));
-    }, [open, courtId, translations, locales]);
+    }, [open, clubId, translations, locales]);
 
     function submit(event: FormEvent) {
         event.preventDefault();
@@ -105,10 +97,10 @@ export function CourtTranslationsDialog({
         });
     }
 
-    function retranslate(targetLocale?: CourtLocale) {
+    function retranslate(targetLocale?: ClubLocale) {
         setTranslating(true);
         router.post(
-            courtsRoutes.translate({ locale, court: Number(courtId) }).url,
+            clubsRoutes.translate({ locale, club: clubId }).url,
             targetLocale ? { target_locale: targetLocale } : {},
             {
                 preserveScroll: true,
@@ -120,36 +112,43 @@ export function CourtTranslationsDialog({
     const hasPendingTranslations = locales.some((code) => {
         const status = translationStatus[code];
 
-        return Object.values(status ?? {}).some((complete) => ! complete);
+        return (
+            status &&
+            (!status.corner_title ||
+                !status.corner_body ||
+                !status.corner_location)
+        );
     });
+
+    const copy = form.data[activeLocale];
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="w-full">
-                    <Languages className="h-4 w-4" />
+                <Button type="button" variant="outline" size="sm">
+                    <Languages className="size-4" />
                     {t('Vertalingen')}
+                    {hasPendingTranslations && (
+                        <TriangleAlert className="size-3.5 text-amber-500" />
+                    )}
                 </Button>
             </DialogTrigger>
-            <DialogContent
-                className="admin-kit max-h-[90vh] overflow-y-auto border-border bg-card text-card-foreground shadow-[0_12px_40px_rgba(41,28,24,0.55)] sm:max-w-2xl"
-                onOpenAutoFocus={(event) => event.preventDefault()}
-            >
+            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
+                    <DialogTitle>{t('Corner vertalingen')}</DialogTitle>
+                    <DialogDescription>
                         {t(
-                            'Bewerk vertalingen per taal. Bron tekst wijzig je via Club Corner bewerken; DeepL vertaalt vanuit die bron.',
+                            'Bewerk vertalingen per taal. Bron tekst wijzig je via Club bewerken; DeepL vertaalt vanuit die bron.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
 
                 {hasPendingTranslations && (
-                    <Alert className="border-primary/35 bg-muted text-foreground">
-                        <TriangleAlert className="h-4 w-4 text-primary" />
-                        <AlertDescription className="text-muted-foreground">
+                    <Alert>
+                        <TriangleAlert />
+                        <AlertDescription>
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla de Club Corner opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Sommige vertalingen ontbreken nog. Sla de Club opnieuw op of gebruik DeepL om ze te genereren.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -164,118 +163,106 @@ export function CourtTranslationsDialog({
                             variant={
                                 activeLocale === code ? 'default' : 'outline'
                             }
-                            onClick={() => setActiveLocale(code as CourtLocale)}
+                            onClick={() => setActiveLocale(code as ClubLocale)}
                         >
-                            {LOCALE_LABELS[code] ?? code.toUpperCase()}
+                            {LOCALE_LABELS[code] ?? code}
                         </Button>
                     ))}
                 </div>
 
                 <form onSubmit={submit} className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor={`${activeLocale}-title`}>
-                            {t('Titel')} ({LOCALE_LABELS[activeLocale]})
-                        </Label>
+                    <div className="space-y-1.5">
+                        <Label>{t('Corner titel')}</Label>
                         <Input
-                            id={`${activeLocale}-title`}
-                            value={form.data[activeLocale]?.title ?? ''}
+                            value={copy?.corner_title ?? ''}
                             onChange={(event) =>
                                 form.setData(
-                                    `${activeLocale}.title`,
-                                    event.target.value,
+                                    `${activeLocale}.corner_title` as never,
+                                    event.target.value as never,
                                 )
                             }
                         />
                         <InputError
                             message={
                                 form.errors[
-                                    `${activeLocale}.title` as keyof typeof form.errors
+                                    `${activeLocale}.corner_title` as keyof typeof form.errors
                                 ]
                             }
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor={`${activeLocale}-body`}>
-                            {t('Beschrijving')} ({LOCALE_LABELS[activeLocale]})
-                        </Label>
+                    <div className="space-y-1.5">
+                        <Label>{t('Corner tekst')}</Label>
                         <Textarea
-                            id={`${activeLocale}-body`}
-                            value={form.data[activeLocale]?.body ?? ''}
+                            rows={4}
+                            value={copy?.corner_body ?? ''}
                             onChange={(event) =>
                                 form.setData(
-                                    `${activeLocale}.body`,
-                                    event.target.value,
+                                    `${activeLocale}.corner_body` as never,
+                                    event.target.value as never,
                                 )
                             }
-                            className="min-h-28 resize-y"
                         />
                         <InputError
                             message={
                                 form.errors[
-                                    `${activeLocale}.body` as keyof typeof form.errors
+                                    `${activeLocale}.corner_body` as keyof typeof form.errors
                                 ]
                             }
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor={`${activeLocale}-location`}>
-                            {t('Locatie')} ({LOCALE_LABELS[activeLocale]})
-                        </Label>
+                    <div className="space-y-1.5">
+                        <Label>{t('Corner locatie')}</Label>
                         <Input
-                            id={`${activeLocale}-location`}
-                            value={form.data[activeLocale]?.location ?? ''}
+                            value={copy?.corner_location ?? ''}
                             onChange={(event) =>
                                 form.setData(
-                                    `${activeLocale}.location`,
-                                    event.target.value,
+                                    `${activeLocale}.corner_location` as never,
+                                    event.target.value as never,
                                 )
                             }
                         />
                         <InputError
                             message={
                                 form.errors[
-                                    `${activeLocale}.location` as keyof typeof form.errors
+                                    `${activeLocale}.corner_location` as keyof typeof form.errors
                                 ]
                             }
                         />
                     </div>
 
-                    <DialogFooter className="flex-col gap-2 sm:flex-row sm:justify-between">
+                    <DialogFooter className="gap-2 sm:justify-between">
                         <div className="flex flex-wrap gap-2">
                             <Button
                                 type="button"
                                 variant="outline"
-                                disabled={translating || form.processing}
+                                size="sm"
+                                disabled={translating}
                                 onClick={() => retranslate(activeLocale)}
                             >
                                 {translating ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    <Loader2 className="size-4 animate-spin" />
                                 ) : (
-                                    <RefreshCw className="h-4 w-4" />
+                                    <RefreshCw className="size-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
-                                    locale: LOCALE_LABELS[activeLocale],
-                                })}
+                                {t('DeepL voor deze taal')}
                             </Button>
                             <Button
                                 type="button"
                                 variant="outline"
-                                disabled={translating || form.processing}
+                                size="sm"
+                                disabled={translating}
                                 onClick={() => retranslate()}
                             >
                                 {translating ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    <Loader2 className="size-4 animate-spin" />
                                 ) : (
-                                    <RefreshCw className="h-4 w-4" />
+                                    <RefreshCw className="size-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('DeepL alle talen')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
-                            {form.processing ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Opslaan')}
                         </Button>
                     </DialogFooter>
                 </form>
