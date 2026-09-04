@@ -31,7 +31,7 @@ class ClubController extends Controller
         }
 
         $query = Club::query()
-            ->approved()
+            ->sessionVenues()
             ->matching($term)
             ->orderByDesc('is_partner')
             ->orderBy('name')
@@ -59,6 +59,7 @@ class ClubController extends Controller
             'country' => $request->validated('country') ?? 'BE',
             'slug' => $this->uniqueSlug($request->validated('name')),
             'status' => ClubStatus::Pending,
+            'is_session_venue' => true,
             'submitted_by_id' => $request->user()->id,
         ]);
 

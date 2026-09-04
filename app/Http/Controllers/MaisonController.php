@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CornerPipelineStatus;
 use App\Enums\FaqContext;
-use App\Models\CommunityCourt;
+use App\Models\Club;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
@@ -11,7 +12,6 @@ use App\Models\DressingItem;
 use App\Models\Faq;
 use App\Models\JournalArticle;
 use App\Models\LegalPage;
-use App\Models\PartnerClub;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
@@ -305,22 +305,20 @@ class MaisonController extends Controller
                 fn () => CommunityFeed::paginate($request),
             );
             // Sessions and events each have their own page now.
-            $props['courts'] = CommunityCourt::query()
-                ->published()
+            $props['courts'] = Club::query()
+                ->publishedCorners()
                 ->with('translations')
-                ->orderBy('sort_order')
-                ->orderBy('id')
                 ->get()
-                ->map(function (CommunityCourt $court) use ($pathLocale) {
-                    $pin = $court->mapPinPosition();
+                ->map(function (Club $club) use ($pathLocale) {
+                    $pin = $club->mapPinPosition();
 
                     return [
-                        'id' => (string) $court->id,
-                        'title' => $court->translated('title', $pathLocale),
-                        'body' => $court->translated('body', $pathLocale),
-                        'location' => $court->translated('location', $pathLocale),
-                        'lat' => $court->lat !== null ? (float) $court->lat : null,
-                        'lng' => $court->lng !== null ? (float) $court->lng : null,
+                        'id' => (string) $club->id,
+                        'title' => $club->cornerTitle($pathLocale),
+                        'body' => $club->cornerBody($pathLocale),
+                        'location' => $club->cornerLocation($pathLocale),
+                        'lat' => $club->lat !== null ? (float) $club->lat : null,
+                        'lng' => $club->lng !== null ? (float) $club->lng : null,
                         'pin_top' => $pin['top'] ?? null,
                         'pin_left' => $pin['left'] ?? null,
                         'coming' => $pin === null,
@@ -342,15 +340,15 @@ class MaisonController extends Controller
     public function corner(): Response
     {
         return $this->page('corner', [
-            'clubs' => PartnerClub::query()
-                ->where('is_published', true)
-                ->orderBy('sort_order')
-                ->orderBy('id')
+            'clubs' => Club::query()
+                ->cornerPage()
                 ->get()
-                ->map(fn (PartnerClub $club): array => [
-                    'city' => $club->translated('city'),
-                    'country' => $club->translated('country'),
-                    'status' => $club->status,
+                ->map(fn (Club $club): array => [
+                    'city' => $club->city,
+                    'country' => $club->countryLabel(),
+                    'status' => $club->corner_pipeline_status?->value ?? CornerPipelineStatus::Open->value,
+                    'status_label' => $club->corner_pipeline_status?->label()
+                        ?? CornerPipelineStatus::Open->label(),
                 ])
                 ->values()
                 ->all(),

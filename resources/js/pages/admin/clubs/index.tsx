@@ -32,17 +32,28 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import clubsRoutes from '@/routes/admin/clubs';
 import type { Paginated } from '@/types/admin';
 import type { AdminClubRow, ClubStatusOption } from '@/types/club';
 
+type ClubFlag = 'all' | 'partner' | 'corner' | 'corner_page';
+
 interface ClubFilters {
     search: string | null;
     status: string | null;
     city: string | null;
+    flag: string | null;
 }
+
+const FLAG_TABS: { value: ClubFlag; label: string }[] = [
+    { value: 'all', label: 'Alle types' },
+    { value: 'partner', label: 'Partnerclub' },
+    { value: 'corner', label: 'Club Corner' },
+    { value: 'corner_page', label: 'Corner pagina' },
+];
 
 export default function ClubsIndex({
     clubs: paginated,
@@ -62,6 +73,7 @@ export default function ClubsIndex({
     const [search, setSearch] = useState(filters.search ?? '');
     const [status, setStatus] = useState(filters.status || 'all');
     const [city, setCity] = useState(filters.city || 'all');
+    const flag = (filters.flag || 'all') as ClubFlag;
     const firstRender = useRef(true);
 
     useEffect(() => {
@@ -78,6 +90,7 @@ export default function ClubsIndex({
                     search: search || undefined,
                     status: status === 'all' ? undefined : status,
                     city: city === 'all' ? undefined : city,
+                    flag: flag === 'all' ? undefined : flag,
                 },
                 { preserveState: true, preserveScroll: true, replace: true },
             );
@@ -93,6 +106,23 @@ export default function ClubsIndex({
         setSearch('');
         setStatus('all');
         setCity('all');
+    }
+
+    function selectFlag(next: string) {
+        const value = (FLAG_TABS.some((tab) => tab.value === next)
+            ? next
+            : 'all') as ClubFlag;
+
+        router.get(
+            clubsRoutes.index(locale).url,
+            {
+                search: search || undefined,
+                status: status === 'all' ? undefined : status,
+                city: city === 'all' ? undefined : city,
+                flag: value === 'all' ? undefined : value,
+            },
+            { preserveState: true, preserveScroll: true, replace: true },
+        );
     }
 
     function approve(clubId: number) {
@@ -153,6 +183,34 @@ export default function ClubsIndex({
                         )}
                     </button>
                 )}
+
+                <div
+                    role="tablist"
+                    aria-label={t('Type')}
+                    className="flex gap-1 overflow-x-auto border-b"
+                >
+                    {FLAG_TABS.map((tab) => {
+                        const isActive = flag === tab.value;
+
+                        return (
+                            <button
+                                key={tab.value}
+                                type="button"
+                                role="tab"
+                                aria-selected={isActive}
+                                onClick={() => selectFlag(tab.value)}
+                                className={cn(
+                                    'shrink-0 border-b-2 px-3 py-2 text-sm transition-colors',
+                                    isActive
+                                        ? 'border-foreground font-medium text-foreground'
+                                        : 'border-transparent text-muted-foreground hover:text-foreground',
+                                )}
+                            >
+                                {t(tab.label)}
+                            </button>
+                        );
+                    })}
+                </div>
 
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_11rem_11rem_auto] sm:items-center">
                     <div className="relative min-w-0">
@@ -267,6 +325,14 @@ export default function ClubsIndex({
                                                     className="ml-2"
                                                 >
                                                     {t('Partner')}
+                                                </Badge>
+                                            )}
+                                            {club.has_corner && (
+                                                <Badge
+                                                    variant="outline"
+                                                    className="ml-2"
+                                                >
+                                                    {t('Corner')}
                                                 </Badge>
                                             )}
                                             <span className="block text-xs text-muted-foreground md:hidden">

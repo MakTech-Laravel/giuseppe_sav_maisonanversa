@@ -105,6 +105,7 @@ type CornerClub = {
     city: string;
     country: string;
     status: string;
+    status_label?: string;
 };
 
 type CornerFormOptions = {
@@ -397,7 +398,7 @@ export default function Corner({
                                             : 'font-sans text-[10px] tracking-[0.15em] text-gold uppercase'
                                     }
                                 >
-                                    {t(club.status)}
+                                    {t(club.status_label ?? club.status)}
                                 </div>
                             </Reveal>
                         ))}

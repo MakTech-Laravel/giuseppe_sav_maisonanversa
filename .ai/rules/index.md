@@ -20,5 +20,6 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
 | routes/web.php | .ai/rules/routes.md |
 | app/Support/Seo/** | .ai/rules/seo.md |
+| app/Services/Community/ClubMerger.php | .ai/rules/services-community.md |
 | resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
 | app/Services/Translation/** | .ai/rules/translation.md |

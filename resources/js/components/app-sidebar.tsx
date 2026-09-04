@@ -10,7 +10,6 @@ import {
     Globe,
     LayoutGrid,
     Mail,
-    MapPin,
     MessageCircle,
     Package,
     Settings2,
@@ -43,7 +42,6 @@ import adminCircle from '@/routes/admin/circle';
 import adminClubs from '@/routes/admin/clubs';
 import adminSiteSettings from '@/routes/admin/site-settings';
 import adminCommunity from '@/routes/admin/community';
-import adminCourts from '@/routes/admin/courts';
 import adminCustomers from '@/routes/admin/customers';
 import adminDressingItems from '@/routes/admin/dressing-items';
 import adminEvents from '@/routes/admin/events';
@@ -55,7 +53,6 @@ import adminJournal from '@/routes/admin/journal';
 import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
-import adminPartnerClubs from '@/routes/admin/partner-clubs';
 import adminProducts from '@/routes/admin/products';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSessions from '@/routes/admin/community-sessions';
@@ -132,21 +129,9 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Club Corners'),
-                    href: adminCourts.index(locale),
-                    icon: MapPin,
-                    permissions: [PERMISSIONS.COMMUNITY.MODERATE],
-                },
-                {
                     title: t('Founding Circle'),
                     href: adminCircle.index(locale),
                     icon: UsersRound,
-                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
-                },
-                {
-                    title: t('Partner Clubs'),
-                    href: adminPartnerClubs.index(locale),
-                    icon: MapPin,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {

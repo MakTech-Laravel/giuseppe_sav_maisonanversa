@@ -107,7 +107,14 @@ export function ClubSubmitDialog({
                                     <button
                                         key={sport}
                                         type="button"
-                                        onClick={() =>
+                                        onClick={() => {
+                                            if (
+                                                active &&
+                                                form.data.sports.length === 1
+                                            ) {
+                                                return;
+                                            }
+
                                             form.setData(
                                                 'sports',
                                                 active
@@ -119,8 +126,8 @@ export function ClubSubmitDialog({
                                                           ...form.data.sports,
                                                           sport,
                                                       ],
-                                            )
-                                        }
+                                            );
+                                        }}
                                         className={cn(
                                             'flex-1 cursor-pointer border px-4 py-2.5 font-sans text-[10px] tracking-[0.16em] uppercase transition-colors',
                                             active
@@ -176,14 +183,14 @@ export function ClubSubmitDialog({
                                     form.setData('city', event.target.value)
                                 }
                                 className={fieldClassName}
-                                required
                             />
                         </Field>
                     </div>
 
                     <Field label={t('Website')} error={form.errors.website}>
                         <input
-                            type="url"
+                            type="text"
+                            inputMode="url"
                             value={form.data.website}
                             onChange={(event) =>
                                 form.setData('website', event.target.value)
