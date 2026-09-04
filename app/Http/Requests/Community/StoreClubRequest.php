@@ -25,9 +25,33 @@ class StoreClubRequest extends FormRequest
             'sports.*' => [Rule::enum(SessionSport::class)],
             'street' => ['nullable', 'string', 'max:255'],
             'postal_code' => ['nullable', 'string', 'max:20'],
-            'city' => ['required', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
             'country' => ['nullable', 'string', 'max:2'],
             'website' => ['nullable', 'url', 'max:255'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'street' => $this->blankToNull('street'),
+            'postal_code' => $this->blankToNull('postal_code'),
+            'city' => $this->blankToNull('city'),
+            'country' => $this->blankToNull('country'),
+            'website' => $this->blankToNull('website'),
+        ]);
+    }
+
+    private function blankToNull(string $key): ?string
+    {
+        $value = $this->input($key);
+
+        if (! is_string($value)) {
+            return null;
+        }
+
+        $trimmed = trim($value);
+
+        return $trimmed === '' ? null : $trimmed;
     }
 }

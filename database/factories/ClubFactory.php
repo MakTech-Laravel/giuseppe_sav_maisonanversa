@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\ClubStatus;
+use App\Enums\CornerPipelineStatus;
 use App\Enums\SessionSport;
 use App\Models\Club;
 use App\Models\User;
@@ -40,6 +41,15 @@ class ClubFactory extends Factory
             'image_path' => null,
             'status' => ClubStatus::Approved,
             'is_partner' => false,
+            'is_session_venue' => true,
+            'show_on_corner_page' => false,
+            'corner_pipeline_status' => null,
+            'has_corner' => false,
+            'corner_published' => false,
+            'corner_title' => null,
+            'corner_body' => null,
+            'corner_location' => null,
+            'sort_order' => 0,
             'submitted_by_id' => null,
             'approved_by_id' => null,
             'approved_at' => now(),
@@ -67,5 +77,40 @@ class ClubFactory extends Factory
     public function partner(): static
     {
         return $this->state(fn (): array => ['is_partner' => true]);
+    }
+
+    public function cornerPage(): static
+    {
+        return $this->state(fn (): array => [
+            'show_on_corner_page' => true,
+            'corner_pipeline_status' => CornerPipelineStatus::Open,
+            'is_session_venue' => false,
+        ]);
+    }
+
+    public function publishedCorner(): static
+    {
+        return $this->state(fn (): array => [
+            'has_corner' => true,
+            'corner_published' => true,
+            'corner_title' => 'Club Corner',
+            'corner_body' => 'Founding Club Corner',
+            'corner_location' => 'Antwerpen, België',
+            'lat' => 51.2194,
+            'lng' => 4.4025,
+        ]);
+    }
+
+    public function comingSoonCorner(): static
+    {
+        return $this->state(fn (): array => [
+            'has_corner' => true,
+            'corner_published' => true,
+            'corner_title' => 'Coming soon',
+            'corner_body' => 'Binnenkort',
+            'corner_location' => 'Amsterdam, Nederland',
+            'lat' => null,
+            'lng' => null,
+        ]);
     }
 }

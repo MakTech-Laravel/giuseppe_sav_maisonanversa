@@ -28,7 +28,9 @@ class StoreCommunitySessionRequest extends FormRequest
             'sport' => ['required', Rule::enum(SessionSport::class)],
             'club_id' => [
                 'required',
-                Rule::exists('clubs', 'id')->where('status', ClubStatus::Approved->value),
+                Rule::exists('clubs', 'id')
+                    ->where('status', ClubStatus::Approved->value)
+                    ->where('is_session_venue', true),
             ],
             'starts_at' => ['required', 'date', 'after:now'],
             'duration_minutes' => ['required', 'integer', Rule::in(CommunitySession::DURATION_MINUTES)],

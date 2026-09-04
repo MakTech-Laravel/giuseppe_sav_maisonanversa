@@ -11,7 +11,6 @@ use App\Jobs\TranslateModelJob;
 use App\Mail\OrderConfirmation;
 use App\Models\Club;
 use App\Models\CommunityComment;
-use App\Models\CommunityCourt;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
@@ -351,28 +350,31 @@ test('creating a community event queues TranslateModelJob', function () {
     });
 });
 
-test('community courts auto-detect title body and location', function () {
-    $court = CommunityCourt::factory()->create();
+test('clubs translate only corner copy columns', function () {
+    $club = Club::factory()->publishedCorner()->create();
 
-    expect($court->translatableColumns())
-        ->toEqualCanonicalizing(['title', 'body', 'location'])
+    expect($club->translatableColumns())
+        ->toEqualCanonicalizing(['corner_title', 'corner_body', 'corner_location'])
+        ->not->toContain('name')
+        ->not->toContain('city')
+        ->not->toContain('street')
         ->not->toContain('lat')
         ->not->toContain('lng');
 });
 
-test('community courts are translated for all locales like faqs', function () {
+test('club corner copy is translated for all locales', function () {
     fakeDeepLTranslations();
 
-    $court = CommunityCourt::factory()->create([
-        'title' => 'Padel Antwerpen',
-        'body' => 'Founding club',
-        'location' => 'Antwerpen',
+    $club = Club::factory()->publishedCorner()->create([
+        'corner_title' => 'Padel Antwerpen',
+        'corner_body' => 'Founding club',
+        'corner_location' => 'Antwerpen',
     ]);
 
-    expect($court->translations()->count())->toBe(9)
-        ->and($court->translated('title', 'nl'))->toBe('NL Padel Antwerpen')
-        ->and($court->translated('title', 'en'))->toBe('EN Padel Antwerpen')
-        ->and($court->translated('title', 'fr'))->toBe('FR Padel Antwerpen');
+    expect($club->translations()->count())->toBe(9)
+        ->and($club->translated('corner_title', 'en'))->toBe('EN Padel Antwerpen')
+        ->and($club->translated('corner_title', 'fr'))->toBe('FR Padel Antwerpen')
+        ->and($club->name)->toBe($club->name);
 });
 
 test('journal articles translate title excerpt body category and date label', function () {
@@ -385,13 +387,20 @@ test('journal articles translate title excerpt body category and date label', fu
         ->not->toContain('cover_path');
 });
 
-test('clubs stay out of DeepL entirely', function () {
+test('club venue fields stay out of DeepL', function () {
     fakeDeepLTranslations();
 
-    $club = Club::factory()->create(['name' => 'Padel Ganda']);
+    $club = Club::factory()->create([
+        'name' => 'Padel Ganda',
+        'city' => 'Gent',
+        'street' => 'Havenlaan 88',
+    ]);
 
-    expect(class_uses_recursive($club))->not->toContain(TranslatesWithDeepL::class)
-        ->and($club->name)->toBe('Padel Ganda');
+    expect(class_uses_recursive($club))->toContain(TranslatesWithDeepL::class)
+        ->and($club->name)->toBe('Padel Ganda')
+        ->and($club->city)->toBe('Gent')
+        ->and($club->street)->toBe('Havenlaan 88')
+        ->and($club->translations()->whereIn('column', ['name', 'city', 'street'])->count())->toBe(0);
 });
 
 test('session notes auto-detect and translate to all locales', function () {

@@ -8,14 +8,11 @@ import {
     MessageSquareQuote,
     FileText,
     Globe,
-    KeyRound,
     LayoutGrid,
     Mail,
-    MapPin,
     MessageCircle,
     Package,
     Settings2,
-    Shield,
     ShoppingBag,
     Shirt,
     Store,
@@ -41,14 +38,14 @@ import {
 import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
-import adminAppointments from '@/routes/admin/appointments';
 import adminCircle from '@/routes/admin/circle';
 import adminClubs from '@/routes/admin/clubs';
+import adminSiteSettings from '@/routes/admin/site-settings';
 import adminCommunity from '@/routes/admin/community';
-import adminSessions from '@/routes/admin/community-sessions';
 import adminCustomers from '@/routes/admin/customers';
 import adminDressingItems from '@/routes/admin/dressing-items';
 import adminEvents from '@/routes/admin/events';
+import adminAppointments from '@/routes/admin/appointments';
 import adminFaqs from '@/routes/admin/faqs';
 import adminFeedback from '@/routes/admin/feedback';
 import adminHeritage from '@/routes/admin/heritage';
@@ -56,12 +53,9 @@ import adminJournal from '@/routes/admin/journal';
 import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
-import adminPartnerClubs from '@/routes/admin/partner-clubs';
-import adminPermissions from '@/routes/admin/permissions';
 import adminProducts from '@/routes/admin/products';
-import adminRoles from '@/routes/admin/roles';
 import adminSeoMetas from '@/routes/admin/seo-metas';
-import adminSiteSettings from '@/routes/admin/site-settings';
+import adminSessions from '@/routes/admin/community-sessions';
 import { PERMISSIONS } from '@/types/permissions';
 
 type NavGroup = {
@@ -100,18 +94,6 @@ function buildNavGroups(
                     icon: Users,
                     permissions: [PERMISSIONS.USERS.INDEX],
                 },
-                {
-                    title: t('Rollen'),
-                    href: adminRoles.index(locale),
-                    icon: Shield,
-                    permissions: [PERMISSIONS.ROLES.INDEX],
-                },
-                {
-                    title: t('Rechten'),
-                    href: adminPermissions.index(locale),
-                    icon: KeyRound,
-                    permissions: [PERMISSIONS.PERMISSIONS.INDEX],
-                },
             ],
         },
         {
@@ -121,19 +103,19 @@ function buildNavGroups(
                     title: t('Bestellingen'),
                     href: adminOrders.index(locale),
                     icon: ShoppingBag,
-                    permissions: [PERMISSIONS.ORDERS.MANAGE],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
                     title: t('Product'),
                     href: adminProducts.index(locale),
                     icon: Store,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
                     title: t('Editievoorraad'),
                     href: adminHeritage.index(locale),
                     icon: Package,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
             ],
         },
@@ -153,12 +135,6 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Partner Clubs'),
-                    href: adminPartnerClubs.index(locale),
-                    icon: MapPin,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
-                },
-                {
                     title: t('Clubs'),
                     href: adminClubs.index(locale),
                     icon: Building2,
@@ -174,7 +150,7 @@ function buildNavGroups(
                     title: t('Gemeenschap'),
                     href: adminCommunity.index(locale),
                     icon: MessageCircle,
-                    permissions: [PERMISSIONS.COMMUNITY.MODERATE],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
             ],
         },
@@ -185,25 +161,25 @@ function buildNavGroups(
                     title: t('FAQ'),
                     href: adminFaqs.index(locale),
                     icon: CircleHelp,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
                     title: t('Afspraken'),
                     href: adminAppointments.index(locale),
                     icon: CalendarCheck,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
                     title: t('Feedback'),
                     href: adminFeedback.index(locale),
                     icon: MessageSquareQuote,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
                     title: t('Kleedkamer'),
                     href: adminDressingItems.index(locale),
                     icon: Shirt,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
                     title: t('Heritage Letter'),
@@ -215,7 +191,7 @@ function buildNavGroups(
                     title: t('Journal'),
                     href: adminJournal.index(locale),
                     icon: BookOpen,
-                    permissions: [PERMISSIONS.POSTS.VIEW],
+                    permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
                 },
             ],
         },
@@ -226,19 +202,19 @@ function buildNavGroups(
                     title: t('Site-instellingen'),
                     href: adminSiteSettings.edit(locale),
                     icon: Globe,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t("Juridische Pagina's"),
+                    title: t('Juridische Pagina\'s'),
                     href: adminLegalPages.index(locale),
                     icon: FileText,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
                     title: t('SEO Meta'),
                     href: adminSeoMetas.index(locale),
                     icon: Globe,
-                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                    permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
             ],
         },
