@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CornerPipelineStatus;
 use App\Enums\FaqContext;
+use App\Models\Club;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
 use App\Models\CommunitySession;
@@ -10,7 +12,6 @@ use App\Models\DressingItem;
 use App\Models\Faq;
 use App\Models\JournalArticle;
 use App\Models\LegalPage;
-use App\Models\PartnerClub;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
@@ -18,7 +19,6 @@ use App\Services\Inquiry\InquiryDeviceCookie;
 use App\Support\CommunityFeed;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -26,7 +26,7 @@ use Inertia\Response;
 
 /**
  * The public Maison Anversa site. The Journal pages Eloquent articles via
- * {@see Journal}; community props load live sessions and events.
+ * {@see Journal}; community props load live sessions, events and courts.
  * Edition figures come from each product's inventory.
  */
 class MaisonController extends Controller
@@ -53,7 +53,7 @@ class MaisonController extends Controller
         $filters = $this->productCatalogFilters($request);
 
         $products = Product::query()
-            ->visibleTo($request->user())
+            ->where('is_published', true)
             ->when($filters['search'] !== '', function ($query) use ($filters): void {
                 $search = $filters['search'];
                 $query->where(function ($inner) use ($search): void {
@@ -86,12 +86,12 @@ class MaisonController extends Controller
         ]);
     }
 
-    public function productShow(Request $request, string $locale, Product $product): Response
+    public function productShow(string $locale, Product $product): Response
     {
-        abort_unless($product->isVisibleTo($request->user()), 404);
+        abort_unless($product->is_published, 404);
 
         $related = Product::query()
-            ->visibleTo($request->user())
+            ->where('is_published', true)
             ->where('id', '!=', $product->id)
             ->where('type', $product->type)
             ->orderBy('sort_order')
@@ -101,7 +101,7 @@ class MaisonController extends Controller
 
         if ($related->isEmpty()) {
             $related = Product::query()
-                ->visibleTo($request->user())
+                ->where('is_published', true)
                 ->where('id', '!=', $product->id)
                 ->orderBy('sort_order')
                 ->orderBy('id')
@@ -294,20 +294,36 @@ class MaisonController extends Controller
         return $related->values()->all();
     }
 
-    public function community(Request $request): Response|RedirectResponse
+    public function community(Request $request): Response
     {
-        if ($request->string('tab')->toString() === 'courts') {
-            return redirect()->route('community.clubs.index', [
-                'locale' => $request->route('locale'),
-            ]);
-        }
-
         $props = [];
+        $routeLocale = $request->route('locale');
+        $pathLocale = is_string($routeLocale) ? $routeLocale : app()->getLocale();
 
         if ($request->user() !== null) {
             $props['posts'] = Inertia::scroll(
                 fn () => CommunityFeed::paginate($request),
             );
+            // Sessions and events each have their own page now.
+            $props['courts'] = Club::query()
+                ->publishedCorners()
+                ->with('translations')
+                ->get()
+                ->map(function (Club $club) use ($pathLocale) {
+                    $pin = $club->mapPinPosition();
+
+                    return [
+                        'id' => (string) $club->id,
+                        'title' => $club->cornerTitle($pathLocale),
+                        'body' => $club->cornerBody($pathLocale),
+                        'location' => $club->cornerLocation($pathLocale),
+                        'lat' => $club->lat !== null ? (float) $club->lat : null,
+                        'lng' => $club->lng !== null ? (float) $club->lng : null,
+                        'pin_top' => $pin['top'] ?? null,
+                        'pin_left' => $pin['left'] ?? null,
+                        'coming' => $pin === null,
+                    ];
+                });
             $props['sidebar'] = [
                 'profile' => $this->communityProfile((int) $request->user()->id),
                 'recentMembers' => $this->recentMembers(),
@@ -315,21 +331,24 @@ class MaisonController extends Controller
             ];
         }
 
+        $tab = $request->string('tab')->toString();
+        $props['tab'] = $tab === 'courts' ? 'courts' : 'feed';
+
         return $this->page('community', $props);
     }
 
     public function corner(): Response
     {
         return $this->page('corner', [
-            'clubs' => PartnerClub::query()
-                ->where('is_published', true)
-                ->orderBy('sort_order')
-                ->orderBy('id')
+            'clubs' => Club::query()
+                ->cornerPage()
                 ->get()
-                ->map(fn (PartnerClub $club): array => [
-                    'city' => $club->translated('city'),
-                    'country' => $club->translated('country'),
-                    'status' => $club->status,
+                ->map(fn (Club $club): array => [
+                    'city' => $club->city,
+                    'country' => $club->countryLabel(),
+                    'status' => $club->corner_pipeline_status?->value ?? CornerPipelineStatus::Open->value,
+                    'status_label' => $club->corner_pipeline_status?->label()
+                        ?? CornerPipelineStatus::Open->label(),
                 ])
                 ->values()
                 ->all(),

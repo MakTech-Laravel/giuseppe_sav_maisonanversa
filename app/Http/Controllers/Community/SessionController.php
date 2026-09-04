@@ -221,7 +221,7 @@ class SessionController extends Controller
             ),
             'capacities' => [2, 4, 6, 8],
             'partner_clubs' => Club::query()
-                ->approved()
+                ->sessionVenues()
                 ->where('is_partner', true)
                 ->orderBy('name')
                 ->limit(6)

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class TranslateCommunityCourtRequest extends FormRequest
+class TranslateClubRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,12 +19,7 @@ class TranslateCommunityCourtRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'target_locale' => [
-                'sometimes',
-                'nullable',
-                'string',
-                Rule::in(config('maison.locales')),
-            ],
+            'target_locale' => ['nullable', 'string', Rule::in(config('maison.locales'))],
         ];
     }
 }
