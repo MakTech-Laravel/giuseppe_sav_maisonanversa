@@ -23,7 +23,10 @@ export function SessionBreadcrumb({ crumbs }: { crumbs: Crumb[] }) {
                         {crumbs.map((crumb, index) => (
                             <Fragment key={crumb.label}>
                                 {index > 0 && (
-                                    <li aria-hidden="true" className="text-gold/50">
+                                    <li
+                                        aria-hidden="true"
+                                        className="text-gold/50"
+                                    >
                                         ›
                                     </li>
                                 )}

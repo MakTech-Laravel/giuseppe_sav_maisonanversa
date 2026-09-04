@@ -183,6 +183,59 @@ test('checkout rejects unpublished product_id', function () {
     expect(Order::query()->count())->toBe(0);
 });
 
+test('checkout rejects early-access products for non-members', function () {
+    actingAsCheckoutUser();
+
+    $product = Product::factory()->create([
+        'is_published' => true,
+        'public_at' => now()->addHours(24),
+    ]);
+
+    $this->post(localized('maison.checkout.store'), checkoutPayload([
+        'product_id' => $product->id,
+        'edition_piece_id' => null,
+    ]))->assertSessionHasErrors('product_id');
+
+    expect(Order::query()->count())->toBe(0);
+});
+
+test('founding circle members can check out early-access products', function () {
+    config([
+        'cashier.secret' => 'sk_test_fake',
+    ]);
+
+    $this->seed([PermissionSeeder::class, RoleSeeder::class]);
+
+    $member = User::factory()->create();
+    $member->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+    $this->actingAs($member);
+
+    $product = Product::factory()->create([
+        'is_published' => true,
+        'public_at' => now()->addHours(24),
+        'amount' => '79.00',
+    ]);
+
+    $this->mock(ProductCheckout::class, function (MockInterface $mock) {
+        $mock->shouldReceive('create')
+            ->once()
+            ->andReturn([
+                'url' => 'https://checkout.stripe.com/c/pay/test_early',
+                'session_id' => 'cs_test_early',
+            ]);
+    });
+
+    $this->post(localized('maison.checkout.store'), checkoutPayload([
+        'product_id' => $product->id,
+        'edition_piece_id' => null,
+    ]))->assertRedirect('https://checkout.stripe.com/c/pay/test_early');
+
+    $order = Order::query()->first();
+
+    expect($order)->not->toBeNull()
+        ->and($order->product_id)->toBe($product->id);
+});
+
 test('cancel marks an incomplete order as canceled', function () {
     $order = Order::factory()->create([
         'status' => OrderStatus::Incomplete,

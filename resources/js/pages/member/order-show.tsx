@@ -155,10 +155,7 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                 <MemberSectionTitle title={t('Tijdlijn')} />
                 <ol className="space-y-4">
                     {order.timeline.map((step) => (
-                        <li
-                            key={step.label}
-                            className="flex items-start gap-4"
-                        >
+                        <li key={step.label} className="flex items-start gap-4">
                             <span
                                 aria-hidden="true"
                                 className={

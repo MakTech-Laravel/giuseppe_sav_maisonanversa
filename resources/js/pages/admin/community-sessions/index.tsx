@@ -141,7 +141,10 @@ export default function CommunitySessionsIndex({
                     </div>
 
                     <Select value={sport} onValueChange={setSport}>
-                        <SelectTrigger className="w-full" aria-label={t('Sport')}>
+                        <SelectTrigger
+                            className="w-full"
+                            aria-label={t('Sport')}
+                        >
                             <SelectValue placeholder={t('Alle sporten')} />
                         </SelectTrigger>
                         <SelectContent>
@@ -183,7 +186,10 @@ export default function CommunitySessionsIndex({
                     </Select>
 
                     <Select value={clubId} onValueChange={setClubId}>
-                        <SelectTrigger className="w-full" aria-label={t('Club')}>
+                        <SelectTrigger
+                            className="w-full"
+                            aria-label={t('Club')}
+                        >
                             <SelectValue placeholder={t('Alle clubs')} />
                         </SelectTrigger>
                         <SelectContent>

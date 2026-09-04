@@ -11,7 +11,10 @@ function intlLocale(locale: Locale | string): string {
 }
 
 /** "Za 24 mei" — the short weekday + day + month the session cards use. */
-export function formatSessionDate(iso: string, locale: Locale | string): string {
+export function formatSessionDate(
+    iso: string,
+    locale: Locale | string,
+): string {
     return new Date(iso).toLocaleDateString(intlLocale(locale), {
         weekday: 'short',
         day: 'numeric',
@@ -32,7 +35,10 @@ export function formatSessionDateLong(
 }
 
 /** "10:30" in 24-hour form, which is what the mockup shows. */
-export function formatSessionTime(iso: string, locale: Locale | string): string {
+export function formatSessionTime(
+    iso: string,
+    locale: Locale | string,
+): string {
     return new Date(iso).toLocaleTimeString(intlLocale(locale), {
         hour: '2-digit',
         minute: '2-digit',

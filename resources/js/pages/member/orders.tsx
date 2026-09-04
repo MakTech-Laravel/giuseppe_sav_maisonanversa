@@ -54,7 +54,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                                 locale,
                                                 order.id,
                                             )}
-                                            className="text-sand underline-offset-2 no-underline transition-colors hover:text-gold hover:underline"
+                                            className="text-sand no-underline underline-offset-2 transition-colors hover:text-gold hover:underline"
                                         >
                                             {order.reference ?? order.id}
                                         </Link>{' '}

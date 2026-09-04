@@ -107,9 +107,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
     },
 ];
 
-export function isNavItem(
-    item: NavItem | FooterExternalItem,
-): item is NavItem {
+export function isNavItem(item: NavItem | FooterExternalItem): item is NavItem {
     return 'page' in item;
 }
 
@@ -124,8 +122,7 @@ export function activePage(url: string, locale: Locale): MaisonPage | null {
     const path = url.split(/[?#]/)[0].replace(/\/+$/, '');
 
     const ranked = [...MAISON_PAGES].sort(
-        (a, b) =>
-            maisonUrl(b, locale).length - maisonUrl(a, locale).length,
+        (a, b) => maisonUrl(b, locale).length - maisonUrl(a, locale).length,
     );
 
     return (

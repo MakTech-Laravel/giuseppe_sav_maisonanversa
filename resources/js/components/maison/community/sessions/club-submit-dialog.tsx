@@ -11,8 +11,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import * as clubRoutes from '@/routes/community/clubs';
 import { cn } from '@/lib/utils';
+import * as clubRoutes from '@/routes/community/clubs';
 
 type ClubSubmitDialogProps = {
     /** Prefills the name with whatever the member just searched for. */
@@ -81,7 +81,9 @@ export function ClubSubmitDialog({
                         {t('Club of corner toevoegen')}
                     </DialogTitle>
                     <DialogDescription className="font-sans text-[11px] tracking-[0.1em] text-stone uppercase">
-                        {t('Wordt zichtbaar na goedkeuring door Maison Anversa.')}
+                        {t(
+                            'Wordt zichtbaar na goedkeuring door Maison Anversa.',
+                        )}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -146,7 +148,10 @@ export function ClubSubmitDialog({
                         </div>
                     </Field>
 
-                    <Field label={t('Straat en nummer')} error={form.errors.street}>
+                    <Field
+                        label={t('Straat en nummer')}
+                        error={form.errors.street}
+                    >
                         <input
                             type="text"
                             value={form.data.street}

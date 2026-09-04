@@ -70,10 +70,11 @@ function MemberNavList({ items, path, onNavigate }: MemberNavListProps) {
 
 export function MemberNav() {
     const { t } = useTranslation();
-    const { locale } = usePage().props;
+    const { locale, auth } = usePage().props;
     const { url } = usePage();
     const path = url.split('?')[0].replace(/\/+$/, '') || '/';
     const [open, setOpen] = useState(false);
+    const isFoundingCircle = Boolean(auth?.user?.is_founding_circle);
 
     const items: NavItem[] = [
         { label: t('Dashboard'), href: `/${locale}/member`, exact: true },
@@ -82,6 +83,22 @@ export function MemberNav() {
             label: t('Founding Circle'),
             href: `/${locale}/member/circle`,
         },
+        {
+            label: t('Lidpaspoort'),
+            href: `/${locale}/member/lidpaspoort`,
+        },
+        ...(isFoundingCircle
+            ? [
+                  {
+                      label: t('Mijn Heritage'),
+                      href: `/${locale}/member/heritage`,
+                  },
+                  {
+                      label: t('Digitaal Heritage Passport'),
+                      href: `/${locale}/member/passport`,
+                  },
+              ]
+            : []),
         { label: t('Gemeenschap'), href: `/${locale}/community`, exact: true },
         { label: t('Sessies'), href: `/${locale}/community/sessions` },
         { label: t('Events'), href: `/${locale}/community/events` },
@@ -121,10 +138,7 @@ export function MemberNav() {
                                 {t('Menu')}
                             </SheetTitle>
                         </SheetHeader>
-                        <nav
-                            aria-label={t('Lid')}
-                            className="overflow-y-auto"
-                        >
+                        <nav aria-label={t('Lid')} className="overflow-y-auto">
                             <MemberNavList
                                 items={items}
                                 path={path}

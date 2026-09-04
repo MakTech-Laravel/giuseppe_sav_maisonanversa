@@ -47,7 +47,8 @@ export function ProductCatalogFilters({
                     search: search || undefined,
                     status: status === 'all' ? undefined : status,
                     per_page:
-                        filters.per_page && filters.per_page !== DEFAULT_PER_PAGE
+                        filters.per_page &&
+                        filters.per_page !== DEFAULT_PER_PAGE
                             ? filters.per_page
                             : undefined,
                 },

@@ -24,9 +24,7 @@ export default function CheckoutSuccess({
           })
         : null;
     const memberOrderHref =
-        auth?.user && orderId
-            ? `/${locale}/member/orders/${orderId}`
-            : null;
+        auth?.user && orderId ? `/${locale}/member/orders/${orderId}` : null;
 
     return (
         <>

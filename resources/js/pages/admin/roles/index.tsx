@@ -80,7 +80,8 @@ export default function RolesIndex({
                     {can(PERMISSIONS.ROLES.CREATE) && (
                         <Button asChild>
                             <Link href={roles.create(wayfinderLocale()).url}>
-                                <Plus className="h-4 w-4" /> {t('Rol toevoegen')}
+                                <Plus className="h-4 w-4" />{' '}
+                                {t('Rol toevoegen')}
                             </Link>
                         </Button>
                     )}
@@ -161,12 +162,12 @@ export default function RolesIndex({
                                                             size="icon"
                                                         >
                                                             <Link
-                                                                href={roles.edit(
-                                                                    {
+                                                                href={
+                                                                    roles.edit({
                                                                         locale: wayfinderLocale(),
                                                                         role: role.id,
-                                                                    },
-                                                                ).url}
+                                                                    }).url
+                                                                }
                                                                 title={t(
                                                                     'Bewerken',
                                                                 )}

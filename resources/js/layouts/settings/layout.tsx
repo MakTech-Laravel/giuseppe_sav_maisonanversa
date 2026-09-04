@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { type PropsWithChildren, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';

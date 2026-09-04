@@ -1,25 +1,13 @@
 import { usePage } from '@inertiajs/react';
-import {
-    CalendarDays,
-    Heart,
-    HelpCircle,
-    Mail,
-    MapPin,
-    MessageCircle,
-    MessageSquare,
-    Package,
-    Phone,
-    Video,
-    X,
-} from 'lucide-react';
+import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { buildContactDockItems } from '@/components/maison/contact/contact-data';
+import type { SiteShared } from '@/components/maison/contact/contact-data';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { useLocale } from '@/hooks/use-locale';
 import { activePage } from '@/lib/maison-navigation';
-import type { SiteShared } from '@/components/maison/contact/contact-data';
 
 /**
  * The floating help dock, bottom right on every page.

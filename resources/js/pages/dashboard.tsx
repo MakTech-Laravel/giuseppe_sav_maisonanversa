@@ -2,6 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import {
     ArrowRight,
     BookOpen,
+    CalendarDays,
     LayoutGrid,
     UserRoundCog,
     Users,
@@ -41,12 +42,18 @@ interface DashboardProps {
         username: string | null;
         created_at: string;
     }[];
+    nextCommunityEvent: {
+        id: string;
+        title: string;
+        starts_at: string;
+    } | null;
     staffName: string;
 }
 
 export default function Dashboard({
     stats,
     recentCustomers,
+    nextCommunityEvent,
     staffName,
 }: DashboardProps) {
     const { t } = useTranslation();
@@ -91,9 +98,7 @@ export default function Dashboard({
                     {stats.map((stat) => (
                         <Card key={stat.key}>
                             <CardHeader className="pb-2">
-                                <CardDescription>
-                                    {t(stat.key)}
-                                </CardDescription>
+                                <CardDescription>{t(stat.key)}</CardDescription>
                                 <CardTitle className="text-3xl tabular-nums">
                                     {stat.value}
                                 </CardTitle>
@@ -106,41 +111,75 @@ export default function Dashboard({
                 </div>
 
                 <div className="grid gap-6 xl:grid-cols-[1fr_2fr]">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>{t('Snelkoppelingen')}</CardTitle>
-                            <CardDescription>
-                                {t(
-                                    'Ga naar veelgebruikte beheerderssecties.',
+                    <div className="grid gap-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{t('Snelkoppelingen')}</CardTitle>
+                                <CardDescription>
+                                    {t(
+                                        'Ga naar veelgebruikte beheerderssecties.',
+                                    )}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="grid gap-2">
+                                {quickLinks
+                                    .filter((item) => can(item.permission))
+                                    .map((item) => (
+                                        <Button
+                                            key={item.label}
+                                            variant="outline"
+                                            className="h-auto justify-start gap-3 px-3 py-3"
+                                            asChild
+                                        >
+                                            <Link href={item.href}>
+                                                <item.icon className="h-4 w-4 text-primary" />
+                                                <span className="text-left">
+                                                    <span className="block font-medium">
+                                                        {item.label}
+                                                    </span>
+                                                    <span className="block text-xs font-normal text-muted-foreground">
+                                                        {item.description}
+                                                    </span>
+                                                </span>
+                                                <ArrowRight className="ml-auto h-4 w-4" />
+                                            </Link>
+                                        </Button>
+                                    ))}
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{t('Volgende evenement')}</CardTitle>
+                                <CardDescription>
+                                    {t(
+                                        'Het eerstvolgende geplande communityevenement.',
+                                    )}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                {nextCommunityEvent ? (
+                                    <div className="flex items-start gap-3">
+                                        <CalendarDays className="mt-0.5 h-4 w-4 text-primary" />
+                                        <div>
+                                            <p className="font-medium">
+                                                {nextCommunityEvent.title}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {new Date(
+                                                    nextCommunityEvent.starts_at,
+                                                ).toLocaleString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-muted-foreground">
+                                        {t('Geen aankomend evenement.')}
+                                    </p>
                                 )}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="grid gap-2">
-                            {quickLinks
-                                .filter((item) => can(item.permission))
-                                .map((item) => (
-                                    <Button
-                                        key={item.label}
-                                        variant="outline"
-                                        className="h-auto justify-start gap-3 px-3 py-3"
-                                        asChild
-                                    >
-                                        <Link href={item.href}>
-                                            <item.icon className="h-4 w-4 text-primary" />
-                                            <span className="text-left">
-                                                <span className="block font-medium">
-                                                    {item.label}
-                                                </span>
-                                                <span className="block text-xs font-normal text-muted-foreground">
-                                                    {item.description}
-                                                </span>
-                                            </span>
-                                            <ArrowRight className="ml-auto h-4 w-4" />
-                                        </Link>
-                                    </Button>
-                                ))}
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
+                    </div>
 
                     <Card className="overflow-hidden">
                         <CardHeader>

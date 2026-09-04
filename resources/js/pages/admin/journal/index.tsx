@@ -1,13 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    BookOpen,
-    Eye,
-    Pencil,
-    Plus,
-    Search,
-    Trash2,
-    X,
-} from 'lucide-react';
+import { BookOpen, Eye, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
@@ -132,7 +124,8 @@ export default function JournalIndex({
                 >
                     <Button asChild>
                         <Link href={journalRoutes.create(wayfinderLocale())}>
-                            <Plus className="h-4 w-4" /> {t('Artikel toevoegen')}
+                            <Plus className="h-4 w-4" />{' '}
+                            {t('Artikel toevoegen')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -173,17 +166,12 @@ export default function JournalIndex({
                             ))}
                         </SelectContent>
                     </Select>
-                    <Select
-                        value={publication}
-                        onValueChange={setPublication}
-                    >
+                    <Select value={publication} onValueChange={setPublication}>
                         <SelectTrigger
                             className="w-full"
                             aria-label={t('Publicatie')}
                         >
-                            <SelectValue
-                                placeholder={t('Alle publicaties')}
-                            />
+                            <SelectValue placeholder={t('Alle publicaties')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
@@ -209,10 +197,7 @@ export default function JournalIndex({
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
-                                <SelectItem
-                                    key={option}
-                                    value={String(option)}
-                                >
+                                <SelectItem key={option} value={String(option)}>
                                     {t('{{count}} per pagina', {
                                         count: option,
                                     })}
@@ -262,7 +247,9 @@ export default function JournalIndex({
                                     >
                                         {hasActiveFilters
                                             ? t('Geen artikelen gevonden.')
-                                            : t('Nog geen artikelen toegevoegd.')}
+                                            : t(
+                                                  'Nog geen artikelen toegevoegd.',
+                                              )}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -314,12 +301,14 @@ export default function JournalIndex({
                                                     asChild
                                                 >
                                                     <Link
-                                                        href={journalRoutes.show({
-                                                            locale,
-                                                            article: Number(
-                                                                article.id,
-                                                            ),
-                                                        })}
+                                                        href={journalRoutes.show(
+                                                            {
+                                                                locale,
+                                                                article: Number(
+                                                                    article.id,
+                                                                ),
+                                                            },
+                                                        )}
                                                     >
                                                         <Eye className="h-4 w-4" />
                                                     </Link>
@@ -330,12 +319,14 @@ export default function JournalIndex({
                                                     asChild
                                                 >
                                                     <Link
-                                                        href={journalRoutes.edit({
-                                                            locale,
-                                                            article: Number(
-                                                                article.id,
-                                                            ),
-                                                        })}
+                                                        href={journalRoutes.edit(
+                                                            {
+                                                                locale,
+                                                                article: Number(
+                                                                    article.id,
+                                                                ),
+                                                            },
+                                                        )}
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Link>
@@ -346,12 +337,15 @@ export default function JournalIndex({
                                                     )}
                                                     onConfirm={() =>
                                                         router.delete(
-                                                            journalRoutes.destroy({
-                                                                locale,
-                                                                article: Number(
-                                                                    article.id,
-                                                                ),
-                                                            }).url,
+                                                            journalRoutes.destroy(
+                                                                {
+                                                                    locale,
+                                                                    article:
+                                                                        Number(
+                                                                            article.id,
+                                                                        ),
+                                                                },
+                                                            ).url,
                                                         )
                                                     }
                                                 >

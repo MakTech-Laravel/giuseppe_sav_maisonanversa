@@ -9,8 +9,8 @@ import type { TabDefinition } from '@/components/maison/community/sessions/sessi
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Wrap } from '@/components/maison/ui/section';
-import * as sessionRoutes from '@/routes/community/sessions';
 import { cn } from '@/lib/utils';
+import * as sessionRoutes from '@/routes/community/sessions';
 import type { Paginated } from '@/types/admin';
 import type {
     SessionCard as SessionCardData,
@@ -147,7 +147,7 @@ export default function SessionsIndex({
                                     }
                                     placeholder={t('Filter op stad...')}
                                     aria-label={t('Filter op stad...')}
-                                    className="w-full border border-gold/20 bg-cream2 py-3 pr-4 pl-11 font-serif text-base text-choc outline-none transition-colors focus:border-gold2"
+                                    className="w-full border border-gold/20 bg-cream2 py-3 pr-4 pl-11 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
                                 />
                             </div>
 

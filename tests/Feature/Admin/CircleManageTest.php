@@ -49,6 +49,23 @@ test('staff can remove founding circle role', function () {
     expect($member->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse();
 });
 
+test('circle member detail shows translated benefits in every locale', function (string $locale, string $passport, string $card) {
+    $member = User::factory()->create();
+    $member->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.circle.show', ['locale' => $locale, 'member' => $member->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/circle/show')
+            ->where('member.benefits', [$passport, $card])
+        );
+})->with([
+    'nl' => ['nl', 'Digitaal Heritage Passport', 'Founding Circle-kaart'],
+    'en' => ['en', 'Digital Heritage Passport', 'Founding Circle card'],
+    'fr' => ['fr', 'Heritage Passport numérique', 'Carte Founding Circle'],
+]);
+
 test('circle index includes edition status and joined_at keys', function () {
     $member = User::factory()->create();
     $member->assignRole(RoleEnum::FOUNDING_CIRCLE->value);

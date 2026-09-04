@@ -199,8 +199,7 @@ export default function HeritageIndex({
                             value={String(product.id)}
                             onValueChange={(value) => {
                                 router.get(
-                                    heritageRoutes.index(wayfinderLocale())
-                                        .url,
+                                    heritageRoutes.index(wayfinderLocale()).url,
                                     { product: value },
                                     { preserveState: false },
                                 );
@@ -294,10 +293,7 @@ export default function HeritageIndex({
                                 placeholder={t('Tot #')}
                             />
                         </div>
-                        <Select
-                            value={status}
-                            onValueChange={setStatus}
-                        >
+                        <Select value={status} onValueChange={setStatus}>
                             <SelectTrigger
                                 className="w-full"
                                 aria-label={t('Status')}
@@ -319,9 +315,7 @@ export default function HeritageIndex({
                         </Select>
                         <Select
                             value={String(perPage)}
-                            onValueChange={(value) =>
-                                setPerPage(Number(value))
-                            }
+                            onValueChange={(value) => setPerPage(Number(value))}
                         >
                             <SelectTrigger
                                 className="w-full"

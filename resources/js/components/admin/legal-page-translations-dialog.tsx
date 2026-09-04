@@ -150,9 +150,7 @@ export function LegalPageTranslationsDialog({
                             variant={
                                 activeLocale === code ? 'default' : 'outline'
                             }
-                            onClick={() =>
-                                setActiveLocale(code as LegalLocale)
-                            }
+                            onClick={() => setActiveLocale(code as LegalLocale)}
                         >
                             {LOCALE_LABELS[code] ?? code.toUpperCase()}
                         </Button>

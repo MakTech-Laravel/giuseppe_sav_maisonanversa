@@ -43,6 +43,27 @@ test('founding circle members can view passport data from their order', function
         );
 });
 
+test('admin-assigned circle members without an order see a friendly empty state instead of a 404', function (
+    string $route,
+    string $component,
+    string $prop,
+) {
+    $user = User::factory()->create();
+    $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    $this->actingAs($user)
+        ->get(localized($route))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component($component)
+            ->where($prop, null)
+        );
+})->with([
+    ['member.heritage', 'member/heritage', 'heritage'],
+    ['member.passport', 'member/passport', 'passport'],
+    ['member.circle', 'member/circle', 'card'],
+]);
+
 test('registered members without the circle cannot open the passport', function () {
     $user = User::factory()->create();
 

@@ -49,7 +49,9 @@ interface CatalogFilters {
 
 const DEFAULT_PER_PAGE = 15;
 
-function catalogQuery(filters: CatalogFilters): Record<string, string | number | undefined> {
+function catalogQuery(
+    filters: CatalogFilters,
+): Record<string, string | number | undefined> {
     return {
         search: filters.search || undefined,
         type: filters.type || undefined,
@@ -135,7 +137,8 @@ export default function ProductsIndex({
                 >
                     <Button asChild>
                         <Link href={products.create(locale)}>
-                            <Plus className="h-4 w-4" /> {t('Product toevoegen')}
+                            <Plus className="h-4 w-4" />{' '}
+                            {t('Product toevoegen')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -201,9 +204,7 @@ export default function ProductsIndex({
                             className="w-full"
                             aria-label={t('Founding Circle')}
                         >
-                            <SelectValue
-                                placeholder={t('Founding Circle')}
-                            />
+                            <SelectValue placeholder={t('Founding Circle')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
@@ -229,10 +230,7 @@ export default function ProductsIndex({
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
-                                <SelectItem
-                                    key={option}
-                                    value={String(option)}
-                                >
+                                <SelectItem key={option} value={String(option)}>
                                     {t('{{count}} per pagina', {
                                         count: option,
                                     })}
@@ -291,7 +289,9 @@ export default function ProductsIndex({
                                                 ? t('Gelimiteerde editie')
                                                 : t('Eenvoudige voorraad')}
                                         </TableCell>
-                                        <TableCell>€ {product.amount}</TableCell>
+                                        <TableCell>
+                                            € {product.amount}
+                                        </TableCell>
                                         <TableCell>
                                             <Badge variant="secondary">
                                                 {product.is_published

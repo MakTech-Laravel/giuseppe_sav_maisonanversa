@@ -157,7 +157,8 @@ export default function AdminsIndex({
                                 {paginated.data.map((user) => {
                                     const url = avatarUrl(user.avatar);
                                     const isSuperAdmin = user.roles?.some(
-                                        (role) => role.name === SUPER_ADMIN_ROLE,
+                                        (role) =>
+                                            role.name === SUPER_ADMIN_ROLE,
                                     );
                                     const isLastSuperAdmin =
                                         isSuperAdmin && superAdminCount <= 1;

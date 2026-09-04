@@ -22,7 +22,11 @@ export function RepeaterField<T>({
     rows: T[];
     onChange: (rows: T[]) => void;
     makeRow: () => T;
-    renderRow: (row: T, index: number, update: (patch: Partial<T>) => void) => ReactNode;
+    renderRow: (
+        row: T,
+        index: number,
+        update: (patch: Partial<T>) => void,
+    ) => ReactNode;
     rowKey: (row: T, index: number) => string;
     addLabel: string;
     emptyLabel?: string;
@@ -103,7 +107,9 @@ export function RepeaterField<T>({
                     {renderRow(row, index, (patch) =>
                         onChange(
                             rows.map((current, at) =>
-                                at === index ? { ...current, ...patch } : current,
+                                at === index
+                                    ? { ...current, ...patch }
+                                    : current,
                             ),
                         ),
                     )}

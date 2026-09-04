@@ -110,7 +110,10 @@ function PageNumber({
             href={href}
             preserveScroll
             preserveState
-            className={cn(classes, 'text-choc3 transition-colors hover:text-gold')}
+            className={cn(
+                classes,
+                'text-choc3 transition-colors hover:text-gold',
+            )}
         >
             {label}
         </Link>

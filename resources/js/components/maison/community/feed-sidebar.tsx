@@ -63,16 +63,27 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                             {name}
                         </div>
                         <div className="font-sans text-[9px] tracking-[0.15em] text-gold uppercase">
-                            {t('Founding Member · Nr. {{num}}', { num: sidebar.profile.editionNumber })}
+                            {t('Founding Member · Nr. {{num}}', {
+                                num: sidebar.profile.editionNumber,
+                            })}
                         </div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-3 pt-3.5 text-center">
                     {[
-                        { value: sidebar.profile.editionNumber, label: 'Nummer' },
-                        { value: String(sidebar.profile.postCount), label: 'Posts' },
-                        { value: String(sidebar.profile.sessionCount), label: 'Sessies' },
+                        {
+                            value: sidebar.profile.editionNumber,
+                            label: 'Nummer',
+                        },
+                        {
+                            value: String(sidebar.profile.postCount),
+                            label: 'Posts',
+                        },
+                        {
+                            value: String(sidebar.profile.sessionCount),
+                            label: 'Sessies',
+                        },
                     ].map((stat) => (
                         <div key={stat.label}>
                             <div className="font-serif text-xl font-light text-gold2">
@@ -96,7 +107,10 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                         key={`${member.name}-${member.editionNumber}`}
                         className="flex items-center gap-3 border-b border-gold/10 py-2.5"
                     >
-                        <Monogram initials={initialsFromName(member.name)} size="sm" />
+                        <Monogram
+                            initials={initialsFromName(member.name)}
+                            size="sm"
+                        />
                         <div className="flex-1">
                             <div className="font-serif text-[15px] font-medium text-choc">
                                 {member.name}
@@ -135,7 +149,9 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
 
                 <div className="mb-3 bg-choc2 p-4">
                     <div className="mb-1.5 font-sans text-[9px] tracking-[0.2em] text-gold uppercase">
-                        {sidebar.nextEvent?.startsAt ? t(sidebar.nextEvent.startsAt) : t('Nog geen event')}
+                        {sidebar.nextEvent?.startsAt
+                            ? t(sidebar.nextEvent.startsAt)
+                            : t('Nog geen event')}
                     </div>
                     <div className="mb-1 font-serif text-base font-medium text-cream">
                         {sidebar.nextEvent
@@ -143,7 +159,9 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                             : t('Wordt binnenkort bekendgemaakt')}
                     </div>
                     <div className="font-sans text-[9px] tracking-widest text-stone">
-                        {sidebar.nextEvent ? t(sidebar.nextEvent.location) : t('Maison Anversa')}
+                        {sidebar.nextEvent
+                            ? t(sidebar.nextEvent.location)
+                            : t('Maison Anversa')}
                     </div>
                 </div>
 

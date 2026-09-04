@@ -99,6 +99,7 @@ class InquiryController extends Controller
             ->when($inbox === 'appointments' && $filters['kind'] !== '', function (Builder $query) use ($filters): void {
                 $query->where('type', $filters['kind']);
             })
+            ->orderByDesc('priority')
             ->latest('id')
             ->paginate($filters['per_page'])
             ->withQueryString()
@@ -186,7 +187,10 @@ class InquiryController extends Controller
      *     seen: bool,
      *     locale: string,
      *     created_at: string|null,
-     *     user_id: int|null
+     *     user_id: int|null,
+     *     priority: bool,
+     *     sla_due_at: string|null,
+     *     sla_breached: bool
      * }
      */
     private function row(Inquiry $inquiry): array
@@ -203,6 +207,7 @@ class InquiryController extends Controller
             'locale' => $inquiry->locale,
             'created_at' => $inquiry->created_at?->toIso8601String(),
             'user_id' => $inquiry->user_id,
+            ...$inquiry->slaShare(),
         ];
     }
 
@@ -221,7 +226,10 @@ class InquiryController extends Controller
      *     locale: string,
      *     ip: string|null,
      *     created_at: string|null,
-     *     user_id: int|null
+     *     user_id: int|null,
+     *     priority: bool,
+     *     sla_due_at: string|null,
+     *     sla_breached: bool
      * }
      */
     private function details(Inquiry $inquiry): array
@@ -241,6 +249,7 @@ class InquiryController extends Controller
             'ip' => $inquiry->ip,
             'created_at' => $inquiry->created_at?->toIso8601String(),
             'user_id' => $inquiry->user_id,
+            ...$inquiry->slaShare(),
         ];
     }
 

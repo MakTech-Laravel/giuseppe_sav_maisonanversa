@@ -82,8 +82,9 @@ export default function MemberLetter({
                                     </p>
                                     <p className="mt-1 font-sans text-[11px] tracking-[0.12em] text-stone uppercase">
                                         {t(
-                                            SOURCE_LABELS[subscription.source] ??
-                                                subscription.source,
+                                            SOURCE_LABELS[
+                                                subscription.source
+                                            ] ?? subscription.source,
                                         )}
                                         {subscription.joined_at
                                             ? ` · ${subscription.joined_at}`
