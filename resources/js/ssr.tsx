@@ -1,17 +1,19 @@
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
+import ReactDOMServer from 'react-dom/server';
 import { I18nProvider } from '@/components/i18n-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { createI18nForLocale } from '@/lib/i18n';
 import { resolvePageLayout } from '@/lib/inertia-layouts';
 import { syncWayfinderLocale } from '@/lib/wayfinder-defaults';
 import { isLocale, SOURCE_LOCALE } from '@/types/locale';
-import ReactDOMServer from 'react-dom/server';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Maison Anversa';
 
 createServer((page) => {
-    const locale = isLocale(page.props.locale) ? page.props.locale : SOURCE_LOCALE;
+    const locale = isLocale(page.props.locale)
+        ? page.props.locale
+        : SOURCE_LOCALE;
 
     syncWayfinderLocale(locale);
 

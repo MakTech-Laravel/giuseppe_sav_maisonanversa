@@ -129,23 +129,23 @@ export function IconPickerPreview({
                     <p className="text-xs text-muted-foreground">{icon}</p>
                 </div>
                 {showCopyKey ? (
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className={cn(
-                        'gap-1.5 rounded-full',
-                        classNames?.copyButton,
-                    )}
-                    onClick={() => void copyKey()}
-                >
-                    {copied ? (
-                        <Check className="size-3.5" />
-                    ) : (
-                        <ClipboardCopy className="size-3.5" />
-                    )}
-                    {copied ? labels.copied : labels.copyKey}
-                </Button>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className={cn(
+                            'gap-1.5 rounded-full',
+                            classNames?.copyButton,
+                        )}
+                        onClick={() => void copyKey()}
+                    >
+                        {copied ? (
+                            <Check className="size-3.5" />
+                        ) : (
+                            <ClipboardCopy className="size-3.5" />
+                        )}
+                        {copied ? labels.copied : labels.copyKey}
+                    </Button>
                 ) : null}
             </div>
 

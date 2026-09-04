@@ -28,16 +28,14 @@ function initialsFromName(name: string): string {
     return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`.toUpperCase();
 }
 
-export function CommunityFeed({
-    posts,
-    onPostPublished,
-}: CommunityFeedProps) {
+export function CommunityFeed({ posts, onPostPublished }: CommunityFeedProps) {
     const page = usePage();
     const { auth, locale } = page.props;
     const userName = auth?.user?.name ?? 'Member';
     const userInitials = initialsFromName(userName);
     const hasScrollProp = page.scrollProps?.posts != null;
     const [scrollEnabled, setScrollEnabled] = useState(hasScrollProp);
+    const [prevHasScrollProp, setPrevHasScrollProp] = useState(hasScrollProp);
 
     // InfiniteScroll reads the core page store (not React context) on mount.
     // That store updates before React swaps components, so tear the scroller
@@ -50,19 +48,28 @@ export function CommunityFeed({
         });
     }, []);
 
-    useEffect(() => {
+    // Re-enable the scroller once a scroll prop reappears. Adjusted during
+    // render rather than in an effect — see
+    // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+    if (hasScrollProp !== prevHasScrollProp) {
+        setPrevHasScrollProp(hasScrollProp);
+
         if (hasScrollProp) {
             setScrollEnabled(true);
         }
-    }, [hasScrollProp]);
+    }
 
     const canInfiniteScroll = scrollEnabled && hasScrollProp;
 
     function handlePublish(text: string) {
-        router.post(`/${locale}/community/posts`, { content: text }, {
-            preserveScroll: true,
-            onSuccess: () => onPostPublished(),
-        });
+        router.post(
+            `/${locale}/community/posts`,
+            { content: text },
+            {
+                preserveScroll: true,
+                onSuccess: () => onPostPublished(),
+            },
+        );
     }
 
     const feed = posts.data.map((post) => (

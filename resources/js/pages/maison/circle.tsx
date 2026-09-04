@@ -94,9 +94,7 @@ export default function Circle() {
                                     {benefit.num}
                                 </div>
                                 <h3 className="relative mb-2 font-serif text-[22px] font-medium text-choc">
-                                    {benefit.title === 'Behind the Scenes'
-                                        ? benefit.title
-                                        : t(benefit.title)}
+                                    {t(benefit.title)}
                                 </h3>
                                 <p className="relative text-[15px] leading-[1.7] text-choc3">
                                     {t(benefit.desc)}

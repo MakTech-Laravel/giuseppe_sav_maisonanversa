@@ -1,10 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import FileUpload from '@/components/file-upload';
 import type { ExistingFile } from '@/components/file-upload';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { useTranslation } from 'react-i18next';
 
 export const EVENT_CAPACITY_PRESETS = [
     { value: '', labelKey: 'Onbeperkt' },
@@ -194,7 +194,9 @@ export function CommunityEventFormFields({
     );
 }
 
-export function capacityToFormValue(capacity: number | null | undefined): string {
+export function capacityToFormValue(
+    capacity: number | null | undefined,
+): string {
     if (capacity === null || capacity === undefined) {
         return '';
     }

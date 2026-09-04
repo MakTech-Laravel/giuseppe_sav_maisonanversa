@@ -154,7 +154,10 @@ function isSafeFontSize(value: string): boolean {
 
 function isSafeFontFamily(value: string): boolean {
     return value.split(',').every((family) => {
-        const token = family.trim().replace(/^['"]|['"]$/g, '').toLowerCase();
+        const token = family
+            .trim()
+            .replace(/^['"]|['"]$/g, '')
+            .toLowerCase();
 
         return token !== '' && SAFE_FONT_FAMILIES.has(token);
     });
@@ -180,17 +183,26 @@ function sanitizeStyle(style: string): string {
 
         let kept: string | null = null;
 
-        if (property === 'text-align' && /^(left|center|right|justify)$/i.test(value)) {
+        if (
+            property === 'text-align' &&
+            /^(left|center|right|justify)$/i.test(value)
+        ) {
             kept = value.toLowerCase();
         } else if (property === 'color') {
-            kept = /^inherit$/i.test(value) || isSafeCssColor(value) ? value : null;
+            kept =
+                /^inherit$/i.test(value) || isSafeCssColor(value)
+                    ? value
+                    : null;
         } else if (property === 'background-color') {
             kept = isSafeCssColor(value) ? value : null;
         } else if (property === 'font-size') {
             kept = isSafeFontSize(value) ? value : null;
         } else if (property === 'font-family') {
             kept = isSafeFontFamily(value) ? value : null;
-        } else if (property === 'line-height' && /^[1-3](\.\d+)?$/.test(value)) {
+        } else if (
+            property === 'line-height' &&
+            /^[1-3](\.\d+)?$/.test(value)
+        ) {
             kept = value;
         }
 
@@ -250,7 +262,9 @@ function unwrap(element: Element): void {
 
 function sanitizeAttributes(element: Element, tag: string): void {
     const allowed = ALLOWED_ATTRIBUTES[tag] ?? new Set<string>();
-    const names = Array.from(element.attributes).map((attribute) => attribute.name);
+    const names = Array.from(element.attributes).map(
+        (attribute) => attribute.name,
+    );
 
     for (const name of names) {
         const lower = name.toLowerCase();
@@ -331,7 +345,10 @@ function sanitizeAttributes(element: Element, tag: string): void {
 }
 
 export function isBlankLegalHtml(html: string): boolean {
-    const text = html.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+    const text = html
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .trim();
 
     return text === '' && !/<(hr|table|ul|ol|details)\b/i.test(html);
 }
@@ -371,7 +388,9 @@ function formatNodes(nodes: Node[], depth: number): string {
     return nodes
         .map((node) => {
             if (node.nodeType === Node.TEXT_NODE) {
-                const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim();
+                const text = (node.textContent ?? '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
 
                 return text === '' ? '' : `${indent}${text}\n`;
             }

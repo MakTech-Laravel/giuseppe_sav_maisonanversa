@@ -1,9 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import type {
-    CommunityCourtPayload,
-    FeedPostData,
-} from '@/components/maison/community/community-data';
+import type { FeedPostData } from '@/components/maison/community/community-data';
 import { CommunityLayout } from '@/components/maison/community/community-layout';
 import { CommunityLoginGate } from '@/components/maison/community/community-login-gate';
 import {
@@ -16,15 +13,9 @@ import type { Paginated } from '@/types/admin';
 
 type CommunityPageProps = {
     posts?: Paginated<FeedPostData>;
-    courts?: CommunityCourtPayload[];
-    tab?: 'feed' | 'courts';
 };
 
-export default function Community({
-    posts,
-    courts = [],
-    tab = 'feed',
-}: CommunityPageProps) {
+export default function Community({ posts }: CommunityPageProps) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
     const toast = useCommunityToast();
@@ -35,20 +26,15 @@ export default function Community({
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={t('Founding Circle & Club Corner')}
+                eyebrow={t('Founding Circle')}
                 title={t('De Community')}
                 subtitle={t(
-                    'Een besloten ruimte voor Founding Circle leden en Club Corner partners. Deel uw ervaringen, plan sessies en ontdek exclusieve evenementen.',
+                    'Een besloten ruimte voor leden van het huis. Deel uw ervaringen, plan sessies en ontdek exclusieve evenementen.',
                 )}
             />
 
             {isAuthenticated && posts ? (
-                <CommunityLayout
-                    toast={toast}
-                    posts={posts}
-                    courts={courts}
-                    tab={tab}
-                />
+                <CommunityLayout toast={toast} posts={posts} />
             ) : (
                 <CommunityLoginGate />
             )}

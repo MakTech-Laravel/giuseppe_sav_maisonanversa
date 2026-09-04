@@ -7,6 +7,7 @@ import {
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
+import { DressingItemTranslationsDialog } from '@/components/admin/dressing-item-translations-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -25,6 +26,18 @@ interface DressingItemDetails {
     sort_order: number;
     is_published: boolean;
 }
+
+type LocaleCopy = {
+    name: string;
+    category: string;
+    description: string;
+};
+
+type TranslationStatus = {
+    name: boolean;
+    category: boolean;
+    description: boolean;
+};
 
 function Field({
     label,
@@ -57,8 +70,14 @@ function Field({
 
 export default function ShowDressingItem({
     item,
+    locales,
+    translations,
+    translationStatus,
 }: {
     item: DressingItemDetails;
+    locales: string[];
+    translations: Record<string, LocaleCopy>;
+    translationStatus: Record<string, TranslationStatus>;
 }) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
@@ -111,6 +130,12 @@ export default function ShowDressingItem({
                                         {t('Bewerken')}
                                     </Link>
                                 </Button>
+                                <DressingItemTranslationsDialog
+                                    dressingItemId={item.id}
+                                    locales={locales}
+                                    translations={translations}
+                                    translationStatus={translationStatus}
+                                />
                                 <Button
                                     variant="outline"
                                     asChild

@@ -1,8 +1,8 @@
-import type { KeyboardEvent } from 'react';
 import { Wand2 } from 'lucide-react';
+import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { prettyPrintLegalHtml } from '@/lib/legal-html';
 
 export function LegalHtmlSourceEditor({
@@ -59,9 +59,7 @@ export function LegalHtmlSourceEditor({
                 className="min-h-88 resize-y font-mono text-[13px] leading-relaxed"
                 aria-invalid={Boolean(error)}
             />
-            {error ? (
-                <p className="text-sm text-destructive">{error}</p>
-            ) : null}
+            {error ? <p className="text-sm text-destructive">{error}</p> : null}
         </div>
     );
 }

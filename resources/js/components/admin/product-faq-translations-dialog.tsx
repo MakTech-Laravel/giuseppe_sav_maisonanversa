@@ -1,7 +1,7 @@
 import { router, useForm } from '@inertiajs/react';
 import { Languages, Loader2, RefreshCw, TriangleAlert } from 'lucide-react';
 import type { FormEvent } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InputError from '@/components/input-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -75,6 +75,7 @@ export function ProductFaqTranslationsDialog({
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const [open, setOpen] = useState(false);
+    const [wasOpen, setWasOpen] = useState(false);
     const [translating, setTranslating] = useState(false);
     const [activeLocale, setActiveLocale] = useState<ProductLocale>('nl');
 
@@ -87,14 +88,17 @@ export function ProductFaqTranslationsDialog({
         initialFormData(translations),
     );
 
-    useEffect(() => {
-        if (!open) {
-            return;
-        }
+    // Reset the form to the latest translations each time the dialog opens.
+    // Adjusted during render rather than in an effect — see
+    // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+    if (open !== wasOpen) {
+        setWasOpen(open);
 
-        setActiveLocale((locales[0] as ProductLocale | undefined) ?? 'nl');
-        form.setData(initialFormData(translations));
-    }, [open, faqId, translations, locales]);
+        if (open) {
+            setActiveLocale((locales[0] as ProductLocale | undefined) ?? 'nl');
+            form.setData(initialFormData(translations));
+        }
+    }
 
     function submit(event: FormEvent) {
         event.preventDefault();
@@ -129,7 +133,11 @@ export function ProductFaqTranslationsDialog({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className={triggerClassName}>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className={triggerClassName}
+                >
                     <Languages className="h-4 w-4" />
                     {t('Vertalingen')}
                 </Button>
@@ -165,7 +173,9 @@ export function ProductFaqTranslationsDialog({
                             variant={
                                 activeLocale === code ? 'default' : 'outline'
                             }
-                            onClick={() => setActiveLocale(code as ProductLocale)}
+                            onClick={() =>
+                                setActiveLocale(code as ProductLocale)
+                            }
                         >
                             {LOCALE_LABELS[code] ?? code.toUpperCase()}
                         </Button>

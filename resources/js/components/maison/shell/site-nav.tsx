@@ -125,7 +125,7 @@ export function SiteNav() {
                     ))}
                 </ul>
 
-                <div className="mt-3 flex items-center gap-4 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:border-t-0 ma-lg:border-l ma-lg:pl-4 ma-lg:pt-0">
+                <div className="mt-3 flex items-center gap-4 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:border-t-0 ma-lg:border-l ma-lg:pt-0 ma-lg:pl-4">
                     <LanguageSwitcher className="ma-lg:gap-1 [&_button]:ma-lg:min-h-0 [&_button]:ma-lg:min-w-0 [&_button]:ma-lg:rounded-sm [&_button]:ma-lg:px-1.5 [&_button]:ma-lg:py-1 [&_button]:ma-lg:text-[9px]" />
                 </div>
             </div>

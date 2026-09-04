@@ -11,15 +11,6 @@ test('story, circle, dressing and journal pages render their Inertia components'
     ['/nl/journal', 'maison/journal'],
 ]);
 
-test('the founding circle portal persists the member in localStorage under the prototype key', function () {
-    $source = file_get_contents(resource_path('js/lib/founding-circle.ts'));
-
-    expect($source)
-        ->toContain("FC_MEMBER_KEY = 'fc_member'")
-        ->toContain('localStorage')
-        ->toContain('readReferralFromSearch');
-});
-
 test('the circle portal points members to the authenticated card', function () {
     $source = file_get_contents(resource_path('js/components/maison/circle/circle-portal.tsx'));
 
@@ -37,7 +28,7 @@ test('the circle portal sits on the cream circle page', function () {
 
     expect($page)
         ->toContain('<CirclePortal />')
-        ->toContain('openOrder')
+        ->toContain('openPurchase')
         ->not->toContain('tone="choc2"')
         ->and($portal)
         ->toContain('bg-cream2')

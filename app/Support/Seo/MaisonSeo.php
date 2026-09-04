@@ -280,7 +280,7 @@ final class MaisonSeo
         $product = $request->route('product');
 
         if ($product instanceof Product) {
-            return $product->is_published ? $product : null;
+            return $product->isVisibleTo($request->user()) ? $product : null;
         }
 
         if (! is_string($product) || $product === '') {
@@ -289,7 +289,7 @@ final class MaisonSeo
 
         return Product::query()
             ->where('slug', $product)
-            ->where('is_published', true)
+            ->visibleTo($request->user())
             ->first();
     }
 

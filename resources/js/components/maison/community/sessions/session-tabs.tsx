@@ -35,7 +35,7 @@ export function SessionTabs<T extends string>({
         <div
             role="tablist"
             aria-label={ariaLabel}
-            className="flex flex-col border-b border-gold/20 md:flex-row md:gap-1 md:overflow-x-auto md:overflow-y-hidden md:[-ms-overflow-style:none] md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden"
+            className="flex flex-col border-b border-gold/20 md:[scrollbar-width:none] md:flex-row md:gap-1 md:overflow-x-auto md:overflow-y-hidden md:[-ms-overflow-style:none] md:[&::-webkit-scrollbar]:hidden"
         >
             {tabs.map((tab) => {
                 const isActive = tab.id === activeTab;
