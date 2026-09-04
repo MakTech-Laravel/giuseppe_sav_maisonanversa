@@ -11,6 +11,7 @@ use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Newsletter\HeritageLetterSubscription;
+use App\Support\MemberPassportPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -79,7 +80,10 @@ class DashboardController extends Controller implements HasMiddleware
     public function heritage(Request $request, string $locale, PassportPresenter $passport): Response
     {
         $order = $passport->heritageOrder($request->user());
-        abort_if($order === null, 404);
+
+        if ($order === null) {
+            return Inertia::render('member/heritage', ['heritage' => null]);
+        }
 
         $order->loadMissing('product');
         $number = str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
@@ -125,17 +129,22 @@ class DashboardController extends Controller implements HasMiddleware
     public function passport(Request $request, string $locale, PassportPresenter $presenter): Response
     {
         $passport = $presenter->forUser($request->user());
-        abort_if($passport === null, 404);
 
         return Inertia::render('member/passport', [
             'passport' => $passport,
         ]);
     }
 
+    public function lidpaspoort(Request $request, string $locale, MemberPassportPresenter $presenter): Response
+    {
+        return Inertia::render('member/lidpaspoort', [
+            'passport' => $presenter->forUser($request->user(), $locale),
+        ]);
+    }
+
     public function circle(Request $request, string $locale, PassportPresenter $presenter): Response
     {
         $card = $presenter->circleCard($request->user());
-        abort_if($card === null, 404);
 
         return Inertia::render('member/circle', [
             'card' => $card,

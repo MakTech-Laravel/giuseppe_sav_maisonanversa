@@ -17,9 +17,7 @@ export function useCheckoutDisplay(override?: OrderProductContext) {
     const productName = source?.productName ?? '';
     const productType = source?.productType ?? 'limited_edition';
     const deliveryLabel =
-        source?.deliveryLabel ??
-        commerce?.defaultExpectedDeliveryLabel ??
-        null;
+        source?.deliveryLabel ?? commerce?.defaultExpectedDeliveryLabel ?? null;
     const priceLabel = displayAmount !== '' ? `€ ${displayAmount}` : '';
 
     return {

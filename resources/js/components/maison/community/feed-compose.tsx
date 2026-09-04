@@ -41,9 +41,7 @@ export function FeedCompose({ initials, onPublish }: FeedComposeProps) {
             </div>
             <div className="flex items-center justify-between">
                 <span className="font-sans text-[9px] tracking-[0.15em] text-stone">
-                    {t(
-                        'Alleen zichtbaar voor Founding Members & Club Corner leden',
-                    )}
+                    {t('Alleen zichtbaar voor ingelogde leden')}
                 </span>
                 <button
                     type="button"

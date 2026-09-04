@@ -2,12 +2,12 @@ import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { CourtTranslationsDialog } from '@/components/admin/court-translations-dialog';
 import {
     AdminPanel,
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
+import { CourtTranslationsDialog } from '@/components/admin/court-translations-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -61,7 +61,7 @@ function Field({
             </p>
             <p
                 className={cn(
-                    'wrap-break-word text-sm font-medium',
+                    'text-sm font-medium wrap-break-word',
                     pre && 'whitespace-pre-wrap',
                 )}
             >
@@ -206,10 +206,7 @@ export default function CourtShow({
                                 />
                             ) : null}
                             {location ? (
-                                <Field
-                                    label={t('Locatie')}
-                                    value={location}
-                                />
+                                <Field label={t('Locatie')} value={location} />
                             ) : null}
                         </div>
                     </AdminPanel>

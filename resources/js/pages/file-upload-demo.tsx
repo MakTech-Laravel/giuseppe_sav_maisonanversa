@@ -295,18 +295,15 @@ function EditModeDemo({ post }: { post: Post }) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        submit(
-            postUpdate({ locale: wayfinderLocale(), post: post.id }).url,
-            {
-                // On success the page reloads `demoPost` with the just-saved files
-                // included as existing attachments. Clear the local "new files" and
-                // the pending removals so nothing renders twice.
-                onSuccess: () => {
-                    reset('files', 'remove_attachments');
-                    setRemovedIds([]);
-                },
+        submit(postUpdate({ locale: wayfinderLocale(), post: post.id }).url, {
+            // On success the page reloads `demoPost` with the just-saved files
+            // included as existing attachments. Clear the local "new files" and
+            // the pending removals so nothing renders twice.
+            onSuccess: () => {
+                reset('files', 'remove_attachments');
+                setRemovedIds([]);
             },
-        );
+        });
     }
 
     return (

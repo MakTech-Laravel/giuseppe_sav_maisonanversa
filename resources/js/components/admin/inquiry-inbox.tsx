@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import { DataPagination } from '@/components/admin/data-pagination';
+import { InquirySlaBadge } from '@/components/admin/inquiry-sla-badge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -123,7 +124,7 @@ export function InquiryInbox({
         );
     }
 
-    const columnCount = showKind ? 7 : 6;
+    const columnCount = showKind ? 8 : 7;
 
     return (
         <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -233,6 +234,7 @@ export function InquiryInbox({
                             ) : null}
                             <TableHead>{t('Bericht')}</TableHead>
                             <TableHead>{t('Status')}</TableHead>
+                            <TableHead>{t('Prioriteit Support')}</TableHead>
                             <TableHead>{t('Datum')}</TableHead>
                             <TableHead className="text-right">
                                 {t('Acties')}
@@ -279,6 +281,20 @@ export function InquiryInbox({
                                                 : t('Ongelezen')}
                                         </Badge>
                                     </TableCell>
+                                    <TableCell>
+                                        {inquiry.priority ? (
+                                            <InquirySlaBadge
+                                                priority={inquiry.priority}
+                                                slaDueAt={inquiry.sla_due_at}
+                                                slaBreached={
+                                                    inquiry.sla_breached
+                                                }
+                                                seen={inquiry.seen}
+                                            />
+                                        ) : (
+                                            '—'
+                                        )}
+                                    </TableCell>
                                     <TableCell className="whitespace-nowrap text-muted-foreground">
                                         {inquiry.created_at
                                             ? new Date(
@@ -293,10 +309,14 @@ export function InquiryInbox({
                                             asChild
                                         >
                                             <Link
-                                                href={routes.show({
-                                                    locale,
-                                                    inquiry: Number(inquiry.id),
-                                                })}
+                                                href={
+                                                    routes.show({
+                                                        locale,
+                                                        inquiry: Number(
+                                                            inquiry.id,
+                                                        ),
+                                                    }).url
+                                                }
                                             >
                                                 <Eye className="h-4 w-4" />
                                                 {t('Bekijken')}

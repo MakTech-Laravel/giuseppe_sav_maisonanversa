@@ -43,7 +43,7 @@ test('reserve and newsletter actions use shell hooks rather than onclick strings
     $source = file_get_contents(resource_path('js/components/maison/product/product-detail.tsx'));
 
     expect($source)
-        ->toContain('openOrder')
+        ->toContain('openPurchase')
         ->toContain('openNewsletter')
         ->not->toContain('onclick=');
 });

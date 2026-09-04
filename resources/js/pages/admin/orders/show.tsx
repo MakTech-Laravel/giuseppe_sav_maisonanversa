@@ -75,9 +75,12 @@ export default function ShowOrder({ order }: { order: Order }) {
     const canShip = ['paid', 'processing'].includes(order.status_key);
     const canDeliver = order.status_key === 'shipped';
     const canCancel = order.status_key === 'incomplete';
-    const canRefund = !['refunded', 'canceled', 'failed', 'incomplete'].includes(
-        order.status_key,
-    );
+    const canRefund = ![
+        'refunded',
+        'canceled',
+        'failed',
+        'incomplete',
+    ].includes(order.status_key);
 
     const submitStatus = (
         status:
@@ -321,7 +324,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                                             <dt className="text-muted-foreground">
                                                 {t('Stripe sessie')}
                                             </dt>
-                                            <dd className="break-all font-mono text-xs">
+                                            <dd className="font-mono text-xs break-all">
                                                 {
                                                     order.payment
                                                         .stripe_checkout_session_id
@@ -329,13 +332,12 @@ export default function ShowOrder({ order }: { order: Order }) {
                                             </dd>
                                         </div>
                                     )}
-                                    {order.payment
-                                        .stripe_payment_intent_id && (
+                                    {order.payment.stripe_payment_intent_id && (
                                         <div>
                                             <dt className="text-muted-foreground">
                                                 {t('Stripe payment intent')}
                                             </dt>
-                                            <dd className="break-all font-mono text-xs">
+                                            <dd className="font-mono text-xs break-all">
                                                 {
                                                     order.payment
                                                         .stripe_payment_intent_id

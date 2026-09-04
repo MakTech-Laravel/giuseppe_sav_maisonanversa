@@ -1,7 +1,11 @@
 <?php
 
 use App\Enums\ProductStatus;
+use App\Enums\RoleEnum;
 use App\Models\Product;
+use App\Models\User;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 
 test('the catalog index paginates published products', function () {
     Product::factory()->count(15)->create();
@@ -108,7 +112,7 @@ test('custom product seo fields are used on the storefront without copying into 
             ->where('seo.ogImage', url('/storage/products/custom-og.jpg')));
 });
 
-test('a product without seo or gallery uses the house default open graph image', function () {
+test('a house default open graph image is used when a product has no seo or gallery', function () {
     $product = Product::factory()->create([
         'name' => 'Plain Product',
         'description' => 'No gallery.',
@@ -123,4 +127,53 @@ test('a product without seo or gallery uses the house default open graph image',
             ->where('seo.ogImage', url((string) config('maison.seo.image')))
             ->where('seo.ogImageWidth', 1024)
             ->where('seo.ogImageHeight', 682));
+});
+
+test('the catalog hides early-access products from guests', function () {
+    Product::factory()->create([
+        'name' => 'Circle Preview',
+        'is_published' => true,
+        'public_at' => now()->addHours(24),
+    ]);
+
+    $this->get(localized('maison.products'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('products.data', fn ($data) => collect($data)->pluck('name')->doesntContain('Circle Preview')));
+});
+
+test('founding circle members can see early-access products in the catalog', function () {
+    $this->seed([
+        PermissionSeeder::class,
+        RoleSeeder::class,
+    ]);
+
+    $product = Product::factory()->create([
+        'name' => 'Circle Preview',
+        'is_published' => true,
+        'public_at' => now()->addHours(24),
+    ]);
+
+    $member = User::factory()->create();
+    $member->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    $this->actingAs($member)
+        ->get(localized('maison.products'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('products.data', fn ($data) => collect($data)->pluck('name')->contains('Circle Preview')));
+
+    $this->actingAs($member)
+        ->get(localized('maison.products.show', ['product' => $product->slug]))
+        ->assertOk();
+});
+
+test('guests cannot open an early-access product page', function () {
+    $product = Product::factory()->create([
+        'is_published' => true,
+        'public_at' => now()->addDay(),
+    ]);
+
+    $this->get(localized('maison.products.show', ['product' => $product->slug]))
+        ->assertNotFound();
 });

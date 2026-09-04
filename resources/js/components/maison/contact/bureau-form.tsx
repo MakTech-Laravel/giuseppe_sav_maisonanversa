@@ -43,7 +43,9 @@ export function BureauForm({
                         icon="✓"
                         className="text-left [&_div]:text-sand [&_h3]:text-cream"
                     >
-                        <p>{t('Wij bevestigen persoonlijk zo snel mogelijk.')}</p>
+                        <p>
+                            {t('Wij bevestigen persoonlijk zo snel mogelijk.')}
+                        </p>
                     </SuccessPanel>
                 ) : (
                     <>
@@ -138,7 +140,10 @@ export function BureauSelect({
     return (
         <select name={name} className={cn(fieldClassName, className)}>
             {options.map((option) => (
-                <option key={option} value={option === options[0] ? '' : option}>
+                <option
+                    key={option}
+                    value={option === options[0] ? '' : option}
+                >
                     {t(option)}
                 </option>
             ))}

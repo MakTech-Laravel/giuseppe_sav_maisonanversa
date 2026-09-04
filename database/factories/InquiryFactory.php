@@ -19,6 +19,7 @@ class InquiryFactory extends Factory
     {
         return [
             'type' => InquiryType::Appointment,
+            'priority' => false,
             'name' => fake()->name(),
             'email' => fake()->safeEmail(),
             'phone' => fake()->optional()->numerify('+32 ### ## ## ##'),
@@ -93,6 +94,13 @@ class InquiryFactory extends Factory
     {
         return $this->state(fn (): array => [
             'seen_at' => now(),
+        ]);
+    }
+
+    public function priority(): static
+    {
+        return $this->state(fn (): array => [
+            'priority' => true,
         ]);
     }
 }

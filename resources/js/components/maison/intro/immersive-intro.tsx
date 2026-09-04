@@ -139,6 +139,11 @@ export function ImmersiveIntro() {
     useLayoutEffect(() => {
         const next = shouldRun();
 
+        // Deliberately deferred to after mount: `shouldRun()` reads
+        // sessionStorage and prefers-reduced-motion, which SSR cannot see.
+        // Computing this during render would desync from the server-rendered
+        // markup and force a hydration remount (see comment above).
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setRunning(next);
 
         if (!next) {
@@ -154,7 +159,7 @@ export function ImmersiveIntro() {
 }
 
 function IntroStage({ onDismissed }: { onDismissed: () => void }) {
-    const availableImages = usePage().props.availableImages ?? [];
+    const availableImages = usePage().props.availableImages;
     const { locale } = useLocale();
     const { t } = useTranslation();
 
@@ -192,13 +197,13 @@ function IntroStage({ onDismissed }: { onDismissed: () => void }) {
      * the panels are brand-palette placeholders, which load nothing, so the bar
      * would otherwise sit at zero for its full five seconds.
      */
-    const pending = useMemo(
-        () =>
-            INTRO_ROOMS.map((room) => imageAsset(room).path).filter((path) =>
-                availableImages.includes(path),
-            ),
-        [availableImages],
-    );
+    const pending = useMemo(() => {
+        const images = availableImages ?? [];
+
+        return INTRO_ROOMS.map((room) => imageAsset(room).path).filter((path) =>
+            images.includes(path),
+        );
+    }, [availableImages]);
 
     const [loaded, setLoaded] = useState(0);
     const [floorPassed, setFloorPassed] = useState(false);

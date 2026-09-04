@@ -81,7 +81,9 @@ export default function MemberDashboard({
                         <p className="mt-2 font-serif text-[28px] text-cream">
                             {stat.value}
                         </p>
-                        <p className="mt-1 text-[13px] text-sand">{stat.hint}</p>
+                        <p className="mt-1 text-[13px] text-sand">
+                            {stat.hint}
+                        </p>
                     </MemberPanel>
                 ))}
             </div>

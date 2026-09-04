@@ -3,9 +3,10 @@ import { Check, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ClubSubmitDialog } from '@/components/maison/community/sessions/club-submit-dialog';
+import { PartnerBadge } from '@/components/maison/community/partner-badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import * as clubRoutes from '@/routes/community/clubs';
 import { cn } from '@/lib/utils';
+import * as clubRoutes from '@/routes/community/clubs';
 import type { ClubCard } from '@/types/session';
 
 type ClubSearchFieldProps = {
@@ -30,7 +31,7 @@ export function ClubSearchField({
     const { t } = useTranslation();
     const { locale } = usePage().props;
     const [term, setTerm] = useState('');
-    const [results, setResults] = useState<ClubCard[]>(suggestions);
+    const [results, setResults] = useState<ClubCard[]>([]);
     const [searching, setSearching] = useState(false);
     const [searched, setSearched] = useState(false);
     const abortRef = useRef<AbortController | null>(null);
@@ -40,9 +41,6 @@ export function ClubSearchField({
 
         if (query.length < MIN_QUERY_LENGTH) {
             abortRef.current?.abort();
-            setResults(suggestions);
-            setSearching(false);
-            setSearched(false);
 
             return;
         }
@@ -77,7 +75,7 @@ export function ClubSearchField({
             window.clearTimeout(timer);
             controller.abort();
         };
-    }, [term, sport, locale, suggestions]);
+    }, [term, sport, locale]);
 
     if (selected) {
         return (
@@ -96,8 +94,10 @@ export function ClubSearchField({
 
     const query = term.trim();
     const waitingForQuery = query.length > 0 && query.length < MIN_QUERY_LENGTH;
-    const showEmptyState = searched && !searching && results.length === 0;
-    const clubs = waitingForQuery ? [] : results;
+    const belowMinLength = query.length < MIN_QUERY_LENGTH;
+    const showEmptyState =
+        !belowMinLength && searched && !searching && results.length === 0;
+    const clubs = waitingForQuery ? [] : belowMinLength ? suggestions : results;
 
     return (
         <div className="space-y-3">
@@ -113,7 +113,7 @@ export function ClubSearchField({
                     placeholder={t('Zoek club, stad of postcode...')}
                     aria-label={t('Zoek club, stad of postcode...')}
                     className={cn(
-                        'w-full border border-gold/20 bg-cream py-3.5 pr-4 pl-11 font-serif text-base text-choc outline-none transition-colors focus:border-gold2',
+                        'w-full border border-gold/20 bg-cream py-3.5 pr-4 pl-11 font-serif text-base text-choc transition-colors outline-none focus:border-gold2',
                         error && 'border-red-700/50',
                     )}
                 />
@@ -209,15 +209,5 @@ function ClubThumbnail({ club }: { club: ClubCard }) {
         >
             {club.name.slice(0, 1).toUpperCase()}
         </div>
-    );
-}
-
-function PartnerBadge() {
-    const { t } = useTranslation();
-
-    return (
-        <span className="shrink-0 border border-gold/25 bg-gold/8 px-2.5 py-1 font-sans text-[9px] tracking-[0.14em] text-gold2 uppercase">
-            {t('Partnerclub')}
-        </span>
     );
 }

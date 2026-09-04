@@ -58,12 +58,7 @@ export function ProductDetail({
                             <p className="font-sans text-[9px] tracking-[0.2em] text-stone uppercase">
                                 {edition.available} {t('Nummers nog')}{' '}
                                 {t('beschikbaar')}
-                                {deliveryLabel ? (
-                                    <>
-                                        {' '}
-                                        · {deliveryLabel}
-                                    </>
-                                ) : null}
+                                {deliveryLabel ? <> · {deliveryLabel}</> : null}
                             </p>
                         </div>
                         {product.description ? (

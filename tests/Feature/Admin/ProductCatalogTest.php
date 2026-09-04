@@ -251,6 +251,29 @@ test('staff can create a simple product with stock', function () {
         ->and(EditionPiece::query()->where('product_id', $product->id)->count())->toBe(0);
 });
 
+test('staff can set a public_at early-access window', function () {
+    $publicAt = now()->addHours(48)->startOfMinute();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.products.store'), [
+            'name' => 'Preview Cloth',
+            'slug' => 'preview-cloth',
+            'type' => ProductType::Simple->value,
+            'amount' => '45.00',
+            'stock_quantity' => 3,
+            'is_published' => true,
+            'public_at' => $publicAt->format('Y-m-d\TH:i'),
+            'grants_founding_circle' => false,
+        ])
+        ->assertRedirect();
+
+    $product = Product::query()->where('slug', 'preview-cloth')->first();
+
+    expect($product)->not->toBeNull()
+        ->and($product->isInEarlyAccess())->toBeTrue()
+        ->and($product->public_at?->equalTo($publicAt))->toBeTrue();
+});
+
 test('staff can open inventory for a limited product', function () {
     $product = Product::founding();
 

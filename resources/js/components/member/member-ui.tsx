@@ -28,10 +28,7 @@ export function MemberPageHeader({
                     {description}
                 </p>
             )}
-            <span
-                aria-hidden="true"
-                className="mt-5 block h-px w-10 bg-gold"
-            />
+            <span aria-hidden="true" className="mt-5 block h-px w-10 bg-gold" />
         </header>
     );
 }
@@ -52,6 +49,23 @@ export function MemberPanel({
         >
             {children}
         </div>
+    );
+}
+
+export function MemberEmptyState({
+    title,
+    description,
+}: {
+    title: string;
+    description: string;
+}) {
+    return (
+        <MemberPanel className="mx-auto max-w-lg text-center">
+            <p className="font-serif text-[22px] text-cream">{title}</p>
+            <p className="mt-3 text-[14px] leading-[1.8] text-sand">
+                {description}
+            </p>
+        </MemberPanel>
     );
 }
 
@@ -85,12 +99,9 @@ export function MemberStatusPill({
         <span
             className={cn(
                 'inline-flex items-center border px-2.5 py-1 font-sans text-[9px] tracking-[0.18em] uppercase',
-                tone === 'success' &&
-                    'border-gold/50 bg-gold/15 text-gold',
-                tone === 'warn' &&
-                    'border-stone/40 bg-choc text-sand',
-                tone === 'neutral' &&
-                    'border-gold/30 bg-choc/50 text-sand',
+                tone === 'success' && 'border-gold/50 bg-gold/15 text-gold',
+                tone === 'warn' && 'border-stone/40 bg-choc text-sand',
+                tone === 'neutral' && 'border-gold/30 bg-choc/50 text-sand',
             )}
         >
             {children}

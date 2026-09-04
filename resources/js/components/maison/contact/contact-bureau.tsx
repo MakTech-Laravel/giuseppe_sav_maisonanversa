@@ -1,5 +1,5 @@
-import type { LucideIcon } from 'lucide-react';
 import { usePage } from '@inertiajs/react';
+import type { LucideIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +14,10 @@ import {
 import {
     BUREAU_PANEL_IDS,
     buildBureauBubbles,
-    type BureauPanelId,
-    type SiteShared,
+} from '@/components/maison/contact/contact-data';
+import type {
+    BureauPanelId,
+    SiteShared,
 } from '@/components/maison/contact/contact-data';
 import { ContactFaq } from '@/components/maison/contact/contact-faq';
 import { Section, Wrap } from '@/components/maison/ui/section';
@@ -119,7 +121,7 @@ function BureauPanel({
     return (
         <div
             id={`bp-${id}`}
-            className="w-full animate-in fade-in slide-in-from-bottom-2 rounded-lg border border-gold/20 bg-black/18 px-7 py-7.5 duration-300"
+            className="w-full animate-in rounded-lg border border-gold/20 bg-black/18 px-7 py-7.5 duration-300 fade-in slide-in-from-bottom-2"
         >
             <h2 className="mb-2 font-serif text-[22px] font-normal text-cream">
                 {t(title)}
@@ -237,10 +239,7 @@ function BureauPanelBody({
                             'Sprekend met een Maison-specialist: een persoonlijk videogesprek over uw nummer, de afwerking, het leder en het monogram. Geen druk, geen haast — alleen advies op maat.',
                         )}
                     </p>
-                    <BureauForm
-                        kind="consult"
-                        submitLabel="Consult aanvragen"
-                    >
+                    <BureauForm kind="consult" submitLabel="Consult aanvragen">
                         <BureauFieldRow>
                             <BureauInput
                                 name="name"
@@ -315,10 +314,7 @@ function BureauPanelBody({
                             'Uw feedback vormt het huis mee. Vertel ons wat u vond — van de site tot de racket.',
                         )}
                     </p>
-                    <BureauForm
-                        kind="feedback"
-                        submitLabel="Verstuur feedback"
-                    >
+                    <BureauForm kind="feedback" submitLabel="Verstuur feedback">
                         <BureauFieldRow>
                             <BureauInput
                                 name="name"
@@ -466,7 +462,9 @@ export function ContactBureau() {
                                         name={bubble.name}
                                         sub={bubble.sub}
                                         active={openPanel === bubble.panel}
-                                        onClick={() => togglePanel(bubble.panel)}
+                                        onClick={() =>
+                                            togglePanel(bubble.panel)
+                                        }
                                     />
                                 )}
                             </div>

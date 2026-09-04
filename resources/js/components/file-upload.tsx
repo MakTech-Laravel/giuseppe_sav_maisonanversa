@@ -338,9 +338,7 @@ function matchesAccept(file: File, accept?: string): boolean {
 
     const name = file.name.toLowerCase();
     const mime = file.type.toLowerCase();
-    const extension = name.includes('.')
-        ? `.${name.split('.').pop()}`
-        : '';
+    const extension = name.includes('.') ? `.${name.split('.').pop()}` : '';
 
     return tokens.some((token) => {
         if (token.startsWith('.')) {
@@ -354,9 +352,14 @@ function matchesAccept(file: File, accept?: string): boolean {
 
             // Empty MIME: allow common image extensions for image/*.
             if (!mime && token === 'image/*') {
-                return ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif'].includes(
-                    extension,
-                );
+                return [
+                    '.png',
+                    '.jpg',
+                    '.jpeg',
+                    '.webp',
+                    '.gif',
+                    '.avif',
+                ].includes(extension);
             }
 
             return false;

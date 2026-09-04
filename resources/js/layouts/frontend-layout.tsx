@@ -1,9 +1,10 @@
 import { usePage } from '@inertiajs/react';
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
+import { CookieConsentBanner } from '@/components/maison/cookie-consent-banner';
 import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
 import type { AuthView } from '@/components/maison/modals/auth-modal';
 import { MaisonModals } from '@/components/maison/modals/maison-modals';
@@ -17,7 +18,6 @@ import type {
 import { SiteFooter } from '@/components/maison/shell/site-footer';
 import { SiteNav } from '@/components/maison/shell/site-nav';
 import { SiteTopbar } from '@/components/maison/shell/site-topbar';
-import { CookieConsentBanner } from '@/components/maison/cookie-consent-banner';
 import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
 import { activePage } from '@/lib/maison-navigation';
@@ -69,7 +69,9 @@ function authPromptKey(
 
 export default function FrontendLayout({ children }: { children: ReactNode }) {
     const main = useRef<HTMLElement>(null);
-    const { url, props } = usePage<PageProps & { checkout: OrderProductContext }>();
+    const { url, props } = usePage<
+        PageProps & { checkout: OrderProductContext }
+    >();
     const { locale } = useLocale();
     const { t } = useTranslation();
     const [userModal, setUserModal] = useState<ModalKind>(null);
@@ -92,13 +94,11 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         dismissedAuthPromptKey !== currentAuthPromptKey;
     const modal = userModal ?? (autoOpenAuth ? 'auth' : null);
     const authView =
-        userModal === 'auth'
-            ? userAuthView
-            : (promptedAuthView ?? 'login');
+        userModal === 'auth' ? userAuthView : (promptedAuthView ?? 'login');
 
     useReveal(main);
 
-    const requireAuthForCheckout = (): boolean => {
+    const requireAuthForCheckout = useCallback((): boolean => {
         if (props.auth?.user) {
             return true;
         }
@@ -107,7 +107,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         setUserModal('auth');
 
         return false;
-    };
+    }, [props.auth?.user]);
 
     const actions = useMemo<ShellActions>(
         () => ({
@@ -145,7 +145,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 setUserModal('auth');
             },
         }),
-        [props.auth?.user, props.checkout],
+        [props.checkout, requireAuthForCheckout],
     );
 
     function closeModal(): void {

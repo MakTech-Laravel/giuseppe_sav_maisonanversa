@@ -4,6 +4,7 @@ export type FeedComment = {
     initials: string;
     body: string;
     info: string;
+    editionNumber: string | null;
 };
 
 export type FeedPostData = {
@@ -15,6 +16,7 @@ export type FeedPostData = {
     avatarBg?: string;
     name: string;
     info: string;
+    editionNumber: string | null;
     badge: string;
     badgeOfficial?: boolean;
     content: string;

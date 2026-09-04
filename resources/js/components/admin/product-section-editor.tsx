@@ -26,10 +26,8 @@ const ITEM_FIELD_LABELS: Record<string, string> = {
 };
 
 const ADMIN_ICON_PICKER_CLASS_NAMES = {
-    dialogContent:
-        'admin-kit border-border bg-background text-foreground',
-    sheetContent:
-        'admin-kit border-border bg-background text-foreground',
+    dialogContent: 'admin-kit border-border bg-background text-foreground',
+    sheetContent: 'admin-kit border-border bg-background text-foreground',
 };
 
 function ItemFields({
@@ -150,9 +148,7 @@ export function ProductSectionEditor({
     const [open, setOpen] = useState(false);
 
     const showStoredImage =
-        Boolean(storedExistingImage) &&
-        !section.image &&
-        !section.remove_image;
+        Boolean(storedExistingImage) && !section.image && !section.remove_image;
 
     const existingImageFiles: ExistingFile[] = showStoredImage
         ? [
@@ -249,11 +245,15 @@ export function ProductSectionEditor({
                     {entry.uses_heading ? (
                         <div className="grid gap-4 md:grid-cols-2">
                             <div className="grid gap-1.5">
-                                <Label className="text-xs">{t('Eyebrow')}</Label>
+                                <Label className="text-xs">
+                                    {t('Eyebrow')}
+                                </Label>
                                 <Input
                                     value={section.eyebrow}
                                     onChange={(event) =>
-                                        onChange({ eyebrow: event.target.value })
+                                        onChange({
+                                            eyebrow: event.target.value,
+                                        })
                                     }
                                 />
                             </div>
@@ -262,7 +262,9 @@ export function ProductSectionEditor({
                                 <Input
                                     value={section.heading}
                                     onChange={(event) =>
-                                        onChange({ heading: event.target.value })
+                                        onChange({
+                                            heading: event.target.value,
+                                        })
                                     }
                                 />
                             </div>
@@ -291,7 +293,8 @@ export function ProductSectionEditor({
                                         onChange={(file) => {
                                             onChange({
                                                 image:
-                                                    (file as File | null) ?? null,
+                                                    (file as File | null) ??
+                                                    null,
                                                 remove_image: false,
                                             });
                                         }}
