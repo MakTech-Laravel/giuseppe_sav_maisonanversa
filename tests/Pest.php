@@ -9,7 +9,6 @@ use Database\Seeders\EditionPieceSeeder;
 use Database\Seeders\FaqSeeder;
 use Database\Seeders\JournalArticleSeeder;
 use Database\Seeders\LegalPageSeeder;
-use Database\Seeders\PartnerClubSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\SeoMetaSeeder;
 use Database\Seeders\SiteSettingSeeder;
@@ -38,7 +37,6 @@ pest()->extend(TestCase::class)
             SiteSettingSeeder::class,
             FaqSeeder::class,
             DressingItemSeeder::class,
-            PartnerClubSeeder::class,
             LegalPageSeeder::class,
             SeoMetaSeeder::class,
         ]);

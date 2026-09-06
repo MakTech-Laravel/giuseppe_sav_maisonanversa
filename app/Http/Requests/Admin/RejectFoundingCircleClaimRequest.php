@@ -4,9 +4,8 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class TranslateCommunityCourtRequest extends FormRequest
+class RejectFoundingCircleClaimRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,12 +18,7 @@ class TranslateCommunityCourtRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'target_locale' => [
-                'sometimes',
-                'nullable',
-                'string',
-                Rule::in(config('maison.locales')),
-            ],
+            'admin_note' => ['nullable', 'string', 'max:1000'],
         ];
     }
 }

@@ -1,7 +1,10 @@
 <?php
 
+use App\Enums\ClubStatus;
+use App\Enums\CornerPipelineStatus;
 use App\Enums\RoleEnum;
-use App\Models\CommunityCourt;
+use App\Enums\SessionSport;
+use App\Models\Club;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -15,162 +18,118 @@ beforeEach(function () {
     $this->admin->syncTypeFromRoles();
 });
 
-test('staff can create a community court', function () {
+test('staff can create a club with corner attributes', function () {
+    fakeDeepLTranslations();
+
     $this->actingAs($this->admin)
-        ->post(route('admin.courts.store', ['locale' => 'nl']), [
-            'title' => 'Club Corner Antwerp',
-            'body' => 'Founding club',
-            'location' => 'Antwerpen',
+        ->post(route('admin.clubs.store', ['locale' => 'nl']), [
+            'name' => 'Club Corner Antwerp',
+            'sports' => [SessionSport::Padel->value],
+            'city' => 'Antwerpen',
+            'status' => ClubStatus::Approved->value,
+            'is_session_venue' => false,
+            'has_corner' => true,
+            'corner_published' => true,
+            'corner_title' => 'Club Corner Antwerp',
+            'corner_body' => 'Founding club',
+            'corner_location' => 'Antwerpen',
             'lat' => 51.2194,
             'lng' => 4.4025,
             'sort_order' => 1,
-            'is_published' => true,
+            'show_on_corner_page' => true,
+            'corner_pipeline_status' => CornerPipelineStatus::Open->value,
         ])
         ->assertRedirect();
 
-    expect(CommunityCourt::query()->where('title', 'Club Corner Antwerp')->exists())->toBeTrue();
+    $club = Club::query()->where('name', 'Club Corner Antwerp')->first();
+
+    expect($club)->not->toBeNull()
+        ->and($club->has_corner)->toBeTrue()
+        ->and($club->corner_published)->toBeTrue()
+        ->and($club->show_on_corner_page)->toBeTrue()
+        ->and($club->corner_title)->toBe('Club Corner Antwerp')
+        ->and($club->is_session_venue)->toBeFalse();
 });
 
-test('staff can update a community court', function () {
-    $court = CommunityCourt::factory()->create(['title' => 'Old Corner']);
+test('staff can update club corner fields', function () {
+    fakeDeepLTranslations();
+
+    $club = Club::factory()->publishedCorner()->create([
+        'name' => 'Old Corner',
+        'corner_title' => 'Old Corner',
+    ]);
 
     $this->actingAs($this->admin)
-        ->put(route('admin.courts.update', ['locale' => 'nl', 'court' => $court->id]), [
-            'title' => 'New Corner',
-            'body' => 'Updated',
-            'location' => 'Brussel',
+        ->put(route('admin.clubs.update', ['locale' => 'nl', 'club' => $club->id]), [
+            'name' => 'New Corner',
+            'sports' => [SessionSport::Padel->value],
+            'city' => 'Brussel',
+            'status' => ClubStatus::Approved->value,
+            'is_session_venue' => true,
+            'has_corner' => true,
+            'corner_published' => true,
+            'corner_title' => 'New Corner',
+            'corner_body' => 'Updated',
+            'corner_location' => 'Brussel',
             'lat' => 50.85,
             'lng' => 4.35,
             'sort_order' => 2,
-            'is_published' => true,
         ])
         ->assertRedirect();
 
-    expect($court->fresh()->title)->toBe('New Corner')
-        ->and($court->fresh()->location)->toBe('Brussel');
+    expect($club->fresh()->name)->toBe('New Corner')
+        ->and($club->fresh()->corner_location)->toBe('Brussel')
+        ->and($club->fresh()->corner_title)->toBe('New Corner');
 });
 
-test('staff can delete a community court', function () {
-    $court = CommunityCourt::factory()->create();
+test('staff can filter clubs by corner flag', function () {
+    Club::factory()->publishedCorner()->create(['name' => 'Heritage Court']);
+    Club::factory()->create(['name' => 'Plain Club', 'has_corner' => false]);
 
     $this->actingAs($this->admin)
-        ->delete(route('admin.courts.destroy', ['locale' => 'nl', 'court' => $court->id]))
-        ->assertRedirect(route('admin.courts.index', ['locale' => 'nl']));
-
-    expect(CommunityCourt::query()->whereKey($court->id)->exists())->toBeFalse();
-});
-
-test('courts index returns paginated courts with filters', function () {
-    CommunityCourt::factory()->create([
-        'title' => 'Heritage Court',
-        'location' => 'Antwerpen',
-        'is_published' => true,
-    ]);
-
-    CommunityCourt::factory()->create([
-        'title' => 'Draft Court',
-        'location' => 'Gent',
-        'is_published' => false,
-    ]);
-
-    $this->actingAs($this->admin)
-        ->get(route('admin.courts.index', [
+        ->get(route('admin.clubs.index', [
             'locale' => 'nl',
-            'search' => 'Heritage',
-            'status' => 'published',
+            'flag' => 'corner',
         ]))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('admin/courts/index')
-            ->has('courts.data', 1)
-            ->where('courts.data.0.title', 'Heritage Court')
-            ->where('courts.data.0.is_published', true)
-            ->where('filters.search', 'Heritage')
-            ->where('filters.status', 'published')
+            ->component('admin/clubs/index')
+            ->has('clubs.data', 1)
+            ->where('clubs.data.0.name', 'Heritage Court')
         );
 });
 
-test('court show exposes stored translation bundle and locale preview', function () {
+test('staff can update club corner translations', function () {
     fakeDeepLTranslations();
 
-    $court = CommunityCourt::factory()->create([
-        'title' => 'Padel Antwerpen',
-        'body' => 'Founding club',
-        'location' => 'Antwerpen',
+    $club = Club::factory()->publishedCorner()->create([
+        'corner_title' => 'Club Corner Antwerp',
+        'corner_body' => 'Founding',
+        'corner_location' => 'Antwerpen',
     ]);
 
     $this->actingAs($this->admin)
-        ->get(route('admin.courts.show', ['locale' => 'en', 'court' => $court->id]))
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->where('court.title', 'EN Padel Antwerpen')
-            ->where('court.body', 'EN Founding club')
-            ->where('court.location', 'EN Antwerpen')
-            ->where('translations.en.title', 'EN Padel Antwerpen')
-            ->where('translations.en.body', 'EN Founding club')
-            ->where('translations.fr.location', 'FR Antwerpen')
-            ->has('locales', 3)
-            ->has('translationStatus')
-        );
-});
-
-test('staff can update court translations manually', function () {
-    $court = CommunityCourt::factory()->create([
-        'title' => 'Bron titel',
-        'body' => 'Bron body',
-        'location' => 'Antwerpen',
-    ]);
-
-    $this->actingAs($this->admin)
-        ->put(route('admin.courts.translations.update', ['locale' => 'nl', 'court' => $court->id]), [
-            'nl' => ['title' => 'NL titel', 'body' => 'NL body', 'location' => 'NL loc'],
-            'en' => ['title' => 'EN title', 'body' => 'EN body', 'location' => 'EN loc'],
-            'fr' => ['title' => 'FR titre', 'body' => 'FR body', 'location' => 'FR loc'],
-        ])
-        ->assertRedirect(route('admin.courts.show', ['locale' => 'nl', 'court' => $court->id]));
-
-    expect($court->fresh()->translated('title', 'en'))->toBe('EN title');
-});
-
-test('staff can queue court retranslation', function () {
-    fakeDeepLTranslations();
-
-    $court = CommunityCourt::factory()->create([
-        'title' => 'Padel Antwerpen',
-        'body' => 'Founding club',
-        'location' => 'Antwerpen',
-    ]);
-
-    $court->translations()->delete();
-
-    $this->actingAs($this->admin)
-        ->post(route('admin.courts.translate', ['locale' => 'nl', 'court' => $court->id]), [
-            'target_locale' => 'en',
+        ->put(route('admin.clubs.translations.update', ['locale' => 'nl', 'club' => $club->id]), [
+            'nl' => [
+                'corner_title' => 'NL Club Corner Antwerp',
+                'corner_body' => 'NL Founding',
+                'corner_location' => 'NL Antwerpen',
+            ],
+            'en' => [
+                'corner_title' => 'EN Club Corner Antwerp',
+                'corner_body' => 'EN Founding',
+                'corner_location' => 'EN Antwerpen',
+            ],
+            'fr' => [
+                'corner_title' => 'FR Club Corner Antwerp',
+                'corner_body' => 'FR Founding',
+                'corner_location' => 'FR Antwerpen',
+            ],
         ])
         ->assertRedirect();
 
-    expect($court->fresh()->translated('title', 'en'))->toBe('EN Padel Antwerpen')
-        ->and($court->fresh()->translated('body', 'en'))->toBe('EN Founding club');
-});
+    $club->refresh()->load('translations');
 
-test('creating a court stores translations immediately', function () {
-    fakeDeepLTranslations();
-
-    $this->actingAs($this->admin)
-        ->post(route('admin.courts.store', ['locale' => 'nl']), [
-            'title' => 'Club Corner Antwerp',
-            'body' => 'Founding club',
-            'location' => 'Antwerpen',
-            'lat' => 51.2194,
-            'lng' => 4.4025,
-            'sort_order' => 1,
-            'is_published' => true,
-        ])
-        ->assertRedirect();
-
-    $court = CommunityCourt::query()->where('title', 'Club Corner Antwerp')->first();
-
-    expect($court)->not->toBeNull()
-        ->and($court->translations()->count())->toBe(9)
-        ->and($court->translated('title', 'en'))->toBe('EN Club Corner Antwerp');
+    expect($club->translated('corner_title', 'en'))->toBe('EN Club Corner Antwerp')
+        ->and($club->translated('corner_body', 'fr'))->toBe('FR Founding');
 });

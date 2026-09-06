@@ -104,15 +104,17 @@ test('community tabs are url based links', function () {
     $layoutSource = File::get(resource_path('js/components/maison/community/community-layout.tsx'));
 
     expect($tabsSource)
-        ->toContain("query: { tab: 'courts' }")
+        ->toContain('clubRoutes.index')
         ->toContain('sessionRoutes.index')
         ->toContain('eventRoutes.index')
         ->toContain('aria-selected')
         ->not->toContain('onTabChange')
-        ->not->toContain('switchCommTab');
+        ->not->toContain('switchCommTab')
+        ->not->toContain("tab: 'courts'");
 
     expect($layoutSource)
-        ->toContain('tab === \'courts\'')
+        ->toContain('CommunityFeed')
+        ->not->toContain('CommunityCourts')
         ->not->toContain('useState');
 });
 

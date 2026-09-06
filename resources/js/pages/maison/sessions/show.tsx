@@ -2,6 +2,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarDays, Clock, Gauge, Timer, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { CommunityTabs } from '@/components/maison/community/community-tabs';
+import { PartnerBadge } from '@/components/maison/community/partner-badge';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
@@ -94,9 +95,7 @@ export default function SessionShow({ session }: SessionShowProps) {
 
                         <div className="flex flex-wrap gap-3 border-b border-gold/15 px-7 py-5">
                             <Pill label={t(session.court_status_label)} />
-                            {session.club?.is_partner && (
-                                <Pill label={t('Partnerclub')} accent />
-                            )}
+                            {session.club?.is_partner && <PartnerBadge />}
                             {session.is_cancelled && (
                                 <Pill label={t('Geannuleerd')} />
                             )}

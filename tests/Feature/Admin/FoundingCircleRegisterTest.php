@@ -2,10 +2,12 @@
 
 use App\Enums\OrderStatus;
 use App\Enums\RoleEnum;
+use App\Models\FoundingCircleClaim;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Checkout\OrderFulfillment;
+use App\Services\FoundingCircle\FoundingCircleClaimService;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -18,7 +20,7 @@ beforeEach(function () {
     $this->admin->syncTypeFromRoles();
 });
 
-test('paying for a founding-circle product writes a permanent register entry', function () {
+test('paying for a founding-circle product creates a pending claim without a register entry', function () {
     $user = User::factory()->create();
     $order = Order::factory()->forUser($user)->create([
         'status' => OrderStatus::Incomplete,
@@ -33,15 +35,11 @@ test('paying for a founding-circle product writes a permanent register entry', f
 
     app(OrderFulfillment::class)->markPaidFromSession($session);
 
-    $entry = FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->first();
-
-    expect($entry)->not->toBeNull()
-        ->and($entry->name)->toBe($user->name)
-        ->and($entry->edition_number)->toBe($order->fresh()->edition_number)
-        ->and($entry->product_id)->toBe($order->product_id);
+    expect(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeFalse()
+        ->and(FoundingCircleClaim::query()->where('order_id', $order->id)->exists())->toBeTrue();
 });
 
-test('the register survives role removal and refund', function () {
+test('the register survives role removal and refund after approval', function () {
     $user = User::factory()->create();
     $order = Order::factory()->forUser($user)->create([
         'status' => OrderStatus::Incomplete,
@@ -56,6 +54,9 @@ test('the register survives role removal and refund', function () {
 
     $fulfillment = app(OrderFulfillment::class);
     $fulfillment->markPaidFromSession($session);
+
+    $claim = FoundingCircleClaim::query()->where('order_id', $order->id)->firstOrFail();
+    app(FoundingCircleClaimService::class)->approve($claim, $this->admin);
 
     expect(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->count())->toBe(1);
 

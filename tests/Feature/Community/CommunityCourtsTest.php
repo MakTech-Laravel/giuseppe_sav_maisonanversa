@@ -1,25 +1,24 @@
 <?php
 
-use App\Models\CommunityCourt;
+use App\Models\Club;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
-test('authenticated members receive published courts on the community page', function () {
+test('authenticated members receive published club corners on the community page', function () {
     $user = User::factory()->create();
 
-    CommunityCourt::factory()->create([
-        'title' => 'Padel Club Antwerpen',
-        'body' => 'Founding Club Corner',
-        'location' => 'Antwerpen, België',
-        'lat' => 51.2194,
-        'lng' => 4.4025,
-        'is_published' => true,
-        'sort_order' => 0,
+    Club::factory()->publishedCorner()->create([
+        'name' => 'Padel Club Antwerpen',
+        'corner_title' => 'Padel Club Antwerpen',
+        'corner_body' => 'Founding Club Corner',
+        'corner_location' => 'Antwerpen, België',
     ]);
 
-    CommunityCourt::factory()->unpublished()->create([
-        'title' => 'Hidden Court',
-        'is_published' => false,
+    Club::factory()->create([
+        'name' => 'Hidden Court',
+        'has_corner' => true,
+        'corner_published' => false,
+        'corner_title' => 'Hidden Court',
     ]);
 
     $this->actingAs($user)
@@ -36,12 +35,12 @@ test('authenticated members receive published courts on the community page', fun
         );
 });
 
-test('courts without coordinates are marked coming soon', function () {
+test('club corners without coordinates are marked coming soon', function () {
     $user = User::factory()->create();
 
-    CommunityCourt::factory()->comingSoon()->create([
-        'title' => 'Amsterdam Padel Club',
-        'is_published' => true,
+    Club::factory()->comingSoonCorner()->create([
+        'name' => 'Amsterdam Padel Club',
+        'corner_title' => 'Amsterdam Padel Club',
     ]);
 
     $this->actingAs($user)
@@ -54,18 +53,16 @@ test('courts without coordinates are marked coming soon', function () {
         );
 });
 
-test('community courts are translated for the request locale', function () {
+test('community club corners are translated for the request locale', function () {
     fakeDeepLTranslations();
 
     $user = User::factory()->create();
 
-    CommunityCourt::factory()->create([
-        'title' => 'Padel Club Antwerpen',
-        'body' => 'Founding Club Corner',
-        'location' => 'Antwerpen, België',
-        'lat' => 51.2194,
-        'lng' => 4.4025,
-        'is_published' => true,
+    Club::factory()->publishedCorner()->create([
+        'name' => 'Padel Club Antwerpen',
+        'corner_title' => 'Padel Club Antwerpen',
+        'corner_body' => 'Founding Club Corner',
+        'corner_location' => 'Antwerpen, België',
     ]);
 
     $this->actingAs($user)
@@ -79,7 +76,7 @@ test('community courts are translated for the request locale', function () {
 });
 
 test('guests do not receive courts props', function () {
-    CommunityCourt::factory()->create(['is_published' => true]);
+    Club::factory()->publishedCorner()->create();
 
     $this->get(route('maison.community', ['locale' => 'nl']))
         ->assertOk()

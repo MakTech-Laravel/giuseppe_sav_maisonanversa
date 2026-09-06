@@ -1,6 +1,7 @@
 import { CalendarDays, Clock, Gauge, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
+import { PartnerBadge } from '@/components/maison/community/partner-badge';
 import {
     formatDuration,
     formatSessionDate,
@@ -64,11 +65,7 @@ export function SessionDraftPreview({
                 {club?.name ?? t('Kies een club of corner.')}
             </h3>
 
-            {club?.is_partner && (
-                <span className="mt-2 inline-flex border border-gold/25 bg-gold/8 px-2.5 py-1 font-sans text-[9px] tracking-[0.16em] text-gold2 uppercase">
-                    {t('Partnerclub')}
-                </span>
-            )}
+            {club?.is_partner && <PartnerBadge className="mt-2" />}
 
             <div className="mt-5 flex flex-col gap-2 font-sans text-[11px] tracking-[0.08em] text-stone">
                 <span className="inline-flex items-center gap-1.5">

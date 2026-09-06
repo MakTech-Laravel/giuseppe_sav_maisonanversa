@@ -6,4 +6,4 @@ paths:
 # Maison Community
 
 ## Community tabs are URL-based
-Feed, Club Corners, Sessions, and Events must be Inertia Links, not local tab state. Club Corners is maison.community?tab=courts. Session and event pages reuse CommunityTabs instead of breadcrumbs. Do not reintroduce useState tab switching on the community layout. Stack CommunityTabs and SessionTabs vertically below md (`flex-col`); keep the horizontal row on md+ (`md:flex-row`).
+Feed, Clubs, Sessions, and Events must be Inertia Links, not local tab state. Clubs live at `community.clubs.index`. Session and event pages reuse CommunityTabs instead of breadcrumbs. Do not reintroduce useState tab switching on the community layout. Stack CommunityTabs and SessionTabs vertically below md (`flex-col`); keep the horizontal row on md+ (`md:flex-row`).
