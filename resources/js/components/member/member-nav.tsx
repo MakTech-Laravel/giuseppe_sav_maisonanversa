@@ -80,8 +80,8 @@ export function MemberNav() {
         { label: t('Dashboard'), href: `/${locale}/member`, exact: true },
         { label: t('Bestellingen'), href: `/${locale}/member/orders` },
         {
-            label: t('Founding Circle'),
-            href: `/${locale}/member/circle`,
+            label: t('Racketregistratie'),
+            href: `/${locale}/member/racket-registration`,
         },
         {
             label: t('Lidpaspoort'),
@@ -89,6 +89,10 @@ export function MemberNav() {
         },
         ...(isFoundingCircle
             ? [
+                  {
+                      label: t('Founding Circle'),
+                      href: `/${locale}/member/circle`,
+                  },
                   {
                       label: t('Mijn Heritage'),
                       href: `/${locale}/member/heritage`,

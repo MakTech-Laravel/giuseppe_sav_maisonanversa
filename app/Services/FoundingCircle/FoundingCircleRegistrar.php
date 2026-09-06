@@ -16,15 +16,19 @@ use App\Models\User;
  */
 class FoundingCircleRegistrar
 {
-    public function register(User $user, ?Order $order = null): FoundingCircleRegisterEntry
-    {
+    public function register(
+        User $user,
+        ?Order $order = null,
+        ?int $editionNumber = null,
+        ?int $productId = null,
+    ): FoundingCircleRegisterEntry {
         return FoundingCircleRegisterEntry::query()->firstOrCreate(
             ['user_id' => $user->id],
             [
-                'product_id' => $order?->product_id,
+                'product_id' => $order?->product_id ?? $productId,
                 'order_id' => $order?->id,
                 'name' => $user->name,
-                'edition_number' => $order?->edition_number,
+                'edition_number' => $order?->edition_number ?? $editionNumber,
                 'joined_at' => now(),
             ],
         );

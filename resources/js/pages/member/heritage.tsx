@@ -60,7 +60,7 @@ export default function MemberHeritage({
                         {t('Status')}
                     </p>
                     <p className="mt-2 font-serif text-[28px] text-cream">
-                        {heritage.status}
+                        {t(heritage.status)}
                     </p>
                     <p className="mt-3 text-[14px] text-sand">
                         {t('Leveringsvenster · {{window}}', {

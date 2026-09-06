@@ -31,9 +31,10 @@ class MemberPassportPresenter
     public function forUser(User $user, string $locale): array
     {
         $heritageOrder = $this->heritage->heritageOrder($user);
+        $approvedClaim = $this->heritage->approvedClaim($user);
         $editionNumber = $heritageOrder?->edition_number !== null
             ? str_pad((string) $heritageOrder->edition_number, 3, '0', STR_PAD_LEFT)
-            : null;
+            : ($approvedClaim !== null ? $approvedClaim->paddedEditionNumber() : null);
 
         $upcomingSessions = SessionFeed::mine($user)
             ->limit(5)
@@ -51,7 +52,7 @@ class MemberPassportPresenter
                     : __('Lid'),
                 'edition_number' => $editionNumber,
             ],
-            'badges' => $this->badges($user, $heritageOrder !== null && $editionNumber !== null),
+            'badges' => $this->badges($user, $editionNumber !== null),
             'sessions' => [
                 'upcoming' => SessionFeed::present($upcomingSessions, $user, $locale),
                 'hosted_count' => CommunitySession::query()
