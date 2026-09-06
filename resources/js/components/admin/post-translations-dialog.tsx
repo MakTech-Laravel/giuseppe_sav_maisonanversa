@@ -1,8 +1,9 @@
 import { router, useForm } from '@inertiajs/react';
 import { Languages, Loader2, RefreshCw, TriangleAlert } from 'lucide-react';
 import type { FormEvent } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import InputError from '@/components/input-error';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +15,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import InputError from '@/components/input-error';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
@@ -60,6 +60,7 @@ export function PostTranslationsDialog({
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const [open, setOpen] = useState(false);
+    const [wasOpen, setWasOpen] = useState(false);
     const [translating, setTranslating] = useState(false);
     const [activeLocale, setActiveLocale] = useState<PostLocale>('nl');
 
@@ -71,14 +72,17 @@ export function PostTranslationsDialog({
         initialFormData(translations),
     );
 
-    useEffect(() => {
-        if (! open) {
-            return;
-        }
+    // Reset the form to the latest translations each time the dialog opens.
+    // Adjusted during render rather than in an effect — see
+    // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+    if (open !== wasOpen) {
+        setWasOpen(open);
 
-        setActiveLocale((locales[0] as PostLocale | undefined) ?? 'nl');
-        form.setData(initialFormData(translations));
-    }, [open, postId, translations, locales]);
+        if (open) {
+            setActiveLocale((locales[0] as PostLocale | undefined) ?? 'nl');
+            form.setData(initialFormData(translations));
+        }
+    }
 
     function submit(event: FormEvent) {
         event.preventDefault();
@@ -106,7 +110,7 @@ export function PostTranslationsDialog({
     const hasPendingTranslations = locales.some((code) => {
         const status = translationStatus[code];
 
-        return ! status?.content;
+        return !status?.content;
     });
 
     return (

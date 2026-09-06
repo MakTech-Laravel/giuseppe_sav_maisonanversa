@@ -2,6 +2,7 @@
 paths:
   - 'app/Models/*.php'
   - app/Models/Inquiry.php
+  - app/Models/Product.php
 ---
 
 # Models
@@ -26,3 +27,12 @@ Product SEO columns stay empty when unset. Do not copy name, description, or gal
 
 ## Inquiries are not DeepL-translated
 Contact booking, consult, and feedback share the Inquiry model. Do not add TranslatesWithDeepL. Store a stable Dutch subject from InquiryType, not the translated heading. Cap is 2 submissions per type per 24 hours, matching IP or device cookie or user_id.
+
+## Product public_at is Founding Circle early access
+Nullable products.public_at is the public release timestamp. Published products with a future public_at are storefront-visible and checkoutable only via Product::visibleTo() / isVisibleTo() for Founding Circle members and staff. Null public_at means published equals public. Do not treat is_published alone as the storefront gate.
+
+## Founding Circle inquiries carry a 12h SLA
+Contact and corner inquiries from users with the founding-circle role set Inquiry.priority. slaDueAt() is created_at plus Inquiry::SLA_HOURS (12). isSlaBreached() is true only while unseen and past due. Admin inbox sorts priority first and shows the countdown badge.
+
+## Product public_at is early access
+Nullable products.public_at is the public release time. Until then, published products are visible and buyable only through Product::visibleTo / isVisibleTo for Founding Circle members and staff. Null public_at keeps published equal to public.

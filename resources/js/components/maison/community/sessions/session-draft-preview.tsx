@@ -110,6 +110,8 @@ function labelFor(
     options: { value: string | number; label: string }[],
     value: string | number,
 ): string {
-    return options.find((option) => String(option.value) === String(value))
-        ?.label ?? String(value);
+    return (
+        options.find((option) => String(option.value) === String(value))
+            ?.label ?? String(value)
+    );
 }

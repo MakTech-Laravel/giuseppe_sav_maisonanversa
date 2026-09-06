@@ -211,7 +211,16 @@ test('the member nav includes the client feedback sections', function () {
 
     expect($source)
         ->not->toContain('My Heritage')
-        ->not->toContain('Passport');
+        ->not->toContain("'Passport'");
+});
+
+test('the member nav shows Heritage and Passport links only for Founding Circle members', function () {
+    $source = file_get_contents(resource_path('js/components/member/member-nav.tsx'));
+
+    expect($source)
+        ->toContain("t('Mijn Heritage')")
+        ->toContain("t('Digitaal Heritage Passport')")
+        ->toContain('isFoundingCircle');
 });
 
 test('member dashboard demo payloads are translated for english', function () {

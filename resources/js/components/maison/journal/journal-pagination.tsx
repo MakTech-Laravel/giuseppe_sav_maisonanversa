@@ -15,7 +15,10 @@ export function JournalPagination({
         return null;
     }
 
-    const pages = Array.from({ length: articles.last_page }, (_, index) => index + 1);
+    const pages = Array.from(
+        { length: articles.last_page },
+        (_, index) => index + 1,
+    );
 
     return (
         <nav
@@ -105,7 +108,10 @@ function PageNumber({
         <Link
             href={href}
             preserveScroll
-            className={cn(classes, 'text-choc3 transition-colors hover:text-gold')}
+            className={cn(
+                classes,
+                'text-choc3 transition-colors hover:text-gold',
+            )}
         >
             {label}
         </Link>

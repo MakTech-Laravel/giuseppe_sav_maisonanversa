@@ -46,7 +46,9 @@ function CraftImage({ src, alt }: { src: string | null; alt: string }) {
     }
 
     const assetKey =
-        src && src in IMAGE_ASSETS ? (src as ImageAssetName) : 'atelier-workshop';
+        src && src in IMAGE_ASSETS
+            ? (src as ImageAssetName)
+            : 'atelier-workshop';
 
     return (
         <PlaceholderImage
@@ -81,7 +83,7 @@ export function ProductCraft({ section }: { section?: ProductSection }) {
                     ) : null}
                     <GoldRule />
                     {section?.heading || section?.subheading ? (
-                        <h2 className="mb-5.5 max-w-full wrap-break-word font-serif text-[clamp(26px,7.2vw,46px)] leading-[1.15] font-normal tracking-[0.02em] uppercase md:tracking-[0.03em]">
+                        <h2 className="mb-5.5 max-w-full font-serif text-[clamp(26px,7.2vw,46px)] leading-[1.15] font-normal tracking-[0.02em] wrap-break-word uppercase md:tracking-[0.03em]">
                             {section.heading}
                             {section.subheading ? (
                                 <>

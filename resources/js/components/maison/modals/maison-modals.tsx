@@ -42,7 +42,11 @@ export function MaisonModals({
                 <EditionPickerModal
                     product={orderProduct}
                     onClose={onClose}
-                    onSelect={({ editionPieceId, editionNumber, editionLabel }) =>
+                    onSelect={({
+                        editionPieceId,
+                        editionNumber,
+                        editionLabel,
+                    }) =>
                         onEditionSelected({
                             ...orderProduct,
                             editionPieceId,

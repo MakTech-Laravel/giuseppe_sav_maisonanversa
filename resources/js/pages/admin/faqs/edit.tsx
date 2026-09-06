@@ -7,8 +7,8 @@ import { AdminResourceShell } from '@/components/admin/admin-resource-shell';
 import {
     FaqFormAside,
     FaqFormFields,
-    type FaqContextOption,
 } from '@/components/admin/faq-form-fields';
+import type { FaqContextOption } from '@/components/admin/faq-form-fields';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';

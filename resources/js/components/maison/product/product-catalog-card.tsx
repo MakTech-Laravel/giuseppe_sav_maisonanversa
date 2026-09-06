@@ -74,7 +74,10 @@ export function ProductCatalogCard({ product }: { product: ProductCardData }) {
                 className="group block h-full border border-gold/10 bg-white/3 transition-colors hover:border-gold/25 hover:bg-gold/5"
             >
                 <div className="relative aspect-square overflow-hidden bg-choc2">
-                    <ProductCover src={product.cover_asset} alt={product.name} />
+                    <ProductCover
+                        src={product.cover_asset}
+                        alt={product.name}
+                    />
                     <span className="absolute top-2 left-2 rounded-full bg-choc/80 px-2 py-1 font-sans text-[8px] tracking-[0.18em] text-gold uppercase">
                         {statusLabel(t, product.status)}
                     </span>

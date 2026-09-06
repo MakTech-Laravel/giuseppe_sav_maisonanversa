@@ -53,7 +53,7 @@ class MaisonController extends Controller
         $filters = $this->productCatalogFilters($request);
 
         $products = Product::query()
-            ->where('is_published', true)
+            ->visibleTo($request->user())
             ->when($filters['search'] !== '', function ($query) use ($filters): void {
                 $search = $filters['search'];
                 $query->where(function ($inner) use ($search): void {
@@ -86,12 +86,12 @@ class MaisonController extends Controller
         ]);
     }
 
-    public function productShow(string $locale, Product $product): Response
+    public function productShow(Request $request, string $locale, Product $product): Response
     {
-        abort_unless($product->is_published, 404);
+        abort_unless($product->isVisibleTo($request->user()), 404);
 
         $related = Product::query()
-            ->where('is_published', true)
+            ->visibleTo($request->user())
             ->where('id', '!=', $product->id)
             ->where('type', $product->type)
             ->orderBy('sort_order')
@@ -101,7 +101,7 @@ class MaisonController extends Controller
 
         if ($related->isEmpty()) {
             $related = Product::query()
-                ->where('is_published', true)
+                ->visibleTo($request->user())
                 ->where('id', '!=', $product->id)
                 ->orderBy('sort_order')
                 ->orderBy('id')

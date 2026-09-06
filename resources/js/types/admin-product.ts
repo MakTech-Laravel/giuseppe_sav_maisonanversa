@@ -80,7 +80,9 @@ export function buildSectionForm(
 ): ProductSectionFormData[] {
     return catalogue
         .map((entry) => {
-            const existing = stored.find((section) => section.key === entry.key);
+            const existing = stored.find(
+                (section) => section.key === entry.key,
+            );
 
             return {
                 key: entry.key,

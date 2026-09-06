@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import { sanitizeLegalHtml } from '@/lib/legal-html';
+import { cn } from '@/lib/utils';
 
 export function LegalHtml({
     html,

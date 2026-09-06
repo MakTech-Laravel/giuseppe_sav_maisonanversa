@@ -57,6 +57,9 @@ export const PERMISSIONS = {
     HERITAGE: {
         VIEW: 'heritage.view',
     },
+    ORDERS: {
+        MANAGE: 'orders.manage',
+    },
     COMMUNITY: {
         MODERATE: 'community.moderate',
         OFFICIAL: 'community.official',

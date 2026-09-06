@@ -173,17 +173,12 @@ export default function DressingItemsIndex({
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                    <Select
-                        value={publication}
-                        onValueChange={setPublication}
-                    >
+                    <Select value={publication} onValueChange={setPublication}>
                         <SelectTrigger
                             className="w-full"
                             aria-label={t('Publicatie')}
                         >
-                            <SelectValue
-                                placeholder={t('Alle publicaties')}
-                            />
+                            <SelectValue placeholder={t('Alle publicaties')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
@@ -209,10 +204,7 @@ export default function DressingItemsIndex({
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
-                                <SelectItem
-                                    key={option}
-                                    value={String(option)}
-                                >
+                                <SelectItem key={option} value={String(option)}>
                                     {t('{{count}} per pagina', {
                                         count: option,
                                     })}
@@ -290,9 +282,7 @@ export default function DressingItemsIndex({
                                                     : t('Concept')}
                                             </Badge>
                                         </TableCell>
-                                        <TableCell>
-                                            {item.sort_order}
-                                        </TableCell>
+                                        <TableCell>{item.sort_order}</TableCell>
                                         <TableCell className="space-x-2 text-right">
                                             <Button
                                                 variant="outline"
@@ -337,9 +327,7 @@ export default function DressingItemsIndex({
                                                         dressingItems.destroy({
                                                             locale,
                                                             dressingItem:
-                                                                Number(
-                                                                    item.id,
-                                                                ),
+                                                                Number(item.id),
                                                         }).url,
                                                     )
                                                 }

@@ -114,7 +114,9 @@ export default function CommunitySessionShow({
                     <Detail label={t('Duur')}>
                         {session.duration_minutes} min
                     </Detail>
-                    <Detail label={t('Niveau')}>{t(session.level_label)}</Detail>
+                    <Detail label={t('Niveau')}>
+                        {t(session.level_label)}
+                    </Detail>
                     <Detail label={t('Wie mag meespelen?')}>
                         {t(session.gender_label)}
                     </Detail>

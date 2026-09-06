@@ -5,7 +5,8 @@ import { store as cookieConsentStore } from '@/routes/cookie-consent';
 
 export function CookieConsentBanner() {
     const { t } = useTranslation();
-    const { cookieConsent } = usePage<{ cookieConsent?: string | null }>().props;
+    const { cookieConsent } = usePage<{ cookieConsent?: string | null }>()
+        .props;
     const form = useForm({
         necessary: true,
         analytics: false,
@@ -36,7 +37,10 @@ export function CookieConsentBanner() {
                                 type="checkbox"
                                 checked={form.data.analytics}
                                 onChange={(event) =>
-                                    form.setData('analytics', event.target.checked)
+                                    form.setData(
+                                        'analytics',
+                                        event.target.checked,
+                                    )
                                 }
                             />
                             {t('Analytics')}
@@ -46,7 +50,10 @@ export function CookieConsentBanner() {
                                 type="checkbox"
                                 checked={form.data.marketing}
                                 onChange={(event) =>
-                                    form.setData('marketing', event.target.checked)
+                                    form.setData(
+                                        'marketing',
+                                        event.target.checked,
+                                    )
                                 }
                             />
                             {t('Marketing')}

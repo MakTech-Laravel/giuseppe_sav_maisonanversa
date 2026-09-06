@@ -185,9 +185,7 @@ export default function MemberSecurity({
                                 </p>
                             </div>
                             <MemberStatusPill
-                                tone={
-                                    twoFactorEnabled ? 'success' : 'warn'
-                                }
+                                tone={twoFactorEnabled ? 'success' : 'warn'}
                             >
                                 {twoFactorEnabled
                                     ? t('Ingeschakeld')

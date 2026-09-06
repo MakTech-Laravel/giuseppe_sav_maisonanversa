@@ -104,9 +104,7 @@ export function ProductTranslationsDialog({
 
     function handleOpenChange(nextOpen: boolean) {
         if (nextOpen) {
-            setActiveLocale(
-                (locales[0] as ProductLocale | undefined) ?? 'nl',
-            );
+            setActiveLocale((locales[0] as ProductLocale | undefined) ?? 'nl');
             form.setData(initialFormData(translations));
         }
 
@@ -392,9 +390,7 @@ export function ProductTranslationsDialog({
                         </Label>
                         <Input
                             id={`${activeLocale}-meta_keywords`}
-                            value={
-                                form.data[activeLocale]?.meta_keywords ?? ''
-                            }
+                            value={form.data[activeLocale]?.meta_keywords ?? ''}
                             onChange={(event) =>
                                 form.setData(
                                     `${activeLocale}.meta_keywords`,

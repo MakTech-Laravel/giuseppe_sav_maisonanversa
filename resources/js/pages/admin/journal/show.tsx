@@ -144,7 +144,9 @@ export default function JournalShow({
                                 >
                                     <Link href={article.public_url}>
                                         <Eye className="h-4 w-4" />
-                                        {t('Bekijk dit artikel zoals op de site.')}
+                                        {t(
+                                            'Bekijk dit artikel zoals op de site.',
+                                        )}
                                     </Link>
                                 </Button>
                                 <JournalTranslationsDialog
@@ -230,7 +232,11 @@ export default function JournalShow({
                         )}
                     >
                         <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                            <Field label={t('Slug')} value={article.slug} mono />
+                            <Field
+                                label={t('Slug')}
+                                value={article.slug}
+                                mono
+                            />
                             <Field
                                 label={t('Auteur')}
                                 value={article.author || t('—')}

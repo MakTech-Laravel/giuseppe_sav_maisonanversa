@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,9 +48,10 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                   number: String(product.editionNumber).padStart(3, '0'),
               })
             : null);
+    const { auth } = usePage().props;
     const [step, setStep] = useState<Step>(1);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState(auth?.user?.name ?? '');
+    const [email, setEmail] = useState(auth?.user?.email ?? '');
     const [phone, setPhone] = useState('');
     const [shippingLine1, setShippingLine1] = useState('');
     const [shippingLine2, setShippingLine2] = useState('');
@@ -223,14 +224,18 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         type="text"
                         required
                         value={shippingLine1}
-                        onChange={(event) => setShippingLine1(event.target.value)}
+                        onChange={(event) =>
+                            setShippingLine1(event.target.value)
+                        }
                         placeholder={t('Straat en huisnummer')}
                         className={modalInputClassName}
                     />
                     <input
                         type="text"
                         value={shippingLine2}
-                        onChange={(event) => setShippingLine2(event.target.value)}
+                        onChange={(event) =>
+                            setShippingLine2(event.target.value)
+                        }
                         placeholder={t('Adresregel 2 (optioneel)')}
                         className={modalInputClassName}
                     />
@@ -249,7 +254,9 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             type="text"
                             required
                             value={shippingCity}
-                            onChange={(event) => setShippingCity(event.target.value)}
+                            onChange={(event) =>
+                                setShippingCity(event.target.value)
+                            }
                             placeholder={t('Stad')}
                             className={modalInputClassName}
                         />
@@ -325,7 +332,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                                 }
                                 className={cn(
                                     modalInputClassName,
-                                    'min-h-[72px] w-full max-w-full resize-y break-words font-sans text-[13px]',
+                                    'min-h-[72px] w-full max-w-full resize-y font-sans text-[13px] break-words',
                                 )}
                             />
                         </div>
@@ -489,7 +496,7 @@ function SummaryRow({
             <span className="shrink-0">{label}</span>
             <strong
                 className={cn(
-                    'min-w-0 flex-1 break-words text-right font-medium text-choc',
+                    'min-w-0 flex-1 text-right font-medium break-words text-choc',
                     total && 'font-serif text-lg text-gold',
                 )}
             >

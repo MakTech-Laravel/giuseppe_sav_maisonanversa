@@ -69,11 +69,7 @@ export function MaisonSeoHead({
                     href={alternate.href}
                 />
             ))}
-            <meta
-                head-key="og:type"
-                property="og:type"
-                content={seo.ogType}
-            />
+            <meta head-key="og:type" property="og:type" content={seo.ogType} />
             <meta head-key="og:url" property="og:url" content={seo.canonical} />
             <meta head-key="og:title" property="og:title" content={title} />
             <meta
@@ -133,13 +129,21 @@ export function MaisonSeoHead({
                 name="twitter:card"
                 content="summary_large_image"
             />
-            <meta head-key="twitter:title" name="twitter:title" content={title} />
+            <meta
+                head-key="twitter:title"
+                name="twitter:title"
+                content={title}
+            />
             <meta
                 head-key="twitter:description"
                 name="twitter:description"
                 content={description}
             />
-            <meta head-key="twitter:image" name="twitter:image" content={image} />
+            <meta
+                head-key="twitter:image"
+                name="twitter:image"
+                content={image}
+            />
             {seo.jsonLd.map((graph, index) => (
                 <script
                     key={index}

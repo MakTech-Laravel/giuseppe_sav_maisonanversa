@@ -18,6 +18,7 @@ import type { ProductFormData } from '@/components/admin/product-form-fields';
 import type { ExistingFile } from '@/components/file-upload';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
+import { PRODUCT_FORM_STEPS } from '@/pages/admin/products/product-form-steps';
 import { dashboard } from '@/routes/admin';
 import products from '@/routes/admin/products';
 import type {
@@ -26,7 +27,6 @@ import type {
     ProductSectionFormData,
 } from '@/types/admin-product';
 import { buildSectionForm } from '@/types/admin-product';
-import { PRODUCT_FORM_STEPS } from '@/pages/admin/products/product-form-steps';
 
 interface CatalogProduct {
     id: number;
@@ -42,6 +42,7 @@ interface CatalogProduct {
     archive_edition_numbers: number[];
     stock_quantity: string | number | null;
     is_published: boolean;
+    public_at?: string | null;
     grants_founding_circle: boolean;
     expected_delivery_label: string | null;
     eyebrow?: string | null;
@@ -72,6 +73,7 @@ const DETAIL_FIELDS = [
     'archive_edition_numbers',
     'stock_quantity',
     'is_published',
+    'public_at',
     'grants_founding_circle',
     'expected_delivery_label',
     'eyebrow',
@@ -117,6 +119,7 @@ export default function EditProduct({
         archive_edition_numbers: product.archive_edition_numbers ?? [],
         stock_quantity: String(product.stock_quantity ?? ''),
         is_published: product.is_published,
+        public_at: product.public_at ?? '',
         grants_founding_circle: product.grants_founding_circle,
         expected_delivery_label: product.expected_delivery_label ?? '',
         eyebrow: product.eyebrow ?? '',
@@ -154,7 +157,8 @@ export default function EditProduct({
         );
         form.submit(products.update(routeArgs), {
             preserveScroll: true,
-            forceFormData: Boolean(form.data.og_image) || form.data.remove_og_image,
+            forceFormData:
+                Boolean(form.data.og_image) || form.data.remove_og_image,
             onSuccess: () => {
                 form.setData((current) => ({
                     ...current,
@@ -186,13 +190,14 @@ export default function EditProduct({
             forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
-                form.setData('sections', (sections) =>
-                    sections.map((section) => ({
+                form.setData((current) => ({
+                    ...current,
+                    sections: current.sections.map((section) => ({
                         ...section,
                         image: null,
                         remove_image: false,
                     })),
-                );
+                }));
             },
         });
     };

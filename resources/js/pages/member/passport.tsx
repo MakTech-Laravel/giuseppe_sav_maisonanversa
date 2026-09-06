@@ -2,7 +2,11 @@ import { Head } from '@inertiajs/react';
 import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import PassportPdfController from '@/actions/App/Http/Controllers/Member/PassportPdfController';
-import { MemberPageHeader, MemberPanel } from '@/components/member/member-ui';
+import {
+    MemberEmptyState,
+    MemberPageHeader,
+    MemberPanel,
+} from '@/components/member/member-ui';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 
 type PassportPage = { title: string; body: string };
@@ -14,9 +18,24 @@ export default function MemberPassport({
         editionNumber: string;
         pages: PassportPage[];
         verificationUrl?: string;
-    };
+    } | null;
 }) {
     const { t } = useTranslation();
+
+    if (passport === null) {
+        return (
+            <>
+                <Head title={t('Digitaal Heritage Passport')} />
+                <MemberPageHeader title={t('Digitaal Heritage Passport')} />
+                <MemberEmptyState
+                    title={t('Nog geen editie toegewezen')}
+                    description={t(
+                        'U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                    )}
+                />
+            </>
+        );
+    }
 
     return (
         <>
@@ -25,7 +44,7 @@ export default function MemberPassport({
                 eyebrow={`No.${passport.editionNumber}`}
                 title={t('Digitaal Heritage Passport')}
                 description={t(
-                    'Vier pagina\'s van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.',
+                    "Vier pagina's van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.",
                 )}
             />
 
@@ -55,7 +74,7 @@ export default function MemberPassport({
                         </p>
                         {page.title === passport.pages[3]?.title &&
                             passport.verificationUrl && (
-                                <p className="mt-4 break-all font-sans text-[11px] text-gold">
+                                <p className="mt-4 font-sans text-[11px] break-all text-gold">
                                     {passport.verificationUrl}
                                 </p>
                             )}

@@ -17,11 +17,11 @@ import {
 import type { ProductFormData } from '@/components/admin/product-form-fields';
 import { Button } from '@/components/ui/button';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
+import { PRODUCT_FORM_STEPS } from '@/pages/admin/products/product-form-steps';
 import { dashboard } from '@/routes/admin';
 import products from '@/routes/admin/products';
 import type { ProductSectionCatalogueEntry } from '@/types/admin-product';
 import { buildSectionForm } from '@/types/admin-product';
-import { PRODUCT_FORM_STEPS } from '@/pages/admin/products/product-form-steps';
 
 /** Fields Precognition validates before each step may be left. */
 const STEP_FIELDS: Record<string, (keyof ProductFormData)[]> = {
@@ -52,7 +52,7 @@ const STEP_FIELDS: Record<string, (keyof ProductFormData)[]> = {
     media: [],
     sections: ['sections'],
     faq: ['faqs'],
-    publish: ['is_published'],
+    publish: ['is_published', 'public_at'],
 };
 
 export default function CreateProduct({
@@ -78,6 +78,7 @@ export default function CreateProduct({
             archive_edition_numbers: [],
             stock_quantity: '0',
             is_published: true,
+            public_at: '',
             grants_founding_circle: false,
             expected_delivery_label: '',
             eyebrow: '',
@@ -146,7 +147,9 @@ export default function CreateProduct({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={t('Product aanmaken')}
-                    description={t('Voeg een catalogusproduct toe in zes stappen.')}
+                    description={t(
+                        'Voeg een catalogusproduct toe in zes stappen.',
+                    )}
                     icon={PackagePlus}
                 >
                     <Button variant="outline" asChild>
@@ -188,7 +191,9 @@ export default function CreateProduct({
                             catalogue={sectionCatalogue}
                         />
                     ) : null}
-                    {step.id === 'faq' ? <ProductFaqFields {...shared} /> : null}
+                    {step.id === 'faq' ? (
+                        <ProductFaqFields {...shared} />
+                    ) : null}
                     {step.id === 'publish' ? (
                         <ProductPublishFields {...shared} />
                     ) : null}

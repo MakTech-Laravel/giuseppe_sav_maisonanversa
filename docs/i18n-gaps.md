@@ -3,36 +3,31 @@
 Generated from the prototype dictionary (`prototype/i18n.js`) by
 `node prototype/convert-i18n.mjs`. Regenerate after any change to that file.
 
-Of 1650 translations (825 Dutch source strings x EN + FR),
-4 are unusable: 3 cut off mid-sentence, 1 empty.
-Each one falls back to the Dutch source text, so a page never renders half a
-sentence. These need a human translation before launch.
+Of 1650 translations (825 Dutch source strings x EN + FR), 1646 are complete.
 
-The remaining 1646 translations are complete.
+**Resolved (Full-Site Completion Plan, Phase 0):** two truncated Dutch-source
+keys — "Eerste sessie vandaag met Heritage No.001. ... onmiddellijk merkbaar. De "
+and "Stuur ons een bericht en wij nemen binnen 48 uur ... een echt gesprek " —
+were dead extraction artifacts of `convert-i18n.mjs` cutting mid-sentence. No
+component ever called `t()` with the truncated text (the full, untruncated
+sentence keys exist separately and are the ones actually rendered), so both
+truncated key/value pairs were removed from `lang/en.json` and `lang/fr.json`
+instead of translated. The canonical `Q2 2027` key (used as literal seeded copy
+in `CommunityCourtSeeder`) was missing its French translation; added as
+`"T2 2027"` matching the existing `Q1 2027` → `T1 2027` convention.
 
-## EN (2)
+One truncated orphan remains **intentionally**: the "Anvers/Enge" key in
+`tests/Feature/TranslationTest.php` (`TRUNCATED_ANVERS_ORPHAN_KEY`) is a
+deliberate test fixture proving the Dutch-source fallback mechanism works for
+an incomplete dictionary entry. Do not delete it or its translations.
 
-- **Dutch source:** Eerste sessie vandaag met Heritage No.001. Het verschil in gevoel met een standaard racket is onmiddellijk merkbaar. De 
-  - **Cut off:** First session today with Heritage No.001. The difference in feel with a standard racket is immediately noticeable. The
-- **Dutch source:** Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek 
-  - **Cut off:** Send us a message and we will personally contact you within 48 hours. No automated responses — a real conversation
-
-## FR (1)
-
-- **Dutch source:** Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek 
-  - **Cut off:** Envoyez-nous un message et nous vous contacterons personnellement sous 48 heures. Pas de réponses automatiques — une vraie discussion
-
-## Keys added outside the prototype dictionary (11)
+## Keys added outside the prototype dictionary (7)
 
 The prototype gave its icon-only controls no accessible names, so screen readers
 announced them as bare "button". Adding those names meant adding six keys the
 prototype dictionary never had. They are interface affordances rather than brand
 copy, so they are translated here directly — flagged for review in case the house
 prefers different wording.
-
-Five more keys cover the Founding Circle portal alerts and placeholders, which
-the prototype only spoke in Dutch `alert()` / `placeholder` attributes and never
-put through `i18n.js`.
 
 | Key | EN | FR |
 | --- | --- | --- |
@@ -42,14 +37,18 @@ put through `i18n.js`.
 | `Maison Anversa — hulp` | Maison Anversa — help | Maison Anversa — aide |
 | `Vorige kamer` | Previous room | Salle précédente |
 | `Volgende kamer` | Next room | Salle suivante |
-| `Vul uw editienummer en e-mailadres in.` | Enter your edition number and email address. | Entrez votre numéro d'édition et votre adresse e-mail. |
-| `Editienummer moet tussen 1 en 100 liggen.` | Edition number must be between 1 and 100. | Le numéro d'édition doit être entre 1 et 100. |
-| `Link gekopieerd — deel hem met een vriend.` | Link copied — share it with a friend. | Lien copié — partagez-le avec un ami. |
-| `Uitgenodigd door Founding Member` | Invited by Founding Member | Invité par Founding Member |
 | `Editienummer (bijv. 7)` | Edition number (e.g. 7) | Numéro d'édition (ex. 7) |
 
 Because `convert-i18n.mjs` writes `lang/en.json` and `lang/fr.json` from the
 prototype alone, rerunning it drops these keys. Re-add them if that happens.
+
+Four more keys (`Vul uw editienummer en e-mailadres in.`, `Editienummer moet
+tussen 1 en 100 liggen.`, `Link gekopieerd — deel hem met een vriend.`,
+`Uitgenodigd door Founding Member`) covered alerts/placeholders in the legacy
+`resources/js/lib/founding-circle.ts` localStorage prototype. That file was
+removed once the real Spatie-role-based Founding Circle/Passport system
+replaced it, and those four keys had no other call site, so they were removed
+too.
 
 ## Copy the dictionary does not carry: the intro slides
 

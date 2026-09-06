@@ -8,7 +8,10 @@ import { GoldRule } from '@/components/maison/ui/gold-rule';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
-import type { JournalArticle, JournalCard as JournalCardData } from '@/types/journal';
+import type {
+    JournalArticle,
+    JournalCard as JournalCardData,
+} from '@/types/journal';
 
 export default function JournalShow({
     article,
