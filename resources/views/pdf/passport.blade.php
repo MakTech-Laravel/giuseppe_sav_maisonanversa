@@ -65,7 +65,7 @@
 </head>
 <body>
     <header class="masthead">
-        <p class="eyebrow">Maison Anversa · No.{{ $passport['editionNumber'] }}</p>
+        <p class="eyebrow">{{ __('Founding Circle') }} · {{ $passport['productName'] ?? '' }} · {{ __('Racket :label', ['label' => $passport['racketLabel'] ?? $passport['editionNumber']]) }}</p>
         <h1>{{ __('Heritage Paspoort') }}</h1>
         <p class="member">{{ $memberName }}</p>
     </header>

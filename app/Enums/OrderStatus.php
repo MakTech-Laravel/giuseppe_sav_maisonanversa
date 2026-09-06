@@ -14,6 +14,23 @@ enum OrderStatus: string
     case Refunded = 'refunded';
 
     /**
+     * Dutch source label — the i18n key the frontend passes to t().
+     */
+    public function label(): string
+    {
+        return match ($this) {
+            self::Incomplete => 'Onvoltooid',
+            self::Paid => 'Betaald',
+            self::Processing => 'In behandeling',
+            self::Canceled => 'Geannuleerd',
+            self::Failed => 'Mislukt',
+            self::Shipped => 'Verzonden',
+            self::Delivered => 'Afgeleverd',
+            self::Refunded => 'Terugbetaald',
+        };
+    }
+
+    /**
      * Post-payment fulfillment statuses (buyer-facing pipeline).
      *
      * @return list<self>

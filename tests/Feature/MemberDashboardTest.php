@@ -198,6 +198,7 @@ test('the member nav includes the client feedback sections', function () {
     foreach ([
         "t('Dashboard')",
         "t('Bestellingen')",
+        "t('Racketregistratie')",
         "t('Founding Circle')",
         "t('Lidpaspoort')",
         "t('Gemeenschap')",
@@ -215,12 +216,14 @@ test('the member nav includes the client feedback sections', function () {
         ->not->toContain("'Passport'");
 });
 
-test('the member nav shows Heritage and Passport links only for Founding Circle members', function () {
+test('the member nav shows Heritage Passport and Circle links only for Founding Circle members', function () {
     $source = file_get_contents(resource_path('js/components/member/member-nav.tsx'));
 
     expect($source)
         ->toContain("t('Mijn Heritage')")
         ->toContain("t('Digitaal Heritage Passport')")
+        ->toContain("t('Founding Circle')")
+        ->toContain("t('Racketregistratie')")
         ->toContain('isFoundingCircle');
 });
 
