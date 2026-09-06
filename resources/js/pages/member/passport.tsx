@@ -16,6 +16,8 @@ export default function MemberPassport({
 }: {
     passport: {
         editionNumber: string;
+        productName: string;
+        racketLabel: string;
         pages: PassportPage[];
         verificationUrl?: string;
     } | null;
@@ -41,12 +43,24 @@ export default function MemberPassport({
         <>
             <Head title={t('Digitaal Heritage Passport')} />
             <MemberPageHeader
-                eyebrow={`No.${passport.editionNumber}`}
+                eyebrow={t('Founding Circle')}
                 title={t('Digitaal Heritage Passport')}
                 description={t(
                     "Vier pagina's van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.",
                 )}
             />
+
+            <MemberPanel className="mb-8 bg-choc p-8 text-center">
+                <p className="font-sans text-[9px] tracking-[0.35em] text-gold uppercase">
+                    {t('Founding Circle')}
+                </p>
+                <p className="mt-6 font-sans text-[12px] tracking-[0.24em] text-cream uppercase">
+                    {passport.productName}
+                </p>
+                <p className="mt-3 font-serif text-[32px] text-gold">
+                    {t('Racket {{label}}', { label: passport.racketLabel })}
+                </p>
+            </MemberPanel>
 
             <div className="mb-8">
                 <a

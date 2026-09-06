@@ -93,7 +93,7 @@ class DashboardController extends Controller implements HasMiddleware
                 'productName' => $order->product?->translated('name'),
                 'editionTotal' => $order->product?->edition_total,
                 'editionNumber' => $number,
-                'status' => $order->status->value,
+                'status' => $order->status->label(),
                 'deliveryWindow' => $order->product?->translated('expected_delivery_label')
                     ?? $order->shipped_at?->toDateString()
                     ?? __('In productie'),

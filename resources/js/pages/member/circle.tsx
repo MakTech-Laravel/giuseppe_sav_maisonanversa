@@ -6,7 +6,13 @@ import {
     MemberPanel,
 } from '@/components/member/member-ui';
 
-type Card = { number: string; name: string; since: string };
+type Card = {
+    number: string;
+    name: string;
+    since: string;
+    productName: string;
+    racketLabel: string;
+};
 
 export default function MemberCircle({ card }: { card: Card | null }) {
     const { t } = useTranslation();
@@ -42,12 +48,15 @@ export default function MemberCircle({ card }: { card: Card | null }) {
 
             <MemberPanel className="mx-auto max-w-md bg-choc p-10 text-center">
                 <p className="font-sans text-[9px] tracking-[0.35em] text-gold uppercase">
-                    Maison Anversa
+                    {t('Founding Circle')}
                 </p>
-                <p className="mt-6 font-serif text-[64px] leading-none tracking-[0.08em] text-gold">
-                    {card.number}
+                <p className="mt-8 font-sans text-[11px] tracking-[0.28em] text-cream uppercase">
+                    {card.productName}
                 </p>
-                <p className="mt-6 font-serif text-[24px] text-cream">
+                <p className="mt-4 font-serif text-[40px] leading-none tracking-[0.08em] text-gold">
+                    {t('Racket {{label}}', { label: card.racketLabel })}
+                </p>
+                <p className="mt-8 font-serif text-[24px] text-cream">
                     {card.name}
                 </p>
                 <p className="mt-2 font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
