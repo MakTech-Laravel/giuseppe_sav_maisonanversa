@@ -39,9 +39,7 @@ export default function DeleteUser() {
                     {t('Waarschuwing')}
                 </p>
                 <p className="mt-0.5 text-muted-foreground">
-                    {t(
-                        'Ga voorzichtig te werk — deze actie is permanent.',
-                    )}
+                    {t('Ga voorzichtig te werk — deze actie is permanent.')}
                 </p>
             </div>
 
@@ -68,7 +66,9 @@ export default function DeleteUser() {
                         </DialogDescription>
 
                         <Form
-                            {...ProfileController.destroy.form(wayfinderLocale())}
+                            {...ProfileController.destroy.form(
+                                wayfinderLocale(),
+                            )}
                             options={{
                                 preserveScroll: true,
                             }}

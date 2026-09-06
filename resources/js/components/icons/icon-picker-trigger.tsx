@@ -151,7 +151,7 @@ export function IconPickerTrigger({
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? statusId : undefined}
             className={cn(
-                    'flex w-full items-center gap-3 rounded-2xl border border-border/80 bg-background px-3 py-2.5 text-left shadow-xs transition-colors hover:bg-muted/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+                'flex w-full items-center gap-3 rounded-2xl border border-border/80 bg-background px-3 py-2.5 text-left shadow-xs transition-colors hover:bg-muted/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
                 open && 'ring-2 ring-ring/30',
                 error && 'border-destructive/60',
                 classNames?.trigger,

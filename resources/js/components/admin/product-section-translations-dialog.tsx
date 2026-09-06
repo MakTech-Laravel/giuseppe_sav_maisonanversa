@@ -1,7 +1,7 @@
 import { router, useForm } from '@inertiajs/react';
 import { Languages, Loader2, RefreshCw, TriangleAlert } from 'lucide-react';
 import type { FormEvent } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -124,6 +124,7 @@ export function ProductSectionTranslationsDialog({
     const locale = wayfinderLocale();
     const sectionKey = String(sectionId);
     const [open, setOpen] = useState(false);
+    const [wasOpen, setWasOpen] = useState(false);
     const [translating, setTranslating] = useState(false);
     const [activeLocale, setActiveLocale] = useState<ProductLocale>('nl');
 
@@ -135,14 +136,17 @@ export function ProductSectionTranslationsDialog({
         sliceForSection(translations, sectionKey),
     );
 
-    useEffect(() => {
-        if (!open) {
-            return;
-        }
+    // Reset the form to the latest translations each time the dialog opens.
+    // Adjusted during render rather than in an effect — see
+    // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+    if (open !== wasOpen) {
+        setWasOpen(open);
 
-        setActiveLocale((locales[0] as ProductLocale | undefined) ?? 'nl');
-        form.setData(sliceForSection(translations, sectionKey));
-    }, [open, translations, locales, sectionKey]);
+        if (open) {
+            setActiveLocale((locales[0] as ProductLocale | undefined) ?? 'nl');
+            form.setData(sliceForSection(translations, sectionKey));
+        }
+    }
 
     const activeSection = useMemo(() => {
         return (
@@ -356,7 +360,8 @@ export function ProductSectionTranslationsDialog({
                                 />
                                 <p className="text-[11px] text-muted-foreground">
                                     {t('{{count}}/120 tekens', {
-                                        count: (activeSection.intro ?? '').length,
+                                        count: (activeSection.intro ?? '')
+                                            .length,
                                     })}
                                 </p>
                             </div>

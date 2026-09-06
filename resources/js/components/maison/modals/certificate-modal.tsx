@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MaisonModal, modalInputClassName } from '@/components/maison/modals/maison-modal';
+import {
+    MaisonModal,
+    modalInputClassName,
+} from '@/components/maison/modals/maison-modal';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 type CertificateModalProps = {
     onClose: () => void;
@@ -67,7 +70,9 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                 />
 
                 <p className="mx-auto max-w-[380px] font-sans text-xs leading-[1.7] text-choc3">
-                    {t('Hiermee wordt verklaard dat het hieronder beschreven werk')}
+                    {t(
+                        'Hiermee wordt verklaard dat het hieronder beschreven werk',
+                    )}
                 </p>
                 <p className="my-3.5 font-serif text-lg text-choc italic">
                     {t('Heritage No.001 — Founding Edition')}

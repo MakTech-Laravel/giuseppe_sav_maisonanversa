@@ -29,13 +29,12 @@ export function FormStepper({
     const { t } = useTranslation();
 
     return (
-        <ol className="flex w-full gap-1 overflow-x-auto scrollbar-none">
+        <ol className="flex w-full scrollbar-none gap-1 overflow-x-auto">
             {steps.map((step, index) => {
                 const isCurrent = index === currentIndex;
                 const isComplete =
                     !allowFreeNavigation && index < furthestIndex;
-                const isLocked =
-                    !allowFreeNavigation && index > furthestIndex;
+                const isLocked = !allowFreeNavigation && index > furthestIndex;
 
                 return (
                     <li key={step.id} className="min-w-0 flex-1">

@@ -84,10 +84,7 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
                         </AdminPanel>
                     }
                 >
-                    <AdminUserProfile
-                        user={customer}
-                        idLabel={t('Klant-ID')}
-                    />
+                    <AdminUserProfile user={customer} idLabel={t('Klant-ID')} />
                 </AdminResourceShell>
             </div>
         </>

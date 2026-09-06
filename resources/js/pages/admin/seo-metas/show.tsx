@@ -2,11 +2,11 @@ import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Globe, Pencil } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { SeoMetaTranslationsDialog } from '@/components/admin/seo-meta-translations-dialog';
 import {
     AdminPanel,
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
+import { SeoMetaTranslationsDialog } from '@/components/admin/seo-meta-translations-dialog';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
@@ -55,7 +55,7 @@ function Field({
             </p>
             <p
                 className={cn(
-                    'wrap-break-word text-sm font-medium',
+                    'text-sm font-medium wrap-break-word',
                     mono && 'font-mono tabular-nums',
                     pre && 'whitespace-pre-wrap',
                 )}

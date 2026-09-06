@@ -2,13 +2,13 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarDays, Clock, Gauge, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
-import * as sessionRoutes from '@/routes/community/sessions';
 import {
     formatDuration,
     formatSessionDate,
     formatSessionTime,
 } from '@/lib/session-format';
 import { cn } from '@/lib/utils';
+import * as sessionRoutes from '@/routes/community/sessions';
 import type { SessionCard as SessionCardData } from '@/types/session';
 
 type SessionCardProps = {
@@ -131,7 +131,11 @@ function SessionAction({
 
     if (session.can_leave) {
         return (
-            <button type="button" onClick={onLeave} className={cn(outlineButton)}>
+            <button
+                type="button"
+                onClick={onLeave}
+                className={cn(outlineButton)}
+            >
                 {t('Sessie verlaten')}
             </button>
         );

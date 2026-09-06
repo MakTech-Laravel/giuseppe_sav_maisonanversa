@@ -241,9 +241,7 @@ function ProfileAvatarField({
                         className="rounded-none"
                         onClick={() => inputRef.current?.click()}
                     >
-                        {displayUrl
-                            ? t('Foto wijzigen')
-                            : t('Foto uploaden')}
+                        {displayUrl ? t('Foto wijzigen') : t('Foto uploaden')}
                     </Button>
                     {displayUrl && (
                         <Button

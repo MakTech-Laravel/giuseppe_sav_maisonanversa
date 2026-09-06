@@ -3,12 +3,15 @@ import { ArrowLeft, FileText, Pencil } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { legalPageTitle, legalPageTitleKey } from '@/components/admin/legal-page-titles';
-import { LegalPageTranslationsDialog } from '@/components/admin/legal-page-translations-dialog';
 import {
     AdminPanel,
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
+import {
+    legalPageTitle,
+    legalPageTitleKey,
+} from '@/components/admin/legal-page-titles';
+import { LegalPageTranslationsDialog } from '@/components/admin/legal-page-translations-dialog';
 import { LegalPageLayout } from '@/components/maison/legal/legal-page-layout';
 import { LegalPageLinks } from '@/components/maison/legal/legal-page-links';
 import { Badge } from '@/components/ui/badge';

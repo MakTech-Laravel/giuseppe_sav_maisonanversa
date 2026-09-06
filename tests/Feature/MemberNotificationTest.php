@@ -42,6 +42,36 @@ test('session join creates a database notification for the host', function () {
     });
 });
 
+test('members can list their notifications with an unread count', function () {
+    $user = User::factory()->create();
+    $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    $session = CommunitySession::factory()->create([
+        'host_id' => $user->id,
+        'starts_at' => now()->addDay(),
+    ]);
+
+    $user->notifyNow(new SessionJoinedNotification($session, 'Member One'));
+    $user->notifyNow(new SessionJoinedNotification($session, 'Member Two'));
+
+    $unread = $user->fresh()->unreadNotifications()->first();
+    $unread->markAsRead();
+
+    $response = $this->actingAs($user)
+        ->getJson(localized('member.notifications.index'))
+        ->assertOk();
+
+    $response->assertJsonPath('unread_count', 1);
+    $response->assertJsonCount(2, 'data');
+    expect($response->json('data.0'))
+        ->toHaveKeys(['id', 'title', 'body', 'read_at', 'created_at']);
+});
+
+test('a guest cannot list another member\'s notifications', function () {
+    $this->getJson(localized('member.notifications.index'))
+        ->assertUnauthorized();
+});
+
 test('members can mark a notification as read', function () {
     $user = User::factory()->create();
     $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);

@@ -7,5 +7,9 @@ export const PRODUCT_FORM_STEPS: FormStep[] = [
     { id: 'media', label: 'Beeld', description: 'Cover en galerij' },
     { id: 'sections', label: 'Secties', description: 'Inhoud van de pagina' },
     { id: 'faq', label: 'FAQ', description: 'Vragen bij dit product' },
-    { id: 'publish', label: 'Publiceren', description: 'Controleer en publiceer' },
+    {
+        id: 'publish',
+        label: 'Publiceren',
+        description: 'Controleer en publiceer',
+    },
 ];

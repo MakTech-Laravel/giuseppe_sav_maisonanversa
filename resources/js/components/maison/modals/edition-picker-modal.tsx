@@ -48,9 +48,7 @@ type EditionPickerModalProps = {
     }) => void;
 };
 
-function statusLabelKey(
-    status: EditionOption['status'],
-): string | null {
+function statusLabelKey(status: EditionOption['status']): string | null {
     switch (status) {
         case 'archive':
             return 'Niet te koop';
@@ -146,7 +144,12 @@ export function EditionPickerModal({
         [locale, productSlug, search, t],
     );
 
+    // Fetching data on a dependency change (locale/productSlug/search) is a
+    // legitimate effect — see
+    // https://react.dev/learn/you-might-not-need-an-effect#fetching-data.
+    // The resets below just clear stale results before the new page loads.
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- data fetch triggered by a dependency change, not derived state
         setItems([]);
         setPage(1);
         setLastPage(1);
@@ -218,7 +221,9 @@ export function EditionPickerModal({
                     <p className="px-4 py-8 text-center text-[13px] text-choc3">
                         {error ??
                             (search !== ''
-                                ? t('Geen editie gevonden voor deze zoekopdracht.')
+                                ? t(
+                                      'Geen editie gevonden voor deze zoekopdracht.',
+                                  )
                                 : t('Geen editienummers gevonden.'))}
                     </p>
                 ) : (

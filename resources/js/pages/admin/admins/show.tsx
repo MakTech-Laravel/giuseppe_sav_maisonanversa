@@ -23,10 +23,7 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
         <>
             <Head title={user.name} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-                <AdminPageHeader
-                    title={t('Beheerdersprofiel')}
-                    icon={IdCard}
-                >
+                <AdminPageHeader title={t('Beheerdersprofiel')} icon={IdCard}>
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" /> {t('Terug')}
@@ -84,10 +81,7 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                         </AdminPanel>
                     }
                 >
-                    <AdminUserProfile
-                        user={user}
-                        idLabel={t('Beheerder-ID')}
-                    />
+                    <AdminUserProfile user={user} idLabel={t('Beheerder-ID')} />
                 </AdminResourceShell>
             </div>
         </>

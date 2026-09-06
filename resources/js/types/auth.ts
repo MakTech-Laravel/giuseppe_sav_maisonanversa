@@ -13,6 +13,8 @@ export type User = {
     roles: string[];
     permissions: PermissionKey[];
     is_super_admin: boolean;
+    is_admin?: boolean;
+    is_founding_circle?: boolean;
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CommunityEventStatus;
+use App\Enums\InquiryType;
+use App\Enums\OrderStatus;
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
+use App\Models\CommunityEvent;
+use App\Models\CommunityReport;
+use App\Models\Inquiry;
 use App\Models\JournalArticle;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,6 +21,12 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request, string $locale): Response
     {
+        $nextEvent = CommunityEvent::query()
+            ->whereIn('status', [CommunityEventStatus::Opening, CommunityEventStatus::Ongoing])
+            ->where('starts_at', '>=', now())
+            ->orderBy('starts_at')
+            ->first();
+
         return Inertia::render('dashboard', [
             'stats' => [
                 [
@@ -31,6 +44,26 @@ class DashboardController extends Controller
                     'value' => (string) JournalArticle::query()->count(),
                     'hintKey' => 'Journalartikelen',
                 ],
+                [
+                    'key' => 'Openstaande bestellingen',
+                    'value' => (string) Order::query()
+                        ->whereIn('status', [OrderStatus::Paid, OrderStatus::Processing])
+                        ->count(),
+                    'hintKey' => 'Betaald, nog niet verzonden',
+                ],
+                [
+                    'key' => 'Ongeziene aanvragen',
+                    'value' => (string) Inquiry::query()
+                        ->whereIn('type', [...InquiryType::appointmentInbox(), InquiryType::Feedback])
+                        ->unseen()
+                        ->count(),
+                    'hintKey' => 'Afspraken en feedback samen',
+                ],
+                [
+                    'key' => 'Openstaande meldingen',
+                    'value' => (string) CommunityReport::query()->where('status', 'open')->count(),
+                    'hintKey' => 'Nog niet afgehandelde communitymeldingen',
+                ],
             ],
             'recentCustomers' => User::query()
                 ->where('type', UserType::Customer)
@@ -44,6 +77,11 @@ class DashboardController extends Controller
                     'username' => $customer->username,
                     'created_at' => $customer->created_at?->toDateString(),
                 ]),
+            'nextCommunityEvent' => $nextEvent === null ? null : [
+                'id' => (string) $nextEvent->id,
+                'title' => $nextEvent->translated('title'),
+                'starts_at' => $nextEvent->starts_at?->toIso8601String(),
+            ],
             'staffName' => $request->user()?->name ?? '',
         ]);
     }
