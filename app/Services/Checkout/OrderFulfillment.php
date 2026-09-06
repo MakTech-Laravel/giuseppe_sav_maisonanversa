@@ -2,10 +2,8 @@
 
 namespace App\Services\Checkout;
 
-use App\Enums\GuardEnum;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
-use App\Enums\RoleEnum;
 use App\Jobs\Orders\SendOrderPaidAdminMail;
 use App\Jobs\Orders\SendOrderPaidBuyerMail;
 use App\Mail\SoldOutNotice;
@@ -17,12 +15,11 @@ use App\Models\User;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
 use App\Services\Edition\SimpleStock;
-use App\Services\FoundingCircle\FoundingCircleRegistrar;
+use App\Services\FoundingCircle\FoundingCircleClaimService;
 use App\Support\MailLocale;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Cashier;
-use Spatie\Permission\Models\Role;
 use Stripe\Exception\ApiErrorException;
 
 class OrderFulfillment
@@ -31,7 +28,7 @@ class OrderFulfillment
         private EditionAllocator $allocator,
         private EditionInventory $inventory,
         private SimpleStock $simpleStock,
-        private FoundingCircleRegistrar $registrar,
+        private FoundingCircleClaimService $claims,
     ) {}
 
     /**
@@ -100,12 +97,10 @@ class OrderFulfillment
             );
 
             $locked->refresh();
-            $locked->loadMissing('product', 'user');
+            $locked->loadMissing('product', 'user', 'editionPiece');
 
             if ($locked->user !== null && $locked->product?->grants_founding_circle) {
-                Role::findOrCreate(RoleEnum::FOUNDING_CIRCLE->value, GuardEnum::WEB->value);
-                $locked->user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
-                $this->registrar->register($locked->user, $locked);
+                $this->claims->createFromOrder($locked);
             }
 
             return $locked;
@@ -190,6 +185,7 @@ class OrderFulfillment
             }
 
             $this->releaseInventoryOnRefund($locked);
+            $this->claims->cancelPendingForOrder($locked);
 
             if ($locked->latestPayment !== null) {
                 $locked->latestPayment->fill([

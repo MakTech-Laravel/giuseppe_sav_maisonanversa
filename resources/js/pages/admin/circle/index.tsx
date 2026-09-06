@@ -1,5 +1,5 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { BookText, Eye, UsersRound } from 'lucide-react';
+import { BookText, ClipboardList, Eye, UsersRound } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
@@ -72,6 +72,12 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                     )}
                     icon={UsersRound}
                 >
+                    <Button variant="outline" asChild>
+                        <Link href={circleRoutes.claims(wayfinderLocale())}>
+                            <ClipboardList className="h-4 w-4" />{' '}
+                            {t('Racketregistraties')}
+                        </Link>
+                    </Button>
                     <Button variant="outline" asChild>
                         <Link href={circleRoutes.register(wayfinderLocale())}>
                             <BookText className="h-4 w-4" /> {t('Naamregister')}

@@ -2,6 +2,7 @@
 
 use App\Enums\OrderStatus;
 use App\Enums\RoleEnum;
+use App\Models\FoundingCircleClaim;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -29,7 +30,7 @@ test('order fulfillment is idempotent for paid sessions', function () {
         ->and(Order::query()->where('status', OrderStatus::Paid)->count())->toBe(1);
 });
 
-test('paying for a founding-circle-granting product automatically enrolls the buyer', function () {
+test('paying for a founding-circle-granting product creates a pending claim without enrolling', function () {
     $user = User::factory()->create();
     $order = Order::factory()->forUser($user)->create([
         'status' => OrderStatus::Incomplete,
@@ -46,8 +47,9 @@ test('paying for a founding-circle-granting product automatically enrolls the bu
 
     app(OrderFulfillment::class)->markPaidFromSession($session);
 
-    expect($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeTrue()
-        ->and($order->fresh()->edition_number)->not->toBeNull();
+    expect($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse()
+        ->and($order->fresh()->edition_number)->not->toBeNull()
+        ->and(FoundingCircleClaim::query()->where('order_id', $order->id)->exists())->toBeTrue();
 });
 
 test('paying for a product that does not grant founding circle does not enroll the buyer', function () {
