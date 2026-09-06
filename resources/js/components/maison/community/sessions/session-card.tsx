@@ -2,6 +2,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarDays, Clock, Gauge, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
+import { PartnerBadge } from '@/components/maison/community/partner-badge';
 import {
     formatDuration,
     formatSessionDate,
@@ -50,11 +51,7 @@ export function SessionCard({ session }: SessionCardProps) {
                     {session.club?.name ?? t('Onbekende club')}
                 </Link>
 
-                {session.club?.is_partner && (
-                    <span className="mt-2 inline-flex items-center gap-1.5 border border-gold/25 bg-gold/8 px-2.5 py-1 font-sans text-[9px] tracking-[0.16em] text-gold2 uppercase">
-                        {t('Partnerclub')}
-                    </span>
-                )}
+                {session.club?.is_partner && <PartnerBadge className="mt-2" />}
 
                 <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 font-sans text-[11px] tracking-[0.08em] text-stone">
                     <span className="inline-flex items-center gap-1.5">

@@ -5,6 +5,66 @@ use App\Enums\SessionSport;
 use App\Models\Club;
 use App\Models\User;
 
+test('members can browse the approved club directory', function () {
+    $user = User::factory()->create();
+
+    $partner = Club::factory()->create([
+        'name' => 'Partner Padel',
+        'city' => 'Antwerpen',
+        'is_partner' => true,
+    ]);
+    Club::factory()->pending()->create(['name' => 'Hidden Club']);
+
+    $this->actingAs($user)
+        ->get(route('community.clubs.index', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('maison/clubs/index')
+            ->has('clubs.data', 1)
+            ->where('clubs.data.0.name', 'Partner Padel')
+            ->where('clubs.data.0.is_partner', true)
+        );
+});
+
+test('members can view an approved club profile with upcoming sessions', function () {
+    $user = User::factory()->create();
+    $club = Club::factory()->create([
+        'name' => 'Padel Ganda',
+        'is_partner' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('community.clubs.show', ['locale' => 'nl', 'club' => $club->id]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('maison/clubs/show')
+            ->where('club.name', 'Padel Ganda')
+            ->where('club.is_partner', true)
+            ->has('club.upcoming_sessions')
+        );
+});
+
+test('pending clubs are hidden from the directory show page', function () {
+    $user = User::factory()->create();
+    $club = Club::factory()->pending()->create();
+
+    $this->actingAs($user)
+        ->get(route('community.clubs.show', ['locale' => 'nl', 'club' => $club->id]))
+        ->assertNotFound();
+});
+
+test('guests cannot browse the club directory', function () {
+    Club::factory()->create();
+
+    $this->get(route('community.clubs.index', ['locale' => 'nl']))
+        ->assertRedirect();
+
+    $club = Club::factory()->create();
+
+    $this->get(route('community.clubs.show', ['locale' => 'nl', 'club' => $club->id]))
+        ->assertRedirect();
+});
+
 test('club search matches name, city and postal code', function () {
     $user = User::factory()->create();
 
@@ -67,6 +127,21 @@ test('club search can be narrowed to a single sport', function () {
         ->and($clubs[0]['name'])->toBe('Padel Only Club');
 });
 
+test('club search hides clubs that are not session venues', function () {
+    $user = User::factory()->create();
+
+    Club::factory()->create([
+        'name' => 'Marketing Only',
+        'city' => 'Gent',
+        'is_session_venue' => false,
+    ]);
+
+    $this->actingAs($user)
+        ->getJson(route('community.clubs.search', ['locale' => 'nl', 'q' => 'Marketing']))
+        ->assertOk()
+        ->assertJsonCount(0, 'clubs');
+});
+
 test('a member submitted club lands in the pending queue', function () {
     $user = User::factory()->create();
 
@@ -86,6 +161,7 @@ test('a member submitted club lands in the pending queue', function () {
     expect($club->status)->toBe(ClubStatus::Pending)
         ->and($club->submitted_by_id)->toBe($user->id)
         ->and($club->slug)->toBe('padel-zuid')
+        ->and($club->is_session_venue)->toBeTrue()
         ->and($club->approved_at)->toBeNull();
 });
 

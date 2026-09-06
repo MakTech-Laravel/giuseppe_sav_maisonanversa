@@ -11,6 +11,7 @@ use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Newsletter\HeritageLetterSubscription;
+use App\Support\MemberPassportPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -92,7 +93,7 @@ class DashboardController extends Controller implements HasMiddleware
                 'productName' => $order->product?->translated('name'),
                 'editionTotal' => $order->product?->edition_total,
                 'editionNumber' => $number,
-                'status' => $order->status->value,
+                'status' => $order->status->label(),
                 'deliveryWindow' => $order->product?->translated('expected_delivery_label')
                     ?? $order->shipped_at?->toDateString()
                     ?? __('In productie'),
@@ -131,6 +132,13 @@ class DashboardController extends Controller implements HasMiddleware
 
         return Inertia::render('member/passport', [
             'passport' => $passport,
+        ]);
+    }
+
+    public function lidpaspoort(Request $request, string $locale, MemberPassportPresenter $presenter): Response
+    {
+        return Inertia::render('member/lidpaspoort', [
+            'passport' => $presenter->forUser($request->user(), $locale),
         ]);
     }
 
