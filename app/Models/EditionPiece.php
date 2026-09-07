@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Enums\EditionPieceStatus;
+use App\Enums\FoundingCircleClaimStatus;
 use Database\Factories\EditionPieceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class EditionPiece extends Model
@@ -63,6 +65,28 @@ class EditionPiece extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * @return HasMany<FoundingCircleClaim, $this>
+     */
+    public function foundingCircleClaims(): HasMany
+    {
+        return $this->hasMany(FoundingCircleClaim::class);
+    }
+
+    public function approvedClaim(): ?FoundingCircleClaim
+    {
+        if ($this->relationLoaded('foundingCircleClaims')) {
+            return $this->foundingCircleClaims
+                ->first(fn (FoundingCircleClaim $claim): bool => $claim->status === FoundingCircleClaimStatus::Approved);
+        }
+
+        return $this->foundingCircleClaims()
+            ->approved()
+            ->with('user')
+            ->latest('reviewed_at')
+            ->first();
     }
 
     public function isArchive(): bool
