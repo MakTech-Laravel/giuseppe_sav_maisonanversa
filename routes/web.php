@@ -244,8 +244,10 @@ Route::prefix('{locale}')
             });
 
             Route::controller(ClubController::class)->group(function () {
+                Route::get('clubs', 'index')->name('clubs.index');
                 Route::get('clubs/search', 'search')->name('clubs.search');
                 Route::post('clubs', 'store')->name('clubs.store');
+                Route::get('clubs/{club}', 'show')->name('clubs.show');
             });
         });
 
