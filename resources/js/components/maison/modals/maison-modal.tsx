@@ -104,9 +104,20 @@ export function MaisonModal({
 
     useEffect(() => {
         function onKeyDown(event: KeyboardEvent): void {
-            if (event.key === 'Escape') {
-                onClose();
+            if (event.key !== 'Escape' || event.defaultPrevented) {
+                return;
             }
+
+            // Portaled selects sit above the modal; let them consume Escape first.
+            if (
+                document.querySelector(
+                    '[data-slot="select-content"][data-state="open"]',
+                )
+            ) {
+                return;
+            }
+
+            onClose();
         }
 
         document.addEventListener('keydown', onKeyDown);
