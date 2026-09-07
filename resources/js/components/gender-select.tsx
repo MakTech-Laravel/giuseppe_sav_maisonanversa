@@ -42,6 +42,9 @@ export function GenderSelect({
                 value={value || undefined}
                 onValueChange={setValue}
                 required
+                // MaisonModal uses a custom focus trap; keep Select non-modal so
+                // the portaled list remains interactive inside that dialog.
+                modal={false}
             >
                 <SelectTrigger
                     id={id}
