@@ -15,9 +15,10 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Jobs/TranslateModelJob.php | .ai/rules/jobs.md |
 | resources/js/pages/admin/legal-pages/**/*.tsx | .ai/rules/legal-pages.md |
 | resources/js/pages/admin/letter/**/*.tsx | .ai/rules/letter.md |
+| app/Mail/** | .ai/rules/mail.md |
 | resources/js/components/maison/community/** | .ai/rules/maison-community.md |
-| resources/js/pages/maison/house.tsx, resources/js/pages/maison/community.tsx | .ai/rules/maison.md |
 | resources/js/components/maison/modals/**, resources/js/components/ui/select.tsx, resources/js/components/gender-select.tsx | .ai/rules/maison-modals.md |
+| resources/js/pages/maison/house.tsx, resources/js/pages/maison/community.tsx | .ai/rules/maison.md |
 | resources/js/components/member/**, resources/js/layouts/member-layout.tsx | .ai/rules/member.md |
 | app/Models/*.php, app/Models/Inquiry.php | .ai/rules/models.md |
 | app/Services/Newsletter/**, app/Http/Controllers/Member/DashboardController.php, resources/js/pages/member/letter.tsx, resources/js/pages/member/email-preferences.tsx | .ai/rules/newsletter.md |
