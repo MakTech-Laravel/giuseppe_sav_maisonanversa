@@ -1,36 +1,46 @@
-// Components
 import { Form, Head } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
+import { MaisonButton } from '@/components/maison/ui/maison-button';
 import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
 
 export default function VerifyEmail({ status }: { status?: string }) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="Email verification" />
+            <Head title={t('E-mail verifiëren')} />
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
+                <div className="mb-6 border border-gold/30 bg-cream2 px-4 py-3 text-center font-sans text-[13px] leading-[1.6] text-choc3">
+                    {t(
+                        'Er is een nieuwe verificatielink naar uw e-mailadres gestuurd.',
+                    )}
                 </div>
             )}
 
             <Form {...send.form()} className="space-y-6 text-center">
                 {({ processing }) => (
                     <>
-                        <Button disabled={processing} variant="secondary">
+                        <MaisonButton
+                            type="submit"
+                            variant="filled"
+                            block
+                            disabled={processing}
+                        >
                             {processing && <Spinner />}
-                            Resend verification email
-                        </Button>
+                            {processing
+                                ? t('Bezig…')
+                                : t('Verificatie-e-mail opnieuw versturen')}
+                        </MaisonButton>
 
                         <TextLink
                             href={logout()}
-                            className="mx-auto block text-sm"
+                            className="mx-auto block font-sans text-[10px] tracking-[0.2em] text-stone uppercase no-underline hover:text-gold"
                         >
-                            Log out
+                            {t('Uitloggen')}
                         </TextLink>
                     </>
                 )}
@@ -40,7 +50,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
 }
 
 VerifyEmail.layout = {
-    title: 'Verify email',
+    title: 'E-mail verifiëren',
     description:
-        'Please verify your email address by clicking on the link we just emailed to you.',
+        'Bevestig uw e-mailadres via de link die we zojuist hebben gestuurd.',
 };

@@ -6,15 +6,22 @@ use App\Mail\OrderConfirmation;
 use App\Mail\Orders\AdminNewOrderNotification;
 use App\Mail\Orders\OrderStatusUpdated;
 use App\Mail\PostDeliveryFollowUp;
+use App\Mail\ResetPasswordMail;
 use App\Mail\RsvpConfirmation;
+use App\Mail\SessionJoinedMail;
 use App\Mail\ShippingNotification;
 use App\Mail\SoldOutNotice;
+use App\Mail\VerifyEmailMail;
 use App\Mail\WaitlistConfirmation;
 use App\Models\CommunityEvent;
+use App\Models\CommunitySession;
 use App\Models\Inquiry;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\OrderStatusEvent;
+use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Mail\Mailable;
 
 test('branded maison mailables include the site logo', function (string $key) {
@@ -37,7 +44,40 @@ test('branded maison mailables include the site logo', function (string $key) {
     'rsvp-confirmation',
     'admin-new-order',
     'status-updated',
+    'reset-password',
+    'verify-email',
+    'session-joined',
 ]);
+
+test('password reset notification sends the branded maison mailable', function () {
+    $user = User::factory()->create(['locale' => 'en']);
+
+    $mailable = (new ResetPassword('test-token'))->toMail($user);
+
+    expect($mailable)->toBeInstanceOf(ResetPasswordMail::class);
+
+    $html = $mailable->render();
+
+    expect($html)
+        ->toContain('images/logos/logo-icon.jpg')
+        ->toContain('/en/reset-password/test-token')
+        ->toContain('Maison Anversa');
+});
+
+test('verify email notification sends the branded maison mailable', function () {
+    $user = User::factory()->unverified()->create(['locale' => 'nl']);
+
+    $mailable = (new VerifyEmail)->toMail($user);
+
+    expect($mailable)->toBeInstanceOf(VerifyEmailMail::class);
+
+    $html = $mailable->render();
+
+    expect($html)
+        ->toContain('images/logos/logo-icon.jpg')
+        ->toContain('Maison Anversa')
+        ->toContain('#291C18');
+});
 
 function brandedMailable(string $key): Mailable
 {
@@ -57,6 +97,20 @@ function brandedMailable(string $key): Mailable
 
             return new OrderStatusUpdated($order, $event);
         })(),
+        'reset-password' => new ResetPasswordMail(
+            resetUrl: 'https://example.test/en/reset-password/token',
+            expireMinutes: 60,
+            locale: 'en',
+        ),
+        'verify-email' => new VerifyEmailMail(
+            verificationUrl: 'https://example.test/email/verify/1/hash',
+            locale: 'nl',
+        ),
+        'session-joined' => new SessionJoinedMail(
+            session: CommunitySession::factory()->create(['starts_at' => now()->addDay()]),
+            memberName: 'Guest Member',
+            locale: 'nl',
+        ),
         default => throw new InvalidArgumentException("Unknown mailable key [{$key}]."),
     };
 }
