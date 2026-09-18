@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Inquiry;
+use App\Support\BrandsMaisonMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 
 class InquiryReceived extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use BrandsMaisonMail, Queueable, SerializesModels;
 
     public function __construct(public Inquiry $inquiry)
     {
@@ -35,7 +36,8 @@ class InquiryReceived extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.inquiry-received',
+            html: 'emails.inquiry-received',
+            with: $this->maisonBrandData(withHomeCta: false),
         );
     }
 }
