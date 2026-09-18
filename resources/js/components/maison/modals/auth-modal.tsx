@@ -9,10 +9,9 @@ import {
     modalNoteClassName,
 } from '@/components/maison/modals/maison-modal';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
-import { SuccessPanel } from '@/components/maison/ui/success-panel';
 import { cn } from '@/lib/utils';
 import { store as loginStore } from '@/routes/login';
-import { email as passwordEmail } from '@/routes/password';
+import { email as passwordEmail, update as passwordUpdate } from '@/routes/password';
 import { store as registerStore } from '@/routes/register';
 import { store as twoFactorStore } from '@/routes/two-factor/login';
 
@@ -38,6 +37,7 @@ export function AuthModal({
     const { t } = useTranslation();
     const [view, setView] = useState<AuthView>(initialView);
     const [forgotSent, setForgotSent] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState('');
     const [showRecoveryInput, setShowRecoveryInput] = useState(false);
 
     const copy = useMemo<ViewCopy>(() => {
@@ -54,9 +54,13 @@ export function AuthModal({
                 return {
                     title: t('Wachtwoord vergeten'),
                     subtitle: t('Herstel · Veilig en discreet'),
-                    description: t(
-                        'Vul uw e-mailadres in en wij sturen u een link om uw wachtwoord opnieuw in te stellen.',
-                    ),
+                    description: forgotSent
+                        ? t(
+                              'Voer de code uit uw e-mail in en kies een nieuw wachtwoord.',
+                          )
+                        : t(
+                              'Vul uw e-mailadres in en wij sturen u een eenmalige code om uw wachtwoord opnieuw in te stellen.',
+                          ),
                 };
             case 'two-factor':
                 return {
@@ -79,11 +83,12 @@ export function AuthModal({
                     ),
                 };
         }
-    }, [showRecoveryInput, t, view]);
+    }, [forgotSent, showRecoveryInput, t, view]);
 
     function switchView(next: AuthView): void {
         setView(next);
         setForgotSent(false);
+        setForgotEmail('');
         setShowRecoveryInput(false);
         onSwitchView(next);
     }
@@ -273,53 +278,124 @@ export function AuthModal({
 
             {view === 'forgot' && (
                 <>
-                    {forgotSent ? (
-                        <SuccessPanel
-                            title={t('Controleer uw inbox.')}
-                            icon="✓"
+                    <p className="mb-7 text-[15px] leading-[1.8] text-choc3">
+                        {copy.description}
+                    </p>
+
+                    {!forgotSent ? (
+                        <Form
+                            {...passwordEmail.form()}
+                            onSuccess={() => setForgotSent(true)}
+                            className="flex flex-col gap-3.5"
                         >
-                            <p>
-                                {t(
-                                    'Als dit e-mailadres bij ons bekend is, ontvangt u binnen enkele minuten een herstellink.',
-                                )}
-                            </p>
-                        </SuccessPanel>
+                            {({ processing, errors }) => (
+                                <>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        required
+                                        autoFocus
+                                        autoComplete="email"
+                                        placeholder={t('Uw e-mailadres')}
+                                        className={modalInputClassName}
+                                        value={forgotEmail}
+                                        onChange={(event) =>
+                                            setForgotEmail(event.target.value)
+                                        }
+                                    />
+                                    <InputError message={errors.email} />
+
+                                    <MaisonButton
+                                        type="submit"
+                                        variant="filled"
+                                        block
+                                        disabled={processing}
+                                    >
+                                        {t('Verstuur code')}
+                                    </MaisonButton>
+                                </>
+                            )}
+                        </Form>
                     ) : (
-                        <>
-                            <p className="mb-7 text-[15px] leading-[1.8] text-choc3">
-                                {copy.description}
-                            </p>
+                        <Form
+                            {...passwordUpdate.form()}
+                            className="flex flex-col gap-3.5"
+                            preserveScroll
+                        >
+                            {({ processing, errors }) => (
+                                <>
+                                    <input
+                                        type="hidden"
+                                        name="email"
+                                        value={forgotEmail}
+                                    />
 
-                            <Form
-                                {...passwordEmail.form()}
-                                onSuccess={() => setForgotSent(true)}
-                                className="flex flex-col gap-3.5"
-                            >
-                                {({ processing, errors }) => (
-                                    <>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            required
-                                            autoFocus
-                                            autoComplete="email"
-                                            placeholder={t('Uw e-mailadres')}
-                                            className={modalInputClassName}
-                                        />
-                                        <InputError message={errors.email} />
+                                    <input
+                                        type="email"
+                                        value={forgotEmail}
+                                        readOnly
+                                        className={cn(
+                                            modalInputClassName,
+                                            'opacity-70',
+                                        )}
+                                    />
 
-                                        <MaisonButton
-                                            type="submit"
-                                            variant="filled"
-                                            block
-                                            disabled={processing}
-                                        >
-                                            {t('Verstuur herstellink')}
-                                        </MaisonButton>
-                                    </>
-                                )}
-                            </Form>
-                        </>
+                                    <input
+                                        type="text"
+                                        name="otp"
+                                        required
+                                        autoFocus
+                                        inputMode="numeric"
+                                        autoComplete="one-time-code"
+                                        maxLength={6}
+                                        placeholder={t('6-cijferige code')}
+                                        className={modalInputClassName}
+                                    />
+                                    <InputError message={errors.otp} />
+
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        required
+                                        autoComplete="new-password"
+                                        placeholder={t('Nieuw wachtwoord')}
+                                        className={modalInputClassName}
+                                    />
+                                    <InputError message={errors.password} />
+
+                                    <input
+                                        type="password"
+                                        name="password_confirmation"
+                                        required
+                                        autoComplete="new-password"
+                                        placeholder={t('Bevestig wachtwoord')}
+                                        className={modalInputClassName}
+                                    />
+                                    <InputError
+                                        message={errors.password_confirmation}
+                                    />
+
+                                    <MaisonButton
+                                        type="submit"
+                                        variant="filled"
+                                        block
+                                        disabled={processing}
+                                    >
+                                        {t('Wachtwoord opnieuw instellen')}
+                                    </MaisonButton>
+
+                                    <button
+                                        type="button"
+                                        className="font-sans text-[11px] tracking-[0.12em] text-stone uppercase transition-colors hover:text-choc"
+                                        onClick={() => {
+                                            setForgotSent(false);
+                                        }}
+                                    >
+                                        {t('Andere code aanvragen')}
+                                    </button>
+                                </>
+                            )}
+                        </Form>
                     )}
 
                     <div className="mt-5 text-center">

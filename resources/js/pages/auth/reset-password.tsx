@@ -1,42 +1,42 @@
 import { Form, Head } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { update } from '@/routes/password';
+import { email as passwordEmail, update } from '@/routes/password';
 
 type Props = {
-    token: string;
     email: string;
     passwordRules: string;
 };
 
-export default function ResetPassword({ token, email, passwordRules }: Props) {
+export default function ResetPassword({ email, passwordRules }: Props) {
+    const { t } = useTranslation();
+
     return (
         <>
-            <Head title="Reset password" />
+            <Head title={t('Wachtwoord opnieuw instellen')} />
 
             <Form
                 {...update.form()}
-                transform={(data) => ({ ...data, token, email })}
-                resetOnSuccess={['password', 'password_confirmation']}
+                className="flex flex-col gap-6"
+                resetOnSuccess={['password', 'password_confirmation', 'otp']}
             >
                 {({ processing, errors }) => (
                     <div className="grid gap-6">
-                        <input type="hidden" name="token" value={token} />
-
                         <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">{t('E-mailadres')}</Label>
                             <Input
                                 id="email"
                                 type="email"
                                 name="email"
                                 autoComplete="email"
-                                value={email}
+                                defaultValue={email}
                                 className="mt-1 block w-full"
-                                readOnly
+                                required
                             />
                             <InputError
                                 message={errors.email}
@@ -45,47 +45,81 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="otp">{t('6-cijferige code')}</Label>
+                            <Input
+                                id="otp"
+                                type="text"
+                                name="otp"
+                                inputMode="numeric"
+                                autoComplete="one-time-code"
+                                maxLength={6}
+                                required
+                                autoFocus
+                                className="mt-1 block w-full tracking-[0.35em]"
+                                placeholder="000000"
+                            />
+                            <InputError message={errors.otp} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">
+                                {t('Nieuw wachtwoord')}
+                            </Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                autoFocus
-                                placeholder="Password"
+                                placeholder={t('Wachtwoord')}
                                 passwordrules={passwordRules}
+                                required
                             />
                             <InputError message={errors.password} />
                         </div>
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">
-                                Confirm password
+                                {t('Bevestig wachtwoord')}
                             </Label>
                             <PasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder="Confirm password"
+                                placeholder={t('Bevestig wachtwoord')}
                                 passwordrules={passwordRules}
+                                required
                             />
                             <InputError
                                 message={errors.password_confirmation}
-                                className="mt-2"
                             />
                         </div>
 
                         <Button
                             type="submit"
-                            className="mt-4 w-full"
+                            className="mt-2 w-full"
                             disabled={processing}
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            Reset password
+                            {t('Wachtwoord opnieuw instellen')}
                         </Button>
                     </div>
+                )}
+            </Form>
+
+            <Form {...passwordEmail.form()} className="mt-4 text-center">
+                {({ processing }) => (
+                    <>
+                        <input type="hidden" name="email" value={email} />
+                        <button
+                            type="submit"
+                            disabled={processing || email === ''}
+                            className="font-sans text-[10px] tracking-[0.2em] text-stone uppercase hover:text-gold disabled:opacity-50"
+                        >
+                            {t('Nieuwe code versturen')}
+                        </button>
+                    </>
                 )}
             </Form>
         </>
@@ -93,6 +127,7 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
 }
 
 ResetPassword.layout = {
-    title: 'Reset password',
-    description: 'Please enter your new password below',
+    title: 'Wachtwoord opnieuw instellen',
+    description:
+        'Voer de code uit uw e-mail in en kies een nieuw wachtwoord.',
 };

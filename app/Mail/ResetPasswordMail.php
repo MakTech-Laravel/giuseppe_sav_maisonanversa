@@ -15,7 +15,7 @@ class ResetPasswordMail extends Mailable
     use BrandsMaisonMail, Queueable, SerializesModels;
 
     public function __construct(
-        public string $resetUrl,
+        public string $otp,
         public int $expireMinutes,
         ?string $locale = null,
     ) {
@@ -25,7 +25,7 @@ class ResetPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Wachtwoord opnieuw instellen'),
+            subject: __('Uw herstelcode voor Maison Anversa'),
         );
     }
 
@@ -35,8 +35,7 @@ class ResetPasswordMail extends Mailable
             html: 'emails.reset-password',
             with: [
                 ...$this->maisonBrandData(null, false),
-                'ctaUrl' => $this->resetUrl,
-                'ctaLabel' => __('Wachtwoord opnieuw instellen'),
+                'otp' => $this->otp,
                 'expireMinutes' => $this->expireMinutes,
             ],
         );
