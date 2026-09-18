@@ -6,6 +6,8 @@ use App\Contracts\BrevoContacts;
 use App\Contracts\StripeCatalogGateway;
 use App\Enums\RoleEnum;
 use App\Listeners\StripeEventListener;
+use App\Mail\ResetPasswordMail;
+use App\Mail\VerifyEmailMail;
 use App\Models\JournalArticle;
 use App\Models\User;
 use App\Observers\JournalArticleObserver;
@@ -13,8 +15,11 @@ use App\Services\Brevo\HttpBrevoContacts;
 use App\Services\Brevo\NullBrevoContacts;
 use App\Services\Stripe\CashierStripeCatalogGateway;
 use App\Support\AdminTypePermissionBypass;
+use App\Support\MailLocale;
 use App\Support\Seo\MaisonSeo;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -49,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureSpatiePermissions();
         $this->configureCashierWebhooks();
         $this->configureSeoViewData();
+        $this->configureBrandedAuthMail();
 
         JournalArticle::observe(JournalArticleObserver::class);
     }
@@ -92,6 +98,41 @@ class AppServiceProvider extends ServiceProvider
                     ->uncompromised()
                 : null,
         );
+    }
+
+    /**
+     * Brand Fortify auth emails (reset password + verify email) with the Maison shell.
+     */
+    protected function configureBrandedAuthMail(): void
+    {
+        ResetPassword::createUrlUsing(function (object $notifiable, string $token): string {
+            return url(route('password.reset', [
+                'locale' => MailLocale::resolve($notifiable->locale ?? null),
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ], false));
+        });
+
+        ResetPassword::toMailUsing(function (object $notifiable, string $token) {
+            $locale = MailLocale::resolve($notifiable->locale ?? null);
+
+            return (new ResetPasswordMail(
+                resetUrl: url(route('password.reset', [
+                    'locale' => $locale,
+                    'token' => $token,
+                    'email' => $notifiable->getEmailForPasswordReset(),
+                ], false)),
+                expireMinutes: (int) config('auth.passwords.'.config('auth.defaults.passwords').'.expire'),
+                locale: $locale,
+            ))->to($notifiable->getEmailForPasswordReset());
+        });
+
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            return (new VerifyEmailMail(
+                verificationUrl: $url,
+                locale: $notifiable->locale ?? null,
+            ))->to($notifiable->getEmailForVerification());
+        });
     }
 
     /**

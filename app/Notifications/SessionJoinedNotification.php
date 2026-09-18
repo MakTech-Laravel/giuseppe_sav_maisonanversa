@@ -2,10 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Mail\SessionJoinedMail;
 use App\Models\CommunitySession;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class SessionJoinedNotification extends Notification implements ShouldQueue
@@ -25,15 +25,13 @@ class SessionJoinedNotification extends Notification implements ShouldQueue
         return ['mail', 'database'];
     }
 
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $notifiable): SessionJoinedMail
     {
-        return (new MailMessage)
-            ->subject(__('Iemand heeft zich aangemeld voor uw sessie'))
-            ->line(__(':name heeft zich aangemeld voor uw sessie op :when.', [
-                'name' => $this->memberName,
-                'when' => $this->session->starts_at->translatedFormat('j F Y H:i'),
-            ]))
-            ->line($this->session->location);
+        return (new SessionJoinedMail(
+            session: $this->session,
+            memberName: $this->memberName,
+            locale: $notifiable->locale ?? null,
+        ))->to($notifiable->routeNotificationFor('mail'));
     }
 
     /**
@@ -48,7 +46,6 @@ class SessionJoinedNotification extends Notification implements ShouldQueue
                 'when' => $this->session->starts_at->translatedFormat('j F Y H:i'),
             ]),
             'session_id' => $this->session->id,
-            'member_name' => $this->memberName,
         ];
     }
 }
