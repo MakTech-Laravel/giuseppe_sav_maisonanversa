@@ -119,6 +119,11 @@
             "width": 768,
             "webp": "images/optimized/rooms/room-atelier-768.webp",
             "avif": "images/optimized/rooms/room-atelier-768.avif"
+        },
+        {
+            "width": 1280,
+            "webp": "images/optimized/rooms/room-atelier-1280.webp",
+            "avif": "images/optimized/rooms/room-atelier-1280.avif"
         }
     ],
     "images/rooms/room-coffee.png": [
