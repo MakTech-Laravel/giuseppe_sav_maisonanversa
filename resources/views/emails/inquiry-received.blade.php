@@ -1,32 +1,53 @@
-<x-mail::message>
-# {{ __('Nieuwe aanvraag') }}
+@component('emails.layouts.maison', [
+    'title' => __('Nieuwe aanvraag'),
+    'logoUrl' => $logoUrl,
+])
+    <p style="margin:0 0 12px;">
+        <strong style="color:#291C18;">{{ __('Type') }}:</strong>
+        {{ $inquiry->type->label() }}
+    </p>
 
-**{{ __('Type') }}:** {{ $inquiry->type->label() }}
+    <p style="margin:0 0 12px;">
+        <strong style="color:#291C18;">{{ __('Naam') }}:</strong>
+        {{ $inquiry->name }}
+    </p>
 
-**{{ __('Naam') }}:** {{ $inquiry->name }}
+    <p style="margin:0 0 12px;">
+        <strong style="color:#291C18;">{{ __('E-mail') }}:</strong>
+        {{ $inquiry->email }}
+    </p>
 
-**{{ __('E-mail') }}:** {{ $inquiry->email }}
+    @if (filled($inquiry->phone))
+        <p style="margin:0 0 12px;">
+            <strong style="color:#291C18;">{{ __('Telefoon') }}:</strong>
+            {{ $inquiry->phone }}
+        </p>
+    @endif
 
-@if (filled($inquiry->phone))
-**{{ __('Telefoon') }}:** {{ $inquiry->phone }}
-@endif
+    @if (filled($inquiry->subject))
+        <p style="margin:0 0 12px;">
+            <strong style="color:#291C18;">{{ __('Onderwerp') }}:</strong>
+            {{ $inquiry->subject }}
+        </p>
+    @endif
 
-@if (filled($inquiry->subject))
-**{{ __('Onderwerp') }}:** {{ $inquiry->subject }}
-@endif
+    <p style="margin:0 0 16px;">
+        <strong style="color:#291C18;">{{ __('Locale') }}:</strong>
+        {{ $inquiry->locale }}
+    </p>
 
-**{{ __('Locale') }}:** {{ $inquiry->locale }}
+    @if (filled($inquiry->message))
+        <p style="margin:0 0 16px;color:#8A7D72;font-size:14px;white-space:pre-line;">
+            {{ $inquiry->message }}
+        </p>
+    @endif
 
-@if (filled($inquiry->message))
-{{ $inquiry->message }}
-@endif
-
-@if (! empty($inquiry->meta))
-@foreach ($inquiry->meta as $key => $value)
-**{{ $key }}:** {{ is_scalar($value) ? $value : json_encode($value) }}
-
-@endforeach
-@endif
-
-{{ config('app.name') }}
-</x-mail::message>
+    @if (! empty($inquiry->meta))
+        @foreach ($inquiry->meta as $key => $value)
+            <p style="margin:0 0 8px;">
+                <strong style="color:#291C18;">{{ $key }}:</strong>
+                {{ is_scalar($value) ? $value : json_encode($value) }}
+            </p>
+        @endforeach
+    @endif
+@endcomponent

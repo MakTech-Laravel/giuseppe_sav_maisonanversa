@@ -4,6 +4,7 @@ namespace App\Mail\Orders;
 
 use App\Models\Order;
 use App\Models\OrderStatusEvent;
+use App\Support\BrandsMaisonMail;
 use App\Support\MailLocale;
 use App\Support\OrderPresenter;
 use Illuminate\Bus\Queueable;
@@ -14,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 
 class OrderStatusUpdated extends Mailable
 {
-    use Queueable, SerializesModels;
+    use BrandsMaisonMail, Queueable, SerializesModels;
 
     public string $statusLabel;
 
@@ -40,8 +41,9 @@ class OrderStatusUpdated extends Mailable
         $this->order->loadMissing('product');
 
         return new Content(
-            markdown: 'emails.orders.status-updated',
+            html: 'emails.orders.status-updated',
             with: [
+                ...$this->maisonBrandData($this->order->locale),
                 'statusLabel' => $this->statusLabel,
             ],
         );
