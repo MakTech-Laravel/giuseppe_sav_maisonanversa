@@ -23,17 +23,21 @@ class HeritageLetterWelcome extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Welkom bij de Heritage Letter'),
+            subject: __('Welkom bij de Heritage Letter.'),
         );
     }
 
     public function content(): Content
     {
+        $locale = $this->subscriber->locale;
+
         return new Content(
-            markdown: 'emails.heritage-letter-welcome',
+            html: 'emails.heritage-letter-welcome',
             with: [
+                'logoUrl' => asset('images/logos/logo-icon.jpg'),
+                'homeUrl' => route('maison.home', ['locale' => $locale]),
                 'unsubscribeUrl' => URL::signedRoute('maison.heritage-letter.unsubscribe', [
-                    'locale' => $this->subscriber->locale,
+                    'locale' => $locale,
                     'subscriber' => $this->subscriber,
                 ]),
             ],

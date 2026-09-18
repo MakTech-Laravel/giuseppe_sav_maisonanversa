@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\NewsletterSubscriber;
+use App\Support\BrandsMaisonMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 
 class SoldOutNotice extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use BrandsMaisonMail, Queueable, SerializesModels;
 
     public function __construct(public NewsletterSubscriber $subscriber)
     {
@@ -29,7 +30,8 @@ class SoldOutNotice extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.sold-out-notice',
+            html: 'emails.sold-out-notice',
+            with: $this->maisonBrandData($this->subscriber->locale),
         );
     }
 }

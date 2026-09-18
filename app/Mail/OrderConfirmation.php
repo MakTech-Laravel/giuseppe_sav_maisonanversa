@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Order;
+use App\Support\BrandsMaisonMail;
 use App\Support\MailLocale;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -12,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 
 class OrderConfirmation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use BrandsMaisonMail, Queueable, SerializesModels;
 
     public function __construct(public Order $order)
     {
@@ -33,7 +34,8 @@ class OrderConfirmation extends Mailable
         $this->order->loadMissing('product');
 
         return new Content(
-            markdown: 'emails.order-confirmation',
+            html: 'emails.order-confirmation',
+            with: $this->maisonBrandData($this->order->locale),
         );
     }
 
