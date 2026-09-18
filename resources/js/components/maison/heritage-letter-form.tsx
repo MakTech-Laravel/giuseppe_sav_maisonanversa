@@ -11,6 +11,8 @@ type HeritageLetterFormProps = {
     showName?: boolean;
     variant?: 'dark' | 'light';
     className?: string;
+    /** Called when signup succeeds (e.g. close the newsletter modal). */
+    onSuccess?: () => void;
 };
 
 export function HeritageLetterForm({
@@ -18,6 +20,7 @@ export function HeritageLetterForm({
     showName = false,
     variant = 'dark',
     className,
+    onSuccess,
 }: HeritageLetterFormProps) {
     const { t } = useTranslation();
     const { locale } = useLocale();
@@ -33,7 +36,7 @@ export function HeritageLetterForm({
             ? 'min-w-0 flex-1 border border-gold/25 bg-transparent px-4 py-3.5 font-sans text-[13px] text-cream outline-none placeholder:text-stone focus:border-gold'
             : 'min-w-0 flex-1 border border-gold/25 bg-transparent px-4 py-3.5 font-sans text-[13px] text-choc outline-none placeholder:text-stone focus:border-gold';
 
-    if (form.recentlySuccessful) {
+    if (form.recentlySuccessful && !onSuccess) {
         return (
             <SuccessPanel
                 title={t('Welkom bij de Heritage Letter.')}
@@ -55,6 +58,9 @@ export function HeritageLetterForm({
                 event.preventDefault();
                 form.post(heritageLetterStore.url(locale), {
                     preserveScroll: true,
+                    onSuccess: () => {
+                        onSuccess?.();
+                    },
                 });
             }}
             className={cn('flex flex-col gap-3.5', className)}
