@@ -13,9 +13,10 @@ beforeEach(function () {
 test('email verification screen can be rendered', function () {
     $user = User::factory()->unverified()->create();
 
-    $response = $this->actingAs($user)->get(route('verification.notice'));
-
-    $response->assertOk();
+    $this->actingAs($user)
+        ->get(route('verification.notice'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('auth/verify-email'));
 });
 
 test('email can be verified', function () {
