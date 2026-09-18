@@ -20,7 +20,6 @@ use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\OrderStatusEvent;
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Mail\Mailable;
 
@@ -48,21 +47,6 @@ test('branded maison mailables include the site logo', function (string $key) {
     'verify-email',
     'session-joined',
 ]);
-
-test('password reset notification sends the branded maison mailable', function () {
-    $user = User::factory()->create(['locale' => 'en']);
-
-    $mailable = (new ResetPassword('test-token'))->toMail($user);
-
-    expect($mailable)->toBeInstanceOf(ResetPasswordMail::class);
-
-    $html = $mailable->render();
-
-    expect($html)
-        ->toContain('images/logos/logo-icon.jpg')
-        ->toContain('/en/reset-password/test-token')
-        ->toContain('Maison Anversa');
-});
 
 test('verify email notification sends the branded maison mailable', function () {
     $user = User::factory()->unverified()->create(['locale' => 'nl']);
@@ -98,8 +82,8 @@ function brandedMailable(string $key): Mailable
             return new OrderStatusUpdated($order, $event);
         })(),
         'reset-password' => new ResetPasswordMail(
-            resetUrl: 'https://example.test/en/reset-password/token',
-            expireMinutes: 60,
+            otp: '847291',
+            expireMinutes: 10,
             locale: 'en',
         ),
         'verify-email' => new VerifyEmailMail(

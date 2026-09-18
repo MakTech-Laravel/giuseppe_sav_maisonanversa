@@ -6,7 +6,6 @@ use App\Contracts\BrevoContacts;
 use App\Contracts\StripeCatalogGateway;
 use App\Enums\RoleEnum;
 use App\Listeners\StripeEventListener;
-use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmailMail;
 use App\Models\JournalArticle;
 use App\Models\User;
@@ -15,17 +14,19 @@ use App\Services\Brevo\HttpBrevoContacts;
 use App\Services\Brevo\NullBrevoContacts;
 use App\Services\Stripe\CashierStripeCatalogGateway;
 use App\Support\AdminTypePermissionBypass;
-use App\Support\MailLocale;
 use App\Support\Seo\MaisonSeo;
 use Carbon\CarbonImmutable;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Cashier\Events\WebhookReceived;
 
@@ -55,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureCashierWebhooks();
         $this->configureSeoViewData();
         $this->configureBrandedAuthMail();
+        $this->configurePasswordResetRateLimiting();
 
         JournalArticle::observe(JournalArticleObserver::class);
     }
@@ -101,37 +103,34 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Brand Fortify auth emails (reset password + verify email) with the Maison shell.
+     * Brand Fortify auth emails that still use Laravel notifications.
      */
     protected function configureBrandedAuthMail(): void
     {
-        ResetPassword::createUrlUsing(function (object $notifiable, string $token): string {
-            return url(route('password.reset', [
-                'locale' => MailLocale::resolve($notifiable->locale ?? null),
-                'token' => $token,
-                'email' => $notifiable->getEmailForPasswordReset(),
-            ], false));
-        });
-
-        ResetPassword::toMailUsing(function (object $notifiable, string $token) {
-            $locale = MailLocale::resolve($notifiable->locale ?? null);
-
-            return (new ResetPasswordMail(
-                resetUrl: url(route('password.reset', [
-                    'locale' => $locale,
-                    'token' => $token,
-                    'email' => $notifiable->getEmailForPasswordReset(),
-                ], false)),
-                expireMinutes: (int) config('auth.passwords.'.config('auth.defaults.passwords').'.expire'),
-                locale: $locale,
-            ))->to($notifiable->getEmailForPasswordReset());
-        });
-
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
             return (new VerifyEmailMail(
                 verificationUrl: $url,
                 locale: $notifiable->locale ?? null,
             ))->to($notifiable->getEmailForVerification());
+        });
+    }
+
+    protected function configurePasswordResetRateLimiting(): void
+    {
+        RateLimiter::for('password-reset-send', function (Request $request) {
+            $email = Str::lower((string) $request->input('email'));
+
+            return [
+                Limit::perMinute(1)->by($email.'|'.$request->ip()),
+                Limit::perHour(5)->by($email),
+                Limit::perHour(20)->by($request->ip()),
+            ];
+        });
+
+        RateLimiter::for('password-reset-attempt', function (Request $request) {
+            $email = Str::lower((string) $request->input('email'));
+
+            return Limit::perMinute(10)->by($email.'|'.$request->ip());
         });
     }
 

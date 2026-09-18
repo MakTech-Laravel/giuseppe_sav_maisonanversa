@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
+use App\Http\Controllers\Auth\PasswordResetOtpController;
 use App\Http\Controllers\Community\ClubController;
 use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\Community\EventController as CommunityEventPageController;
@@ -75,6 +76,15 @@ Route::middleware('web')->controller(AuthModalRedirectController::class)->group(
     Route::get('register', 'register')->name('register');
     Route::get('forgot-password', 'forgotPassword')->name('password.request');
     Route::get('two-factor-challenge', 'twoFactor')->name('two-factor.login');
+});
+
+Route::middleware(['web', 'guest'])->group(function () {
+    Route::post('forgot-password', [PasswordResetOtpController::class, 'send'])
+        ->middleware('throttle:password-reset-send')
+        ->name('password.email');
+    Route::post('reset-password', [PasswordResetOtpController::class, 'reset'])
+        ->middleware('throttle:password-reset-attempt')
+        ->name('password.update');
 });
 
 Route::pattern('locale', implode('|', config('maison.locales')));
@@ -148,10 +158,9 @@ Route::prefix('{locale}')
 Route::prefix('{locale}')
     ->middleware('locale')
     ->group(function () {
-        Route::get('reset-password/{token}', fn (Request $request, string $token) => Inertia::render('auth/reset-password', [
-            'email' => $request->email,
-            'token' => $token,
-        ]))->middleware('guest')->name('password.reset');
+        Route::get('reset-password', [PasswordResetOtpController::class, 'create'])
+            ->middleware('guest')
+            ->name('password.reset');
 
         Route::get('email/verify', function (Request $request) {
             $user = $request->user();
