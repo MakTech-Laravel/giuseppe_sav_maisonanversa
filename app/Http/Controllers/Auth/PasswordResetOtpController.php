@@ -53,9 +53,11 @@ class PasswordResetOtpController extends Controller
 
         $locale = $this->redirects->resolveLocale($request);
 
-        return redirect()
-            ->route('maison.home', ['locale' => $locale])
-            ->with('open_auth_modal', 'login')
-            ->with('status', __('Uw wachtwoord is opnieuw ingesteld. U kunt nu inloggen.'));
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Wachtwoord succesvol opnieuw ingesteld. Log nu in.'),
+        ]);
+
+        return redirect()->route('maison.home', ['locale' => $locale]);
     }
 }

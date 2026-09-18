@@ -63,14 +63,14 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 
                         <div className="grid gap-2">
                             <Label htmlFor="password">
-                                {t('Nieuw wachtwoord')}
+                                {t('Nieuw wachtwoord instellen')}
                             </Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder={t('Wachtwoord')}
+                                placeholder={t('Nieuw wachtwoord')}
                                 passwordrules={passwordRules}
                                 required
                             />
@@ -79,7 +79,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">
-                                {t('Bevestig wachtwoord')}
+                                {t('Bevestig nieuw wachtwoord')}
                             </Label>
                             <PasswordInput
                                 id="password_confirmation"
@@ -102,7 +102,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            {t('Wachtwoord opnieuw instellen')}
+                            {t('Wachtwoord opslaan')}
                         </Button>
                     </div>
                 )}
@@ -129,5 +129,5 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 ResetPassword.layout = {
     title: 'Wachtwoord opnieuw instellen',
     description:
-        'Voer de code uit uw e-mail in en kies een nieuw wachtwoord.',
+        'Voer de code uit uw e-mail in en stel uw nieuwe wachtwoord in.',
 };

@@ -99,6 +99,7 @@ class HandleInertiaRequests extends Middleware
             'availableImages' => Inertia::always(Imagery::existingPaths()),
             'flash' => [
                 'open_auth_modal' => fn () => $request->session()->get('open_auth_modal'),
+                'status' => fn () => $request->session()->get('status'),
             ],
         ];
     }

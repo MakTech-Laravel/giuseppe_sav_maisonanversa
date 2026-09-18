@@ -1,5 +1,5 @@
 import { Form } from '@inertiajs/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenderSelect } from '@/components/gender-select';
 import InputError from '@/components/input-error';
@@ -8,6 +8,7 @@ import {
     modalInputClassName,
     modalNoteClassName,
 } from '@/components/maison/modals/maison-modal';
+import { ModalPasswordInput } from '@/components/maison/modals/modal-password-input';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { cn } from '@/lib/utils';
 import { store as loginStore } from '@/routes/login';
@@ -39,6 +40,14 @@ export function AuthModal({
     const [forgotSent, setForgotSent] = useState(false);
     const [forgotEmail, setForgotEmail] = useState('');
     const [showRecoveryInput, setShowRecoveryInput] = useState(false);
+
+    useEffect(() => {
+        setView(initialView);
+
+        if (initialView !== 'forgot') {
+            setForgotSent(false);
+        }
+    }, [initialView]);
 
     const copy = useMemo<ViewCopy>(() => {
         switch (view) {
@@ -115,7 +124,10 @@ export function AuthModal({
                     >
                         {({ processing, errors }) => (
                             <>
-                                <label className="sr-only" htmlFor="auth-login">
+                                <label
+                                    className="sr-only"
+                                    htmlFor="auth-login"
+                                >
                                     {t('Gebruikersnaam / E-mail')}
                                 </label>
                                 <input
@@ -125,7 +137,9 @@ export function AuthModal({
                                     required
                                     autoFocus
                                     autoComplete="username"
-                                    placeholder={t('Gebruikersnaam / E-mail')}
+                                    placeholder={t(
+                                        'Gebruikersnaam / E-mail',
+                                    )}
                                     className={modalInputClassName}
                                 />
                                 <InputError message={errors.email} />
@@ -136,14 +150,12 @@ export function AuthModal({
                                 >
                                     {t('Wachtwoord')}
                                 </label>
-                                <input
+                                <ModalPasswordInput
                                     id="auth-password"
-                                    type="password"
                                     name="password"
                                     required
                                     autoComplete="current-password"
                                     placeholder={t('Wachtwoord')}
-                                    className={modalInputClassName}
                                 />
                                 <InputError message={errors.password} />
 
@@ -221,23 +233,19 @@ export function AuthModal({
                                 />
                                 <InputError message={errors.email} />
 
-                                <input
-                                    type="password"
+                                <ModalPasswordInput
                                     name="password"
                                     required
                                     autoComplete="new-password"
                                     placeholder={t('Wachtwoord')}
-                                    className={modalInputClassName}
                                 />
                                 <InputError message={errors.password} />
 
-                                <input
-                                    type="password"
+                                <ModalPasswordInput
                                     name="password_confirmation"
                                     required
                                     autoComplete="new-password"
                                     placeholder={t('Bevestig wachtwoord')}
-                                    className={modalInputClassName}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -319,8 +327,9 @@ export function AuthModal({
                     ) : (
                         <Form
                             {...passwordUpdate.form()}
+                            onSuccess={onClose}
                             className="flex flex-col gap-3.5"
-                            preserveScroll
+                            options={{ preserveScroll: true }}
                         >
                             {({ processing, errors }) => (
                                 <>
@@ -330,50 +339,89 @@ export function AuthModal({
                                         value={forgotEmail}
                                     />
 
-                                    <input
-                                        type="email"
-                                        value={forgotEmail}
-                                        readOnly
-                                        className={cn(
-                                            modalInputClassName,
-                                            'opacity-70',
-                                        )}
-                                    />
+                                    <div className="flex flex-col gap-1.5">
+                                        <label
+                                            htmlFor="auth-reset-email"
+                                            className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
+                                        >
+                                            {t('E-mailadres')}
+                                        </label>
+                                        <input
+                                            id="auth-reset-email"
+                                            type="email"
+                                            value={forgotEmail}
+                                            readOnly
+                                            className={cn(
+                                                modalInputClassName,
+                                                'opacity-70',
+                                            )}
+                                        />
+                                    </div>
 
-                                    <input
-                                        type="text"
-                                        name="otp"
-                                        required
-                                        autoFocus
-                                        inputMode="numeric"
-                                        autoComplete="one-time-code"
-                                        maxLength={6}
-                                        placeholder={t('6-cijferige code')}
-                                        className={modalInputClassName}
-                                    />
-                                    <InputError message={errors.otp} />
+                                    <div className="flex flex-col gap-1.5">
+                                        <label
+                                            htmlFor="auth-reset-otp"
+                                            className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
+                                        >
+                                            {t('6-cijferige code')}
+                                        </label>
+                                        <input
+                                            id="auth-reset-otp"
+                                            type="text"
+                                            name="otp"
+                                            required
+                                            autoFocus
+                                            inputMode="numeric"
+                                            autoComplete="one-time-code"
+                                            maxLength={6}
+                                            placeholder="000000"
+                                            className={cn(
+                                                modalInputClassName,
+                                                'tracking-[0.35em]',
+                                            )}
+                                        />
+                                        <InputError message={errors.otp} />
+                                    </div>
 
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        required
-                                        autoComplete="new-password"
-                                        placeholder={t('Nieuw wachtwoord')}
-                                        className={modalInputClassName}
-                                    />
-                                    <InputError message={errors.password} />
+                                    <div className="flex flex-col gap-1.5">
+                                        <label
+                                            htmlFor="auth-reset-password"
+                                            className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
+                                        >
+                                            {t('Nieuw wachtwoord instellen')}
+                                        </label>
+                                        <ModalPasswordInput
+                                            id="auth-reset-password"
+                                            name="password"
+                                            required
+                                            autoComplete="new-password"
+                                            placeholder={t('Nieuw wachtwoord')}
+                                        />
+                                        <InputError message={errors.password} />
+                                    </div>
 
-                                    <input
-                                        type="password"
-                                        name="password_confirmation"
-                                        required
-                                        autoComplete="new-password"
-                                        placeholder={t('Bevestig wachtwoord')}
-                                        className={modalInputClassName}
-                                    />
-                                    <InputError
-                                        message={errors.password_confirmation}
-                                    />
+                                    <div className="flex flex-col gap-1.5">
+                                        <label
+                                            htmlFor="auth-reset-password-confirm"
+                                            className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
+                                        >
+                                            {t('Bevestig nieuw wachtwoord')}
+                                        </label>
+                                        <ModalPasswordInput
+                                            id="auth-reset-password-confirm"
+                                            name="password_confirmation"
+                                            required
+                                            autoComplete="new-password"
+                                            placeholder={t(
+                                                'Bevestig wachtwoord',
+                                            )}
+                                        />
+                                        <InputError
+                                            message={
+                                                errors.password_confirmation
+                                            }
+                                        />
+                                    </div>
 
                                     <MaisonButton
                                         type="submit"
@@ -381,7 +429,7 @@ export function AuthModal({
                                         block
                                         disabled={processing}
                                     >
-                                        {t('Wachtwoord opnieuw instellen')}
+                                        {t('Wachtwoord opslaan')}
                                     </MaisonButton>
 
                                     <button
