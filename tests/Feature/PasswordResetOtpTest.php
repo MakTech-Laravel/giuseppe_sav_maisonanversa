@@ -57,6 +57,8 @@ test('password can be reset with a valid otp', function () {
     expect(Hash::check('NewPassword1!', $user->fresh()->password))->toBeTrue()
         ->and(DB::table('password_reset_tokens')->where('email', $user->email)->exists())->toBeFalse()
         ->and($response->headers->get('Location'))->toContain('/nl');
+
+    $response->assertSessionMissing('open_auth_modal');
 });
 
 test('invalid otp is rejected and increments attempts', function () {

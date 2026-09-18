@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
@@ -36,6 +36,7 @@ type PageProps = {
     };
     flash?: {
         open_auth_modal?: AuthView;
+        status?: string | null;
     };
 };
 
@@ -93,8 +94,20 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         promptedAuthView !== null &&
         dismissedAuthPromptKey !== currentAuthPromptKey;
     const modal = userModal ?? (autoOpenAuth ? 'auth' : null);
-    const authView =
-        userModal === 'auth' ? userAuthView : (promptedAuthView ?? 'login');
+    // Prefer flash-driven auth view (e.g. post password-reset) over stale local state.
+    const authView = promptedAuthView ?? userAuthView;
+
+    useEffect(() => {
+        const flashView = props.flash?.open_auth_modal;
+
+        if (!flashView) {
+            return;
+        }
+
+        setUserAuthView(flashView);
+        setUserModal('auth');
+        setDismissedAuthPromptKey(null);
+    }, [props.flash?.open_auth_modal, currentAuthPromptKey]);
 
     useReveal(main);
 
@@ -149,7 +162,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     );
 
     function closeModal(): void {
-        if (autoOpenAuth && userModal === null) {
+        if (autoOpenAuth || modal === 'auth') {
             setDismissedAuthPromptKey(currentAuthPromptKey);
         }
 
