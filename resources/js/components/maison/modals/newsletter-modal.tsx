@@ -32,6 +32,7 @@ export function NewsletterModal({ onClose }: NewsletterModalProps) {
                 showName
                 variant="light"
                 className="[&_input]:placeholder:text-stone"
+                onSuccess={onClose}
             />
 
             <p className={modalNoteClassName}>
