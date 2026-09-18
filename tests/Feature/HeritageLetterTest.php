@@ -166,11 +166,19 @@ test('the sync job removes unsubscribed contacts from brevo', function () {
 });
 
 test('the welcome mail includes a signed unsubscribe url', function () {
-    $subscriber = NewsletterSubscriber::factory()->create();
+    $subscriber = NewsletterSubscriber::factory()->create(['locale' => 'en']);
 
     $html = (new HeritageLetterWelcome($subscriber))->render();
+    $homeUrl = route('maison.home', ['locale' => 'en']);
+    $logoUrl = asset('images/logos/logo-icon.jpg');
 
     expect($html)
         ->toContain('heritage-letter/unsubscribe')
-        ->toContain('signature=');
+        ->toContain('signature=')
+        ->toContain($logoUrl)
+        ->toContain('images/logos/logo-icon.jpg')
+        ->toContain($homeUrl)
+        ->toContain('alt="Maison Anversa"')
+        ->toContain('Thank you sincerely for subscribing to the Maison Anversa Heritage Letter.')
+        ->toContain('Through this letter the house shares stories, news about our editions and exclusive invitations');
 });
