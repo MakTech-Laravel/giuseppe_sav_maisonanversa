@@ -1,17 +1,27 @@
-<x-mail::message>
-# {{ __($inquiry->type->confirmationSubject()) }}
+@component('emails.layouts.maison', [
+    'title' => __($inquiry->type->confirmationSubject()),
+    'logoUrl' => $logoUrl,
+    'ctaUrl' => $homeUrl,
+    'ctaLabel' => __('Bezoek het huis'),
+])
+    <p style="margin:0 0 16px;">
+        {{ __('Beste :name,', ['name' => $inquiry->name]) }}
+    </p>
 
-{{ __('Beste :name,', ['name' => $inquiry->name]) }}
+    <p style="margin:0 0 16px;">
+        {{ __('Wij hebben uw bericht ontvangen en bevestigen persoonlijk zo snel mogelijk.') }}
+    </p>
 
-{{ __('Wij hebben uw bericht ontvangen en bevestigen persoonlijk zo snel mogelijk.') }}
+    @if (filled($inquiry->subject))
+        <p style="margin:0 0 12px;">
+            <strong style="color:#291C18;">{{ __('Onderwerp') }}:</strong>
+            {{ $inquiry->subject }}
+        </p>
+    @endif
 
-@if (filled($inquiry->subject))
-**{{ __('Onderwerp') }}:** {{ $inquiry->subject }}
-@endif
-
-@if (filled($inquiry->message))
-{{ $inquiry->message }}
-@endif
-
-{{ config('app.name') }}
-</x-mail::message>
+    @if (filled($inquiry->message))
+        <p style="margin:0;color:#8A7D72;font-size:14px;white-space:pre-line;">
+            {{ $inquiry->message }}
+        </p>
+    @endif
+@endcomponent

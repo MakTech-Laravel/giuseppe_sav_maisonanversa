@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Inquiry;
+use App\Support\BrandsMaisonMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,9 +13,12 @@ use Illuminate\Queue\SerializesModels;
 
 class InquiryConfirmation extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use BrandsMaisonMail, Queueable, SerializesModels;
 
-    public function __construct(public Inquiry $inquiry) {}
+    public function __construct(public Inquiry $inquiry)
+    {
+        $this->locale($inquiry->locale);
+    }
 
     public function envelope(): Envelope
     {
@@ -26,7 +30,8 @@ class InquiryConfirmation extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.inquiry-confirmation',
+            html: 'emails.inquiry-confirmation',
+            with: $this->maisonBrandData($this->inquiry->locale),
         );
     }
 }

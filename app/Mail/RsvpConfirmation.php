@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\CommunityEvent;
+use App\Support\BrandsMaisonMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 
 class RsvpConfirmation extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use BrandsMaisonMail, Queueable, SerializesModels;
 
     public function __construct(public CommunityEvent $event)
     {
@@ -31,7 +32,8 @@ class RsvpConfirmation extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.rsvp-confirmation',
+            html: 'emails.rsvp-confirmation',
+            with: $this->maisonBrandData(),
         );
     }
 }
