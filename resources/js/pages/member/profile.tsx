@@ -20,6 +20,7 @@ import { Label } from '@/components/ui/label';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { send } from '@/routes/verification';
+import type { User } from '@/types/auth';
 
 export default function MemberProfile({
     mustVerifyEmail,
@@ -82,20 +83,36 @@ export default function MemberProfile({
                             <div className="grid gap-5 md:grid-cols-2">
                                 <div className="grid gap-2">
                                     <Label
-                                        htmlFor="name"
+                                        htmlFor="first_name"
                                         className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                     >
-                                        {t('Naam')}
+                                        {t('Voornaam')}
                                     </Label>
                                     <Input
-                                        id="name"
-                                        name="name"
-                                        defaultValue={user.name}
+                                        id="first_name"
+                                        name="first_name"
+                                        defaultValue={profileFirstName(user)}
                                         required
-                                        autoComplete="name"
+                                        autoComplete="given-name"
                                         className={memberFieldClassName}
                                     />
-                                    <InputError message={errors.name} />
+                                    <InputError message={errors.first_name} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label
+                                        htmlFor="last_name"
+                                        className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                    >
+                                        {t('Achternaam')}
+                                    </Label>
+                                    <Input
+                                        id="last_name"
+                                        name="last_name"
+                                        defaultValue={profileLastName(user)}
+                                        autoComplete="family-name"
+                                        className={memberFieldClassName}
+                                    />
+                                    <InputError message={errors.last_name} />
                                 </div>
 
                                 <div className="grid gap-2">
@@ -357,4 +374,28 @@ function DeleteMemberAccount({ locale }: { locale: string }) {
             )}
         </MemberPanel>
     );
+}
+
+function profileFirstName(user: User): string {
+    if (typeof user.first_name === 'string' && user.first_name !== '') {
+        return user.first_name;
+    }
+
+    const parts = user.name.trim().split(/\s+/);
+
+    if (parts.length <= 1) {
+        return parts[0] ?? '';
+    }
+
+    return parts.slice(0, -1).join(' ');
+}
+
+function profileLastName(user: User): string {
+    if (typeof user.last_name === 'string') {
+        return user.last_name;
+    }
+
+    const parts = user.name.trim().split(/\s+/);
+
+    return parts.length <= 1 ? '' : (parts[parts.length - 1] ?? '');
 }

@@ -80,10 +80,6 @@ export function MemberNav() {
         { label: t('Dashboard'), href: `/${locale}/member`, exact: true },
         { label: t('Bestellingen'), href: `/${locale}/member/orders` },
         {
-            label: t('Racketregistratie'),
-            href: `/${locale}/member/racket-registration`,
-        },
-        {
             label: t('Lidpaspoort'),
             href: `/${locale}/member/lidpaspoort`,
         },
@@ -100,6 +96,10 @@ export function MemberNav() {
                   {
                       label: t('Digitaal Heritage Passport'),
                       href: `/${locale}/member/passport`,
+                  },
+                  {
+                      label: t('Registervermelding'),
+                      href: `/${locale}/member/register-listing`,
                   },
               ]
             : []),

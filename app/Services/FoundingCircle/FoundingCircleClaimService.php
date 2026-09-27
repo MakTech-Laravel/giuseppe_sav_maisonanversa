@@ -184,12 +184,9 @@ class FoundingCircleClaimService
             Role::findOrCreate(RoleEnum::FOUNDING_CIRCLE->value, GuardEnum::WEB->value);
             $locked->user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
 
-            $this->registrar->register(
-                $locked->user,
-                $locked->order,
-                $locked->edition_number,
-                $locked->product_id,
-            );
+            if ($locked->order !== null) {
+                $this->registrar->inscribeFromOrder($locked->order);
+            }
 
             $locked->fill([
                 'status' => FoundingCircleClaimStatus::Approved,

@@ -31,7 +31,8 @@ export default function MemberDashboard({
     recentOrders?: RecentOrder[];
 }) {
     const { t } = useTranslation();
-    const { locale } = usePage().props;
+    const { locale, auth } = usePage().props;
+    const isFoundingCircle = Boolean(auth?.user?.is_founding_circle);
 
     const links = [
         {
@@ -39,11 +40,15 @@ export default function MemberDashboard({
             label: t('Bestellingen'),
             hint: t('Betalingsgeschiedenis'),
         },
-        {
-            href: `/${locale}/member/circle`,
-            label: t('Founding Circle'),
-            hint: t('Uw lidmaatschapskaart'),
-        },
+        ...(isFoundingCircle
+            ? [
+                  {
+                      href: `/${locale}/member/circle`,
+                      label: t('Founding Circle'),
+                      hint: t('Uw lidmaatschapskaart'),
+                  },
+              ]
+            : []),
         {
             href: `/${locale}/member/profile`,
             label: t('Profiel'),

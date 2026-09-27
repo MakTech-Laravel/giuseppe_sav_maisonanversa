@@ -20,6 +20,7 @@ test('staff can assign founding circle by email', function () {
     $this->actingAs($this->admin)
         ->post(route('admin.circle.assign', ['locale' => 'nl']), [
             'email' => $member->email,
+            'edition_number' => 12,
         ])
         ->assertRedirect();
 
@@ -32,6 +33,7 @@ test('staff can assign founding circle by user id', function () {
     $this->actingAs($this->admin)
         ->post(route('admin.circle.assign', ['locale' => 'nl']), [
             'user_id' => $member->id,
+            'edition_number' => 13,
         ])
         ->assertRedirect();
 

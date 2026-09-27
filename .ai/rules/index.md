@@ -15,8 +15,9 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Jobs/TranslateModelJob.php | .ai/rules/jobs.md |
 | resources/js/pages/admin/legal-pages/**/*.tsx | .ai/rules/legal-pages.md |
 | resources/js/pages/admin/letter/**/*.tsx | .ai/rules/letter.md |
-| app/Mail/** | .ai/rules/mail.md |
+| app/Mail/**, app/Services/Auth/PasswordResetOtpService.php | .ai/rules/mail.md |
 | resources/js/components/maison/community/** | .ai/rules/maison-community.md |
+| resources/js/pages/maison/founding-circle/** | .ai/rules/maison-founding-circle.md |
 | resources/js/components/maison/modals/**, resources/js/components/ui/select.tsx, resources/js/components/gender-select.tsx | .ai/rules/maison-modals.md |
 | resources/js/pages/maison/house.tsx, resources/js/pages/maison/community.tsx | .ai/rules/maison.md |
 | resources/js/components/member/**, resources/js/layouts/member-layout.tsx | .ai/rules/member.md |
@@ -25,6 +26,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
 | routes/web.php | .ai/rules/routes.md |
 | app/Support/Seo/** | .ai/rules/seo.md |
+| app/Services/Checkout/** | .ai/rules/services-checkout.md |
 | app/Services/Community/ClubMerger.php | .ai/rules/services-community.md |
 | resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
 | app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php | .ai/rules/support.md |

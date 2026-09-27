@@ -84,7 +84,8 @@ test('members can update their profile gender from the member area', function ()
 
     $this->actingAs($user)
         ->patch(localized('member.profile.update'), [
-            'name' => 'Updated Name',
+            'first_name' => 'Updated',
+            'last_name' => 'Name',
             'email' => $user->email,
             'gender' => UserGender::Female->value,
             'username' => 'new_handle',
@@ -93,6 +94,8 @@ test('members can update their profile gender from the member area', function ()
 
     expect($user->fresh()->username)->toBe('old_handle')
         ->and($user->fresh()->name)->toBe('Updated Name')
+        ->and($user->fresh()->first_name)->toBe('Updated')
+        ->and($user->fresh()->last_name)->toBe('Name')
         ->and($user->fresh()->gender)->toBe(UserGender::Female);
 });
 
@@ -103,7 +106,8 @@ test('members can upload and remove a profile avatar', function () {
 
     $this->actingAs($user)
         ->patch(localized('member.profile.update'), [
-            'name' => $user->name,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'email' => $user->email,
             'gender' => $user->gender->value,
             'avatar' => UploadedFile::fake()->image('avatar.jpg'),
@@ -117,7 +121,8 @@ test('members can upload and remove a profile avatar', function () {
 
     $this->actingAs($user)
         ->patch(localized('member.profile.update'), [
-            'name' => $user->name,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'email' => $user->email,
             'gender' => $user->gender->value,
             'remove_avatar' => true,
@@ -198,7 +203,6 @@ test('the member nav includes the client feedback sections', function () {
     foreach ([
         "t('Dashboard')",
         "t('Bestellingen')",
-        "t('Racketregistratie')",
         "t('Founding Circle')",
         "t('Lidpaspoort')",
         "t('Gemeenschap')",
@@ -223,7 +227,8 @@ test('the member nav shows Heritage Passport and Circle links only for Founding 
         ->toContain("t('Mijn Heritage')")
         ->toContain("t('Digitaal Heritage Passport')")
         ->toContain("t('Founding Circle')")
-        ->toContain("t('Racketregistratie')")
+        ->toContain("t('Registervermelding')")
+        ->not->toContain("t('Racketregistratie')")
         ->toContain('isFoundingCircle');
 });
 

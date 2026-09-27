@@ -1,8 +1,11 @@
 <?php
 
 use App\Enums\OrderStatus;
+use App\Enums\RegisterVisibility;
 use App\Enums\RoleEnum;
+use App\Models\EditionPiece;
 use App\Models\FoundingCircleClaim;
+use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -30,13 +33,19 @@ test('order fulfillment is idempotent for paid sessions', function () {
         ->and(Order::query()->where('status', OrderStatus::Paid)->count())->toBe(1);
 });
 
-test('paying for a founding-circle-granting product creates a pending claim without enrolling', function () {
+test('paying for heritage no.001 inscribes the buyer as a private member on the picked number', function () {
     $user = User::factory()->create();
+    $product = Product::founding();
+    $piece = EditionPiece::query()
+        ->where('product_id', $product->id)
+        ->where('edition_number', $product->formatEditionLabel(42))
+        ->firstOrFail();
+
     $order = Order::factory()->forUser($user)->create([
         'status' => OrderStatus::Incomplete,
+        'product_id' => $product->id,
+        'edition_piece_id' => $piece->id,
     ]);
-
-    expect($order->product->grants_founding_circle)->toBeTrue();
 
     $session = (object) [
         'id' => 'cs_test_founding_circle',
@@ -47,14 +56,22 @@ test('paying for a founding-circle-granting product creates a pending claim with
 
     app(OrderFulfillment::class)->markPaidFromSession($session);
 
-    expect($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse()
-        ->and($order->fresh()->edition_number)->not->toBeNull()
-        ->and(FoundingCircleClaim::query()->where('order_id', $order->id)->exists())->toBeTrue();
+    $entry = FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->first();
+
+    expect($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeTrue()
+        ->and($order->fresh()->edition_number)->toBe(42)
+        ->and($entry)->not->toBeNull()
+        ->and($entry->edition_number)->toBe(42)
+        ->and($entry->register_visibility)->toBe(RegisterVisibility::Private)
+        ->and($entry->register_consent_at)->toBeNull()
+        ->and(FoundingCircleClaim::query()->where('order_id', $order->id)->exists())->toBeFalse();
 });
 
-test('paying for a product that does not grant founding circle does not enroll the buyer', function () {
+test('paying for another product does not enroll the buyer even when the founding flag is on', function () {
     $user = User::factory()->create();
-    $product = Product::factory()->create();
+    $product = Product::factory()->create([
+        'grants_founding_circle' => true,
+    ]);
     $order = Order::factory()->forUser($user)->create([
         'status' => OrderStatus::Incomplete,
         'product_id' => $product->id,
@@ -69,5 +86,6 @@ test('paying for a product that does not grant founding circle does not enroll t
 
     app(OrderFulfillment::class)->markPaidFromSession($session);
 
-    expect($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse();
+    expect($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse()
+        ->and(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeFalse();
 });

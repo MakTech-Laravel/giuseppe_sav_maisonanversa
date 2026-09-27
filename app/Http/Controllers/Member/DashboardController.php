@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Enums\UserGender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Member\UpdateLetterPreferencesRequest;
-use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Http\Requests\Member\UpdateMemberProfileRequest;
 use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
@@ -14,6 +14,7 @@ use App\Services\Newsletter\HeritageLetterSubscription;
 use App\Support\MemberPassportPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
+use App\Support\PersonName;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -215,14 +216,21 @@ class DashboardController extends Controller implements HasMiddleware
     }
 
     public function updateProfile(
-        ProfileUpdateRequest $request,
+        UpdateMemberProfileRequest $request,
         string $locale,
         HeritageLetterSubscription $subscription,
     ): RedirectResponse {
         $user = $request->user();
         $previousEmail = $user->email;
+        $firstName = (string) $request->validated('first_name');
+        $lastName = (string) ($request->validated('last_name') ?? '');
 
-        $user->fill($request->safe()->only(['name', 'email', 'gender']));
+        $user->fill([
+            ...$request->safe()->only(['email', 'gender']),
+            'first_name' => $firstName,
+            'last_name' => $lastName !== '' ? $lastName : null,
+            'name' => PersonName::compose($firstName, $lastName),
+        ]);
 
         $emailChanged = $user->isDirty('email');
 

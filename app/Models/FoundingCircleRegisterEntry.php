@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use App\Enums\RegisterVisibility;
 use Database\Factories\FoundingCircleRegisterEntryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Permanent, append-only ledger of everyone who has ever earned Founding
- * Circle membership. Entries are never updated or deleted by the app —
- * `name` is a snapshot taken at join time and is not re-synced if the
- * user later changes their name, and the row survives role removal or
- * order refunds. Foreign keys are nulled (not cascaded) if the related
- * user/product/order is hard-deleted, so the historical record remains.
+ * Live Founding Circle place for Heritage No.001.
+ *
+ * One row per member. `edition_number` is the same number as the racket,
+ * certificate, and Heritage Passport. `name` is a snapshot taken when the
+ * place was inscribed; the public register reads the account name instead.
+ * Visibility, consent, and the row itself change when the member updates
+ * their listing, an admin hides the entry, or the order is refunded.
  *
  * @use HasFactory<FoundingCircleRegisterEntryFactory>
  */
@@ -33,6 +35,17 @@ class FoundingCircleRegisterEntry extends Model
         'name',
         'edition_number',
         'joined_at',
+        'register_visibility',
+        'register_consent_at',
+        'register_hidden_by_admin',
+    ];
+
+    /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'register_visibility' => 'private',
+        'register_hidden_by_admin' => false,
     ];
 
     /**
@@ -43,6 +56,9 @@ class FoundingCircleRegisterEntry extends Model
         return [
             'edition_number' => 'integer',
             'joined_at' => 'datetime',
+            'register_visibility' => RegisterVisibility::class,
+            'register_consent_at' => 'datetime',
+            'register_hidden_by_admin' => 'boolean',
         ];
     }
 
@@ -68,5 +84,11 @@ class FoundingCircleRegisterEntry extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function showsPrivateLabel(): bool
+    {
+        return $this->register_hidden_by_admin
+            || $this->register_visibility === RegisterVisibility::Private;
     }
 }

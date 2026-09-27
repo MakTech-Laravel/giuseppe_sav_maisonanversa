@@ -6,6 +6,7 @@ use App\Models\CommerceSetting;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Services\FoundingCircle\FoundingCircleRegisterSnapshot;
 use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
 use App\Support\Seo\MaisonSeo;
@@ -89,6 +90,7 @@ class HandleInertiaRequests extends Middleware
             'seo' => Inertia::always(fn (): array => MaisonSeo::document($request)),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => fn (): array => Product::checkoutShare(),
+            'foundingRegister' => fn (): array => app(FoundingCircleRegisterSnapshot::class)->share(),
             'commerce' => fn (): array => CommerceSetting::current()->toShare(),
             'site' => Inertia::always(fn (): array => SiteSetting::current()->toShare()),
 

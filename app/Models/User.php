@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -19,7 +20,7 @@ use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'username', 'gender', 'type', 'password', 'avatar', 'locale', 'marketing_consent_at'])]
+#[Fillable(['name', 'first_name', 'last_name', 'email', 'username', 'gender', 'type', 'password', 'avatar', 'locale', 'marketing_consent_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -48,7 +49,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isFoundingCircle(): bool
     {
-        return $this->hasRole(RoleEnum::FOUNDING_CIRCLE->value) || $this->isAdmin();
+        return $this->hasRole(RoleEnum::FOUNDING_CIRCLE->value);
+    }
+
+    public function seesEarlyAccess(): bool
+    {
+        return $this->isFoundingCircle() || $this->isAdmin();
     }
 
     public function syncTypeFromRoles(): void
@@ -88,6 +94,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * @return HasOne<FoundingCircleRegisterEntry, $this>
+     */
+    public function foundingCircleRegister(): HasOne
+    {
+        return $this->hasOne(FoundingCircleRegisterEntry::class);
     }
 
     /**

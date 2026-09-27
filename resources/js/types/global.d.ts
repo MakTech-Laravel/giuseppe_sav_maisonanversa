@@ -56,6 +56,12 @@ declare module '@inertiajs/core' {
             availableLocales: Locale[];
             availableImages: string[];
             checkout: CheckoutShared;
+            foundingRegister: {
+                inscribed_count: number;
+                remaining_count: number;
+                places_total: number;
+                latest_entry: { number: string; label: string } | null;
+            };
             commerce: CommerceShared;
             site: SiteShared;
             seo: SeoDocument;

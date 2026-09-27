@@ -1,3 +1,4 @@
+import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { ProductGallery } from '@/components/maison/product/product-gallery';
 import { SectionIcon } from '@/components/maison/product/section-icon';
@@ -6,6 +7,8 @@ import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
+import { useLocale } from '@/hooks/use-locale';
+import { FOUNDING_PRODUCT_SLUG } from '@/lib/maison-navigation';
 import type { Edition } from '@/types/edition';
 import type { ProductPageData } from '@/types/product';
 import { productSectionItems } from '@/types/product';
@@ -21,7 +24,10 @@ export function ProductDetail({
     checkout?: OrderProductContext;
 }) {
     const { t } = useTranslation();
+    const { locale } = useLocale();
+    const { foundingRegister } = usePage().props;
     const { openPurchase, openNewsletter } = useShellActions();
+    const isFoundingProduct = product.slug === FOUNDING_PRODUCT_SLUG;
     const { priceLabel, deliveryLabel } = useCheckoutDisplay(checkout);
     const isSoldOut = edition.soldOut || product.status === 'archived';
     const isComingSoon = product.status === 'coming_soon';
@@ -82,6 +88,31 @@ export function ProductDetail({
                                         </span>
                                     </div>
                                 ))}
+                            </div>
+                        ) : null}
+
+                        {isFoundingProduct && canReserve ? (
+                            <div className="mb-6 border border-gold/30 p-4">
+                                <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
+                                    {t('Uw plaats in het register')}
+                                </p>
+                                <p className="mt-2 text-sm leading-relaxed text-choc3">
+                                    {t(
+                                        'Elke eigenaar van Heritage No.001 wordt ingeschreven. U kiest zelf uw nummer bij het afrekenen.',
+                                    )}
+                                </p>
+                                <p className="mt-3 font-serif text-lg text-choc">
+                                    {t('{{count}} van {{total}} plaatsen resterend', {
+                                        count: foundingRegister.remaining_count,
+                                        total: foundingRegister.places_total,
+                                    })}
+                                </p>
+                                <Link
+                                    href={`/${locale}/founding-circle/register`}
+                                    className="mt-3 inline-flex font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                >
+                                    {t('Bekijk het register')}
+                                </Link>
                             </div>
                         ) : null}
 

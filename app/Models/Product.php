@@ -156,7 +156,7 @@ class Product extends Model
     {
         $query->where('is_published', true);
 
-        if ($user?->isFoundingCircle()) {
+        if ($user?->seesEarlyAccess()) {
             return $query;
         }
 
@@ -176,7 +176,7 @@ class Product extends Model
             return true;
         }
 
-        return $user?->isFoundingCircle() ?? false;
+        return $user?->seesEarlyAccess() ?? false;
     }
 
     public function isInEarlyAccess(): bool

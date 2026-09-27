@@ -28,7 +28,7 @@ function footerItemHref(item: FooterExternalItem, site: SiteShared): string {
  */
 export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
     const { t } = useTranslation();
-    const { site } = usePage<{ site: SiteShared }>().props;
+    const { site, locale } = usePage<{ site: SiteShared }>().props;
 
     return (
         <footer className="relative overflow-hidden border-t border-gold/12 bg-choc px-6 pt-12 pb-25 md:px-20 md:pt-15 md:pb-9">
@@ -103,7 +103,9 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                                     );
                                 }
 
-                                const href = footerItemHref(item, site);
+                                const href = item.localePath
+                                    ? `/${locale}${item.href}`
+                                    : footerItemHref(item, site);
                                 const isHttp = href.startsWith('http');
 
                                 return (
@@ -120,6 +122,12 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                                             }
                                             className={className}
                                         >
+                                            {item.localePath ? (
+                                                <span
+                                                    aria-hidden="true"
+                                                    className="mr-2 inline-block size-1.5 bg-gold"
+                                                />
+                                            ) : null}
                                             {t(item.label)}
                                         </a>
                                     </li>

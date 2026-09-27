@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
  */
 export function SiteNav() {
     const { url } = usePage();
+    const { foundingRegister } = usePage().props;
     const { locale } = useLocale();
     const { t } = useTranslation();
 
@@ -101,28 +102,70 @@ export function SiteNav() {
                 )}
             >
                 <ul className="flex w-full flex-col ma-lg:w-auto ma-lg:flex-row ma-lg:flex-nowrap ma-lg:items-center ma-lg:gap-5">
-                    {PRIMARY_NAV.map(({ page, label }) => (
-                        <li key={page} className="w-full ma-lg:w-auto">
-                            <MaisonLink
-                                to={page}
-                                aria-current={
-                                    current === page ? 'page' : undefined
-                                }
-                                // Tapping the page you are already on should still
-                                // dismiss the menu, and that fires no navigation.
-                                onClick={() => setOpenedOn(null)}
-                                className={cn(
-                                    'flex min-h-11 w-full items-center border-b border-gold/10 py-4 font-sans text-xs tracking-[0.25em] uppercase transition-colors',
-                                    'ma-lg:min-h-0 ma-lg:w-auto ma-lg:border-b ma-lg:py-0 ma-lg:pb-0.5 ma-lg:text-[9px] ma-lg:tracking-[0.18em]',
-                                    current === page
-                                        ? 'border-b-gold text-gold ma-lg:border-b-gold'
-                                        : 'text-cream/65 hover:text-gold ma-lg:border-b-transparent ma-lg:hover:border-b-gold',
-                                )}
+                    {PRIMARY_NAV.map(({ page, label }) =>
+                        page === 'circle' ? (
+                            <li
+                                key={page}
+                                className="group relative w-full ma-lg:w-auto"
                             >
-                                {t(label)}
-                            </MaisonLink>
-                        </li>
-                    ))}
+                                <MaisonLink
+                                    to={page}
+                                    aria-current={
+                                        current === page ? 'page' : undefined
+                                    }
+                                    onClick={() => setOpenedOn(null)}
+                                    className={cn(
+                                        'flex min-h-11 w-full items-center border-b border-gold/10 py-4 font-sans text-xs tracking-[0.25em] uppercase transition-colors',
+                                        'ma-lg:min-h-0 ma-lg:w-auto ma-lg:border-b ma-lg:py-0 ma-lg:pb-0.5 ma-lg:text-[9px] ma-lg:tracking-[0.18em]',
+                                        current === page
+                                            ? 'border-b-gold text-gold ma-lg:border-b-gold'
+                                            : 'text-cream/65 hover:text-gold ma-lg:border-b-transparent ma-lg:hover:border-b-gold',
+                                    )}
+                                >
+                                    {t(label)}
+                                </MaisonLink>
+                                <div className="flex flex-col border-b border-gold/10 pb-2 ma-lg:absolute ma-lg:top-full ma-lg:left-0 ma-lg:z-20 ma-lg:hidden ma-lg:min-w-56 ma-lg:border ma-lg:border-gold/20 ma-lg:bg-choc ma-lg:p-3 ma-lg:group-hover:flex ma-lg:group-focus-within:flex">
+                                    <a
+                                        href={`/${locale}/founding-circle/register`}
+                                        onClick={() => setOpenedOn(null)}
+                                        className="flex min-h-11 items-center justify-between gap-3 py-2 font-sans text-[10px] tracking-[0.16em] text-cream/80 uppercase hover:text-gold"
+                                    >
+                                        <span>{t('Het register')}</span>
+                                        <span className="text-gold">
+                                            {foundingRegister.inscribed_count}/
+                                            {foundingRegister.places_total}
+                                        </span>
+                                    </a>
+                                    {foundingRegister.latest_entry && (
+                                        <p className="font-sans text-[10px] tracking-[0.08em] text-sand">
+                                            {t('Laatste inschrijving')}{' '}
+                                            {foundingRegister.latest_entry.number}{' '}
+                                            {foundingRegister.latest_entry.label}
+                                        </p>
+                                    )}
+                                </div>
+                            </li>
+                        ) : (
+                            <li key={page} className="w-full ma-lg:w-auto">
+                                <MaisonLink
+                                    to={page}
+                                    aria-current={
+                                        current === page ? 'page' : undefined
+                                    }
+                                    onClick={() => setOpenedOn(null)}
+                                    className={cn(
+                                        'flex min-h-11 w-full items-center border-b border-gold/10 py-4 font-sans text-xs tracking-[0.25em] uppercase transition-colors',
+                                        'ma-lg:min-h-0 ma-lg:w-auto ma-lg:border-b ma-lg:py-0 ma-lg:pb-0.5 ma-lg:text-[9px] ma-lg:tracking-[0.18em]',
+                                        current === page
+                                            ? 'border-b-gold text-gold ma-lg:border-b-gold'
+                                            : 'text-cream/65 hover:text-gold ma-lg:border-b-transparent ma-lg:hover:border-b-gold',
+                                    )}
+                                >
+                                    {t(label)}
+                                </MaisonLink>
+                            </li>
+                        ),
+                    )}
                 </ul>
 
                 <div className="mt-3 flex items-center gap-4 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:border-t-0 ma-lg:border-l ma-lg:pt-0 ma-lg:pl-4">

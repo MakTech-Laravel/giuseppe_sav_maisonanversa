@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DressingItemController;
 use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\FoundingCircleClaimController as AdminFoundingCircleClaimController;
 use App\Http\Controllers\Admin\HeritageLetterController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\JournalArticleController;
@@ -30,15 +29,16 @@ use App\Http\Controllers\Community\SessionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
+use App\Http\Controllers\Maison\FoundingCircleRegisterController;
 use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
 use App\Http\Controllers\Maison\ProductEditionController;
 use App\Http\Controllers\Maison\VerificationController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
-use App\Http\Controllers\Member\FoundingCircleClaimController as MemberFoundingCircleClaimController;
 use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\Member\PassportPdfController;
+use App\Http\Controllers\Member\RegisterListingController;
 use App\Http\Controllers\PostAttachmentController;
 use App\Http\Controllers\RobotsTxtController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -118,6 +118,8 @@ Route::prefix('{locale}')
             Route::get('shipping', 'shipping')->name('shipping');
             Route::get('care', 'care')->name('care');
         });
+
+        Route::get('founding-circle/register', FoundingCircleRegisterController::class)->name('register');
 
         Route::get('products/{product:slug}/editions', [ProductEditionController::class, 'index'])
             ->name('products.editions');
@@ -206,16 +208,18 @@ Route::prefix('{locale}')
             ->group(function () {
                 Route::get('/', 'index')->name('dashboard');
                 Route::get('lidpaspoort', 'lidpaspoort')->name('lidpaspoort');
-                Route::get('heritage', 'heritage')->name('heritage');
+                Route::get('heritage', 'heritage')->middleware('founding-circle')->name('heritage');
                 Route::get('orders', 'orders')->name('orders');
                 Route::get('orders/{order}', 'orderShow')->name('orders.show');
-                Route::get('passport', 'passport')->name('passport');
-                Route::get('passport.pdf', PassportPdfController::class)->name('passport.pdf');
-                Route::get('circle', 'circle')->name('circle');
-                Route::get('racket-registration', [MemberFoundingCircleClaimController::class, 'index'])
-                    ->name('racket-registration');
-                Route::post('racket-registration', [MemberFoundingCircleClaimController::class, 'store'])
-                    ->name('racket-registration.store');
+                Route::get('passport', 'passport')->middleware('founding-circle')->name('passport');
+                Route::get('passport.pdf', PassportPdfController::class)->middleware('founding-circle')->name('passport.pdf');
+                Route::get('circle', 'circle')->middleware('founding-circle')->name('circle');
+                Route::get('register-listing', [RegisterListingController::class, 'edit'])
+                    ->middleware('founding-circle')
+                    ->name('register-listing');
+                Route::patch('register-listing', [RegisterListingController::class, 'update'])
+                    ->middleware('founding-circle')
+                    ->name('register-listing.update');
                 Route::get('letter', 'letter')->name('letter');
                 Route::get('email-preferences', 'emailPreferences')->name('email-preferences');
                 Route::patch('email-preferences', 'updateEmailPreferences')->name('email-preferences.update');
@@ -308,14 +312,11 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('circle/register', 'circleRegister')->name('circle.register')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
-                Route::get('circle/claims', [AdminFoundingCircleClaimController::class, 'index'])
-                    ->name('circle.claims')
+                Route::get('circle/register/export', 'exportCircleRegister')->name('circle.register.export')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
-                Route::post('circle/claims/{claim}/approve', [AdminFoundingCircleClaimController::class, 'approve'])
-                    ->name('circle.claims.approve')
+                Route::patch('circle/register/{entry}', 'updateCircleRegisterNumber')->name('circle.register.number')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
-                Route::post('circle/claims/{claim}/reject', [AdminFoundingCircleClaimController::class, 'reject'])
-                    ->name('circle.claims.reject')
+                Route::patch('circle/register/{entry}/visibility', 'hideCircleRegisterEntry')->name('circle.register.hide')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('circle/{member}', 'circleShow')->name('circle.show')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);

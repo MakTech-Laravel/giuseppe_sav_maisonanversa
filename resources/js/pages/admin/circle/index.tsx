@@ -1,5 +1,5 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { BookText, ClipboardList, Eye, UsersRound } from 'lucide-react';
+import { BookText, Eye, UsersRound } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
@@ -33,6 +33,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
     const form = useForm(circleRoutes.assign(wayfinderLocale()), {
         email: '',
         user_id: '',
+        edition_number: '',
     });
 
     function submitAssign(event: FormEvent) {
@@ -41,6 +42,8 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
         form.transform((data) => ({
             email: data.email || null,
             user_id: data.user_id === '' ? null : Number(data.user_id),
+            edition_number:
+                data.edition_number === '' ? null : Number(data.edition_number),
         }));
 
         form.submit({
@@ -73,12 +76,6 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                     icon={UsersRound}
                 >
                     <Button variant="outline" asChild>
-                        <Link href={circleRoutes.claims(wayfinderLocale())}>
-                            <ClipboardList className="h-4 w-4" />{' '}
-                            {t('Racketregistraties')}
-                        </Link>
-                    </Button>
-                    <Button variant="outline" asChild>
                         <Link href={circleRoutes.register(wayfinderLocale())}>
                             <BookText className="h-4 w-4" /> {t('Naamregister')}
                         </Link>
@@ -103,6 +100,27 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                         {form.errors.email && (
                             <p className="text-sm text-destructive">
                                 {form.errors.email}
+                            </p>
+                        )}
+                    </div>
+                    <div className="w-full space-y-1 sm:w-28">
+                        <Input
+                            type="number"
+                            min={1}
+                            max={100}
+                            placeholder={t('Nummer')}
+                            value={form.data.edition_number}
+                            onChange={(event) =>
+                                form.setData(
+                                    'edition_number',
+                                    event.target.value,
+                                )
+                            }
+                            required
+                        />
+                        {form.errors.edition_number && (
+                            <p className="text-sm text-destructive">
+                                {form.errors.edition_number}
                             </p>
                         )}
                     </div>

@@ -25,6 +25,8 @@ class LegalPageSeeder extends Seeder
 </ul>
 <h2>Uw rechten</h2>
 <p>U heeft recht op inzage, correctie, verwijdering en bezwaar.</p>
+<h2>Publiek register</h2>
+<p>Als u Heritage No.001 koopt, wordt u ingeschreven in het officiële Founding Circle-register. Standaard verschijnt alleen uw nummer als Privélid. U kiest in uw account of uw volledige naam, uw voornaam en initiaal, of alleen uw nummer publiek zichtbaar is. U kunt die keuze op elk moment wijzigen of intrekken.</p>
 HTML,
             'terms' => <<<'HTML'
 <h2>Algemene voorwaarden</h2>

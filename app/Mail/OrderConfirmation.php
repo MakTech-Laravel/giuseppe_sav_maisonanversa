@@ -33,9 +33,14 @@ class OrderConfirmation extends Mailable
     {
         $this->order->loadMissing('product');
 
+        $locale = MailLocale::resolve($this->order->locale);
+
         return new Content(
             html: 'emails.order-confirmation',
-            with: $this->maisonBrandData($this->order->locale),
+            with: [
+                ...$this->maisonBrandData($this->order->locale),
+                'listingUrl' => route('member.register-listing', ['locale' => $locale]),
+            ],
         );
     }
 

@@ -8,6 +8,7 @@ use App\Enums\UserGender;
 use App\Enums\UserType;
 use App\Models\User;
 use App\Services\Newsletter\HeritageLetterSubscription;
+use App\Support\PersonName;
 use Spatie\Permission\Models\Role;
 
 class UserRegistrationService
@@ -21,8 +22,12 @@ class UserRegistrationService
      */
     public function register(array $input): User
     {
+        $parts = PersonName::split($input['name']);
+
         $user = User::create([
             'name' => $input['name'],
+            'first_name' => $parts['first_name'] !== '' ? $parts['first_name'] : null,
+            'last_name' => $parts['last_name'] !== '' ? $parts['last_name'] : null,
             'email' => $input['email'],
             'username' => User::generateUsername($input['name']),
             'gender' => UserGender::from($input['gender']),

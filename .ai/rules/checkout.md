@@ -5,5 +5,5 @@ paths:
 
 # Checkout
 
-## Founding Circle requires claim approval
-Checkout for grants_founding_circle products only allocates the unique edition piece and creates a pending FoundingCircleClaim. Do not assign the founding-circle role or write founding_circle_register on pay. Admin approve (FoundingCircleClaimService::approve) grants the role + naamregister; reject frees the serial for re-claim. Admin circle.assign remains an ops override. Passport/Circle stay presenter composites gated by the role.
+## Heritage No.001 payment inscribes the register
+OrderFulfillment inscribes Heritage No.001 buyers through FoundingCircleRegistrar after the edition piece is allocated. Other products never grant founding-circle, even when grants_founding_circle is true. markRefunded releases the register row before inventory so the edition number still matches. Passport and the Circle card stay presenter composites gated by the role.

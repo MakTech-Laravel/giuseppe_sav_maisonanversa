@@ -8,6 +8,7 @@ import { HomeMarquee } from '@/components/maison/home/home-marquee';
 import { HomeNewsletter } from '@/components/maison/home/home-newsletter';
 import { HomePreorder } from '@/components/maison/home/home-preorder';
 import { HomeProduct } from '@/components/maison/home/home-product';
+import { HomeRegister } from '@/components/maison/home/home-register';
 import { HomeStory } from '@/components/maison/home/home-story';
 import { HomeUnboxing } from '@/components/maison/home/home-unboxing';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
@@ -35,6 +36,7 @@ export default function Home({
             <HomeStory />
             <HomeAntwerp />
             <HomeProduct product={product} />
+            <HomeRegister />
             <HomeUnboxing />
             <HomeCircle />
             <HomePreorder edition={edition} includes={product?.includes} />

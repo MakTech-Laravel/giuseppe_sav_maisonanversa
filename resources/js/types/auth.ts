@@ -3,6 +3,8 @@ import type { PermissionKey } from './permissions';
 export type User = {
     id: number;
     name: string;
+    first_name?: string | null;
+    last_name?: string | null;
     username: string;
     gender?: string | null;
     email: string;

@@ -11,11 +11,12 @@ use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\OrderStatusEvent;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
 use App\Services\Edition\SimpleStock;
-use App\Services\FoundingCircle\FoundingCircleClaimService;
+use App\Services\FoundingCircle\FoundingCircleRegistrar;
 use App\Support\MailLocale;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -28,7 +29,7 @@ class OrderFulfillment
         private EditionAllocator $allocator,
         private EditionInventory $inventory,
         private SimpleStock $simpleStock,
-        private FoundingCircleClaimService $claims,
+        private FoundingCircleRegistrar $registrar,
     ) {}
 
     /**
@@ -99,8 +100,8 @@ class OrderFulfillment
             $locked->refresh();
             $locked->loadMissing('product', 'user', 'editionPiece');
 
-            if ($locked->user !== null && $locked->product?->grants_founding_circle) {
-                $this->claims->createFromOrder($locked);
+            if ($locked->user !== null && $locked->product?->slug === Product::FOUNDING_SLUG) {
+                $this->registrar->inscribeFromOrder($locked);
             }
 
             return $locked;
@@ -184,8 +185,8 @@ class OrderFulfillment
                 return $locked;
             }
 
+            $this->registrar->releaseForOrder($locked);
             $this->releaseInventoryOnRefund($locked);
-            $this->claims->cancelPendingForOrder($locked);
 
             if ($locked->latestPayment !== null) {
                 $locked->latestPayment->fill([

@@ -9,6 +9,7 @@ use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignCircleMemberRequest;
 use App\Http\Requests\Admin\ResolveCommunityReportRequest;
+use App\Http\Requests\Admin\UpdateCircleRegisterNumberRequest;
 use App\Http\Requests\Admin\UpdateHeritageProductRequest;
 use App\Models\CommunityPost;
 use App\Models\CommunityReport;
@@ -20,6 +21,7 @@ use App\Services\Checkout\OrderStatusService;
 use App\Services\Edition\EditionInventory;
 use App\Services\FoundingCircle\FoundingCircleRegistrar;
 use App\Support\CommunityPostPresenter;
+use App\Support\FoundingCircleRegisterPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
 use Illuminate\Http\RedirectResponse;
@@ -28,6 +30,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Stripe\Exception\ApiErrorException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class OpsController extends Controller
 {
@@ -283,27 +286,78 @@ class OpsController extends Controller
         ]);
     }
 
-    public function circleRegister(Request $request, string $locale): Response
+    public function circleRegister(Request $request, string $locale, FoundingCircleRegisterPresenter $presenter): Response
     {
-        $entries = FoundingCircleRegisterEntry::query()
-            ->with(['user.roles'])
-            ->orderByRaw('edition_number is null')
-            ->orderBy('edition_number')
-            ->orderBy('joined_at')
-            ->get()
-            ->map(fn (FoundingCircleRegisterEntry $entry) => [
-                'id' => (string) $entry->id,
-                'name' => $entry->name,
-                'edition_number' => $entry->edition_number !== null
-                    ? str_pad((string) $entry->edition_number, 3, '0', STR_PAD_LEFT)
-                    : null,
-                'joined_at' => $entry->joined_at?->toDateString(),
-                'still_member' => $entry->user?->hasRole(RoleEnum::FOUNDING_CIRCLE->value) ?? false,
-            ]);
+        $status = $request->string('status')->toString();
+        $status = in_array($status, ['inscribed', 'available', 'archive'], true) ? $status : 'all';
+        $entries = $presenter->adminLedger($request->string('search')->toString() ?: null);
+
+        if ($status !== 'all') {
+            $entries = array_values(array_filter(
+                $entries,
+                fn (array $row): bool => $row['state'] === $status,
+            ));
+        }
 
         return Inertia::render('admin/circle/register', [
             'entries' => $entries,
+            'filters' => [
+                'search' => $request->string('search')->toString(),
+                'status' => $status,
+            ],
         ]);
+    }
+
+    public function exportCircleRegister(FoundingCircleRegisterPresenter $presenter): StreamedResponse
+    {
+        $rows = $presenter->adminLedger();
+
+        return response()->streamDownload(function () use ($rows): void {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['number', 'state', 'name', 'email', 'visibility', 'consent_at', 'hidden']);
+
+            foreach ($rows as $row) {
+                fputcsv($handle, [
+                    $row['number'],
+                    $row['state'],
+                    $row['member_name'],
+                    $row['email'],
+                    $row['visibility'],
+                    $row['consent_at'],
+                    $row['hidden'] ? '1' : '0',
+                ]);
+            }
+
+            fclose($handle);
+        }, 'founding-circle-register.csv', [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
+
+    public function updateCircleRegisterNumber(
+        UpdateCircleRegisterNumberRequest $request,
+        string $locale,
+        FoundingCircleRegisterEntry $entry,
+        FoundingCircleRegistrar $registrar,
+    ): RedirectResponse {
+        $registrar->changeNumber($entry, (int) $request->validated('edition_number'));
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Nummer bijgewerkt.')]);
+
+        return back();
+    }
+
+    public function hideCircleRegisterEntry(
+        Request $request,
+        string $locale,
+        FoundingCircleRegisterEntry $entry,
+        FoundingCircleRegistrar $registrar,
+    ): RedirectResponse {
+        $registrar->setHidden($entry, $request->boolean('hidden', true));
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Registervermelding bijgewerkt.')]);
+
+        return back();
     }
 
     public function circleShow(Request $request, string $locale, User $member, PassportPresenter $passport): Response
@@ -323,17 +377,20 @@ class OpsController extends Controller
     ): RedirectResponse {
         $user = $this->resolveCircleUser($request);
 
-        $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
-        $registrar->register($user);
+        $registrar->assign($user, (int) $request->validated('edition_number'));
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Lid toegevoegd aan Founding Circle.')]);
 
         return back();
     }
 
-    public function removeCircleMember(Request $request, string $locale, User $member): RedirectResponse
-    {
-        $member->removeRole(RoleEnum::FOUNDING_CIRCLE->value);
+    public function removeCircleMember(
+        Request $request,
+        string $locale,
+        User $member,
+        FoundingCircleRegistrar $registrar,
+    ): RedirectResponse {
+        $registrar->releaseMember($member);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Lid verwijderd uit Founding Circle.')]);
 

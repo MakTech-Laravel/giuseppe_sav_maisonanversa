@@ -5,8 +5,5 @@ paths:
 
 # Founding Circle
 
-## Founding Circle register is append-only
-FoundingCircleRegistrar::register() firstOrCreates one founding_circle_register row per user_id. Snapshot name, edition, and joined_at at write time and never update or delete the row on role removal, refunds, or profile changes. Admin Circle → Naamregister is the ledger UI.
-
-## Enrollment requires claim approval
-Checkout for `grants_founding_circle` products only allocates the unique edition piece and creates a pending `FoundingCircleClaim`. Do not assign the `founding-circle` role or write `founding_circle_register` on pay. Admin approve (`FoundingCircleClaimService::approve`) grants the role + naamregister; reject frees the serial for re-claim. Refunds auto-reject pending order-sourced claims. `admin.circle.assign` remains an ops override that grants role + register immediately.
+## Heritage No.001 payment inscribes the register
+Only Product::FOUNDING_SLUG (heritage-no-001) creates Founding Circle membership. Successful payment writes founding_circle_register for the edition number the buyer picked, visibility private, with no FoundingCircleClaim. A refund deletes that row and drops the role so the number is Available again. The public ledger is always 100 presenter rows: full name, first name plus initial, Privélid, Niet te koop, or Beschikbaar. Names come from the live account, not the historical name column. Do not restore the racket-registration or admin claims screens.

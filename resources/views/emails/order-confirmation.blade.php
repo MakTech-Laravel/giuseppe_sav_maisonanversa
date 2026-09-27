@@ -21,9 +21,12 @@
         {{ $order->reference() }}
     </p>
 
-    @if ($order->product?->grants_founding_circle)
-        <p style="margin:0;color:#8A7D72;font-size:14px;">
-            {{ __('Uw Digital Heritage Passport verschijnt in uw account zodra de betaling is bevestigd.') }}
+    @if ($order->product?->slug === \App\Models\Product::FOUNDING_SLUG)
+        <p style="margin:0 0 12px;color:#8A7D72;font-size:14px;">
+            {{ __('Uw naam staat in het privé-archief van het huis. Hoe u in het publieke register verschijnt, kiest u in uw account.') }}
+        </p>
+        <p style="margin:0;">
+            <a href="{{ $listingUrl }}" style="color:#8A6A3B;">{{ __('Beheer mijn vermelding') }}</a>
         </p>
     @endif
 @endcomponent

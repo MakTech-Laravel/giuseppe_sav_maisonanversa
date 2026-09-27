@@ -58,6 +58,7 @@ export type FooterExternalItem = {
     href: string;
     label: string;
     channel?: FooterChannel;
+    localePath?: boolean;
 };
 
 export type FooterColumn = {
@@ -72,6 +73,11 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
             { page: 'products', label: 'Producten' },
             { page: 'story', label: 'Ons Verhaal' },
             { page: 'circle', label: 'Founding Circle' },
+            {
+                href: '/founding-circle/register',
+                label: 'Het register',
+                localePath: true,
+            },
             { page: 'dressing', label: 'Kleedkamer' },
             { page: 'journal', label: 'Journal' },
             { page: 'community', label: 'Community' },

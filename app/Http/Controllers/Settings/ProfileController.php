@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileDeleteRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\User;
+use App\Support\PersonName;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,8 +36,15 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request, string $locale): RedirectResponse
     {
         $user = $request->user();
+        $parts = PersonName::split((string) $request->validated('name'));
 
-        $user->fill($request->safe()->only(['name', 'email', 'gender']));
+        $user->fill([
+            'name' => PersonName::compose($parts['first_name'], $parts['last_name']),
+            'first_name' => $parts['first_name'],
+            'last_name' => $parts['last_name'] !== '' ? $parts['last_name'] : null,
+            'email' => $request->validated('email'),
+            'gender' => $request->validated('gender'),
+        ]);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

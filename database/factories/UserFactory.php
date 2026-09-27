@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\UserGender;
 use App\Enums\UserType;
 use App\Models\User;
+use App\Support\PersonName;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -26,8 +27,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $name = fake()->name();
+        $parts = PersonName::split($name);
+
         return [
-            'name' => fake()->name(),
+            'name' => $name,
+            'first_name' => $parts['first_name'],
+            'last_name' => $parts['last_name'] !== '' ? $parts['last_name'] : null,
             'username' => Str::lower(str_replace('.', '_', fake()->unique()->userName())),
             'gender' => fake()->randomElement(UserGender::cases()),
             'email' => fake()->unique()->safeEmail(),

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\RegisterVisibility;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Product;
 use App\Models\User;
@@ -22,8 +23,11 @@ class FoundingCircleRegisterEntryFactory extends Factory
             'product_id' => Product::factory(),
             'order_id' => null,
             'name' => fake()->name(),
-            'edition_number' => fake()->numberBetween(1, 100),
+            'edition_number' => fake()->unique()->numberBetween(1, 100),
             'joined_at' => now(),
+            'register_visibility' => RegisterVisibility::Private,
+            'register_consent_at' => null,
+            'register_hidden_by_admin' => false,
         ];
     }
 }
