@@ -102,18 +102,42 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
                                                 onChange={() =>
                                                     setVisibility(option.value)
                                                 }
-                                                className="mt-1"
+                                                className={cn(
+                                                    'mt-1',
+                                                    selected && 'accent-choc',
+                                                )}
                                             />
                                             <span>
-                                                <span className="block font-sans text-[11px] tracking-[0.16em] text-cream uppercase">
+                                                <span
+                                                    className={cn(
+                                                        'block font-sans text-[11px] tracking-[0.16em] uppercase',
+                                                        selected
+                                                            ? 'text-choc'
+                                                            : 'text-cream',
+                                                    )}
+                                                >
                                                     {t(option.title)}
                                                 </span>
-                                                <span className="mt-1 block text-sm text-sand">
+                                                <span
+                                                    className={cn(
+                                                        'mt-1 block text-sm',
+                                                        selected
+                                                            ? 'text-choc3'
+                                                            : 'text-sand',
+                                                    )}
+                                                >
                                                     {t(option.description)}
                                                 </span>
                                             </span>
                                         </span>
-                                        <span className="hidden text-right font-serif text-sm text-gold sm:block">
+                                        <span
+                                            className={cn(
+                                                'hidden text-right font-serif text-sm sm:block',
+                                                selected
+                                                    ? 'text-choc'
+                                                    : 'text-gold',
+                                            )}
+                                        >
                                             {listing[option.preview]}
                                         </span>
                                     </label>

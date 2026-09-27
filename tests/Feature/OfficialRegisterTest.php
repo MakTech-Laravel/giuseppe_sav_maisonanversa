@@ -15,6 +15,7 @@ use App\Services\FoundingCircle\FoundingCircleRegistrar;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -108,6 +109,17 @@ test('a public listing requires consent and private clears it', function () {
 
     expect($entry->fresh()->register_consent_at)->toBeNull()
         ->and($entry->fresh()->register_visibility)->toBe(RegisterVisibility::Private);
+});
+
+test('the selected listing option uses dark type on the cream card', function () {
+    $page = File::get(resource_path('js/pages/member/register-listing.tsx'));
+
+    expect($page)
+        ->toContain("? 'text-choc'")
+        ->toContain(": 'text-cream'")
+        ->toContain("? 'text-choc3'")
+        ->toContain(": 'text-sand'")
+        ->not->toContain('text-cream uppercase');
 });
 
 test('a non member cannot open the register listing', function () {
