@@ -619,3 +619,43 @@ Route::prefix('{locale}')
             abort(404);
         });
     });
+
+/*
+ * Staff bookmarks often omit the locale prefix. Guests get the home login
+ * modal; signed-in staff land on the localized admin path.
+ */
+Route::get('admin/login', [AuthModalRedirectController::class, 'login']);
+
+Route::get('admin/{path?}', function (Request $request, PostLoginRedirectService $redirects, ?string $path = null) {
+    $user = $request->user();
+    $locale = $redirects->resolveLocale($request);
+
+    if ($user === null) {
+        return redirect()
+            ->route('maison.home', ['locale' => $locale])
+            ->with('open_auth_modal', 'login');
+    }
+
+    if (! $user->isAdmin()) {
+        return redirect()->to($redirects->urlFor($user, $request));
+    }
+
+    if (! is_string($path) || $path === '') {
+        return redirect('/'.$locale.'/admin/dashboard');
+    }
+
+    if (preg_match('/^(?!.*\\.\\.)[A-Za-z0-9_\\-.\\/]+$/', $path) !== 1) {
+        abort(404);
+    }
+
+    return redirect('/'.$locale.'/admin/'.$path);
+})->where('path', '.*');
+
+/*
+ * Paths with no locale prefix never enter the {locale} group, so the web
+ * middleware (and its Inertia shares) would otherwise be skipped. This
+ * fallback keeps the branded 404 inside that stack.
+ */
+Route::fallback(function () {
+    abort(404);
+});

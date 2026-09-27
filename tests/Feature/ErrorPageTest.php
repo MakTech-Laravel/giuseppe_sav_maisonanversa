@@ -17,6 +17,18 @@ test('unknown journal slugs render the branded inertia 404', function () {
         ->assertInertia(fn ($page) => $page->component('errors/404'));
 });
 
+test('unprefixed unknown paths still share the public shell props', function () {
+    $this->get('/niet-gevonden')
+        ->assertNotFound()
+        ->assertInertia(fn ($page) => $page
+            ->component('errors/404')
+            ->has('foundingRegister.inscribed_count')
+            ->has('foundingRegister.places_total')
+            ->has('site')
+            ->has('locale')
+        );
+});
+
 test('the 404 recovery links sit on the chocolate hero', function () {
     expect(File::get(resource_path('js/pages/errors/404.tsx')))
         ->toContain('variant="hero"')

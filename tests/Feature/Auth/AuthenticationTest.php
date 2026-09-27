@@ -13,6 +13,36 @@ test('login redirects to the localized home with auth modal flash', function () 
     $response->assertSessionHas('open_auth_modal', 'login');
 });
 
+test('bare admin urls open the login modal for guests', function (string $path) {
+    $this->get($path)
+        ->assertRedirect(localized('maison.home', absolute: false))
+        ->assertSessionHas('open_auth_modal', 'login');
+})->with(['/admin', '/admin/login']);
+
+test('bare admin urls send staff to the localized admin path', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->get('/admin')
+        ->assertRedirect('/'.defaultLocale().'/admin/dashboard');
+
+    $this->actingAs($admin)
+        ->get('/admin/circle/register')
+        ->assertRedirect('/'.defaultLocale().'/admin/circle/register');
+
+    $this->actingAs($admin)
+        ->get('/admin/login')
+        ->assertRedirect(localized('admin.dashboard', absolute: false));
+});
+
+test('bare admin urls send customers to the member dashboard', function () {
+    $customer = User::factory()->create();
+
+    $this->actingAs($customer)
+        ->get('/admin')
+        ->assertRedirect(localized('member.dashboard', absolute: false));
+});
+
 test('authenticated visitors are sent to their dashboard instead of the login modal', function () {
     $user = User::factory()->create();
 

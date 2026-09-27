@@ -10,3 +10,6 @@ Wrap admin prefixes with the `admin` middleware (User::isAdmin()) and member pre
 
 ## Public community clubs need index and show
 Community ClubController exposes index and show for the member directory. Register GET community.clubs.index and community.clubs.show (keep clubs/search before clubs/{club}). CommunityTabs and maison/clubs pages call clubRoutes.index.url — omitting those routes makes Wayfinder omit index and crashes CommunityTabs with Cannot read properties of undefined (reading 'url').
+
+## Unprefixed paths need an outer fallback
+Public routes live under /{locale}. A URL whose first segment is not nl, en, or fr never enters that group, so a missing outer Route::fallback() skips the web middleware and the 404 Inertia page is rendered with only the seo share. The public shell then crashes (SiteNav reads foundingRegister). Keep the outer fallback that abort(404)s, and keep bare /admin and /admin/login redirects: guests go to the home login modal, staff go to the localized admin path.
