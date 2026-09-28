@@ -39,5 +39,8 @@
         <env name="STRIPE_WEBHOOK_SECRET" value=""/>
         <env name="DEEPL_API_KEY" value=""/>
         <env name="DEEPL_API_HOST" value=""/>
+        <env name="BREVO_API_KEY" value=""/>
+        <env name="BREVO_LIST_HERITAGE_LETTER" value=""/>
+        <env name="BREVO_LIST_ORDERS" value="2"/>
     </php>
 </phpunit>

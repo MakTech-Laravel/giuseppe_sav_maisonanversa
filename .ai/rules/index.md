@@ -5,6 +5,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | Applies to | Rule file |
 | --- | --- |
 | app/Http/Controllers/Admin/CommunityEventController.php | .ai/rules/admin.md |
+| app/Services/Brevo/**, app/Contracts/BrevoContacts.php, app/Jobs/SyncOrderToBrevo.php | .ai/rules/brevo.md |
 | app/Services/FoundingCircle/**,app/Support/PassportPresenter.php,app/Services/Checkout/OrderFulfillment.php | .ai/rules/checkout.md |
 | app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |

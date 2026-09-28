@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Jobs\Orders\SendOrderPaidAdminMail;
 use App\Jobs\Orders\SendOrderPaidBuyerMail;
+use App\Jobs\SyncOrderToBrevo;
 use App\Mail\SoldOutNotice;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
@@ -110,6 +111,7 @@ class OrderFulfillment
         if (! $alreadyPaid) {
             SendOrderPaidBuyerMail::dispatch($fulfilled);
             SendOrderPaidAdminMail::dispatch($fulfilled);
+            SyncOrderToBrevo::dispatch($fulfilled);
 
             if ($this->inventory->snapshot($fulfilled->product)['soldOut']) {
                 $this->notifySoldOut();
