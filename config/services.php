@@ -39,6 +39,7 @@ return [
         'api_key' => env('BREVO_API_KEY'),
         'list_heritage_letter' => env('BREVO_LIST_HERITAGE_LETTER'),
         'list_waitlist' => env('BREVO_LIST_WAITLIST'),
+        'list_orders' => env('BREVO_LIST_ORDERS', 2),
         'welcome_via' => env('BREVO_WELCOME_VIA', 'brevo'),
         'smtp' => [
             'host' => env('BREVO_SMTP_HOST', 'smtp-relay.brevo.com'),

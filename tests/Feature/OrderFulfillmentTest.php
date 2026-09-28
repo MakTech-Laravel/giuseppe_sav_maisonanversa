@@ -3,6 +3,7 @@
 use App\Enums\OrderStatus;
 use App\Enums\RegisterVisibility;
 use App\Enums\RoleEnum;
+use App\Jobs\SyncOrderToBrevo;
 use App\Models\EditionPiece;
 use App\Models\FoundingCircleClaim;
 use App\Models\FoundingCircleRegisterEntry;
@@ -10,8 +11,11 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Checkout\OrderFulfillment;
+use Illuminate\Support\Facades\Queue;
 
 test('order fulfillment is idempotent for paid sessions', function () {
+    Queue::fake();
+
     $order = Order::factory()->create([
         'status' => OrderStatus::Incomplete,
     ]);
@@ -34,6 +38,8 @@ test('order fulfillment is idempotent for paid sessions', function () {
 });
 
 test('paying for heritage no.001 inscribes the buyer as a private member on the picked number', function () {
+    Queue::fake();
+
     $user = User::factory()->create();
     $product = Product::founding();
     $piece = EditionPiece::query()
@@ -68,6 +74,8 @@ test('paying for heritage no.001 inscribes the buyer as a private member on the 
 });
 
 test('paying for another product does not enroll the buyer even when the founding flag is on', function () {
+    Queue::fake();
+
     $user = User::factory()->create();
     $product = Product::factory()->create([
         'grants_founding_circle' => true,
@@ -88,4 +96,44 @@ test('paying for another product does not enroll the buyer even when the foundin
 
     expect($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse()
         ->and(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeFalse();
+});
+
+test('the first paid session queues a brevo order list sync once', function () {
+    Queue::fake();
+
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Incomplete,
+        'stripe_checkout_session_id' => 'cs_test_brevo_order',
+    ]);
+
+    $session = (object) [
+        'id' => 'cs_test_brevo_order',
+        'payment_status' => 'paid',
+        'payment_intent' => 'pi_test_brevo_order',
+        'metadata' => ['order_id' => (string) $order->id],
+    ];
+
+    $fulfillment = app(OrderFulfillment::class);
+    $fulfillment->markPaidFromSession($session);
+    $fulfillment->markPaidFromSession($session);
+
+    Queue::assertPushed(SyncOrderToBrevo::class, 1);
+});
+
+test('an unpaid session does not queue a brevo order list sync', function () {
+    Queue::fake();
+
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Incomplete,
+        'stripe_checkout_session_id' => 'cs_test_brevo_unpaid',
+    ]);
+
+    app(OrderFulfillment::class)->markPaidFromSession((object) [
+        'id' => 'cs_test_brevo_unpaid',
+        'payment_status' => 'unpaid',
+        'payment_intent' => null,
+        'metadata' => ['order_id' => (string) $order->id],
+    ]);
+
+    Queue::assertNotPushed(SyncOrderToBrevo::class);
 });
