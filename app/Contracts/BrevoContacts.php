@@ -3,6 +3,7 @@
 namespace App\Contracts;
 
 use App\Models\NewsletterSubscriber;
+use App\Models\Order;
 
 interface BrevoContacts
 {
@@ -15,4 +16,9 @@ interface BrevoContacts
      * Remove a contact from the Heritage Letter list.
      */
     public function unsubscribeHeritageLetterContact(NewsletterSubscriber $subscriber): void;
+
+    /**
+     * Upsert a paid-order buyer onto the orders list. Does not touch the Heritage Letter list.
+     */
+    public function upsertOrderContact(Order $order): void;
 }
