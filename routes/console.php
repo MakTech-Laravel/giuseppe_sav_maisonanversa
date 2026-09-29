@@ -10,6 +10,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command(ReleaseExpiredHolds::class)->everyFiveMinutes();
+Schedule::command(ReleaseExpiredHolds::class)->everyMinute();
 Schedule::command(SendPostDeliveryFollowUps::class)->daily();
 Schedule::command('seo:generate')->daily();
