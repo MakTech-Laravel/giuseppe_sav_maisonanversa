@@ -95,6 +95,7 @@ return [
 
     'checkout' => [
         'currency' => 'eur',
+        'hold_minutes' => 15,
     ],
 
     /*
