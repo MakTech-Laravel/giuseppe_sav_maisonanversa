@@ -39,6 +39,28 @@ test('checkout success and cancel pages are reachable', function () {
             ->component('maison/checkout-cancel'));
 });
 
+test('checkout success page does not mark an incomplete order paid', function () {
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Incomplete,
+        'stripe_checkout_session_id' => 'cs_test_success_no_fulfill',
+        'edition_number' => null,
+    ]);
+    Payment::factory()->forOrder($order)->pending()->create([
+        'stripe_checkout_session_id' => 'cs_test_success_no_fulfill',
+    ]);
+
+    $this->get(localized('maison.checkout.success').'?session_id=cs_test_success_no_fulfill')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('maison/checkout-success')
+            ->where('paid', false)
+            ->where('pendingConfirmation', true)
+            ->where('orderId', $order->id));
+
+    expect($order->fresh()->status)->toBe(OrderStatus::Incomplete)
+        ->and($order->fresh()->latestPayment->status)->toBe(PaymentStatus::Pending);
+});
+
 test('checkout requires authentication', function () {
     $this->post(localized('maison.checkout.store'), checkoutPayload())
         ->assertRedirect(localized('maison.home', absolute: false))
@@ -325,6 +347,12 @@ test('stripe webhook listener fulfills paid checkout sessions', function () {
         ->and($order->fresh()->stripe_payment_intent_id)->toBe('pi_test_hook')
         ->and($payment->fresh()->status)->toBe(PaymentStatus::Paid)
         ->and($payment->fresh()->stripe_payment_intent_id)->toBe('pi_test_hook');
+});
+
+test('stripe webhook listener is registered exactly once', function () {
+    $listeners = app('events')->getRawListeners()[WebhookReceived::class] ?? [];
+
+    expect($listeners)->toHaveCount(1);
 });
 
 test('paid founding checkout grants founding circle but other products do not', function () {

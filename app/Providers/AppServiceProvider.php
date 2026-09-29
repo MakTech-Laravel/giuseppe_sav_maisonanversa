@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Contracts\BrevoContacts;
 use App\Contracts\StripeCatalogGateway;
 use App\Enums\RoleEnum;
-use App\Listeners\StripeEventListener;
 use App\Mail\VerifyEmailMail;
 use App\Models\JournalArticle;
 use App\Models\User;
@@ -21,14 +20,12 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
-use Laravel\Cashier\Events\WebhookReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -53,7 +50,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configureSpatiePermissions();
-        $this->configureCashierWebhooks();
         $this->configureSeoViewData();
         $this->configureBrandedAuthMail();
         $this->configurePasswordResetRateLimiting();
@@ -69,14 +65,6 @@ class AppServiceProvider extends ServiceProvider
         View::composer('app', function ($view): void {
             $view->with('seo', MaisonSeo::document(request()));
         });
-    }
-
-    /**
-     * Listen for Cashier webhook payloads (guest checkout fulfillment).
-     */
-    protected function configureCashierWebhooks(): void
-    {
-        Event::listen(WebhookReceived::class, StripeEventListener::class);
     }
 
     /**

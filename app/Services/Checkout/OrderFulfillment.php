@@ -62,13 +62,13 @@ class OrderFulfillment
             $intentId = $this->paymentIntentId($session);
             $sessionId = is_string($session->id ?? null) ? $session->id : $lockedPayment->stripe_checkout_session_id;
 
-            $lockedPayment->fill([
-                'status' => PaymentStatus::Paid,
-                'stripe_checkout_session_id' => $sessionId,
-                'stripe_payment_intent_id' => $intentId ?? $lockedPayment->stripe_payment_intent_id,
-            ])->save();
-
             if ($locked->status->isFulfillment()) {
+                $lockedPayment->fill([
+                    'status' => PaymentStatus::Paid,
+                    'stripe_checkout_session_id' => $sessionId,
+                    'stripe_payment_intent_id' => $intentId ?? $lockedPayment->stripe_payment_intent_id,
+                ])->save();
+
                 $locked->fill([
                     'stripe_checkout_session_id' => $sessionId ?? $locked->stripe_checkout_session_id,
                     'stripe_payment_intent_id' => $intentId ?? $locked->stripe_payment_intent_id,
@@ -76,6 +76,16 @@ class OrderFulfillment
 
                 return $locked->refresh();
             }
+
+            if ($locked->status !== OrderStatus::Incomplete) {
+                return $locked->refresh();
+            }
+
+            $lockedPayment->fill([
+                'status' => PaymentStatus::Paid,
+                'stripe_checkout_session_id' => $sessionId,
+                'stripe_payment_intent_id' => $intentId ?? $lockedPayment->stripe_payment_intent_id,
+            ])->save();
 
             if ($locked->product?->isLimitedEdition()) {
                 $this->allocator->allocate($locked);
@@ -108,7 +118,7 @@ class OrderFulfillment
             return $locked;
         });
 
-        if (! $alreadyPaid) {
+        if (! $alreadyPaid && $fulfilled->status->isFulfillment()) {
             SendOrderPaidBuyerMail::dispatch($fulfilled);
             SendOrderPaidAdminMail::dispatch($fulfilled);
             SyncOrderToBrevo::dispatch($fulfilled);
