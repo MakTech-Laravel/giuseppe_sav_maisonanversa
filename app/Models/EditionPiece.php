@@ -24,6 +24,7 @@ class EditionPiece extends Model
         'edition_number',
         'status',
         'order_id',
+        'reserved_by_user_id',
         'reserved_until',
         'allocated_at',
         'verification_token',
@@ -65,6 +66,21 @@ class EditionPiece extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function reservedByUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reserved_by_user_id');
+    }
+
+    public function isHeldBy(?User $user): bool
+    {
+        return $user !== null
+            && $this->status === EditionPieceStatus::Reserved
+            && (int) $this->reserved_by_user_id === (int) $user->id;
     }
 
     /**

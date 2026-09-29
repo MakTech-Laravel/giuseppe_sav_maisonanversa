@@ -8,6 +8,7 @@ use App\Exceptions\EditionSoldOutException;
 use App\Exceptions\EditionUnavailableException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maison\CheckoutRequest;
+use App\Models\EditionPiece;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Services\Checkout\OrderFulfillment;
@@ -20,10 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
-use Laravel\Cashier\Cashier;
-use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Throwable;
 
 class CheckoutController extends Controller
 {
@@ -41,7 +39,19 @@ class CheckoutController extends Controller
     ): SymfonyResponse {
         $product = $request->resolveProduct();
 
-        if ($product === null || $inventory->snapshot($product)['available'] === 0) {
+        $allocator->releaseExpiredHolds();
+
+        $heldByBuyer = false;
+
+        if ($product?->isLimitedEdition()) {
+            $editionPieceId = $request->integer('edition_piece_id') ?: null;
+            $piece = $editionPieceId !== null
+                ? EditionPiece::query()->whereKey($editionPieceId)->first()
+                : null;
+            $heldByBuyer = $piece?->isHeldBy($request->user()) ?? false;
+        }
+
+        if ($product === null || ($inventory->snapshot($product)['available'] === 0 && ! $heldByBuyer)) {
             throw ValidationException::withMessages([
                 'checkout' => __(':product is uitverkocht.', [
                     'product' => $product?->translated('name') ?? __('Heritage No.001'),
@@ -115,43 +125,17 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Landing page after a successful Stripe payment.
+     * Landing page after Stripe Checkout. Payment is confirmed by webhook only.
      */
-    public function success(
-        Request $request,
-        string $locale,
-        OrderFulfillment $fulfillment,
-    ): Response {
+    public function success(Request $request, string $locale): Response
+    {
         $sessionId = $request->string('session_id')->toString();
-        $order = null;
-        $paid = false;
-
-        if ($sessionId !== '' && filled(config('cashier.secret'))) {
-            try {
-                $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
-
-                if (($session->payment_status ?? null) === 'paid') {
-                    $order = $fulfillment->markPaidFromSession($session);
-                    $paid = $order?->isPaid() ?? false;
-                } else {
-                    $orderId = $session->metadata['order_id'] ?? null;
-                    $order = $orderId
-                        ? Order::query()->find($orderId)
-                        : Order::query()
-                            ->where('stripe_checkout_session_id', $sessionId)
-                            ->orWhereHas('payments', fn ($query) => $query->where('stripe_checkout_session_id', $sessionId))
-                            ->first();
-                }
-            } catch (ApiErrorException|Throwable) {
-                $order = Order::query()
-                    ->where('stripe_checkout_session_id', $sessionId)
-                    ->orWhereHas('payments', fn ($query) => $query->where('stripe_checkout_session_id', $sessionId))
-                    ->first();
-            }
-        }
+        $order = $this->orderForCheckoutSession($sessionId);
+        $paid = $order?->isPaid() ?? false;
 
         return Inertia::render('maison/checkout-success', [
             'paid' => $paid,
+            'pendingConfirmation' => $sessionId !== '' && ! $paid,
             'editionNumber' => $order?->edition_number !== null
                 ? (string) $order->edition_number
                 : null,
@@ -175,5 +159,22 @@ class CheckoutController extends Controller
         }
 
         return Inertia::render('maison/checkout-cancel');
+    }
+
+    private function orderForCheckoutSession(string $sessionId): ?Order
+    {
+        if ($sessionId === '') {
+            return null;
+        }
+
+        return Order::query()
+            ->where(function ($query) use ($sessionId): void {
+                $query->where('stripe_checkout_session_id', $sessionId)
+                    ->orWhereHas(
+                        'payments',
+                        fn ($payments) => $payments->where('stripe_checkout_session_id', $sessionId),
+                    );
+            })
+            ->first();
     }
 }
