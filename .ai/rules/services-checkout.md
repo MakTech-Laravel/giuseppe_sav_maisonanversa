@@ -16,3 +16,6 @@ Payment is confirmed only by the Stripe webhook (`checkout.session.completed` / 
 
 ## Stripe webhook URL has no locale
 Payment webhooks hit POST /stripe/webhook with no /en|/nl|/fr prefix. Do not point Stripe Dashboard or stripe listen at /{locale}/stripe/webhook. CSRF exempts stripe/*; fulfillment still comes only from WebhookReceived.
+
+## Clear missing Stripe customer before checkout
+Logged-in checkout uses Cashier Checkout::customer($user). If users.stripe_id points at a deleted or other-account customer, Stripe throws No such customer. Call StripeCustomerGuard::forgetIfMissing($user) before creating the session so Cashier can create a fresh customer.
