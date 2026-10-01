@@ -355,6 +355,15 @@ test('stripe webhook listener is registered exactly once', function () {
     expect($listeners)->toHaveCount(1);
 });
 
+test('stripe webhook route stays unprefixed by locale', function () {
+    expect(route('cashier.webhook', absolute: false))->toBe('/stripe/webhook');
+
+    foreach (config('maison.locales') as $locale) {
+        expect(route('cashier.webhook', absolute: false))
+            ->not->toContain('/'.$locale.'/');
+    }
+});
+
 test('paid founding checkout grants founding circle but other products do not', function () {
     $this->seed([PermissionSeeder::class, RoleSeeder::class]);
 
