@@ -15,7 +15,7 @@ export default function ClubCreate({ options }: { options: ClubFormOptions }) {
     return (
         <>
             <Head title={t('Club toevoegen')} />
-            <div className="w-full max-w-4xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+            <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={t('Club toevoegen')}
                     description={t(
@@ -24,12 +24,14 @@ export default function ClubCreate({ options }: { options: ClubFormOptions }) {
                     icon={Building2}
                 />
 
-                <ClubForm
-                    options={options}
-                    action={clubsRoutes.store(locale).url}
-                    method="post"
-                    submitLabel={t('Club toevoegen')}
-                />
+                <div className="mx-auto w-full max-w-4xl">
+                    <ClubForm
+                        options={options}
+                        action={clubsRoutes.store(locale).url}
+                        method="post"
+                        submitLabel={t('Club toevoegen')}
+                    />
+                </div>
             </div>
         </>
     );
