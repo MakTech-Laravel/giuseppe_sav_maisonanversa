@@ -18,6 +18,7 @@ import { translateMemberStatus } from '@/lib/circle-member-status';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import circleRoutes from '@/routes/admin/circle';
+import customers from '@/routes/admin/customers';
 
 interface CircleMember {
     id: string;
@@ -30,7 +31,8 @@ interface CircleMember {
 
 export default function CircleIndex({ members }: { members: CircleMember[] }) {
     const { t } = useTranslation();
-    const form = useForm(circleRoutes.assign(wayfinderLocale()), {
+    const locale = wayfinderLocale();
+    const form = useForm(circleRoutes.assign(locale), {
         email: '',
         user_id: '',
         edition_number: '',
@@ -58,7 +60,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
 
         router.delete(
             circleRoutes.remove({
-                locale: wayfinderLocale(),
+                locale,
                 member: Number(memberId),
             }).url,
         );
@@ -76,7 +78,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                     icon={UsersRound}
                 >
                     <Button variant="outline" asChild>
-                        <Link href={circleRoutes.register(wayfinderLocale())}>
+                        <Link href={circleRoutes.register(locale)}>
                             <BookText className="h-4 w-4" /> {t('Naamregister')}
                         </Link>
                     </Button>
@@ -149,9 +151,6 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead>{t('Editie')}</TableHead>
                                 <TableHead>{t('Lid')}</TableHead>
-                                <TableHead className="hidden md:table-cell">
-                                    {t('E-mail')}
-                                </TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
                                     {t('Ingeschreven op')}
@@ -169,9 +168,21 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                                             ? `№ ${member.edition}`
                                             : '—'}
                                     </TableCell>
-                                    <TableCell>{member.name}</TableCell>
-                                    <TableCell className="hidden md:table-cell">
-                                        {member.email}
+                                    <TableCell>
+                                        <Link
+                                            href={customers.show({
+                                                locale,
+                                                user: Number(member.id),
+                                            })}
+                                            className="block min-w-0"
+                                        >
+                                            <span className="font-medium text-foreground underline-offset-2 hover:underline">
+                                                {member.name}
+                                            </span>
+                                            <p className="truncate text-xs text-muted-foreground">
+                                                {member.email}
+                                            </p>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant="secondary">
@@ -192,7 +203,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                                         >
                                             <Link
                                                 href={circleRoutes.show({
-                                                    locale: wayfinderLocale(),
+                                                    locale,
                                                     member: Number(member.id),
                                                 })}
                                                 title={t('Lid bekijken')}

@@ -22,6 +22,7 @@ class AssignCircleMemberRequest extends FormRequest
             'email' => ['nullable', 'email', 'required_without:user_id', Rule::exists('users', 'email')],
             'user_id' => ['nullable', 'integer', 'required_without:email', Rule::exists('users', 'id')],
             'edition_number' => ['required', 'integer', 'min:1', 'max:100'],
+            'replace' => ['sometimes', 'boolean'],
         ];
     }
 }

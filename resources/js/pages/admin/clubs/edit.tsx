@@ -28,15 +28,13 @@ export default function ClubEdit({
                     icon={Building2}
                 />
 
-                <div className="mx-auto w-full max-w-4xl">
-                    <ClubForm
-                        options={options}
-                        club={club}
-                        action={clubsRoutes.update({ locale, club: club.id }).url}
-                        method="put"
-                        submitLabel={t('Opslaan')}
-                    />
-                </div>
+                <ClubForm
+                    options={options}
+                    club={club}
+                    action={clubsRoutes.update({ locale, club: club.id }).url}
+                    method="put"
+                    submitLabel={t('Opslaan')}
+                />
             </div>
         </>
     );

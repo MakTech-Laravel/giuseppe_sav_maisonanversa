@@ -24,14 +24,12 @@ export default function ClubCreate({ options }: { options: ClubFormOptions }) {
                     icon={Building2}
                 />
 
-                <div className="mx-auto w-full max-w-4xl">
-                    <ClubForm
-                        options={options}
-                        action={clubsRoutes.store(locale).url}
-                        method="post"
-                        submitLabel={t('Club toevoegen')}
-                    />
-                </div>
+                <ClubForm
+                    options={options}
+                    action={clubsRoutes.store(locale).url}
+                    method="post"
+                    submitLabel={t('Club toevoegen')}
+                />
             </div>
         </>
     );

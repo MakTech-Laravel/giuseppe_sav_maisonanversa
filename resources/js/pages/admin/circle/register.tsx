@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/table';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import circleRoutes from '@/routes/admin/circle';
+import customers from '@/routes/admin/customers';
 
 interface AdminPlace {
     id: string | null;
@@ -42,6 +43,7 @@ export default function CircleRegister({
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const [search, setSearch] = useState(filters.search);
+    const [emails, setEmails] = useState<Record<number, string>>({});
 
     function applyFilters(event: FormEvent, status = filters.status) {
         event.preventDefault();
@@ -73,6 +75,49 @@ export default function CircleRegister({
         router.patch(
             `/${locale}/admin/circle/register/${entry.id}/visibility`,
             { hidden: !entry.hidden },
+            { preserveScroll: true },
+        );
+    }
+
+    function assignMember(entry: AdminPlace, replace: boolean) {
+        const email = (emails[entry.sequence] ?? '').trim();
+
+        if (email === '') {
+            return;
+        }
+
+        router.post(
+            circleRoutes.assign({ locale }).url,
+            {
+                email,
+                edition_number: entry.sequence,
+                replace,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () =>
+                    setEmails((current) => ({
+                        ...current,
+                        [entry.sequence]: '',
+                    })),
+            },
+        );
+    }
+
+    function removeMember(entry: AdminPlace) {
+        if (entry.user_id === null) {
+            return;
+        }
+
+        if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
+            return;
+        }
+
+        router.delete(
+            circleRoutes.remove({
+                locale,
+                member: entry.user_id,
+            }).url,
             { preserveScroll: true },
         );
     }
@@ -162,10 +207,39 @@ export default function CircleRegister({
                                         № {entry.number}
                                     </TableCell>
                                     <TableCell>
-                                        <div>{entry.member_name ?? '—'}</div>
-                                        <div className="text-xs text-muted-foreground">
-                                            {entry.email ?? t(stateLabel(entry.state))}
-                                        </div>
+                                        {entry.user_id !== null &&
+                                        entry.member_name ? (
+                                            <Link
+                                                href={customers.show({
+                                                    locale,
+                                                    user: entry.user_id,
+                                                })}
+                                                className="block min-w-0"
+                                            >
+                                                <span className="font-medium text-foreground underline-offset-2 hover:underline">
+                                                    {entry.member_name}
+                                                </span>
+                                                {entry.email && (
+                                                    <p className="truncate text-xs text-muted-foreground">
+                                                        {entry.email}
+                                                    </p>
+                                                )}
+                                            </Link>
+                                        ) : (
+                                            <>
+                                                <div>
+                                                    {entry.member_name ?? '—'}
+                                                </div>
+                                                <div className="text-xs text-muted-foreground">
+                                                    {entry.email ??
+                                                        t(
+                                                            stateLabel(
+                                                                entry.state,
+                                                            ),
+                                                        )}
+                                                </div>
+                                            </>
+                                        )}
                                     </TableCell>
                                     <TableCell className="hidden md:table-cell">
                                         {entry.visibility_label
@@ -193,55 +267,130 @@ export default function CircleRegister({
                                         )}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {entry.id !== null && (
+                                        {entry.state !== 'archive' && (
                                             <div className="flex flex-wrap items-center justify-end gap-2">
-                                                <form
-                                                    className="flex items-center gap-2"
-                                                    onSubmit={(event) => {
-                                                        event.preventDefault();
-                                                        const value =
-                                                            new FormData(
-                                                                event.currentTarget,
-                                                            ).get(
-                                                                'edition_number',
-                                                            );
-                                                        changeNumber(
-                                                            entry,
-                                                            String(value ?? ''),
-                                                        );
-                                                    }}
-                                                >
-                                                    <Input
-                                                        name="edition_number"
-                                                        type="number"
-                                                        min={1}
-                                                        max={100}
-                                                        defaultValue={
-                                                            entry.sequence
-                                                        }
-                                                        className="w-20"
-                                                        aria-label={t('Nummer')}
-                                                    />
-                                                    <Button
-                                                        type="submit"
-                                                        size="sm"
-                                                        variant="outline"
-                                                    >
-                                                        {t('Nummer')}
-                                                    </Button>
-                                                </form>
-                                                <Button
-                                                    type="button"
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        toggleHidden(entry)
+                                                <Input
+                                                    type="email"
+                                                    value={
+                                                        emails[entry.sequence] ??
+                                                        ''
                                                     }
-                                                >
-                                                    {entry.hidden
-                                                        ? t('Toon weer')
-                                                        : t('Verberg')}
-                                                </Button>
+                                                    onChange={(event) =>
+                                                        setEmails(
+                                                            (current) => ({
+                                                                ...current,
+                                                                [entry.sequence]:
+                                                                    event.target
+                                                                        .value,
+                                                            }),
+                                                        )
+                                                    }
+                                                    placeholder={t('E-mail')}
+                                                    className="w-44"
+                                                    aria-label={t('E-mail')}
+                                                />
+                                                {entry.state === 'available' ? (
+                                                    <Button
+                                                        type="button"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            assignMember(
+                                                                entry,
+                                                                false,
+                                                            )
+                                                        }
+                                                    >
+                                                        {t('Toewijzen')}
+                                                    </Button>
+                                                ) : (
+                                                    <>
+                                                        <Button
+                                                            type="button"
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={() =>
+                                                                assignMember(
+                                                                    entry,
+                                                                    true,
+                                                                )
+                                                            }
+                                                        >
+                                                            {t('Wijzig lid')}
+                                                        </Button>
+                                                        <Button
+                                                            type="button"
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={() =>
+                                                                removeMember(
+                                                                    entry,
+                                                                )
+                                                            }
+                                                        >
+                                                            {t('Verwijderen')}
+                                                        </Button>
+                                                    </>
+                                                )}
+                                                {entry.id !== null && (
+                                                    <>
+                                                        <form
+                                                            className="flex items-center gap-2"
+                                                            onSubmit={(
+                                                                event,
+                                                            ) => {
+                                                                event.preventDefault();
+                                                                const value =
+                                                                    new FormData(
+                                                                        event.currentTarget,
+                                                                    ).get(
+                                                                        'edition_number',
+                                                                    );
+                                                                changeNumber(
+                                                                    entry,
+                                                                    String(
+                                                                        value ??
+                                                                            '',
+                                                                    ),
+                                                                );
+                                                            }}
+                                                        >
+                                                            <Input
+                                                                name="edition_number"
+                                                                type="number"
+                                                                min={1}
+                                                                max={100}
+                                                                defaultValue={
+                                                                    entry.sequence
+                                                                }
+                                                                className="w-20"
+                                                                aria-label={t(
+                                                                    'Nummer',
+                                                                )}
+                                                            />
+                                                            <Button
+                                                                type="submit"
+                                                                size="sm"
+                                                                variant="outline"
+                                                            >
+                                                                {t('Nummer')}
+                                                            </Button>
+                                                        </form>
+                                                        <Button
+                                                            type="button"
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={() =>
+                                                                toggleHidden(
+                                                                    entry,
+                                                                )
+                                                            }
+                                                        >
+                                                            {entry.hidden
+                                                                ? t('Toon weer')
+                                                                : t('Verberg')}
+                                                        </Button>
+                                                    </>
+                                                )}
                                             </div>
                                         )}
                                     </TableCell>

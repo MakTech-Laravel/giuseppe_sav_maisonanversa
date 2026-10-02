@@ -376,8 +376,21 @@ class OpsController extends Controller
         FoundingCircleRegistrar $registrar,
     ): RedirectResponse {
         $user = $this->resolveCircleUser($request);
+        $editionNumber = (int) $request->validated('edition_number');
 
-        $registrar->assign($user, (int) $request->validated('edition_number'));
+        if ($request->boolean('replace')) {
+            $occupant = FoundingCircleRegisterEntry::query()
+                ->where('edition_number', $editionNumber)
+                ->where('user_id', '!=', $user->id)
+                ->with('user')
+                ->first();
+
+            if ($occupant?->user !== null) {
+                $registrar->releaseMember($occupant->user);
+            }
+        }
+
+        $registrar->assign($user, $editionNumber);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Lid toegevoegd aan Founding Circle.')]);
 
@@ -432,16 +445,20 @@ class OpsController extends Controller
     private function circleMemberPayload(User $user, PassportPresenter $passport): array
     {
         $order = $passport->heritageOrder($user);
+        $registerEntry = FoundingCircleRegisterEntry::query()
+            ->where('user_id', $user->id)
+            ->first();
+        $editionNumber = $order?->edition_number ?? $registerEntry?->edition_number;
 
         return [
             'id' => (string) $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'edition' => $order?->edition_number !== null
-                ? str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)
+            'edition' => $editionNumber !== null
+                ? str_pad((string) $editionNumber, 3, '0', STR_PAD_LEFT)
                 : null,
-            'status' => $order !== null ? 'Active' : 'Reserved',
-            'joined_at' => $order?->created_at?->toDateString(),
+            'status' => $order !== null || $registerEntry !== null ? 'Active' : 'Reserved',
+            'joined_at' => ($order?->created_at ?? $registerEntry?->joined_at)?->toDateString(),
         ];
     }
 
