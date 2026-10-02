@@ -151,7 +151,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                                         </h2>
                                         <p className="mt-2 text-sm text-muted-foreground">
                                             {t(
-                                                'Eén plaats in Heritage No.001 (001–100). 004 en 4 zijn hetzelfde nummer.',
+                                                'Eén vaste plaats in Heritage No.001 (1–100).',
                                             )}
                                         </p>
                                     </div>

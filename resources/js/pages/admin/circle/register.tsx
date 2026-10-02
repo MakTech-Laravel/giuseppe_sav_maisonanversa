@@ -64,18 +64,6 @@ export default function CircleRegister({
         );
     }
 
-    function changeNumber(entry: AdminPlace, editionNumber: string) {
-        if (entry.id === null) {
-            return;
-        }
-
-        router.patch(
-            `/${locale}/admin/circle/register/${entry.id}`,
-            { edition_number: Number(editionNumber) },
-            { preserveScroll: true },
-        );
-    }
-
     function toggleHidden(entry: AdminPlace) {
         if (entry.id === null) {
             return;
@@ -132,7 +120,7 @@ export default function CircleRegister({
                 <AdminPageHeader
                     title={t('Naamregister')}
                     description={t(
-                        'Alle honderd plaatsen van Heritage No.001. Verberg een vermelding, wijzig het nummer, of exporteer het register.',
+                        'Alle honderd plaatsen van Heritage No.001. Wijs een klant toe, verberg een vermelding, of exporteer het register.',
                     )}
                     icon={BookText}
                 >
@@ -207,7 +195,7 @@ export default function CircleRegister({
                             {entries.map((entry) => (
                                 <TableRow key={entry.number}>
                                     <TableCell className="font-medium">
-                                        № {entry.number}
+                                        № {entry.sequence}
                                     </TableCell>
                                     <TableCell>
                                         {entry.user_id !== null &&
@@ -318,64 +306,18 @@ export default function CircleRegister({
                                                     </>
                                                 )}
                                                 {entry.id !== null && (
-                                                    <>
-                                                        <form
-                                                            className="flex items-center gap-2"
-                                                            onSubmit={(
-                                                                event,
-                                                            ) => {
-                                                                event.preventDefault();
-                                                                const value =
-                                                                    new FormData(
-                                                                        event.currentTarget,
-                                                                    ).get(
-                                                                        'edition_number',
-                                                                    );
-                                                                changeNumber(
-                                                                    entry,
-                                                                    String(
-                                                                        value ??
-                                                                            '',
-                                                                    ),
-                                                                );
-                                                            }}
-                                                        >
-                                                            <Input
-                                                                name="edition_number"
-                                                                type="number"
-                                                                min={1}
-                                                                max={100}
-                                                                defaultValue={
-                                                                    entry.sequence
-                                                                }
-                                                                className="w-20"
-                                                                aria-label={t(
-                                                                    'Nummer',
-                                                                )}
-                                                            />
-                                                            <Button
-                                                                type="submit"
-                                                                size="sm"
-                                                                variant="outline"
-                                                            >
-                                                                {t('Nummer')}
-                                                            </Button>
-                                                        </form>
-                                                        <Button
-                                                            type="button"
-                                                            size="sm"
-                                                            variant="outline"
-                                                            onClick={() =>
-                                                                toggleHidden(
-                                                                    entry,
-                                                                )
-                                                            }
-                                                        >
-                                                            {entry.hidden
-                                                                ? t('Toon weer')
-                                                                : t('Verberg')}
-                                                        </Button>
-                                                    </>
+                                                    <Button
+                                                        type="button"
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            toggleHidden(entry)
+                                                        }
+                                                    >
+                                                        {entry.hidden
+                                                            ? t('Toon weer')
+                                                            : t('Verberg')}
+                                                    </Button>
                                                 )}
                                             </div>
                                         )}
@@ -402,7 +344,7 @@ export default function CircleRegister({
                 description={
                     picker
                         ? t('Kies een klant voor editie № {{number}}.', {
-                              number: String(picker.sequence).padStart(3, '0'),
+                              number: picker.sequence,
                           })
                         : undefined
                 }

@@ -455,7 +455,7 @@ class OpsController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'edition' => $editionNumber !== null
-                ? str_pad((string) $editionNumber, 3, '0', STR_PAD_LEFT)
+                ? (string) (int) $editionNumber
                 : null,
             'status' => $order !== null || $registerEntry !== null ? 'Active' : 'Reserved',
             'joined_at' => ($order?->created_at ?? $registerEntry?->joined_at)?->toDateString(),
