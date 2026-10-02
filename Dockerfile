@@ -2,6 +2,7 @@
 FROM php:8.4-fpm
 
 COPY ./docker/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY ./docker/php-fpm-www.conf /usr/local/etc/php-fpm.d/zz-maison.conf
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -20,9 +21,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libicu-dev \
     supervisor \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(nproc)" pdo_mysql mbstring zip gd bcmath intl \
+    && docker-php-ext-install -j"$(nproc)" pdo_mysql mbstring zip gd bcmath intl pcntl \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
+    && mkdir -p /var/log/supervisor /run/nginx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

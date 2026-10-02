@@ -10,6 +10,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |
 | app/Http/Controllers/Maison/VerificationController.php | .ai/rules/controllers-maison.md |
+| docker/** | .ai/rules/docker.md |
 | app/Services/Edition/** | .ai/rules/edition.md |
 | app/Services/FoundingCircle/** | .ai/rules/founding-circle.md |
 | resources/js/pages/maison/house.tsx,resources/js/components/maison/house/** | .ai/rules/house.md |
