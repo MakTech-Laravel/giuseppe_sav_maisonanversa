@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -46,6 +47,45 @@ class CustomerController extends Controller
                     ->whereNotNull('email_verified_at')
                     ->count(),
             ]),
+        ]);
+    }
+
+    /**
+     * Paginated customer lookup for admin pickers (name / email search).
+     */
+    public function search(Request $request, string $locale): JsonResponse
+    {
+        $search = trim((string) $request->query('search', ''));
+
+        $customers = User::query()
+            ->where('type', UserType::Customer)
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('username', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('name')
+            ->orderBy('id')
+            ->paginate(20)
+            ->through(fn (User $user): array => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+
+        return response()->json([
+            'data' => $customers->items(),
+            'meta' => [
+                'current_page' => $customers->currentPage(),
+                'last_page' => $customers->lastPage(),
+                'per_page' => $customers->perPage(),
+                'total' => $customers->total(),
+            ],
+            'links' => [
+                'next' => $customers->nextPageUrl(),
+            ],
         ]);
     }
 

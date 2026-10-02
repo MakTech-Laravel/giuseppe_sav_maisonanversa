@@ -3,6 +3,10 @@ import { ArrowLeft, BookText, Download } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+    AdminCustomerPickerSheet,
+    type PickerCustomer,
+} from '@/components/admin/admin-customer-picker-sheet';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -33,6 +37,11 @@ interface AdminPlace {
     user_id: number | null;
 }
 
+type PickerMode = {
+    sequence: number;
+    replace: boolean;
+};
+
 export default function CircleRegister({
     entries,
     filters,
@@ -43,7 +52,7 @@ export default function CircleRegister({
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const [search, setSearch] = useState(filters.search);
-    const [emails, setEmails] = useState<Record<number, string>>({});
+    const [picker, setPicker] = useState<PickerMode | null>(null);
 
     function applyFilters(event: FormEvent, status = filters.status) {
         event.preventDefault();
@@ -79,27 +88,21 @@ export default function CircleRegister({
         );
     }
 
-    function assignMember(entry: AdminPlace, replace: boolean) {
-        const email = (emails[entry.sequence] ?? '').trim();
-
-        if (email === '') {
+    function assignMember(customer: PickerCustomer) {
+        if (picker === null) {
             return;
         }
 
         router.post(
             circleRoutes.assign({ locale }).url,
             {
-                email,
-                edition_number: entry.sequence,
-                replace,
+                user_id: customer.id,
+                edition_number: picker.sequence,
+                replace: picker.replace,
             },
             {
                 preserveScroll: true,
-                onSuccess: () =>
-                    setEmails((current) => ({
-                        ...current,
-                        [entry.sequence]: '',
-                    })),
+                onSuccess: () => setPicker(null),
             },
         );
     }
@@ -269,35 +272,16 @@ export default function CircleRegister({
                                     <TableCell className="text-right">
                                         {entry.state !== 'archive' && (
                                             <div className="flex flex-wrap items-center justify-end gap-2">
-                                                <Input
-                                                    type="email"
-                                                    value={
-                                                        emails[entry.sequence] ??
-                                                        ''
-                                                    }
-                                                    onChange={(event) =>
-                                                        setEmails(
-                                                            (current) => ({
-                                                                ...current,
-                                                                [entry.sequence]:
-                                                                    event.target
-                                                                        .value,
-                                                            }),
-                                                        )
-                                                    }
-                                                    placeholder={t('E-mail')}
-                                                    className="w-44"
-                                                    aria-label={t('E-mail')}
-                                                />
                                                 {entry.state === 'available' ? (
                                                     <Button
                                                         type="button"
                                                         size="sm"
                                                         onClick={() =>
-                                                            assignMember(
-                                                                entry,
-                                                                false,
-                                                            )
+                                                            setPicker({
+                                                                sequence:
+                                                                    entry.sequence,
+                                                                replace: false,
+                                                            })
                                                         }
                                                     >
                                                         {t('Toewijzen')}
@@ -309,10 +293,12 @@ export default function CircleRegister({
                                                             size="sm"
                                                             variant="outline"
                                                             onClick={() =>
-                                                                assignMember(
-                                                                    entry,
-                                                                    true,
-                                                                )
+                                                                setPicker({
+                                                                    sequence:
+                                                                        entry.sequence,
+                                                                    replace:
+                                                                        true,
+                                                                })
                                                             }
                                                         >
                                                             {t('Wijzig lid')}
@@ -400,6 +386,35 @@ export default function CircleRegister({
                     </Table>
                 </div>
             </div>
+
+            <AdminCustomerPickerSheet
+                open={picker !== null}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setPicker(null);
+                    }
+                }}
+                title={
+                    picker?.replace
+                        ? t('Wijzig lid')
+                        : t('Lid toewijzen')
+                }
+                description={
+                    picker
+                        ? t('Kies een klant voor editie № {{number}}.', {
+                              number: String(picker.sequence).padStart(3, '0'),
+                          })
+                        : undefined
+                }
+                selectedId={
+                    picker
+                        ? (entries.find(
+                              (entry) => entry.sequence === picker.sequence,
+                          )?.user_id ?? null)
+                        : null
+                }
+                onSelect={assignMember}
+            />
         </>
     );
 }

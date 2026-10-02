@@ -288,6 +288,8 @@ Route::prefix('{locale}')
             Route::controller(CustomerController::class)->group(function () {
                 Route::get('customers', 'index')->name('customers.index')
                     ->middleware('permission:'.PermissionEnum::USERS_INDEX->value);
+                Route::get('customers/search', 'search')->name('customers.search')
+                    ->middleware('permission:'.PermissionEnum::USERS_INDEX->value.'|'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('customers/create', 'create')->name('customers.create')
                     ->middleware('permission:'.PermissionEnum::USERS_CREATE->value);
                 Route::post('customers', 'store')->name('customers.store')
