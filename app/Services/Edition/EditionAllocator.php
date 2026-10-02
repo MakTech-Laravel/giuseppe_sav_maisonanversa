@@ -182,9 +182,22 @@ class EditionAllocator
     }
 
     /**
+     * Return a reserved or allocated piece to available stock after incomplete cancel/fail/expire.
+     */
+    public function releaseOnCancel(Order $order): void
+    {
+        $this->returnLinkedPieceToAvailable($order);
+    }
+
+    /**
      * Return a reserved or allocated piece to available stock after a refund.
      */
     public function releaseOnRefund(Order $order): void
+    {
+        $this->returnLinkedPieceToAvailable($order);
+    }
+
+    private function returnLinkedPieceToAvailable(Order $order): void
     {
         DB::transaction(function () use ($order): void {
             $lockedOrder = Order::query()->whereKey($order->id)->lockForUpdate()->first();

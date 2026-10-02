@@ -246,7 +246,7 @@ class OrderFulfillment
                 return $locked;
             }
 
-            $this->releaseInventory($locked);
+            $this->releaseInventoryOnCancel($locked);
 
             $intentId = $this->paymentIntentId($session);
             $sessionId = is_string($session->id ?? null) ? $session->id : $lockedPayment->stripe_checkout_session_id;
@@ -307,7 +307,7 @@ class OrderFulfillment
                 return $locked;
             }
 
-            $this->releaseInventory($locked);
+            $this->releaseInventoryOnCancel($locked);
 
             if ($payment !== null) {
                 /** @var Payment $lockedPayment */
@@ -362,7 +362,7 @@ class OrderFulfillment
                 return $locked->refresh();
             }
 
-            $this->releaseInventory($locked);
+            $this->releaseInventoryOnCancel($locked);
 
             Payment::query()
                 ->where('order_id', $locked->id)
@@ -382,10 +382,11 @@ class OrderFulfillment
         });
     }
 
-    private function releaseInventory(Order $order): void
+    private function releaseInventoryOnCancel(Order $order): void
     {
         if ($order->product?->isLimitedEdition()) {
-            $this->allocator->release($order);
+            $this->registrar->releaseForOrder($order);
+            $this->allocator->releaseOnCancel($order);
 
             return;
         }

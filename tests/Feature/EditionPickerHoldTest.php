@@ -278,6 +278,33 @@ test('guests cannot hold an edition piece', function () {
     ]))->assertUnauthorized();
 });
 
+test('admin users cannot hold an edition piece', function () {
+    $admin = User::factory()->admin()->create();
+    $this->actingAs($admin);
+
+    $product = Product::founding();
+    $piece = foundingPiece(23);
+
+    $this->postJson(localized('maison.products.editions.hold', [
+        'product' => $product->slug,
+        'editionPiece' => $piece->id,
+    ]))->assertForbidden();
+
+    expect($piece->fresh()->status)->toBe(EditionPieceStatus::Available);
+});
+
+test('admin users cannot place a storefront checkout order', function () {
+    $admin = User::factory()->admin()->create();
+    $this->actingAs($admin);
+
+    $before = Order::query()->count();
+
+    $this->post(localized('maison.checkout.store'), checkoutPayload())
+        ->assertForbidden();
+
+    expect(Order::query()->count())->toBe($before);
+});
+
 test('editions endpoint releases expired holds so the number is selectable again', function () {
     $user = actingAsCheckoutUser();
     $product = Product::founding();

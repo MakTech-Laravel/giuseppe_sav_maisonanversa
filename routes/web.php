@@ -124,7 +124,7 @@ Route::prefix('{locale}')
         Route::get('products/{product:slug}/editions', [ProductEditionController::class, 'index'])
             ->name('products.editions');
         Route::post('products/{product:slug}/editions/{editionPiece}/hold', [ProductEditionController::class, 'hold'])
-            ->middleware(['auth', 'throttle:10,1'])
+            ->middleware(['auth', 'customer', 'throttle:10,1'])
             ->name('products.editions.hold');
 
         Route::controller(InquiryController::class)->group(function () {
@@ -149,7 +149,7 @@ Route::prefix('{locale}')
 
         Route::controller(CheckoutController::class)->group(function () {
             Route::post('checkout', 'store')
-                ->middleware(['auth', 'throttle:10,1'])
+                ->middleware(['auth', 'customer', 'throttle:10,1'])
                 ->name('checkout.store');
             Route::get('checkout/success', 'success')->name('checkout.success');
             Route::get('checkout/cancel', 'cancel')->name('checkout.cancel');

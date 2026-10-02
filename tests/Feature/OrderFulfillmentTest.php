@@ -1,6 +1,9 @@
 <?php
 
+use App\Enums\EditionPieceStatus;
+use App\Enums\GuardEnum;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Enums\RegisterVisibility;
 use App\Enums\RoleEnum;
 use App\Jobs\SyncOrderToBrevo;
@@ -8,10 +11,12 @@ use App\Models\EditionPiece;
 use App\Models\FoundingCircleClaim;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Checkout\OrderFulfillment;
 use Illuminate\Support\Facades\Queue;
+use Spatie\Permission\Models\Role;
 
 test('order fulfillment is idempotent for paid sessions', function () {
     Queue::fake();
@@ -136,4 +141,98 @@ test('an unpaid session does not queue a brevo order list sync', function () {
     ]);
 
     Queue::assertNotPushed(SyncOrderToBrevo::class);
+});
+
+test('canceling an incomplete checkout frees a reserved edition piece', function () {
+    $user = User::factory()->create();
+    $product = Product::founding();
+    $piece = EditionPiece::query()
+        ->where('product_id', $product->id)
+        ->where('edition_number', $product->formatEditionLabel(55))
+        ->firstOrFail();
+
+    $order = Order::factory()->forUser($user)->create([
+        'status' => OrderStatus::Incomplete,
+        'product_id' => $product->id,
+        'edition_piece_id' => $piece->id,
+        'edition_number' => null,
+        'stripe_checkout_session_id' => 'cs_test_cancel_reserved',
+    ]);
+
+    $piece->update([
+        'status' => EditionPieceStatus::Reserved,
+        'order_id' => $order->id,
+        'reserved_by_user_id' => $user->id,
+        'reserved_until' => now()->addMinutes(15),
+    ]);
+
+    Payment::factory()->forOrder($order)->pending()->create([
+        'stripe_checkout_session_id' => 'cs_test_cancel_reserved',
+    ]);
+
+    $result = app(OrderFulfillment::class)->markCanceledBySessionId('cs_test_cancel_reserved');
+
+    expect($result->status)->toBe(OrderStatus::Canceled)
+        ->and($order->fresh())
+        ->status->toBe(OrderStatus::Canceled)
+        ->edition_piece_id->toBeNull()
+        ->edition_number->toBeNull()
+        ->and($piece->fresh())
+        ->status->toBe(EditionPieceStatus::Available)
+        ->order_id->toBeNull()
+        ->reserved_by_user_id->toBeNull()
+        ->and($order->fresh()->latestPayment->status)->toBe(PaymentStatus::Canceled);
+});
+
+test('canceling an incomplete order frees a stuck allocated piece and register inscription', function () {
+    $user = User::factory()->create();
+    $product = Product::founding();
+    $piece = EditionPiece::query()
+        ->where('product_id', $product->id)
+        ->where('edition_number', $product->formatEditionLabel(56))
+        ->firstOrFail();
+
+    $order = Order::factory()->forUser($user)->create([
+        'status' => OrderStatus::Incomplete,
+        'product_id' => $product->id,
+        'edition_piece_id' => $piece->id,
+        'edition_number' => 56,
+        'stripe_checkout_session_id' => 'cs_test_cancel_allocated',
+    ]);
+
+    $piece->update([
+        'status' => EditionPieceStatus::Allocated,
+        'order_id' => $order->id,
+        'reserved_by_user_id' => null,
+        'reserved_until' => null,
+        'allocated_at' => now(),
+    ]);
+
+    FoundingCircleRegisterEntry::factory()->create([
+        'user_id' => $user->id,
+        'product_id' => $product->id,
+        'order_id' => $order->id,
+        'edition_number' => 56,
+        'name' => $user->name,
+    ]);
+    Role::findOrCreate(RoleEnum::FOUNDING_CIRCLE->value, GuardEnum::WEB->value);
+    $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);
+
+    Payment::factory()->forOrder($order)->pending()->create([
+        'stripe_checkout_session_id' => 'cs_test_cancel_allocated',
+    ]);
+
+    $result = app(OrderFulfillment::class)->markCanceledBySessionId('cs_test_cancel_allocated');
+
+    expect($result->status)->toBe(OrderStatus::Canceled)
+        ->and($order->fresh())
+        ->status->toBe(OrderStatus::Canceled)
+        ->edition_piece_id->toBeNull()
+        ->edition_number->toBeNull()
+        ->and($piece->fresh())
+        ->status->toBe(EditionPieceStatus::Available)
+        ->order_id->toBeNull()
+        ->allocated_at->toBeNull()
+        ->and(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeFalse()
+        ->and($user->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse();
 });

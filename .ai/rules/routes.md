@@ -16,3 +16,6 @@ Public routes live under /{locale}. A URL whose first segment is not nl, en, or 
 
 ## Stripe webhook stays unprefixed
 Cashier serves POST /stripe/webhook (cashier.webhook) outside the {locale} group. Never nest Cashier under /{locale}. Local stripe listen must forward to http://127.0.0.1:8000/stripe/webhook. On PowerShell, quote --events or omit the filter; an unquoted comma list becomes invalid and forwards nothing. CSRF already excludes stripe/*.
+
+## Staff cannot place storefront orders
+Maison checkout.store and products.editions.hold use auth+customer middleware. CheckoutRequest::authorize requires isCustomer(). There is no admin place-order UI; Ops assign is the only staff path onto the Founding Circle register.

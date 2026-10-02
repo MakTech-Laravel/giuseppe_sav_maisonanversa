@@ -19,3 +19,6 @@ Payment webhooks hit POST /stripe/webhook with no /en|/nl|/fr prefix. Do not poi
 
 ## Clear missing Stripe customer before checkout
 Logged-in checkout uses Cashier Checkout::customer($user). If users.stripe_id points at a deleted or other-account customer, Stripe throws No such customer. Call StripeCustomerGuard::forgetIfMissing($user) before creating the session so Cashier can create a fresh customer.
+
+## Incomplete cancel frees Allocated pieces and register
+markCanceledBySessionId, markFailedFromSession, and cancelIncomplete must call registrar->releaseForOrder then allocator->releaseOnCancel (not release). release() leaves Allocated alone; releaseOnCancel clears Reserved and Allocated the same way releaseOnRefund does. Paid orders still unwind only via markRefunded.

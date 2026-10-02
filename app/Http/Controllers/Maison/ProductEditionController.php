@@ -104,6 +104,7 @@ class ProductEditionController extends Controller
         $user = $request->user();
 
         abort_unless($user !== null, 401);
+        abort_unless($user->isCustomer(), 403);
 
         $allocator->releaseExpiredHolds();
 
