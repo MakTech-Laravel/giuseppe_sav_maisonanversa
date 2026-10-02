@@ -111,26 +111,26 @@ test('an untranslated key falls back to its dutch source text', function (string
     expect(__('Een sleutel die niet bestaat'))->toBe('Een sleutel die niet bestaat');
 })->with(['nl', 'en', 'fr']);
 
-const FULL_ANVERS_STORY_KEY = '"Anvers" is de Franse naam voor Antwerpen. "Anversa" is onze Europese variatie — elegant in het Frans, Italiaans en Engels tegelijk. De naam draagt de stad. De stad draagt het merk.';
+const FULL_STORY_NAME_KEY = 'Anversa is de Italiaanse naam voor Antwerpen. We kozen hem voor een stad die altijd over haar grenzen heen keek, en voor een huis met wortels in Antwerpen en een blik op Europa.';
 
 const TRUNCATED_ANVERS_ORPHAN_KEY = '"Anvers" is de Franse naam voor Antwerpen. "Anversa" is onze Europese variatie — elegant in het Frans, Italiaans en Enge';
 
-test('the story page quotes the full source key', function () {
-    $source = file_get_contents(resource_path('js/pages/maison/story.tsx'));
+test('the story name section quotes the full source key', function () {
+    $source = file_get_contents(resource_path('js/components/maison/story/story-name.tsx'));
 
-    expect($source)->toContain(FULL_ANVERS_STORY_KEY);
+    expect($source)->toContain(FULL_STORY_NAME_KEY);
 });
 
-test('the full story key resolves in translated locales', function (string $locale) {
+test('the full story name key resolves in translated locales', function (string $locale) {
     App::setLocale($locale);
 
-    expect(__(FULL_ANVERS_STORY_KEY))->not->toBe(FULL_ANVERS_STORY_KEY);
+    expect(__(FULL_STORY_NAME_KEY))->not->toBe(FULL_STORY_NAME_KEY);
 })->with(['en', 'fr']);
 
 test('a truncated key that is absent from the dictionary falls back to dutch on translated locales', function (string $locale) {
     App::setLocale($locale);
 
-    $partialKey = '"Anvers" is de Franse naam voor Antwerpen. "Anversa" is onze Europese variatie — elegant in het Frans, Italiaans en Engels tegelijk. De naam draagt de stad.';
+    $partialKey = 'Anversa is de Italiaanse naam voor Antwerpen. We kozen hem voor een stad die altijd over haar grenzen heen keek.';
 
     expect(__($partialKey))->toBe($partialKey);
 })->with(['en', 'fr']);
