@@ -13,8 +13,11 @@ use App\Services\Checkout\OrderFulfillment;
 use App\Services\Checkout\ProductCheckout;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
+use Illuminate\Support\Facades\Queue;
 use Laravel\Cashier\Events\WebhookReceived;
 use Mockery\MockInterface;
+use Stripe\Service\Checkout\SessionService;
+use Stripe\StripeClient;
 
 test('cashier currency is eur only', function () {
     $product = Product::founding();
@@ -40,13 +43,25 @@ test('checkout success and cancel pages are reachable', function () {
 });
 
 test('checkout success page does not mark an incomplete order paid', function () {
+    config(['cashier.secret' => 'sk_test_fake']);
+
     $order = Order::factory()->create([
         'status' => OrderStatus::Incomplete,
         'stripe_checkout_session_id' => 'cs_test_success_no_fulfill',
         'edition_number' => null,
     ]);
-    Payment::factory()->forOrder($order)->pending()->create([
+    $payment = Payment::factory()->forOrder($order)->pending()->create([
         'stripe_checkout_session_id' => 'cs_test_success_no_fulfill',
+    ]);
+
+    fakeStripeCheckoutSession('cs_test_success_no_fulfill', (object) [
+        'id' => 'cs_test_success_no_fulfill',
+        'payment_status' => 'unpaid',
+        'payment_intent' => null,
+        'metadata' => (object) [
+            'order_id' => (string) $order->id,
+            'payment_id' => (string) $payment->id,
+        ],
     ]);
 
     $this->get(localized('maison.checkout.success').'?session_id=cs_test_success_no_fulfill')
@@ -56,6 +71,81 @@ test('checkout success page does not mark an incomplete order paid', function ()
             ->where('paid', false)
             ->where('pendingConfirmation', true)
             ->where('orderId', $order->id));
+
+    expect($order->fresh()->status)->toBe(OrderStatus::Incomplete)
+        ->and($order->fresh()->latestPayment->status)->toBe(PaymentStatus::Pending);
+});
+
+test('checkout success page marks the order paid when stripe reports the session paid', function () {
+    Queue::fake();
+
+    $product = Product::factory()->create();
+    $order = Order::factory()->create([
+        'product_id' => $product->id,
+        'status' => OrderStatus::Incomplete,
+        'stripe_checkout_session_id' => 'cs_test_paid_reconcile',
+        'edition_number' => null,
+        'amount' => $product->amount,
+        'currency' => $product->currency,
+    ]);
+    $payment = Payment::factory()->forOrder($order)->pending()->create([
+        'stripe_checkout_session_id' => 'cs_test_paid_reconcile',
+        'amount' => $product->amount,
+        'currency' => $product->currency,
+    ]);
+
+    config(['cashier.secret' => 'sk_test_fake']);
+
+    fakeStripeCheckoutSession('cs_test_paid_reconcile', (object) [
+        'id' => 'cs_test_paid_reconcile',
+        'payment_status' => 'paid',
+        'payment_intent' => 'pi_test_paid_reconcile',
+        'metadata' => [
+            'order_id' => (string) $order->id,
+            'payment_id' => (string) $payment->id,
+        ],
+    ]);
+
+    $this->get(localized('maison.checkout.success').'?session_id=cs_test_paid_reconcile')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('maison/checkout-success')
+            ->where('paid', true)
+            ->where('pendingConfirmation', false)
+            ->where('orderId', $order->id));
+
+    expect($order->fresh()->status)->toBe(OrderStatus::Paid)
+        ->and($order->fresh()->latestPayment->status)->toBe(PaymentStatus::Paid)
+        ->and($order->fresh()->stripe_payment_intent_id)->toBe('pi_test_paid_reconcile');
+});
+
+test('checkout success page ignores a paid session whose metadata does not match the order', function () {
+    config(['cashier.secret' => 'sk_test_fake']);
+
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Incomplete,
+        'stripe_checkout_session_id' => 'cs_test_paid_mismatch',
+        'edition_number' => null,
+    ]);
+    Payment::factory()->forOrder($order)->pending()->create([
+        'stripe_checkout_session_id' => 'cs_test_paid_mismatch',
+    ]);
+
+    fakeStripeCheckoutSession('cs_test_paid_mismatch', (object) [
+        'id' => 'cs_test_paid_mismatch',
+        'payment_status' => 'paid',
+        'payment_intent' => 'pi_test_mismatch',
+        'metadata' => [
+            'order_id' => '999999',
+            'payment_id' => '999999',
+        ],
+    ]);
+
+    $this->get(localized('maison.checkout.success').'?session_id=cs_test_paid_mismatch')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('paid', false)
+            ->where('pendingConfirmation', true));
 
     expect($order->fresh()->status)->toBe(OrderStatus::Incomplete)
         ->and($order->fresh()->latestPayment->status)->toBe(PaymentStatus::Pending);
@@ -472,3 +562,20 @@ test('cashier webhook events include checkout session expired and charge refunde
         ->toContain('checkout.session.expired')
         ->toContain('charge.refunded');
 });
+
+function fakeStripeCheckoutSession(string $sessionId, object $session): void
+{
+    $sessions = Mockery::mock(SessionService::class);
+    $sessions->shouldReceive('retrieve')
+        ->once()
+        ->with($sessionId)
+        ->andReturn($session);
+
+    $checkout = new stdClass;
+    $checkout->sessions = $sessions;
+
+    $stripe = Mockery::mock(StripeClient::class);
+    $stripe->checkout = $checkout;
+
+    app()->bind(StripeClient::class, fn () => $stripe);
+}

@@ -11,6 +11,7 @@ use App\Http\Requests\Maison\CheckoutRequest;
 use App\Models\EditionPiece;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Services\Checkout\CheckoutSessionReconciler;
 use App\Services\Checkout\OrderFulfillment;
 use App\Services\Checkout\ProductCheckout;
 use App\Services\Edition\EditionAllocator;
@@ -125,12 +126,23 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Landing page after Stripe Checkout. Payment is confirmed by webhook only.
+     * Landing page after Stripe Checkout.
+     *
+     * The webhook remains the primary confirmation. When it has not arrived, reconcile
+     * the Checkout Session with Stripe before rendering so a succeeded payment can leave pending.
      */
-    public function success(Request $request, string $locale): Response
-    {
+    public function success(
+        Request $request,
+        string $locale,
+        CheckoutSessionReconciler $reconciler,
+    ): Response {
         $sessionId = $request->string('session_id')->toString();
         $order = $this->orderForCheckoutSession($sessionId);
+
+        if ($order !== null && $sessionId !== '') {
+            $order = $reconciler->reconcile($order, $sessionId);
+        }
+
         $paid = $order?->isPaid() ?? false;
 
         return Inertia::render('maison/checkout-success', [
