@@ -50,7 +50,7 @@ export function HomeRegister() {
                     </div>
 
                     <div
-                        className="mt-8 grid w-full max-w-md grid-cols-10 gap-1.5"
+                        className="mt-7 grid w-fit grid-cols-10 gap-1.5"
                         aria-hidden="true"
                     >
                         {Array.from({ length: total }, (_, index) => (
@@ -58,8 +58,8 @@ export function HomeRegister() {
                                 key={index}
                                 className={
                                     index < inscribed
-                                        ? 'aspect-square w-full bg-cream'
-                                        : 'aspect-square w-full border border-sand/45'
+                                        ? 'size-3.5 bg-cream sm:size-4'
+                                        : 'size-3.5 border border-sand/45 sm:size-4'
                                 }
                             />
                         ))}
