@@ -7,6 +7,7 @@ use App\Models\User;
 use Database\Seeders\DressingItemSeeder;
 use Database\Seeders\EditionPieceSeeder;
 use Database\Seeders\FaqSeeder;
+use Database\Seeders\HomeHeroSeeder;
 use Database\Seeders\JournalArticleSeeder;
 use Database\Seeders\LegalPageSeeder;
 use Database\Seeders\ProductSeeder;
@@ -35,6 +36,7 @@ pest()->extend(TestCase::class)
             EditionPieceSeeder::class,
             JournalArticleSeeder::class,
             SiteSettingSeeder::class,
+            HomeHeroSeeder::class,
             FaqSeeder::class,
             DressingItemSeeder::class,
             LegalPageSeeder::class,

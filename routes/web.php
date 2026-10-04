@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DressingItemController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\HeritageLetterController;
+use App\Http\Controllers\Admin\HomeHeroController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
@@ -502,6 +503,17 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('site-settings', 'update')->name('site-settings.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+            });
+
+            Route::controller(HomeHeroController::class)->group(function () {
+                Route::get('home-hero', 'edit')->name('home-hero.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('home-hero', 'update')->name('home-hero.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('home-hero/translations', 'updateTranslations')->name('home-hero.translations.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('home-hero/translate', 'translate')->name('home-hero.translate')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
             Route::controller(LegalPageController::class)->group(function () {

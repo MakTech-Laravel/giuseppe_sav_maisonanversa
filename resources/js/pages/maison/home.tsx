@@ -2,6 +2,7 @@ import { HomeAntwerp } from '@/components/maison/home/home-antwerp';
 import { HomeCircle } from '@/components/maison/home/home-circle';
 import { HomeContentGrid } from '@/components/maison/home/home-content-grid';
 import { HomeHero } from '@/components/maison/home/home-hero';
+import type { HomeHeroContent } from '@/components/maison/home/home-hero';
 import { HomeIntro } from '@/components/maison/home/home-intro';
 import { HomeManifesto } from '@/components/maison/home/home-manifesto';
 import { HomeMarquee } from '@/components/maison/home/home-marquee';
@@ -23,14 +24,16 @@ type HomeProductData = {
 export default function Home({
     edition,
     product,
+    hero,
 }: {
     edition: Edition;
     product?: HomeProductData | null;
+    hero: HomeHeroContent;
 }) {
     return (
         <>
             <MaisonSeoHead />
-            <HomeHero edition={edition} />
+            <HomeHero edition={edition} hero={hero} />
             <HomeMarquee />
             <HomeIntro />
             <HomeStory />

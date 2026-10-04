@@ -10,6 +10,7 @@ use App\Models\CommunityPost;
 use App\Models\CommunitySession;
 use App\Models\DressingItem;
 use App\Models\Faq;
+use App\Models\HomeHero;
 use App\Models\JournalArticle;
 use App\Models\LegalPage;
 use App\Models\Product;
@@ -17,6 +18,7 @@ use App\Models\User;
 use App\Services\Edition\EditionInventory;
 use App\Services\Inquiry\InquiryDeviceCookie;
 use App\Support\CommunityFeed;
+use App\Support\HomeHeroPresenter;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
 use Illuminate\Http\Request;
@@ -35,6 +37,10 @@ class MaisonController extends Controller
     {
         return $this->page('home', [
             'product' => Product::founding()?->toPageShare(),
+            'hero' => app(HomeHeroPresenter::class)->toStorefront(
+                HomeHero::current(),
+                app()->getLocale(),
+            ),
         ]);
     }
 
