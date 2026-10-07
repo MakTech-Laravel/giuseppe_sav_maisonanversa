@@ -54,6 +54,7 @@ test('the seeded hero renders on the homepage', function () {
             ->where('hero.eyebrow', 'Antwerpen, België — Founding Edition 2026')
             ->where('hero.title', 'Maison')
             ->where('hero.titleAccent', 'Anversa')
+            ->where('hero.tagline', 'European Heritage Sports & Lifestyle House')
             ->where('hero.showCounter', true)
             ->where('hero.counterLines.0', 'Nummers nog')
             ->where('hero.counterLines.1', 'beschikbaar')
@@ -74,7 +75,7 @@ test('the seeded hero renders on the homepage', function () {
 test('the hero tagline always uses the source column, never a locale translation', function () {
     $hero = HomeHero::current();
     $hero->update([
-        'tagline' => 'European Heritage Sports and Lifestyle House',
+        'tagline' => 'European Heritage Sports & Lifestyle House',
     ]);
 
     $hero->translations()->create([
@@ -93,7 +94,7 @@ test('the hero tagline always uses the source column, never a locale translation
 
     foreach (['nl', 'en', 'fr'] as $locale) {
         $this->get("/{$locale}")->assertInertia(fn (Assert $page) => $page
-            ->where('hero.tagline', 'European Heritage Sports and Lifestyle House')
+            ->where('hero.tagline', 'European Heritage Sports & Lifestyle House')
         );
     }
 });
