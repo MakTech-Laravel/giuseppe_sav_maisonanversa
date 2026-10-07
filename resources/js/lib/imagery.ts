@@ -88,8 +88,8 @@ export const IMAGE_ASSETS = {
         ground: 'light',
     },
     'maison-facade-house': {
-        path: 'images/brand/maison-facade-house.png',
-        ratio: '3 / 2',
+        path: 'images/brand/maison_anversa.png',
+        ratio: '2742 / 3302',
         label: 'Huistekening',
         gradient: `linear-gradient(165deg, ${CREAM} 0%, ${SAND} 100%)`,
         ground: 'light',

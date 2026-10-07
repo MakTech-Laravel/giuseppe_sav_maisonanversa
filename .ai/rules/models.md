@@ -2,6 +2,7 @@
 paths:
   - 'app/Models/*.php'
   - app/Models/Inquiry.php
+  - app/Models/HomeHero.php
 ---
 
 # Models
@@ -32,3 +33,6 @@ PartnerClub and CommunityCourt are retired. Use Club with is_session_venue, is_p
 
 ## Club merge is hard delete
 ClubMerger merges into the survivor id: apply field sources + feature flags + sports from the admin payload, remapping community_sessions and corner_* translations, then permanently delete the duplicate. Never write ClubStatus::Merged for new merges; Merged remains only as a historical enum case.
+
+## Homepage hero is not a site setting
+Editable homepage hero copy, photograph, and button actions live on the HomeHero singleton, not SiteSetting. Dutch columns are the DeepL source (labels, eyebrow, title, tagline, counter lines only). Actions, targets, and image_path stay untranslated. The stock number stays EditionInventory; only the caption and show_counter are editable. Button hrefs are resolved in HomeHeroPresenter. Storefront tagline always uses the Dutch source column as-is (`$hero->tagline`), never a locale translation — even when en/fr rows exist.

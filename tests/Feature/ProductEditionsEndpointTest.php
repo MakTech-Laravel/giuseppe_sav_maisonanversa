@@ -29,6 +29,7 @@ test('editions endpoint returns all pieces paginated by 30 with range meta', fun
     $data = collect($response->json('data'));
 
     expect($data)->toHaveCount(30)
+        ->and($data->first())->not->toHaveKey('sku')
         ->and($data->firstWhere('edition_number', 1))
         ->toMatchArray([
             'status' => 'archive',

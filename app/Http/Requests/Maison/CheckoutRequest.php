@@ -15,7 +15,7 @@ class CheckoutRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return $this->user()?->isCustomer() ?? false;
     }
 
     /**
@@ -85,19 +85,6 @@ class CheckoutRequest extends FormRequest
                 return;
             }
 
-            $available = app(EditionInventory::class)->snapshot($product)['available'];
-
-            if ($available === 0) {
-                $validator->errors()->add(
-                    'checkout',
-                    __(':product is uitverkocht.', [
-                        'product' => $product->translated('name'),
-                    ]),
-                );
-
-                return;
-            }
-
             $editionPieceId = $this->integer('edition_piece_id') ?: null;
 
             if ($editionPieceId === null) {
@@ -112,10 +99,24 @@ class CheckoutRequest extends FormRequest
             $piece = EditionPiece::query()
                 ->whereKey($editionPieceId)
                 ->where('product_id', $product->id)
-                ->where('status', EditionPieceStatus::Available)
                 ->first();
 
-            if ($piece === null) {
+            $heldByBuyer = $piece?->isHeldBy($this->user()) ?? false;
+
+            $available = app(EditionInventory::class)->snapshot($product)['available'];
+
+            if ($available === 0 && ! $heldByBuyer) {
+                $validator->errors()->add(
+                    'checkout',
+                    __(':product is uitverkocht.', [
+                        'product' => $product->translated('name'),
+                    ]),
+                );
+
+                return;
+            }
+
+            if ($piece === null || ($piece->status !== EditionPieceStatus::Available && ! $heldByBuyer)) {
                 $validator->errors()->add(
                     'edition_piece_id',
                     __('Dit editienummer is niet meer beschikbaar. Kies een ander nummer.'),

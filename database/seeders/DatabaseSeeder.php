@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             EditionPieceSeeder::class,
             CommerceSettingSeeder::class,
             SiteSettingSeeder::class,
+            HomeHeroSeeder::class,
             JournalArticleSeeder::class,
             ClubSeeder::class,
             CommunityDemoSeeder::class,

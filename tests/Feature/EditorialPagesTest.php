@@ -96,11 +96,29 @@ test('the journal cards cover the six prototype articles', function () {
         ->toContain('articles.data.map');
 });
 
-test('the story page keeps the founder quote as english brand copy', function () {
-    $source = file_get_contents(resource_path('js/pages/maison/story.tsx'));
+test('the story page composes the client editorial sections', function () {
+    $page = file_get_contents(resource_path('js/pages/maison/story.tsx'));
+    $founder = file_get_contents(resource_path('js/components/maison/story/story-founder.tsx'));
+    $closing = file_get_contents(resource_path('js/components/maison/story/story-closing.tsx'));
+    $hero = file_get_contents(resource_path('js/components/maison/story/story-hero.tsx'));
 
-    expect($source)
-        ->toContain('Heritage is not what we inherit')
+    expect($page)
+        ->toContain('StoryHero')
+        ->toContain('StoryFounder')
+        ->toContain('StoryClosing')
+        ->not->toContain('HeritageLetterForm')
+        ->not->toContain('onclick=')
+        ->and($hero)
+        ->toContain('Alles begint bij')
+        ->and($founder)
         ->toContain('Yusuf Savran')
-        ->not->toContain('onclick=');
+        ->not->toContain('[Persoonlijke bio')
+        ->and($closing)
+        ->toContain('Every legacy begins with a first chapter.');
 });
+
+test('the story page renders in all locales', function (string $locale) {
+    $this->get("/{$locale}/story")
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('maison/story'));
+})->with(['nl', 'en', 'fr']);

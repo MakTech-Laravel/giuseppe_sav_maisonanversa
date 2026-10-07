@@ -1,5 +1,10 @@
+import { useHttp } from '@inertiajs/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+    hold,
+    index as editionsIndex,
+} from '@/actions/App/Http/Controllers/Maison/ProductEditionController';
 import {
     MaisonModal,
     modalInputClassName,
@@ -14,7 +19,6 @@ type EditionOption = {
     id: number;
     edition_number: number;
     label: string;
-    sku: string;
     status: 'archive' | 'available' | 'reserved' | 'allocated';
     selectable: boolean;
 };
@@ -48,7 +52,7 @@ type EditionPickerModalProps = {
     }) => void;
 };
 
-function statusLabelKey(status: EditionOption['status']): string | null {
+function statusLabelKey(status: EditionOption['status']): string {
     switch (status) {
         case 'archive':
             return 'Niet te koop';
@@ -57,7 +61,7 @@ function statusLabelKey(status: EditionOption['status']): string | null {
         case 'reserved':
             return 'Gereserveerd';
         default:
-            return null;
+            return 'Beschikbaar';
     }
 }
 
@@ -68,10 +72,12 @@ export function EditionPickerModal({
 }: EditionPickerModalProps) {
     const { t } = useTranslation();
     const { locale } = useLocale();
+    const { submit } = useHttp();
     const [items, setItems] = useState<EditionOption[]>([]);
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [holdingId, setHoldingId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [rangeLabel, setRangeLabel] = useState<string | null>(null);
     const [searchInput, setSearchInput] = useState('');
@@ -100,16 +106,16 @@ export function EditionPickerModal({
             setError(null);
 
             try {
-                const params = new URLSearchParams({
-                    page: String(nextPage),
-                });
-
-                if (search !== '') {
-                    params.set('search', search);
-                }
-
                 const response = await fetch(
-                    `/${locale}/products/${productSlug}/editions?${params.toString()}`,
+                    editionsIndex.url(
+                        { locale, product: productSlug },
+                        {
+                            query: {
+                                page: nextPage,
+                                ...(search !== '' ? { search } : {}),
+                            },
+                        },
+                    ),
                     {
                         headers: {
                             Accept: 'application/json',
@@ -181,6 +187,43 @@ export function EditionPickerModal({
         return () => observer.disconnect();
     }, [lastPage, loadPage, page]);
 
+    async function selectEdition(item: EditionOption): Promise<void> {
+        if (!productSlug || holdingId !== null) {
+            return;
+        }
+
+        setHoldingId(item.id);
+        setError(null);
+
+        try {
+            await submit(
+                hold({
+                    locale,
+                    product: productSlug,
+                    editionPiece: item.id,
+                }),
+            );
+
+            onSelect({
+                editionPieceId: item.id,
+                editionNumber: item.edition_number,
+                editionLabel: item.label,
+            });
+        } catch {
+            setError(
+                t(
+                    'Dit editienummer is niet meer beschikbaar. Kies een ander nummer.',
+                ),
+            );
+            setItems([]);
+            setPage(1);
+            setLastPage(1);
+            void loadPage(1);
+        } finally {
+            setHoldingId(null);
+        }
+    }
+
     return (
         <MaisonModal
             label={t('Kies uw editienummer')}
@@ -229,7 +272,7 @@ export function EditionPickerModal({
                 ) : (
                     <ul className="divide-y divide-gold/15">
                         {items.map((item) => {
-                            const badge = statusLabelKey(item.status);
+                            const badge = t(statusLabelKey(item.status));
 
                             if (!item.selectable) {
                                 return (
@@ -241,31 +284,29 @@ export function EditionPickerModal({
                                             {item.label}
                                         </span>
                                         <span className="font-sans text-[10px] tracking-[0.14em] text-stone uppercase">
-                                            {badge ? t(badge) : item.sku}
+                                            {badge}
                                         </span>
                                     </li>
                                 );
                             }
 
+                            const pending = holdingId === item.id;
+
                             return (
                                 <li key={item.id}>
                                     <button
                                         type="button"
-                                        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-gold/10"
-                                        onClick={() =>
-                                            onSelect({
-                                                editionPieceId: item.id,
-                                                editionNumber:
-                                                    item.edition_number,
-                                                editionLabel: item.label,
-                                            })
-                                        }
+                                        disabled={holdingId !== null}
+                                        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-gold/10 disabled:opacity-60"
+                                        onClick={() => {
+                                            void selectEdition(item);
+                                        }}
                                     >
                                         <span className="font-serif text-[18px] text-choc">
                                             {item.label}
                                         </span>
                                         <span className="font-sans text-[10px] tracking-[0.14em] text-stone uppercase">
-                                            {item.sku}
+                                            {pending ? t('Laden…') : badge}
                                         </span>
                                     </button>
                                 </li>

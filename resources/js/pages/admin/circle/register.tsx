@@ -3,6 +3,10 @@ import { ArrowLeft, BookText, Download } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+    AdminCustomerPickerSheet,
+    type PickerCustomer,
+} from '@/components/admin/admin-customer-picker-sheet';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,6 +21,7 @@ import {
 } from '@/components/ui/table';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import circleRoutes from '@/routes/admin/circle';
+import customers from '@/routes/admin/customers';
 
 interface AdminPlace {
     id: string | null;
@@ -32,6 +37,11 @@ interface AdminPlace {
     user_id: number | null;
 }
 
+type PickerMode = {
+    sequence: number;
+    replace: boolean;
+};
+
 export default function CircleRegister({
     entries,
     filters,
@@ -42,6 +52,7 @@ export default function CircleRegister({
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const [search, setSearch] = useState(filters.search);
+    const [picker, setPicker] = useState<PickerMode | null>(null);
 
     function applyFilters(event: FormEvent, status = filters.status) {
         event.preventDefault();
@@ -50,18 +61,6 @@ export default function CircleRegister({
             circleRoutes.register({ locale }).url,
             { search, status },
             { preserveState: true, preserveScroll: true },
-        );
-    }
-
-    function changeNumber(entry: AdminPlace, editionNumber: string) {
-        if (entry.id === null) {
-            return;
-        }
-
-        router.patch(
-            `/${locale}/admin/circle/register/${entry.id}`,
-            { edition_number: Number(editionNumber) },
-            { preserveScroll: true },
         );
     }
 
@@ -77,6 +76,43 @@ export default function CircleRegister({
         );
     }
 
+    function assignMember(customer: PickerCustomer) {
+        if (picker === null) {
+            return;
+        }
+
+        router.post(
+            circleRoutes.assign({ locale }).url,
+            {
+                user_id: customer.id,
+                edition_number: picker.sequence,
+                replace: picker.replace,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => setPicker(null),
+            },
+        );
+    }
+
+    function removeMember(entry: AdminPlace) {
+        if (entry.user_id === null) {
+            return;
+        }
+
+        if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
+            return;
+        }
+
+        router.delete(
+            circleRoutes.remove({
+                locale,
+                member: entry.user_id,
+            }).url,
+            { preserveScroll: true },
+        );
+    }
+
     return (
         <>
             <Head title={t('Naamregister')} />
@@ -84,7 +120,7 @@ export default function CircleRegister({
                 <AdminPageHeader
                     title={t('Naamregister')}
                     description={t(
-                        'Alle honderd plaatsen van Heritage No.001. Verberg een vermelding, wijzig het nummer, of exporteer het register.',
+                        'Alle honderd plaatsen van Heritage No.001. Wijs een klant toe, verberg een vermelding, of exporteer het register.',
                     )}
                     icon={BookText}
                 >
@@ -159,13 +195,42 @@ export default function CircleRegister({
                             {entries.map((entry) => (
                                 <TableRow key={entry.number}>
                                     <TableCell className="font-medium">
-                                        № {entry.number}
+                                        № {entry.sequence}
                                     </TableCell>
                                     <TableCell>
-                                        <div>{entry.member_name ?? '—'}</div>
-                                        <div className="text-xs text-muted-foreground">
-                                            {entry.email ?? t(stateLabel(entry.state))}
-                                        </div>
+                                        {entry.user_id !== null &&
+                                        entry.member_name ? (
+                                            <Link
+                                                href={customers.show({
+                                                    locale,
+                                                    user: entry.user_id,
+                                                })}
+                                                className="block min-w-0"
+                                            >
+                                                <span className="font-medium text-foreground underline-offset-2 hover:underline">
+                                                    {entry.member_name}
+                                                </span>
+                                                {entry.email && (
+                                                    <p className="truncate text-xs text-muted-foreground">
+                                                        {entry.email}
+                                                    </p>
+                                                )}
+                                            </Link>
+                                        ) : (
+                                            <>
+                                                <div>
+                                                    {entry.member_name ?? '—'}
+                                                </div>
+                                                <div className="text-xs text-muted-foreground">
+                                                    {entry.email ??
+                                                        t(
+                                                            stateLabel(
+                                                                entry.state,
+                                                            ),
+                                                        )}
+                                                </div>
+                                            </>
+                                        )}
                                     </TableCell>
                                     <TableCell className="hidden md:table-cell">
                                         {entry.visibility_label
@@ -193,55 +258,67 @@ export default function CircleRegister({
                                         )}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {entry.id !== null && (
+                                        {entry.state !== 'archive' && (
                                             <div className="flex flex-wrap items-center justify-end gap-2">
-                                                <form
-                                                    className="flex items-center gap-2"
-                                                    onSubmit={(event) => {
-                                                        event.preventDefault();
-                                                        const value =
-                                                            new FormData(
-                                                                event.currentTarget,
-                                                            ).get(
-                                                                'edition_number',
-                                                            );
-                                                        changeNumber(
-                                                            entry,
-                                                            String(value ?? ''),
-                                                        );
-                                                    }}
-                                                >
-                                                    <Input
-                                                        name="edition_number"
-                                                        type="number"
-                                                        min={1}
-                                                        max={100}
-                                                        defaultValue={
-                                                            entry.sequence
-                                                        }
-                                                        className="w-20"
-                                                        aria-label={t('Nummer')}
-                                                    />
+                                                {entry.state === 'available' ? (
                                                     <Button
-                                                        type="submit"
+                                                        type="button"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            setPicker({
+                                                                sequence:
+                                                                    entry.sequence,
+                                                                replace: false,
+                                                            })
+                                                        }
+                                                    >
+                                                        {t('Toewijzen')}
+                                                    </Button>
+                                                ) : (
+                                                    <>
+                                                        <Button
+                                                            type="button"
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={() =>
+                                                                setPicker({
+                                                                    sequence:
+                                                                        entry.sequence,
+                                                                    replace:
+                                                                        true,
+                                                                })
+                                                            }
+                                                        >
+                                                            {t('Wijzig lid')}
+                                                        </Button>
+                                                        <Button
+                                                            type="button"
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={() =>
+                                                                removeMember(
+                                                                    entry,
+                                                                )
+                                                            }
+                                                        >
+                                                            {t('Verwijderen')}
+                                                        </Button>
+                                                    </>
+                                                )}
+                                                {entry.id !== null && (
+                                                    <Button
+                                                        type="button"
                                                         size="sm"
                                                         variant="outline"
+                                                        onClick={() =>
+                                                            toggleHidden(entry)
+                                                        }
                                                     >
-                                                        {t('Nummer')}
+                                                        {entry.hidden
+                                                            ? t('Toon weer')
+                                                            : t('Verberg')}
                                                     </Button>
-                                                </form>
-                                                <Button
-                                                    type="button"
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        toggleHidden(entry)
-                                                    }
-                                                >
-                                                    {entry.hidden
-                                                        ? t('Toon weer')
-                                                        : t('Verberg')}
-                                                </Button>
+                                                )}
                                             </div>
                                         )}
                                     </TableCell>
@@ -251,6 +328,35 @@ export default function CircleRegister({
                     </Table>
                 </div>
             </div>
+
+            <AdminCustomerPickerSheet
+                open={picker !== null}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setPicker(null);
+                    }
+                }}
+                title={
+                    picker?.replace
+                        ? t('Wijzig lid')
+                        : t('Lid toewijzen')
+                }
+                description={
+                    picker
+                        ? t('Kies een klant voor editie № {{number}}.', {
+                              number: picker.sequence,
+                          })
+                        : undefined
+                }
+                selectedId={
+                    picker
+                        ? (entries.find(
+                              (entry) => entry.sequence === picker.sequence,
+                          )?.user_id ?? null)
+                        : null
+                }
+                onSelect={assignMember}
+            />
         </>
     );
 }

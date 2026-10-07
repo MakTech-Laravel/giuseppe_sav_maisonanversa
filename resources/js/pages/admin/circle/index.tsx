@@ -1,11 +1,9 @@
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { BookText, Eye, UsersRound } from 'lucide-react';
-import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -18,6 +16,7 @@ import { translateMemberStatus } from '@/lib/circle-member-status';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import circleRoutes from '@/routes/admin/circle';
+import customers from '@/routes/admin/customers';
 
 interface CircleMember {
     id: string;
@@ -30,26 +29,7 @@ interface CircleMember {
 
 export default function CircleIndex({ members }: { members: CircleMember[] }) {
     const { t } = useTranslation();
-    const form = useForm(circleRoutes.assign(wayfinderLocale()), {
-        email: '',
-        user_id: '',
-        edition_number: '',
-    });
-
-    function submitAssign(event: FormEvent) {
-        event.preventDefault();
-
-        form.transform((data) => ({
-            email: data.email || null,
-            user_id: data.user_id === '' ? null : Number(data.user_id),
-            edition_number:
-                data.edition_number === '' ? null : Number(data.edition_number),
-        }));
-
-        form.submit({
-            onSuccess: () => form.reset(),
-        });
-    }
+    const locale = wayfinderLocale();
 
     function removeMember(memberId: string) {
         if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
@@ -58,7 +38,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
 
         router.delete(
             circleRoutes.remove({
-                locale: wayfinderLocale(),
+                locale,
                 member: Number(memberId),
             }).url,
         );
@@ -71,87 +51,23 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                 <AdminPageHeader
                     title={t('Founding Circle')}
                     description={t(
-                        'Bekijk Founding Edition-leden en reserveringen (1–100).',
+                        'Bekijk Founding Edition-leden. Wijs plaatsen toe via het Naamregister — elke rij is al een editienummer.',
                     )}
                     icon={UsersRound}
                 >
-                    <Button variant="outline" asChild>
-                        <Link href={circleRoutes.register(wayfinderLocale())}>
+                    <Button asChild>
+                        <Link href={circleRoutes.register(locale)}>
                             <BookText className="h-4 w-4" /> {t('Naamregister')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
-                <form
-                    onSubmit={submitAssign}
-                    className="flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm sm:flex-row sm:items-end"
-                >
-                    <div className="flex-1 space-y-1">
-                        <p className="text-sm font-medium">
-                            {t('Lid toevoegen')}
-                        </p>
-                        <Input
-                            type="email"
-                            placeholder={t('E-mail')}
-                            value={form.data.email}
-                            onChange={(event) =>
-                                form.setData('email', event.target.value)
-                            }
-                        />
-                        {form.errors.email && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.email}
-                            </p>
-                        )}
-                    </div>
-                    <div className="w-full space-y-1 sm:w-28">
-                        <Input
-                            type="number"
-                            min={1}
-                            max={100}
-                            placeholder={t('Nummer')}
-                            value={form.data.edition_number}
-                            onChange={(event) =>
-                                form.setData(
-                                    'edition_number',
-                                    event.target.value,
-                                )
-                            }
-                            required
-                        />
-                        {form.errors.edition_number && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.edition_number}
-                            </p>
-                        )}
-                    </div>
-                    <div className="w-full space-y-1 sm:w-40">
-                        <Input
-                            type="number"
-                            placeholder={t('User ID')}
-                            value={form.data.user_id}
-                            onChange={(event) =>
-                                form.setData('user_id', event.target.value)
-                            }
-                        />
-                        {form.errors.user_id && (
-                            <p className="text-sm text-destructive">
-                                {form.errors.user_id}
-                            </p>
-                        )}
-                    </div>
-                    <Button type="submit" disabled={form.processing}>
-                        {t('Toewijzen')}
-                    </Button>
-                </form>
+
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead>{t('Editie')}</TableHead>
                                 <TableHead>{t('Lid')}</TableHead>
-                                <TableHead className="hidden md:table-cell">
-                                    {t('E-mail')}
-                                </TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
                                     {t('Ingeschreven op')}
@@ -162,57 +78,84 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {members.map((member) => (
-                                <TableRow key={member.id}>
-                                    <TableCell className="font-medium">
-                                        {member.edition
-                                            ? `№ ${member.edition}`
-                                            : '—'}
-                                    </TableCell>
-                                    <TableCell>{member.name}</TableCell>
-                                    <TableCell className="hidden md:table-cell">
-                                        {member.email}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="secondary">
-                                            {translateMemberStatus(
-                                                member.status,
-                                                t,
-                                            )}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="hidden sm:table-cell">
-                                        {member.joined_at ?? '—'}
-                                    </TableCell>
-                                    <TableCell className="space-x-1 text-right">
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            asChild
-                                        >
-                                            <Link
-                                                href={circleRoutes.show({
-                                                    locale: wayfinderLocale(),
-                                                    member: Number(member.id),
-                                                })}
-                                                title={t('Lid bekijken')}
-                                            >
-                                                <Eye className="h-4 w-4" />
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            type="button"
-                                            onClick={() =>
-                                                removeMember(member.id)
-                                            }
-                                        >
-                                            {t('Verwijderen')}
-                                        </Button>
+                            {members.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={5}
+                                        className="py-10 text-center text-sm text-muted-foreground"
+                                    >
+                                        {t(
+                                            'Nog geen leden. Open het Naamregister om een klant op een plaats te zetten.',
+                                        )}
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            ) : (
+                                members.map((member) => (
+                                    <TableRow key={member.id}>
+                                        <TableCell className="font-medium">
+                                            {member.edition
+                                                ? `№ ${member.edition}`
+                                                : '—'}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Link
+                                                href={customers.show({
+                                                    locale,
+                                                    user: Number(member.id),
+                                                })}
+                                                className="block min-w-0"
+                                            >
+                                                <span className="font-medium text-foreground underline-offset-2 hover:underline">
+                                                    {member.name}
+                                                </span>
+                                                <p className="truncate text-xs text-muted-foreground">
+                                                    {member.email}
+                                                </p>
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="secondary">
+                                                {translateMemberStatus(
+                                                    member.status,
+                                                    t,
+                                                )}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="hidden sm:table-cell">
+                                            {member.joined_at ?? '—'}
+                                        </TableCell>
+                                        <TableCell className="space-x-1 text-right">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={circleRoutes.show({
+                                                        locale,
+                                                        member: Number(
+                                                            member.id,
+                                                        ),
+                                                    })}
+                                                    title={t('Lid bekijken')}
+                                                >
+                                                    <Eye className="h-4 w-4" />
+                                                </Link>
+                                            </Button>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                type="button"
+                                                onClick={() =>
+                                                    removeMember(member.id)
+                                                }
+                                            >
+                                                {t('Verwijderen')}
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
                         </TableBody>
                     </Table>
                 </div>

@@ -9,6 +9,7 @@ import type { TabDefinition } from '@/components/maison/community/sessions/sessi
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Wrap } from '@/components/maison/ui/section';
+import { useResumePendingSessionJoin } from '@/hooks/use-resume-pending-session-join';
 import { cn } from '@/lib/utils';
 import * as sessionRoutes from '@/routes/community/sessions';
 import type { Paginated } from '@/types/admin';
@@ -41,6 +42,9 @@ export default function SessionsIndex({
 
     const indexUrl = sessionRoutes.index.url(locale);
     const hasScrollProp = page.scrollProps?.sessions != null;
+    const sessionCards = sessions?.data ?? [];
+
+    useResumePendingSessionJoin(sessionCards);
 
     useEffect(() => {
         if (firstRender.current) {

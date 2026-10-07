@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DressingItemController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\HeritageLetterController;
+use App\Http\Controllers\Admin\HomeHeroController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
@@ -123,6 +124,9 @@ Route::prefix('{locale}')
 
         Route::get('products/{product:slug}/editions', [ProductEditionController::class, 'index'])
             ->name('products.editions');
+        Route::post('products/{product:slug}/editions/{editionPiece}/hold', [ProductEditionController::class, 'hold'])
+            ->middleware(['auth', 'customer', 'throttle:10,1'])
+            ->name('products.editions.hold');
 
         Route::controller(InquiryController::class)->group(function () {
             Route::post('contact', 'storeContact')
@@ -146,7 +150,7 @@ Route::prefix('{locale}')
 
         Route::controller(CheckoutController::class)->group(function () {
             Route::post('checkout', 'store')
-                ->middleware(['auth', 'throttle:10,1'])
+                ->middleware(['auth', 'customer', 'throttle:10,1'])
                 ->name('checkout.store');
             Route::get('checkout/success', 'success')->name('checkout.success');
             Route::get('checkout/cancel', 'cancel')->name('checkout.cancel');
@@ -285,6 +289,8 @@ Route::prefix('{locale}')
             Route::controller(CustomerController::class)->group(function () {
                 Route::get('customers', 'index')->name('customers.index')
                     ->middleware('permission:'.PermissionEnum::USERS_INDEX->value);
+                Route::get('customers/search', 'search')->name('customers.search')
+                    ->middleware('permission:'.PermissionEnum::USERS_INDEX->value.'|'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('customers/create', 'create')->name('customers.create')
                     ->middleware('permission:'.PermissionEnum::USERS_CREATE->value);
                 Route::post('customers', 'store')->name('customers.store')
@@ -497,6 +503,17 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('site-settings', 'update')->name('site-settings.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+            });
+
+            Route::controller(HomeHeroController::class)->group(function () {
+                Route::get('home-hero', 'edit')->name('home-hero.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('home-hero', 'update')->name('home-hero.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('home-hero/translations', 'updateTranslations')->name('home-hero.translations.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('home-hero/translate', 'translate')->name('home-hero.translate')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
             Route::controller(LegalPageController::class)->group(function () {

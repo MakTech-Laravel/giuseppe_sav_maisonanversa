@@ -7,13 +7,17 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Stripe\StripeCatalog;
+use App\Services\Stripe\StripeCustomerGuard;
 use Illuminate\Validation\ValidationException;
 use Laravel\Cashier\Checkout;
 use RuntimeException;
 
 class FoundingEditionCheckout
 {
-    public function __construct(private StripeCatalog $catalog) {}
+    public function __construct(
+        private StripeCatalog $catalog,
+        private StripeCustomerGuard $stripeCustomers,
+    ) {}
 
     /**
      * Create a Stripe Checkout session for a pending product order (EUR).
@@ -83,6 +87,9 @@ class FoundingEditionCheckout
 
         if ($user === null) {
             $sessionOptions['customer_email'] = $order->email;
+        } else {
+            $this->stripeCustomers->forgetIfMissing($user);
+            $user->refresh();
         }
 
         $builder = $user !== null

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\RoleEnum;
+use App\Models\FoundingCircleRegisterEntry;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -49,6 +50,32 @@ test('staff can remove founding circle role', function () {
         ->assertRedirect();
 
     expect($member->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse();
+});
+
+test('staff can replace the member on an occupied edition number', function () {
+    $current = User::factory()->create();
+    $replacement = User::factory()->create();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.circle.assign', ['locale' => 'nl']), [
+            'email' => $current->email,
+            'edition_number' => 14,
+        ])
+        ->assertRedirect();
+
+    $this->actingAs($this->admin)
+        ->post(route('admin.circle.assign', ['locale' => 'nl']), [
+            'email' => $replacement->email,
+            'edition_number' => 14,
+            'replace' => true,
+        ])
+        ->assertRedirect()
+        ->assertSessionHasNoErrors();
+
+    expect($current->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeFalse()
+        ->and($replacement->fresh()->hasRole(RoleEnum::FOUNDING_CIRCLE->value))->toBeTrue()
+        ->and(FoundingCircleRegisterEntry::query()->where('edition_number', 14)->value('user_id'))
+        ->toBe($replacement->id);
 });
 
 test('circle member detail shows translated benefits in every locale', function (string $locale, string $passport, string $card) {

@@ -64,6 +64,17 @@ test('the home hero uses the mansion photograph as its full-bleed backdrop', fun
         ->toContain('images/brand/hero-mansion.png');
 });
 
+test('the home hero eyebrow tagline and ghost links use warm ivory cream', function () {
+    $source = file_get_contents(resource_path('js/components/maison/home/home-hero.tsx'));
+
+    expect($source)
+        ->toContain('tracking-[0.4em] text-cream uppercase before:inline-block')
+        ->toContain('tracking-[0.35em] text-cream uppercase')
+        ->toContain('text-cream border-cream/35')
+        ->not->toContain('tracking-[0.4em] text-gold')
+        ->not->toContain('tracking-[0.35em] text-gold');
+});
+
 test('the mansion photograph is on disk under the public brand path', function () {
     expect(public_path('images/brand/hero-mansion.png'))->toBeFile();
 });

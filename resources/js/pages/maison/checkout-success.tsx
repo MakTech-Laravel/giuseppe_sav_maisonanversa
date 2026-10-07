@@ -1,4 +1,5 @@
-import { usePage } from '@inertiajs/react';
+import { usePage, usePoll } from '@inertiajs/react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
@@ -7,17 +8,34 @@ import { PageHero } from '@/components/maison/ui/page-hero';
 
 export default function CheckoutSuccess({
     paid,
+    pendingConfirmation = false,
     editionNumber,
     orderId,
     orderReference,
 }: {
     paid: boolean;
+    pendingConfirmation?: boolean;
     editionNumber?: string | null;
     orderId?: number | null;
     orderReference?: string | null;
 }) {
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
+    const { stop } = usePoll(
+        2000,
+        {
+            only: [
+                'paid',
+                'pendingConfirmation',
+                'editionNumber',
+                'orderId',
+                'orderReference',
+            ],
+        },
+        {
+            autoStart: pendingConfirmation,
+        },
+    );
     const numberLabel = editionNumber
         ? t('Nr. {{number}}', {
               number: String(editionNumber).padStart(3, '0'),
@@ -25,6 +43,12 @@ export default function CheckoutSuccess({
         : null;
     const memberOrderHref =
         auth?.user && orderId ? `/${locale}/member/orders/${orderId}` : null;
+
+    useEffect(() => {
+        if (paid) {
+            stop();
+        }
+    }, [paid, stop]);
 
     return (
         <>
