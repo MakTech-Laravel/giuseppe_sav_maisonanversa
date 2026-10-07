@@ -54,6 +54,7 @@ test('the seeded hero renders on the homepage', function () {
             ->where('hero.eyebrow', 'Antwerpen, België — Founding Edition 2026')
             ->where('hero.title', 'Maison')
             ->where('hero.titleAccent', 'Anversa')
+            ->where('hero.tagline', 'European Heritage Sports & Lifestyle House')
             ->where('hero.showCounter', true)
             ->where('hero.counterLines.0', 'Nummers nog')
             ->where('hero.counterLines.1', 'beschikbaar')
@@ -69,6 +70,33 @@ test('the seeded hero renders on the homepage', function () {
             ->where('hero.buttons.2.kind', 'newsletter')
             ->where('hero.buttons.2.href', null)
         );
+});
+
+test('the hero tagline always uses the source column, never a locale translation', function () {
+    $hero = HomeHero::current();
+    $hero->update([
+        'tagline' => 'European Heritage Sports & Lifestyle House',
+    ]);
+
+    $hero->translations()->create([
+        'locale' => 'en',
+        'column' => 'tagline',
+        'value' => 'European Heritage Sports and Lifestyle House · Built to last for generations.',
+        'source_hash' => $hero->translationSourceHash('tagline'),
+    ]);
+
+    $hero->translations()->create([
+        'locale' => 'fr',
+        'column' => 'tagline',
+        'value' => 'European Heritage Sports and Lifestyle House · Construit pour durer plusieurs générations.',
+        'source_hash' => $hero->translationSourceHash('tagline'),
+    ]);
+
+    foreach (['nl', 'en', 'fr'] as $locale) {
+        $this->get("/{$locale}")->assertInertia(fn (Assert $page) => $page
+            ->where('hero.tagline', 'European Heritage Sports & Lifestyle House')
+        );
+    }
 });
 
 test('admin update changes copy, image, and a button, and the homepage follows the locale', function () {

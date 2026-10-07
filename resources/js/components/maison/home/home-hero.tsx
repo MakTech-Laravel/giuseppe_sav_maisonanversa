@@ -64,20 +64,20 @@ export function HomeHero({
                 className="absolute inset-0"
                 style={{
                     backgroundImage: [
-                        'linear-gradient(158deg, rgba(41,28,24,0.35) 0%, rgba(41,28,24,0.15) 35%, rgba(41,28,24,0.55) 70%, rgba(10,7,4,0.88) 100%)',
-                        'radial-gradient(ellipse at 68% 28%, rgba(100,68,40,0.22) 0%, transparent 42%)',
-                        'radial-gradient(ellipse at 20% 70%, rgba(35,22,12,0.4) 0%, transparent 50%)',
+                        'linear-gradient(158deg, rgba(41,28,24,0.4) 0%, rgba(41,28,24,0.2) 30%, rgba(22,14,10,0.65) 65%, rgba(10,7,4,0.92) 100%)',
+                        'radial-gradient(ellipse at 68% 28%, rgba(100,68,40,0.18) 0%, transparent 42%)',
+                        'radial-gradient(ellipse at 18% 78%, rgba(10,7,4,0.55) 0%, transparent 55%)',
                     ].join(', '),
                 }}
             />
 
             <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-linear-to-b from-choc/25 via-transparent via-45% to-choc/85"
+                className="absolute inset-0 bg-linear-to-b from-choc/30 via-transparent via-40% to-choc/90"
             />
 
             <div className="relative z-2 mx-auto w-full max-w-320 px-8 pb-16 md:px-20 md:pb-20">
-                <p className="mb-5 flex items-center gap-3.5 font-sans text-[9px] font-light tracking-[0.4em] text-gold uppercase before:inline-block before:h-px before:w-6 before:bg-gold before:content-['']">
+                <p className="mb-5 flex items-center gap-3.5 font-sans text-[9px] font-light tracking-[0.4em] text-cream uppercase before:inline-block before:h-px before:w-6 before:bg-cream/70 before:content-['']">
                     {hero.eyebrow}
                 </p>
 
@@ -90,19 +90,24 @@ export function HomeHero({
 
                 <div className="my-6 h-px w-12 bg-gold" />
 
-                <p className="mb-10 font-sans text-[10px] font-light tracking-[0.35em] text-gold uppercase">
+                <p className="mb-10 font-sans text-[10px] font-light tracking-[0.35em] text-cream uppercase">
                     {hero.tagline}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-5">
                     {hero.buttons.map((button, index) => {
                         const variant = index === 0 ? 'hero' : 'ghost';
+                        const ghostClassName =
+                            index === 0
+                                ? undefined
+                                : 'text-cream border-cream/35 hover:border-gold hover:text-gold';
 
                         if (button.kind === 'newsletter') {
                             return (
                                 <MaisonButton
                                     key={`${button.kind}-${index}`}
                                     variant={variant}
+                                    className={ghostClassName}
                                     onClick={openNewsletter}
                                 >
                                     {button.label}
@@ -119,6 +124,7 @@ export function HomeHero({
                                 key={button.href}
                                 as={MaisonLink}
                                 variant={variant}
+                                className={ghostClassName}
                                 href={button.href}
                             >
                                 {button.label}

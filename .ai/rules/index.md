@@ -10,9 +10,11 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |
 | app/Http/Controllers/Maison/VerificationController.php | .ai/rules/controllers-maison.md |
+| resources/js/pages/maison/home.tsx,resources/js/components/maison/home/**,app/Support/SessionFeed.php,app/Http/Controllers/MaisonController.php | .ai/rules/controllers.md |
 | docker/** | .ai/rules/docker.md |
 | app/Services/Edition/** | .ai/rules/edition.md |
 | app/Services/FoundingCircle/** | .ai/rules/founding-circle.md |
+| resources/js/components/maison/home/** | .ai/rules/home.md |
 | resources/js/pages/maison/house.tsx,resources/js/components/maison/house/** | .ai/rules/house.md |
 | app/Support/Html/** | .ai/rules/html.md |
 | app/Jobs/TranslateModelJob.php | .ai/rules/jobs.md |
@@ -32,5 +34,5 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Services/Checkout/** | .ai/rules/services-checkout.md |
 | app/Services/Community/ClubMerger.php | .ai/rules/services-community.md |
 | resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
-| app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php | .ai/rules/support.md |
+| app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php, app/Support/HomeHeroPresenter.php, app/Support/SessionFeed.php | .ai/rules/support.md |
 | app/Services/Translation/** | .ai/rules/translation.md |
