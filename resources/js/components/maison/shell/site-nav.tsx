@@ -46,16 +46,16 @@ export function SiteNav() {
             <MaisonLink
                 to="home"
                 data-magnetic
-                className="flex min-w-0 items-center gap-2.5 ma-lg:flex-col ma-lg:items-center ma-lg:gap-0.5"
+                className="flex flex-1 items-center gap-2.5 pr-3 ma-lg:flex-none ma-lg:flex-col ma-lg:items-center ma-lg:gap-0.5 ma-lg:pr-0"
             >
                 <PlaceholderImage
                     asset="logo-icon"
                     alt=""
                     captioned={false}
-                    className="size-6 shrink-0 ma-lg:mb-0.5 ma-lg:size-7"
+                    className="size-[var(--nav-logo-icon)] shrink-0 self-center ma-lg:mb-0.5 ma-lg:size-7"
                 />
 
-                <span className="truncate font-serif text-[15px] font-medium tracking-[0.2em] text-cream uppercase ma-lg:text-[20px] ma-lg:leading-none ma-lg:tracking-[0.28em]">
+                <span className="self-center font-serif text-[length:var(--nav-logo-size)] leading-none font-medium tracking-[var(--nav-logo-tracking)] text-cream uppercase ma-lg:text-[20px] ma-lg:tracking-[0.28em]">
                     Maison Anversa
                 </span>
 
@@ -64,34 +64,31 @@ export function SiteNav() {
                 </span>
             </MaisonLink>
 
-            <div className="flex shrink-0 items-center gap-1 ma-lg:hidden">
-                <AuthMenu compact />
-                <button
-                    type="button"
-                    aria-label={t('Menu')}
-                    aria-expanded={open}
-                    aria-controls="maison-nav-links"
-                    onClick={() => setOpenedOn(open ? null : url)}
-                    className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25"
-                >
-                    {[0, 1, 2].map((bar) => (
-                        <span
-                            key={bar}
-                            aria-hidden="true"
-                            className={cn(
-                                'block h-[1.6px] w-6 bg-gold transition-transform duration-300',
-                                open &&
-                                    bar === 0 &&
-                                    'translate-y-[6.6px] rotate-45',
-                                open && bar === 1 && 'opacity-0',
-                                open &&
-                                    bar === 2 &&
-                                    'translate-y-[-6.6px] -rotate-45',
-                            )}
-                        />
-                    ))}
-                </button>
-            </div>
+            <button
+                type="button"
+                aria-label={t('Menu')}
+                aria-expanded={open}
+                aria-controls="maison-nav-links"
+                onClick={() => setOpenedOn(open ? null : url)}
+                className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25 ma-lg:hidden"
+            >
+                {[0, 1, 2].map((bar) => (
+                    <span
+                        key={bar}
+                        aria-hidden="true"
+                        className={cn(
+                            'block h-[1.6px] w-6 bg-gold transition-transform duration-300',
+                            open &&
+                                bar === 0 &&
+                                'translate-y-[6.6px] rotate-45',
+                            open && bar === 1 && 'opacity-0',
+                            open &&
+                                bar === 2 &&
+                                'translate-y-[-6.6px] -rotate-45',
+                        )}
+                    />
+                ))}
+            </button>
 
             <div
                 id="maison-nav-links"
@@ -168,7 +165,10 @@ export function SiteNav() {
                     )}
                 </ul>
 
-                <div className="mt-3 flex items-center gap-4 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:border-t-0 ma-lg:border-l ma-lg:pt-0 ma-lg:pl-4">
+                <div className="mt-3 flex flex-col gap-3 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:flex-row ma-lg:items-center ma-lg:gap-4 ma-lg:border-t-0 ma-lg:border-l ma-lg:pt-0 ma-lg:pl-4">
+                    <div className="ma-lg:hidden">
+                        <AuthMenu menuPlacement="up" />
+                    </div>
                     <LanguageSwitcher className="ma-lg:gap-1 [&_button]:ma-lg:min-h-0 [&_button]:ma-lg:min-w-0 [&_button]:ma-lg:rounded-sm [&_button]:ma-lg:px-1.5 [&_button]:ma-lg:py-1 [&_button]:ma-lg:text-[9px]" />
                 </div>
             </div>
