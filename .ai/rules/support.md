@@ -4,6 +4,7 @@ paths:
   - app/Support/ClubDirectory.php
   - app/Http/Controllers/Maison/VerificationController.php
   - app/Support/HomeHeroPresenter.php
+  - app/Support/SessionFeed.php
 ---
 
 # Support
@@ -35,3 +36,6 @@ HomeHeroPresenter::toStorefront always resolves tagline via translated(tagline, 
 
 ## Hero tagline is always English
 toStorefront always resolves tagline with locale en. Other hero copy still follows the page locale. Do not switch tagline back to the request locale.
+
+## SessionFeed cards accept guest viewers
+toCard and present take nullable User. Guests get can_join when the session is still open; player/host names and avatars are redacted (initials only). joinable() excludes full sessions for the homepage.

@@ -22,6 +22,21 @@ export function formatSessionDate(
     });
 }
 
+/** Split parts for the homepage session date block (e.g. Di / 6 / Okt). */
+export function formatSessionDateParts(
+    iso: string,
+    locale: Locale | string,
+): { weekday: string; day: string; month: string } {
+    const date = new Date(iso);
+    const resolved = intlLocale(locale);
+
+    return {
+        weekday: date.toLocaleDateString(resolved, { weekday: 'short' }),
+        day: date.toLocaleDateString(resolved, { day: 'numeric' }),
+        month: date.toLocaleDateString(resolved, { month: 'short' }),
+    };
+}
+
 /** "24 mei 2025" for the fuller detail header. */
 export function formatSessionDateLong(
     iso: string,
