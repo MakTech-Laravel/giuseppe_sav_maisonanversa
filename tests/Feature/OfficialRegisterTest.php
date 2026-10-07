@@ -219,6 +219,7 @@ test('homepage shares register counters and the public page is noindex', functio
 
     expect(file_get_contents(resource_path('js/pages/maison/founding-circle/register.tsx')))
         ->toContain('noIndex')
+        ->toContain("font-sans text-[10px] tracking-[0.16em] text-stone uppercase")
         ->and(file_get_contents(resource_path('js/pages/maison/home.tsx')))->toContain('HomeRegister')
         ->and(file_get_contents(resource_path('js/lib/maison-navigation.ts')))->toContain('/founding-circle/register')
         ->and(file_get_contents(resource_path('js/components/maison/shell/site-nav.tsx')))->toContain('foundingRegister.inscribed_count');
