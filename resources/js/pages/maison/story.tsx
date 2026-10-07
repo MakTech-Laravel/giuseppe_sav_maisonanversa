@@ -12,10 +12,10 @@ export default function Story() {
     return (
         <>
             <MaisonSeoHead />
-            <StoryHero />
-            <StoryCity />
-            <StoryRitual />
-            <StoryOrigins />
+            {/* <StoryHero /> */}
+            {/* <StoryCity /> */}
+            {/* <StoryRitual /> */}
+            {/* <StoryOrigins /> */}
             <StoryName />
             <StoryMake />
             <StoryFounder />

@@ -94,6 +94,10 @@
      */
     --topbar-h: 40px;
     --nav-h: 90px;
+    /* Mobile SiteNav wordmark — tweak here without hunting class names. */
+    --nav-logo-size: 0.875rem; /* 14px */
+    --nav-logo-tracking: 0.16em;
+    --nav-logo-icon: 1.75rem; /* 28px */
 
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
