@@ -46,3 +46,8 @@ export function useShellActions(): ShellActions {
 
     return actions;
 }
+
+/** Null outside FrontendLayout (e.g. member area cards that only join when authed). */
+export function useOptionalShellActions(): ShellActions | null {
+    return useContext(ShellActionsContext);
+}

@@ -9,3 +9,6 @@ paths:
 
 ## Select dropdowns must stack above MaisonModal
 `MaisonModal` uses `z-9990`. Radix/shadcn `SelectContent` portals to `document.body`, so it must use a higher z-index (`z-[10050]`) or the list renders under the overlay and cannot be clicked — this broke gender on register. `GenderSelect` sets `modal={false}` so it does not fight the custom modal focus trap. Do not lower Select below the modal stack.
+
+## Customer picker never shows SKUs
+Customer edition picker rows never show computed SKUs like HE-002. Labels are Beschikbaar, Verkocht, Niet te koop, and Gereserveerd. The public editions JSON omits sku; admin inventory still shows SKUs.

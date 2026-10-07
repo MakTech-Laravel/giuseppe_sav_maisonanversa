@@ -31,6 +31,18 @@ final class SessionFeed
     }
 
     /**
+     * Open sessions that still have a free seat (homepage joinable list).
+     *
+     * @return Builder<CommunitySession>
+     */
+    public static function joinable(): Builder
+    {
+        return self::open()->whereRaw(
+            '(select count(*) from community_session_participants where community_session_participants.community_session_id = community_sessions.id) < community_sessions.capacity',
+        );
+    }
+
+    /**
      * Sessions the member hosts or has joined that have not ended yet.
      *
      * @return Builder<CommunitySession>
@@ -86,7 +98,7 @@ final class SessionFeed
      * @param  Collection<int, CommunitySession>  $sessions
      * @return list<array<string, mixed>>
      */
-    public static function present(Collection $sessions, User $viewer, string $locale): array
+    public static function present(Collection $sessions, ?User $viewer, string $locale): array
     {
         return $sessions
             ->map(fn (CommunitySession $session): array => self::toCard($session, $viewer, $locale))
@@ -97,15 +109,22 @@ final class SessionFeed
     /**
      * @return array<string, mixed>
      */
-    public static function toCard(CommunitySession $session, User $viewer, string $locale): array
+    public static function toCard(CommunitySession $session, ?User $viewer, string $locale): array
     {
+        $redactNames = $viewer === null;
+
         $players = $session->participants
-            ->map(fn ($participant): array => self::player($participant->user, $session->host_id))
+            ->map(fn ($participant): array => self::player(
+                $participant->user,
+                $session->host_id,
+                $redactNames,
+            ))
             ->values()
             ->all();
 
-        $joined = $session->participants->contains('user_id', $viewer->id);
-        $isHost = $session->host_id === $viewer->id;
+        $joined = $viewer !== null
+            && $session->participants->contains('user_id', $viewer->id);
+        $isHost = $viewer !== null && $session->host_id === $viewer->id;
         $isPast = $session->isPast();
 
         return [
@@ -127,7 +146,7 @@ final class SessionFeed
             'open_slots' => $session->openSlots(),
             'players' => $players,
             'notes' => $session->translated('notes', $locale),
-            'host' => self::player($session->host, $session->host_id),
+            'host' => self::player($session->host, $session->host_id, $redactNames),
             'is_full' => $session->isFull(),
             'is_past' => $isPast,
             'is_cancelled' => $session->isCancelled(),
@@ -142,13 +161,15 @@ final class SessionFeed
     /**
      * @return array<string, mixed>
      */
-    public static function player(User $user, ?int $hostId = null): array
+    public static function player(User $user, ?int $hostId = null, bool $redactName = false): array
     {
         return [
             'id' => $user->id,
-            'name' => $user->name,
+            'name' => $redactName ? '' : $user->name,
             'initials' => mb_strtoupper(mb_substr($user->name, 0, 2)),
-            'avatar_url' => $user->avatar ? Storage::disk('public')->url($user->avatar) : null,
+            'avatar_url' => $redactName || ! $user->avatar
+                ? null
+                : Storage::disk('public')->url($user->avatar),
             'is_host' => $hostId !== null && $user->id === $hostId,
         ];
     }

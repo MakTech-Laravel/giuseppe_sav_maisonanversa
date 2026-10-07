@@ -10,6 +10,7 @@ use App\Models\CommunityPost;
 use App\Models\CommunitySession;
 use App\Models\DressingItem;
 use App\Models\Faq;
+use App\Models\HomeHero;
 use App\Models\JournalArticle;
 use App\Models\LegalPage;
 use App\Models\Product;
@@ -17,8 +18,10 @@ use App\Models\User;
 use App\Services\Edition\EditionInventory;
 use App\Services\Inquiry\InquiryDeviceCookie;
 use App\Support\CommunityFeed;
+use App\Support\HomeHeroPresenter;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
+use App\Support\SessionFeed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -31,10 +34,26 @@ use Inertia\Response;
  */
 class MaisonController extends Controller
 {
-    public function home(): Response
+    public function home(Request $request): Response
     {
+        $locale = app()->getLocale();
+        $viewer = $request->user();
+        $upcoming = SessionFeed::joinable()->limit(3)->get();
+
         return $this->page('home', [
             'product' => Product::founding()?->toPageShare(),
+            'hero' => app(HomeHeroPresenter::class)->toStorefront(
+                HomeHero::current(),
+                $locale,
+            ),
+            'upcomingSessions' => SessionFeed::present(
+                $upcoming,
+                $viewer,
+                $locale,
+            ),
+            'openSessionsThisWeek' => SessionFeed::joinable()
+                ->where('starts_at', '<=', now()->addDays(7))
+                ->count(),
         ]);
     }
 

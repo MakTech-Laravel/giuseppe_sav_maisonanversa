@@ -210,17 +210,29 @@ function PlaceRow({
     dimmed?: boolean;
 }) {
     const { t } = useTranslation();
+    const isPlaceholder =
+        place.state === 'available' || place.state === 'archive';
 
     return (
         <li
             className={cn(
-                'flex min-h-11 items-baseline gap-3 border-b border-gold/15 py-2 font-serif text-[15px]',
+                'flex min-h-11 items-baseline gap-3 border-b border-gold/15 py-2',
                 dimmed && 'opacity-30',
                 place.you && 'bg-gold/20 px-2',
             )}
         >
-            <span className="w-8 shrink-0 text-gold2">{place.number}</span>
-            <span className={cn('min-w-0 flex-1 truncate', place.italic && 'italic')}>
+            <span className="w-8 shrink-0 font-serif text-[15px] text-gold2">
+                {place.number}
+            </span>
+            <span
+                className={cn(
+                    'min-w-0 flex-1 truncate',
+                    isPlaceholder
+                        ? 'font-sans text-[10px] tracking-[0.16em] text-stone uppercase'
+                        : 'font-serif text-[15px]',
+                    place.italic && 'italic',
+                )}
+            >
                 {label}
             </span>
             {place.you ? (

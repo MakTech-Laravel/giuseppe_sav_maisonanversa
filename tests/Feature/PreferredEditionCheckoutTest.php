@@ -5,6 +5,7 @@ use App\Enums\OrderStatus;
 use App\Exceptions\EditionUnavailableException;
 use App\Jobs\Orders\SendOrderPaidAdminMail;
 use App\Jobs\Orders\SendOrderPaidBuyerMail;
+use App\Jobs\SyncOrderToBrevo;
 use App\Models\EditionPiece;
 use App\Models\Order;
 use App\Models\Product;
@@ -81,7 +82,11 @@ test('checkout holds the preferred edition piece', function () {
 });
 
 test('paid fulfillment dispatches buyer and admin mail jobs', function () {
-    Bus::fake([SendOrderPaidBuyerMail::class, SendOrderPaidAdminMail::class]);
+    Bus::fake([
+        SendOrderPaidBuyerMail::class,
+        SendOrderPaidAdminMail::class,
+        SyncOrderToBrevo::class,
+    ]);
 
     $order = Order::factory()->create([
         'status' => OrderStatus::Incomplete,

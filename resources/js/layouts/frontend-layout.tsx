@@ -90,7 +90,9 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         props.flash?.open_auth_modal,
         url,
     );
+    const isAuthenticated = props.auth?.user != null;
     const autoOpenAuth =
+        !isAuthenticated &&
         promptedAuthView !== null &&
         dismissedAuthPromptKey !== currentAuthPromptKey;
     const modal = userModal ?? (autoOpenAuth ? 'auth' : null);
@@ -100,14 +102,28 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     useEffect(() => {
         const flashView = props.flash?.open_auth_modal;
 
-        if (!flashView) {
+        if (!flashView || isAuthenticated) {
             return;
         }
 
         setUserAuthView(flashView);
         setUserModal('auth');
         setDismissedAuthPromptKey(null);
-    }, [props.flash?.open_auth_modal, currentAuthPromptKey]);
+    }, [props.flash?.open_auth_modal, currentAuthPromptKey, isAuthenticated]);
+
+    /*
+     * Login keeps FrontendLayout mounted when the intended URL is a public
+     * Maison page. Clear the stale auth modal so AuthMenu can show the
+     * profile initial beside the menu toggle instead of staying behind Log in.
+     */
+    useEffect(() => {
+        if (!isAuthenticated || userModal !== 'auth') {
+            return;
+        }
+
+        setUserModal(null);
+        setDismissedAuthPromptKey(currentAuthPromptKey);
+    }, [isAuthenticated, userModal, currentAuthPromptKey]);
 
     useReveal(main);
 

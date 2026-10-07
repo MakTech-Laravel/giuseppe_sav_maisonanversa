@@ -102,10 +102,7 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
                                                 onChange={() =>
                                                     setVisibility(option.value)
                                                 }
-                                                className={cn(
-                                                    'mt-1',
-                                                    selected && 'accent-choc',
-                                                )}
+                                                className="mt-1 size-4 accent-gold"
                                             />
                                             <span>
                                                 <span
@@ -134,7 +131,7 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
                                             className={cn(
                                                 'hidden text-right font-serif text-sm sm:block',
                                                 selected
-                                                    ? 'text-choc'
+                                                    ? 'text-gold2'
                                                     : 'text-gold',
                                             )}
                                         >
@@ -149,7 +146,7 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
                         )}
 
                         {needsConsent && (
-                            <label className="flex items-start gap-3 text-sm text-sand">
+                            <label className="flex cursor-pointer items-start gap-3 text-sm text-sand">
                                 <input
                                     type="checkbox"
                                     name="consent"
@@ -158,7 +155,7 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
                                     onChange={(event) =>
                                         setConsent(event.target.checked)
                                     }
-                                    className="mt-1"
+                                    className="mt-1 size-4 accent-gold"
                                 />
                                 <span>
                                     {t(

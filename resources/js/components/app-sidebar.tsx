@@ -8,6 +8,7 @@ import {
     MessageSquareQuote,
     FileText,
     Globe,
+    ImageIcon,
     LayoutGrid,
     Mail,
     MessageCircle,
@@ -38,24 +39,25 @@ import {
 import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
+import adminAppointments from '@/routes/admin/appointments';
 import adminCircle from '@/routes/admin/circle';
 import adminClubs from '@/routes/admin/clubs';
-import adminSiteSettings from '@/routes/admin/site-settings';
 import adminCommunity from '@/routes/admin/community';
+import adminSessions from '@/routes/admin/community-sessions';
 import adminCustomers from '@/routes/admin/customers';
 import adminDressingItems from '@/routes/admin/dressing-items';
 import adminEvents from '@/routes/admin/events';
-import adminAppointments from '@/routes/admin/appointments';
 import adminFaqs from '@/routes/admin/faqs';
 import adminFeedback from '@/routes/admin/feedback';
 import adminHeritage from '@/routes/admin/heritage';
+import adminHomeHero from '@/routes/admin/home-hero';
 import adminJournal from '@/routes/admin/journal';
 import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
 import adminSeoMetas from '@/routes/admin/seo-metas';
-import adminSessions from '@/routes/admin/community-sessions';
+import adminSiteSettings from '@/routes/admin/site-settings';
 import { PERMISSIONS } from '@/types/permissions';
 
 type NavGroup = {
@@ -198,6 +200,12 @@ function buildNavGroups(
         {
             label: t('Website'),
             items: [
+                {
+                    title: t('Home hero'),
+                    href: adminHomeHero.edit(locale),
+                    icon: ImageIcon,
+                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                },
                 {
                     title: t('Site-instellingen'),
                     href: adminSiteSettings.edit(locale),

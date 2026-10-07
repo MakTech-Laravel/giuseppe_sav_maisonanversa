@@ -18,9 +18,15 @@ type SharedAuth = {
 type AuthMenuProps = {
     compact?: boolean;
     className?: string;
+    /** Drawer footers open upward so the menu is not clipped off-screen. */
+    menuPlacement?: 'down' | 'up';
 };
 
-export function AuthMenu({ compact = false, className }: AuthMenuProps) {
+export function AuthMenu({
+    compact = false,
+    className,
+    menuPlacement = 'down',
+}: AuthMenuProps) {
     const { t } = useTranslation();
     const { openAuth } = useShellActions();
     const { auth, locale } = usePage<{ auth?: SharedAuth; locale: string }>()
@@ -52,7 +58,7 @@ export function AuthMenu({ compact = false, className }: AuthMenuProps) {
                     className,
                 )}
             >
-                {compact ? t('Inloggen') : t('Inloggen')}
+                {t('Inloggen')}
             </button>
         );
     }
@@ -69,6 +75,7 @@ export function AuthMenu({ compact = false, className }: AuthMenuProps) {
         <div ref={root} className={cn('relative', className)}>
             <button
                 type="button"
+                aria-label={compact ? firstName : undefined}
                 aria-expanded={open}
                 aria-haspopup="menu"
                 onClick={() => setOpen((current) => !current)}
@@ -89,7 +96,12 @@ export function AuthMenu({ compact = false, className }: AuthMenuProps) {
             {open && (
                 <div
                     role="menu"
-                    className="absolute top-[calc(100%+0.5rem)] right-0 z-[250] min-w-44 border border-gold/20 bg-choc py-2 shadow-lg"
+                    className={cn(
+                        'absolute right-0 z-[250] min-w-44 border border-gold/20 bg-choc py-2 shadow-lg',
+                        menuPlacement === 'up'
+                            ? 'bottom-[calc(100%+0.5rem)]'
+                            : 'top-[calc(100%+0.5rem)]',
+                    )}
                 >
                     <Link
                         role="menuitem"

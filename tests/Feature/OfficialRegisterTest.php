@@ -130,6 +130,30 @@ test('a non member cannot open the register listing', function () {
         ->assertForbidden();
 });
 
+test('an inscribed member can open the register listing', function () {
+    $member = User::factory()->create([
+        'first_name' => 'Ada',
+        'last_name' => 'Lovelace',
+        'name' => 'Ada Lovelace',
+    ]);
+    app(FoundingCircleRegistrar::class)->assign($member, 3);
+
+    $this->actingAs($member)
+        ->get(route('member.register-listing', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('member/register-listing')
+            ->where('listing.number', '003')
+            ->where('listing.visibility', 'private')
+            ->where('listing.consent', false)
+            ->where('listing.full', '003  Ada Lovelace')
+        );
+
+    expect(file_get_contents(resource_path('js/pages/member/register-listing.tsx')))
+        ->toContain('accent-gold')
+        ->toContain('type="checkbox"');
+});
+
 test('admin hide forces a private label and a duplicate or archived number is rejected', function () {
     $member = User::factory()->create([
         'first_name' => 'Ada',
@@ -207,6 +231,7 @@ test('homepage shares register counters and the public page is noindex', functio
 
     expect(file_get_contents(resource_path('js/pages/maison/founding-circle/register.tsx')))
         ->toContain('noIndex')
+        ->toContain("font-sans text-[10px] tracking-[0.16em] text-stone uppercase")
         ->and(file_get_contents(resource_path('js/pages/maison/home.tsx')))->toContain('HomeRegister')
         ->and(file_get_contents(resource_path('js/lib/maison-navigation.ts')))->toContain('/founding-circle/register')
         ->and(file_get_contents(resource_path('js/components/maison/shell/site-nav.tsx')))->toContain('foundingRegister.inscribed_count');

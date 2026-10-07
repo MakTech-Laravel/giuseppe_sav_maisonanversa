@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Jobs\Orders\SendOrderPaidAdminMail;
 use App\Jobs\Orders\SendOrderPaidBuyerMail;
+use App\Jobs\SyncOrderToBrevo;
 use App\Mail\SoldOutNotice;
 use App\Models\NewsletterSubscriber;
 use App\Models\Order;
@@ -61,13 +62,13 @@ class OrderFulfillment
             $intentId = $this->paymentIntentId($session);
             $sessionId = is_string($session->id ?? null) ? $session->id : $lockedPayment->stripe_checkout_session_id;
 
-            $lockedPayment->fill([
-                'status' => PaymentStatus::Paid,
-                'stripe_checkout_session_id' => $sessionId,
-                'stripe_payment_intent_id' => $intentId ?? $lockedPayment->stripe_payment_intent_id,
-            ])->save();
-
             if ($locked->status->isFulfillment()) {
+                $lockedPayment->fill([
+                    'status' => PaymentStatus::Paid,
+                    'stripe_checkout_session_id' => $sessionId,
+                    'stripe_payment_intent_id' => $intentId ?? $lockedPayment->stripe_payment_intent_id,
+                ])->save();
+
                 $locked->fill([
                     'stripe_checkout_session_id' => $sessionId ?? $locked->stripe_checkout_session_id,
                     'stripe_payment_intent_id' => $intentId ?? $locked->stripe_payment_intent_id,
@@ -75,6 +76,16 @@ class OrderFulfillment
 
                 return $locked->refresh();
             }
+
+            if ($locked->status !== OrderStatus::Incomplete) {
+                return $locked->refresh();
+            }
+
+            $lockedPayment->fill([
+                'status' => PaymentStatus::Paid,
+                'stripe_checkout_session_id' => $sessionId,
+                'stripe_payment_intent_id' => $intentId ?? $lockedPayment->stripe_payment_intent_id,
+            ])->save();
 
             if ($locked->product?->isLimitedEdition()) {
                 $this->allocator->allocate($locked);
@@ -107,9 +118,10 @@ class OrderFulfillment
             return $locked;
         });
 
-        if (! $alreadyPaid) {
+        if (! $alreadyPaid && $fulfilled->status->isFulfillment()) {
             SendOrderPaidBuyerMail::dispatch($fulfilled);
             SendOrderPaidAdminMail::dispatch($fulfilled);
+            SyncOrderToBrevo::dispatch($fulfilled);
 
             if ($this->inventory->snapshot($fulfilled->product)['soldOut']) {
                 $this->notifySoldOut();
@@ -234,7 +246,7 @@ class OrderFulfillment
                 return $locked;
             }
 
-            $this->releaseInventory($locked);
+            $this->releaseInventoryOnCancel($locked);
 
             $intentId = $this->paymentIntentId($session);
             $sessionId = is_string($session->id ?? null) ? $session->id : $lockedPayment->stripe_checkout_session_id;
@@ -295,7 +307,7 @@ class OrderFulfillment
                 return $locked;
             }
 
-            $this->releaseInventory($locked);
+            $this->releaseInventoryOnCancel($locked);
 
             if ($payment !== null) {
                 /** @var Payment $lockedPayment */
@@ -350,7 +362,7 @@ class OrderFulfillment
                 return $locked->refresh();
             }
 
-            $this->releaseInventory($locked);
+            $this->releaseInventoryOnCancel($locked);
 
             Payment::query()
                 ->where('order_id', $locked->id)
@@ -370,10 +382,11 @@ class OrderFulfillment
         });
     }
 
-    private function releaseInventory(Order $order): void
+    private function releaseInventoryOnCancel(Order $order): void
     {
         if ($order->product?->isLimitedEdition()) {
-            $this->allocator->release($order);
+            $this->registrar->releaseForOrder($order);
+            $this->allocator->releaseOnCancel($order);
 
             return;
         }

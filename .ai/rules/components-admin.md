@@ -18,3 +18,6 @@ Guarantee/trust/service item icons use LucideIconPicker (dialog mode) and store 
 
 ## Product section Lucide icons and craft upload
 Guarantee/trust/service item icons use LucideIconPicker (dialog) and store Lucide kebab keys in product_section_items.icon. Craft imagery uses FileUpload into product_sections.image_path (legacy image_key remains read-only fallback). Storefront uses SectionIcon: Lucide when valid, else Unicode glyph.
+
+## Circle assign uses customer picker sheet
+Founding Circle assign/change opens AdminCustomerPickerSheet, which loads GET admin/customers/search with name/email query and infinite scroll. Do not go back to raw email/user_id inputs for assign flows.

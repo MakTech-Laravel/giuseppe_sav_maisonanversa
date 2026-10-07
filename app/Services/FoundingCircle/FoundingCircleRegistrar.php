@@ -93,6 +93,14 @@ class FoundingCircleRegistrar
         }
 
         return DB::transaction(function () use ($user, $product, $editionNumber): FoundingCircleRegisterEntry {
+            $existing = FoundingCircleRegisterEntry::query()
+                ->where('user_id', $user->id)
+                ->first();
+
+            if ($existing !== null && (int) $existing->edition_number !== $editionNumber) {
+                $this->freePieceForEntry($existing);
+            }
+
             $piece = $this->assertAssignable($product, $editionNumber, $user->id);
             $this->holdPiece($piece);
             $this->grantRole($user);
@@ -260,6 +268,7 @@ class FoundingCircleRegistrar
         $piece->fill([
             'status' => EditionPieceStatus::Available,
             'order_id' => null,
+            'reserved_by_user_id' => null,
             'reserved_until' => null,
             'allocated_at' => null,
         ])->save();
@@ -279,6 +288,7 @@ class FoundingCircleRegistrar
                 'status' => EditionPieceStatus::Allocated,
                 'allocated_at' => now(),
                 'reserved_until' => null,
+                'reserved_by_user_id' => null,
             ])->save();
         }
     }
