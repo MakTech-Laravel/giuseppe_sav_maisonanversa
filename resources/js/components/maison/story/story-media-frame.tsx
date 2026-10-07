@@ -5,6 +5,10 @@ import { cn } from '@/lib/utils';
 type StoryMediaFrameProps = {
     /** When set, renders the brand/product asset (caption-free). */
     asset?: ImageAssetName;
+    /**
+     * Overrides the asset's natural shape. Omit to use the asset ratio (or
+     * `4 / 5` for empty placeholder slots). Pass `null` to fill the parent.
+     */
     ratio?: string | null;
     className?: string;
     /** Object-fit for real images; illustrations often need contain. */
@@ -18,21 +22,24 @@ type StoryMediaFrameProps = {
  */
 export function StoryMediaFrame({
     asset,
-    ratio = '4 / 5',
+    ratio,
     className,
     contain = false,
     loading = 'lazy',
 }: StoryMediaFrameProps) {
+    const resolvedRatio =
+        ratio !== undefined ? ratio : asset ? undefined : '4 / 5';
+
     if (asset) {
         return (
             <PlaceholderImage
                 asset={asset}
                 alt=""
                 captioned={false}
-                ratio={ratio}
+                ratio={resolvedRatio}
                 loading={loading}
                 className={cn(
-                    contain && '[&_img]:object-contain [&_img]:p-6',
+                    contain && '[&_img]:object-contain [&_img]:p-0',
                     className,
                 )}
             />
@@ -44,7 +51,10 @@ export function StoryMediaFrame({
             aria-hidden="true"
             className={cn('overflow-hidden bg-choc2', className)}
             style={{
-                aspectRatio: ratio === null ? undefined : ratio,
+                aspectRatio:
+                    resolvedRatio === null || resolvedRatio === undefined
+                        ? undefined
+                        : resolvedRatio,
                 backgroundImage:
                     'linear-gradient(165deg, #3a2a22 0%, #2b1d18 55%, #8d705a 140%)',
             }}
