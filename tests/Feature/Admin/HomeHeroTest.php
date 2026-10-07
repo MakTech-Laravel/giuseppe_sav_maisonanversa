@@ -71,6 +71,33 @@ test('the seeded hero renders on the homepage', function () {
         );
 });
 
+test('the hero tagline always uses the source column, never a locale translation', function () {
+    $hero = HomeHero::current();
+    $hero->update([
+        'tagline' => 'European Heritage Sports and Lifestyle House',
+    ]);
+
+    $hero->translations()->create([
+        'locale' => 'en',
+        'column' => 'tagline',
+        'value' => 'European Heritage Sports and Lifestyle House · Built to last for generations.',
+        'source_hash' => $hero->translationSourceHash('tagline'),
+    ]);
+
+    $hero->translations()->create([
+        'locale' => 'fr',
+        'column' => 'tagline',
+        'value' => 'European Heritage Sports and Lifestyle House · Construit pour durer plusieurs générations.',
+        'source_hash' => $hero->translationSourceHash('tagline'),
+    ]);
+
+    foreach (['nl', 'en', 'fr'] as $locale) {
+        $this->get("/{$locale}")->assertInertia(fn (Assert $page) => $page
+            ->where('hero.tagline', 'European Heritage Sports and Lifestyle House')
+        );
+    }
+});
+
 test('admin update changes copy, image, and a button, and the homepage follows the locale', function () {
     Storage::fake('public');
 

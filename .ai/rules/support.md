@@ -3,6 +3,7 @@ paths:
   - app/Support/PassportPresenter.php
   - app/Support/ClubDirectory.php
   - app/Http/Controllers/Maison/VerificationController.php
+  - app/Support/HomeHeroPresenter.php
 ---
 
 # Support
@@ -25,3 +26,12 @@ lang/en.json and lang/fr.json are keyed by the Dutch source string (i18next fall
 
 ## No map APIs for club directory in V1
 Member club directory is list + profile + search filters only. Do not add Mapbox/Google Maps or geocoding to the storefront club UX until the client approves API/cost. `clubs.lat/lng` may exist in the database but are not rendered on member pages in V1.
+
+## Hero tagline is always English
+HomeHeroPresenter::toStorefront() always resolves tagline via translated('tagline', 'en'), never the page locale. Eyebrow, titles, counter lines, and button labels still follow the storefront locale. Keep English as the brand line even when nl/fr translations exist in admin.
+
+## Hero tagline is always English
+HomeHeroPresenter::toStorefront always resolves tagline via translated(tagline, en), never the page locale. Eyebrow, titles, counter lines, and button labels still follow the storefront locale.
+
+## Hero tagline is always English
+toStorefront always resolves tagline with locale en. Other hero copy still follows the page locale. Do not switch tagline back to the request locale.
