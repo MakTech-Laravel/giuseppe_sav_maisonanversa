@@ -110,7 +110,7 @@ class HomeHero extends Model
             'eyebrow' => 'Antwerpen, België — Founding Edition 2026',
             'title' => 'Maison',
             'title_accent' => 'Anversa',
-            'tagline' => 'European Heritage Sports and Lifestyle House · Gebouwd voor generaties.',
+            'tagline' => 'European Heritage Sports & Lifestyle House',
             'show_counter' => true,
             'counter_line_one' => 'Nummers nog',
             'counter_line_two' => 'beschikbaar',

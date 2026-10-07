@@ -3,6 +3,8 @@ import { CalendarDays, Clock, Gauge, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
 import { PartnerBadge } from '@/components/maison/community/partner-badge';
+import { useOptionalShellActions } from '@/components/maison/shell/shell-actions';
+import { storePendingSessionJoin } from '@/lib/pending-session-join';
 import {
     formatDuration,
     formatSessionDate,
@@ -18,10 +20,18 @@ type SessionCardProps = {
 
 export function SessionCard({ session }: SessionCardProps) {
     const { t } = useTranslation();
-    const { locale } = usePage().props;
+    const { auth, locale } = usePage().props;
+    const shellActions = useOptionalShellActions();
     const args = { locale, communitySession: Number(session.id) };
 
     function handleJoin() {
+        if (!auth?.user) {
+            storePendingSessionJoin(session.id);
+            shellActions?.openAuth('login');
+
+            return;
+        }
+
         router.post(sessionRoutes.join(args).url, {}, { preserveScroll: true });
     }
 

@@ -21,6 +21,7 @@ use App\Support\CommunityFeed;
 use App\Support\HomeHeroPresenter;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
+use App\Support\SessionFeed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -33,14 +34,26 @@ use Inertia\Response;
  */
 class MaisonController extends Controller
 {
-    public function home(): Response
+    public function home(Request $request): Response
     {
+        $locale = app()->getLocale();
+        $viewer = $request->user();
+        $upcoming = SessionFeed::joinable()->limit(3)->get();
+
         return $this->page('home', [
             'product' => Product::founding()?->toPageShare(),
             'hero' => app(HomeHeroPresenter::class)->toStorefront(
                 HomeHero::current(),
-                app()->getLocale(),
+                $locale,
             ),
+            'upcomingSessions' => SessionFeed::present(
+                $upcoming,
+                $viewer,
+                $locale,
+            ),
+            'openSessionsThisWeek' => SessionFeed::joinable()
+                ->where('starts_at', '<=', now()->addDays(7))
+                ->count(),
         ]);
     }
 

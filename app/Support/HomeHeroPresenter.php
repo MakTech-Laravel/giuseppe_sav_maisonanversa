@@ -74,7 +74,8 @@ class HomeHeroPresenter
             'eyebrow' => $hero->translated('eyebrow', $locale),
             'title' => $hero->translated('title', $locale),
             'titleAccent' => $hero->translated('title_accent', $locale),
-            'tagline' => $hero->translated('tagline', $locale),
+            // Brand line uses the source column as-is on every locale (never DeepL).
+            'tagline' => (string) $hero->tagline,
             'showCounter' => $hero->show_counter,
             'counterLines' => [
                 $hero->translated('counter_line_one', $locale),
