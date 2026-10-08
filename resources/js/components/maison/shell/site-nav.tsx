@@ -98,6 +98,10 @@ export function SiteNav() {
                     'ma-lg:static ma-lg:flex ma-lg:w-auto ma-lg:max-w-full ma-lg:flex-row ma-lg:items-center ma-lg:gap-5 ma-lg:border-0 ma-lg:bg-transparent ma-lg:p-0',
                 )}
             >
+                <div className="border-b border-gold/10 pb-1 ma-lg:hidden">
+                    <AuthMenu />
+                </div>
+
                 <ul className="flex w-full flex-col ma-lg:w-auto ma-lg:flex-row ma-lg:flex-nowrap ma-lg:items-center ma-lg:gap-5">
                     {PRIMARY_NAV.map(({ page, label }) =>
                         page === 'circle' ? (
@@ -166,9 +170,6 @@ export function SiteNav() {
                 </ul>
 
                 <div className="mt-3 flex flex-col gap-3 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:flex-row ma-lg:items-center ma-lg:gap-4 ma-lg:border-t-0 ma-lg:border-l ma-lg:pt-0 ma-lg:pl-4">
-                    <div className="ma-lg:hidden">
-                        <AuthMenu menuPlacement="up" />
-                    </div>
                     <LanguageSwitcher className="ma-lg:gap-1 [&_button]:ma-lg:min-h-0 [&_button]:ma-lg:min-w-0 [&_button]:ma-lg:rounded-sm [&_button]:ma-lg:px-1.5 [&_button]:ma-lg:py-1 [&_button]:ma-lg:text-[9px]" />
                 </div>
             </div>
