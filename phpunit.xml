@@ -42,5 +42,6 @@
         <env name="BREVO_API_KEY" value=""/>
         <env name="BREVO_LIST_HERITAGE_LETTER" value=""/>
         <env name="BREVO_LIST_ORDERS" value="2"/>
+        <env name="BREVO_LIST_FOLDER_ID" value=""/>
     </php>
 </phpunit>

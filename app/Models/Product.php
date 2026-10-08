@@ -69,6 +69,7 @@ class Product extends Model
         'meta_description',
         'meta_keywords',
         'og_image',
+        'brevo_list_id',
         'status',
         'sort_order',
     ];
@@ -90,6 +91,7 @@ class Product extends Model
             'public_at' => 'datetime',
             'grants_founding_circle' => 'boolean',
             'sort_order' => 'integer',
+            'brevo_list_id' => 'integer',
         ];
     }
 
