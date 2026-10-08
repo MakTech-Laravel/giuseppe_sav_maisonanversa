@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\DeleteProductBrevoList;
 use App\Models\Product;
 use App\Services\Edition\LimitedEditionLedger;
 use App\Services\Stripe\StripeCatalog;
@@ -17,6 +18,18 @@ class ProductObserver
     {
         $this->syncLedgerSafely($product);
         $this->syncStripeSafely($product);
+    }
+
+    /**
+     * Drop only this product's Brevo list. Contacts stay on the orders list.
+     */
+    public function deleted(Product $product): void
+    {
+        $listId = (int) $product->brevo_list_id;
+
+        if ($listId > 0) {
+            DeleteProductBrevoList::dispatch($listId);
+        }
     }
 
     /**
