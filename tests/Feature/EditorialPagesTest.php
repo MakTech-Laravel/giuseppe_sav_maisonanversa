@@ -99,23 +99,17 @@ test('the journal cards cover the six prototype articles', function () {
 test('the story page composes the client editorial sections', function () {
     $page = file_get_contents(resource_path('js/pages/maison/story.tsx'));
     $founder = file_get_contents(resource_path('js/components/maison/story/story-founder.tsx'));
-    $closing = file_get_contents(resource_path('js/components/maison/story/story-closing.tsx'));
-    $hero = file_get_contents(resource_path('js/components/maison/story/story-hero.tsx'));
     $name = file_get_contents(resource_path('js/components/maison/story/story-name.tsx'));
 
     expect($page)
         ->toContain('StoryHero')
+        ->toContain('StoryQuote')
         ->toContain('StoryFounder')
         ->toContain('StoryClosing')
         ->not->toContain('HeritageLetterForm')
         ->not->toContain('onclick=')
-        ->and($hero)
-        ->toContain('Alles begint bij')
         ->and($founder)
-        ->toContain('Yusuf Savran')
         ->not->toContain('[Persoonlijke bio')
-        ->and($closing)
-        ->toContain('Every legacy begins with a first chapter.')
         ->and($name)
         ->toContain('md:grid-cols-2 md:gap-16')
         ->toContain('w-[78%] max-w-72')
@@ -126,6 +120,14 @@ test('the story page composes the client editorial sections', function () {
         ->not->toContain('px-0')
         ->not->toContain('md:pl-0')
         ->not->toContain('md:pr-32');
+
+    $this->get('/nl/story')
+        ->assertOk()
+        ->assertInertia(fn ($inertia) => $inertia
+            ->where('story.hero.title', 'Alles begint bij')
+            ->where('story.founder.name', 'Yusuf Savran')
+            ->where('story.closing.line', 'Every legacy begins with a first chapter.')
+        );
 });
 
 test('the story page renders in all locales', function (string $locale) {

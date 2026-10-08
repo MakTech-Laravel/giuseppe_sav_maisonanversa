@@ -9,6 +9,7 @@ import {
     FileText,
     Globe,
     ImageIcon,
+    ScrollText,
     LayoutGrid,
     Mail,
     MessageCircle,
@@ -58,6 +59,7 @@ import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSiteSettings from '@/routes/admin/site-settings';
+import adminStoryPage from '@/routes/admin/story-page';
 import { PERMISSIONS } from '@/types/permissions';
 
 type NavGroup = {
@@ -204,6 +206,12 @@ function buildNavGroups(
                     title: t('Home hero'),
                     href: adminHomeHero.edit(locale),
                     icon: ImageIcon,
+                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                },
+                {
+                    title: t('Ons verhaal'),
+                    href: adminStoryPage.edit(locale),
+                    icon: ScrollText,
                     permissions: [PERMISSIONS.HERITAGE.VIEW],
                 },
                 {

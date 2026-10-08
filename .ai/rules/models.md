@@ -3,6 +3,7 @@ paths:
   - 'app/Models/*.php'
   - app/Models/Inquiry.php
   - app/Models/HomeHero.php
+  - app/Models/StoryPage.php
 ---
 
 # Models
@@ -36,3 +37,9 @@ ClubMerger merges into the survivor id: apply field sources + feature flags + sp
 
 ## Homepage hero is not a site setting
 Editable homepage hero copy, photograph, and button actions live on the HomeHero singleton, not SiteSetting. Dutch columns are the DeepL source (labels, eyebrow, title, tagline, counter lines only). Actions, targets, and image_path stay untranslated. The stock number stays EditionInventory; only the caption and show_counter are editable. Button hrefs are resolved in HomeHeroPresenter. Storefront tagline always uses the Dutch source column as-is (`$hero->tagline`), never a locale translation — even when en/fr rows exist.
+
+## Story page is a CMS singleton
+Editable /story copy lives on the StoryPage singleton, not SiteSetting and not i18next keys. Dutch columns are the DeepL source. name_title, name_pronunciation, make_title, founder_name, and founder_signature stay untranslated. Each *_visible flag hides that band on the storefront; toggling it does not requeue DeepL. Hero, city, name, the three product cards, and founder accept an uploaded photograph; an empty path keeps the current brand image. Ritual step count, card layout, and the Heritage product button href stay fixed. Image paths are not translated.
+
+## Story page is a CMS singleton
+Editable story copy lives on the StoryPage singleton. Dutch columns are the DeepL source. name_title, name_pronunciation, make_title, founder_name, and founder_signature stay untranslated. Each visible flag hides that band. Uploaded photographs are optional and are not translated. Ritual step count, product cards, and the Heritage button href stay fixed.
