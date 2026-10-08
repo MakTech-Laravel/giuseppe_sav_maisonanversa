@@ -204,6 +204,34 @@ test('deepl retries after a 429 and then stores the translation', function () {
     Http::assertSentCount(2);
 });
 
+test('deepl keeps the brand spelling in any capitalization', function () {
+    config(['services.deepl.key' => 'test-key:fx']);
+
+    Http::fake([
+        '*' => function ($request) {
+            $text = (string) $request->data()['text'][0];
+            $text = (string) preg_replace(
+                '/(<x id="\d+">).*?(<\/x>)/',
+                '$1House of Antwerp$2',
+                $text,
+            );
+
+            return Http::response([
+                'translations' => [[
+                    'text' => 'EN '.$text,
+                ]],
+            ]);
+        },
+    ]);
+
+    $translator = app(DeepLTranslator::class);
+
+    expect($translator->translate('Welkom bij Maison Anversa.', 'en'))
+        ->toBe('EN Welkom bij Maison Anversa.')
+        ->and($translator->translate('MAISON ANVERSA-account en Anversa', 'en'))
+        ->toBe('EN MAISON ANVERSA-account en Anversa');
+});
+
 test('a deepl quota error does not persist translation rows', function () {
     Queue::fake();
 
