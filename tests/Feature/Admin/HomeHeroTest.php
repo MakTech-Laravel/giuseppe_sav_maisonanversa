@@ -189,6 +189,27 @@ test('a newsletter button opens the letter modal without a href', function () {
     );
 });
 
+test('the homepage wordmark stays the stored spelling in english', function () {
+    $hero = HomeHero::current();
+    $hero->translations()->create([
+        'locale' => 'en',
+        'column' => 'title',
+        'value' => 'House',
+        'source_hash' => $hero->translationSourceHash('title'),
+    ]);
+    $hero->translations()->create([
+        'locale' => 'en',
+        'column' => 'title_accent',
+        'value' => 'Antwerp',
+        'source_hash' => $hero->translationSourceHash('title_accent'),
+    ]);
+
+    $hero = app(HomeHeroPresenter::class)->toStorefront($hero->fresh(), 'en');
+
+    expect($hero['title'])->toBe('Maison')
+        ->and($hero['titleAccent'])->toBe('Anversa');
+});
+
 test('a hidden button slot is omitted from the homepage', function () {
     HomeHero::current()->update([
         'secondary_action' => HomeHeroAction::Hidden,

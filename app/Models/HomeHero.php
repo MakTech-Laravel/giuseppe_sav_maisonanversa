@@ -16,15 +16,23 @@ class HomeHero extends Model
     public const SLOTS = ['primary', 'secondary', 'tertiary'];
 
     /**
-     * Dutch source columns DeepL may translate. Actions, targets, and the
-     * photograph stay on the row itself.
+     * The wordmark stays the stored spelling in every language.
+     *
+     * @var list<string>
+     */
+    public const UNTRANSLATED_COLUMNS = [
+        'title',
+        'title_accent',
+    ];
+
+    /**
+     * Dutch source columns DeepL may translate. The wordmark, actions,
+     * targets, and the photograph stay on the row itself.
      *
      * @var list<string>
      */
     public const TRANSLATION_COLUMNS = [
         'eyebrow',
-        'title',
-        'title_accent',
         'tagline',
         'counter_line_one',
         'counter_line_two',
@@ -43,6 +51,7 @@ class HomeHero extends Model
      */
     protected array $translationExcept = [
         'image_path',
+        ...self::UNTRANSLATED_COLUMNS,
         'primary_action',
         'primary_target',
         'secondary_action',
