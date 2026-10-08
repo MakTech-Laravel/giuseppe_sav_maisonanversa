@@ -3,6 +3,8 @@ import type { ImageAssetName } from '@/lib/imagery';
 import { cn } from '@/lib/utils';
 
 type StoryMediaFrameProps = {
+    /** Uploaded photograph. Takes precedence over the brand asset. */
+    src?: string | null;
     /** When set, renders the brand/product asset (caption-free). */
     asset?: ImageAssetName;
     /**
@@ -21,6 +23,7 @@ type StoryMediaFrameProps = {
  * missing photography falls back to a silent brand gradient.
  */
 export function StoryMediaFrame({
+    src,
     asset,
     ratio,
     className,
@@ -29,6 +32,30 @@ export function StoryMediaFrame({
 }: StoryMediaFrameProps) {
     const resolvedRatio =
         ratio !== undefined ? ratio : asset ? undefined : '4 / 5';
+
+    if (src) {
+        return (
+            <div
+                className={cn('relative overflow-hidden', className)}
+                style={{
+                    aspectRatio:
+                        resolvedRatio === null || resolvedRatio === undefined
+                            ? undefined
+                            : resolvedRatio,
+                }}
+            >
+                <img
+                    src={src}
+                    alt=""
+                    loading={loading}
+                    className={cn(
+                        'h-full w-full',
+                        contain ? 'object-contain' : 'object-cover',
+                    )}
+                />
+            </div>
+        );
+    }
 
     if (asset) {
         return (

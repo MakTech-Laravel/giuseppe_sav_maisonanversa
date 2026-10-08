@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SiteSettingController;
+use App\Http\Controllers\Admin\StoryPageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
 use App\Http\Controllers\Auth\PasswordResetOtpController;
@@ -503,6 +504,17 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('site-settings', 'update')->name('site-settings.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+            });
+
+            Route::controller(StoryPageController::class)->group(function () {
+                Route::get('story-page', 'edit')->name('story-page.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('story-page', 'update')->name('story-page.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('story-page/translations', 'updateTranslations')->name('story-page.translations.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('story-page/translate', 'translate')->name('story-page.translate')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 
             Route::controller(HomeHeroController::class)->group(function () {

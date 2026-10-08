@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\StoryPage;
 use Illuminate\Support\Facades\App;
 
 /**
@@ -115,10 +116,8 @@ const FULL_STORY_NAME_KEY = 'Anversa is de Italiaanse naam voor Antwerpen. We ko
 
 const TRUNCATED_ANVERS_ORPHAN_KEY = '"Anvers" is de Franse naam voor Antwerpen. "Anversa" is onze Europese variatie — elegant in het Frans, Italiaans en Enge';
 
-test('the story name section quotes the full source key', function () {
-    $source = file_get_contents(resource_path('js/components/maison/story/story-name.tsx'));
-
-    expect($source)->toContain(FULL_STORY_NAME_KEY);
+test('the story name section keeps the full dutch source', function () {
+    expect(StoryPage::defaults()['name_body'])->toBe(FULL_STORY_NAME_KEY);
 });
 
 test('the full story name key resolves in translated locales', function (string $locale) {

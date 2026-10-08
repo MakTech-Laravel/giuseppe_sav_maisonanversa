@@ -83,6 +83,7 @@ test('a staff member with only heritage.view can open every heritage-gated admin
         'admin.dressing-items.index',
         'admin.site-settings.edit',
         'admin.home-hero.edit',
+        'admin.story-page.edit',
         'admin.legal-pages.index',
         'admin.seo-metas.index',
     ] as $routeName) {
