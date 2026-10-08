@@ -18,6 +18,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/pages/maison/house.tsx,resources/js/components/maison/house/** | .ai/rules/house.md |
 | app/Support/Html/** | .ai/rules/html.md |
 | app/Jobs/TranslateModelJob.php | .ai/rules/jobs.md |
+| resources/js/components/member/**,resources/js/layouts/member-layout.tsx | .ai/rules/layouts.md |
 | resources/js/pages/admin/legal-pages/**/*.tsx | .ai/rules/legal-pages.md |
 | resources/js/pages/admin/letter/**/*.tsx | .ai/rules/letter.md |
 | app/Mail/**, app/Services/Auth/PasswordResetOtpService.php | .ai/rules/mail.md |

@@ -8,3 +8,6 @@ paths:
 
 ## Member nav mobile drawer
 On mobile, MemberNav uses a Menu button plus a left Sheet drawer. Keep the sticky vertical sidebar for md+. Do not restore the horizontal overflow-x-auto strip.
+
+## Member topbar stacks only on mobile
+On mobile, MemberTopbar is two centered rows (logo, then utilities). From md up, keep a single row: logo left, utilities right.
