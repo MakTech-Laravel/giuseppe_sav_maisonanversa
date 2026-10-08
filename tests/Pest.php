@@ -13,6 +13,7 @@ use Database\Seeders\LegalPageSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\SeoMetaSeeder;
 use Database\Seeders\SiteSettingSeeder;
+use Database\Seeders\StoryPageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -37,6 +38,7 @@ pest()->extend(TestCase::class)
             JournalArticleSeeder::class,
             SiteSettingSeeder::class,
             HomeHeroSeeder::class,
+            StoryPageSeeder::class,
             FaqSeeder::class,
             DressingItemSeeder::class,
             LegalPageSeeder::class,

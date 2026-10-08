@@ -14,6 +14,7 @@ use App\Models\HomeHero;
 use App\Models\JournalArticle;
 use App\Models\LegalPage;
 use App\Models\Product;
+use App\Models\StoryPage;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
 use App\Services\Inquiry\InquiryDeviceCookie;
@@ -22,6 +23,7 @@ use App\Support\HomeHeroPresenter;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
 use App\Support\SessionFeed;
+use App\Support\StoryPagePresenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -169,7 +171,12 @@ class MaisonController extends Controller
 
     public function story(): Response
     {
-        return $this->page('story');
+        return $this->page('story', [
+            'story' => app(StoryPagePresenter::class)->toStorefront(
+                StoryPage::current(),
+                app()->getLocale(),
+            ),
+        ]);
     }
 
     public function circle(): Response

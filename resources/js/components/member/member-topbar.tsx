@@ -40,14 +40,15 @@ export function MemberTopbar({
                         </p>
                     </div>
                 </Link>
-                <div className="flex items-center gap-3 md:gap-4">
+
+                <div className="flex shrink-0 items-center gap-3 md:gap-4">
                     <MemberNotificationBell />
-                    <LanguageSwitcher className="gap-1 [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
+                    <LanguageSwitcher className="hidden gap-1 md:flex [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
                     <span
                         aria-hidden="true"
                         className="hidden h-5 w-px bg-gold/25 sm:block"
                     />
-                    <div className="flex items-center gap-3">
+                    <div className="hidden items-center gap-3 md:flex">
                         <Avatar className="size-8 overflow-hidden rounded-full border border-gold/30">
                             {avatarUrl ? (
                                 <AvatarImage src={avatarUrl} alt={name} />

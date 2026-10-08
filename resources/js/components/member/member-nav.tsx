@@ -1,6 +1,7 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/maison/shell/language-switcher';
 import {
     Sheet,
     SheetContent,
@@ -142,6 +143,9 @@ export function MemberNav() {
                                 {t('Menu')}
                             </SheetTitle>
                         </SheetHeader>
+                        <div className="flex justify-center border-b border-gold/20 px-4 py-3">
+                            <LanguageSwitcher />
+                        </div>
                         <nav aria-label={t('Lid')} className="overflow-y-auto">
                             <MemberNavList
                                 items={items}

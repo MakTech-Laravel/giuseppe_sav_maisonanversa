@@ -19,16 +19,25 @@ test('the auth menu is wired into the public shell', function () {
         ->toContain("aria-label={t('Menu')}");
 });
 
-test('mobile site nav keeps auth inside the opened drawer not the header', function () {
+test('mobile site nav keeps auth at the top of the opened drawer', function () {
     $nav = File::get(resource_path('js/components/maison/shell/site-nav.tsx'));
 
     expect($nav)
         ->toContain('id="maison-nav-links"')
-        ->toContain('<AuthMenu menuPlacement="up" />')
+        ->toContain('<AuthMenu />')
         ->toContain('ma-lg:hidden')
+        ->not->toContain('menuPlacement="up"')
         ->not->toContain('<AuthMenu compact />')
         ->toContain("aria-label={t('Menu')}")
         ->toContain('className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25 ma-lg:hidden"');
+
+    $drawer = strstr($nav, 'id="maison-nav-links"');
+    $links = strstr($drawer, '<ul');
+    $beforeLinks = strstr($drawer, '<ul', true);
+
+    expect($beforeLinks)->toContain('<AuthMenu />')
+        ->and($beforeLinks)->toContain('ma-lg:hidden')
+        ->and($links)->not->toContain('AuthMenu');
 });
 
 test('auth menu keeps login for guests and the profile initial after login', function () {
@@ -41,7 +50,7 @@ test('auth menu keeps login for guests and the profile initial after login', fun
         ->toContain('firstName.charAt(0).toUpperCase()')
         ->toContain("t('Uitloggen')")
         ->toContain("menuPlacement?: 'down' | 'up'")
-        ->toContain("bottom-[calc(100%+0.5rem)]");
+        ->toContain('bottom-[calc(100%+0.5rem)]');
 });
 
 test('frontend layout closes the auth modal once the visitor is authenticated', function () {

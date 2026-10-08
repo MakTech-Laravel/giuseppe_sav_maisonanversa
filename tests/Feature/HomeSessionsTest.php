@@ -117,6 +117,21 @@ test('verified members can join a session listed on the home page', function () 
     expect($session->participants()->where('user_id', $guest->id)->exists())->toBeTrue();
 });
 
+test('the home page returns an empty upcomingSessions list when none are joinable', function () {
+    CommunitySession::factory()->cancelled()->create([
+        'starts_at' => now()->addDays(2),
+    ]);
+    CommunitySession::factory()->past()->create();
+
+    $this->get('/nl')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('maison/home')
+            ->has('upcomingSessions', 0)
+            ->where('openSessionsThisWeek', 0)
+        );
+});
+
 test('the home sessions section matches the PDF placement copy and card', function () {
     $homeSessions = file_get_contents(resource_path('js/components/maison/home/home-sessions.tsx'));
     $homeCard = file_get_contents(resource_path('js/components/maison/home/home-session-card.tsx'));
@@ -143,6 +158,10 @@ test('the home sessions section matches the PDF placement copy and card', functi
         ->toContain('+ Plan een sessie')
         ->toContain('Bekijk alle sessies')
         ->toContain('useResumePendingSessionJoin')
+        ->toContain('border-dashed')
+        ->toContain('Geen open sessies op dit moment')
+        ->toContain('Plan de eerste sessie van de week.')
+        ->not->toContain('max-w-[520px]')
         ->not->toContain("from '@/components/maison/community/sessions/session-card'");
 
     expect($homeCard)

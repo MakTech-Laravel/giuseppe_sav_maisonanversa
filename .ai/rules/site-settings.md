@@ -15,8 +15,8 @@ Site settings store contact channels, Instagram, and atelier coordinates for the
 ## Storefront reads SiteSetting, not placeholders
 Footer Instagram and Pers resolve from `site.instagramUrl` and `site.emailPressHref` via channel markers. Organization JSON-LD uses telephone, hello email, and Instagram `sameAs` from `SiteSetting::current()`. Do not hardcode `press@` or Instagram URLs as the live hrefs.
 
-## Mobile auth lives inside the opened drawer
-On viewports below `ma-lg`, the SiteNav header is logo + hamburger only so the wordmark is not squeezed. AuthMenu (Log in / profile initial) sits inside `#maison-nav-links` with the language switcher. Desktop auth stays in SiteTopbar. Mobile wordmark size is `--nav-logo-size` / `--nav-logo-tracking` / `--nav-logo-icon` in `resources/css/app.css` (defaults 14px / 0.16em / 28px); desktop stays `text-[20px]`.
+## Mobile auth is the first item in the opened drawer
+On viewports below `ma-lg`, the SiteNav header is logo + hamburger only so the wordmark is not squeezed. AuthMenu (Log in, or the signed-in initial and name) is the first child of `#maison-nav-links`, in the gap before the links. The dropdown opens downward. The language switcher stays at the bottom of that drawer. Hide that AuthMenu at `ma-lg`. Desktop auth stays in SiteTopbar. Mobile wordmark size is `--nav-logo-size` / `--nav-logo-tracking` / `--nav-logo-icon` in `resources/css/app.css` (defaults 14px / 0.16em / 28px); desktop stays `text-[20px]`.
 
 ## Close auth modal after login on public pages
 AuthMenu swaps Log in for the gold profile initial when auth.user is set. FrontendLayout must clear userModal auth (and not auto-open auth) once authenticated, because login can return to a public Maison URL while the layout stays mounted.
