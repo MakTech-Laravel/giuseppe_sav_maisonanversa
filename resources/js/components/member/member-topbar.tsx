@@ -19,10 +19,10 @@ export function MemberTopbar({
 
     return (
         <header className="sticky top-0 z-40 border-b border-gold/20 bg-choc2 text-cream">
-            <div className="mx-auto flex w-full max-w-320 flex-col items-center gap-3 px-4 py-3 md:h-16 md:flex-row md:items-center md:justify-between md:gap-3 md:px-10 md:py-0">
+            <div className="mx-auto flex h-16 w-full max-w-320 items-center justify-between gap-3 px-4 md:px-10">
                 <Link
                     href={`/${locale}`}
-                    className="flex min-w-0 items-center justify-center gap-3 no-underline md:justify-start"
+                    className="flex min-w-0 items-center gap-3 no-underline"
                 >
                     <PlaceholderImage
                         asset="logo-icon"
@@ -41,14 +41,14 @@ export function MemberTopbar({
                     </div>
                 </Link>
 
-                <div className="flex items-center justify-center gap-3 md:justify-end md:gap-4">
+                <div className="flex shrink-0 items-center gap-3 md:gap-4">
                     <MemberNotificationBell />
-                    <LanguageSwitcher className="gap-1 [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
+                    <LanguageSwitcher className="hidden gap-1 md:flex [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
                     <span
                         aria-hidden="true"
                         className="hidden h-5 w-px bg-gold/25 sm:block"
                     />
-                    <div className="flex items-center gap-3">
+                    <div className="hidden items-center gap-3 md:flex">
                         <Avatar className="size-8 overflow-hidden rounded-full border border-gold/30">
                             {avatarUrl ? (
                                 <AvatarImage src={avatarUrl} alt={name} />

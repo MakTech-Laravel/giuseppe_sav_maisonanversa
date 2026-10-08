@@ -101,6 +101,7 @@ test('the story page composes the client editorial sections', function () {
     $founder = file_get_contents(resource_path('js/components/maison/story/story-founder.tsx'));
     $closing = file_get_contents(resource_path('js/components/maison/story/story-closing.tsx'));
     $hero = file_get_contents(resource_path('js/components/maison/story/story-hero.tsx'));
+    $name = file_get_contents(resource_path('js/components/maison/story/story-name.tsx'));
 
     expect($page)
         ->toContain('StoryHero')
@@ -114,7 +115,17 @@ test('the story page composes the client editorial sections', function () {
         ->toContain('Yusuf Savran')
         ->not->toContain('[Persoonlijke bio')
         ->and($closing)
-        ->toContain('Every legacy begins with a first chapter.');
+        ->toContain('Every legacy begins with a first chapter.')
+        ->and($name)
+        ->toContain('md:grid-cols-2 md:gap-16')
+        ->toContain('w-[78%] max-w-72')
+        ->toContain('text-[40px]')
+        ->toContain('md:text-[clamp(56px,6.5vw,80px)]')
+        ->toContain('text-[15px]')
+        ->toContain('md:text-[18px]')
+        ->not->toContain('px-0')
+        ->not->toContain('md:pl-0')
+        ->not->toContain('md:pr-32');
 });
 
 test('the story page renders in all locales', function (string $locale) {
