@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
@@ -7,7 +8,10 @@ import { cn } from '@/lib/utils';
  * prefix, so the URL stays shareable — the prototype rewrote text nodes in place
  * and reloaded, which left the address bar saying nothing about the language.
  */
-export function LanguageSwitcher({ className }: { className?: string }) {
+export function LanguageSwitcher({
+    className,
+    ...props
+}: ComponentProps<'div'>) {
     const { locale, availableLocales, switchLocale } = useLocale();
     const { t } = useTranslation();
 
@@ -16,6 +20,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
             className={cn('flex items-center gap-1.5', className)}
             role="group"
             aria-label={t('Taal')}
+            {...props}
         >
             {availableLocales.map((option) => (
                 <button
