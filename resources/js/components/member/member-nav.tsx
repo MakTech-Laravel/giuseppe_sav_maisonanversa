@@ -69,7 +69,11 @@ function MemberNavList({ items, path, onNavigate }: MemberNavListProps) {
     );
 }
 
-export function MemberNav() {
+export function MemberNav({
+    placement = 'all',
+}: {
+    placement?: 'bar' | 'sidebar' | 'all';
+}) {
     const { t } = useTranslation();
     const { locale, auth } = usePage().props;
     const { url } = usePage();
@@ -124,14 +128,23 @@ export function MemberNav() {
 
     return (
         <>
-            <div className="md:hidden">
+            {(placement === 'bar' || placement === 'all') && (
+            <div className="flex w-full items-center justify-between gap-3 md:hidden">
+                <LanguageSwitcher className="gap-0.5 [&_button]:min-h-9 [&_button]:min-w-9 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
                 <Sheet open={open} onOpenChange={setOpen}>
                     <SheetTrigger asChild>
                         <button
                             type="button"
-                            className="border border-gold/25 bg-choc3 px-4 py-2.5 font-sans text-[10px] tracking-[0.18em] text-cream uppercase transition-colors hover:border-gold/40 hover:bg-choc2"
+                            aria-label={t('Menu')}
+                            className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25"
                         >
-                            {t('Menu')}
+                            {[0, 1, 2].map((bar) => (
+                                <span
+                                    key={bar}
+                                    aria-hidden="true"
+                                    className="block h-[1.6px] w-6 bg-gold"
+                                />
+                            ))}
                         </button>
                     </SheetTrigger>
                     <SheetContent
@@ -143,9 +156,6 @@ export function MemberNav() {
                                 {t('Menu')}
                             </SheetTitle>
                         </SheetHeader>
-                        <div className="flex justify-center border-b border-gold/20 px-4 py-3">
-                            <LanguageSwitcher />
-                        </div>
                         <nav aria-label={t('Lid')} className="overflow-y-auto">
                             <MemberNavList
                                 items={items}
@@ -156,7 +166,9 @@ export function MemberNav() {
                     </SheetContent>
                 </Sheet>
             </div>
+            )}
 
+            {(placement === 'sidebar' || placement === 'all') && (
             <nav
                 aria-label={t('Lid')}
                 className="hidden w-full shrink-0 md:sticky md:top-20 md:block md:w-56 md:self-start"
@@ -165,6 +177,7 @@ export function MemberNav() {
                     <MemberNavList items={items} path={path} />
                 </div>
             </nav>
+            )}
         </>
     );
 }

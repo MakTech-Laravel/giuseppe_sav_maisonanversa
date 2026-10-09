@@ -18,7 +18,7 @@ export function MemberTopbar({
     const getInitials = useInitials();
 
     return (
-        <header className="sticky top-0 z-40 border-b border-gold/20 bg-choc2 text-cream">
+        <header className="border-b border-gold/20 bg-choc2 text-cream">
             <div className="mx-auto flex h-16 w-full max-w-320 items-center justify-between gap-3 px-4 md:px-10">
                 <Link
                     href={`/${locale}`}
