@@ -93,7 +93,7 @@
      * than a utility, and Tailwind drops theme variables it sees no usage for.
      */
     --topbar-h: 40px;
-    --nav-h: 90px;
+    --nav-h: 118px;
     /* Mobile SiteNav wordmark — tweak here without hunting class names. */
     --nav-logo-size: 0.875rem; /* 14px */
     --nav-logo-tracking: 0.16em;
@@ -149,6 +149,12 @@
     --scrollbar-track: #e8e0d5;
     --scrollbar-thumb: rgba(141, 112, 90, 0.55);
     --scrollbar-thumb-hover: #8d705a;
+}
+
+@media (min-width: 1100px) {
+    :root {
+        --nav-h: 90px;
+    }
 }
 
 /*
