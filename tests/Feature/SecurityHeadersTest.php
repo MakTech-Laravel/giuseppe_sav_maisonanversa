@@ -16,9 +16,34 @@ test('html responses send a content security policy with a vite nonce', function
         ->toContain('https://www.googletagmanager.com')
         ->toContain('http://127.0.0.1:5173')
         ->toContain("style-src 'self' 'unsafe-inline' https://fonts.bunny.net http://localhost:5173 http://127.0.0.1:5173")
+        ->not->toContain('[::1]')
         ->and($response->headers->get('X-Frame-Options'))->toBe('SAMEORIGIN')
         ->and($response->headers->get('X-Content-Type-Options'))->toBe('nosniff')
         ->and($response->headers->get('Referrer-Policy'))->toBe('strict-origin-when-cross-origin');
+});
+
+test('the csp allows the external reverb websocket origin', function () {
+    config([
+        'broadcasting.connections.reverb.options.host' => 'ws.maisonanversa.maktechlaravel.cloud',
+        'broadcasting.connections.reverb.options.port' => 443,
+        'broadcasting.connections.reverb.options.scheme' => 'https',
+    ]);
+
+    $csp = (string) $this->get('/nl')->assertOk()->headers->get('Content-Security-Policy');
+
+    expect($csp)->toContain('wss://ws.maisonanversa.maktechlaravel.cloud');
+});
+
+test('the csp keeps a non-default local reverb port', function () {
+    config([
+        'broadcasting.connections.reverb.options.host' => '127.0.0.1',
+        'broadcasting.connections.reverb.options.port' => 8080,
+        'broadcasting.connections.reverb.options.scheme' => 'http',
+    ]);
+
+    $csp = (string) $this->get('/nl')->assertOk()->headers->get('Content-Security-Policy');
+
+    expect($csp)->toContain('ws://127.0.0.1:8080');
 });
 
 test('non-production responses are tagged noindex', function () {

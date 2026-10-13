@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\RealtimeController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SiteSettingController;
@@ -625,6 +626,17 @@ Route::prefix('{locale}')
                 Route::get('permissions/export', 'export')->name('permissions.export')
                     ->middleware('permission:'.PermissionEnum::PERMISSIONS_EXPORT->value);
             });
+
+            Route::controller(RealtimeController::class)
+                ->prefix('realtime')
+                ->name('realtime.')
+                ->middleware('permission:'.PermissionEnum::REALTIME_VIEW->value)
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('health', 'health')->name('health');
+                    Route::post('ping', 'ping')->name('ping');
+                    Route::post('test-notification', 'testNotification')->name('test-notification');
+                });
         });
 
         Route::middleware(['auth'])->group(function () {
