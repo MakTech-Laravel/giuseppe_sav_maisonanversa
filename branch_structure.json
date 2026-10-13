@@ -5,6 +5,7 @@
     "8_18_2026",
     "backup_8_18_2026",
     "community",
+    "conversation",
     "founding-circle",
     "fresh_giuseppe_sav",
     "heritage-letter",
@@ -36,8 +37,11 @@
     "mahfuz_23_08",
     "main",
     "monirul",
+    "notification",
     "phase_one_qa",
     "production",
+    "reverb_server",
+    "session_fixing",
     "site-settings-&-seo"
   ],
   "parent": {
@@ -45,6 +49,7 @@
     "8_18_2026": "main",
     "backup_8_18_2026": "main",
     "community": "main",
+    "conversation": "main",
     "founding-circle": "main",
     "fresh_giuseppe_sav": "main",
     "heritage-letter": "main",
@@ -76,8 +81,11 @@
     "mahfuz_23_08": "main",
     "main": null,
     "monirul": "main",
+    "notification": "main",
     "phase_one_qa": "main",
     "production": "main",
+    "reverb_server": "main",
+    "session_fixing": "main",
     "site-settings-&-seo": "main"
   },
   "order": [
@@ -86,6 +94,7 @@
     "8_18_2026",
     "backup_8_18_2026",
     "community",
+    "conversation",
     "founding-circle",
     "fresh_giuseppe_sav",
     "heritage-letter",
@@ -116,8 +125,11 @@
     "mahfuz/ui-primitives",
     "mahfuz_23_08",
     "monirul",
+    "notification",
     "phase_one_qa",
     "production",
+    "reverb_server",
+    "session_fixing",
     "site-settings-&-seo"
   ]
 }
