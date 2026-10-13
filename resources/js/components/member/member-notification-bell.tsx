@@ -1,6 +1,6 @@
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Bell } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     markAllAsRead,
@@ -16,68 +16,19 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
+import type { NotificationItem } from '@/types/notification';
 
-type MemberNotification = {
-    id: string;
-    title: string | null;
-    body: string | null;
-    read_at: string | null;
-    created_at: string | null;
-};
-
-type NotificationsResponse = {
-    data: MemberNotification[];
-    unread_count: number;
-};
-
-async function fetchNotifications(
-    locale: string,
-): Promise<NotificationsResponse | null> {
-    const response = await fetch(`/${locale}/member/notifications`, {
-        headers: {
-            Accept: 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-    });
-
-    if (!response.ok) {
-        return null;
-    }
-
-    return (await response.json()) as NotificationsResponse;
-}
-
-/** Polling keeps the unread badge fresh without a websocket connection. */
-const POLL_INTERVAL_MS = 60_000;
-
+/** Reads the shared `notifications` prop, which realtime events refresh. */
 export function MemberNotificationBell() {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
+    const { notifications: shared } = usePage().props;
     const [open, setOpen] = useState(false);
-    const [notifications, setNotifications] = useState<MemberNotification[]>(
-        [],
-    );
-    const [unreadCount, setUnreadCount] = useState(0);
-    const [loaded, setLoaded] = useState(false);
 
-    const refresh = useCallback(() => {
-        fetchNotifications(locale).then((payload) => {
-            if (!payload) {
-                return;
-            }
+    const notifications = shared?.preview ?? [];
+    const unreadCount = shared?.unreadCount ?? 0;
 
-            setNotifications(payload.data);
-            setUnreadCount(payload.unread_count);
-            setLoaded(true);
-        });
-    }, [locale]);
-
-    useEffect(() => {
-        refresh();
-        const interval = window.setInterval(refresh, POLL_INTERVAL_MS);
-
-        return () => window.clearInterval(interval);
-    }, [refresh]);
+    const refresh = () => router.reload({ only: ['notifications'] });
 
     const handleOpenChange = (nextOpen: boolean) => {
         setOpen(nextOpen);
@@ -87,8 +38,12 @@ export function MemberNotificationBell() {
         }
     };
 
-    const handleItemClick = (notification: MemberNotification) => {
-        if (notification.read_at) {
+    const handleItemClick = (notification: NotificationItem) => {
+        if (notification.read) {
+            if (notification.href) {
+                window.location.assign(notification.href);
+            }
+
             return;
         }
 
@@ -98,7 +53,11 @@ export function MemberNotificationBell() {
             {
                 preserveScroll: true,
                 preserveState: true,
-                onSuccess: refresh,
+                onSuccess: () => {
+                    if (notification.href) {
+                        window.location.assign(notification.href);
+                    }
+                },
             },
         );
     };
@@ -107,11 +66,7 @@ export function MemberNotificationBell() {
         router.post(
             markAllAsRead.url({ locale }),
             {},
-            {
-                preserveScroll: true,
-                preserveState: true,
-                onSuccess: refresh,
-            },
+            { preserveScroll: true, preserveState: true },
         );
     };
 
@@ -124,7 +79,7 @@ export function MemberNotificationBell() {
                     className="relative flex size-8 shrink-0 items-center justify-center border border-gold/25 bg-choc3 text-cream transition-colors hover:border-gold/40 hover:bg-choc2"
                 >
                     <Bell className="size-4" />
-                    {loaded && unreadCount > 0 ? (
+                    {unreadCount > 0 ? (
                         <Badge
                             variant="destructive"
                             className="absolute -top-1.5 -right-1.5 h-4 min-w-4 justify-center rounded-full border-none px-1 text-[9px] leading-none"
@@ -166,13 +121,13 @@ export function MemberNotificationBell() {
                         >
                             <span className="flex w-full items-center justify-between gap-2 font-sans text-[11px] font-medium tracking-[0.04em]">
                                 {notification.title}
-                                {!notification.read_at ? (
+                                {!notification.read ? (
                                     <span className="size-1.5 shrink-0 rounded-full bg-gold" />
                                 ) : null}
                             </span>
-                            {notification.body ? (
+                            {notification.message ? (
                                 <span className="font-sans text-[11px] text-sand">
-                                    {notification.body}
+                                    {notification.message}
                                 </span>
                             ) : null}
                             {notification.created_at ? (

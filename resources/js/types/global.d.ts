@@ -1,5 +1,6 @@
 import type { Auth } from '@/types/auth';
 import type { Locale } from '@/types/locale';
+import type { SharedNotifications } from '@/types/notification';
 import type { SeoDocument } from '@/types/seo';
 
 export type CheckoutShared = {
@@ -65,6 +66,7 @@ declare module '@inertiajs/core' {
             commerce: CommerceShared;
             site: SiteShared;
             seo: SeoDocument;
+            notifications?: SharedNotifications | null;
             [key: string]: unknown;
         };
     }

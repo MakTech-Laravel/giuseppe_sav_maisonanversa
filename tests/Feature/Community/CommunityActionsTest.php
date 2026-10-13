@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\NotificationType;
 use App\Enums\RoleEnum;
 use App\Models\CommunityPost;
 use App\Models\CommunityPostHide;
@@ -7,10 +8,9 @@ use App\Models\CommunityReport;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
-use App\Notifications\ReportFiledNotification;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
     $this->seed([PermissionSeeder::class, RoleSeeder::class]);
@@ -28,7 +28,7 @@ test('members can report a community post', function () {
 
     $post = CommunityPost::factory()->create(['author_id' => $author->id]);
 
-    Notification::fake();
+    Queue::fake();
 
     $this->actingAs($reporter)
         ->post(route('community.posts.report', ['locale' => 'nl', 'communityPost' => $post->id]), [
@@ -42,7 +42,11 @@ test('members can report a community post', function () {
         'status' => 'open',
     ])->exists())->toBeTrue();
 
-    Notification::assertSentTo($moderator, ReportFiledNotification::class);
+    $row = $moderator->userNotifications()->with('notification')->first();
+
+    expect($row)->not->toBeNull()
+        ->and($row->notification->type)->toBe(NotificationType::Community)
+        ->and($row->notification->data['community_post_id'])->toBe($post->id);
 });
 
 test('members can hide a post from their own feed only', function () {

@@ -121,6 +121,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * In-app inbox rows (app_notifications), separate from Laravel's Notifiable table.
+     *
+     * @return HasMany<UserNotification, $this>
+     */
+    public function userNotifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class);
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array

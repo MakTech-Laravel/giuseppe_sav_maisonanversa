@@ -3,32 +3,27 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use App\Services\Notifications\InboxService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
     public const PER_PAGE = 20;
 
+    public function __construct(private readonly InboxService $inbox) {}
+
     public function index(Request $request, string $locale): JsonResponse
     {
-        $notifications = $request->user()
-            ->notifications()
-            ->latest()
-            ->paginate(self::PER_PAGE)
-            ->through(fn (DatabaseNotification $notification) => [
-                'id' => $notification->id,
-                'title' => $notification->data['title'] ?? null,
-                'body' => $notification->data['body'] ?? null,
-                'read_at' => $notification->read_at?->toIso8601String(),
-                'created_at' => $notification->created_at?->toIso8601String(),
-            ]);
+        $notifications = $this->inbox->paginateFor($request->user(), [], self::PER_PAGE);
 
         return response()->json([
-            'data' => $notifications->items(),
-            'unread_count' => $request->user()->unreadNotifications()->count(),
+            'data' => array_map(fn (array $item): array => [
+                ...$item,
+                'body' => $item['message'],
+            ], $notifications->items()),
+            'unread_count' => $this->inbox->unreadCount($request->user()),
             'meta' => [
                 'current_page' => $notifications->currentPage(),
                 'last_page' => $notifications->lastPage(),
@@ -38,22 +33,15 @@ class NotificationController extends Controller
 
     public function markAsRead(Request $request, string $locale, string $notification): RedirectResponse
     {
-        /** @var DatabaseNotification|null $record */
-        $record = $request->user()
-            ->notifications()
-            ->whereKey($notification)
-            ->first();
-
-        abort_if($record === null, 404);
-
-        $record->markAsRead();
+        $row = $this->inbox->findFor($request->user(), $notification);
+        $this->inbox->markRead($request->user(), $row);
 
         return back();
     }
 
     public function markAllAsRead(Request $request, string $locale): RedirectResponse
     {
-        $request->user()->unreadNotifications->markAsRead();
+        $this->inbox->markAllRead($request->user());
 
         return back();
     }

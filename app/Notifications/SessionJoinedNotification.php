@@ -2,8 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationType;
 use App\Mail\SessionJoinedMail;
 use App\Models\CommunitySession;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -22,7 +24,7 @@ class SessionJoinedNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail'];
     }
 
     public function toMail(object $notifiable): SessionJoinedMail
@@ -35,17 +37,25 @@ class SessionJoinedNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * @return array<string, mixed>
+     * The matching in-app inbox entry (the bell), sent through NotificationService.
      */
-    public function toArray(object $notifiable): array
+    public function sendInApp(User $host): void
     {
-        return [
-            'title' => __('Sessie-aanmelding'),
-            'body' => __(':name heeft zich aangemeld voor uw sessie op :when.', [
+        $locale = $host->locale ?: config('maison.default_locale');
+
+        notify_user(
+            $host,
+            NotificationType::Community,
+            __('Sessie-aanmelding'),
+            __(':name heeft zich aangemeld voor uw sessie op :when.', [
                 'name' => $this->memberName,
                 'when' => $this->session->starts_at->translatedFormat('j F Y H:i'),
             ]),
-            'session_id' => $this->session->id,
-        ];
+            [
+                'session_id' => $this->session->id,
+                'link_url' => route('community.sessions.show', ['locale' => $locale, 'communitySession' => $this->session->id]),
+                'link_label' => __('Bekijk sessie'),
+            ],
+        );
     }
 }

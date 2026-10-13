@@ -20,11 +20,12 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { getEcho, getXsrfToken } from '@/echo';
+import { getEcho } from '@/echo';
 import { useEchoConnection } from '@/hooks/use-echo-connection';
 import { showRealtimeTestToast } from '@/hooks/use-private-realtime-toast';
 import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
+import { callJson } from '@/realtime/call-json';
 import {
     CONNECTION_STATUS_LABELS,
     privateUserChannel,
@@ -73,31 +74,6 @@ const LOG_COLOR: Record<LogLevel, string> = {
 
 function clock(): string {
     return new Date().toLocaleTimeString('en-GB', { hour12: false });
-}
-
-async function callJson(
-    url: string,
-    method: 'get' | 'post',
-    body?: Record<string, unknown>,
-): Promise<{ ok: boolean; status: number; json: Record<string, unknown> }> {
-    const response = await fetch(url, {
-        method: method.toUpperCase(),
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-XSRF-TOKEN': getXsrfToken(),
-        },
-        credentials: 'same-origin',
-        body: body ? JSON.stringify(body) : undefined,
-    });
-
-    const json = (await response.json().catch(() => ({}))) as Record<
-        string,
-        unknown
-    >;
-
-    return { ok: response.ok, status: response.status, json };
 }
 
 export default function RealtimeIndex() {

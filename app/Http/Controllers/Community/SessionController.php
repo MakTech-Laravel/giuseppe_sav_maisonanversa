@@ -159,7 +159,9 @@ class SessionController extends Controller
                 'user_id' => $request->user()->id,
             ]);
 
-            $locked->host->notify(new SessionJoinedNotification($locked, $request->user()->name));
+            $joined = new SessionJoinedNotification($locked, $request->user()->name);
+            $locked->host->notify($joined);
+            $joined->sendInApp($locked->host);
         });
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('U bent aangemeld voor de sessie.')]);
