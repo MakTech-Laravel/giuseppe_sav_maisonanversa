@@ -14,6 +14,7 @@ import {
     Mail,
     MessageCircle,
     Package,
+    Radio,
     Settings2,
     ShoppingBag,
     Shirt,
@@ -57,6 +58,7 @@ import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
 import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
+import adminRealtime from '@/routes/admin/realtime';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSiteSettings from '@/routes/admin/site-settings';
 import adminStoryPage from '@/routes/admin/story-page';
@@ -80,6 +82,12 @@ function buildNavGroups(
                     href: dashboard(locale),
                     icon: LayoutGrid,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                },
+                {
+                    title: t('Realtime console'),
+                    href: adminRealtime.index(locale),
+                    icon: Radio,
+                    permissions: [PERMISSIONS.REALTIME.VIEW],
                 },
             ],
         },
@@ -195,7 +203,10 @@ function buildNavGroups(
                     title: t('Journal'),
                     href: adminJournal.index(locale),
                     icon: BookOpen,
-                    permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
+                    permissions: [
+                        PERMISSIONS.POSTS.VIEW,
+                        PERMISSIONS.POSTS.INDEX,
+                    ],
                 },
             ],
         },
@@ -221,7 +232,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Juridische Pagina\'s'),
+                    title: t("Juridische Pagina's"),
                     href: adminLegalPages.index(locale),
                     icon: FileText,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],

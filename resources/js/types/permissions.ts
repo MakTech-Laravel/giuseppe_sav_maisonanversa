@@ -14,6 +14,9 @@ export const PERMISSIONS = {
     DOCUMENTATION: {
         VIEW: 'documentation.view',
     },
+    REALTIME: {
+        VIEW: 'realtime.view',
+    },
     FILE_UPLOAD: {
         INDEX: 'file-upload.index',
     },
