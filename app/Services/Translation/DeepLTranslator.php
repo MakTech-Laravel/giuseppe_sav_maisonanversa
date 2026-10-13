@@ -72,14 +72,32 @@ class DeepLTranslator
             return $texts;
         }
 
+        $spellings = [];
+        $payloadTexts = [];
+
+        foreach (array_values($texts) as $index => $text) {
+            $spellings[$index] = [];
+            $payloadTexts[$index] = $this->maskBrandName($text, $spellings[$index]);
+        }
+
+        $protectsBrand = collect($spellings)->contains(
+            fn (array $matches): bool => $matches !== [],
+        );
+
         $payload = [
-            'text' => array_values($texts),
+            'text' => $payloadTexts,
             'target_lang' => $this->normalizeTarget($target),
             'preserve_formatting' => true,
         ];
 
         if ($html) {
             $payload['tag_handling'] = 'html';
+        } elseif ($protectsBrand) {
+            $payload['tag_handling'] = 'xml';
+        }
+
+        if ($protectsBrand) {
+            $payload['ignore_tags'] = 'x';
         }
 
         if ($source !== null) {
@@ -118,8 +136,11 @@ class DeepLTranslator
         $translations = $response->json('translations') ?? [];
 
         return array_map(
-            fn (int $index): string => $translations[$index]['text'] ?? $texts[$index],
-            array_keys($texts),
+            fn (int $index): string => $this->restoreBrandName(
+                $translations[$index]['text'] ?? $payloadTexts[$index],
+                $spellings[$index] ?? [],
+            ),
+            array_keys($payloadTexts),
         );
     }
 
@@ -135,5 +156,46 @@ class DeepLTranslator
         }
 
         return strtoupper($target);
+    }
+
+    /**
+     * @param  list<string>  $spellings
+     */
+    private function maskBrandName(string $text, array &$spellings): string
+    {
+        $masked = preg_replace_callback(
+            '/Maison\s+Anversa/iu',
+            function (array $match) use (&$spellings): string {
+                $index = count($spellings);
+                $spellings[] = $match[0];
+
+                return '<x id="'.$index.'">'.$index.'</x>';
+            },
+            $text,
+        );
+
+        return is_string($masked) ? $masked : $text;
+    }
+
+    /**
+     * @param  list<string>  $spellings
+     */
+    private function restoreBrandName(string $text, array $spellings): string
+    {
+        if ($spellings === []) {
+            return $text;
+        }
+
+        $restored = preg_replace_callback(
+            '/<x id="(\d+)">.*?<\/x>/s',
+            function (array $match) use ($spellings): string {
+                $index = (int) $match[1];
+
+                return $spellings[$index] ?? $match[0];
+            },
+            $text,
+        );
+
+        return is_string($restored) ? $restored : $text;
     }
 }

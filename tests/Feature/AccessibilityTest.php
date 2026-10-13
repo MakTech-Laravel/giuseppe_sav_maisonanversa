@@ -119,6 +119,7 @@ test('site navigation keeps a solid chocolate bar with menu and language switche
     expect($source)
         ->toContain('bg-choc')
         ->toContain('LanguageSwitcher')
+        ->toContain('data-slot="header-language"')
         ->toContain('PRIMARY_NAV')
         ->toContain('ma-lg:items-center')
         ->toContain('ma-lg:gap-5')

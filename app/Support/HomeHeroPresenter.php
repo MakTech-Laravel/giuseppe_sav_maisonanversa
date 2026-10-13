@@ -72,8 +72,8 @@ class HomeHeroPresenter
         return [
             'imageUrl' => $this->imageUrl($hero),
             'eyebrow' => $hero->translated('eyebrow', $locale),
-            'title' => $hero->translated('title', $locale),
-            'titleAccent' => $hero->translated('title_accent', $locale),
+            'title' => (string) $hero->title,
+            'titleAccent' => (string) $hero->title_accent,
             // Brand line uses the source column as-is on every locale (never DeepL).
             'tagline' => (string) $hero->tagline,
             'showCounter' => $hero->show_counter,

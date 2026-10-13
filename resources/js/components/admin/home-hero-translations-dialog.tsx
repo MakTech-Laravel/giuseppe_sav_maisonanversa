@@ -24,8 +24,6 @@ type LocaleCopy = Record<string, string>;
 
 const COLUMNS = [
     ['eyebrow', 'Wenkbrauw'],
-    ['title', 'Titel'],
-    ['title_accent', 'Titelregel 2'],
     ['tagline', 'Ondertitel'],
     ['counter_line_one', 'Regel 1'],
     ['counter_line_two', 'Regel 2'],

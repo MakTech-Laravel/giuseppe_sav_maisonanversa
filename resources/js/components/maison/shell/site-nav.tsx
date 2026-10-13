@@ -39,56 +39,63 @@ export function SiteNav() {
         <nav
             className={cn(
                 'fixed inset-x-0 top-(--topbar-h) z-199 h-(--nav-h) border-b border-gold/15 bg-choc',
-                'flex items-center justify-between gap-3 px-6',
-                'ma-lg:flex-col ma-lg:items-center ma-lg:justify-center ma-lg:gap-2 ma-lg:px-8',
+                'flex flex-col justify-center gap-1 px-6 py-2',
+                'ma-lg:items-center ma-lg:justify-center ma-lg:gap-2 ma-lg:px-8 ma-lg:py-0',
             )}
         >
-            <MaisonLink
-                to="home"
-                data-magnetic
-                className="flex flex-1 items-center gap-2.5 pr-3 ma-lg:flex-none ma-lg:flex-col ma-lg:items-center ma-lg:gap-0.5 ma-lg:pr-0"
-            >
-                <PlaceholderImage
-                    asset="logo-icon"
-                    alt=""
-                    captioned={false}
-                    className="size-[var(--nav-logo-icon)] shrink-0 self-center ma-lg:mb-0.5 ma-lg:size-7"
-                />
-
-                <span className="self-center font-serif text-[length:var(--nav-logo-size)] leading-none font-medium tracking-[var(--nav-logo-tracking)] text-cream uppercase ma-lg:text-[20px] ma-lg:tracking-[0.28em]">
-                    Maison Anversa
-                </span>
-
-                <span className="hidden font-sans text-[8px] font-light tracking-[0.4em] text-gold uppercase ma-lg:block">
-                    European Heritage Sports and Lifestyle House
-                </span>
-            </MaisonLink>
-
-            <button
-                type="button"
-                aria-label={t('Menu')}
-                aria-expanded={open}
-                aria-controls="maison-nav-links"
-                onClick={() => setOpenedOn(open ? null : url)}
-                className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25 ma-lg:hidden"
-            >
-                {[0, 1, 2].map((bar) => (
-                    <span
-                        key={bar}
-                        aria-hidden="true"
-                        className={cn(
-                            'block h-[1.6px] w-6 bg-gold transition-transform duration-300',
-                            open &&
-                                bar === 0 &&
-                                'translate-y-[6.6px] rotate-45',
-                            open && bar === 1 && 'opacity-0',
-                            open &&
-                                bar === 2 &&
-                                'translate-y-[-6.6px] -rotate-45',
-                        )}
+            <div className="flex w-full items-center justify-between gap-3 ma-lg:w-auto ma-lg:justify-center">
+                <MaisonLink
+                    to="home"
+                    data-magnetic
+                    className="flex flex-1 items-center gap-2.5 pr-3 ma-lg:flex-none ma-lg:flex-col ma-lg:items-center ma-lg:gap-0.5 ma-lg:pr-0"
+                >
+                    <PlaceholderImage
+                        asset="logo-icon"
+                        alt=""
+                        captioned={false}
+                        className="size-[var(--nav-logo-icon)] shrink-0 self-center ma-lg:mb-0.5 ma-lg:size-7"
                     />
-                ))}
-            </button>
+
+                    <span className="self-center font-serif text-[length:var(--nav-logo-size)] leading-none font-medium tracking-[var(--nav-logo-tracking)] text-cream uppercase ma-lg:text-[20px] ma-lg:tracking-[0.28em]">
+                        Maison Anversa
+                    </span>
+
+                    <span className="hidden font-sans text-[8px] font-light tracking-[0.4em] text-gold uppercase ma-lg:block">
+                        European Heritage Sports and Lifestyle House
+                    </span>
+                </MaisonLink>
+
+                <button
+                    type="button"
+                    aria-label={t('Menu')}
+                    aria-expanded={open}
+                    aria-controls="maison-nav-links"
+                    onClick={() => setOpenedOn(open ? null : url)}
+                    className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25 ma-lg:hidden"
+                >
+                    {[0, 1, 2].map((bar) => (
+                        <span
+                            key={bar}
+                            aria-hidden="true"
+                            className={cn(
+                                'block h-[1.6px] w-6 bg-gold transition-transform duration-300',
+                                open &&
+                                    bar === 0 &&
+                                    'translate-y-[6.6px] rotate-45',
+                                open && bar === 1 && 'opacity-0',
+                                open &&
+                                    bar === 2 &&
+                                    'translate-y-[-6.6px] -rotate-45',
+                            )}
+                        />
+                    ))}
+                </button>
+            </div>
+
+            <LanguageSwitcher
+                data-slot="header-language"
+                className="self-end ma-lg:hidden gap-0.5 [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:rounded-sm [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]"
+            />
 
             <div
                 id="maison-nav-links"
@@ -169,7 +176,7 @@ export function SiteNav() {
                     )}
                 </ul>
 
-                <div className="mt-3 flex flex-col gap-3 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:flex-row ma-lg:items-center ma-lg:gap-4 ma-lg:border-t-0 ma-lg:border-l ma-lg:pt-0 ma-lg:pl-4">
+                <div className="mt-3 hidden flex-col gap-3 border-t border-gold/15 pt-3 ma-lg:mt-0 ma-lg:ml-2 ma-lg:flex ma-lg:flex-row ma-lg:items-center ma-lg:gap-4 ma-lg:border-t-0 ma-lg:border-l ma-lg:pt-0 ma-lg:pl-4">
                     <LanguageSwitcher className="ma-lg:gap-1 [&_button]:ma-lg:min-h-0 [&_button]:ma-lg:min-w-0 [&_button]:ma-lg:rounded-sm [&_button]:ma-lg:px-1.5 [&_button]:ma-lg:py-1 [&_button]:ma-lg:text-[9px]" />
                 </div>
             </div>

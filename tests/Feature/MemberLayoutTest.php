@@ -8,10 +8,11 @@ test('the member layout uses maison brand surfaces', function () {
     expect($layout)
         ->toContain('bg-choc')
         ->toContain('MemberNav')
+        ->toContain('placement="bar"')
+        ->toContain('sticky top-0')
         ->toContain('MemberTopbar')
         ->and($topbar)
         ->toContain('bg-choc2')
-        ->toContain('sticky')
         ->toContain('justify-between')
         ->not->toContain('flex-col')
         ->toContain('Avatar')
@@ -24,10 +25,12 @@ test('the member layout uses maison brand surfaces', function () {
         ->toContain('member-notification-bell')
         ->and($nav)
         ->toContain('LanguageSwitcher')
+        ->toContain('justify-between')
         ->toContain('md:sticky')
         ->toContain('Sheet')
         ->toContain('side="left"')
-        ->toContain("t('Menu')")
+        ->toContain("aria-label={t('Menu')}")
+        ->toContain('bg-gold')
         ->not->toContain('overflow-x-auto');
 });
 

@@ -20,12 +20,19 @@ export default function MemberLayout({ children }: { children: ReactNode }) {
                     content="noindex, nofollow"
                 />
             </Head>
-            <MemberTopbar
-                name={auth?.user?.name ?? ''}
-                avatarUrl={auth?.user?.avatar_url}
-            />
+            <div className="sticky top-0 z-40">
+                <MemberTopbar
+                    name={auth?.user?.name ?? ''}
+                    avatarUrl={auth?.user?.avatar_url}
+                />
+                <div className="border-b border-gold/20 bg-choc2 md:hidden">
+                    <div className="mx-auto flex w-full max-w-320 items-center px-4 py-3">
+                        <MemberNav placement="bar" />
+                    </div>
+                </div>
+            </div>
             <div className="mx-auto flex w-full max-w-320 flex-col gap-8 px-6 py-8 md:flex-row md:items-start md:px-10">
-                <MemberNav />
+                <MemberNav placement="sidebar" />
                 <main className="min-w-0 flex-1 pb-16">{children}</main>
             </div>
         </div>
