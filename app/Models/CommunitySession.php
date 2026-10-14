@@ -46,6 +46,8 @@ class CommunitySession extends Model
         'gender',
         'notes',
         'cancelled_at',
+        'cancellation_message',
+        'reminder_sent_at',
     ];
 
     protected function casts(): array
@@ -54,6 +56,7 @@ class CommunitySession extends Model
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
             'cancelled_at' => 'datetime',
+            'reminder_sent_at' => 'datetime',
             'capacity' => 'integer',
             'duration_minutes' => 'integer',
             'sport' => SessionSport::class,

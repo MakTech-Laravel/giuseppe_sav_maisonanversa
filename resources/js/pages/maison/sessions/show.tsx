@@ -3,6 +3,7 @@ import { CalendarDays, Clock, Gauge, Timer, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { CommunityTabs } from '@/components/maison/community/community-tabs';
 import { PartnerBadge } from '@/components/maison/community/partner-badge';
+import { CancelSessionDialog } from '@/components/maison/community/sessions/cancel-session-dialog';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { PageHero } from '@/components/maison/ui/page-hero';
@@ -31,14 +32,6 @@ export default function SessionShow({ session }: SessionShowProps) {
 
     function handleLeave() {
         router.delete(sessionRoutes.leave(args).url, { preserveScroll: true });
-    }
-
-    function handleCancel() {
-        if (!window.confirm(t('Deze sessie annuleren?'))) {
-            return;
-        }
-
-        router.delete(sessionRoutes.destroy(args).url);
     }
 
     function handleRemove(player: SessionPlayer) {
@@ -151,13 +144,10 @@ export default function SessionShow({ session }: SessionShowProps) {
                             )}
 
                             {session.can_manage && (
-                                <button
-                                    type="button"
-                                    onClick={handleCancel}
-                                    className={outlineButton}
-                                >
-                                    {t('Sessie annuleren')}
-                                </button>
+                                <CancelSessionDialog
+                                    sessionId={Number(session.id)}
+                                    triggerClassName={outlineButton}
+                                />
                             )}
 
                             {session.is_full &&

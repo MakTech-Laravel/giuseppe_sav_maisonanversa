@@ -8,6 +8,7 @@ use App\Models\Club;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
+use App\Services\Community\SessionNotificationService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ use Inertia\Response;
 class CommunitySessionController extends Controller
 {
     private const PER_PAGE = 15;
+
+    public function __construct(private readonly SessionNotificationService $notifier) {}
 
     public function index(Request $request, string $locale): Response
     {
@@ -92,7 +95,11 @@ class CommunitySessionController extends Controller
 
     public function cancel(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
     {
-        $communitySession->update(['cancelled_at' => now()]);
+        if (! $communitySession->isCancelled()) {
+            $communitySession->update(['cancelled_at' => now()]);
+
+            $this->notifier->cancelled($communitySession, $request->user());
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie geannuleerd.')]);
 
@@ -111,10 +118,16 @@ class CommunitySessionController extends Controller
             __('De host kan niet uit de eigen sessie worden verwijderd.'),
         );
 
-        CommunitySessionParticipant::query()
+        $wasFull = $communitySession->participants()->count() >= $communitySession->capacity;
+
+        $removed = CommunitySessionParticipant::query()
             ->where('community_session_id', $communitySession->id)
             ->where('user_id', $user->id)
             ->delete();
+
+        if ($removed > 0) {
+            $this->notifier->removed($communitySession, $user, $request->user(), $wasFull);
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Speler verwijderd uit de sessie.')]);
 

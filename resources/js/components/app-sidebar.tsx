@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import {
+    Bell,
+    BellRing,
     BookOpen,
     Building2,
     CalendarCheck,
@@ -56,6 +58,8 @@ import adminHomeHero from '@/routes/admin/home-hero';
 import adminJournal from '@/routes/admin/journal';
 import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
+import adminNotifications from '@/routes/admin/notifications';
+import adminNotificationTest from '@/routes/admin/notifications/test';
 import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
 import adminRealtime from '@/routes/admin/realtime';
@@ -82,6 +86,17 @@ function buildNavGroups(
                     href: dashboard(locale),
                     icon: LayoutGrid,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                },
+                {
+                    title: t('Meldingen'),
+                    href: adminNotifications.index(locale),
+                    icon: Bell,
+                },
+                {
+                    title: t('Meldingen testen'),
+                    href: adminNotificationTest.index(locale),
+                    icon: BellRing,
+                    permissions: [PERMISSIONS.NOTIFICATIONS.TEST],
                 },
                 {
                     title: t('Realtime console'),

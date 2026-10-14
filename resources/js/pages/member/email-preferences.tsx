@@ -1,7 +1,10 @@
 import { Head, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { updateEmailPreferences } from '@/actions/App/Http/Controllers/Member/DashboardController';
+import {
+    updateEmailPreferences,
+    updateSessionEmails,
+} from '@/actions/App/Http/Controllers/Member/DashboardController';
 import {
     MemberPageHeader,
     MemberPanel,
@@ -19,15 +22,25 @@ type Preferences = {
 
 export default function MemberEmailPreferences({
     preferences,
+    sessionEmails,
 }: {
     preferences: Preferences;
     status: string | null;
+    sessionEmails: boolean;
 }) {
     const { t } = useTranslation();
     const form = useForm(
         updateEmailPreferences(wayfinderLocale()),
         preferences,
     );
+    const sessionForm = useForm(updateSessionEmails(wayfinderLocale()), {
+        session_emails: sessionEmails,
+    });
+
+    function onSessionSubmit(event: FormEvent) {
+        event.preventDefault();
+        sessionForm.submit({ preserveScroll: true });
+    }
 
     function onSubmit(event: FormEvent) {
         event.preventDefault();
@@ -118,6 +131,51 @@ export default function MemberEmailPreferences({
                     </Button>
 
                     {form.recentlySuccessful && (
+                        <p className="font-sans text-[11px] tracking-[0.12em] text-gold2 uppercase">
+                            {t('Voorkeuren opgeslagen.')}
+                        </p>
+                    )}
+                </form>
+            </MemberPanel>
+
+            <MemberPanel className="mt-8 max-w-xl">
+                <MemberSectionTitle
+                    title={t('Sessie-e-mails')}
+                    description={t(
+                        'In-app meldingen blijven altijd aan. Hier kiest u alleen of u ze ook per e-mail ontvangt.',
+                    )}
+                />
+
+                <form onSubmit={onSessionSubmit} className="space-y-6">
+                    <label className="flex cursor-pointer items-start gap-3">
+                        <input
+                            type="checkbox"
+                            checked={sessionForm.data.session_emails}
+                            onChange={(event) =>
+                                sessionForm.setData(
+                                    'session_emails',
+                                    event.target.checked,
+                                )
+                            }
+                            className="mt-0.5 size-4 accent-gold"
+                        />
+                        <span className="space-y-1">
+                            <span className="block font-sans text-[12px] tracking-[0.14em] text-cream uppercase">
+                                {t('E-mails over mijn sessies')}
+                            </span>
+                            <span className="block text-[13px] leading-relaxed text-sand">
+                                {t(
+                                    'Nieuwe spelers, bevestigingen, volzette en geannuleerde sessies, vrijgekomen plaatsen en de herinnering de dag voordien.',
+                                )}
+                            </span>
+                        </span>
+                    </label>
+
+                    <Button type="submit" disabled={sessionForm.processing}>
+                        {t('Opslaan')}
+                    </Button>
+
+                    {sessionForm.recentlySuccessful && (
                         <p className="font-sans text-[11px] tracking-[0.12em] text-gold2 uppercase">
                             {t('Voorkeuren opgeslagen.')}
                         </p>
