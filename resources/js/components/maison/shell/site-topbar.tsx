@@ -1,15 +1,19 @@
+import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { AuthMenu } from '@/components/maison/shell/auth-menu';
+import { MemberNotificationBell } from '@/components/member/member-notification-bell';
 
 /**
  * The 40px band above the header. Its left and right groups drop away below
  * 768px, leaving only the edition line centred.
  *
  * Heritage Letter (newsletter signup) stays visible for guests and members;
- * AuthMenu handles Log in vs the signed-in profile control.
+ * AuthMenu handles Log in vs the signed-in profile control. The notification
+ * bell exists only once someone is signed in.
  */
 export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
     const { t } = useTranslation();
+    const isAuthenticated = usePage().props.auth?.user != null;
 
     return (
         <div className="fixed inset-x-0 top-0 z-[200] flex h-[var(--topbar-h)] items-center justify-between gap-3 border-b border-gold/20 bg-choc px-4 ma-lg:px-12">
@@ -22,6 +26,8 @@ export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
             </span>
 
             <div className="hidden items-center gap-6 ma-lg:flex">
+                {isAuthenticated && <MemberNotificationBell />}
+
                 <button
                     type="button"
                     onClick={onNewsletter}

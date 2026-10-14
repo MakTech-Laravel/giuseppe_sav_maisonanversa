@@ -231,10 +231,22 @@ test('homepage shares register counters and the public page is noindex', functio
 
     expect(file_get_contents(resource_path('js/pages/maison/founding-circle/register.tsx')))
         ->toContain('noIndex')
-        ->toContain("font-sans text-[10px] tracking-[0.16em] text-stone uppercase")
+        ->toContain('font-sans text-[10px] tracking-[0.16em] text-stone uppercase')
         ->and(file_get_contents(resource_path('js/pages/maison/home.tsx')))->toContain('HomeRegister')
         ->and(file_get_contents(resource_path('js/lib/maison-navigation.ts')))->toContain('/founding-circle/register')
         ->and(file_get_contents(resource_path('js/components/maison/shell/site-nav.tsx')))->toContain('foundingRegister.inscribed_count');
+});
+
+test('a partial notifications reload still shares the register counters the nav reads', function () {
+    $this->actingAs(User::factory()->create())
+        ->get(route('maison.home', ['locale' => 'en']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->reloadOnly('notifications', fn (Assert $reload) => $reload
+                ->has('foundingRegister.inscribed_count')
+                ->has('foundingRegister.places_total')
+            )
+        );
 });
 
 test('the founding order email points members at their listing and privacy mentions the register', function () {

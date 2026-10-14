@@ -1,11 +1,7 @@
-import { router, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { Bell } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-    markAllAsRead,
-    markAsRead,
-} from '@/actions/App/Http/Controllers/Member/NotificationController';
 import { Badge } from '@/components/ui/badge';
 import {
     DropdownMenu,
@@ -15,56 +11,59 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
+import adminNotifications from '@/routes/admin/notifications';
+import memberNotifications from '@/routes/member/notifications';
 import type { NotificationItem } from '@/types/notification';
 
-/** Reads the shared `notifications` prop, which realtime events refresh. */
-export function MemberNotificationBell() {
+/**
+ * Reads the shared `notifications` prop, which realtime events refresh.
+ * Renders nothing for guests. Admins are routed to the admin inbox because
+ * the member routes sit behind the `customer` middleware.
+ */
+export function MemberNotificationBell({ className }: { className?: string }) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
-    const { notifications: shared } = usePage().props;
+    const { auth, notifications: shared } = usePage().props;
     const [open, setOpen] = useState(false);
 
+    const user = auth?.user;
+
+    if (!user) {
+        return null;
+    }
+
+    const isAdmin = Boolean(user.is_admin);
     const notifications = shared?.preview ?? [];
     const unreadCount = shared?.unreadCount ?? 0;
 
-    const refresh = () => router.reload({ only: ['notifications'] });
+    const indexHref = isAdmin
+        ? adminNotifications.index(locale)
+        : memberNotifications.index(locale);
+    const readAllUrl = isAdmin
+        ? adminNotifications.readAll(locale).url
+        : memberNotifications.readAll(locale).url;
+    const showUrl = (id: number) =>
+        isAdmin
+            ? adminNotifications.show({ locale, userNotification: id }).url
+            : memberNotifications.show({ locale, userNotification: id }).url;
 
     const handleOpenChange = (nextOpen: boolean) => {
         setOpen(nextOpen);
 
         if (nextOpen) {
-            refresh();
+            router.reload({ only: ['notifications'] });
         }
     };
 
     const handleItemClick = (notification: NotificationItem) => {
-        if (notification.read) {
-            if (notification.href) {
-                window.location.assign(notification.href);
-            }
-
-            return;
-        }
-
-        router.post(
-            markAsRead.url({ locale, notification: notification.id }),
-            {},
-            {
-                preserveScroll: true,
-                preserveState: true,
-                onSuccess: () => {
-                    if (notification.href) {
-                        window.location.assign(notification.href);
-                    }
-                },
-            },
-        );
+        router.visit(showUrl(notification.id));
     };
 
     const handleMarkAllRead = () => {
         router.post(
-            markAllAsRead.url({ locale }),
+            readAllUrl,
             {},
             { preserveScroll: true, preserveState: true },
         );
@@ -76,7 +75,10 @@ export function MemberNotificationBell() {
                 <button
                     type="button"
                     aria-label={t('Meldingen')}
-                    className="relative flex size-8 shrink-0 items-center justify-center border border-gold/25 bg-choc3 text-cream transition-colors hover:border-gold/40 hover:bg-choc2"
+                    className={cn(
+                        'relative flex size-8 shrink-0 items-center justify-center border border-gold/25 bg-choc3 text-cream transition-colors hover:border-gold/40 hover:bg-choc2',
+                        className,
+                    )}
                 >
                     <Bell className="size-4" />
                     {unreadCount > 0 ? (
@@ -91,7 +93,7 @@ export function MemberNotificationBell() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 align="end"
-                className="w-80 border-gold/25 bg-choc3 text-cream"
+                className="z-[260] w-80 max-w-[calc(100vw-1.5rem)] border-gold/25 bg-choc3 text-cream"
             >
                 <div className="flex items-center justify-between px-2 py-1.5">
                     <DropdownMenuLabel className="p-0 font-sans text-[10px] tracking-[0.18em] text-sand uppercase">
@@ -113,33 +115,41 @@ export function MemberNotificationBell() {
                         {t('Geen meldingen.')}
                     </p>
                 ) : (
-                    notifications.map((notification) => (
-                        <DropdownMenuItem
-                            key={notification.id}
-                            onSelect={() => handleItemClick(notification)}
-                            className="flex cursor-pointer flex-col items-start gap-0.5 rounded-none py-2 whitespace-normal text-cream focus:bg-choc2 focus:text-cream"
-                        >
-                            <span className="flex w-full items-center justify-between gap-2 font-sans text-[11px] font-medium tracking-[0.04em]">
-                                {notification.title}
-                                {!notification.read ? (
-                                    <span className="size-1.5 shrink-0 rounded-full bg-gold" />
+                    <div className="max-h-96 overflow-y-auto">
+                        {notifications.map((notification) => (
+                            <DropdownMenuItem
+                                key={notification.id}
+                                onSelect={() => handleItemClick(notification)}
+                                className={cn(
+                                    'flex cursor-pointer flex-col items-start gap-0.5 rounded-none py-2 whitespace-normal text-cream focus:bg-choc2 focus:text-cream',
+                                    !notification.read && 'bg-gold/10',
+                                )}
+                            >
+                                <span className="flex w-full items-center justify-between gap-2 font-sans text-[11px] font-medium tracking-[0.04em]">
+                                    {notification.title}
+                                    {!notification.read ? (
+                                        <span className="size-1.5 shrink-0 rounded-full bg-gold" />
+                                    ) : null}
+                                </span>
+                                {notification.message ? (
+                                    <span className="line-clamp-2 font-sans text-[11px] text-sand">
+                                        {notification.message}
+                                    </span>
                                 ) : null}
-                            </span>
-                            {notification.message ? (
-                                <span className="font-sans text-[11px] text-sand">
-                                    {notification.message}
-                                </span>
-                            ) : null}
-                            {notification.created_at ? (
                                 <span className="font-sans text-[9px] tracking-[0.1em] text-sand/70 uppercase">
-                                    {new Date(
-                                        notification.created_at,
-                                    ).toLocaleString()}
+                                    {notification.created_at_human}
                                 </span>
-                            ) : null}
-                        </DropdownMenuItem>
-                    ))
+                            </DropdownMenuItem>
+                        ))}
+                    </div>
                 )}
+                <DropdownMenuSeparator className="bg-gold/20" />
+                <DropdownMenuItem
+                    asChild
+                    className="justify-center rounded-none py-2 font-sans text-[10px] tracking-[0.18em] text-gold uppercase focus:bg-choc2 focus:text-cream"
+                >
+                    <Link href={indexHref}>{t('Alle meldingen')}</Link>
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

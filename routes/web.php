@@ -231,6 +231,7 @@ Route::prefix('{locale}')
                 Route::get('letter', 'letter')->name('letter');
                 Route::get('email-preferences', 'emailPreferences')->name('email-preferences');
                 Route::patch('email-preferences', 'updateEmailPreferences')->name('email-preferences.update');
+                Route::patch('session-emails', 'updateSessionEmails')->name('session-emails.update');
                 Route::get('profile', 'profile')->name('profile');
                 Route::patch('profile', 'updateProfile')->name('profile.update');
                 Route::get('security', 'security')->name('security');
@@ -240,6 +241,12 @@ Route::prefix('{locale}')
                 Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
                     ->whereNumber('notification')
                     ->name('notifications.read');
+                Route::get('notifications/{userNotification}', [NotificationController::class, 'show'])
+                    ->whereNumber('userNotification')
+                    ->name('notifications.show');
+                Route::delete('notifications/{userNotification}', [NotificationController::class, 'destroy'])
+                    ->whereNumber('userNotification')
+                    ->name('notifications.destroy');
             });
 
         Route::prefix('community')->name('community.')->group(function () {
