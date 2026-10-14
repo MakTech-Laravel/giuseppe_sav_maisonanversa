@@ -83,6 +83,10 @@ export function MemberNav({
 
     const items: NavItem[] = [
         { label: t('Dashboard'), href: `/${locale}/member`, exact: true },
+        {
+            label: t('Meldingen'),
+            href: `/${locale}/member/notifications`,
+        },
         { label: t('Bestellingen'), href: `/${locale}/member/orders` },
         {
             label: t('Lidpaspoort'),
@@ -129,54 +133,57 @@ export function MemberNav({
     return (
         <>
             {(placement === 'bar' || placement === 'all') && (
-            <div className="flex w-full items-center justify-between gap-3 md:hidden">
-                <LanguageSwitcher className="gap-0.5 [&_button]:min-h-9 [&_button]:min-w-9 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
-                <Sheet open={open} onOpenChange={setOpen}>
-                    <SheetTrigger asChild>
-                        <button
-                            type="button"
-                            aria-label={t('Menu')}
-                            className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25"
+                <div className="flex w-full items-center justify-between gap-3 md:hidden">
+                    <LanguageSwitcher className="gap-0.5 [&_button]:min-h-9 [&_button]:min-w-9 [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]" />
+                    <Sheet open={open} onOpenChange={setOpen}>
+                        <SheetTrigger asChild>
+                            <button
+                                type="button"
+                                aria-label={t('Menu')}
+                                className="flex size-11 shrink-0 flex-col items-center justify-center gap-1.25"
+                            >
+                                {[0, 1, 2].map((bar) => (
+                                    <span
+                                        key={bar}
+                                        aria-hidden="true"
+                                        className="block h-[1.6px] w-6 bg-gold"
+                                    />
+                                ))}
+                            </button>
+                        </SheetTrigger>
+                        <SheetContent
+                            side="left"
+                            className="gap-0 border-gold/25 bg-choc3 p-0 text-cream [&>button]:text-cream [&>button]:hover:bg-choc2 [&>button]:hover:text-gold [&>button]:focus:ring-gold"
                         >
-                            {[0, 1, 2].map((bar) => (
-                                <span
-                                    key={bar}
-                                    aria-hidden="true"
-                                    className="block h-[1.6px] w-6 bg-gold"
+                            <SheetHeader className="border-b border-gold/20 px-4 py-4">
+                                <SheetTitle className="font-sans text-[10px] font-medium tracking-[0.18em] text-cream uppercase">
+                                    {t('Menu')}
+                                </SheetTitle>
+                            </SheetHeader>
+                            <nav
+                                aria-label={t('Lid')}
+                                className="overflow-y-auto"
+                            >
+                                <MemberNavList
+                                    items={items}
+                                    path={path}
+                                    onNavigate={() => setOpen(false)}
                                 />
-                            ))}
-                        </button>
-                    </SheetTrigger>
-                    <SheetContent
-                        side="left"
-                        className="gap-0 border-gold/25 bg-choc3 p-0 text-cream [&>button]:text-cream [&>button]:hover:bg-choc2 [&>button]:hover:text-gold [&>button]:focus:ring-gold"
-                    >
-                        <SheetHeader className="border-b border-gold/20 px-4 py-4">
-                            <SheetTitle className="font-sans text-[10px] font-medium tracking-[0.18em] text-cream uppercase">
-                                {t('Menu')}
-                            </SheetTitle>
-                        </SheetHeader>
-                        <nav aria-label={t('Lid')} className="overflow-y-auto">
-                            <MemberNavList
-                                items={items}
-                                path={path}
-                                onNavigate={() => setOpen(false)}
-                            />
-                        </nav>
-                    </SheetContent>
-                </Sheet>
-            </div>
+                            </nav>
+                        </SheetContent>
+                    </Sheet>
+                </div>
             )}
 
             {(placement === 'sidebar' || placement === 'all') && (
-            <nav
-                aria-label={t('Lid')}
-                className="hidden w-full shrink-0 md:sticky md:top-20 md:block md:w-56 md:self-start"
-            >
-                <div className="max-h-[calc(100vh-6rem)] overflow-y-auto border border-gold/25 bg-choc3">
-                    <MemberNavList items={items} path={path} />
-                </div>
-            </nav>
+                <nav
+                    aria-label={t('Lid')}
+                    className="hidden w-full shrink-0 md:sticky md:top-20 md:block md:w-56 md:self-start"
+                >
+                    <div className="max-h-[calc(100vh-6rem)] overflow-y-auto border border-gold/25 bg-choc3">
+                        <MemberNavList items={items} path={path} />
+                    </div>
+                </nav>
             )}
         </>
     );

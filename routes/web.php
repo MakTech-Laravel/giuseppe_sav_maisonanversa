@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\HomeHeroController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
+use App\Http\Controllers\Admin\NotificationTestController;
 use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -229,12 +231,22 @@ Route::prefix('{locale}')
                 Route::get('letter', 'letter')->name('letter');
                 Route::get('email-preferences', 'emailPreferences')->name('email-preferences');
                 Route::patch('email-preferences', 'updateEmailPreferences')->name('email-preferences.update');
+                Route::patch('session-emails', 'updateSessionEmails')->name('session-emails.update');
                 Route::get('profile', 'profile')->name('profile');
                 Route::patch('profile', 'updateProfile')->name('profile.update');
                 Route::get('security', 'security')->name('security');
                 Route::delete('profile', 'destroy')->name('profile.destroy');
+                Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
                 Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
-                Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+                Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+                    ->whereNumber('notification')
+                    ->name('notifications.read');
+                Route::get('notifications/{userNotification}', [NotificationController::class, 'show'])
+                    ->whereNumber('userNotification')
+                    ->name('notifications.show');
+                Route::delete('notifications/{userNotification}', [NotificationController::class, 'destroy'])
+                    ->whereNumber('userNotification')
+                    ->name('notifications.destroy');
             });
 
         Route::prefix('community')->name('community.')->group(function () {
@@ -636,6 +648,26 @@ Route::prefix('{locale}')
                     Route::get('health', 'health')->name('health');
                     Route::post('ping', 'ping')->name('ping');
                     Route::post('test-notification', 'testNotification')->name('test-notification');
+                });
+
+            Route::controller(NotificationTestController::class)
+                ->prefix('notifications/test')
+                ->name('notifications.test.')
+                ->middleware('permission:'.PermissionEnum::NOTIFICATIONS_TEST->value)
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/', 'send')->name('send');
+                });
+
+            Route::controller(AdminNotificationController::class)
+                ->prefix('notifications')
+                ->name('notifications.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('read-all', 'readAll')->name('read-all');
+                    Route::get('{userNotification}', 'show')->whereNumber('userNotification')->name('show');
+                    Route::post('{userNotification}/read', 'read')->whereNumber('userNotification')->name('read');
+                    Route::delete('{userNotification}', 'destroy')->whereNumber('userNotification')->name('destroy');
                 });
         });
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 
 test('unknown public paths render the branded inertia 404', function () {
@@ -26,6 +27,21 @@ test('unprefixed unknown paths still share the public shell props', function () 
             ->has('foundingRegister.places_total')
             ->has('site')
             ->has('locale')
+        );
+});
+
+test('a missing route model renders the 404 with the public shell props', function () {
+    $this->actingAs(User::factory()->create())
+        ->get('/en/community/sessions/999999')
+        ->assertNotFound()
+        ->assertInertia(fn ($page) => $page
+            ->component('errors/404')
+            ->has('foundingRegister.inscribed_count')
+            ->has('foundingRegister.places_total')
+            ->has('site')
+            ->has('auth.user')
+            ->where('locale', 'en')
+            ->where('seo.robots', 'noindex, nofollow')
         );
 });
 

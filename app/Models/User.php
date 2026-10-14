@@ -20,12 +20,19 @@ use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'first_name', 'last_name', 'email', 'username', 'gender', 'type', 'password', 'avatar', 'locale', 'marketing_consent_at'])]
+#[Fillable(['name', 'first_name', 'last_name', 'email', 'username', 'gender', 'type', 'password', 'avatar', 'locale', 'session_emails', 'marketing_consent_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use Billable, HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable;
+
+    /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'session_emails' => true,
+    ];
 
     public function guardName(): string
     {
@@ -121,6 +128,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * In-app inbox rows (app_notifications), separate from Laravel's Notifiable table.
+     *
+     * @return HasMany<UserNotification, $this>
+     */
+    public function userNotifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class);
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array
@@ -130,6 +147,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
             'marketing_consent_at' => 'datetime',
+            'session_emails' => 'boolean',
             'type' => UserType::class,
             'gender' => UserGender::class,
         ];

@@ -32,7 +32,8 @@ test('members can view the dashboard shell', function () {
             ->where('member.name', 'Circle Member')
             ->where('member.editionNumber', '—')
             ->has('stats', 3)
-            ->missing('notifications')
+            ->where('notifications.unreadCount', 0)
+            ->has('notifications.preview', 0)
         );
 });
 

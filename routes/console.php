@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\Community\SendSessionReminders;
 use App\Console\Commands\Editions\ReleaseExpiredHolds;
 use App\Console\Commands\Mail\SendPostDeliveryFollowUps;
 use Illuminate\Foundation\Inspiring;
@@ -17,6 +18,11 @@ Schedule::command(ReleaseExpiredHolds::class)
 
 Schedule::command(SendPostDeliveryFollowUps::class)
     ->daily()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(SendSessionReminders::class)
+    ->everyFifteenMinutes()
     ->withoutOverlapping()
     ->onOneServer();
 

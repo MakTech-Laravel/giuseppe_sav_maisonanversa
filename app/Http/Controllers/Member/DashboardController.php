@@ -186,7 +186,24 @@ class DashboardController extends Controller implements HasMiddleware
                     'events' => false,
                 ],
             'status' => $subscriber?->status->value,
+            'sessionEmails' => (bool) $request->user()->session_emails,
         ]);
+    }
+
+    /**
+     * Session mails only; the in-app notifications cannot be switched off.
+     */
+    public function updateSessionEmails(Request $request, string $locale): RedirectResponse
+    {
+        $validated = $request->validate([
+            'session_emails' => ['required', 'boolean'],
+        ]);
+
+        $request->user()->update(['session_emails' => $validated['session_emails']]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Voorkeuren opgeslagen.')]);
+
+        return back();
     }
 
     public function updateEmailPreferences(

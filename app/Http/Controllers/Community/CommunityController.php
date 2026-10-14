@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Community;
 
+use App\Enums\NotificationType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\ReportCommunityPostRequest;
 use App\Jobs\TranslateModelJob;
@@ -14,11 +15,9 @@ use App\Models\CommunityPostHide;
 use App\Models\CommunityReport;
 use App\Models\EventRsvp;
 use App\Models\User;
-use App\Notifications\ReportFiledNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class CommunityController extends Controller
@@ -103,11 +102,19 @@ class CommunityController extends Controller
             'status' => 'open',
         ]);
 
-        $moderators = User::permission('community.moderate')->get();
-
-        if ($moderators->isNotEmpty()) {
-            Notification::send($moderators, new ReportFiledNotification($report));
-        }
+        notify_users(
+            User::permission('community.moderate')->pluck('id'),
+            NotificationType::Community,
+            __('Community-melding'),
+            __('Een community-post is gemeld: :reason', ['reason' => $report->reason]),
+            [
+                'report_id' => $report->id,
+                'community_post_id' => $report->community_post_id,
+                'link_url' => route('admin.community.index', ['locale' => config('maison.default_locale')]),
+                'link_label' => __('Moderatie openen'),
+            ],
+            $request->user(),
+        );
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht gemeld.')]);
 

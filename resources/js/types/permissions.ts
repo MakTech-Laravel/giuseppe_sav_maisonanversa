@@ -17,6 +17,9 @@ export const PERMISSIONS = {
     REALTIME: {
         VIEW: 'realtime.view',
     },
+    NOTIFICATIONS: {
+        TEST: 'notifications.test',
+    },
     FILE_UPLOAD: {
         INDEX: 'file-upload.index',
     },

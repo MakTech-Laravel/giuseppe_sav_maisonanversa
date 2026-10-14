@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Services\FoundingCircle\FoundingCircleRegisterSnapshot;
+use App\Services\Notifications\InboxService;
 use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
 use App\Support\Seo\MaisonSeo;
@@ -90,7 +91,7 @@ class HandleInertiaRequests extends Middleware
             'seo' => Inertia::always(fn (): array => MaisonSeo::document($request)),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => fn (): array => Product::checkoutShare(),
-            'foundingRegister' => fn (): array => app(FoundingCircleRegisterSnapshot::class)->share(),
+            'foundingRegister' => Inertia::always(fn (): array => app(FoundingCircleRegisterSnapshot::class)->share()),
             'commerce' => fn (): array => CommerceSetting::current()->toShare(),
             'site' => Inertia::always(fn (): array => SiteSetting::current()->toShare()),
 
@@ -99,6 +100,10 @@ class HandleInertiaRequests extends Middleware
              * back to a placeholder rather than requesting a missing file.
              */
             'availableImages' => Inertia::always(Imagery::existingPaths()),
+            'notifications' => fn (): ?array => $user ? [
+                'unreadCount' => app(InboxService::class)->unreadCount($user),
+                'preview' => app(InboxService::class)->preview($user),
+            ] : null,
             'flash' => [
                 'open_auth_modal' => fn () => $request->session()->get('open_auth_modal'),
                 'status' => fn () => $request->session()->get('status'),

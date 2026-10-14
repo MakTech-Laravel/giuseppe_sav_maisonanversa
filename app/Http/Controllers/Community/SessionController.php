@@ -12,7 +12,7 @@ use App\Models\Club;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
-use App\Notifications\SessionJoinedNotification;
+use App\Services\Community\SessionNotificationService;
 use App\Support\SessionFeed;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,6 +23,8 @@ use Inertia\Response;
 
 class SessionController extends Controller
 {
+    public function __construct(private readonly SessionNotificationService $notifier) {}
+
     public function index(Request $request, string $locale): Response
     {
         $user = $request->user();
@@ -105,6 +107,8 @@ class SessionController extends Controller
             return $session;
         });
 
+        $this->notifier->created($session, $request->user());
+
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie gepubliceerd.')]);
 
         return redirect()->route('community.sessions.show', [
@@ -126,7 +130,18 @@ class SessionController extends Controller
     {
         $this->authorize('cancel', $communitySession);
 
-        $communitySession->update(['cancelled_at' => now()]);
+        $validated = $request->validate([
+            'message' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        if (! $communitySession->isCancelled()) {
+            $communitySession->update([
+                'cancelled_at' => now(),
+                'cancellation_message' => filled($validated['message'] ?? null) ? trim($validated['message']) : null,
+            ]);
+
+            $this->notifier->cancelled($communitySession, $request->user());
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie geannuleerd.')]);
 
@@ -135,7 +150,7 @@ class SessionController extends Controller
 
     public function join(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
     {
-        DB::transaction(function () use ($request, $communitySession): void {
+        $joined = DB::transaction(function () use ($request, $communitySession): bool {
             $locked = CommunitySession::query()
                 ->whereKey($communitySession->id)
                 ->lockForUpdate()
@@ -147,7 +162,7 @@ class SessionController extends Controller
             ])->exists();
 
             if ($already) {
-                return;
+                return false;
             }
 
             abort_if($locked->isCancelled(), 422, __('Deze sessie is geannuleerd.'));
@@ -159,8 +174,12 @@ class SessionController extends Controller
                 'user_id' => $request->user()->id,
             ]);
 
-            $locked->host->notify(new SessionJoinedNotification($locked, $request->user()->name));
+            return true;
         });
+
+        if ($joined) {
+            $this->notifier->joined($communitySession, $request->user());
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('U bent aangemeld voor de sessie.')]);
 
@@ -171,10 +190,16 @@ class SessionController extends Controller
     {
         $this->authorize('leave', $communitySession);
 
-        CommunitySessionParticipant::query()
+        $wasFull = $communitySession->participants()->count() >= $communitySession->capacity;
+
+        $left = CommunitySessionParticipant::query()
             ->where('community_session_id', $communitySession->id)
             ->where('user_id', $request->user()->id)
             ->delete();
+
+        if ($left > 0) {
+            $this->notifier->left($communitySession, $request->user(), $wasFull);
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('U heeft de sessie verlaten.')]);
 
@@ -195,10 +220,16 @@ class SessionController extends Controller
             __('De host kan niet uit de eigen sessie worden verwijderd.'),
         );
 
-        CommunitySessionParticipant::query()
+        $wasFull = $communitySession->participants()->count() >= $communitySession->capacity;
+
+        $removed = CommunitySessionParticipant::query()
             ->where('community_session_id', $communitySession->id)
             ->where('user_id', $user->id)
             ->delete();
+
+        if ($removed > 0) {
+            $this->notifier->removed($communitySession, $user, $request->user(), $wasFull);
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Speler verwijderd uit de sessie.')]);
 

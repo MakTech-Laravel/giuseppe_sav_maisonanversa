@@ -18,6 +18,7 @@ import type {
 import { SiteFooter } from '@/components/maison/shell/site-footer';
 import { SiteNav } from '@/components/maison/shell/site-nav';
 import { SiteTopbar } from '@/components/maison/shell/site-topbar';
+import { RealtimeListeners } from '@/components/realtime/realtime-listeners';
 import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
 import { activePage } from '@/lib/maison-navigation';
@@ -202,6 +203,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                         {t('Ga naar de inhoud')}
                     </a>
                     <CinematicLayer />
+                    {isAuthenticated && <RealtimeListeners />}
 
                     <header>
                         <SiteTopbar onNewsletter={actions.openNewsletter} />

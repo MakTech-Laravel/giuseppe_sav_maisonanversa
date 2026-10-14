@@ -33,7 +33,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | routes/web.php | .ai/rules/routes.md |
 | app/Support/Seo/** | .ai/rules/seo.md |
 | app/Services/Checkout/** | .ai/rules/services-checkout.md |
-| app/Services/Community/ClubMerger.php | .ai/rules/services-community.md |
+| app/Services/Community/ClubMerger.php, app/Services/Community/SessionNotificationService.php | .ai/rules/services-community.md |
 | resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
 | app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php, app/Support/HomeHeroPresenter.php, app/Support/SessionFeed.php | .ai/rules/support.md |
 | app/Services/Translation/** | .ai/rules/translation.md |

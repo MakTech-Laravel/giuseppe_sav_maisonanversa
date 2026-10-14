@@ -266,6 +266,21 @@ test('the open tab can be filtered by sport and city', function () {
         );
 });
 
+test('the session page shares the register counters the nav reads, also after a notifications reload', function () {
+    $session = CommunitySession::factory()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('community.sessions.show', ['locale' => 'en', 'communitySession' => $session->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('maison/sessions/show')
+            ->has('foundingRegister.inscribed_count')
+            ->reloadOnly('notifications', fn (Assert $reload) => $reload
+                ->has('foundingRegister.inscribed_count')
+            )
+        );
+});
+
 test('guests are redirected away from the sessions page', function () {
     $this->get(route('community.sessions.index', ['locale' => 'nl']))
         ->assertRedirect();

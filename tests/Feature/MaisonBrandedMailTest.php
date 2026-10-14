@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SessionNotice;
 use App\Mail\InquiryConfirmation;
 use App\Mail\InquiryReceived;
 use App\Mail\OrderConfirmation;
@@ -8,7 +9,7 @@ use App\Mail\Orders\OrderStatusUpdated;
 use App\Mail\PostDeliveryFollowUp;
 use App\Mail\ResetPasswordMail;
 use App\Mail\RsvpConfirmation;
-use App\Mail\SessionJoinedMail;
+use App\Mail\SessionNoticeMail;
 use App\Mail\ShippingNotification;
 use App\Mail\SoldOutNotice;
 use App\Mail\VerifyEmailMail;
@@ -45,7 +46,7 @@ test('branded maison mailables include the site logo', function (string $key) {
     'status-updated',
     'reset-password',
     'verify-email',
-    'session-joined',
+    'session-notice',
 ]);
 
 test('verify email notification sends the branded maison mailable', function () {
@@ -90,9 +91,14 @@ function brandedMailable(string $key): Mailable
             verificationUrl: 'https://example.test/email/verify/1/hash',
             locale: 'nl',
         ),
-        'session-joined' => new SessionJoinedMail(
+        'session-notice' => new SessionNoticeMail(
             session: CommunitySession::factory()->create(['starts_at' => now()->addDay()]),
-            memberName: 'Guest Member',
+            notice: SessionNotice::JoinConfirmed,
+            subjectName: 'Guest Member',
+            players: ['Host Member'],
+            freePlaces: 2,
+            sessionUrl: 'https://example.test/nl/community/sessions/1',
+            ctaUrl: 'https://example.test/nl/community/sessions/1',
             locale: 'nl',
         ),
         default => throw new InvalidArgumentException("Unknown mailable key [{$key}]."),
