@@ -20,7 +20,7 @@ use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'first_name', 'last_name', 'email', 'username', 'gender', 'type', 'password', 'avatar', 'locale', 'session_emails', 'marketing_consent_at'])]
+#[Fillable(['name', 'first_name', 'last_name', 'email', 'username', 'gender', 'type', 'password', 'avatar', 'locale', 'session_emails', 'show_first_name_on_cards', 'marketing_consent_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -32,6 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $attributes = [
         'session_emails' => true,
+        'show_first_name_on_cards' => true,
     ];
 
     public function guardName(): string
@@ -148,6 +149,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'two_factor_confirmed_at' => 'datetime',
             'marketing_consent_at' => 'datetime',
             'session_emails' => 'boolean',
+            'show_first_name_on_cards' => 'boolean',
             'type' => UserType::class,
             'gender' => UserGender::class,
         ];

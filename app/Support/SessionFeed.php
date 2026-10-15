@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Enums\SessionParticipantStatus;
 use App\Models\CommunitySession;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,19 +32,23 @@ final class SessionFeed
     }
 
     /**
-     * Open sessions that still have a free seat (homepage joinable list).
+     * Open sessions that still have a free seat and still take requests
+     * (homepage joinable list).
      *
      * @return Builder<CommunitySession>
      */
     public static function joinable(): Builder
     {
-        return self::open()->whereRaw(
-            '(select count(*) from community_session_participants where community_session_participants.community_session_id = community_sessions.id) < community_sessions.capacity',
-        );
+        return self::open()
+            ->where('starts_at', '>', now()->addHours(CommunitySession::REGISTRATION_CLOSES_HOURS))
+            ->whereRaw(
+                "(select count(*) from community_session_participants where community_session_participants.community_session_id = community_sessions.id and community_session_participants.status in ('pending', 'confirmed')) < community_sessions.capacity",
+            );
     }
 
     /**
-     * Sessions the member hosts or has joined that have not ended yet.
+     * Sessions the member hosts, plays in or has asked to join, that have
+     * not ended yet.
      *
      * @return Builder<CommunitySession>
      */
@@ -54,7 +59,9 @@ final class SessionFeed
             ->where('ends_at', '>', now())
             ->where(function (Builder $query) use ($user): void {
                 $query->where('host_id', $user->id)
-                    ->orWhereHas('participants', fn (Builder $p) => $p->where('user_id', $user->id));
+                    ->orWhereHas('participantRecords', fn (Builder $p) => $p
+                        ->where('user_id', $user->id)
+                        ->whereIn('status', SessionParticipantStatus::seatHolding()));
             })
             ->orderBy('starts_at');
     }
@@ -90,8 +97,8 @@ final class SessionFeed
     public static function base(): Builder
     {
         return CommunitySession::query()
-            ->with(['host', 'club', 'participants.user', 'translations'])
-            ->withCount('participants');
+            ->with(['host', 'club', 'participants.user', 'participantRecords', 'translations'])
+            ->withCount(['participants', 'joinRequests']);
     }
 
     /**
@@ -126,6 +133,13 @@ final class SessionFeed
             && $session->participants->contains('user_id', $viewer->id);
         $isHost = $viewer !== null && $session->host_id === $viewer->id;
         $isPast = $session->isPast();
+        $hasStarted = $session->hasStarted();
+        $viewerStatus = $viewer === null
+            ? null
+            : $session->participantRecords->firstWhere('user_id', $viewer->id)?->status;
+        $isPending = $viewerStatus === SessionParticipantStatus::Pending;
+        $lifecycle = $session->lifecycle();
+        $waitingCount = $isPast || $session->isCancelled() ? 0 : $session->pendingCount();
 
         return [
             'id' => (string) $session->id,
@@ -143,7 +157,7 @@ final class SessionFeed
             'gender_label' => $session->gender->label(),
             'capacity' => $session->capacity,
             'participants_count' => $session->participantsCount(),
-            'open_slots' => $session->openSlots(),
+            'open_slots' => max(0, $session->capacity - $session->participantsCount() - $waitingCount),
             'players' => $players,
             'notes' => $session->translated('notes', $locale),
             'host' => self::player($session->host, $session->host_id, $redactNames),
@@ -152,9 +166,18 @@ final class SessionFeed
             'is_cancelled' => $session->isCancelled(),
             'is_host' => $isHost,
             'is_joined' => $joined,
-            'can_join' => ! $joined && ! $isPast && ! $session->isCancelled() && ! $session->isFull(),
-            'can_leave' => $joined && ! $isHost && ! $isPast,
+            'can_join' => $viewerStatus === null && $session->acceptsRequests(),
+            'can_leave' => $joined && ! $isHost && ! $hasStarted,
             'can_manage' => $isHost && ! $isPast,
+            'pending_count' => $waitingCount,
+            'viewer_status' => $viewerStatus?->value,
+            'is_pending' => $isPending,
+            'can_withdraw' => $isPending && ! $hasStarted,
+            'registration_closed' => ! $isPast && ! $session->isCancelled() && $session->isRegistrationClosed(),
+            'registration_closes_at' => $session->registrationClosesAt()->toIso8601String(),
+            'lifecycle' => $lifecycle->value,
+            'lifecycle_label' => $lifecycle->label(),
+            'is_locked' => $session->isScoreboardLocked(),
         ];
     }
 

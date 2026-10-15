@@ -5,8 +5,8 @@ namespace App\Support;
 class MailLocale
 {
     /**
-     * Resolve a Maison locale for outbound mail.
-     * Empty or unsupported values fall back to the default (nl).
+     * Resolve a Maison locale for outbound mail and notifications.
+     * Empty or unsupported values fall back to the notification locale (en).
      */
     public static function resolve(?string $locale): string
     {
@@ -19,6 +19,6 @@ class MailLocale
             return $locale;
         }
 
-        return (string) config('maison.default_locale', 'nl');
+        return (string) config('maison.notification_fallback_locale', 'en');
     }
 }

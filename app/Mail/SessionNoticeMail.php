@@ -2,8 +2,10 @@
 
 namespace App\Mail;
 
+use App\Enums\SessionMatchType;
 use App\Enums\SessionNotice;
 use App\Models\CommunitySession;
+use App\Models\User;
 use App\Support\BrandsMaisonMail;
 use App\Support\MailLocale;
 use App\Support\SessionCalendar;
@@ -36,6 +38,8 @@ class SessionNoticeMail extends Mailable implements ShouldQueue
         public string $sessionUrl,
         public string $ctaUrl,
         ?string $locale = null,
+        public ?string $timingNote = null,
+        public ?string $secondaryCtaUrl = null,
     ) {
         $this->locale(MailLocale::resolve($locale));
     }
@@ -57,7 +61,11 @@ class SessionNoticeMail extends Mailable implements ShouldQueue
             with: [
                 ...$this->maisonBrandData($this->locale, withHomeCta: false),
                 'title' => $this->notice->subject(),
-                'intro' => $this->notice->intro($this->subjectName),
+                'intro' => $this->notice->intro($this->subjectName, $this->freePlaces, (string) $club?->name),
+                'timingNote' => $this->timingNote,
+                'shareUrl' => $this->notice->showsShareLink() ? $this->session->shareUrl($this->locale) : null,
+                'secondaryCtaUrl' => $this->secondaryCtaUrl,
+                'secondaryCtaLabel' => $this->secondaryCtaUrl !== null ? $this->notice->secondaryCtaLabel() : null,
                 'rows' => $this->detailRows(),
                 'players' => in_array('players', $this->notice->details(), true) ? $this->players : [],
                 'organiserMessage' => in_array('message', $this->notice->details(), true)
@@ -113,6 +121,12 @@ class SessionNoticeMail extends Mailable implements ShouldQueue
         $rows = [];
 
         foreach ($this->notice->details() as $detail) {
+            if ($detail === 'result') {
+                array_push($rows, ...$this->resultRows());
+
+                continue;
+            }
+
             $row = match ($detail) {
                 'club' => $club ? [__('Club'), $club->name] : null,
                 'address' => $club && filled($club->addressLine()) ? [__('Adres'), $club->addressLine()] : null,
@@ -132,5 +146,46 @@ class SessionNoticeMail extends Mailable implements ShouldQueue
         }
 
         return $rows;
+    }
+
+    /**
+     * Match format, line-ups, set scores and the winner of the official result.
+     *
+     * @return list<array{label: string, value: string}>
+     */
+    private function resultRows(): array
+    {
+        $score = $this->session->officialScore()->first();
+
+        if ($score === null) {
+            return [];
+        }
+
+        $names = User::query()
+            ->whereIn('id', [...$score->team_a, ...$score->team_b])
+            ->pluck('name', 'id');
+
+        $teamLine = fn (array $ids): string => collect($ids)
+            ->map(fn (int|string $id): string => (string) ($names[(int) $id] ?? ''))
+            ->filter()
+            ->implode(' · ');
+
+        $singles = $score->match_type === SessionMatchType::Singles;
+        $sideA = $singles ? __('Speler A') : __('Team A');
+        $sideB = $singles ? __('Speler B') : __('Team B');
+
+        $winner = match ($score->winner()) {
+            'a' => $sideA.' ('.$teamLine($score->team_a).')',
+            'b' => $sideB.' ('.$teamLine($score->team_b).')',
+            default => __('Gelijkspel'),
+        };
+
+        return [
+            ['label' => __('Formaat'), 'value' => __($score->match_type->label()).' · '.__($score->format->label())],
+            ['label' => $sideA, 'value' => $teamLine($score->team_a)],
+            ['label' => $sideB, 'value' => $teamLine($score->team_b)],
+            ['label' => __('Uitslag'), 'value' => $score->setsLine()],
+            ['label' => __('Winnaar'), 'value' => $winner],
+        ];
     }
 }

@@ -10,6 +10,7 @@ use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
 
 beforeEach(function () {
@@ -98,6 +99,47 @@ test('members can update their profile gender from the member area', function ()
         ->and($user->fresh()->first_name)->toBe('Updated')
         ->and($user->fresh()->last_name)->toBe('Name')
         ->and($user->fresh()->gender)->toBe(UserGender::Female);
+});
+
+test('members choose the language of their emails and notifications on the profile', function () {
+    $user = User::factory()->create(['locale' => 'nl']);
+
+    $this->actingAs($user)
+        ->get(localized('member.profile'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('preferredLocale', 'nl')
+            ->has('locales', 3)
+            ->where('locales.1', ['value' => 'en', 'label' => 'English'])
+        );
+
+    $this->actingAs($user)
+        ->patch(localized('member.profile.update'), [
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'gender' => $user->gender->value,
+            'locale' => 'fr',
+        ])
+        ->assertRedirect(localized('member.profile', absolute: false));
+
+    expect($user->fresh()->locale)->toBe('fr');
+});
+
+test('the profile refuses a language the house does not support', function () {
+    $user = User::factory()->create(['locale' => 'nl']);
+
+    $this->actingAs($user)
+        ->patch(localized('member.profile.update'), [
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'gender' => $user->gender->value,
+            'locale' => 'de',
+        ])
+        ->assertSessionHasErrors('locale');
+
+    expect($user->fresh()->locale)->toBe('nl');
 });
 
 test('members can upload and remove a profile avatar', function () {

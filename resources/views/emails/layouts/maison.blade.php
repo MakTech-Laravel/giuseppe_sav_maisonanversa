@@ -5,6 +5,8 @@
 
     $ctaUrl = $ctaUrl ?? null;
     $ctaLabel = $ctaLabel ?? null;
+    $secondaryCtaUrl = $secondaryCtaUrl ?? null;
+    $secondaryCtaLabel = $secondaryCtaLabel ?? null;
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -58,6 +60,14 @@
                                 >
                                     {{ $ctaLabel }}
                                 </a>
+                                @if (filled($secondaryCtaUrl) && filled($secondaryCtaLabel))
+                                    <a
+                                        href="{{ $secondaryCtaUrl }}"
+                                        style="display:inline-block;margin:0 0 0 8px;padding:14px 28px;border:1px solid #291C18;background-color:transparent;color:#291C18;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.18em;text-decoration:none;text-transform:uppercase;"
+                                    >
+                                        {{ $secondaryCtaLabel }}
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endif

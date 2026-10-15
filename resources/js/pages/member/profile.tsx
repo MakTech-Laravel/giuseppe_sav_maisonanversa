@@ -17,6 +17,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { send } from '@/routes/verification';
@@ -26,10 +33,16 @@ export default function MemberProfile({
     mustVerifyEmail,
     status,
     genders,
+    preferredLocale,
+    showFirstNameOnCards = true,
+    locales,
 }: {
     mustVerifyEmail: boolean;
     status?: string;
     genders: { value: string; label: string }[];
+    preferredLocale: string;
+    showFirstNameOnCards?: boolean;
+    locales: { value: string; label: string }[];
 }) {
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
@@ -153,6 +166,34 @@ export default function MemberProfile({
                                     />
                                     <InputError message={errors.gender} />
                                 </div>
+
+                                <div className="grid gap-2 md:col-span-2">
+                                    <Label
+                                        htmlFor="locale"
+                                        className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
+                                    >
+                                        {t('Taal voor e-mails en meldingen')}
+                                    </Label>
+                                    <PreferredLanguageSelect
+                                        defaultValue={preferredLocale}
+                                        options={locales}
+                                        triggerClassName={cn(
+                                            memberFieldClassName,
+                                            'rounded-none shadow-none [&_svg]:text-sand',
+                                        )}
+                                    />
+                                    <p className="font-sans text-[11px] text-stone">
+                                        {t(
+                                            'Sessiemails en meldingen worden in deze taal verstuurd.',
+                                        )}
+                                    </p>
+                                    <InputError message={errors.locale} />
+                                </div>
+
+                                <MatchCardNameField
+                                    defaultChecked={showFirstNameOnCards}
+                                    error={errors.show_first_name_on_cards}
+                                />
 
                                 <div className="grid gap-2 md:col-span-2">
                                     <Label
@@ -299,6 +340,89 @@ function ProfileAvatarField({
             {removeAvatar && (
                 <input type="hidden" name="remove_avatar" value="1" />
             )}
+        </div>
+    );
+}
+
+function PreferredLanguageSelect({
+    defaultValue,
+    options,
+    triggerClassName,
+}: {
+    defaultValue: string;
+    options: { value: string; label: string }[];
+    triggerClassName?: string;
+}) {
+    const { t } = useTranslation();
+    const [value, setValue] = useState(defaultValue);
+
+    return (
+        <>
+            <input type="hidden" name="locale" value={value} />
+            <Select
+                value={value || undefined}
+                onValueChange={setValue}
+                required
+            >
+                <SelectTrigger
+                    id="locale"
+                    aria-label={t('Taal voor e-mails en meldingen')}
+                    className={cn('w-full', triggerClassName)}
+                >
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    {options.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </>
+    );
+}
+
+/**
+ * Match cards print initials plus the first name; members may hide the name.
+ * Last names never appear on a card.
+ */
+function MatchCardNameField({
+    defaultChecked,
+    error,
+}: {
+    defaultChecked: boolean;
+    error?: string;
+}) {
+    const { t } = useTranslation();
+    const [checked, setChecked] = useState(defaultChecked);
+
+    return (
+        <div className="grid gap-2 md:col-span-2">
+            <input
+                type="hidden"
+                name="show_first_name_on_cards"
+                value={checked ? '1' : '0'}
+            />
+            <label className="flex cursor-pointer items-start gap-3">
+                <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(event) => setChecked(event.target.checked)}
+                    className="mt-0.5 size-4 accent-gold"
+                />
+                <span className="space-y-1">
+                    <span className="block font-sans text-[10px] tracking-[0.16em] text-gold uppercase">
+                        {t('Toon mijn voornaam op wedstrijdkaarten')}
+                    </span>
+                    <span className="block font-sans text-[11px] text-stone">
+                        {t(
+                            'Staat dit uit, dan verschijnen alleen je initialen.',
+                        )}
+                    </span>
+                </span>
+            </label>
+            <InputError message={error} />
         </div>
     );
 }

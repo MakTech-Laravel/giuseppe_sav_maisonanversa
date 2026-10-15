@@ -3,6 +3,7 @@
 namespace App\Support\Seo;
 
 use App\Enums\FaqContext;
+use App\Models\CommunitySession;
 use App\Models\DressingItem;
 use App\Models\Faq;
 use App\Models\JournalArticle;
@@ -153,12 +154,22 @@ final class MaisonSeo
         $article = self::journalArticle($request, $routeName);
         $product = self::productForSeo($request, $routeName);
         $dressingItem = self::dressingItemForSeo($request, $routeName);
+        $sharedSession = self::sharedSessionForSeo($request, $routeName);
         $indexable = self::isIndexable($routeName, $article, $product, $dressingItem);
         $canonical = self::canonical($request, $routeName, $locale, $origin, $article, $product, $dressingItem);
-        $copy = self::copy($page, $article, $routeName, $product, $dressingItem);
+        $copy = $sharedSession !== null
+            ? self::sharedSessionCopy($sharedSession)
+            : self::copy($page, $article, $routeName, $product, $dressingItem);
         $hreflang = self::hreflang($routeName, $article, $product, $dressingItem);
-        $ogImage = self::ogImage($origin, $product);
+        $ogImage = $sharedSession !== null
+            ? route('maison.sessions.card', ['locale' => $locale, 'shareToken' => $sharedSession->share_token, 'format' => 'post'])
+            : self::ogImage($origin, $product);
         $usingDefaultOg = $ogImage === self::absoluteUrl($origin, (string) config('maison.seo.image'));
+        $ogImageSize = match (true) {
+            $sharedSession !== null => ['width' => 1080, 'height' => 1350],
+            $usingDefaultOg => ['width' => self::ogImageWidth(), 'height' => self::ogImageHeight()],
+            default => ['width' => null, 'height' => null],
+        };
 
         return [
             'title' => $copy['title'],
@@ -168,8 +179,8 @@ final class MaisonSeo
             'robots' => $indexable ? null : 'noindex, nofollow',
             'ogType' => $article !== null ? 'article' : 'website',
             'ogImage' => $ogImage,
-            'ogImageWidth' => $usingDefaultOg ? self::ogImageWidth() : null,
-            'ogImageHeight' => $usingDefaultOg ? self::ogImageHeight() : null,
+            'ogImageWidth' => $ogImageSize['width'],
+            'ogImageHeight' => $ogImageSize['height'],
             'siteName' => 'Maison Anversa',
             'locale' => self::OG_LOCALE[$locale] ?? 'nl_BE',
             'localeAlternates' => self::localeAlternates($locale),
@@ -313,6 +324,41 @@ final class MaisonSeo
             ->where('slug', $item)
             ->where('is_published', true)
             ->first();
+    }
+
+    /**
+     * The public match-card page; cancelled sessions keep the house image.
+     */
+    private static function sharedSessionForSeo(Request $request, ?string $routeName): ?CommunitySession
+    {
+        if ($routeName !== 'maison.sessions.share') {
+            return null;
+        }
+
+        $token = $request->route('shareToken');
+
+        if (! is_string($token) || $token === '') {
+            return null;
+        }
+
+        return CommunitySession::query()
+            ->with('club')
+            ->where('share_token', $token)
+            ->whereNull('cancelled_at')
+            ->first();
+    }
+
+    /**
+     * @return array{title: string, description: string}
+     */
+    private static function sharedSessionCopy(CommunitySession $session): array
+    {
+        $club = (string) ($session->club?->name ?? __('Sessie'));
+
+        return [
+            'title' => __('Sessie').' · '.$session->sport->label().' — '.$club,
+            'description' => __('Bekijk en deel de wedstrijdkaart van deze sessie bij :club.', ['club' => $club]),
+        ];
     }
 
     /**

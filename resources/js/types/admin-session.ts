@@ -1,6 +1,6 @@
 import type { ClubCard } from '@/types/session';
 
-export type SessionLifecycle = 'active' | 'ended' | 'cancelled';
+export type SessionLifecycle = 'active' | 'ended' | 'finished' | 'cancelled';
 
 export type AdminSessionRow = {
     id: string;
