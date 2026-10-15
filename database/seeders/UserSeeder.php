@@ -98,6 +98,20 @@ class UserSeeder extends Seeder
                 'role' => RoleEnum::USER->value,
                 'type' => UserType::Customer,
             ],
+            [
+                'name' => 'Md Monirul Islam',
+                'email' => 'xmonirislam75@gmail.com',
+                'password' => 'xmonirislam75@gmail.com',
+                'role' => RoleEnum::USER->value,
+                'type' => UserType::Customer,
+            ],
+            [
+                'name' => 'Md Monirul Islam',
+                'email' => 'mdmonirul.islam.bd2003@gmail.com',
+                'password' => 'mdmonirul.islam.bd2003@gmail.com',
+                'role' => RoleEnum::USER->value,
+                'type' => UserType::Customer,
+            ],
             ...$this->numberedUsers(10),
         ];
     }
