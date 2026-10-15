@@ -83,6 +83,16 @@ class CommunitySessionPolicy
             || $session->participants()->where('user_id', $user->id)->exists();
     }
 
+    /**
+     * The session chat belongs to the host and the confirmed players. It
+     * stays readable after the session closes; only posting stops.
+     */
+    public function chat(User $user, CommunitySession $session): bool
+    {
+        return $session->isHostedBy($user)
+            || $session->participants()->where('user_id', $user->id)->exists();
+    }
+
     public function reviewScore(User $user, CommunitySession $session): bool
     {
         return $this->managesScoreboard($user, $session);

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { CommunityTabs } from '@/components/maison/community/community-tabs';
 import { PartnerBadge } from '@/components/maison/community/partner-badge';
 import { CancelSessionDialog } from '@/components/maison/community/sessions/cancel-session-dialog';
+import { SessionChatButton } from '@/components/maison/community/sessions/chat/session-chat-button';
 import { JoinRequests } from '@/components/maison/community/sessions/join-requests';
 import {
     CopyShareLinkButton,
@@ -250,6 +251,11 @@ export default function SessionShow({
                                         {t('Alle plaatsen aangevraagd')}
                                     </span>
                                 )}
+
+                                <SessionChatButton
+                                    session={session}
+                                    withLabel
+                                />
 
                                 {session.can_leave && (
                                     <button
