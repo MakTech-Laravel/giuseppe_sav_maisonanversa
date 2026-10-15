@@ -114,7 +114,7 @@ test('verified members can join a session listed on the home page', function () 
         ]))
         ->assertRedirect();
 
-    expect($session->participants()->where('user_id', $guest->id)->exists())->toBeTrue();
+    expect($session->joinRequests()->where('user_id', $guest->id)->exists())->toBeTrue();
 });
 
 test('the home page returns an empty upcomingSessions list when none are joinable', function () {

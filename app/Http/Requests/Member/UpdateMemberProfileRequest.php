@@ -33,8 +33,10 @@ class UpdateMemberProfileRequest extends FormRequest
                 Rule::unique(User::class)->ignore($userId),
             ],
             'gender' => ['required', Rule::enum(UserGender::class)],
+            'locale' => ['sometimes', 'required', 'string', Rule::in(config('maison.locales'))],
             'avatar' => ['nullable', 'image', 'max:2048'],
             'remove_avatar' => ['nullable', 'boolean'],
+            'show_first_name_on_cards' => ['sometimes', 'boolean'],
         ];
     }
 }

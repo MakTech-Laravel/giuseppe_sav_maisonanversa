@@ -11,6 +11,7 @@ use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Newsletter\HeritageLetterSubscription;
+use App\Support\MailLocale;
 use App\Support\MemberPassportPresenter;
 use App\Support\OrderPresenter;
 use App\Support\PassportPresenter;
@@ -30,6 +31,17 @@ use Laravel\Fortify\Features;
 
 class DashboardController extends Controller implements HasMiddleware
 {
+    /**
+     * Each language in its own name, so members recognise it in any locale.
+     *
+     * @var array<string, string>
+     */
+    private const LANGUAGE_NAMES = [
+        'nl' => 'Nederlands',
+        'en' => 'English',
+        'fr' => 'Français',
+    ];
+
     /**
      * @return array<int, Middleware>
      */
@@ -229,6 +241,12 @@ class DashboardController extends Controller implements HasMiddleware
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
             'genders' => UserGender::options(),
+            'preferredLocale' => MailLocale::resolve($request->user()->locale),
+            'showFirstNameOnCards' => (bool) $request->user()->show_first_name_on_cards,
+            'locales' => array_map(
+                fn (string $code): array => ['value' => $code, 'label' => self::LANGUAGE_NAMES[$code] ?? strtoupper($code)],
+                config('maison.locales'),
+            ),
         ]);
     }
 
@@ -243,7 +261,7 @@ class DashboardController extends Controller implements HasMiddleware
         $lastName = (string) ($request->validated('last_name') ?? '');
 
         $user->fill([
-            ...$request->safe()->only(['email', 'gender']),
+            ...$request->safe()->only(['email', 'gender', 'locale', 'show_first_name_on_cards']),
             'first_name' => $firstName,
             'last_name' => $lastName !== '' ? $lastName : null,
             'name' => PersonName::compose($firstName, $lastName),

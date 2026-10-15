@@ -31,6 +31,7 @@ use App\Http\Controllers\Community\ClubController;
 use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\Community\EventController as CommunityEventPageController;
 use App\Http\Controllers\Community\SessionController;
+use App\Http\Controllers\Community\SessionScoreController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\Maison\FoundingCircleRegisterController;
 use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
 use App\Http\Controllers\Maison\ProductEditionController;
+use App\Http\Controllers\Maison\SessionShareController;
 use App\Http\Controllers\Maison\VerificationController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
@@ -144,6 +146,16 @@ Route::prefix('{locale}')
         Route::get('verify/{token}', VerificationController::class)
             ->where('token', '[0-9a-fA-F-]{36}')
             ->name('verify');
+
+        Route::controller(SessionShareController::class)
+            ->where(['shareToken' => '[A-Za-z0-9]{32}'])
+            ->middleware('throttle:60,1')
+            ->group(function () {
+                Route::get('s/{shareToken}', 'show')->name('sessions.share');
+                Route::get('s/{shareToken}/card/{format}.png', 'card')
+                    ->where('format', 'story|post')
+                    ->name('sessions.card');
+            });
 
         Route::post('heritage-letter', [NewsletterController::class, 'store'])
             ->middleware('throttle:5,1')
@@ -272,6 +284,21 @@ Route::prefix('{locale}')
                 Route::delete('sessions/{communitySession}/leave', 'leave')->name('sessions.leave');
                 Route::delete('sessions/{communitySession}/participants/{user}', 'removeParticipant')
                     ->name('sessions.participants.destroy');
+                Route::patch('sessions/{communitySession}/requests/{user}/approve', 'approveRequest')
+                    ->name('sessions.requests.approve');
+                Route::patch('sessions/{communitySession}/requests/{user}/reject', 'rejectRequest')
+                    ->name('sessions.requests.reject');
+            });
+
+            Route::controller(SessionScoreController::class)->scopeBindings()->group(function () {
+                Route::post('sessions/{communitySession}/scores', 'store')->name('sessions.scores.store');
+                Route::patch('sessions/{communitySession}/scores/{score}/approve', 'approve')
+                    ->name('sessions.scores.approve');
+                Route::patch('sessions/{communitySession}/scores/{score}/reject', 'reject')
+                    ->name('sessions.scores.reject');
+                Route::patch('sessions/{communitySession}/scoreboard/lock', 'lock')->name('sessions.scoreboard.lock');
+                Route::patch('sessions/{communitySession}/scoreboard/unlock', 'unlock')->name('sessions.scoreboard.unlock');
+                Route::patch('sessions/{communitySession}/finish', 'finish')->name('sessions.finish');
             });
 
             Route::controller(ClubController::class)->group(function () {

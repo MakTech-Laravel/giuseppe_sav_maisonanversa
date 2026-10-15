@@ -7,6 +7,8 @@ import type { SessionPlayer } from '@/types/session';
 type PlayerSlotsProps = {
     players: SessionPlayer[];
     openSlots: number;
+    /** Seats held by join requests awaiting the host's decision. */
+    pendingSlots?: number;
     size?: 'md' | 'lg';
     /** Renders names and roles beneath each avatar, as on the detail page. */
     withLabels?: boolean;
@@ -14,12 +16,14 @@ type PlayerSlotsProps = {
 };
 
 /**
- * The avatar row from the mockup: filled slots first, then dashed placeholders
- * for however many seats are still open.
+ * The avatar row from the mockup: filled slots first, then dotted placeholders
+ * for seats held by pending requests, then dashed placeholders for however
+ * many seats are still open.
  */
 export function PlayerSlots({
     players,
     openSlots,
+    pendingSlots = 0,
     size = 'md',
     withLabels = false,
     onRemove,
@@ -76,6 +80,28 @@ export function PlayerSlots({
                     )}
                 </div>
             ))}
+
+            {Array.from({ length: Math.max(0, pendingSlots) }).map(
+                (_, index) => (
+                    <div
+                        key={`pending-${index}`}
+                        className="flex w-14 flex-col items-center gap-1.5"
+                    >
+                        <Monogram
+                            size={size}
+                            initials="…"
+                            title={t('In afwachting')}
+                            className="border-dotted bg-gold/10 text-gold2"
+                        />
+
+                        {withLabels && (
+                            <span className="font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
+                                {t('In afwachting')}
+                            </span>
+                        )}
+                    </div>
+                ),
+            )}
 
             {Array.from({ length: Math.max(0, openSlots) }).map((_, index) => (
                 <div

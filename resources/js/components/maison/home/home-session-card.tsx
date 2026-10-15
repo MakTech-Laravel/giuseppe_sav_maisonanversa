@@ -23,6 +23,7 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
     const showUrl = sessionRoutes.show(args).url;
     const date = formatSessionDateParts(session.starts_at, locale);
     const playing = session.is_joined || session.is_host;
+    const pendingCount = session.pending_count ?? 0;
 
     function openDetail() {
         router.visit(showUrl);
@@ -51,6 +52,12 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
         }
 
         return t('{{count}} plaatsen vrij', { count: session.open_slots });
+    }
+
+    function waitingLabel(): string {
+        return pendingCount > 0
+            ? ` · ${t('{{count}} in afwachting', { count: pendingCount })}`
+            : '';
     }
 
     return (
@@ -100,6 +107,17 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
                             title={player.name || undefined}
                         />
                     ))}
+                    {Array.from({ length: Math.max(0, pendingCount) }).map(
+                        (_, index) => (
+                            <Monogram
+                                key={`pending-${index}`}
+                                size="md"
+                                initials="…"
+                                title={t('In afwachting')}
+                                className="border-dotted border-[#8D705A] bg-[#8D705A]/10 text-[#8D705A]"
+                            />
+                        ),
+                    )}
                     {Array.from({
                         length: Math.max(0, session.open_slots),
                     }).map((_, index) => (
@@ -114,15 +132,30 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
 
                 <p className="font-sans text-[10px] tracking-[0.16em] text-[#6E5646] uppercase">
                     {freePlacesLabel()}
+                    {waitingLabel()}
                 </p>
 
                 {playing ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-choc bg-choc px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase">
                         {t('Je speelt mee ✓')}
                     </span>
-                ) : session.is_full ? (
+                ) : session.is_pending ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-[#DDD0C2] px-6 font-sans text-[10px] tracking-[0.2em] text-[#6E5646] uppercase">
-                        {t('Volzet')}
+                        {t('Aanvraag in behandeling')}
+                    </span>
+                ) : session.viewer_status === 'rejected' ? (
+                    <span className="inline-flex min-h-11 items-center justify-center border border-[#DDD0C2] px-6 font-sans text-[10px] tracking-[0.2em] text-[#6E5646] uppercase">
+                        {t('Aanvraag geweigerd')}
+                    </span>
+                ) : session.is_full ||
+                  session.registration_closed ||
+                  !session.can_join ? (
+                    <span className="inline-flex min-h-11 items-center justify-center border border-[#DDD0C2] px-6 font-sans text-[10px] tracking-[0.2em] text-[#6E5646] uppercase">
+                        {session.is_full
+                            ? t('Volzet')
+                            : session.registration_closed
+                              ? t('Inschrijving gesloten')
+                              : t('Alle plaatsen aangevraagd')}
                     </span>
                 ) : (
                     <button

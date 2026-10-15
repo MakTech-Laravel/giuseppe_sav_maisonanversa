@@ -3,10 +3,16 @@
     'logoUrl' => $logoUrl,
     'ctaUrl' => $ctaUrl,
     'ctaLabel' => $ctaLabel,
+    'secondaryCtaUrl' => $secondaryCtaUrl ?? null,
+    'secondaryCtaLabel' => $secondaryCtaLabel ?? null,
 ])
     <p style="margin:0 0 24px;">
         {{ $intro }}
     </p>
+
+    @if (filled($timingNote ?? null))
+        <p style="margin:0 0 24px;padding:12px 16px;border-left:2px solid #8D705A;background-color:#EBE0D5;color:#291C18;text-align:left;font-weight:bold;">{{ $timingNote }}</p>
+    @endif
 
     @if ($rows !== [])
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;border-top:1px solid rgba(141,112,90,0.25);text-align:left;">
@@ -35,6 +41,15 @@
         </p>
         <p style="margin:0 0 24px;color:#291C18;">
             {{ implode(' · ', $players) }}
+        </p>
+    @endif
+
+    @if (filled($shareUrl ?? null))
+        <p style="margin:0 0 8px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8D705A;">
+            {{ __('Deel deze link') }}
+        </p>
+        <p style="margin:0 0 24px;padding:12px 16px;border:1px dashed rgba(141,112,90,0.5);background-color:#FBF8F4;word-break:break-all;">
+            <a href="{{ $shareUrl }}" style="color:#291C18;text-decoration:underline;">{{ $shareUrl }}</a>
         </p>
     @endif
 

@@ -21,13 +21,15 @@ const MAX_MESSAGE = 1000;
 export function CancelSessionDialog({
     sessionId,
     triggerClassName,
+    defaultOpen = false,
 }: {
     sessionId: number;
     triggerClassName: string;
+    defaultOpen?: boolean;
 }) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(defaultOpen);
     const [message, setMessage] = useState('');
     const [processing, setProcessing] = useState(false);
 

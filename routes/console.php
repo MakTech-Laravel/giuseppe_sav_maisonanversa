@@ -1,5 +1,7 @@
 <?php
 
+use App\Console\Commands\Community\SendMatchCards;
+use App\Console\Commands\Community\SendOpenSpotsAlerts;
 use App\Console\Commands\Community\SendSessionReminders;
 use App\Console\Commands\Editions\ReleaseExpiredHolds;
 use App\Console\Commands\Mail\SendPostDeliveryFollowUps;
@@ -22,6 +24,16 @@ Schedule::command(SendPostDeliveryFollowUps::class)
     ->onOneServer();
 
 Schedule::command(SendSessionReminders::class)
+    ->everyFifteenMinutes()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(SendOpenSpotsAlerts::class)
+    ->everyFifteenMinutes()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(SendMatchCards::class)
     ->everyFifteenMinutes()
     ->withoutOverlapping()
     ->onOneServer();

@@ -162,6 +162,7 @@ class CommunitySessionController extends Controller
             'level_label' => $session->level->label(),
             'lifecycle' => match (true) {
                 $session->isCancelled() => 'cancelled',
+                $session->isFinished() => 'finished',
                 $session->isPast() => 'ended',
                 default => 'active',
             },

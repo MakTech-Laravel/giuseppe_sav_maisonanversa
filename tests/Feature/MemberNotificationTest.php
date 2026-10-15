@@ -28,7 +28,7 @@ function memberInboxRow(User $user, array $notification = [], array $row = []): 
     ]);
 }
 
-test('session join mails the host and adds an in-app notification', function () {
+test('session join request mails the host and adds an in-app notification', function () {
     Mail::fake();
     Queue::fake();
 
@@ -55,7 +55,7 @@ test('session join mails the host and adds an in-app notification', function () 
     Mail::assertQueued(SessionNoticeMail::class, function (SessionNoticeMail $mail) use ($host, $guest): bool {
         return $mail->hasTo($host->email)
             && $mail->subjectName === $guest->name
-            && $mail->notice === SessionNotice::NewPlayer;
+            && $mail->notice === SessionNotice::JoinRequested;
     });
 
     $row = $host->userNotifications()->with('notification')->first();

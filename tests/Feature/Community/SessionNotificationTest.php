@@ -89,37 +89,90 @@ function joinSession(User $user, CommunitySession $session): void
         ->assertRedirect();
 }
 
-test('E1 and E2: a join notifies the organiser and confirms to the joiner, nobody else', function () {
+function approveRequest(User $host, User $requester, CommunitySession $session): void
+{
+    test()->actingAs($host)
+        ->patch(route('community.sessions.requests.approve', [
+            'locale' => 'nl',
+            'communitySession' => $session->id,
+            'user' => $requester->id,
+        ]))
+        ->assertRedirect();
+}
+
+test('a join request notifies only the organiser, nobody is confirmed yet', function () {
     $joiner = User::factory()->create(['name' => 'New Player']);
 
     joinSession($joiner, $this->session);
 
-    expect(inAppNotices($this->host))->toBe([SessionNotice::NewPlayer->value])
-        ->and(mailedNotice($this->host, SessionNotice::NewPlayer))->toBeTrue()
-        ->and(inAppNotices($joiner))->toBe([SessionNotice::JoinConfirmed->value])
-        ->and(mailedNotice($joiner, SessionNotice::JoinConfirmed))->toBeTrue()
+    expect(inAppNotices($this->host))->toBe([SessionNotice::JoinRequested->value])
+        ->and(mailedNotice($this->host, SessionNotice::JoinRequested))->toBeTrue()
+        ->and(inAppNotices($joiner))->toBe([])
         ->and(inAppNotices($this->player))->toBe([])
         ->and(inAppNotices($this->admin))->toBe([])
         ->and(mailsTo($this->admin))->toBe(0);
 
     $row = $this->host->userNotifications()->with('notification')->first();
     expect($row->notification->message)->toContain('New Player')
-        ->and($row->notification->message)->toContain('Vrije plaatsen: 1')
         ->and($row->notification->data['session_id'])->toBe($this->session->id);
 });
 
-test('E3: the join that fills the session tells every other player and the admins', function () {
-    $this->session->update(['capacity' => 3]);
+test('E2: approving a request confirms it to the player, not to the organiser', function () {
     $joiner = User::factory()->create();
-
     joinSession($joiner, $this->session);
 
-    expect(inAppNotices($this->host))->toBe([SessionNotice::NewPlayer->value, SessionNotice::SessionFull->value])
+    approveRequest($this->host, $joiner, $this->session);
+
+    expect(inAppNotices($joiner))->toBe([SessionNotice::JoinConfirmed->value])
+        ->and(mailedNotice($joiner, SessionNotice::JoinConfirmed))->toBeTrue()
+        ->and(inAppNotices($this->host))->toBe([SessionNotice::JoinRequested->value])
+        ->and(inAppNotices($this->player))->toBe([]);
+});
+
+test('E3: the approval that fills the session tells every other player and the admins', function () {
+    $this->session->update(['capacity' => 3]);
+    $joiner = User::factory()->create();
+    joinSession($joiner, $this->session);
+
+    approveRequest($this->host, $joiner, $this->session);
+
+    expect(inAppNotices($this->host))->toBe([SessionNotice::JoinRequested->value, SessionNotice::SessionFull->value])
         ->and(inAppNotices($this->player))->toBe([SessionNotice::SessionFull->value])
         ->and(mailedNotice($this->player, SessionNotice::SessionFull))->toBeTrue()
         ->and(inAppNotices($joiner))->toBe([SessionNotice::JoinConfirmed->value])
         ->and(inAppNotices($this->admin))->toBe([SessionNotice::AdminFull->value])
         ->and(mailedNotice($this->otherAdmin, SessionNotice::AdminFull))->toBeTrue();
+});
+
+test('rejecting a request tells only the requester', function () {
+    $joiner = User::factory()->create();
+    joinSession($joiner, $this->session);
+
+    $this->actingAs($this->host)
+        ->patch(route('community.sessions.requests.reject', [
+            'locale' => 'nl',
+            'communitySession' => $this->session->id,
+            'user' => $joiner->id,
+        ]))
+        ->assertRedirect();
+
+    expect(inAppNotices($joiner))->toBe([SessionNotice::RequestRejected->value])
+        ->and(mailedNotice($joiner, SessionNotice::RequestRejected))->toBeTrue()
+        ->and(inAppNotices($this->host))->toBe([SessionNotice::JoinRequested->value])
+        ->and(inAppNotices($this->player))->toBe([]);
+});
+
+test('withdrawing a pending request tells only the organiser', function () {
+    $joiner = User::factory()->create();
+    joinSession($joiner, $this->session);
+
+    $this->actingAs($joiner)
+        ->delete(route('community.sessions.leave', ['locale' => 'nl', 'communitySession' => $this->session->id]))
+        ->assertRedirect();
+
+    expect(inAppNotices($this->host))->toBe([SessionNotice::JoinRequested->value, SessionNotice::RequestWithdrawn->value])
+        ->and(inAppNotices($joiner))->toBe([])
+        ->and(inAppNotices($this->player))->toBe([]);
 });
 
 test('joining a session twice sends nothing the second time', function () {
@@ -272,7 +325,7 @@ test('members who switched session emails off still get the in-app notification'
 
     joinSession(User::factory()->create(), $this->session);
 
-    expect(inAppNotices($this->host))->toBe([SessionNotice::NewPlayer->value])
+    expect(inAppNotices($this->host))->toBe([SessionNotice::JoinRequested->value])
         ->and(mailsTo($this->host))->toBe(0);
 });
 
@@ -313,6 +366,30 @@ test('E5: the reminder goes to every player once, only within 24 hours of the st
         ->and(mailedNotice($this->player, SessionNotice::Reminder))->toBeTrue()
         ->and($this->session->fresh()->reminder_sent_at)->not->toBeNull()
         ->and($later->fresh()->reminder_sent_at)->toBeNull();
+});
+
+test('the reminder reaches confirmed players and the organiser by mail, never pending or rejected users', function () {
+    $this->session->update(['starts_at' => now()->addHours(20)]);
+
+    $pending = User::factory()->create();
+    $rejected = User::factory()->create();
+    CommunitySessionParticipant::factory()->pending()->create([
+        'community_session_id' => $this->session->id,
+        'user_id' => $pending->id,
+    ]);
+    CommunitySessionParticipant::factory()->rejected()->create([
+        'community_session_id' => $this->session->id,
+        'user_id' => $rejected->id,
+    ]);
+
+    $this->artisan('sessions:send-reminders')->assertSuccessful();
+
+    expect(mailedNotice($this->host, SessionNotice::Reminder))->toBeTrue()
+        ->and(mailedNotice($this->player, SessionNotice::Reminder))->toBeTrue()
+        ->and(inAppNotices($pending))->toBe([])
+        ->and(inAppNotices($rejected))->toBe([])
+        ->and(mailsTo($pending))->toBe(0)
+        ->and(mailsTo($rejected))->toBe(0);
 });
 
 test('the reminder skips cancelled sessions', function () {
@@ -365,4 +442,107 @@ test('the confirmation and full mails carry the session details and a calendar f
     expect($reminder->attachments())->toBe([]);
 
     $reminder->assertHasSubject('Tomorrow on the court');
+});
+
+function confirmationMailTo(User $user): ?SessionNoticeMail
+{
+    return Mail::queued(
+        SessionNoticeMail::class,
+        fn (SessionNoticeMail $mail): bool => $mail->notice === SessionNotice::JoinConfirmed && $mail->hasTo($user->email),
+    )->first();
+}
+
+function latestInAppMessage(User $user): string
+{
+    return (string) $user->userNotifications()->with('notification')->latest('id')->first()?->notification->message;
+}
+
+test('E2 approved on the day of the session says it is today', function () {
+    $this->travelTo(now()->setDate(2026, 10, 15)->setTime(9, 0));
+    $this->session->update(['starts_at' => now()->setTime(18, 30)]);
+    $joiner = User::factory()->create(['locale' => 'nl']);
+
+    joinSession($joiner, $this->session);
+    approveRequest($this->host, $joiner, $this->session);
+
+    $mail = confirmationMailTo($joiner);
+
+    expect($mail->timingNote)->toBe('Uw sessie is vandaag om 18:30.')
+        ->and($mail->render())->toContain('Uw sessie is vandaag om 18:30.')
+        ->and($mail->attachments())->toHaveCount(1)
+        ->and(latestInAppMessage($joiner))->toContain('Uw sessie is vandaag om 18:30.');
+});
+
+test('E2 approved the evening before says it is tomorrow', function () {
+    $this->travelTo(now()->setDate(2026, 10, 14)->setTime(20, 0));
+    $this->session->update(['starts_at' => now()->addDay()->setTime(10, 0)]);
+    $joiner = User::factory()->create(['locale' => 'nl']);
+
+    joinSession($joiner, $this->session);
+    approveRequest($this->host, $joiner, $this->session);
+
+    expect(confirmationMailTo($joiner)->timingNote)->toBe('Uw sessie is morgen om 10:00.');
+});
+
+test('E2 more than 24 hours ahead carries no timing line', function () {
+    $joiner = User::factory()->create();
+
+    joinSession($joiner, $this->session);
+    approveRequest($this->host, $joiner, $this->session);
+
+    expect(confirmationMailTo($joiner)->timingNote)->toBeNull()
+        ->and(latestInAppMessage($joiner))->not->toContain('morgen om');
+});
+
+test('the E2 timing line is written in the player\'s own language', function () {
+    $this->travelTo(now()->setDate(2026, 10, 14)->setTime(20, 0));
+    $this->session->update(['starts_at' => now()->addDay()->setTime(10, 0)]);
+    $joiner = User::factory()->create(['locale' => 'en']);
+
+    joinSession($joiner, $this->session);
+    approveRequest($this->host, $joiner, $this->session);
+
+    $mail = confirmationMailTo($joiner);
+
+    expect($mail->locale)->toBe('en')
+        ->and($mail->timingNote)->toBe('Your session is tomorrow at 10:00.')
+        ->and(latestInAppMessage($joiner))->toContain('Your session is tomorrow at 10:00.');
+});
+
+test('a player approved after the 24-hour reminder gets E2 with the details, never E5', function () {
+    $this->travelTo(now()->setDate(2026, 10, 14)->setTime(20, 0));
+    $this->session->update(['starts_at' => now()->addDay()->setTime(10, 0)]);
+    $joiner = User::factory()->create(['locale' => 'nl']);
+    joinSession($joiner, $this->session);
+
+    $this->artisan('sessions:send-reminders')->assertSuccessful();
+
+    approveRequest($this->host, $joiner, $this->session);
+
+    $this->artisan('sessions:send-reminders')->assertSuccessful();
+
+    $mail = confirmationMailTo($joiner);
+
+    expect(inAppNotices($joiner))->toBe([SessionNotice::JoinConfirmed->value])
+        ->and(mailedNotice($joiner, SessionNotice::Reminder))->toBeFalse()
+        ->and(mailedNotice($this->player, SessionNotice::Reminder))->toBeTrue()
+        ->and($mail->attachments())->toHaveCount(1)
+        ->and($mail->timingNote)->toBe('Uw sessie is morgen om 10:00.');
+});
+
+test('a member without a supported language gets session notices in english', function () {
+    $this->player->forceFill(['locale' => 'xx'])->save();
+
+    $this->actingAs($this->host)
+        ->delete(route('community.sessions.destroy', ['locale' => 'nl', 'communitySession' => $this->session->id]))
+        ->assertRedirect();
+
+    $notification = $this->player->userNotifications()->with('notification')->first()->notification;
+
+    expect($notification->title)->toBe('Session cancelled');
+
+    Mail::assertQueued(
+        SessionNoticeMail::class,
+        fn (SessionNoticeMail $mail): bool => $mail->hasTo($this->player->email) && $mail->locale === 'en',
+    );
 });

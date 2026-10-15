@@ -98,6 +98,23 @@ class UserSeeder extends Seeder
                 'role' => RoleEnum::USER->value,
                 'type' => UserType::Customer,
             ],
+            ...$this->numberedUsers(10),
         ];
+    }
+
+    /**
+     * Test members user1@dev.com … userN@dev.com; the password is the email.
+     *
+     * @return list<array{name: string, email: string, password: string, role: string, type: UserType}>
+     */
+    private function numberedUsers(int $count): array
+    {
+        return array_map(fn (int $number): array => [
+            'name' => "User {$number}",
+            'email' => "user{$number}@dev.com",
+            'password' => "user{$number}@dev.com",
+            'role' => RoleEnum::USER->value,
+            'type' => UserType::Customer,
+        ], range(1, $count));
     }
 }

@@ -18,6 +18,14 @@ return [
     'default_locale' => 'nl',
 
     /*
+    | Mails and in-app notifications follow the recipient's `users.locale`.
+    | When that is empty or unsupported, they fall back to this locale rather
+    | than the site default.
+    */
+
+    'notification_fallback_locale' => 'en',
+
+    /*
     |--------------------------------------------------------------------------
     | Locale preference cookie
     |--------------------------------------------------------------------------
@@ -103,11 +111,33 @@ return [
     | Order admin notifications
     |--------------------------------------------------------------------------
     |
-    | New paid orders are emailed here in the default Maison locale (nl).
+    | New paid orders are emailed here in the notification fallback locale (en).
     |
     */
 
     'order_admin_email' => env('ORDER_ADMIN_EMAIL', env('MAIL_FROM_ADDRESS')),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Match cards
+    |--------------------------------------------------------------------------
+    |
+    | Story and Post PNGs rendered by resources/match-card/render.mjs (Satori +
+    | resvg). Players are notified once a session with at least `min_players`
+    | confirmed players has ended; sessions that ended longer than
+    | `notify_window_hours` ago are skipped so a deploy never mails old games.
+    | Bump `template_version` after changing the template to drop cached PNGs.
+    |
+    */
+
+    'match_cards' => [
+        'node_binary' => env('MATCH_CARD_NODE', 'node'),
+        'script' => resource_path('match-card/render.mjs'),
+        'disk' => 'local',
+        'min_players' => 2,
+        'notify_window_hours' => 48,
+        'template_version' => 1,
+    ],
 
     'corner_form_options' => [
         'court_options' => ['4-6 courts', '7-10 courts', '10+ courts'],
