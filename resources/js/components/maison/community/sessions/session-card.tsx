@@ -2,6 +2,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarDays, Clock, Gauge, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PartnerBadge } from '@/components/maison/community/partner-badge';
+import { SessionChatButton } from '@/components/maison/community/sessions/chat/session-chat-button';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
 import { useOptionalShellActions } from '@/components/maison/shell/shell-actions';
 import { storePendingSessionJoin } from '@/lib/pending-session-join';
@@ -98,12 +99,15 @@ export function SessionCard({ session }: SessionCardProps) {
                         ` · ${t('{{count}} in afwachting', { count: pendingCount })}`}
                 </span>
 
-                <SessionAction
-                    session={session}
-                    onJoin={handleJoin}
-                    onLeave={handleLeave}
-                    showUrl={showUrl}
-                />
+                <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                    <SessionChatButton session={session} />
+                    <SessionAction
+                        session={session}
+                        onJoin={handleJoin}
+                        onLeave={handleLeave}
+                        showUrl={showUrl}
+                    />
+                </div>
             </div>
         </article>
     );

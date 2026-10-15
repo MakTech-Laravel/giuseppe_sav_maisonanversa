@@ -279,6 +279,7 @@ Route::prefix('{locale}')
                 Route::get('sessions/create', 'create')->name('sessions.create');
                 Route::post('sessions', 'store')->name('sessions.store');
                 Route::get('sessions/{communitySession}', 'show')->name('sessions.show');
+                Route::get('sessions/{communitySession}/chat', 'chat')->name('sessions.chat');
                 Route::delete('sessions/{communitySession}', 'destroy')->name('sessions.destroy');
                 Route::post('sessions/{communitySession}/join', 'join')->name('sessions.join');
                 Route::delete('sessions/{communitySession}/leave', 'leave')->name('sessions.leave');
