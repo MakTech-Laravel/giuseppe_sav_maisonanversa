@@ -53,7 +53,7 @@ export function ChatMessageItem({
 
             <MessageContent className="gap-1.5">
                 {!isOwn && isFirstInGroup && (
-                    <MessageHeader className="px-0 font-sans text-[10px] font-medium tracking-[0.16em] text-stone uppercase">
+                    <MessageHeader className="px-0 font-sans text-[10px] font-medium tracking-[0.16em] text-sand uppercase">
                         {message.author.name}
                     </MessageHeader>
                 )}
@@ -68,8 +68,8 @@ export function ChatMessageItem({
                         className={cn(
                             'max-w-[85%] md:max-w-[70%]',
                             isOwn
-                                ? '*:data-[slot=bubble-content]:bg-choc *:data-[slot=bubble-content]:text-cream'
-                                : '*:data-[slot=bubble-content]:border-gold/20 *:data-[slot=bubble-content]:bg-cream *:data-[slot=bubble-content]:text-choc',
+                                ? '*:data-[slot=bubble-content]:bg-gold *:data-[slot=bubble-content]:text-choc'
+                                : '*:data-[slot=bubble-content]:border-gold/25 *:data-[slot=bubble-content]:bg-choc2 *:data-[slot=bubble-content]:text-cream',
                         )}
                     >
                         <BubbleContent className="rounded-none font-sans text-[13px] leading-relaxed whitespace-pre-wrap">
@@ -107,7 +107,7 @@ function ChatImageGrid({ attachments }: { attachments: ChatAttachment[] }) {
                     href={attachment.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="block overflow-hidden border border-gold/15 bg-cream"
+                    className="block overflow-hidden border border-gold/25 bg-choc2"
                 >
                     <img
                         src={attachment.url}

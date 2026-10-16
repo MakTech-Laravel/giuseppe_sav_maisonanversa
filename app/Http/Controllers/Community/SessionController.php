@@ -162,22 +162,15 @@ class SessionController extends Controller
     }
 
     /**
-     * The session's group chat. Messages are not stored yet, so the page
-     * opens on an empty transcript.
+     * Deep links from the community area land on the member chat inbox.
      */
-    public function chat(Request $request, string $locale, CommunitySession $communitySession): Response
+    public function chat(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
     {
         $this->authorize('chat', $communitySession);
 
-        $viewer = $request->user();
-
-        $communitySession->load(['host', 'club', 'participants.user', 'participantRecords', 'translations'])
-            ->loadCount(['participants', 'joinRequests']);
-
-        return Inertia::render('maison/sessions/chat', [
-            'session' => SessionFeed::toCard($communitySession, $viewer, $locale),
-            'viewer' => SessionFeed::player($viewer, $communitySession->host_id),
-            'messages' => [],
+        return redirect()->route('member.chat.show', [
+            'locale' => $locale,
+            'communitySession' => $communitySession,
         ]);
     }
 

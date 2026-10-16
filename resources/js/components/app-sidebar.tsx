@@ -15,6 +15,7 @@ import {
     LayoutGrid,
     Mail,
     MessageCircle,
+    MessagesSquare,
     Package,
     Radio,
     Settings2,
@@ -44,6 +45,7 @@ import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
 import adminAppointments from '@/routes/admin/appointments';
+import adminChat from '@/routes/admin/chat';
 import adminCircle from '@/routes/admin/circle';
 import adminClubs from '@/routes/admin/clubs';
 import adminCommunity from '@/routes/admin/community';
@@ -171,6 +173,12 @@ function buildNavGroups(
                     title: t('Sessies'),
                     href: adminSessions.index(locale),
                     icon: CalendarDays,
+                    permissions: [PERMISSIONS.SESSIONS.MANAGE],
+                },
+                {
+                    title: t('Chat'),
+                    href: adminChat.index(locale),
+                    icon: MessagesSquare,
                     permissions: [PERMISSIONS.SESSIONS.MANAGE],
                 },
                 {
