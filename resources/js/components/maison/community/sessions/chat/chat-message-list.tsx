@@ -23,6 +23,8 @@ type ChatMessageListProps = {
     currentUserId: number;
     emptyState?: ReactNode;
     className?: string;
+    onRetry?: (message: ChatMessage) => void;
+    onDismissFailed?: (message: ChatMessage) => void;
 };
 
 type ChatRow =
@@ -39,6 +41,8 @@ export function ChatMessageList({
     currentUserId,
     emptyState,
     className,
+    onRetry,
+    onDismissFailed,
 }: ChatMessageListProps) {
     const { t } = useTranslation();
     const rows = useMemo(() => buildRows(messages), [messages]);
@@ -79,6 +83,10 @@ export function ChatMessageList({
                                                             row.messages
                                                                 .length -
                                                                 1
+                                                        }
+                                                        onRetry={onRetry}
+                                                        onDismissFailed={
+                                                            onDismissFailed
                                                         }
                                                     />
                                                 ),

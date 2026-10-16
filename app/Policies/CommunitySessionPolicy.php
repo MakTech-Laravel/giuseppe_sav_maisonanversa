@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\CommunitySession;
 use App\Models\User;
+use App\Services\Community\SessionChatService;
 
 class CommunitySessionPolicy
 {
@@ -91,6 +92,15 @@ class CommunitySessionPolicy
     {
         return $session->isHostedBy($user)
             || $session->participants()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Posting requires a chat roster seat while the session is still open.
+     */
+    public function sendMessage(User $user, CommunitySession $session): bool
+    {
+        return $this->chat($user, $session)
+            && app(SessionChatService::class)->isOpen($session);
     }
 
     public function reviewScore(User $user, CommunitySession $session): bool

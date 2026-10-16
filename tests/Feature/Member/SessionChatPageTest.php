@@ -42,6 +42,9 @@ test('the host opens the session chat inbox', function () {
             ->where('activeSession.is_host', true)
             ->where('viewer.id', $this->host->id)
             ->where('messages', [])
+            ->where('can_send', true)
+            ->where('messages_purge_at', null)
+            ->has('unread_counts')
             ->has('sessions', 1));
 });
 
@@ -87,7 +90,50 @@ test('the chat stays readable after the session is cancelled', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('member/chat')
-            ->where('activeSession.is_cancelled', true));
+            ->where('activeSession.is_cancelled', true)
+            ->where('can_send', false)
+            ->whereNotNull('messages_purge_at'));
+});
+
+test('sessions past the seven-day retention window leave the chat list', function () {
+    $purged = CommunitySession::factory()->create([
+        'host_id' => $this->host->id,
+        'starts_at' => now()->subDays(10),
+        'cancelled_at' => null,
+    ]);
+    $purged->refresh();
+    chatPageSeat($purged, $this->host);
+
+    $recentClosed = CommunitySession::factory()->create([
+        'host_id' => $this->host->id,
+        'starts_at' => now()->subDays(2),
+        'cancelled_at' => null,
+    ]);
+    $recentClosed->refresh();
+    chatPageSeat($recentClosed, $this->host);
+
+    $this->actingAs($this->host)
+        ->get(memberChatIndexUrl())
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('member/chat')
+            ->has('sessions', 2)
+            ->where('sessions.0.id', (string) $this->session->id)
+            ->where('sessions.1.id', (string) $recentClosed->id));
+});
+
+test('opening a purged session chat redirects to the inbox', function () {
+    $purged = CommunitySession::factory()->create([
+        'host_id' => $this->host->id,
+        'starts_at' => now()->subDays(10),
+        'cancelled_at' => null,
+    ]);
+    $purged->refresh();
+    chatPageSeat($purged, $this->host);
+
+    $this->actingAs($this->host)
+        ->get(memberChatShowUrl($purged))
+        ->assertRedirect(memberChatIndexUrl());
 });
 
 test('pending and rejected requests cannot open the chat', function (SessionParticipantStatus $status) {

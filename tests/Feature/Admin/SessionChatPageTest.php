@@ -56,7 +56,9 @@ test('staff open a session chat as read-only', function () {
             ->component('admin/chat')
             ->where('activeSession.id', (string) $this->session->id)
             ->where('viewer.id', $this->admin->id)
-            ->where('messages', []));
+            ->where('messages', [])
+            ->where('can_send', false)
+            ->where('messages_purge_at', null));
 });
 
 test('staff without sessions.manage cannot open chat', function () {

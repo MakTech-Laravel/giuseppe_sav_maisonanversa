@@ -10,6 +10,8 @@ type SessionChatProps = {
     currentUserId: number;
     canSend: boolean;
     onSend?: (body: string, files: File[]) => void;
+    onRetry?: (message: ChatMessage) => void;
+    onDismissFailed?: (message: ChatMessage) => void;
     title?: string;
     subtitle?: string;
     /** Rendered at the right of the header, e.g. a participant stack. */
@@ -28,6 +30,8 @@ export function SessionChat({
     currentUserId,
     canSend,
     onSend,
+    onRetry,
+    onDismissFailed,
     title,
     subtitle,
     headerAside,
@@ -62,6 +66,8 @@ export function SessionChat({
             <ChatMessageList
                 messages={messages}
                 currentUserId={currentUserId}
+                onRetry={onRetry}
+                onDismissFailed={onDismissFailed}
             />
 
             {canSend && onSend ? (

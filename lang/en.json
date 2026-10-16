@@ -2760,5 +2760,15 @@
     "Kies links een sessie om de chat te openen en berichten te versturen.": "Choose a session on the left to open the chat and send messages.",
     "Bekijk sessiechats. Beheerders kunnen berichten lezen maar niet versturen.": "View session chats. Admins can read messages but cannot send them.",
     "Alleen-lezen. Beheerders kunnen geen berichten versturen.": "Read-only. Admins cannot send messages.",
-    "Kies links een sessie om de chat te openen. U kunt berichten lezen maar niet versturen.": "Choose a session on the left to open the chat. You can read messages but cannot send them."
+    "Kies links een sessie om de chat te openen. U kunt berichten lezen maar niet versturen.": "Choose a session on the left to open the chat. You can read messages but cannot send them.",
+    "Bericht kon niet worden verstuurd.": "Message could not be sent.",
+    "Afbeelding niet beschikbaar": "Image unavailable",
+    "Nog geen spelers": "No players yet",
+    "Versturen mislukt": "Send failed",
+    "Verstuurd": "Sent",
+    "Versturen…": "Sending…",
+    "Nieuw bericht": "New message",
+    "Nieuwe berichten": "New messages",
+    "U heeft :count ongelezen chatberichten.": "You have :count unread chat messages.",
+    "Bekijk berichten": "View messages"
 }

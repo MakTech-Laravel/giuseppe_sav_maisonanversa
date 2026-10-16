@@ -2761,5 +2761,15 @@
     "Kies links een sessie om de chat te openen en berichten te versturen.": "Choisissez une session à gauche pour ouvrir le chat et envoyer des messages.",
     "Bekijk sessiechats. Beheerders kunnen berichten lezen maar niet versturen.": "Consultez les chats de session. Les administrateurs peuvent lire les messages mais pas les envoyer.",
     "Alleen-lezen. Beheerders kunnen geen berichten versturen.": "Lecture seule. Les administrateurs ne peuvent pas envoyer de messages.",
-    "Kies links een sessie om de chat te openen. U kunt berichten lezen maar niet versturen.": "Choisissez une session à gauche pour ouvrir le chat. Vous pouvez lire les messages mais pas les envoyer."
+    "Kies links een sessie om de chat te openen. U kunt berichten lezen maar niet versturen.": "Choisissez une session à gauche pour ouvrir le chat. Vous pouvez lire les messages mais pas les envoyer.",
+    "Bericht kon niet worden verstuurd.": "Le message n'a pas pu être envoyé.",
+    "Afbeelding niet beschikbaar": "Image indisponible",
+    "Nog geen spelers": "Pas encore de joueurs",
+    "Versturen mislukt": "Échec de l'envoi",
+    "Verstuurd": "Envoyé",
+    "Versturen…": "Envoi…",
+    "Nieuw bericht": "Nouveau message",
+    "Nieuwe berichten": "Nouveaux messages",
+    "U heeft :count ongelezen chatberichten.": "Vous avez :count messages de chat non lus.",
+    "Bekijk berichten": "Voir les messages"
 }

@@ -8,6 +8,7 @@ type ChatSessionListProps = {
     sessions: SessionCard[];
     hrefFor: (session: SessionCard) => string;
     activeSessionId?: string | null;
+    unreadCounts?: Record<string, number>;
     className?: string;
 };
 
@@ -15,6 +16,7 @@ export function ChatSessionList({
     sessions,
     hrefFor,
     activeSessionId = null,
+    unreadCounts = {},
     className,
 }: ChatSessionListProps) {
     const { t } = useTranslation();
@@ -48,6 +50,7 @@ export function ChatSessionList({
             {sessions.map((session) => {
                 const active = activeSessionId === session.id;
                 const clubName = session.club?.name ?? t('Sessie');
+                const unread = unreadCounts[session.id] ?? 0;
 
                 return (
                     <li key={session.id} className="border-b border-gold/20">
@@ -62,9 +65,14 @@ export function ChatSessionList({
                             aria-current={active ? 'page' : undefined}
                         >
                             <div className="flex flex-wrap items-center gap-2">
-                                <span className="truncate font-serif text-[15px] font-medium text-cream">
+                                <span className="min-w-0 flex-1 truncate font-serif text-[15px] font-medium text-cream">
                                     {clubName}
                                 </span>
+                                {unread > 0 ? (
+                                    <span className="inline-flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full bg-gold px-1 text-[9px] leading-none font-semibold text-choc tabular-nums">
+                                        {unread > 99 ? '99+' : unread}
+                                    </span>
+                                ) : null}
                                 {session.is_cancelled && (
                                     <StatusPill label={t('Geannuleerd')} />
                                 )}

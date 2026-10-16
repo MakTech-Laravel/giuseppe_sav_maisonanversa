@@ -1,10 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, MessageSquare, MessagesSquare } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { ChatMembersButton } from '@/components/maison/community/sessions/chat/chat-members-button';
 import { SessionChat } from '@/components/maison/community/sessions/chat/session-chat';
-import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
 import { ChatSessionList } from '@/components/member/chat/chat-session-list';
+import { useSessionChatChannel } from '@/hooks/use-session-chat-channel';
 import { formatSessionDateLong, formatSessionTime } from '@/lib/session-format';
 import { cn } from '@/lib/utils';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
@@ -17,13 +19,16 @@ type AdminChatPageProps = {
     activeSession: SessionCard | null;
     viewer: SessionPlayer;
     messages: ChatMessage[];
+    can_send: boolean;
+    messages_purge_at: string | null;
 };
 
 export default function AdminChatPage({
     sessions,
     activeSession,
     viewer,
-    messages,
+    messages: initialMessages,
+    messages_purge_at: messagesPurgeAt,
 }: AdminChatPageProps) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
@@ -45,7 +50,7 @@ export default function AdminChatPage({
                 <div className="flex min-h-120 flex-1 overflow-hidden border border-gold/25 bg-choc3 text-cream">
                     <aside
                         className={cn(
-                            'w-full shrink-0 flex-col border-gold/20 md:flex md:w-80 md:border-r',
+                            'w-full shrink-0 flex-col border-gold/20 md:flex md:w-56 md:border-r',
                             activeSession ? 'hidden' : 'flex',
                         )}
                     >
@@ -87,24 +92,12 @@ export default function AdminChatPage({
                                     </Link>
                                 </div>
 
-                                <SessionChat
-                                    messages={messages}
-                                    currentUserId={viewer.id}
-                                    canSend={false}
-                                    title={
-                                        activeSession.club?.name ?? t('Sessie')
-                                    }
-                                    subtitle={`${formatSessionDateLong(activeSession.starts_at, locale)} · ${formatSessionTime(activeSession.starts_at, locale)}`}
-                                    headerAside={
-                                        <PlayerSlots
-                                            players={activeSession.players}
-                                            openSlots={0}
-                                        />
-                                    }
-                                    closedMessage={t(
-                                        'Alleen-lezen. Beheerders kunnen geen berichten versturen.',
-                                    )}
-                                    className="min-h-0 flex-1 border-0"
+                                <AdminActiveSessionChat
+                                    key={activeSession.id}
+                                    session={activeSession}
+                                    viewer={viewer}
+                                    initialMessages={initialMessages}
+                                    messagesPurgeAt={messagesPurgeAt}
                                 />
                             </>
                         ) : (
@@ -114,6 +107,58 @@ export default function AdminChatPage({
                 </div>
             </div>
         </>
+    );
+}
+
+function AdminActiveSessionChat({
+    session,
+    viewer,
+    initialMessages,
+    messagesPurgeAt,
+}: {
+    session: SessionCard;
+    viewer: SessionPlayer;
+    initialMessages: ChatMessage[];
+    messagesPurgeAt: string | null;
+}) {
+    const { t } = useTranslation();
+    const locale = wayfinderLocale();
+    const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+
+    const mergeIncoming = useCallback((incoming: ChatMessage) => {
+        setMessages((current) => {
+            if (current.some((message) => message.id === incoming.id)) {
+                return current;
+            }
+
+            return [...current, incoming];
+        });
+    }, []);
+
+    useSessionChatChannel(session.id, mergeIncoming);
+
+    const purgeLabel = messagesPurgeAt
+        ? formatSessionDateLong(messagesPurgeAt, locale)
+        : null;
+
+    const closedMessage = purgeLabel
+        ? t(
+              'Alleen-lezen. Beheerders kunnen geen berichten versturen. Berichten worden op {{date}} verwijderd (7 dagen na afsluiting).',
+              { date: purgeLabel },
+          )
+        : t('Alleen-lezen. Beheerders kunnen geen berichten versturen.');
+
+    return (
+        <SessionChat
+            messages={messages}
+            currentUserId={viewer.id}
+            canSend={false}
+            title={session.club?.name ?? t('Sessie')}
+            subtitle={`${formatSessionDateLong(session.starts_at, locale)} · ${formatSessionTime(session.starts_at, locale)}`}
+            headerAside={<ChatMembersButton players={session.players} />}
+            closedMessage={closedMessage}
+            className="min-h-0 flex-1 border-0"
+        />
     );
 }
 
