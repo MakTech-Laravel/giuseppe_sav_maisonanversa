@@ -6,6 +6,7 @@ use App\Models\CommerceSetting;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Services\Community\SessionChatService;
 use App\Services\FoundingCircle\FoundingCircleRegisterSnapshot;
 use App\Services\Notifications\InboxService;
 use App\Support\AdminTypePermissionBypass;
@@ -103,6 +104,9 @@ class HandleInertiaRequests extends Middleware
             'notifications' => fn (): ?array => $user ? [
                 'unreadCount' => app(InboxService::class)->unreadCount($user),
                 'preview' => app(InboxService::class)->preview($user),
+            ] : null,
+            'chat' => fn (): ?array => $user ? [
+                'unreadTotal' => app(SessionChatService::class)->unreadTotal($user),
             ] : null,
             'flash' => [
                 'open_auth_modal' => fn () => $request->session()->get('open_auth_modal'),

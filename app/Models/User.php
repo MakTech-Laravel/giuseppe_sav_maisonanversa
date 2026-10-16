@@ -150,6 +150,8 @@ class User extends Authenticatable implements MustVerifyEmail
             'marketing_consent_at' => 'datetime',
             'session_emails' => 'boolean',
             'show_first_name_on_cards' => 'boolean',
+            'last_seen_at' => 'datetime',
+            'chat_digest_sent_at' => 'datetime',
             'type' => UserType::class,
             'gender' => UserGender::class,
         ];

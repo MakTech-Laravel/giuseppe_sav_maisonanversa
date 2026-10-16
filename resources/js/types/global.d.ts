@@ -67,6 +67,7 @@ declare module '@inertiajs/core' {
             site: SiteShared;
             seo: SeoDocument;
             notifications?: SharedNotifications | null;
+            chat?: { unreadTotal: number } | null;
             [key: string]: unknown;
         };
     }
