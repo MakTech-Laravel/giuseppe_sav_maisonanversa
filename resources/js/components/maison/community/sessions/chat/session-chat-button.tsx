@@ -3,7 +3,7 @@ import { MessageCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { canOpenSessionChat } from '@/lib/session-chat';
 import { cn } from '@/lib/utils';
-import * as sessionRoutes from '@/routes/community/sessions';
+import * as memberChat from '@/routes/member/chat';
 import type { SessionCard } from '@/types/session';
 
 type SessionChatButtonProps = {
@@ -30,7 +30,7 @@ export function SessionChatButton({
     return (
         <Link
             href={
-                sessionRoutes.chat({
+                memberChat.show({
                     locale,
                     communitySession: Number(session.id),
                 }).url

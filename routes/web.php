@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RealtimeController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeoMetaController;
+use App\Http\Controllers\Admin\SessionChatController as AdminSessionChatController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\StoryPageController;
 use App\Http\Controllers\Admin\UserController;
@@ -45,7 +46,9 @@ use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\Member\PassportPdfController;
+use App\Http\Controllers\Member\PresenceController;
 use App\Http\Controllers\Member\RegisterListingController;
+use App\Http\Controllers\Member\SessionChatController;
 use App\Http\Controllers\PostAttachmentController;
 use App\Http\Controllers\RobotsTxtController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -259,6 +262,14 @@ Route::prefix('{locale}')
                 Route::delete('notifications/{userNotification}', [NotificationController::class, 'destroy'])
                     ->whereNumber('userNotification')
                     ->name('notifications.destroy');
+                Route::post('presence', PresenceController::class)->name('presence');
+                Route::get('chat', [SessionChatController::class, 'index'])->name('chat.index');
+                Route::get('chat/{communitySession}', [SessionChatController::class, 'show'])
+                    ->name('chat.show');
+                Route::post('chat/{communitySession}/messages', [SessionChatController::class, 'store'])
+                    ->name('chat.messages.store');
+                Route::post('chat/{communitySession}/read', [SessionChatController::class, 'markRead'])
+                    ->name('chat.read');
             });
 
         Route::prefix('community')->name('community.')->group(function () {
@@ -608,6 +619,13 @@ Route::prefix('{locale}')
                     Route::delete('sessions/{communitySession}/participants/{user}', 'removeParticipant')
                         ->name('community-sessions.participants.destroy');
                     Route::delete('sessions/{communitySession}', 'destroy')->name('community-sessions.destroy');
+                });
+
+            Route::controller(AdminSessionChatController::class)
+                ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value)
+                ->group(function () {
+                    Route::get('chat', 'index')->name('chat.index');
+                    Route::get('chat/{communitySession}', 'show')->name('chat.show');
                 });
 
             Route::controller(AdminClubController::class)
