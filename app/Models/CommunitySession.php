@@ -171,6 +171,14 @@ class CommunitySession extends Model
     }
 
     /**
+     * @return HasMany<CommunitySessionMessage, $this>
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(CommunitySessionMessage::class);
+    }
+
+    /**
      * @param  Builder<static>  $query
      * @return Builder<static>
      */

@@ -23,6 +23,8 @@ type ChatMessageListProps = {
     currentUserId: number;
     emptyState?: ReactNode;
     className?: string;
+    onRetry?: (message: ChatMessage) => void;
+    onDismissFailed?: (message: ChatMessage) => void;
 };
 
 type ChatRow =
@@ -39,6 +41,8 @@ export function ChatMessageList({
     currentUserId,
     emptyState,
     className,
+    onRetry,
+    onDismissFailed,
 }: ChatMessageListProps) {
     const { t } = useTranslation();
     const rows = useMemo(() => buildRows(messages), [messages]);
@@ -80,6 +84,10 @@ export function ChatMessageList({
                                                                 .length -
                                                                 1
                                                         }
+                                                        onRetry={onRetry}
+                                                        onDismissFailed={
+                                                            onDismissFailed
+                                                        }
                                                     />
                                                 ),
                                             )}
@@ -92,7 +100,7 @@ export function ChatMessageList({
                 </MessageScrollerViewport>
                 <MessageScrollerButton
                     variant="outline"
-                    className="rounded-none border-gold/30 bg-cream text-choc hover:bg-gold/10 hover:text-choc"
+                    className="rounded-none border-gold/30 bg-choc2 text-cream hover:bg-gold/15 hover:text-gold"
                 />
             </MessageScroller>
 
@@ -138,7 +146,7 @@ function ChatDaySeparator({ sentAt }: { sentAt: string }) {
     return (
         <div className="flex items-center gap-4" role="separator">
             <span className="h-px flex-1 bg-gold/15" aria-hidden="true" />
-            <span className="font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
+            <span className="font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
                 {formatSessionDateLong(sentAt, locale)}
             </span>
             <span className="h-px flex-1 bg-gold/15" aria-hidden="true" />
@@ -152,10 +160,10 @@ function ChatEmptyState() {
     return (
         <div className="flex flex-col items-center gap-3 px-6 py-14 text-center">
             <MessageCircle className="size-6 text-gold2" aria-hidden="true" />
-            <p className="font-serif text-lg text-choc">
+            <p className="font-serif text-lg text-cream">
                 {t('Nog geen berichten')}
             </p>
-            <p className="max-w-sm font-sans text-[12px] text-stone">
+            <p className="max-w-sm font-sans text-[12px] text-sand">
                 {t('Stuur het eerste bericht om het gesprek te starten.')}
             </p>
         </div>

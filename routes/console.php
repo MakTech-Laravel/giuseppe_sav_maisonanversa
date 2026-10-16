@@ -1,7 +1,9 @@
 <?php
 
+use App\Console\Commands\Community\PruneSessionChatMessagesCommand;
 use App\Console\Commands\Community\SendMatchCards;
 use App\Console\Commands\Community\SendOpenSpotsAlerts;
+use App\Console\Commands\Community\SendSessionChatDigestsCommand;
 use App\Console\Commands\Community\SendSessionReminders;
 use App\Console\Commands\Editions\ReleaseExpiredHolds;
 use App\Console\Commands\Mail\SendPostDeliveryFollowUps;
@@ -35,6 +37,16 @@ Schedule::command(SendOpenSpotsAlerts::class)
 
 Schedule::command(SendMatchCards::class)
     ->everyFifteenMinutes()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(PruneSessionChatMessagesCommand::class)
+    ->daily()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(SendSessionChatDigestsCommand::class)
+    ->everyThirtyMinutes()
     ->withoutOverlapping()
     ->onOneServer();
 

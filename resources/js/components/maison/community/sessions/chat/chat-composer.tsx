@@ -124,7 +124,7 @@ export function ChatComposer({
         <form
             onSubmit={handleSubmit}
             className={cn(
-                'border-t border-gold/15 bg-cream2 px-4 py-4 md:px-6',
+                'border-t border-gold/20 bg-choc3 px-4 py-4 md:px-6',
                 className,
             )}
         >
@@ -142,7 +142,7 @@ export function ChatComposer({
 
             <InputGroup
                 data-disabled={disabled}
-                className="rounded-none border-gold/25 bg-cream shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-gold2 has-[[data-slot=input-group-control]:focus-visible]:ring-0"
+                className="rounded-none border-gold/25 bg-choc2 shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-gold has-[[data-slot=input-group-control]:focus-visible]:ring-0"
             >
                 {images.length > 0 && (
                     <InputGroupAddon align="block-start" className="pb-0">
@@ -152,7 +152,7 @@ export function ChatComposer({
                                     key={image.id}
                                     orientation="vertical"
                                     size="xs"
-                                    className="w-20 rounded-none border-gold/20 bg-cream2"
+                                    className="w-20 rounded-none border-gold/25 bg-choc3"
                                 >
                                     <AttachmentMedia
                                         variant="image"
@@ -171,7 +171,7 @@ export function ChatComposer({
                                             onClick={() =>
                                                 removeImage(image.id)
                                             }
-                                            className="rounded-none bg-cream/90 text-choc hover:bg-cream"
+                                            className="rounded-none bg-choc/90 text-cream hover:bg-choc hover:text-gold"
                                         >
                                             <X />
                                         </AttachmentAction>
@@ -190,12 +190,12 @@ export function ChatComposer({
                     rows={1}
                     placeholder={placeholder ?? t('Schrijf een bericht...')}
                     aria-label={t('Chatbericht')}
-                    className="max-h-40 min-h-12 px-4 font-sans text-[14px] text-choc placeholder:text-stone"
+                    className="max-h-40 min-h-12 px-4 font-sans text-[14px] text-cream placeholder:text-sand"
                 />
 
                 <InputGroupAddon
                     align="block-end"
-                    className="justify-between border-t border-gold/10 pt-2"
+                    className="justify-between border-t border-gold/15 pt-2"
                 >
                     <InputGroupButton
                         size="icon-sm"
@@ -203,7 +203,7 @@ export function ChatComposer({
                         title={t('Afbeelding toevoegen')}
                         disabled={!canAddImages}
                         onClick={() => fileInput.current?.click()}
-                        className="rounded-none text-choc hover:bg-gold/10 hover:text-choc"
+                        className="rounded-none text-cream hover:bg-gold/10 hover:text-gold"
                     >
                         <ImagePlus />
                     </InputGroupButton>
@@ -213,7 +213,7 @@ export function ChatComposer({
                         size="sm"
                         variant="default"
                         disabled={!canSend}
-                        className="rounded-none bg-choc px-4 font-sans text-[10px] tracking-[0.2em] text-cream uppercase hover:bg-gold2"
+                        className="rounded-none bg-gold px-4 font-sans text-[10px] tracking-[0.2em] text-choc uppercase hover:bg-gold2"
                     >
                         {t('Versturen')}
                         <SendHorizontal aria-hidden="true" />
