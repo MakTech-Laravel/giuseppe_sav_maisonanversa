@@ -21,7 +21,7 @@ export function ChatClosedNotice({
         <div
             role="status"
             className={cn(
-                'flex items-center justify-center gap-2 border-t border-gold/15 bg-gold/6 px-6 py-5 text-center font-sans text-[11px] tracking-[0.08em] text-choc3',
+                'flex items-center justify-center gap-2 border-t border-gold/20 bg-choc2 px-6 py-5 text-center font-sans text-[11px] tracking-[0.08em] text-sand',
                 className,
             )}
         >

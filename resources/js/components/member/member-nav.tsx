@@ -87,6 +87,7 @@ export function MemberNav({
             label: t('Meldingen'),
             href: `/${locale}/member/notifications`,
         },
+        { label: t('Chat'), href: `/${locale}/member/chat` },
         { label: t('Bestellingen'), href: `/${locale}/member/orders` },
         {
             label: t('Lidpaspoort'),
