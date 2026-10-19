@@ -35,7 +35,7 @@ class SessionShareController extends Controller
 
         return Inertia::render('maison/sessions/share', [
             'session' => SessionFeed::toCard($session, $viewer, $locale),
-            'players' => $this->cards->players($session),
+            'players' => $this->cards->players($session, $locale),
             'result' => $session->officialScore?->setsLine(),
             'card' => Gate::allows('shareCard', $session) ? $this->cards->links($session, $locale) : null,
             'shareUrl' => $session->isCancelled() ? null : $session->shareUrl($locale),

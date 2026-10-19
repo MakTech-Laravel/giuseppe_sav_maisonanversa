@@ -20,6 +20,19 @@ done
 
 php artisan storage:link --force --no-interaction
 
+# Coolify may mount an empty volume over storage/; ensure match-card cache dirs exist
+# and stay writable by php-fpm / queue workers (www-data).
+mkdir -p \
+    storage/app/private \
+    storage/app/public \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+
 php artisan config:cache --no-interaction
 php artisan route:cache --no-interaction
 php artisan view:cache --no-interaction
