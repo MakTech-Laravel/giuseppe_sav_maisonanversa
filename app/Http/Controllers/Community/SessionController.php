@@ -162,11 +162,21 @@ class SessionController extends Controller
     }
 
     /**
-     * Deep links from the community area land on the member chat inbox.
+     * Deep links from the community area: admins go to the staff chat inbox
+     * (customer middleware blocks member routes); members stay on member chat.
      */
     public function chat(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
     {
         $this->authorize('chat', $communitySession);
+
+        $user = $request->user();
+
+        if ($user instanceof User && $user->isAdmin()) {
+            return redirect()->route('admin.chat.show', [
+                'locale' => $locale,
+                'communitySession' => $communitySession,
+            ]);
+        }
 
         return redirect()->route('member.chat.show', [
             'locale' => $locale,
