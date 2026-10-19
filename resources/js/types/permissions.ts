@@ -20,6 +20,10 @@ export const PERMISSIONS = {
     NOTIFICATIONS: {
         TEST: 'notifications.test',
     },
+    SERVERS_MAINTENANCE: {
+        VIEW: 'servers-maintenance.view',
+        RESTART: 'servers-maintenance.restart',
+    },
     FILE_UPLOAD: {
         INDEX: 'file-upload.index',
     },

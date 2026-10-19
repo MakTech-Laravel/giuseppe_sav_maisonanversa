@@ -24,14 +24,14 @@ test('html responses send a content security policy with a vite nonce', function
 
 test('the csp allows the external reverb websocket origin', function () {
     config([
-        'broadcasting.connections.reverb.options.host' => 'ws.maisonanversa.maktechlaravel.cloud',
+        'broadcasting.connections.reverb.options.host' => 'ws.maisonanversa.com',
         'broadcasting.connections.reverb.options.port' => 443,
         'broadcasting.connections.reverb.options.scheme' => 'https',
     ]);
 
     $csp = (string) $this->get('/nl')->assertOk()->headers->get('Content-Security-Policy');
 
-    expect($csp)->toContain('wss://ws.maisonanversa.maktechlaravel.cloud');
+    expect($csp)->toContain('wss://ws.maisonanversa.com');
 });
 
 test('the csp keeps a non-default local reverb port', function () {

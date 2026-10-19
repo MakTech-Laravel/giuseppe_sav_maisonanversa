@@ -30,6 +30,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/match-card/** | .ai/rules/match-card.md |
 | resources/js/components/member/**, resources/js/layouts/member-layout.tsx | .ai/rules/member.md |
 | app/Models/*.php, app/Models/Inquiry.php, app/Models/HomeHero.php, app/Models/StoryPage.php | .ai/rules/models.md |
+| app/Monitoring/** | .ai/rules/monitoring.md |
 | app/Services/Newsletter/**, app/Http/Controllers/Member/DashboardController.php, resources/js/pages/member/letter.tsx, resources/js/pages/member/email-preferences.tsx | .ai/rules/newsletter.md |
 | resources/js/pages/admin/**/*.tsx | .ai/rules/pages-admin.md |
 | routes/web.php | .ai/rules/routes.md |

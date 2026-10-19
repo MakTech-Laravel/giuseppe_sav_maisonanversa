@@ -35,7 +35,7 @@ WORKDIR /var/www
 # Echo config is baked into the Vite bundle, so the external Reverb host/key must be
 # supplied as Coolify build args (they override the .env.example placeholders).
 ARG VITE_REVERB_APP_KEY=
-ARG VITE_REVERB_HOST=ws.maisonanversa.maktechlaravel.cloud
+ARG VITE_REVERB_HOST=ws.maisonanversa.com
 ARG VITE_REVERB_PORT=443
 ARG VITE_REVERB_SCHEME=https
 ENV VITE_REVERB_APP_KEY=${VITE_REVERB_APP_KEY} \

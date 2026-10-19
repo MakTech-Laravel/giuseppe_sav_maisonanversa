@@ -106,7 +106,7 @@ test('the health endpoint reports the target without leaking the secret', functi
         'broadcasting.default' => 'reverb',
         'broadcasting.connections.reverb.key' => 'abcdefghijklmnop',
         'broadcasting.connections.reverb.secret' => 'super-secret-value',
-        'broadcasting.connections.reverb.options.host' => 'ws.maisonanversa.maktechlaravel.cloud',
+        'broadcasting.connections.reverb.options.host' => 'ws.maisonanversa.com',
         'broadcasting.connections.reverb.options.port' => 443,
         'broadcasting.connections.reverb.options.scheme' => 'https',
     ]);
@@ -115,7 +115,7 @@ test('the health endpoint reports the target without leaking the secret', functi
         ->getJson(route('admin.realtime.health', ['locale' => 'nl']))
         ->assertOk()
         ->assertJsonPath('data.broadcast_connection', 'reverb')
-        ->assertJsonPath('data.host', 'ws.maisonanversa.maktechlaravel.cloud')
+        ->assertJsonPath('data.host', 'ws.maisonanversa.com')
         ->assertJsonPath('data.app_key_preview', 'abcdefgh...');
 
     expect($response->getContent())

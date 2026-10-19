@@ -4,6 +4,7 @@ import {
     BookOpen,
     CalendarDays,
     LayoutGrid,
+    ServerCog,
     UserRoundCog,
     Users,
 } from 'lucide-react';
@@ -31,7 +32,9 @@ import { dashboard } from '@/routes/admin';
 import admins from '@/routes/admin/admins';
 import customers from '@/routes/admin/customers';
 import journalRoutes from '@/routes/admin/journal';
+import serversMaintenance from '@/routes/admin/servers-maintenance';
 import { PERMISSIONS } from '@/types/permissions';
+import type { PermissionKey } from '@/types/permissions';
 
 interface DashboardProps {
     stats: { key: string; value: string; hintKey: string }[];
@@ -58,7 +61,13 @@ export default function Dashboard({
 }: DashboardProps) {
     const { t } = useTranslation();
     const { can } = usePermission();
-    const quickLinks = [
+    const quickLinks: {
+        label: string;
+        description: string;
+        href: string | { url: string };
+        icon: typeof Users;
+        permission?: PermissionKey;
+    }[] = [
         {
             label: t('Klanten'),
             description: t('Beheer ledenaccounts'),
@@ -79,6 +88,15 @@ export default function Dashboard({
             href: journalRoutes.index(wayfinderLocale()),
             icon: BookOpen,
             permission: PERMISSIONS.POSTS.VIEW,
+        },
+        {
+            label: t('Reverb Server'),
+            description: t(
+                'Monitor and restart the main application and Reverb.',
+            ),
+            href: serversMaintenance.index(wayfinderLocale()),
+            icon: ServerCog,
+            // Read-always for any admin who can open the dashboard.
         },
     ];
 
@@ -123,7 +141,11 @@ export default function Dashboard({
                             </CardHeader>
                             <CardContent className="grid gap-2">
                                 {quickLinks
-                                    .filter((item) => can(item.permission))
+                                    .filter(
+                                        (item) =>
+                                            item.permission === undefined ||
+                                            can(item.permission),
+                                    )
                                     .map((item) => (
                                         <Button
                                             key={item.label}

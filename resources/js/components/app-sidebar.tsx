@@ -18,6 +18,7 @@ import {
     MessagesSquare,
     Package,
     Radio,
+    ServerCog,
     Settings2,
     ShoppingBag,
     Shirt,
@@ -65,6 +66,7 @@ import adminNotificationTest from '@/routes/admin/notifications/test';
 import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
 import adminRealtime from '@/routes/admin/realtime';
+import adminServersMaintenance from '@/routes/admin/servers-maintenance';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSiteSettings from '@/routes/admin/site-settings';
 import adminStoryPage from '@/routes/admin/story-page';
@@ -105,6 +107,12 @@ function buildNavGroups(
                     href: adminRealtime.index(locale),
                     icon: Radio,
                     permissions: [PERMISSIONS.REALTIME.VIEW],
+                },
+                {
+                    title: t('Reverb Server'),
+                    href: adminServersMaintenance.index(locale),
+                    icon: ServerCog,
+                    // Read-always for admins: visible whenever the admin shell is reachable.
                 },
             ],
         },
