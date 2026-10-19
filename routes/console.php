@@ -7,6 +7,8 @@ use App\Console\Commands\Community\SendSessionChatDigestsCommand;
 use App\Console\Commands\Community\SendSessionReminders;
 use App\Console\Commands\Editions\ReleaseExpiredHolds;
 use App\Console\Commands\Mail\SendPostDeliveryFollowUps;
+use App\Console\Commands\Monitoring\PruneMonitoringHistoryCommand;
+use App\Console\Commands\Monitoring\RunHealthChecksCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -51,6 +53,16 @@ Schedule::command(SendSessionChatDigestsCommand::class)
     ->onOneServer();
 
 Schedule::command('seo:generate')
+    ->daily()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(RunHealthChecksCommand::class)
+    ->everyThirtySeconds()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(PruneMonitoringHistoryCommand::class)
     ->daily()
     ->withoutOverlapping()
     ->onOneServer();

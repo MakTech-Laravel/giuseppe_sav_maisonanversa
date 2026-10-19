@@ -10,6 +10,8 @@ enum PermissionEnum: string
     case DOCUMENTATION_VIEW = 'documentation.view';
     case REALTIME_VIEW = 'realtime.view';
     case NOTIFICATIONS_TEST = 'notifications.test';
+    case SERVERS_MAINTENANCE_VIEW = 'servers-maintenance.view';
+    case SERVERS_MAINTENANCE_RESTART = 'servers-maintenance.restart';
 
     // FILE UPLOAD
     case FILE_UPLOAD_INDEX = 'file-upload.index';
@@ -70,7 +72,9 @@ enum PermissionEnum: string
             self::REPOSITORY_VIEW,
             self::DOCUMENTATION_VIEW,
             self::REALTIME_VIEW,
-            self::NOTIFICATIONS_TEST => 'Dashboard',
+            self::NOTIFICATIONS_TEST,
+            self::SERVERS_MAINTENANCE_VIEW,
+            self::SERVERS_MAINTENANCE_RESTART => 'Dashboard',
 
             self::FILE_UPLOAD_INDEX,
             self::FILE_UPLOAD_STORE => 'File Upload',

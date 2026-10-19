@@ -41,6 +41,8 @@ enum RoleEnum: string
                 PermissionEnum::DOCUMENTATION_VIEW,
                 PermissionEnum::REALTIME_VIEW,
                 PermissionEnum::NOTIFICATIONS_TEST,
+                PermissionEnum::SERVERS_MAINTENANCE_VIEW,
+                PermissionEnum::SERVERS_MAINTENANCE_RESTART,
 
                 PermissionEnum::FILE_UPLOAD_INDEX,
                 PermissionEnum::FILE_UPLOAD_STORE,

@@ -698,6 +698,8 @@ Route::prefix('{locale}')
                     Route::post('test-notification', 'testNotification')->name('test-notification');
                 });
 
+            require __DIR__.'/admin-server-monitoring.php';
+
             Route::controller(NotificationTestController::class)
                 ->prefix('notifications/test')
                 ->name('notifications.test.')
