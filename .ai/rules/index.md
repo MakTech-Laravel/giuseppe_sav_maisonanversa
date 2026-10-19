@@ -7,9 +7,10 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Http/Controllers/Admin/CommunityEventController.php | .ai/rules/admin.md |
 | app/Services/Brevo/**, app/Contracts/BrevoContacts.php, app/Jobs/SyncOrderToBrevo.php | .ai/rules/brevo.md |
 | app/Services/FoundingCircle/**,app/Support/PassportPresenter.php,app/Services/Checkout/OrderFulfillment.php | .ai/rules/checkout.md |
+| app/Console/Commands/Community/** | .ai/rules/commands-community.md |
 | app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |
-| app/Http/Controllers/Maison/VerificationController.php | .ai/rules/controllers-maison.md |
+| app/Http/Controllers/Maison/VerificationController.php, app/Http/Controllers/Maison/SessionShareController.php | .ai/rules/controllers-maison.md |
 | resources/js/pages/maison/home.tsx,resources/js/components/maison/home/**,app/Support/SessionFeed.php,app/Http/Controllers/MaisonController.php | .ai/rules/controllers.md |
 | docker/** | .ai/rules/docker.md |
 | app/Services/Edition/** | .ai/rules/edition.md |
@@ -26,6 +27,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/pages/maison/founding-circle/** | .ai/rules/maison-founding-circle.md |
 | resources/js/components/maison/modals/**, resources/js/components/ui/select.tsx, resources/js/components/gender-select.tsx | .ai/rules/maison-modals.md |
 | resources/js/pages/maison/house.tsx, resources/js/pages/maison/community.tsx | .ai/rules/maison.md |
+| resources/match-card/** | .ai/rules/match-card.md |
 | resources/js/components/member/**, resources/js/layouts/member-layout.tsx | .ai/rules/member.md |
 | app/Models/*.php, app/Models/Inquiry.php, app/Models/HomeHero.php, app/Models/StoryPage.php | .ai/rules/models.md |
 | app/Services/Newsletter/**, app/Http/Controllers/Member/DashboardController.php, resources/js/pages/member/letter.tsx, resources/js/pages/member/email-preferences.tsx | .ai/rules/newsletter.md |
@@ -33,7 +35,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | routes/web.php | .ai/rules/routes.md |
 | app/Support/Seo/** | .ai/rules/seo.md |
 | app/Services/Checkout/** | .ai/rules/services-checkout.md |
-| app/Services/Community/ClubMerger.php | .ai/rules/services-community.md |
+| app/Services/Community/ClubMerger.php, app/Services/Community/SessionNotificationService.php | .ai/rules/services-community.md |
 | resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
-| app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php, app/Support/HomeHeroPresenter.php, app/Support/SessionFeed.php | .ai/rules/support.md |
+| app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php, app/Support/HomeHeroPresenter.php, app/Support/SessionFeed.php, app/Support/MatchScore.php | .ai/rules/support.md |
 | app/Services/Translation/** | .ai/rules/translation.md |

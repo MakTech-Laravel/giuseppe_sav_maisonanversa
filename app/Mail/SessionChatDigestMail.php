@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\CommunitySession;
 use App\Support\BrandsMaisonMail;
 use App\Support\MailLocale;
 use Illuminate\Bus\Queueable;
@@ -12,13 +11,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SessionJoinedMail extends Mailable implements ShouldQueue
+/**
+ * Bulk “new messages” digest — one mail per inactive member with unread chat,
+ * never one mail per message.
+ */
+class SessionChatDigestMail extends Mailable implements ShouldQueue
 {
     use BrandsMaisonMail, Queueable, SerializesModels;
 
     public function __construct(
-        public CommunitySession $session,
-        public string $memberName,
+        public int $unreadCount,
+        public string $ctaUrl,
         ?string $locale = null,
     ) {
         $this->locale(MailLocale::resolve($locale));
@@ -27,19 +30,22 @@ class SessionJoinedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Iemand heeft zich aangemeld voor uw sessie'),
+            subject: __('Nieuwe berichten'),
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            html: 'emails.session-joined',
+            html: 'emails.session-chat-digest',
             with: [
-                ...$this->maisonBrandData(),
-                'memberName' => $this->memberName,
-                'when' => $this->session->starts_at->translatedFormat('j F Y H:i'),
-                'location' => $this->session->location,
+                ...$this->maisonBrandData($this->locale, withHomeCta: false),
+                'title' => __('Nieuwe berichten'),
+                'intro' => __('U heeft :count ongelezen chatberichten.', [
+                    'count' => $this->unreadCount,
+                ]),
+                'ctaUrl' => $this->ctaUrl,
+                'ctaLabel' => __('Bekijk berichten'),
             ],
         );
     }

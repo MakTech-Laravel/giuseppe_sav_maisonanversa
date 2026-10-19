@@ -1,8 +1,9 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { CalendarDays, Clock, Gauge, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
 import { PartnerBadge } from '@/components/maison/community/partner-badge';
+import { SessionChatButton } from '@/components/maison/community/sessions/chat/session-chat-button';
+import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
 import { useOptionalShellActions } from '@/components/maison/shell/shell-actions';
 import { storePendingSessionJoin } from '@/lib/pending-session-join';
 import {
@@ -23,6 +24,7 @@ export function SessionCard({ session }: SessionCardProps) {
     const { auth, locale } = usePage().props;
     const shellActions = useOptionalShellActions();
     const args = { locale, communitySession: Number(session.id) };
+    const pendingCount = session.pending_count ?? 0;
 
     function handleJoin() {
         if (!auth?.user) {
@@ -87,19 +89,25 @@ export function SessionCard({ session }: SessionCardProps) {
                 <PlayerSlots
                     players={session.players}
                     openSlots={session.open_slots}
+                    pendingSlots={pendingCount}
                 />
 
                 <span className="font-sans text-[10px] tracking-[0.16em] text-stone uppercase">
                     {session.participants_count} / {session.capacity}{' '}
                     {t('spelers')}
+                    {pendingCount > 0 &&
+                        ` · ${t('{{count}} in afwachting', { count: pendingCount })}`}
                 </span>
 
-                <SessionAction
-                    session={session}
-                    onJoin={handleJoin}
-                    onLeave={handleLeave}
-                    showUrl={showUrl}
-                />
+                <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                    <SessionChatButton session={session} />
+                    <SessionAction
+                        session={session}
+                        onJoin={handleJoin}
+                        onLeave={handleLeave}
+                        showUrl={showUrl}
+                    />
+                </div>
             </div>
         </article>
     );
@@ -148,8 +156,37 @@ function SessionAction({
         );
     }
 
+    if (session.is_pending) {
+        return (
+            <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                <StatusPill label={t('Aanvraag in behandeling')} />
+                {session.can_withdraw && (
+                    <button
+                        type="button"
+                        onClick={onLeave}
+                        className={cn(outlineButton)}
+                    >
+                        {t('Aanvraag intrekken')}
+                    </button>
+                )}
+            </div>
+        );
+    }
+
+    if (session.viewer_status === 'rejected') {
+        return <StatusPill label={t('Aanvraag geweigerd')} />;
+    }
+
     if (session.is_full) {
         return <StatusPill label={t('Sessie compleet')} />;
+    }
+
+    if (session.registration_closed) {
+        return <StatusPill label={t('Inschrijving gesloten')} />;
+    }
+
+    if (!session.can_join) {
+        return <StatusPill label={t('Alle plaatsen aangevraagd')} />;
     }
 
     return (

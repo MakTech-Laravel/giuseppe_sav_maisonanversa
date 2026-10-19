@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Community;
 use App\Enums\SessionCourtStatus;
 use App\Enums\SessionGender;
 use App\Enums\SessionLevel;
+use App\Enums\SessionParticipantStatus;
 use App\Enums\SessionSport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\StoreCommunitySessionRequest;
@@ -12,17 +13,26 @@ use App\Models\Club;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
-use App\Notifications\SessionJoinedNotification;
+use App\Services\Community\SessionNotificationService;
+use App\Services\Community\SessionScoreboard;
+use App\Support\MatchCardPresenter;
 use App\Support\SessionFeed;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class SessionController extends Controller
 {
+    public function __construct(
+        private readonly SessionNotificationService $notifier,
+        private readonly SessionScoreboard $scoreboard,
+        private readonly MatchCardPresenter $cards,
+    ) {}
+
     public function index(Request $request, string $locale): Response
     {
         $user = $request->user();
@@ -100,10 +110,14 @@ class SessionController extends Controller
             CommunitySessionParticipant::query()->create([
                 'community_session_id' => $session->id,
                 'user_id' => $request->user()->id,
+                'status' => SessionParticipantStatus::Confirmed,
+                'decided_at' => now(),
             ]);
 
             return $session;
         });
+
+        $this->notifier->created($session, $request->user());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie gepubliceerd.')]);
 
@@ -115,10 +129,48 @@ class SessionController extends Controller
 
     public function show(Request $request, string $locale, CommunitySession $communitySession): Response
     {
-        $communitySession->load(['host', 'club', 'participants.user', 'translations'])->loadCount('participants');
+        $viewer = $request->user();
+
+        $communitySession->load(['host', 'club', 'participants.user', 'participantRecords', 'joinRequests.user', 'translations'])
+            ->loadCount(['participants', 'joinRequests']);
+
+        $showsRequests = $viewer !== null
+            && $communitySession->isHostedBy($viewer)
+            && ! $communitySession->hasStarted()
+            && ! $communitySession->isCancelled();
 
         return Inertia::render('maison/sessions/show', [
-            'session' => SessionFeed::toCard($communitySession, $request->user(), $locale),
+            'session' => SessionFeed::toCard($communitySession, $viewer, $locale),
+            'joinRequests' => $showsRequests
+                ? $communitySession->joinRequests
+                    ->sortBy('created_at')
+                    ->map(fn (CommunitySessionParticipant $row): array => [
+                        ...SessionFeed::player($row->user),
+                        'requested_at' => $row->created_at?->toIso8601String(),
+                    ])
+                    ->values()
+                    ->all()
+                : [],
+            'scoreboard' => $this->scoreboard->present($communitySession, $viewer),
+            'matchCard' => Gate::allows('shareCard', $communitySession)
+                ? $this->cards->links($communitySession, $locale)
+                : null,
+            'shareUrl' => $communitySession->isCancelled()
+                ? null
+                : $communitySession->shareUrl($locale),
+        ]);
+    }
+
+    /**
+     * Deep links from the community area land on the member chat inbox.
+     */
+    public function chat(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
+    {
+        $this->authorize('chat', $communitySession);
+
+        return redirect()->route('member.chat.show', [
+            'locale' => $locale,
+            'communitySession' => $communitySession,
         ]);
     }
 
@@ -126,57 +178,193 @@ class SessionController extends Controller
     {
         $this->authorize('cancel', $communitySession);
 
-        $communitySession->update(['cancelled_at' => now()]);
+        $validated = $request->validate([
+            'message' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        if (! $communitySession->isCancelled()) {
+            $communitySession->update([
+                'cancelled_at' => now(),
+                'cancellation_message' => filled($validated['message'] ?? null) ? trim($validated['message']) : null,
+            ]);
+
+            $this->notifier->cancelled($communitySession, $request->user());
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie geannuleerd.')]);
 
         return redirect()->route('community.sessions.index', ['locale' => $locale]);
     }
 
+    /**
+     * Joining is a request: it reserves a seat (confirmed + pending never
+     * exceeds capacity) and waits for the host's decision.
+     */
     public function join(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
     {
-        DB::transaction(function () use ($request, $communitySession): void {
+        $requested = DB::transaction(function () use ($request, $communitySession): bool {
             $locked = CommunitySession::query()
                 ->whereKey($communitySession->id)
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            $already = CommunitySessionParticipant::query()->where([
+            $existing = CommunitySessionParticipant::query()->where([
                 'community_session_id' => $locked->id,
                 'user_id' => $request->user()->id,
-            ])->exists();
+            ])->first();
 
-            if ($already) {
-                return;
+            if ($existing !== null) {
+                abort_if(
+                    $existing->status === SessionParticipantStatus::Rejected,
+                    422,
+                    __('De organisator heeft uw aanvraag voor deze sessie niet aanvaard.'),
+                );
+
+                return false;
             }
 
             abort_if($locked->isCancelled(), 422, __('Deze sessie is geannuleerd.'));
             abort_if($locked->isPast(), 422, __('Deze sessie is al voorbij.'));
+            abort_if($locked->isRegistrationClosed(), 422, __('De inschrijvingen voor deze sessie zijn gesloten.'));
             abort_if($locked->isFull(), 422, __('Deze sessie is vol.'));
+            abort_if(
+                $locked->reservedSeats() >= $locked->capacity,
+                422,
+                __('Alle vrije plaatsen zijn al aangevraagd. Probeer het later opnieuw.'),
+            );
 
             CommunitySessionParticipant::query()->create([
                 'community_session_id' => $locked->id,
                 'user_id' => $request->user()->id,
+                'status' => SessionParticipantStatus::Pending,
             ]);
 
-            $locked->host->notify(new SessionJoinedNotification($locked, $request->user()->name));
+            return true;
         });
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('U bent aangemeld voor de sessie.')]);
+        if ($requested) {
+            $this->notifier->requested($communitySession, $request->user());
+        }
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => $requested
+                ? __('Uw aanvraag is verstuurd naar de organisator.')
+                : __('U heeft deze sessie al aangevraagd.'),
+        ]);
 
         return back();
     }
 
+    public function approveRequest(
+        Request $request,
+        string $locale,
+        CommunitySession $communitySession,
+        User $user,
+    ): RedirectResponse {
+        $this->authorize('decideRequest', $communitySession);
+
+        $approved = DB::transaction(function () use ($communitySession, $user): bool {
+            $locked = CommunitySession::query()
+                ->whereKey($communitySession->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $row = $this->pendingRequest($locked, $user);
+
+            if ($row === null) {
+                return false;
+            }
+
+            abort_if($locked->isFull(), 422, __('Deze sessie is vol.'));
+
+            $row->update([
+                'status' => SessionParticipantStatus::Confirmed,
+                'decided_at' => now(),
+            ]);
+
+            return true;
+        });
+
+        if ($approved) {
+            $this->notifier->approved($communitySession, $user, $request->user());
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Aanvraag goedgekeurd.')]);
+
+        return back();
+    }
+
+    public function rejectRequest(
+        Request $request,
+        string $locale,
+        CommunitySession $communitySession,
+        User $user,
+    ): RedirectResponse {
+        $this->authorize('decideRequest', $communitySession);
+
+        $rejected = DB::transaction(function () use ($communitySession, $user): bool {
+            $locked = CommunitySession::query()
+                ->whereKey($communitySession->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $row = $this->pendingRequest($locked, $user);
+
+            if ($row === null) {
+                return false;
+            }
+
+            $row->update([
+                'status' => SessionParticipantStatus::Rejected,
+                'decided_at' => now(),
+            ]);
+
+            return true;
+        });
+
+        if ($rejected) {
+            $this->notifier->rejected($communitySession, $user, $request->user());
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Aanvraag geweigerd.')]);
+
+        return back();
+    }
+
+    /**
+     * Leaves a confirmed seat or withdraws a pending request. A rejected row
+     * stays, so a turned-down member cannot ask again.
+     */
     public function leave(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
     {
         $this->authorize('leave', $communitySession);
 
-        CommunitySessionParticipant::query()
+        $row = CommunitySessionParticipant::query()
             ->where('community_session_id', $communitySession->id)
             ->where('user_id', $request->user()->id)
-            ->delete();
+            ->whereIn('status', SessionParticipantStatus::seatHolding())
+            ->first();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('U heeft de sessie verlaten.')]);
+        $wasPending = $row?->isPending() ?? false;
+        $wasFull = $communitySession->participants()->count() >= $communitySession->capacity;
+
+        $left = $row === null
+            ? 0
+            : CommunitySessionParticipant::query()->whereKey($row->id)->delete();
+
+        if ($left > 0) {
+            if ($wasPending) {
+                $this->notifier->withdrawn($communitySession, $request->user());
+            } else {
+                $this->notifier->left($communitySession, $request->user(), $wasFull);
+            }
+        }
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => $wasPending ? __('Uw aanvraag is ingetrokken.') : __('U heeft de sessie verlaten.'),
+        ]);
 
         return back();
     }
@@ -195,14 +383,31 @@ class SessionController extends Controller
             __('De host kan niet uit de eigen sessie worden verwijderd.'),
         );
 
-        CommunitySessionParticipant::query()
+        $wasFull = $communitySession->participants()->count() >= $communitySession->capacity;
+
+        $removed = CommunitySessionParticipant::query()
             ->where('community_session_id', $communitySession->id)
             ->where('user_id', $user->id)
+            ->where('status', SessionParticipantStatus::Confirmed->value)
             ->delete();
+
+        if ($removed > 0) {
+            $this->notifier->removed($communitySession, $user, $request->user(), $wasFull);
+        }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Speler verwijderd uit de sessie.')]);
 
         return back();
+    }
+
+    private function pendingRequest(CommunitySession $session, User $user): ?CommunitySessionParticipant
+    {
+        return CommunitySessionParticipant::query()
+            ->where('community_session_id', $session->id)
+            ->where('user_id', $user->id)
+            ->where('status', SessionParticipantStatus::Pending->value)
+            ->lockForUpdate()
+            ->first();
     }
 
     /**

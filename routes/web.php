@@ -14,11 +14,15 @@ use App\Http\Controllers\Admin\HomeHeroController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
+use App\Http\Controllers\Admin\NotificationTestController;
 use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\RealtimeController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeoMetaController;
+use App\Http\Controllers\Admin\SessionChatController as AdminSessionChatController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\StoryPageController;
 use App\Http\Controllers\Admin\UserController;
@@ -28,6 +32,7 @@ use App\Http\Controllers\Community\ClubController;
 use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\Community\EventController as CommunityEventPageController;
 use App\Http\Controllers\Community\SessionController;
+use App\Http\Controllers\Community\SessionScoreController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
@@ -35,12 +40,15 @@ use App\Http\Controllers\Maison\FoundingCircleRegisterController;
 use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
 use App\Http\Controllers\Maison\ProductEditionController;
+use App\Http\Controllers\Maison\SessionShareController;
 use App\Http\Controllers\Maison\VerificationController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\Member\PassportPdfController;
+use App\Http\Controllers\Member\PresenceController;
 use App\Http\Controllers\Member\RegisterListingController;
+use App\Http\Controllers\Member\SessionChatController;
 use App\Http\Controllers\PostAttachmentController;
 use App\Http\Controllers\RobotsTxtController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -142,6 +150,16 @@ Route::prefix('{locale}')
             ->where('token', '[0-9a-fA-F-]{36}')
             ->name('verify');
 
+        Route::controller(SessionShareController::class)
+            ->where(['shareToken' => '[A-Za-z0-9]{32}'])
+            ->middleware('throttle:60,1')
+            ->group(function () {
+                Route::get('s/{shareToken}', 'show')->name('sessions.share');
+                Route::get('s/{shareToken}/card/{format}.png', 'card')
+                    ->where('format', 'story|post')
+                    ->name('sessions.card');
+            });
+
         Route::post('heritage-letter', [NewsletterController::class, 'store'])
             ->middleware('throttle:5,1')
             ->name('heritage-letter.store');
@@ -228,12 +246,30 @@ Route::prefix('{locale}')
                 Route::get('letter', 'letter')->name('letter');
                 Route::get('email-preferences', 'emailPreferences')->name('email-preferences');
                 Route::patch('email-preferences', 'updateEmailPreferences')->name('email-preferences.update');
+                Route::patch('session-emails', 'updateSessionEmails')->name('session-emails.update');
                 Route::get('profile', 'profile')->name('profile');
                 Route::patch('profile', 'updateProfile')->name('profile.update');
                 Route::get('security', 'security')->name('security');
                 Route::delete('profile', 'destroy')->name('profile.destroy');
+                Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
                 Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
-                Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+                Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+                    ->whereNumber('notification')
+                    ->name('notifications.read');
+                Route::get('notifications/{userNotification}', [NotificationController::class, 'show'])
+                    ->whereNumber('userNotification')
+                    ->name('notifications.show');
+                Route::delete('notifications/{userNotification}', [NotificationController::class, 'destroy'])
+                    ->whereNumber('userNotification')
+                    ->name('notifications.destroy');
+                Route::post('presence', PresenceController::class)->name('presence');
+                Route::get('chat', [SessionChatController::class, 'index'])->name('chat.index');
+                Route::get('chat/{communitySession}', [SessionChatController::class, 'show'])
+                    ->name('chat.show');
+                Route::post('chat/{communitySession}/messages', [SessionChatController::class, 'store'])
+                    ->name('chat.messages.store');
+                Route::post('chat/{communitySession}/read', [SessionChatController::class, 'markRead'])
+                    ->name('chat.read');
             });
 
         Route::prefix('community')->name('community.')->group(function () {
@@ -254,11 +290,27 @@ Route::prefix('{locale}')
                 Route::get('sessions/create', 'create')->name('sessions.create');
                 Route::post('sessions', 'store')->name('sessions.store');
                 Route::get('sessions/{communitySession}', 'show')->name('sessions.show');
+                Route::get('sessions/{communitySession}/chat', 'chat')->name('sessions.chat');
                 Route::delete('sessions/{communitySession}', 'destroy')->name('sessions.destroy');
                 Route::post('sessions/{communitySession}/join', 'join')->name('sessions.join');
                 Route::delete('sessions/{communitySession}/leave', 'leave')->name('sessions.leave');
                 Route::delete('sessions/{communitySession}/participants/{user}', 'removeParticipant')
                     ->name('sessions.participants.destroy');
+                Route::patch('sessions/{communitySession}/requests/{user}/approve', 'approveRequest')
+                    ->name('sessions.requests.approve');
+                Route::patch('sessions/{communitySession}/requests/{user}/reject', 'rejectRequest')
+                    ->name('sessions.requests.reject');
+            });
+
+            Route::controller(SessionScoreController::class)->scopeBindings()->group(function () {
+                Route::post('sessions/{communitySession}/scores', 'store')->name('sessions.scores.store');
+                Route::patch('sessions/{communitySession}/scores/{score}/approve', 'approve')
+                    ->name('sessions.scores.approve');
+                Route::patch('sessions/{communitySession}/scores/{score}/reject', 'reject')
+                    ->name('sessions.scores.reject');
+                Route::patch('sessions/{communitySession}/scoreboard/lock', 'lock')->name('sessions.scoreboard.lock');
+                Route::patch('sessions/{communitySession}/scoreboard/unlock', 'unlock')->name('sessions.scoreboard.unlock');
+                Route::patch('sessions/{communitySession}/finish', 'finish')->name('sessions.finish');
             });
 
             Route::controller(ClubController::class)->group(function () {
@@ -569,6 +621,15 @@ Route::prefix('{locale}')
                     Route::delete('sessions/{communitySession}', 'destroy')->name('community-sessions.destroy');
                 });
 
+            Route::controller(AdminSessionChatController::class)
+                ->middleware('permission:'.PermissionEnum::SESSIONS_MANAGE->value)
+                ->group(function () {
+                    Route::get('chat', 'index')->name('chat.index');
+                    Route::get('chat/{communitySession}', 'show')->name('chat.show');
+                    Route::post('chat/{communitySession}/messages', 'store')
+                        ->name('chat.messages.store');
+                });
+
             Route::controller(AdminClubController::class)
                 ->middleware('permission:'.PermissionEnum::CLUBS_MANAGE->value)
                 ->group(function () {
@@ -625,6 +686,37 @@ Route::prefix('{locale}')
                 Route::get('permissions/export', 'export')->name('permissions.export')
                     ->middleware('permission:'.PermissionEnum::PERMISSIONS_EXPORT->value);
             });
+
+            Route::controller(RealtimeController::class)
+                ->prefix('realtime')
+                ->name('realtime.')
+                ->middleware('permission:'.PermissionEnum::REALTIME_VIEW->value)
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('health', 'health')->name('health');
+                    Route::post('ping', 'ping')->name('ping');
+                    Route::post('test-notification', 'testNotification')->name('test-notification');
+                });
+
+            Route::controller(NotificationTestController::class)
+                ->prefix('notifications/test')
+                ->name('notifications.test.')
+                ->middleware('permission:'.PermissionEnum::NOTIFICATIONS_TEST->value)
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/', 'send')->name('send');
+                });
+
+            Route::controller(AdminNotificationController::class)
+                ->prefix('notifications')
+                ->name('notifications.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('read-all', 'readAll')->name('read-all');
+                    Route::get('{userNotification}', 'show')->whereNumber('userNotification')->name('show');
+                    Route::post('{userNotification}/read', 'read')->whereNumber('userNotification')->name('read');
+                    Route::delete('{userNotification}', 'destroy')->whereNumber('userNotification')->name('destroy');
+                });
         });
 
         Route::middleware(['auth'])->group(function () {

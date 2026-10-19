@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import {
+    Bell,
+    BellRing,
     BookOpen,
     Building2,
     CalendarCheck,
@@ -13,7 +15,9 @@ import {
     LayoutGrid,
     Mail,
     MessageCircle,
+    MessagesSquare,
     Package,
+    Radio,
     Settings2,
     ShoppingBag,
     Shirt,
@@ -41,6 +45,7 @@ import { useLocale } from '@/hooks/use-locale';
 import { dashboard } from '@/routes/admin';
 import adminAdmins from '@/routes/admin/admins';
 import adminAppointments from '@/routes/admin/appointments';
+import adminChat from '@/routes/admin/chat';
 import adminCircle from '@/routes/admin/circle';
 import adminClubs from '@/routes/admin/clubs';
 import adminCommunity from '@/routes/admin/community';
@@ -55,8 +60,11 @@ import adminHomeHero from '@/routes/admin/home-hero';
 import adminJournal from '@/routes/admin/journal';
 import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
+import adminNotifications from '@/routes/admin/notifications';
+import adminNotificationTest from '@/routes/admin/notifications/test';
 import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
+import adminRealtime from '@/routes/admin/realtime';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSiteSettings from '@/routes/admin/site-settings';
 import adminStoryPage from '@/routes/admin/story-page';
@@ -80,6 +88,23 @@ function buildNavGroups(
                     href: dashboard(locale),
                     icon: LayoutGrid,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                },
+                {
+                    title: t('Meldingen'),
+                    href: adminNotifications.index(locale),
+                    icon: Bell,
+                },
+                {
+                    title: t('Meldingen testen'),
+                    href: adminNotificationTest.index(locale),
+                    icon: BellRing,
+                    permissions: [PERMISSIONS.NOTIFICATIONS.TEST],
+                },
+                {
+                    title: t('Realtime console'),
+                    href: adminRealtime.index(locale),
+                    icon: Radio,
+                    permissions: [PERMISSIONS.REALTIME.VIEW],
                 },
             ],
         },
@@ -151,6 +176,12 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.SESSIONS.MANAGE],
                 },
                 {
+                    title: t('Chat'),
+                    href: adminChat.index(locale),
+                    icon: MessagesSquare,
+                    permissions: [PERMISSIONS.SESSIONS.MANAGE],
+                },
+                {
                     title: t('Gemeenschap'),
                     href: adminCommunity.index(locale),
                     icon: MessageCircle,
@@ -195,7 +226,10 @@ function buildNavGroups(
                     title: t('Journal'),
                     href: adminJournal.index(locale),
                     icon: BookOpen,
-                    permissions: [PERMISSIONS.POSTS.VIEW, PERMISSIONS.POSTS.INDEX],
+                    permissions: [
+                        PERMISSIONS.POSTS.VIEW,
+                        PERMISSIONS.POSTS.INDEX,
+                    ],
                 },
             ],
         },
@@ -221,7 +255,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Juridische Pagina\'s'),
+                    title: t("Juridische Pagina's"),
                     href: adminLegalPages.index(locale),
                     icon: FileText,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],

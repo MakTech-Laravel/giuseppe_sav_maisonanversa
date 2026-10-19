@@ -14,6 +14,12 @@ export const PERMISSIONS = {
     DOCUMENTATION: {
         VIEW: 'documentation.view',
     },
+    REALTIME: {
+        VIEW: 'realtime.view',
+    },
+    NOTIFICATIONS: {
+        TEST: 'notifications.test',
+    },
     FILE_UPLOAD: {
         INDEX: 'file-upload.index',
     },

@@ -26,6 +26,7 @@ import type {
 const LIFECYCLE_LABELS: Record<SessionLifecycle, string> = {
     active: 'Actief',
     ended: 'Beëindigd',
+    finished: 'Afgesloten',
     cancelled: 'Geannuleerd',
 };
 

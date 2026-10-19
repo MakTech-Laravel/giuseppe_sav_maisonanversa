@@ -32,6 +32,17 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
+# Echo config is baked into the Vite bundle, so the external Reverb host/key must be
+# supplied as Coolify build args (they override the .env.example placeholders).
+ARG VITE_REVERB_APP_KEY=
+ARG VITE_REVERB_HOST=ws.maisonanversa.maktechlaravel.cloud
+ARG VITE_REVERB_PORT=443
+ARG VITE_REVERB_SCHEME=https
+ENV VITE_REVERB_APP_KEY=${VITE_REVERB_APP_KEY} \
+    VITE_REVERB_HOST=${VITE_REVERB_HOST} \
+    VITE_REVERB_PORT=${VITE_REVERB_PORT} \
+    VITE_REVERB_SCHEME=${VITE_REVERB_SCHEME}
+
 # .dockerignore excludes vendor/, node_modules/, .env, public/hot, etc.
 COPY . .
 

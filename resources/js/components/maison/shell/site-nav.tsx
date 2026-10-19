@@ -5,6 +5,7 @@ import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { AuthMenu } from '@/components/maison/shell/auth-menu';
 import { LanguageSwitcher } from '@/components/maison/shell/language-switcher';
+import { MemberNotificationBell } from '@/components/member/member-notification-bell';
 import { useLocale } from '@/hooks/use-locale';
 import { activePage, PRIMARY_NAV } from '@/lib/maison-navigation';
 import { cn } from '@/lib/utils';
@@ -21,7 +22,8 @@ import { cn } from '@/lib/utils';
  */
 export function SiteNav() {
     const { url } = usePage();
-    const { foundingRegister } = usePage().props;
+    const { foundingRegister, auth } = usePage().props;
+    const isAuthenticated = auth?.user != null;
     const { locale } = useLocale();
     const { t } = useTranslation();
 
@@ -92,10 +94,13 @@ export function SiteNav() {
                 </button>
             </div>
 
-            <LanguageSwitcher
-                data-slot="header-language"
-                className="self-end ma-lg:hidden gap-0.5 [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:rounded-sm [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]"
-            />
+            <div className="flex items-center gap-2 self-end ma-lg:hidden">
+                <LanguageSwitcher
+                    data-slot="header-language"
+                    className="gap-0.5 [&_button]:min-h-8 [&_button]:min-w-8 [&_button]:rounded-sm [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[9px]"
+                />
+                {isAuthenticated && <MemberNotificationBell />}
+            </div>
 
             <div
                 id="maison-nav-links"
@@ -132,7 +137,7 @@ export function SiteNav() {
                                 >
                                     {t(label)}
                                 </MaisonLink>
-                                <div className="flex flex-col border-b border-gold/10 pb-2 ma-lg:absolute ma-lg:top-full ma-lg:left-0 ma-lg:z-20 ma-lg:hidden ma-lg:min-w-56 ma-lg:border ma-lg:border-gold/20 ma-lg:bg-choc ma-lg:p-3 ma-lg:group-hover:flex ma-lg:group-focus-within:flex">
+                                <div className="flex flex-col border-b border-gold/10 pb-2 ma-lg:absolute ma-lg:top-full ma-lg:left-0 ma-lg:z-20 ma-lg:hidden ma-lg:min-w-56 ma-lg:border ma-lg:border-gold/20 ma-lg:bg-choc ma-lg:p-3 ma-lg:group-focus-within:flex ma-lg:group-hover:flex">
                                     <a
                                         href={`/${locale}/founding-circle/register`}
                                         onClick={() => setOpenedOn(null)}
@@ -147,8 +152,14 @@ export function SiteNav() {
                                     {foundingRegister.latest_entry && (
                                         <p className="font-sans text-[10px] tracking-[0.08em] text-sand">
                                             {t('Laatste inschrijving')}{' '}
-                                            {foundingRegister.latest_entry.number}{' '}
-                                            {foundingRegister.latest_entry.label}
+                                            {
+                                                foundingRegister.latest_entry
+                                                    .number
+                                            }{' '}
+                                            {
+                                                foundingRegister.latest_entry
+                                                    .label
+                                            }
                                         </p>
                                     )}
                                 </div>

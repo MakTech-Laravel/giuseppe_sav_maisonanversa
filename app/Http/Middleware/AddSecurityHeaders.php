@@ -63,12 +63,13 @@ class AddSecurityHeaders
             'https://www.googletagmanager.com',
             'https://*.google-analytics.com',
             'https://*.analytics.google.com',
+            ...$this->reverbOrigins(),
         ];
 
         if (! app()->isProduction()) {
             $script[] = "'unsafe-eval'";
 
-            foreach (['localhost', '127.0.0.1', '[::1]'] as $host) {
+            foreach (['localhost', '127.0.0.1'] as $host) {
                 $origin = "http://{$host}:5173";
 
                 $script[] = $origin;
@@ -102,5 +103,26 @@ class AddSecurityHeaders
         return collect($directives)
             ->map(fn (array $sources, string $name): string => $name.' '.implode(' ', $sources))
             ->implode('; ');
+    }
+
+    /**
+     * Echo dials the standalone Reverb server on its own host, which 'self' does not cover.
+     *
+     * @return list<string>
+     */
+    private function reverbOrigins(): array
+    {
+        $options = (array) config('broadcasting.connections.reverb.options', []);
+        $host = trim((string) ($options['host'] ?? ''));
+
+        if ($host === '') {
+            return [];
+        }
+
+        $secure = ($options['scheme'] ?? 'https') === 'https';
+        $port = (int) ($options['port'] ?? ($secure ? 443 : 80));
+        $suffix = $port === ($secure ? 443 : 80) ? '' : ":{$port}";
+
+        return [($secure ? 'wss' : 'ws')."://{$host}{$suffix}"];
     }
 }

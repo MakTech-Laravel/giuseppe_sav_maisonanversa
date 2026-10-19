@@ -39,6 +39,8 @@ enum RoleEnum: string
                 PermissionEnum::DASHBOARD_VIEW,
                 PermissionEnum::REPOSITORY_VIEW,
                 PermissionEnum::DOCUMENTATION_VIEW,
+                PermissionEnum::REALTIME_VIEW,
+                PermissionEnum::NOTIFICATIONS_TEST,
 
                 PermissionEnum::FILE_UPLOAD_INDEX,
                 PermissionEnum::FILE_UPLOAD_STORE,

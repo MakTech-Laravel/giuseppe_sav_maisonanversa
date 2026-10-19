@@ -19,6 +19,7 @@
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.14",
         "maatwebsite/excel": "^3.1",
+        "pusher/pusher-php-server": "^7.3",
         "spatie/laravel-permission": "^7.4",
         "spatie/laravel-sitemap": "^8.2"
     },
@@ -39,7 +40,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Support/notify.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

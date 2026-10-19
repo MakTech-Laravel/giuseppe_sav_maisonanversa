@@ -7,7 +7,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import typescript from 'typescript-eslint';
 
-
 const controlStatements = [
     'if',
     'return',

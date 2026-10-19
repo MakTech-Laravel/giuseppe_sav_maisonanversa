@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -99,6 +100,11 @@ return Application::configure(basePath: dirname(__DIR__))
             URL::defaults(['locale' => $locale]);
             $request->attributes->set('maison_seo_error', true);
 
+            /*
+             * A missing route-model binding throws before HandleInertiaRequests
+             * runs, so the shell props SiteNav and the footer read would be absent.
+             */
+            Inertia::share(app(HandleInertiaRequests::class)->share($request));
             Inertia::share('seo', MaisonSeo::document($request));
 
             return Inertia::render('errors/404')
