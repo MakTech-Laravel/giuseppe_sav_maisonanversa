@@ -86,13 +86,18 @@ class CommunitySessionPolicy
     }
 
     /**
-     * The session chat belongs to the host and the confirmed players. It
-     * stays readable after the session closes; only posting stops.
+     * The session chat belongs to the host and the confirmed players. Staff
+     * with sessions.manage may open any session (admin inbox / system send).
+     * It stays readable after the session closes; only posting stops.
      */
     public function chat(User $user, CommunitySession $session): bool
     {
-        return $session->isHostedBy($user)
-            || $session->participants()->where('user_id', $user->id)->exists();
+        if ($session->isHostedBy($user)
+            || $session->participants()->where('user_id', $user->id)->exists()) {
+            return true;
+        }
+
+        return $user->can(PermissionEnum::SESSIONS_MANAGE->value);
     }
 
     /**

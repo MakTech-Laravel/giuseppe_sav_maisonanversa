@@ -3,7 +3,8 @@ import { MessageCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { canOpenSessionChat } from '@/lib/session-chat';
 import { cn } from '@/lib/utils';
-import * as memberChat from '@/routes/member/chat';
+import adminChat from '@/routes/admin/chat';
+import memberChat from '@/routes/member/chat';
 import type { SessionCard } from '@/types/session';
 
 type SessionChatButtonProps = {
@@ -19,22 +20,27 @@ export function SessionChatButton({
     className,
 }: SessionChatButtonProps) {
     const { t } = useTranslation();
-    const { locale } = usePage().props;
+    const { locale, auth } = usePage().props;
+    const isAdmin = Boolean(auth?.user?.is_admin);
 
-    if (!canOpenSessionChat(session)) {
+    if (!canOpenSessionChat(session, { isAdmin })) {
         return null;
     }
 
     const label = t('Open de sessiechat');
+    const href = isAdmin
+        ? adminChat.show({
+              locale,
+              communitySession: Number(session.id),
+          }).url
+        : memberChat.show({
+              locale,
+              communitySession: Number(session.id),
+          }).url;
 
     return (
         <Link
-            href={
-                memberChat.show({
-                    locale,
-                    communitySession: Number(session.id),
-                }).url
-            }
+            href={href}
             aria-label={withLabel ? undefined : label}
             title={label}
             className={cn(

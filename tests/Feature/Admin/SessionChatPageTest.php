@@ -92,3 +92,38 @@ test('staff without sessions.manage cannot open chat', function () {
 test('guests are sent to log in', function () {
     $this->get(adminChatIndexUrl())->assertRedirect();
 });
+
+test('admins cannot open member chat routes', function () {
+    $this->actingAs($this->admin)
+        ->get(route('member.chat.show', [
+            'locale' => 'nl',
+            'communitySession' => $this->session->id,
+        ]))
+        ->assertForbidden();
+});
+
+test('the community chat deep link sends admins to the staff inbox', function () {
+    $this->actingAs($this->admin)
+        ->get(route('community.sessions.chat', [
+            'locale' => 'nl',
+            'communitySession' => $this->session->id,
+        ]))
+        ->assertRedirect(adminChatShowUrl($this->session));
+});
+
+test('staff without a play seat can still open admin chat for a session', function () {
+    expect(
+        CommunitySessionParticipant::query()
+            ->where('community_session_id', $this->session->id)
+            ->where('user_id', $this->admin->id)
+            ->exists(),
+    )->toBeFalse();
+
+    $this->actingAs($this->admin)
+        ->get(adminChatShowUrl($this->session))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/chat')
+            ->where('activeSession.id', (string) $this->session->id)
+            ->where('can_send', true));
+});
