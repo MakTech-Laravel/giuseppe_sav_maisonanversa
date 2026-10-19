@@ -282,6 +282,7 @@ function ActiveSessionChat({
                 body: messageBody,
                 attachments,
                 sent_at: sentAt,
+                is_system: false,
                 status: 'sending',
             },
         ]);

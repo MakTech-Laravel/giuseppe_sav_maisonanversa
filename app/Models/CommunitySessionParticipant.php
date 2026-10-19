@@ -13,12 +13,19 @@ class CommunitySessionParticipant extends Model
     /** @use HasFactory<CommunitySessionParticipantFactory> */
     use HasFactory;
 
-    protected $fillable = ['community_session_id', 'user_id', 'status', 'decided_at'];
+    protected $fillable = [
+        'community_session_id',
+        'user_id',
+        'status',
+        'for_chat_only',
+        'decided_at',
+    ];
 
     protected function casts(): array
     {
         return [
             'status' => SessionParticipantStatus::class,
+            'for_chat_only' => 'boolean',
             'decided_at' => 'datetime',
         ];
     }

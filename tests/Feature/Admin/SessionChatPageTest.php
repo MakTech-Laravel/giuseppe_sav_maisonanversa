@@ -48,7 +48,7 @@ test('staff with sessions.manage open the chat inbox', function () {
             ->where('messages', []));
 });
 
-test('staff open a session chat as read-only', function () {
+test('staff open an open session chat with can_send', function () {
     $this->actingAs($this->admin)
         ->get(adminChatShowUrl($this->session))
         ->assertOk()
@@ -57,8 +57,21 @@ test('staff open a session chat as read-only', function () {
             ->where('activeSession.id', (string) $this->session->id)
             ->where('viewer.id', $this->admin->id)
             ->where('messages', [])
-            ->where('can_send', false)
+            ->where('can_send', true)
             ->where('messages_purge_at', null));
+});
+
+test('staff open a past session chat as read-only', function () {
+    $this->session->update(['starts_at' => now()->subHours(3)]);
+    $this->session->refresh();
+
+    $this->actingAs($this->admin)
+        ->get(adminChatShowUrl($this->session))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/chat')
+            ->where('can_send', false)
+            ->whereNotNull('messages_purge_at'));
 });
 
 test('staff without sessions.manage cannot open chat', function () {

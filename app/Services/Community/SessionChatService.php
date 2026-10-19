@@ -2,16 +2,19 @@
 
 namespace App\Services\Community;
 
+use App\Enums\SessionParticipantStatus;
 use App\Events\SessionChatActivity;
 use App\Events\SessionMessageCreated;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionChatRead;
 use App\Models\CommunitySessionMessage;
 use App\Models\CommunitySessionMessageAttachment;
+use App\Models\CommunitySessionParticipant;
 use App\Models\User;
 use App\Support\SessionFeed;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -104,6 +107,55 @@ class SessionChatService
     }
 
     /**
+     * Ensure staff have a Confirmed roster row for chat. Does not consume a
+     * play seat (`for_chat_only`) and skips capacity / registration checks.
+     */
+    public function ensureStaffChatParticipant(CommunitySession $session, User $staff): void
+    {
+        $existing = $session->participantRecords()
+            ->where('user_id', $staff->id)
+            ->first();
+
+        if ($existing !== null && $existing->isConfirmed()) {
+            return;
+        }
+
+        if ($existing !== null) {
+            $existing->forceFill([
+                'status' => SessionParticipantStatus::Confirmed,
+                'for_chat_only' => true,
+                'decided_at' => now(),
+            ])->save();
+
+            return;
+        }
+
+        CommunitySessionParticipant::query()->create([
+            'community_session_id' => $session->id,
+            'user_id' => $staff->id,
+            'status' => SessionParticipantStatus::Confirmed,
+            'for_chat_only' => true,
+            'decided_at' => now(),
+        ]);
+    }
+
+    /**
+     * @param  list<UploadedFile>  $files
+     */
+    public function sendAsStaff(CommunitySession $session, User $staff, ?string $body, array $files = []): CommunitySessionMessage
+    {
+        if (! $this->isOpen($session)) {
+            throw ValidationException::withMessages([
+                'body' => __('Deze chat is gesloten.'),
+            ]);
+        }
+
+        $this->ensureStaffChatParticipant($session, $staff);
+
+        return $this->send($session, $staff, $body, $files);
+    }
+
+    /**
      * @param  list<UploadedFile>  $files
      */
     public function send(CommunitySession $session, User $author, ?string $body, array $files = []): CommunitySessionMessage
@@ -127,6 +179,7 @@ class SessionChatService
             $message = $session->messages()->create([
                 'user_id' => $author->id,
                 'body' => $trimmed,
+                'is_system' => $this->authorSendsAsSystem($session, $author),
             ]);
 
             foreach ($files as $file) {
@@ -145,8 +198,9 @@ class SessionChatService
 
         $this->markRead($author, $session);
 
-        SessionMessageCreated::dispatch($message);
-        $this->notifyRecipientsOfActivity($session, $author);
+        // Persist succeeds even when Reverb is down; live Echo still works when it is up.
+        $this->safeBroadcast(fn () => SessionMessageCreated::dispatch($message));
+        $this->safeBroadcast(fn () => $this->notifyRecipientsOfActivity($session, $author));
 
         return $message;
     }
@@ -336,12 +390,36 @@ class SessionChatService
                 continue;
             }
 
-            SessionChatActivity::dispatch(
+            $this->safeBroadcast(fn () => SessionChatActivity::dispatch(
                 $recipient->id,
                 (int) $session->id,
                 $this->unreadTotal($recipient),
-            );
+            ));
         }
+    }
+
+    /**
+     * Reverb / Pusher being unreachable must not roll the chat HTTP request into a 500.
+     */
+    private function safeBroadcast(callable $callback): void
+    {
+        try {
+            $callback();
+        } catch (BroadcastException $e) {
+            report($e);
+        }
+    }
+
+    /**
+     * Staff chat-only seats post as system messages; play seats and members do not.
+     */
+    public function authorSendsAsSystem(CommunitySession $session, User $author): bool
+    {
+        return $session->participantRecords()
+            ->where('user_id', $author->id)
+            ->where('status', SessionParticipantStatus::Confirmed->value)
+            ->where('for_chat_only', true)
+            ->exists();
     }
 
     /**
@@ -364,6 +442,7 @@ class SessionChatService
                 ->values()
                 ->all(),
             'sent_at' => $message->created_at?->toIso8601String(),
+            'is_system' => (bool) $message->is_system,
         ];
     }
 

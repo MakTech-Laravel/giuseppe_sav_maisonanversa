@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\PermissionEnum;
 use App\Models\CommunitySession;
 use App\Models\User;
 use App\Services\Community\SessionChatService;
@@ -96,11 +97,21 @@ class CommunitySessionPolicy
 
     /**
      * Posting requires a chat roster seat while the session is still open.
+     * Staff with sessions.manage may send on open sessions (force-join on store).
      */
     public function sendMessage(User $user, CommunitySession $session): bool
     {
-        return $this->chat($user, $session)
-            && app(SessionChatService::class)->isOpen($session);
+        $open = app(SessionChatService::class)->isOpen($session);
+
+        if (! $open) {
+            return false;
+        }
+
+        if ($this->chat($user, $session)) {
+            return true;
+        }
+
+        return $user->can(PermissionEnum::SESSIONS_MANAGE->value);
     }
 
     public function reviewScore(User $user, CommunitySession $session): bool

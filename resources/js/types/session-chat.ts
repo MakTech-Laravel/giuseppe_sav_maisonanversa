@@ -14,6 +14,8 @@ export type ChatMessage = {
     body: string | null;
     attachments: ChatAttachment[];
     sent_at: string;
+    /** Staff chat-only posts (not play-joined) render as centered system notices. */
+    is_system: boolean;
     /** Client-only: optimistic send lifecycle. Server messages are treated as sent. */
     status?: ChatMessageStatus;
 };

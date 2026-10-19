@@ -17,7 +17,15 @@ class CommunitySessionMessage extends Model
         'community_session_id',
         'user_id',
         'body',
+        'is_system',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_system' => 'boolean',
+        ];
+    }
 
     /**
      * @return BelongsTo<CommunitySession, $this>
