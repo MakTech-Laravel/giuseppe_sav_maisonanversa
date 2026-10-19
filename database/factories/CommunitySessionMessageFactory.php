@@ -21,6 +21,12 @@ class CommunitySessionMessageFactory extends Factory
             'community_session_id' => CommunitySession::factory(),
             'user_id' => User::factory(),
             'body' => fake()->sentence(),
+            'is_system' => false,
         ];
+    }
+
+    public function system(): static
+    {
+        return $this->state(fn (): array => ['is_system' => true]);
     }
 }

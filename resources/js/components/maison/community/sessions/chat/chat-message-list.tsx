@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChatMessageItem } from '@/components/maison/community/sessions/chat/chat-message-item';
+import { ChatSystemMessage } from '@/components/maison/community/sessions/chat/chat-system-message';
 import { MessageGroup } from '@/components/ui/message';
 import {
     MessageScroller,
@@ -29,12 +30,13 @@ type ChatMessageListProps = {
 
 type ChatRow =
     | { kind: 'day'; id: string; sentAt: string }
+    | { kind: 'system'; id: string; message: ChatMessage }
     | { kind: 'group'; id: string; authorId: number; messages: ChatMessage[] };
 
 /**
- * The scrollable transcript: day separators, then runs of consecutive
- * messages from one author. Opens at the latest message and follows new ones
- * while the reader stays at the bottom.
+ * The scrollable transcript: day separators, system notices, then runs of
+ * consecutive messages from one author. Opens at the latest message and
+ * follows new ones while the reader stays at the bottom.
  */
 export function ChatMessageList({
     messages,
@@ -64,6 +66,10 @@ export function ChatMessageList({
                                 >
                                     {row.kind === 'day' ? (
                                         <ChatDaySeparator sentAt={row.sentAt} />
+                                    ) : row.kind === 'system' ? (
+                                        <ChatSystemMessage
+                                            message={row.message}
+                                        />
                                     ) : (
                                         <MessageGroup className="gap-1.5">
                                             {row.messages.map(
@@ -132,7 +138,10 @@ function FollowOwnMessages({
 
         previousCount.current = messages.length;
 
-        if (grew && latest?.author.id === currentUserId) {
+        if (
+            grew &&
+            (latest?.author.id === currentUserId || latest?.is_system)
+        ) {
             scrollToEnd({ behavior: 'smooth' });
         }
     }, [messages, currentUserId, scrollToEnd]);
@@ -186,6 +195,17 @@ function buildRows(messages: ChatMessage[]): ChatRow[] {
                 id: `day-${day}`,
                 sentAt: message.sent_at,
             });
+        }
+
+        if (message.is_system) {
+            currentGroup = null;
+            rows.push({
+                kind: 'system',
+                id: `system-${message.id}`,
+                message,
+            });
+
+            continue;
         }
 
         if (currentGroup && currentGroup.authorId === message.author.id) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Community\StoreSessionChatMessageRequest;
 use App\Models\CommunitySession;
 use App\Models\User;
 use App\Services\Community\SessionChatService;
@@ -14,7 +15,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 /**
- * Staff read-only view of session chats. Admins never get a composer.
+ * Staff session chat inbox. Open sessions get a composer; first send force-joins
+ * the admin for chat only when they are not already a confirmed player.
  */
 class SessionChatController extends Controller
 {
@@ -32,14 +34,30 @@ class SessionChatController extends Controller
         }
 
         $communitySession->load(['host', 'club', 'participants.user', 'participantRecords', 'translations'])
-            ->loadCount(['participants', 'joinRequests']);
+            ->loadCount(['playParticipants', 'joinRequests']);
 
         return $this->render($request->user(), $locale, $communitySession);
+    }
+
+    public function store(
+        StoreSessionChatMessageRequest $request,
+        string $locale,
+        CommunitySession $communitySession,
+    ): RedirectResponse {
+        $this->chat->sendAsStaff(
+            $communitySession,
+            $request->user(),
+            $request->messageBody(),
+            $request->images(),
+        );
+
+        return back();
     }
 
     private function render(User $viewer, string $locale, ?CommunitySession $active): Response
     {
         $sessions = $this->chatSessions();
+        $canSend = $active !== null && $this->chat->isOpen($active);
         $purgeAt = $active !== null ? $this->chat->messagesPurgeAt($active) : null;
 
         return Inertia::render('admin/chat', [
@@ -49,7 +67,7 @@ class SessionChatController extends Controller
                 : SessionFeed::toCard($active, $viewer, $locale),
             'viewer' => SessionFeed::player($viewer, $active?->host_id),
             'messages' => $active === null ? [] : $this->chat->listFor($active),
-            'can_send' => false,
+            'can_send' => $canSend,
             'messages_purge_at' => $purgeAt?->toIso8601String(),
         ]);
     }

@@ -17,6 +17,7 @@ class CommunitySessionParticipantFactory extends Factory
             'community_session_id' => CommunitySession::factory(),
             'user_id' => User::factory(),
             'status' => SessionParticipantStatus::Confirmed,
+            'for_chat_only' => false,
         ];
     }
 
@@ -29,6 +30,15 @@ class CommunitySessionParticipantFactory extends Factory
     {
         return $this->state(fn (): array => [
             'status' => SessionParticipantStatus::Rejected,
+            'decided_at' => now(),
+        ]);
+    }
+
+    public function forChatOnly(): static
+    {
+        return $this->state(fn (): array => [
+            'status' => SessionParticipantStatus::Confirmed,
+            'for_chat_only' => true,
             'decided_at' => now(),
         ]);
     }

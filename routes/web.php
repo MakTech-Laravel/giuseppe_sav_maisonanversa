@@ -626,6 +626,8 @@ Route::prefix('{locale}')
                 ->group(function () {
                     Route::get('chat', 'index')->name('chat.index');
                     Route::get('chat/{communitySession}', 'show')->name('chat.show');
+                    Route::post('chat/{communitySession}/messages', 'store')
+                        ->name('chat.messages.store');
                 });
 
             Route::controller(AdminClubController::class)

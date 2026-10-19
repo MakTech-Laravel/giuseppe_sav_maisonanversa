@@ -42,7 +42,7 @@ final class SessionFeed
         return self::open()
             ->where('starts_at', '>', now()->addHours(CommunitySession::REGISTRATION_CLOSES_HOURS))
             ->whereRaw(
-                "(select count(*) from community_session_participants where community_session_participants.community_session_id = community_sessions.id and community_session_participants.status in ('pending', 'confirmed')) < community_sessions.capacity",
+                "(select count(*) from community_session_participants where community_session_participants.community_session_id = community_sessions.id and community_session_participants.status in ('pending', 'confirmed') and community_session_participants.for_chat_only = 0) < community_sessions.capacity",
             );
     }
 
@@ -98,7 +98,7 @@ final class SessionFeed
     {
         return CommunitySession::query()
             ->with(['host', 'club', 'participants.user', 'participantRecords', 'translations'])
-            ->withCount(['participants', 'joinRequests']);
+            ->withCount(['playParticipants', 'joinRequests']);
     }
 
     /**
@@ -120,7 +120,11 @@ final class SessionFeed
     {
         $redactNames = $viewer === null;
 
-        $players = $session->participants
+        $playParticipants = $session->participants
+            ->where('for_chat_only', false)
+            ->values();
+
+        $players = $playParticipants
             ->map(fn ($participant): array => self::player(
                 $participant->user,
                 $session->host_id,
@@ -130,7 +134,7 @@ final class SessionFeed
             ->all();
 
         $joined = $viewer !== null
-            && $session->participants->contains('user_id', $viewer->id);
+            && $playParticipants->contains('user_id', $viewer->id);
         $isHost = $viewer !== null && $session->host_id === $viewer->id;
         $isPast = $session->isPast();
         $hasStarted = $session->hasStarted();
