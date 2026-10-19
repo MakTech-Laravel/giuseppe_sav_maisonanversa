@@ -249,10 +249,10 @@ test('outsiders cannot authorize the session chat channel', function () {
         ->assertForbidden();
 });
 
-test('there is no admin store route for session chat messages', function () {
+test('the admin store route for session chat messages exists', function () {
     expect(collect(Route::getRoutes())->contains(
         fn ($route): bool => $route->getName() === 'admin.chat.messages.store',
-    ))->toBeFalse();
+    ))->toBeTrue();
 });
 
 test('sending a message bumps unread for other players and clears for the sender', function () {

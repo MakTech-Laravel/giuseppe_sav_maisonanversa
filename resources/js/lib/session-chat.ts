@@ -1,7 +1,17 @@
 import type { SessionCard } from '@/types/session';
 
-/** The chat belongs to the host and the confirmed players. */
-export function canOpenSessionChat(session: SessionCard): boolean {
+/**
+ * Host and confirmed play seats always open chat. Staff (`isAdmin`) may open
+ * any session from the public card (destination is admin chat).
+ */
+export function canOpenSessionChat(
+    session: SessionCard,
+    options?: { isAdmin?: boolean },
+): boolean {
+    if (options?.isAdmin) {
+        return true;
+    }
+
     return session.is_host || session.is_joined;
 }
 

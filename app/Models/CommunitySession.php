@@ -135,12 +135,22 @@ class CommunitySession extends Model
     }
 
     /**
-     * Confirmed players only: the host plus approved requests.
+     * Confirmed roster rows: play seats plus staff chat-only joins.
      */
     public function participants(): HasMany
     {
         return $this->hasMany(CommunitySessionParticipant::class)
             ->where('status', SessionParticipantStatus::Confirmed->value);
+    }
+
+    /**
+     * Confirmed players who occupy a play seat (excludes staff chat-only).
+     */
+    public function playParticipants(): HasMany
+    {
+        return $this->hasMany(CommunitySessionParticipant::class)
+            ->where('status', SessionParticipantStatus::Confirmed->value)
+            ->where('for_chat_only', false);
     }
 
     /**
@@ -156,6 +166,7 @@ class CommunitySession extends Model
     {
         return $this->belongsToMany(User::class, 'community_session_participants')
             ->wherePivot('status', SessionParticipantStatus::Confirmed->value)
+            ->wherePivot('for_chat_only', false)
             ->withTimestamps();
     }
 
@@ -198,9 +209,15 @@ class CommunitySession extends Model
 
     public function participantsCount(): int
     {
-        return isset($this->participants_count)
-            ? (int) $this->participants_count
-            : $this->participants()->count();
+        if (isset($this->play_participants_count)) {
+            return (int) $this->play_participants_count;
+        }
+
+        if ($this->relationLoaded('participants')) {
+            return $this->participants->where('for_chat_only', false)->count();
+        }
+
+        return $this->playParticipants()->count();
     }
 
     public function pendingCount(): int

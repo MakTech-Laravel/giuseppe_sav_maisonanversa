@@ -41,7 +41,7 @@ class SessionChatController extends Controller
         $this->chat->markRead($viewer, $communitySession);
 
         $communitySession->load(['host', 'club', 'participants.user', 'participantRecords', 'translations'])
-            ->loadCount(['participants', 'joinRequests']);
+            ->loadCount(['playParticipants', 'joinRequests']);
 
         return $this->render($viewer, $locale, $communitySession);
     }
