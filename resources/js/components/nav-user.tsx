@@ -28,7 +28,8 @@ export function NavUser() {
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <DropdownMenu>
+                {/* modal={false}: avoid body pointer-events lock if the menu opens off-screen */}
+                <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"
@@ -40,14 +41,16 @@ export function NavUser() {
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="admin-kit w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg border-sidebar-border bg-sidebar font-sans text-sidebar-foreground shadow-[0_12px_40px_rgba(41,28,24,0.55)]"
+                        className="admin-kit z-[100] w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg border-sidebar-border bg-sidebar font-sans text-sidebar-foreground shadow-[0_12px_40px_rgba(41,28,24,0.55)]"
                         align="end"
+                        sideOffset={8}
+                        collisionPadding={12}
                         side={
                             isMobile
-                                ? 'bottom'
+                                ? 'top'
                                 : state === 'collapsed'
-                                  ? 'left'
-                                  : 'bottom'
+                                  ? 'right'
+                                  : 'top'
                         }
                     >
                         <UserMenuContent user={user} />

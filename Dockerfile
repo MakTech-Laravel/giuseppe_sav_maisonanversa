@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     unzip \
     curl \
+    ca-certificates \
+    fontconfig \
+    fonts-dejavu-core \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -65,6 +68,8 @@ RUN cp .env.example .env \
     && php artisan wayfinder:generate --with-form --ansi \
     && npm ci \
     && npm run build \
+    && node -e "import('@resvg/resvg-js').then(() => console.log('resvg-ok'))" \
+    && mkdir -p storage/app/private storage/app/public \
     && chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 

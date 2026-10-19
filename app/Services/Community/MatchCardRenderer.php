@@ -56,7 +56,8 @@ class MatchCardRenderer
         $output = tempnam(sys_get_temp_dir(), 'match-card-');
 
         try {
-            $result = Process::timeout(60)
+            $result = Process::path(base_path())
+                ->timeout(60)
                 ->input((string) json_encode($payload, JSON_UNESCAPED_UNICODE))
                 ->run([
                     (string) config('maison.match_cards.node_binary'),

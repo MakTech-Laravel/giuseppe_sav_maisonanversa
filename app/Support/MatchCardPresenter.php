@@ -10,8 +10,9 @@ use Illuminate\Support\Traits\Localizable;
 /**
  * Everything printed on a match card, in the language of whoever opens it.
  *
- * Players appear as initials plus their first name (unless they switched
- * `show_first_name_on_cards` off). Last names never leave this class.
+ * Players appear as initials plus their first name. When
+ * `show_first_name_on_cards` is off, the first-name slot prints the
+ * translated Private label instead. Last names never leave this class.
  *
  * @phpstan-type CardPlayer array{initials: string, first_name: string|null, edition: string|null}
  * @phpstan-type CardPayload array{
@@ -114,22 +115,32 @@ final class MatchCardPresenter
     }
 
     /**
-     * Confirmed players, organiser first.
+     * Confirmed players, organiser first. Pass `$locale` so the Private label
+     * (and any other translated copy) follows the URL language, not just the
+     * ambient app locale.
      *
      * @return list<CardPlayer>
      */
-    public function players(CommunitySession $session): array
+    public function players(CommunitySession $session, ?string $locale = null): array
     {
-        $session->loadMissing('participants.user');
+        $build = function () use ($session): array {
+            $session->loadMissing('participants.user');
 
-        return $session->participants
-            ->sortBy(fn (CommunitySessionParticipant $row): array => [
-                $row->user_id === $session->host_id ? 0 : 1,
-                $row->created_at?->getTimestamp() ?? 0,
-            ])
-            ->map(fn (CommunitySessionParticipant $row): array => $this->player($row->user))
-            ->values()
-            ->all();
+            return $session->participants
+                ->sortBy(fn (CommunitySessionParticipant $row): array => [
+                    $row->user_id === $session->host_id ? 0 : 1,
+                    $row->created_at?->getTimestamp() ?? 0,
+                ])
+                ->map(fn (CommunitySessionParticipant $row): array => $this->player($row->user))
+                ->values()
+                ->all();
+        };
+
+        if ($locale === null) {
+            return $build();
+        }
+
+        return $this->withLocale(MailLocale::resolve($locale), $build);
     }
 
     /**
@@ -143,7 +154,9 @@ final class MatchCardPresenter
 
         return [
             'initials' => $initials !== '' ? $initials : mb_strtoupper(mb_substr((string) $user->name, 0, 1)),
-            'first_name' => $user->show_first_name_on_cards && $given !== '' ? $given : null,
+            'first_name' => $user->show_first_name_on_cards
+                ? ($given !== '' ? $given : null)
+                : __('Privé'),
             'edition' => $this->edition($user),
         ];
     }

@@ -65,6 +65,8 @@ test('the admin user menu uses the chocolate shell palette', function () {
         ->toContain('admin-kit')
         ->toContain('bg-sidebar')
         ->toContain('auth?.user')
+        ->toContain('modal={false}')
+        ->toContain("? 'top'")
         ->and($authMenu)
         ->toContain('auth?.user')
         ->and(file_get_contents(resource_path('js/components/maison/placeholder-image.tsx')))
