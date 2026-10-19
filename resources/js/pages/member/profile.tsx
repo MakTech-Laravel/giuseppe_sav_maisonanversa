@@ -384,8 +384,8 @@ function PreferredLanguageSelect({
 }
 
 /**
- * Match cards print initials plus the first name; members may hide the name.
- * Last names never appear on a card.
+ * Match cards print initials plus the first name; members may replace the
+ * name with the Private label. Last names never appear on a card.
  */
 function MatchCardNameField({
     defaultChecked,
@@ -417,7 +417,7 @@ function MatchCardNameField({
                     </span>
                     <span className="block font-sans text-[11px] text-stone">
                         {t(
-                            'Staat dit uit, dan verschijnen alleen je initialen.',
+                            'Staat dit uit, dan staat er “Privé” in plaats van je voornaam.',
                         )}
                     </span>
                 </span>
