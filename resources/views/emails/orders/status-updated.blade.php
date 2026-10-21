@@ -20,10 +20,17 @@
     @endif
 
     @if ($order->edition_number !== null && (int) ($order->product?->edition_total ?? 0) > 0)
-        <p style="margin:0;">
+        <p style="margin:0 0 16px;">
             <strong style="color:#291C18;">{{ __('Editienummer') }}:</strong>
             {{ __('Nr. :number', ['number' => str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)]) }}
             / {{ (int) $order->product->edition_total }}
+        </p>
+    @endif
+
+    @if (! empty($returnsUrl))
+        <p style="margin:0;">
+            {{ __('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.') }}
+            <a href="{{ $returnsUrl }}" style="color:#8A6A3B;">{{ __('Start een retour') }}</a>
         </p>
     @endif
 @endcomponent

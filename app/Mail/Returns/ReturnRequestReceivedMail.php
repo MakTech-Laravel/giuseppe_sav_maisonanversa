@@ -3,6 +3,7 @@
 namespace App\Mail\Returns;
 
 use App\Models\OrderReturn;
+use App\Services\Returns\GuestReturnLink;
 use App\Support\BrandsMaisonMail;
 use App\Support\MailLocale;
 use Illuminate\Bus\Queueable;
@@ -31,15 +32,18 @@ class ReturnRequestReceivedMail extends Mailable
     {
         $this->orderReturn->loadMissing('order', 'user');
         $locale = MailLocale::resolve($this->orderReturn->order?->locale);
+        $returnUrl = $this->orderReturn->user_id === null
+            ? app(GuestReturnLink::class)->showUrl($this->orderReturn, $locale)
+            : route('member.returns.show', [
+                'locale' => $locale,
+                'orderReturn' => $this->orderReturn->id,
+            ]);
 
         return new Content(
             html: 'emails.returns.r1-request-received',
             with: [
                 ...$this->maisonBrandData($this->orderReturn->order?->locale),
-                'returnUrl' => route('member.returns.show', [
-                    'locale' => $locale,
-                    'orderReturn' => $this->orderReturn->id,
-                ]),
+                'returnUrl' => $returnUrl,
                 'returnAddress' => (string) config('maison.returns.return_address'),
             ],
         );

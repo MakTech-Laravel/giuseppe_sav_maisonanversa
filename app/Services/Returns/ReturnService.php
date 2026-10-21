@@ -33,7 +33,7 @@ class ReturnService
      */
     public function request(
         Order $order,
-        User $actor,
+        ?User $actor,
         ?ReturnReason $reason,
         ?string $comment,
         bool $confirmed,
@@ -81,7 +81,7 @@ class ReturnService
             $return = OrderReturn::query()->create([
                 'number' => $this->nextNumber(),
                 'order_id' => $order->id,
-                'user_id' => $actor->id,
+                'user_id' => $actor?->id,
                 'status' => ReturnStatus::Requested,
                 'reason' => $reason,
                 'comment' => $comment,
@@ -125,7 +125,7 @@ class ReturnService
         return $return;
     }
 
-    public function addTracking(OrderReturn $return, User $actor, string $carrier, string $trackingNumber): OrderReturn
+    public function addTracking(OrderReturn $return, ?User $actor, string $carrier, string $trackingNumber): OrderReturn
     {
         if (! in_array($return->status, [ReturnStatus::Requested, ReturnStatus::InTransit], true)) {
             throw ValidationException::withMessages([
@@ -146,7 +146,7 @@ class ReturnService
         return $return->refresh();
     }
 
-    public function cancel(OrderReturn $return, User $actor, ?string $note = null): OrderReturn
+    public function cancel(OrderReturn $return, ?User $actor, ?string $note = null): OrderReturn
     {
         if ($return->status !== ReturnStatus::Requested) {
             throw ValidationException::withMessages([
@@ -325,7 +325,7 @@ class ReturnService
     private function transition(
         OrderReturn $return,
         ReturnStatus $to,
-        User $actor,
+        ?User $actor,
         string $note,
         bool $restoreRegister = false,
     ): OrderReturn {

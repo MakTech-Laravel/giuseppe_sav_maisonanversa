@@ -150,7 +150,7 @@ class ReturnController extends Controller
 
     public function cancel(Request $request, string $locale, OrderReturn $orderReturn, ReturnService $returns): RedirectResponse
     {
-        $returns->cancel($orderReturn, $request->user(), __('Geannuleerd door beheerder.'));
+        $returns->cancel($orderReturn, $request->user(), 'Geannuleerd door beheerder.');
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Retour geannuleerd.')]);
 
         return back();
@@ -171,8 +171,13 @@ class ReturnController extends Controller
             'status_label' => $return->status->label(),
             'customer' => $return->user?->name ?? $return->order?->name,
             'order_reference' => $return->order?->reference(),
-            'items' => $return->items->map(fn ($item) => $item->product?->name)->filter()->values()
-                ?: collect([$return->order?->product?->name])->filter()->values(),
+            'items' => $return->items
+                ->map(fn ($item) => $item->product?->name)
+                ->filter()
+                ->values()
+                ->whenEmpty(fn () => collect([$return->order?->product?->name])->filter()->values())
+                ->values()
+                ->all(),
             'requested_at' => $return->requested_at?->toDateTimeString(),
             'refund_due_by' => $return->refund_due_by?->toDateString(),
             'due_soon' => $dueSoon && $return->status->isOpen(),

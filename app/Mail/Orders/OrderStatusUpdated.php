@@ -2,8 +2,10 @@
 
 namespace App\Mail\Orders;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\OrderStatusEvent;
+use App\Services\Returns\GuestReturnLink;
 use App\Support\BrandsMaisonMail;
 use App\Support\MailLocale;
 use App\Support\OrderPresenter;
@@ -39,12 +41,24 @@ class OrderStatusUpdated extends Mailable
     public function content(): Content
     {
         $this->order->loadMissing('product');
+        $locale = MailLocale::resolve($this->order->locale);
+        $showReturns = $this->event->status === OrderStatus::Delivered
+            || $this->order->status === OrderStatus::Delivered;
+        $returnsUrl = null;
+
+        if ($showReturns) {
+            $returnsUrl = app(GuestReturnLink::class)->createUrl($this->order, $locale)
+                ?? ($this->order->user_id
+                    ? route('member.orders', ['locale' => $locale])
+                    : route('maison.returns', ['locale' => $locale]));
+        }
 
         return new Content(
             html: 'emails.orders.status-updated',
             with: [
                 ...$this->maisonBrandData($this->order->locale),
                 'statusLabel' => $this->statusLabel,
+                'returnsUrl' => $returnsUrl,
             ],
         );
     }

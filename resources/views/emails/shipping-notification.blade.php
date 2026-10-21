@@ -9,8 +9,13 @@
         {{ __('is verzonden.') }}
     </p>
 
-    <p style="margin:0;">
+    <p style="margin:0 0 16px;">
         <strong style="color:#291C18;">{{ __('Referentie') }}:</strong>
         {{ $order->reference() }}
+    </p>
+
+    <p style="margin:0;">
+        {{ __('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.') }}
+        <a href="{{ $returnsUrl }}" style="color:#8A6A3B;">{{ __('Start een retour') }}</a>
     </p>
 @endcomponent

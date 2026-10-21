@@ -38,6 +38,7 @@ use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
 use App\Http\Controllers\Maison\FoundingCircleRegisterController;
+use App\Http\Controllers\Maison\GuestOrderReturnController;
 use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
 use App\Http\Controllers\Maison\ProductEditionController;
@@ -139,6 +140,24 @@ Route::prefix('{locale}')
             ->name('returns.retour');
         Route::get('retours', fn (string $locale) => redirect()->route('maison.returns', ['locale' => $locale]))
             ->name('returns.retours');
+
+        Route::controller(GuestOrderReturnController::class)
+            ->prefix('guest-returns')
+            ->name('guest-returns.')
+            ->middleware('throttle:20,1')
+            ->group(function () {
+                Route::get('orders/{order}/create', 'create')
+                    ->middleware('signed')
+                    ->name('create');
+                Route::post('orders/{order}', 'store')
+                    ->name('store');
+                Route::get('{orderReturn}', 'show')
+                    ->middleware('signed')
+                    ->name('show');
+                Route::patch('{orderReturn}/tracking', 'tracking')
+                    ->middleware('signed')
+                    ->name('tracking');
+            });
 
         Route::get('founding-circle/register', FoundingCircleRegisterController::class)->name('register');
 

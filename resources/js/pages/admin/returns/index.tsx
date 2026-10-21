@@ -30,6 +30,7 @@ type ReturnRow = {
     status_label: string;
     customer: string | null;
     order_reference: string | null;
+    items: string[];
     requested_at: string | null;
     refund_due_by: string | null;
     due_soon: boolean;
@@ -102,6 +103,7 @@ export default function AdminReturnsIndex({
                                 <TableHead>{t('Nummer')}</TableHead>
                                 <TableHead>{t('Bestelling')}</TableHead>
                                 <TableHead>{t('Klant')}</TableHead>
+                                <TableHead>{t('Artikelen')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead>{t('Aangevraagd')}</TableHead>
                                 <TableHead>{t('Terugbetaling vóór')}</TableHead>
@@ -111,7 +113,7 @@ export default function AdminReturnsIndex({
                             {paginated.data.length === 0 ? (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={6}
+                                        colSpan={7}
                                         className="py-10 text-center text-muted-foreground"
                                     >
                                         {t('Geen retours gevonden.')}
@@ -139,6 +141,11 @@ export default function AdminReturnsIndex({
                                             {row.order_reference}
                                         </TableCell>
                                         <TableCell>{row.customer}</TableCell>
+                                        <TableCell className="max-w-48 truncate">
+                                            {row.items.length > 0
+                                                ? row.items.join(', ')
+                                                : '—'}
+                                        </TableCell>
                                         <TableCell>
                                             {t(row.status_label)}
                                         </TableCell>

@@ -9,14 +9,18 @@ use App\Enums\RoleEnum;
 use App\Jobs\Returns\SendReturnAdminRequestMail;
 use App\Jobs\Returns\SendReturnCustomerMail;
 use App\Mail\OrderConfirmation;
+use App\Mail\Orders\OrderStatusUpdated;
+use App\Mail\ShippingNotification;
 use App\Models\EditionPiece;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
 use App\Models\OrderReturn;
+use App\Models\OrderStatusEvent;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\FoundingCircle\FoundingCircleRegistrar;
+use App\Services\Returns\GuestReturnLink;
 use App\Services\Returns\ReturnEligibility;
 use App\Services\Returns\ReturnService;
 use Database\Seeders\PermissionSeeder;
@@ -318,4 +322,91 @@ test('admin returns index requires returns.manage', function () {
     $this->actingAs($admin)
         ->get(route('admin.returns.index', ['locale' => 'nl']))
         ->assertOk();
+});
+
+test('shipping and delivered status mails include the returns CTA', function () {
+    $order = Order::factory()->paid()->create([
+        'edition_number' => 7,
+        'status' => OrderStatus::Delivered,
+        'shipped_at' => now()->subDays(2),
+        'delivered_at' => now()->subDay(),
+        'delivered_on' => now()->subDay()->toDateString(),
+    ]);
+
+    $shippingHtml = (new ShippingNotification($order))->render();
+    expect($shippingHtml)
+        ->toContain(__('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.'))
+        ->and($shippingHtml)->toContain(route('maison.returns', ['locale' => 'nl']));
+
+    $event = OrderStatusEvent::factory()->forOrder($order)->create([
+        'status' => OrderStatus::Delivered,
+    ]);
+    $statusHtml = (new OrderStatusUpdated($order, $event))->render();
+
+    expect($statusHtml)
+        ->toContain(__('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.'))
+        ->and($statusHtml)->toContain('Start een retour');
+});
+
+test('guest signed return link creates a return without an account', function () {
+    $product = Product::founding();
+    $order = Order::factory()->paid()->create([
+        'user_id' => null,
+        'product_id' => $product->id,
+        'email' => 'guest-return@example.com',
+        'status' => OrderStatus::Delivered,
+        'shipped_at' => now()->subDays(3),
+        'delivered_at' => now()->subDay(),
+        'delivered_on' => now()->subDay()->toDateString(),
+    ]);
+
+    $url = app(GuestReturnLink::class)->createUrl($order, 'nl');
+    expect($url)->not->toBeNull();
+
+    $this->get($url)
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('maison/guest-returns/create')
+            ->where('order.id', (string) $order->id));
+
+    $this->post(route('maison.guest-returns.store', ['locale' => 'nl', 'order' => $order->id]), [
+        'confirmed' => '1',
+        'reason' => ReturnReason::NotExpected->value,
+    ])->assertRedirect();
+
+    $return = OrderReturn::query()->where('order_id', $order->id)->first();
+
+    expect($return)->not->toBeNull()
+        ->and($return->user_id)->toBeNull()
+        ->and($return->status)->toBe(ReturnStatus::Requested);
+
+    $showUrl = app(GuestReturnLink::class)->showUrl($return, 'nl');
+
+    $this->get($showUrl)
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('maison/guest-returns/show')
+            ->where('return.number', $return->number));
+});
+
+test('admin cancel stores the dutch source note for translation', function () {
+    $user = User::factory()->create();
+    $order = heritagePaidOrder($user, 41);
+    $order->update([
+        'status' => OrderStatus::Delivered,
+        'shipped_at' => now()->subDays(3),
+        'delivered_at' => now()->subDay(),
+        'delivered_on' => now()->subDay()->toDateString(),
+    ]);
+
+    $return = app(ReturnService::class)->request($order, $user, null, null, true);
+    $admin = User::factory()->admin()->create();
+    $admin->assignRole(RoleEnum::ADMIN->value);
+
+    $this->actingAs($admin)
+        ->post(route('admin.returns.cancel', ['locale' => 'nl', 'orderReturn' => $return->id]))
+        ->assertRedirect();
+
+    expect($return->fresh()->status)->toBe(ReturnStatus::Cancelled)
+        ->and($return->events()->latest('id')->value('note'))->toBe('Geannuleerd door beheerder.');
 });
