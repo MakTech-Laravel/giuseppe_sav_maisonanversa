@@ -178,7 +178,7 @@ class ReturnController extends Controller
                 ->whenEmpty(fn () => collect([$return->order?->product?->name])->filter()->values())
                 ->values()
                 ->all(),
-            'requested_at' => $return->requested_at?->toDateTimeString(),
+            'requested_at' => $return->requested_at?->format('Y-m-d H:i'),
             'refund_due_by' => $return->refund_due_by?->toDateString(),
             'due_soon' => $dueSoon && $return->status->isOpen(),
             'maison_pays_return_shipping' => $return->maison_pays_return_shipping,
