@@ -40,6 +40,7 @@ class OrderConfirmation extends Mailable
             with: [
                 ...$this->maisonBrandData($this->order->locale),
                 'listingUrl' => route('member.register-listing', ['locale' => $locale]),
+                'returnsUrl' => route('maison.returns', ['locale' => $locale]),
             ],
         );
     }

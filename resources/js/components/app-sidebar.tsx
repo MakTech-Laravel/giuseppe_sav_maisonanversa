@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     Bell,
     BellRing,
@@ -18,6 +18,7 @@ import {
     MessagesSquare,
     Package,
     Radio,
+    RotateCcw,
     ServerCog,
     Settings2,
     ShoppingBag,
@@ -80,6 +81,7 @@ type NavGroup = {
 function buildNavGroups(
     locale: string,
     t: (key: string) => string,
+    returnsOpenCount = 0,
 ): NavGroup[] {
     return [
         {
@@ -141,6 +143,13 @@ function buildNavGroups(
                     href: adminOrders.index(locale),
                     icon: ShoppingBag,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                },
+                {
+                    title: t('Retours'),
+                    href: `/${locale}/admin/returns`,
+                    icon: RotateCcw,
+                    permissions: [PERMISSIONS.RETURNS.MANAGE],
+                    badge: returnsOpenCount > 0 ? returnsOpenCount : undefined,
                 },
                 {
                     title: t('Product'),
@@ -293,7 +302,13 @@ function buildNavGroups(
 export function AppSidebar() {
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const navGroups = useMemo(() => buildNavGroups(locale, t), [locale, t]);
+    const returnsOpenCount =
+        (usePage().props.returns as { openCount?: number } | undefined)
+            ?.openCount ?? 0;
+    const navGroups = useMemo(
+        () => buildNavGroups(locale, t, returnsOpenCount),
+        [locale, t, returnsOpenCount],
+    );
 
     return (
         <Sidebar collapsible="icon" variant="inset">

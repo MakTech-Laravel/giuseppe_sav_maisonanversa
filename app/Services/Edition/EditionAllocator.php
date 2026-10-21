@@ -215,7 +215,11 @@ class EditionAllocator
                 return;
             }
 
-            if (! in_array($piece->status, [EditionPieceStatus::Reserved, EditionPieceStatus::Allocated], true)) {
+            if (! in_array($piece->status, [
+                EditionPieceStatus::Reserved,
+                EditionPieceStatus::Allocated,
+                EditionPieceStatus::Returning,
+            ], true)) {
                 return;
             }
 

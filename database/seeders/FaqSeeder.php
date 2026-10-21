@@ -26,7 +26,7 @@ class FaqSeeder extends Seeder
                 ],
                 [
                     'question' => 'Kan ik mijn racket retourneren?',
-                    'answer' => 'Retourneren binnen 14 dagen na levering, mits ongebruikt. Het definitieve retourbeleid wordt vastgelegd bij lancering.',
+                    'answer' => 'Retourneren binnen 14 dagen na levering via Mijn account → Bestellingen → Retourneren, of via /returns. Stuur alles mee wat erbij hoorde.',
                 ],
                 [
                     'question' => 'Is de prijs inclusief verzending?',

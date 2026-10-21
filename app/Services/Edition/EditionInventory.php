@@ -55,19 +55,21 @@ class EditionInventory
 
             $archived = (clone $pieces)->where('status', EditionPieceStatus::Archive)->count();
             $allocated = (clone $pieces)->where('status', EditionPieceStatus::Allocated)->count();
+            $returning = (clone $pieces)->where('status', EditionPieceStatus::Returning)->count();
             $held = (clone $pieces)->where('status', EditionPieceStatus::Reserved)->count();
             $available = (clone $pieces)->where('status', EditionPieceStatus::Available)->count();
             $sellable = max(0, $total - $archived);
+            $owned = $allocated + $returning;
 
             return [
                 'total' => $total,
                 'archived' => $archived,
                 'sellable' => $sellable,
-                'allocated' => $allocated,
+                'allocated' => $owned,
                 'held' => $held,
-                'reserved' => $allocated,
+                'reserved' => $owned,
                 'available' => $available,
-                'soldOut' => $sellable === 0 || $allocated >= $sellable,
+                'soldOut' => $sellable === 0 || $owned >= $sellable,
                 'deliveryLabel' => $product->expected_delivery_label,
                 'productName' => $product->name,
             ];

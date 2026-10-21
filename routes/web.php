@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RealtimeController;
+use App\Http\Controllers\Admin\ReturnController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SessionChatController as AdminSessionChatController;
@@ -40,11 +41,14 @@ use App\Http\Controllers\Maison\FoundingCircleRegisterController;
 use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
 use App\Http\Controllers\Maison\ProductEditionController;
+use App\Http\Controllers\Maison\ReturnsPageController;
 use App\Http\Controllers\Maison\SessionShareController;
 use App\Http\Controllers\Maison\VerificationController;
 use App\Http\Controllers\MaisonController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\Member\NotificationController;
+use App\Http\Controllers\Member\OrderCancelController;
+use App\Http\Controllers\Member\OrderReturnController;
 use App\Http\Controllers\Member\PassportPdfController;
 use App\Http\Controllers\Member\PresenceController;
 use App\Http\Controllers\Member\RegisterListingController;
@@ -128,6 +132,13 @@ Route::prefix('{locale}')
             Route::get('shipping', 'shipping')->name('shipping');
             Route::get('care', 'care')->name('care');
         });
+
+        Route::get('returns', ReturnsPageController::class)
+            ->name('returns');
+        Route::get('retour', fn (string $locale) => redirect()->route('maison.returns', ['locale' => $locale]))
+            ->name('returns.retour');
+        Route::get('retours', fn (string $locale) => redirect()->route('maison.returns', ['locale' => $locale]))
+            ->name('returns.retours');
 
         Route::get('founding-circle/register', FoundingCircleRegisterController::class)->name('register');
 
@@ -234,6 +245,18 @@ Route::prefix('{locale}')
                 Route::get('heritage', 'heritage')->middleware('founding-circle')->name('heritage');
                 Route::get('orders', 'orders')->name('orders');
                 Route::get('orders/{order}', 'orderShow')->name('orders.show');
+                Route::post('orders/{order}/cancel', OrderCancelController::class)
+                    ->name('orders.cancel');
+                Route::get('orders/{order}/returns/create', [OrderReturnController::class, 'create'])
+                    ->name('orders.returns.create');
+                Route::post('orders/{order}/returns', [OrderReturnController::class, 'store'])
+                    ->name('orders.returns.store');
+                Route::get('returns/{orderReturn}', [OrderReturnController::class, 'show'])
+                    ->name('returns.show');
+                Route::patch('returns/{orderReturn}/tracking', [OrderReturnController::class, 'tracking'])
+                    ->name('returns.tracking');
+                Route::delete('returns/{orderReturn}', [OrderReturnController::class, 'destroy'])
+                    ->name('returns.destroy');
                 Route::get('passport', 'passport')->middleware('founding-circle')->name('passport');
                 Route::get('passport.pdf', PassportPdfController::class)->middleware('founding-circle')->name('passport.pdf');
                 Route::get('circle', 'circle')->middleware('founding-circle')->name('circle');
@@ -365,6 +388,36 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
                 Route::patch('orders/{order}', 'updateOrderStatus')->name('orders.update')
                     ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
+                Route::get('returns', [ReturnController::class, 'index'])
+                    ->name('returns.index')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::get('returns/{orderReturn}', [ReturnController::class, 'show'])
+                    ->name('returns.show')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/receive', [ReturnController::class, 'markReceived'])
+                    ->name('returns.receive')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/refund', [ReturnController::class, 'refundFull'])
+                    ->name('returns.refund')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/partial-refund', [ReturnController::class, 'refundPartial'])
+                    ->name('returns.partial-refund')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/decline', [ReturnController::class, 'decline'])
+                    ->name('returns.decline')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/note', [ReturnController::class, 'note'])
+                    ->name('returns.note')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/tracking', [ReturnController::class, 'tracking'])
+                    ->name('returns.tracking')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/extend', [ReturnController::class, 'extendDeadline'])
+                    ->name('returns.extend')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
+                Route::post('returns/{orderReturn}/cancel', [ReturnController::class, 'cancel'])
+                    ->name('returns.cancel')
+                    ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
                 Route::get('circle', 'circle')->name('circle.index')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::post('circle', 'assignCircleMember')->name('circle.assign')

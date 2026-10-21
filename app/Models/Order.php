@@ -43,6 +43,8 @@ class Order extends Model
         'processing_at',
         'shipped_at',
         'delivered_at',
+        'delivered_on',
+        'return_deadline_at',
         'follow_up_sent_at',
     ];
 
@@ -59,6 +61,8 @@ class Order extends Model
             'processing_at' => 'datetime',
             'shipped_at' => 'datetime',
             'delivered_at' => 'datetime',
+            'delivered_on' => 'date',
+            'return_deadline_at' => 'datetime',
             'follow_up_sent_at' => 'datetime',
         ];
     }
@@ -111,9 +115,23 @@ class Order extends Model
         return $this->hasOne(Payment::class)->latestOfMany();
     }
 
+    /**
+     * @return HasMany<OrderReturn, $this>
+     */
+    public function returns(): HasMany
+    {
+        return $this->hasMany(OrderReturn::class);
+    }
+
     public function isPaid(): bool
     {
         return $this->status->isFulfillment();
+    }
+
+    public function isShipped(): bool
+    {
+        return $this->shipped_at !== null
+            || in_array($this->status, [OrderStatus::Shipped, OrderStatus::Delivered], true);
     }
 
     /**

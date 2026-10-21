@@ -9,6 +9,7 @@ use App\Console\Commands\Editions\ReleaseExpiredHolds;
 use App\Console\Commands\Mail\SendPostDeliveryFollowUps;
 use App\Console\Commands\Monitoring\PruneMonitoringHistoryCommand;
 use App\Console\Commands\Monitoring\RunHealthChecksCommand;
+use App\Console\Commands\Returns\SendAdminReturnDigestCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -23,6 +24,11 @@ Schedule::command(ReleaseExpiredHolds::class)
     ->onOneServer();
 
 Schedule::command(SendPostDeliveryFollowUps::class)
+    ->daily()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(SendAdminReturnDigestCommand::class)
     ->daily()
     ->withoutOverlapping()
     ->onOneServer();

@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import {
     MemberPageHeader,
@@ -34,7 +34,26 @@ type OrderDetail = {
     }[];
 };
 
-export default function MemberOrderShow({ order }: { order: OrderDetail }) {
+type ReturnsState = {
+    can_cancel: boolean;
+    can_return: boolean;
+    period_ended: boolean;
+    request_deadline: string | null;
+    open_return: {
+        id: number;
+        number: string;
+        status: string;
+        status_label: string;
+    } | null;
+};
+
+export default function MemberOrderShow({
+    order,
+    returns,
+}: {
+    order: OrderDetail;
+    returns?: ReturnsState;
+}) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
 
@@ -75,6 +94,73 @@ export default function MemberOrderShow({ order }: { order: OrderDetail }) {
                     {order.date}
                 </p>
             </div>
+
+            {returns ? (
+                <MemberPanel className="mb-6">
+                    <MemberSectionTitle title={t('Retour')} />
+                    {returns.can_cancel ? (
+                        <button
+                            type="button"
+                            className="inline-flex min-h-11 items-center justify-center border border-cream px-5 font-sans text-[10px] tracking-[0.2em] text-cream uppercase"
+                            onClick={() =>
+                                router.post(
+                                    `/${locale}/member/orders/${order.id}/cancel`,
+                                )
+                            }
+                        >
+                            {t('Bestelling annuleren')}
+                        </button>
+                    ) : null}
+                    {returns.can_return ? (
+                        <div className="space-y-3">
+                            {returns.request_deadline ? (
+                                <p className="font-sans text-sm text-sand">
+                                    {t('Retourneren kan tot :date', {
+                                        date: returns.request_deadline,
+                                    })}
+                                </p>
+                            ) : null}
+                            <Link
+                                href={`/${locale}/member/orders/${order.id}/returns/create`}
+                                className="inline-flex min-h-11 items-center justify-center border border-cream px-5 font-sans text-[10px] tracking-[0.2em] text-cream uppercase no-underline"
+                            >
+                                {t('Retourneren')}
+                            </Link>
+                        </div>
+                    ) : null}
+                    {returns.open_return ? (
+                        <div className="space-y-3">
+                            <p className="text-cream">
+                                {t(returns.open_return.status_label)} ·{' '}
+                                {returns.open_return.number}
+                            </p>
+                            <Link
+                                href={`/${locale}/member/returns/${returns.open_return.id}`}
+                                className="inline-flex min-h-11 items-center justify-center border border-cream px-5 font-sans text-[10px] tracking-[0.2em] text-cream uppercase no-underline"
+                            >
+                                {t('Trackingnummer toevoegen')}
+                            </Link>
+                        </div>
+                    ) : null}
+                    {returns.period_ended ? (
+                        <div className="space-y-2">
+                            <p className="text-sand">
+                                {t(
+                                    'De retourtermijn voor deze bestelling is voorbij.',
+                                )}
+                            </p>
+                            <Link
+                                href={`/${locale}/contact`}
+                                className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase"
+                            >
+                                {t(
+                                    'Een probleem met je product? Neem contact op',
+                                )}
+                            </Link>
+                        </div>
+                    ) : null}
+                </MemberPanel>
+            ) : null}
 
             <div className="grid gap-6 lg:grid-cols-5">
                 <MemberPanel className="lg:col-span-3">

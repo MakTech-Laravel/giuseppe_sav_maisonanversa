@@ -82,6 +82,52 @@ class FoundingCircleRegistrar
         $this->releaseEntry($entry);
     }
 
+    /**
+     * Mark the heritage piece as returning while the register row stays.
+     * Public ledger shows the number as Reserved until refund or restore.
+     */
+    public function markReturningForOrder(Order $order): void
+    {
+        $order->loadMissing('product', 'editionPiece');
+
+        if (! $this->isFoundingProduct($order->product) || $order->edition_number === null) {
+            return;
+        }
+
+        $piece = $order->editionPiece ?? $this->findPiece($order->product, (int) $order->edition_number);
+
+        if ($piece === null || ! in_array($piece->status, [EditionPieceStatus::Allocated, EditionPieceStatus::Returning], true)) {
+            return;
+        }
+
+        $piece->fill(['status' => EditionPieceStatus::Returning])->save();
+        $this->inventory->bust($order->product);
+        $this->snapshot->bust();
+    }
+
+    /**
+     * After a declined or cancelled return, restore the piece to Allocated
+     * so the public ledger shows the member again (Inscribed).
+     */
+    public function restoreAllocatedForOrder(Order $order): void
+    {
+        $order->loadMissing('product', 'editionPiece');
+
+        if (! $this->isFoundingProduct($order->product) || $order->edition_number === null) {
+            return;
+        }
+
+        $piece = $order->editionPiece ?? $this->findPiece($order->product, (int) $order->edition_number);
+
+        if ($piece === null || $piece->status !== EditionPieceStatus::Returning) {
+            return;
+        }
+
+        $piece->fill(['status' => EditionPieceStatus::Allocated])->save();
+        $this->inventory->bust($order->product);
+        $this->snapshot->bust();
+    }
+
     public function assign(User $user, int $editionNumber): FoundingCircleRegisterEntry
     {
         $product = Product::founding();
@@ -254,7 +300,7 @@ class FoundingCircleRegistrar
 
         $piece = $this->findPiece($product, (int) $entry->edition_number);
 
-        if ($piece === null || $piece->status !== EditionPieceStatus::Allocated) {
+        if ($piece === null || ! in_array($piece->status, [EditionPieceStatus::Allocated, EditionPieceStatus::Returning], true)) {
             return;
         }
 

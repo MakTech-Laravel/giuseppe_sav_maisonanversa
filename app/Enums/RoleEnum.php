@@ -74,6 +74,7 @@ enum RoleEnum: string
 
                 PermissionEnum::HERITAGE_VIEW,
                 PermissionEnum::ORDERS_MANAGE,
+                PermissionEnum::RETURNS_MANAGE,
                 PermissionEnum::COMMUNITY_MODERATE,
                 PermissionEnum::COMMUNITY_OFFICIAL,
                 PermissionEnum::SESSIONS_MANAGE,

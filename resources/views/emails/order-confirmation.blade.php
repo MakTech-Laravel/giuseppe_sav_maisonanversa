@@ -25,8 +25,13 @@
         <p style="margin:0 0 12px;color:#8A7D72;font-size:14px;">
             {{ __('Uw naam staat in het privé-archief van het huis. Hoe u in het publieke register verschijnt, kiest u in uw account.') }}
         </p>
-        <p style="margin:0;">
+        <p style="margin:0 0 16px;">
             <a href="{{ $listingUrl }}" style="color:#8A6A3B;">{{ __('Beheer mijn vermelding') }}</a>
         </p>
     @endif
+
+    <p style="margin:0;color:#8A7D72;font-size:14px;">
+        {{ __('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.') }}
+        <a href="{{ $returnsUrl }}" style="color:#8A6A3B;">{{ __('Start een retour') }}</a>
+    </p>
 @endcomponent

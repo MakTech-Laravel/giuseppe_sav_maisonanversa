@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\ReturnStatus;
 use App\Models\CommerceSetting;
+use App\Models\OrderReturn;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Services\Auth\PostLoginRedirectService;
@@ -107,6 +109,11 @@ class HandleInertiaRequests extends Middleware
             ] : null,
             'chat' => fn (): ?array => $user ? [
                 'unreadTotal' => app(SessionChatService::class)->unreadTotal($user),
+            ] : null,
+            'returns' => fn (): ?array => $user?->isAdmin() ? [
+                'openCount' => OrderReturn::query()
+                    ->where('status', ReturnStatus::Requested->value)
+                    ->count(),
             ] : null,
             'flash' => [
                 'open_auth_modal' => fn () => $request->session()->get('open_auth_modal'),

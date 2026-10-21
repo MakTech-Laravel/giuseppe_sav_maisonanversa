@@ -11,6 +11,7 @@ use App\Models\NewsletterSubscriber;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Newsletter\HeritageLetterSubscription;
+use App\Services\Returns\ReturnEligibility;
 use App\Support\MailLocale;
 use App\Support\MemberPassportPresenter;
 use App\Support\OrderPresenter;
@@ -130,12 +131,18 @@ class DashboardController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function orderShow(Request $request, string $locale, Order $order, OrderPresenter $presenter): Response
-    {
+    public function orderShow(
+        Request $request,
+        string $locale,
+        Order $order,
+        OrderPresenter $presenter,
+        ReturnEligibility $eligibility,
+    ): Response {
         abort_unless($order->user_id === $request->user()->id, 403);
 
         return Inertia::render('member/order-show', [
             'order' => $presenter->detail($order),
+            'returns' => $eligibility->forOrder($order),
         ]);
     }
 

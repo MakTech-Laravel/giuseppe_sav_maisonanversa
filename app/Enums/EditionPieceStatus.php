@@ -8,6 +8,7 @@ enum EditionPieceStatus: string
     case Available = 'available';
     case Reserved = 'reserved';
     case Allocated = 'allocated';
+    case Returning = 'returning';
 
     /**
      * Dutch source label — the i18n key the frontend passes to t().
@@ -19,6 +20,7 @@ enum EditionPieceStatus: string
             self::Available => 'Beschikbaar',
             self::Reserved => 'Gereserveerd',
             self::Allocated => 'Toegewezen',
+            self::Returning => 'Retour',
         };
     }
 }

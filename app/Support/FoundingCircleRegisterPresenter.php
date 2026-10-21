@@ -2,7 +2,9 @@
 
 namespace App\Support;
 
+use App\Enums\EditionPieceStatus;
 use App\Enums\RegisterVisibility;
+use App\Models\EditionPiece;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Product;
 use App\Models\User;
@@ -35,11 +37,19 @@ class FoundingCircleRegisterPresenter
             ->get()
             ->keyBy(fn (FoundingCircleRegisterEntry $entry): int => (int) $entry->edition_number);
 
+        $returning = $this->returningSequences($product);
+
         $places = [];
 
         for ($sequence = 1; $sequence <= $total; $sequence++) {
             $entry = $entries->get($sequence);
-            $places[] = $this->place($sequence, $entry, in_array($sequence, $archived, true), $viewer);
+            $places[] = $this->place(
+                $sequence,
+                $entry,
+                in_array($sequence, $archived, true),
+                $viewer,
+                $returning->contains($sequence),
+            );
         }
 
         return $places;
@@ -88,20 +98,25 @@ class FoundingCircleRegisterPresenter
             ->get()
             ->keyBy(fn (FoundingCircleRegisterEntry $entry): int => (int) $entry->edition_number);
 
+        $returning = $this->returningSequences($product);
+
         $places = [];
 
         for ($sequence = 1; $sequence <= $total; $sequence++) {
             $entry = $entries->get($sequence);
+            $isReturning = $returning->contains($sequence);
             $row = [
                 'id' => $entry !== null ? (string) $entry->id : null,
                 'number' => str_pad((string) $sequence, 3, '0', STR_PAD_LEFT),
                 'sequence' => $sequence,
-                'state' => $entry !== null ? 'inscribed' : (in_array($sequence, $archived, true) ? 'archive' : 'available'),
-                'member_name' => $entry?->user?->name,
-                'email' => $entry?->user?->email,
-                'visibility' => $entry?->register_visibility->value,
-                'visibility_label' => $entry?->register_visibility->label(),
-                'consent_at' => $entry?->register_consent_at?->toDateString(),
+                'state' => $isReturning
+                    ? 'returning'
+                    : ($entry !== null ? 'inscribed' : (in_array($sequence, $archived, true) ? 'archive' : 'available')),
+                'member_name' => $isReturning ? null : $entry?->user?->name,
+                'email' => $isReturning ? null : $entry?->user?->email,
+                'visibility' => $isReturning ? null : $entry?->register_visibility->value,
+                'visibility_label' => $isReturning ? __('Gereserveerd') : $entry?->register_visibility->label(),
+                'consent_at' => $isReturning ? null : $entry?->register_consent_at?->toDateString(),
                 'hidden' => (bool) $entry?->register_hidden_by_admin,
                 'user_id' => $entry?->user_id,
             ];
@@ -165,9 +180,27 @@ class FoundingCircleRegisterPresenter
      *     you: bool
      * }
      */
-    private function place(int $sequence, ?FoundingCircleRegisterEntry $entry, bool $archived, ?User $viewer): array
-    {
+    private function place(
+        int $sequence,
+        ?FoundingCircleRegisterEntry $entry,
+        bool $archived,
+        ?User $viewer,
+        bool $returning = false,
+    ): array {
         $number = str_pad((string) $sequence, 3, '0', STR_PAD_LEFT);
+
+        if ($returning) {
+            return [
+                'number' => $number,
+                'sequence' => $sequence,
+                'state' => 'returning',
+                'label_key' => 'Gereserveerd',
+                'name' => null,
+                'year' => null,
+                'italic' => true,
+                'you' => false,
+            ];
+        }
 
         if ($entry === null) {
             return [
@@ -208,5 +241,23 @@ class FoundingCircleRegisterPresenter
             'italic' => false,
             'you' => $you,
         ];
+    }
+
+    /**
+     * @return Collection<int, int>
+     */
+    private function returningSequences(?Product $product): Collection
+    {
+        if ($product === null) {
+            return collect();
+        }
+
+        return EditionPiece::query()
+            ->where('product_id', $product->id)
+            ->where('status', EditionPieceStatus::Returning)
+            ->get()
+            ->map(fn (EditionPiece $piece): int => $product->parseEditionSequence((string) $piece->edition_number))
+            ->filter()
+            ->values();
     }
 }

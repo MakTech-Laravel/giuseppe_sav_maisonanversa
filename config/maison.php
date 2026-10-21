@@ -139,6 +139,34 @@ return [
         'template_version' => 1,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Customer returns
+    |--------------------------------------------------------------------------
+    |
+    | Belgian / EU withdrawal: 14 days starting the day after delivery, then
+    | 14 days to ship. Refund due within 14 days of the request. Express
+    | shipping is never auto-refunded (cents reserved for when fees exist).
+    |
+    */
+
+    'returns' => [
+        'withdrawal_days' => 14,
+        'ship_within_days' => 14,
+        'delivery_fallback_days' => 5,
+        'refund_due_days' => 14,
+        'stale_days' => 7,
+        'urgency_days' => 3,
+        'number_prefix' => 'MA-R-',
+        'guest_link_ttl_hours' => 48,
+        'express_shipping_cents' => (int) env('MAISON_EXPRESS_SHIPPING_CENTS', 0),
+        'return_address' => env(
+            'MAISON_RETURN_ADDRESS',
+            'Maison Anversa · Returns · Antwerp, Belgium',
+        ),
+        'max_photos' => 3,
+    ],
+
     'corner_form_options' => [
         'court_options' => ['4-6 courts', '7-10 courts', '10+ courts'],
         'format_options' => [

@@ -132,27 +132,47 @@ class OrderFulfillment
     }
 
     /**
-     * Create a Stripe refund (when a PaymentIntent exists), restore inventory, and mark refunded.
+     * Create a Stripe refund (when a PaymentIntent exists).
+     *
+     * Null amount = full refund and mark the order refunded (inventory + register).
+     * With amount cents = partial Stripe refund only; caller handles register/order status.
+     *
+     * @return array{order: Order, stripe_refund_id: string|null}
      *
      * @throws ApiErrorException
      */
-    public function refund(Order $order): Order
+    public function refund(Order $order, ?int $amountCents = null, ?string $idempotencyKey = null): array
     {
-        if ($order->status === OrderStatus::Refunded) {
-            return $order;
+        if ($order->status === OrderStatus::Refunded && $amountCents === null) {
+            return ['order' => $order, 'stripe_refund_id' => null];
         }
 
         $order->loadMissing('latestPayment');
         $intentId = $order->latestPayment?->stripe_payment_intent_id
             ?: $order->stripe_payment_intent_id;
 
+        $stripeRefundId = null;
+
         if (filled($intentId)) {
-            Cashier::stripe()->refunds->create([
-                'payment_intent' => $intentId,
-            ]);
+            $payload = ['payment_intent' => $intentId];
+
+            if ($amountCents !== null) {
+                $payload['amount'] = $amountCents;
+            }
+
+            $opts = $idempotencyKey !== null ? ['idempotency_key' => $idempotencyKey] : [];
+            $refund = Cashier::stripe()->refunds->create($payload, $opts);
+            $stripeRefundId = is_string($refund->id ?? null) ? $refund->id : null;
         }
 
-        return $this->markRefunded($order);
+        if ($amountCents === null) {
+            return [
+                'order' => $this->markRefunded($order),
+                'stripe_refund_id' => $stripeRefundId,
+            ];
+        }
+
+        return ['order' => $order->refresh(), 'stripe_refund_id' => $stripeRefundId];
     }
 
     /**

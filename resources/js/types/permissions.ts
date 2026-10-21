@@ -70,6 +70,9 @@ export const PERMISSIONS = {
     ORDERS: {
         MANAGE: 'orders.manage',
     },
+    RETURNS: {
+        MANAGE: 'returns.manage',
+    },
     COMMUNITY: {
         MODERATE: 'community.moderate',
         OFFICIAL: 'community.official',

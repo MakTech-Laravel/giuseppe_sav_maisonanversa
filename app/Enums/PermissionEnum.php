@@ -55,6 +55,7 @@ enum PermissionEnum: string
 
     case HERITAGE_VIEW = 'heritage.view';
     case ORDERS_MANAGE = 'orders.manage';
+    case RETURNS_MANAGE = 'returns.manage';
     case COMMUNITY_MODERATE = 'community.moderate';
     case COMMUNITY_OFFICIAL = 'community.official';
     case COMMUNITY_PARTICIPATE = 'community.participate';
@@ -111,7 +112,8 @@ enum PermissionEnum: string
             self::SETTINGS_PRINT => 'Settings',
 
             self::HERITAGE_VIEW,
-            self::ORDERS_MANAGE => 'Heritage',
+            self::ORDERS_MANAGE,
+            self::RETURNS_MANAGE => 'Heritage',
 
             self::COMMUNITY_MODERATE,
             self::COMMUNITY_OFFICIAL,

@@ -36,7 +36,7 @@ class OrderStatusService
         }
 
         if ($status === OrderStatus::Refunded) {
-            $refunded = $this->fulfillment->refund($order);
+            $refunded = $this->fulfillment->refund($order)['order'];
             $event = $this->recordEvent($refunded, $status, $message, $admin);
             SendOrderStatusUpdatedBuyerMail::dispatch($refunded, $event);
 
