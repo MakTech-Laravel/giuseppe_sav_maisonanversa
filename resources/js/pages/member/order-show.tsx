@@ -115,7 +115,7 @@ export default function MemberOrderShow({
                         <div className="space-y-3">
                             {returns.request_deadline ? (
                                 <p className="font-sans text-sm text-sand">
-                                    {t('Retourneren kan tot :date', {
+                                    {t('Retourneren kan tot {{date}}', {
                                         date: returns.request_deadline,
                                     })}
                                 </p>

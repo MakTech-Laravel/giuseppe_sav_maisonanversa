@@ -115,7 +115,7 @@ return [
     |
     */
 
-    'order_admin_email' => env('ORDER_ADMIN_EMAIL', env('MAIL_FROM_ADDRESS')),
+    'order_admin_email' => env('ORDER_ADMIN_EMAIL') ?: env('MAIL_FROM_ADDRESS'),
 
     /*
     |--------------------------------------------------------------------------

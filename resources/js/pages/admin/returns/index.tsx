@@ -69,15 +69,15 @@ export default function AdminReturnsIndex({
                 description={t('Retouraanvragen van klanten')}
             />
 
-            <div className="mb-4 flex flex-wrap gap-3">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Input
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                     placeholder={t('Zoeken')}
-                    className="max-w-xs"
+                    className="w-full sm:max-w-xs"
                 />
                 <Select value={status} onValueChange={setStatus}>
-                    <SelectTrigger className="w-48">
+                    <SelectTrigger className="w-full sm:w-48">
                         <SelectValue placeholder={t('Status')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -94,50 +94,77 @@ export default function AdminReturnsIndex({
                 </Button>
             </div>
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>{t('Nummer')}</TableHead>
-                        <TableHead>{t('Bestelling')}</TableHead>
-                        <TableHead>{t('Klant')}</TableHead>
-                        <TableHead>{t('Status')}</TableHead>
-                        <TableHead>{t('Aangevraagd')}</TableHead>
-                        <TableHead>{t('Terugbetaling vóór')}</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {paginated.data.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell>
-                                <Link
-                                    href={`/${locale}/admin/returns/${row.id}`}
-                                    className="font-medium underline"
-                                >
-                                    {row.number}
-                                </Link>
-                                {row.maison_pays_return_shipping ? (
-                                    <Badge className="ml-2" variant="outline">
-                                        {t('Onze verzending')}
-                                    </Badge>
-                                ) : null}
-                            </TableCell>
-                            <TableCell>{row.order_reference}</TableCell>
-                            <TableCell>{row.customer}</TableCell>
-                            <TableCell>{t(row.status_label)}</TableCell>
-                            <TableCell>{row.requested_at}</TableCell>
-                            <TableCell
-                                className={
-                                    row.due_soon ? 'font-semibold text-red-600' : ''
-                                }
-                            >
-                                {row.refund_due_by}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{t('Nummer')}</TableHead>
+                                <TableHead>{t('Bestelling')}</TableHead>
+                                <TableHead>{t('Klant')}</TableHead>
+                                <TableHead>{t('Status')}</TableHead>
+                                <TableHead>{t('Aangevraagd')}</TableHead>
+                                <TableHead>{t('Terugbetaling vóór')}</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginated.data.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={6}
+                                        className="py-10 text-center text-muted-foreground"
+                                    >
+                                        {t('Geen retours gevonden.')}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginated.data.map((row) => (
+                                    <TableRow key={row.id}>
+                                        <TableCell>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <Link
+                                                    href={`/${locale}/admin/returns/${row.id}`}
+                                                    className="font-medium underline underline-offset-4"
+                                                >
+                                                    {row.number}
+                                                </Link>
+                                                {row.maison_pays_return_shipping ? (
+                                                    <Badge variant="outline">
+                                                        {t('Onze verzending')}
+                                                    </Badge>
+                                                ) : null}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            {row.order_reference}
+                                        </TableCell>
+                                        <TableCell>{row.customer}</TableCell>
+                                        <TableCell>
+                                            {t(row.status_label)}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row.requested_at}
+                                        </TableCell>
+                                        <TableCell
+                                            className={
+                                                row.due_soon
+                                                    ? 'font-semibold text-red-600'
+                                                    : ''
+                                            }
+                                        >
+                                            {row.refund_due_by}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
 
-            <DataPagination paginated={paginated} />
+            <div className="mt-4">
+                <DataPagination meta={paginated} />
+            </div>
         </>
     );
 }

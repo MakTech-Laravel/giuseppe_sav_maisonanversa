@@ -176,7 +176,7 @@ export default function MemberReturnCreate({
                         <button
                             type="submit"
                             disabled={processing}
-                            className="inline-flex min-h-11 items-center justify-center border border-choc bg-cream px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase"
+                            className="inline-flex min-h-11 items-center justify-center border border-cream bg-cream px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             {t('Retour bevestigen')}
                         </button>

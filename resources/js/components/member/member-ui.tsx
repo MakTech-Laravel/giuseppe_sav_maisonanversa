@@ -14,24 +14,22 @@ export function MemberPageHeader({
     description?: string;
 }) {
     return (
-        <div>
-        </div>
-        // <header className="mb-10">
-        //     {eyebrow && (
-        //         <p className="mb-2 font-sans text-[9px] tracking-[0.28em] text-gold uppercase">
-        //             {eyebrow}
-        //         </p>
-        //     )}
-        //     <h1 className="font-serif text-[clamp(28px,4vw,42px)] leading-[1.15] font-normal text-cream">
-        //         {title}
-        //     </h1>
-        //     {description && (
-        //         <p className="mt-3 max-w-xl text-[15px] leading-[1.8] text-sand">
-        //             {description}
-        //         </p>
-        //     )}
-        //     <span aria-hidden="true" className="mt-5 block h-px w-10 bg-gold" />
-        // </header>
+        <header className="mb-10">
+            {eyebrow ? (
+                <p className="mb-2 font-sans text-[9px] tracking-[0.28em] text-gold uppercase">
+                    {eyebrow}
+                </p>
+            ) : null}
+            <h1 className="font-serif text-[clamp(28px,4vw,42px)] leading-[1.15] font-normal text-cream">
+                {title}
+            </h1>
+            {description ? (
+                <p className="mt-3 max-w-xl text-[15px] leading-[1.8] text-sand">
+                    {description}
+                </p>
+            ) : null}
+            <span aria-hidden="true" className="mt-5 block h-px w-10 bg-gold" />
+        </header>
     );
 }
 

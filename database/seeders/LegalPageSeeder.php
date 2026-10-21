@@ -40,9 +40,9 @@ HTML,
 <h2>Verzending &amp; Retour</h2>
 <p>Europa: verzending inbegrepen. Buiten Europa: op aanvraag.</p>
 <h2>Retour</h2>
-<p>Retour binnen 14 dagen na levering, ongebruikt en met originele verpakking.</p>
+<p>U heeft 14 dagen bedenktijd vanaf de dag na levering. Start een retour via Mijn account → Bestellingen → Retourneren, of via <a href="/nl/returns">maisonanversa.com/nl/retour</a> (EN: <a href="/en/returns">/en/returns</a>, FR: <a href="/fr/returns">/fr/retours</a>). Stuur het artikel ongebruikt mee met originele verpakking, Heritage Passport en accessoires. De kosten van de retourzending zijn voor u, tenzij het artikel beschadigd of defect aankwam.</p>
 <h2>Terugbetaling</h2>
-<p>Na controle betalen we terug via het oorspronkelijke betaalmiddel.</p>
+<p>Na ontvangst of bewijs van verzending betalen we binnen 14 dagen terug via het oorspronkelijke betaalmiddel.</p>
 HTML,
             'care' => <<<'HTML'
 <h2>Zorg &amp; Garantie</h2>

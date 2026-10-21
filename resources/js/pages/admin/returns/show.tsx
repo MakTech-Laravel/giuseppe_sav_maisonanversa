@@ -58,202 +58,351 @@ export default function AdminReturnShow({
             />
 
             <AdminResourceShell
-                main={
-                    <div className="space-y-6">
-                        <AdminPanel title={t('Details')}>
-                            <p>
-                                {t('Status')}: {t(orderReturn.status_label)}
-                            </p>
-                            <p>
-                                {t('Reden')}: {orderReturn.reason ?? '—'}
-                            </p>
-                            <p>{orderReturn.comment}</p>
-                            <p>
-                                {t('Verwacht')}: €
-                                {orderReturn.expected_refund_amount}
-                            </p>
-                            {orderReturn.maison_pays_return_shipping ? (
-                                <p className="font-medium text-amber-700">
-                                    {t(
-                                        'Beschadigd — retourzending op onze kosten',
-                                    )}
-                                </p>
-                            ) : null}
-                            {orderReturn.stripe_refund_id ? (
-                                <p>
-                                    Stripe: {orderReturn.stripe_refund_id} (€
-                                    {orderReturn.refund_amount})
-                                </p>
-                            ) : null}
-                            <Link
-                                href={`/${locale}/admin/orders/${orderReturn.order_id}`}
-                                className="text-sm underline"
+                aside={
+                    <div className="space-y-4">
+                        {(orderReturn.can_receive ||
+                            orderReturn.can_refund ||
+                            orderReturn.can_decline ||
+                            orderReturn.can_cancel) && (
+                            <AdminPanel
+                                title={t('Acties')}
+                                description={t(
+                                    'Verwerk deze retouraanvraag.',
+                                )}
                             >
-                                {t('Bekijk bestelling')}
-                            </Link>
-                        </AdminPanel>
-
-                        {orderReturn.photos.length > 0 ? (
-                            <AdminPanel title={t('Foto\'s')}>
-                                <div className="flex flex-wrap gap-3">
-                                    {orderReturn.photos.map((photo) => (
-                                        <a
-                                            key={photo.id}
-                                            href={photo.url}
-                                            target="_blank"
-                                            rel="noreferrer"
+                                <div className="flex flex-col gap-3">
+                                    {orderReturn.can_receive ? (
+                                        <Form
+                                            action={`/${locale}/admin/returns/${orderReturn.id}/receive`}
+                                            method="post"
                                         >
-                                            <img
-                                                src={photo.url}
-                                                alt=""
-                                                className="h-24 w-24 object-cover"
-                                            />
-                                        </a>
-                                    ))}
+                                            <Button
+                                                type="submit"
+                                                className="w-full"
+                                            >
+                                                {t('Markeer als ontvangen')}
+                                            </Button>
+                                        </Form>
+                                    ) : null}
+
+                                    {orderReturn.can_refund ? (
+                                        <Form
+                                            action={`/${locale}/admin/returns/${orderReturn.id}/refund`}
+                                            method="post"
+                                        >
+                                            <Button
+                                                type="submit"
+                                                className="w-full"
+                                            >
+                                                {t('Volledig terugbetalen')}
+                                            </Button>
+                                        </Form>
+                                    ) : null}
+
+                                    {orderReturn.can_cancel ? (
+                                        <Form
+                                            action={`/${locale}/admin/returns/${orderReturn.id}/cancel`}
+                                            method="post"
+                                        >
+                                            <Button
+                                                type="submit"
+                                                variant="ghost"
+                                                className="w-full"
+                                            >
+                                                {t('Annuleren')}
+                                            </Button>
+                                        </Form>
+                                    ) : null}
                                 </div>
+                            </AdminPanel>
+                        )}
+
+                        {orderReturn.can_refund ? (
+                            <AdminPanel title={t('Gedeeltelijk terugbetalen')}>
+                                <Form
+                                    action={`/${locale}/admin/returns/${orderReturn.id}/partial-refund`}
+                                    method="post"
+                                    className="space-y-3"
+                                >
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="refund_amount">
+                                            {t('Gedeeltelijk bedrag')}
+                                        </Label>
+                                        <Input
+                                            id="refund_amount"
+                                            name="refund_amount"
+                                            type="number"
+                                            step="0.01"
+                                            required
+                                            defaultValue={
+                                                orderReturn.expected_refund_amount ??
+                                                ''
+                                            }
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="partial_reason">
+                                            {t('Reden')}
+                                        </Label>
+                                        <Textarea
+                                            id="partial_reason"
+                                            name="refund_reason"
+                                            required
+                                            rows={3}
+                                        />
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        variant="outline"
+                                        className="w-full"
+                                    >
+                                        {t('Gedeeltelijk terugbetalen')}
+                                    </Button>
+                                </Form>
                             </AdminPanel>
                         ) : null}
 
-                        <AdminPanel title={t('Log')}>
-                            <ul className="space-y-3">
+                        {orderReturn.can_decline ? (
+                            <AdminPanel title={t('Afwijzen')}>
+                                <Form
+                                    action={`/${locale}/admin/returns/${orderReturn.id}/decline`}
+                                    method="post"
+                                    className="space-y-3"
+                                >
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="decline_reason">
+                                            {t('Reden')}
+                                        </Label>
+                                        <Textarea
+                                            id="decline_reason"
+                                            name="refund_reason"
+                                            required
+                                            rows={3}
+                                        />
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        variant="destructive"
+                                        className="w-full"
+                                    >
+                                        {t('Afwijzen')}
+                                    </Button>
+                                </Form>
+                            </AdminPanel>
+                        ) : null}
+
+                        <AdminPanel title={t('Tracking')}>
+                            <Form
+                                action={`/${locale}/admin/returns/${orderReturn.id}/tracking`}
+                                method="post"
+                                className="space-y-3"
+                            >
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="carrier">
+                                        {t('Vervoerder')}
+                                    </Label>
+                                    <Input
+                                        id="carrier"
+                                        name="carrier"
+                                        defaultValue={
+                                            orderReturn.carrier ?? ''
+                                        }
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="tracking_number">
+                                        {t('Trackingnummer')}
+                                    </Label>
+                                    <Input
+                                        id="tracking_number"
+                                        name="tracking_number"
+                                        defaultValue={
+                                            orderReturn.tracking_number ?? ''
+                                        }
+                                        required
+                                    />
+                                </div>
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className="w-full"
+                                >
+                                    {t('Tracking opslaan')}
+                                </Button>
+                            </Form>
+                        </AdminPanel>
+
+                        <AdminPanel title={t('Termijn verlengen')}>
+                            <Form
+                                action={`/${locale}/admin/returns/${orderReturn.id}/extend`}
+                                method="post"
+                                className="space-y-3"
+                            >
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="return_deadline_at">
+                                        {t('Nieuwe deadline')}
+                                    </Label>
+                                    <Input
+                                        id="return_deadline_at"
+                                        name="return_deadline_at"
+                                        type="date"
+                                        required
+                                    />
+                                </div>
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className="w-full"
+                                >
+                                    {t('Opslaan')}
+                                </Button>
+                            </Form>
+                        </AdminPanel>
+
+                        <AdminPanel title={t('Notitie')}>
+                            <Form
+                                action={`/${locale}/admin/returns/${orderReturn.id}/note`}
+                                method="post"
+                                className="space-y-3"
+                            >
+                                <Textarea name="note" required rows={3} />
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className="w-full"
+                                >
+                                    {t('Notitie toevoegen')}
+                                </Button>
+                            </Form>
+                        </AdminPanel>
+                    </div>
+                }
+            >
+                <div className="space-y-6">
+                    <AdminPanel title={t('Details')}>
+                        <dl className="space-y-2.5 text-sm">
+                            <div className="flex gap-3">
+                                <dt className="w-28 shrink-0 text-muted-foreground">
+                                    {t('Status')}
+                                </dt>
+                                <dd className="font-medium">
+                                    {t(orderReturn.status_label)}
+                                </dd>
+                            </div>
+                            <div className="flex gap-3">
+                                <dt className="w-28 shrink-0 text-muted-foreground">
+                                    {t('Reden')}
+                                </dt>
+                                <dd className="font-medium">
+                                    {orderReturn.reason
+                                        ? t(orderReturn.reason)
+                                        : '—'}
+                                </dd>
+                            </div>
+                            <div className="flex gap-3">
+                                <dt className="w-28 shrink-0 text-muted-foreground">
+                                    {t('Verwacht')}
+                                </dt>
+                                <dd className="font-medium">
+                                    €{orderReturn.expected_refund_amount}
+                                </dd>
+                            </div>
+                            {orderReturn.refund_amount ? (
+                                <div className="flex gap-3">
+                                    <dt className="w-28 shrink-0 text-muted-foreground">
+                                        {t('Terugbetaald')}
+                                    </dt>
+                                    <dd className="font-medium">
+                                        €{orderReturn.refund_amount}
+                                    </dd>
+                                </div>
+                            ) : null}
+                        </dl>
+
+                        {orderReturn.comment ? (
+                            <p className="mt-4 text-sm text-muted-foreground">
+                                {orderReturn.comment}
+                            </p>
+                        ) : null}
+
+                        {orderReturn.maison_pays_return_shipping ? (
+                            <p className="mt-4 rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-800 dark:text-amber-200">
+                                {t(
+                                    'Beschadigd — retourzending op onze kosten',
+                                )}
+                            </p>
+                        ) : null}
+
+                        {orderReturn.stripe_refund_id ? (
+                            <p className="mt-3 text-sm text-muted-foreground">
+                                Stripe: {orderReturn.stripe_refund_id}
+                            </p>
+                        ) : null}
+
+                        <div className="mt-4">
+                            <Link
+                                href={`/${locale}/admin/orders/${orderReturn.order_id}`}
+                                className="text-sm font-medium underline underline-offset-4"
+                            >
+                                {t('Bekijk bestelling')}
+                            </Link>
+                        </div>
+                    </AdminPanel>
+
+                    {orderReturn.photos.length > 0 ? (
+                        <AdminPanel title={t("Foto's")}>
+                            <div className="flex flex-wrap gap-3">
+                                {orderReturn.photos.map((photo) => (
+                                    <a
+                                        key={photo.id}
+                                        href={photo.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="overflow-hidden rounded-md border"
+                                    >
+                                        <img
+                                            src={photo.url}
+                                            alt=""
+                                            className="h-24 w-24 object-cover"
+                                        />
+                                    </a>
+                                ))}
+                            </div>
+                        </AdminPanel>
+                    ) : null}
+
+                    <AdminPanel title={t('Log')}>
+                        {orderReturn.events.length === 0 ? (
+                            <p className="text-sm text-muted-foreground">
+                                {t('Nog geen gebeurtenissen.')}
+                            </p>
+                        ) : (
+                            <ul className="space-y-4">
                                 {orderReturn.events.map((event) => (
-                                    <li key={event.id} className="text-sm">
-                                        <span className="font-medium">
-                                            {event.to}
-                                        </span>{' '}
-                                        · {event.user ?? '—'} · {event.at}
+                                    <li
+                                        key={event.id}
+                                        className="border-b border-border/60 pb-3 last:border-0 last:pb-0"
+                                    >
+                                        <p className="text-sm font-medium">
+                                            {t(event.to)}
+                                        </p>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            {event.user ?? '—'} ·{' '}
+                                            {event.at ?? '—'}
+                                        </p>
                                         {event.note ? (
-                                            <p className="text-muted-foreground">
-                                                {event.note}
+                                            <p className="mt-2 text-sm text-muted-foreground">
+                                                {t(event.note)}
                                             </p>
                                         ) : null}
                                     </li>
                                 ))}
                             </ul>
-                        </AdminPanel>
-                    </div>
-                }
-                aside={
-                    <div className="space-y-4">
-                        {orderReturn.can_receive ? (
-                            <Form
-                                action={`/${locale}/admin/returns/${orderReturn.id}/receive`}
-                                method="post"
-                            >
-                                <Button type="submit" className="w-full">
-                                    {t('Markeer als ontvangen')}
-                                </Button>
-                            </Form>
-                        ) : null}
-
-                        {orderReturn.can_refund ? (
-                            <>
-                                <Form
-                                    action={`/${locale}/admin/returns/${orderReturn.id}/refund`}
-                                    method="post"
-                                >
-                                    <Button type="submit" className="w-full">
-                                        {t('Volledig terugbetalen')}
-                                    </Button>
-                                </Form>
-
-                                <Form
-                                    action={`/${locale}/admin/returns/${orderReturn.id}/partial-refund`}
-                                    method="post"
-                                    className="space-y-2 rounded border p-3"
-                                >
-                                    <Label>{t('Gedeeltelijk bedrag')}</Label>
-                                    <Input
-                                        name="refund_amount"
-                                        type="number"
-                                        step="0.01"
-                                        required
-                                        defaultValue={
-                                            orderReturn.expected_refund_amount ??
-                                            ''
-                                        }
-                                    />
-                                    <Label>{t('Reden')}</Label>
-                                    <Textarea name="refund_reason" required />
-                                    <Button type="submit" variant="outline">
-                                        {t('Gedeeltelijk terugbetalen')}
-                                    </Button>
-                                </Form>
-                            </>
-                        ) : null}
-
-                        {orderReturn.can_decline ? (
-                            <Form
-                                action={`/${locale}/admin/returns/${orderReturn.id}/decline`}
-                                method="post"
-                                className="space-y-2 rounded border p-3"
-                            >
-                                <Label>{t('Afwijzen')}</Label>
-                                <Textarea name="refund_reason" required />
-                                <Button type="submit" variant="destructive">
-                                    {t('Afwijzen')}
-                                </Button>
-                            </Form>
-                        ) : null}
-
-                        <Form
-                            action={`/${locale}/admin/returns/${orderReturn.id}/tracking`}
-                            method="post"
-                            className="space-y-2 rounded border p-3"
-                        >
-                            <Label>{t('Tracking')}</Label>
-                            <Input
-                                name="carrier"
-                                defaultValue={orderReturn.carrier ?? ''}
-                                required
-                            />
-                            <Input
-                                name="tracking_number"
-                                defaultValue={orderReturn.tracking_number ?? ''}
-                                required
-                            />
-                            <Button type="submit" variant="outline">
-                                {t('Tracking opslaan')}
-                            </Button>
-                        </Form>
-
-                        <Form
-                            action={`/${locale}/admin/returns/${orderReturn.id}/extend`}
-                            method="post"
-                            className="space-y-2 rounded border p-3"
-                        >
-                            <Label>{t('Termijn verlengen')}</Label>
-                            <Input name="return_deadline_at" type="date" required />
-                            <Button type="submit" variant="outline">
-                                {t('Opslaan')}
-                            </Button>
-                        </Form>
-
-                        <Form
-                            action={`/${locale}/admin/returns/${orderReturn.id}/note`}
-                            method="post"
-                            className="space-y-2 rounded border p-3"
-                        >
-                            <Label>{t('Notitie')}</Label>
-                            <Textarea name="note" required />
-                            <Button type="submit" variant="outline">
-                                {t('Notitie toevoegen')}
-                            </Button>
-                        </Form>
-
-                        {orderReturn.can_cancel ? (
-                            <Form
-                                action={`/${locale}/admin/returns/${orderReturn.id}/cancel`}
-                                method="post"
-                            >
-                                <Button type="submit" variant="ghost">
-                                    {t('Annuleren')}
-                                </Button>
-                            </Form>
-                        ) : null}
-                    </div>
-                }
-            />
+                        )}
+                    </AdminPanel>
+                </div>
+            </AdminResourceShell>
         </>
     );
 }

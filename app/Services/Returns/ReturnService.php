@@ -109,7 +109,8 @@ class ReturnService
                 ]);
             }
 
-            $this->recordEvent($return, null, ReturnStatus::Requested, $actor, __('Retouraanvraag ingediend.'));
+            // Store Dutch source keys; translate on display so locale switches stay correct.
+            $this->recordEvent($return, null, ReturnStatus::Requested, $actor, 'Retouraanvraag ingediend.');
 
             if ($return->includesFoundingRacket()) {
                 $this->registrar->markReturningForOrder($order);
@@ -140,7 +141,7 @@ class ReturnService
             'status' => ReturnStatus::InTransit,
         ])->save();
 
-        $this->recordEvent($return, $from, ReturnStatus::InTransit, $actor, __('Trackingnummer toegevoegd.'));
+        $this->recordEvent($return, $from, ReturnStatus::InTransit, $actor, 'Trackingnummer toegevoegd.');
 
         return $return->refresh();
     }
@@ -157,7 +158,7 @@ class ReturnService
             $return,
             ReturnStatus::Cancelled,
             $actor,
-            $note ?? __('Retour geannuleerd.'),
+            $note ?? 'Retour geannuleerd.',
             restoreRegister: true,
         );
     }
@@ -176,7 +177,7 @@ class ReturnService
             'received_at' => now(),
         ])->save();
 
-        $this->recordEvent($return, $from, ReturnStatus::Received, $actor, __('Pakket ontvangen.'));
+        $this->recordEvent($return, $from, ReturnStatus::Received, $actor, 'Pakket ontvangen.');
         SendReturnCustomerMail::dispatch($return->refresh(), 'r2');
 
         return $return->refresh();
@@ -200,7 +201,7 @@ class ReturnService
             'resolved_at' => now(),
         ])->save();
 
-        $this->recordEvent($return, $from, ReturnStatus::Refunded, $actor, __('Volledige terugbetaling uitgevoerd.'));
+        $this->recordEvent($return, $from, ReturnStatus::Refunded, $actor, 'Volledige terugbetaling uitgevoerd.');
         SendReturnCustomerMail::dispatch($return->refresh(), 'r3');
 
         return $return->refresh();
