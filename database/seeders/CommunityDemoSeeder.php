@@ -6,6 +6,7 @@ use App\Enums\SessionCourtStatus;
 use App\Enums\SessionGender;
 use App\Enums\SessionLevel;
 use App\Enums\SessionSport;
+use App\Enums\UserType;
 use App\Models\Club;
 use App\Models\CommunityEvent;
 use App\Models\CommunityPost;
@@ -54,6 +55,22 @@ class CommunityDemoSeeder extends Seeder
         CommunitySessionParticipant::query()->firstOrCreate([
             'community_session_id' => $session->id,
             'user_id' => $host->id,
+        ]);
+
+        $partner = User::query()->where('email', 'user2@dev.com')->first()
+            ?? User::query()
+                ->where('email', '!=', $host->email)
+                ->where('type', UserType::Customer)
+                ->orderBy('id')
+                ->first()
+            ?? User::factory()->create([
+                'name' => 'User 2',
+                'email' => 'user2@dev.com',
+            ]);
+
+        CommunitySessionParticipant::query()->firstOrCreate([
+            'community_session_id' => $session->id,
+            'user_id' => $partner->id,
         ]);
     }
 }

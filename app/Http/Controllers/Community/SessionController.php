@@ -269,7 +269,7 @@ class SessionController extends Controller
             'type' => 'success',
             'message' => match ($outcome) {
                 'pending' => __('Uw aanvraag is verstuurd naar de organisator.'),
-                'confirmed' => __('Je speelt mee.'),
+                'confirmed' => __('U speelt mee.'),
                 default => $communitySession->requiresJoinRequests()
                     ? __('U heeft deze sessie al aangevraagd.')
                     : __('U speelt al mee in deze sessie.'),

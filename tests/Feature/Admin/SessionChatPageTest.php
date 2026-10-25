@@ -99,7 +99,8 @@ test('admins cannot open member chat routes', function () {
             'locale' => 'nl',
             'communitySession' => $this->session->id,
         ]))
-        ->assertForbidden();
+        ->assertForbidden()
+        ->assertInertia(fn ($page) => $page->component('errors/403'));
 });
 
 test('the community chat deep link sends admins to the staff inbox', function () {

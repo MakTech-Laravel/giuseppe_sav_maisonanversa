@@ -63,7 +63,7 @@ test('the digest command notifies an inactive member with unread chat once', fun
     expect($row)->not->toBeNull()
         ->and($row->notification->type)->toBe(NotificationType::Community)
         ->and($row->notification->title)->toBe('Nieuwe berichten')
-        ->and($row->notification->message)->toContain('1')
+        ->and($row->notification->message)->toBe('U heeft 1 ongelezen chatbericht.')
         ->and($row->notification->data['digest'])->toBe('session_chat')
         ->and($this->host->fresh()->chat_digest_sent_at)->not->toBeNull();
 
@@ -71,6 +71,27 @@ test('the digest command notifies an inactive member with unread chat once', fun
         return $mail->hasTo($this->host->email)
             && $mail->unreadCount === 1;
     });
+});
+
+test('the digest uses the singular chatbericht form for one unread', function () {
+    Mail::fake();
+
+    $player = User::factory()->create();
+    CommunitySessionParticipant::factory()->create([
+        'community_session_id' => $this->session->id,
+        'user_id' => $player->id,
+        'status' => SessionParticipantStatus::Confirmed,
+    ]);
+
+    unreadMessageFor($this->session, $player);
+    unreadMessageFor($this->session, $player, 'Tweede');
+
+    $this->artisan(SendSessionChatDigestsCommand::class)
+        ->assertSuccessful();
+
+    $message = $this->host->userNotifications()->with('notification')->first()?->notification?->message;
+
+    expect($message)->toBe('U heeft 2 ongelezen chatberichten.');
 });
 
 test('the digest command skips active members', function () {

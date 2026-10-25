@@ -23,6 +23,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatSessionDateTime } from '@/lib/session-format';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import sessionsRoutes from '@/routes/admin/community-sessions';
@@ -271,9 +272,10 @@ export default function CommunitySessionsIndex({
                                             {t(session.sport_label)}
                                         </TableCell>
                                         <TableCell className="hidden md:table-cell">
-                                            {new Date(
+                                            {formatSessionDateTime(
                                                 session.starts_at,
-                                            ).toLocaleString()}
+                                                locale,
+                                            )}
                                         </TableCell>
                                         <TableCell>
                                             {session.participants_count} /{' '}

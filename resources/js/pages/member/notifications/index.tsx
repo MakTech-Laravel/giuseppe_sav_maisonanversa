@@ -22,10 +22,10 @@ interface MemberNotificationsIndexProps {
     unreadCount: number;
 }
 
-const STATUS_TABS: { value: NotificationStatusFilter; label: string }[] = [
-    { value: 'all', label: 'Alle' },
-    { value: 'unread', label: 'Ongelezen' },
-    { value: 'read', label: 'Gelezen' },
+const STATUS_TABS: { value: NotificationStatusFilter; labelKey: string }[] = [
+    { value: 'all', labelKey: 'Alle' },
+    { value: 'unread', labelKey: 'Ongelezen' },
+    { value: 'read', labelKey: 'Gelezen' },
 ];
 
 const pagerClassName =
@@ -95,7 +95,7 @@ export default function MemberNotificationsIndex({
                                     : 'text-sand hover:bg-choc2 hover:text-cream',
                             )}
                         >
-                            {t(tab.label)}
+                            {t(tab.labelKey)}
                             {tab.value === 'unread' && unreadCount > 0 ? (
                                 <span className="tabular-nums">
                                     ({unreadCount})

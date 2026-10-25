@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Services\Community\MatchCardRenderer;
 use App\Support\MatchCardPresenter;
+use App\Support\SessionFeed;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Process\PendingProcess;
@@ -105,6 +106,31 @@ test('the share page hides the first name when privacy is off', function (string
             ->where('players.0.first_name', 'Sofia')
         );
 })->with(['nl', 'en', 'fr']);
+
+test('for_chat_only seats are excluded from the match card roster', function () {
+    $staff = User::factory()->create(['first_name' => 'Admin', 'last_name' => 'Staff']);
+
+    CommunitySessionParticipant::factory()->forChatOnly()->create([
+        'community_session_id' => $this->session->id,
+        'user_id' => $staff->id,
+    ]);
+
+    $players = app(MatchCardPresenter::class)->players($this->session->fresh());
+
+    expect(collect($players)->pluck('initials')->all())->toBe(['SV', 'JP'])
+        ->and(count($players))->toBe(2);
+});
+
+test('session feed and match card share the same initials', function () {
+    $user = User::factory()->create([
+        'name' => 'User Something',
+        'first_name' => 'User',
+        'last_name' => 'User',
+    ]);
+
+    expect(SessionFeed::player($user)['initials'])->toBe('UU')
+        ->and(app(MatchCardPresenter::class)->player($user)['initials'])->toBe('UU');
+});
 
 test('founding circle members carry their edition number', function () {
     $this->player->assignRole(RoleEnum::FOUNDING_CIRCLE->value);

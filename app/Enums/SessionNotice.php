@@ -89,7 +89,7 @@ enum SessionNotice: string
             self::ScoreApproved => __('Score goedgekeurd'),
             self::ScoreRejected => __('Score niet aanvaard'),
             self::SessionFinished => __('Sessie afgesloten: de uitslag'),
-            self::MatchCardReady => __('Je wedstrijdkaart is klaar'),
+            self::MatchCardReady => __('Uw wedstrijdkaart is klaar'),
             self::AdminCreated => __('Nieuwe sessie aangemaakt'),
             self::AdminFull => __('Sessie volzet'),
         };
@@ -119,7 +119,7 @@ enum SessionNotice: string
             self::ScoreApproved => __('De organisator heeft de score van de onderstaande sessie goedgekeurd.'),
             self::ScoreRejected => __('De organisator heeft uw ingediende score niet aanvaard.'),
             self::SessionFinished => __('De sessie is afgesloten. Hieronder vindt u de officiële uitslag.'),
-            self::MatchCardReady => __('Bedankt voor de sessie bij :club. Je wedstrijdkaart staat klaar: deel ze met je vrienden of bewaar ze als herinnering.', $replace),
+            self::MatchCardReady => __('Bedankt voor de sessie bij :club. Uw wedstrijdkaart staat klaar: deel ze met uw vrienden of bewaar ze als herinnering.', $replace),
             self::AdminCreated => __(':name heeft een nieuwe sessie aangemaakt.', $replace),
             self::AdminFull => __('Alle plaatsen van deze sessie zijn ingenomen.'),
         };
@@ -148,7 +148,7 @@ enum SessionNotice: string
             self::ScoreApproved => __('De score van de sessie van :when is goedgekeurd: :result.', $replace),
             self::ScoreRejected => __('Uw score voor de sessie van :when werd niet aanvaard.', $replace),
             self::SessionFinished => __('De sessie van :when is afgesloten. Uitslag: :result.', $replace),
-            self::MatchCardReady => __('Je wedstrijdkaart van :club is klaar.', $replace),
+            self::MatchCardReady => __('Uw wedstrijdkaart van :club is klaar.', $replace),
             self::AdminCreated => __(':name heeft een nieuwe sessie aangemaakt voor :when.', $replace),
         };
     }
@@ -162,7 +162,7 @@ enum SessionNotice: string
             self::JoinRequested => __('Bekijk aanvraag'),
             self::ScoreSubmitted => __('Bekijk score'),
             self::ScoreApproved, self::SessionFinished => __('Bekijk uitslag'),
-            self::MatchCardReady => __('Deel je kaart'),
+            self::MatchCardReady => __('Deel uw kaart'),
             default => __('Bekijk sessie'),
         };
     }

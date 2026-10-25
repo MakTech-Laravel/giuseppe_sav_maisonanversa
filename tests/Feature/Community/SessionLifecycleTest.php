@@ -43,6 +43,25 @@ test('creating a session seats the host in the first slot', function () {
         ->and($session->openSlots())->toBe(3);
 });
 
+test('naive session starts_at is stored as Europe/Brussels wall clock', function () {
+    config(['app.timezone' => 'Europe/Brussels']);
+
+    $host = User::factory()->create();
+    $club = Club::factory()->create();
+    $startsAt = now('Europe/Brussels')->addDays(2)->setTime(10, 30)->format('Y-m-d\TH:i');
+
+    $this->actingAs($host)
+        ->post(route('community.sessions.store', ['locale' => 'nl']), sessionPayload($club, [
+            'starts_at' => $startsAt,
+        ]))
+        ->assertRedirect();
+
+    $session = CommunitySession::query()->firstOrFail();
+
+    expect($session->starts_at->timezone('Europe/Brussels')->format('H:i'))->toBe('10:30')
+        ->and($session->starts_at->timezone('Europe/Brussels')->format('Y-m-d\TH:i'))->toBe($startsAt);
+});
+
 test('a session can last twenty or forty minutes', function () {
     $host = User::factory()->create();
     $club = Club::factory()->create();

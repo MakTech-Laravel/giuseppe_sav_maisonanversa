@@ -82,12 +82,14 @@ class SendSessionChatDigestsCommand extends Command
         app()->setLocale($locale);
 
         $sessionId = $chat->sessionIdWithMostUnread($user);
-        $ctaUrl = $sessionId !== null
-            ? route('member.chat.show', ['locale' => $locale, 'communitySession' => $sessionId])
-            : route('member.chat.index', ['locale' => $locale]);
+        $ctaUrl = $this->chatUrl($user, $locale, $sessionId);
 
         $title = __('Nieuwe berichten');
-        $message = __('U heeft :count ongelezen chatberichten.', ['count' => $unread]);
+        $message = trans_choice(
+            'U heeft :count ongelezen chatbericht.|U heeft :count ongelezen chatberichten.',
+            $unread,
+            ['count' => $unread],
+        );
 
         notify_user(
             $user,
@@ -113,5 +115,18 @@ class SendSessionChatDigestsCommand extends Command
         $user->forceFill(['chat_digest_sent_at' => now()])->save();
 
         return true;
+    }
+
+    private function chatUrl(User $user, string $locale, ?int $sessionId): string
+    {
+        if ($user->isAdmin()) {
+            return $sessionId !== null
+                ? route('admin.chat.show', ['locale' => $locale, 'communitySession' => $sessionId])
+                : route('admin.chat.index', ['locale' => $locale]);
+        }
+
+        return $sessionId !== null
+            ? route('member.chat.show', ['locale' => $locale, 'communitySession' => $sessionId])
+            : route('member.chat.index', ['locale' => $locale]);
     }
 }

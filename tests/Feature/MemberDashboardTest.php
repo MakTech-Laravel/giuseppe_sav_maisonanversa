@@ -126,6 +126,16 @@ test('members choose the language of their emails and notifications on the profi
     expect($user->fresh()->locale)->toBe('fr');
 });
 
+test('browsing a site language syncs the member mail locale', function () {
+    $user = User::factory()->create(['locale' => 'nl']);
+
+    $this->actingAs($user)
+        ->get(route('maison.home', ['locale' => 'en']))
+        ->assertOk();
+
+    expect($user->fresh()->locale)->toBe('en');
+});
+
 test('the profile refuses a language the house does not support', function () {
     $user = User::factory()->create(['locale' => 'nl']);
 

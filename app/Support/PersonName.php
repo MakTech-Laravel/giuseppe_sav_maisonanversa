@@ -53,6 +53,22 @@ class PersonName
         return self::split($user->name)['last_name'];
     }
 
+    /**
+     * Two-letter monogram for session cards and match cards (given + family).
+     */
+    public static function initials(User $user): string
+    {
+        $given = self::given($user);
+        $family = self::family($user);
+        $initials = mb_strtoupper(mb_substr($given, 0, 1).mb_substr($family, 0, 1));
+
+        if ($initials !== '') {
+            return $initials;
+        }
+
+        return mb_strtoupper(mb_substr((string) $user->name, 0, 1));
+    }
+
     public static function initial(string $lastName, string $firstName): string
     {
         $source = $lastName !== '' ? $lastName : $firstName;

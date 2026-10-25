@@ -13,7 +13,7 @@ import type { SessionCard as SessionCardData } from '@/types/session';
 
 /**
  * Homepage session row from the Phase 1 briefing: date block, club/time,
- * initials + open slots, and Doe mee / Je speelt mee.
+ * initials + open slots, and Doe mee / U speelt mee.
  */
 export function HomeSessionCard({ session }: { session: SessionCardData }) {
     const { t } = useTranslation();
@@ -137,7 +137,7 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
 
                 {playing ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-choc bg-choc px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase">
-                        {t('Je speelt mee ✓')}
+                        {t('U speelt mee ✓')}
                     </span>
                 ) : session.is_pending ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-[#DDD0C2] px-6 font-sans text-[10px] tracking-[0.2em] text-[#6E5646] uppercase">

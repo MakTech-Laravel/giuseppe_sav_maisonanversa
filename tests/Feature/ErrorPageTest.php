@@ -51,3 +51,24 @@ test('the 404 recovery links sit on the chocolate hero', function () {
         ->toContain('variant="ghost"')
         ->not->toContain('variant="choc"');
 });
+
+test('forbidden member routes render the branded inertia 403', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->get('/nl/member')
+        ->assertForbidden()
+        ->assertInertia(fn ($page) => $page
+            ->component('errors/403')
+            ->where('seo.robots', 'noindex, nofollow')
+            ->has('site')
+            ->where('locale', 'nl')
+        );
+});
+
+test('the 403 recovery links sit on the chocolate hero', function () {
+    expect(File::get(resource_path('js/pages/errors/403.tsx')))
+        ->toContain('variant="hero"')
+        ->toContain('variant="ghost"')
+        ->not->toContain('variant="choc"');
+});

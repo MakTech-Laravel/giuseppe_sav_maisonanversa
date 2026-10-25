@@ -7,7 +7,11 @@ use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('the home page includes upcoming joinable sessions for guests', function () {
-    $host = User::factory()->create(['name' => 'Hidden Host']);
+    $host = User::factory()->create([
+        'name' => 'Hidden Host',
+        'first_name' => 'Hidden',
+        'last_name' => 'Host',
+    ]);
     $open = CommunitySession::factory()->create([
         'host_id' => $host->id,
         'starts_at' => now()->addDays(2),
@@ -34,7 +38,7 @@ test('the home page includes upcoming joinable sessions for guests', function ()
             ->where('upcomingSessions.0.is_joined', false)
             ->where('upcomingSessions.0.host.name', '')
             ->where('upcomingSessions.0.players.0.name', '')
-            ->where('upcomingSessions.0.players.0.initials', 'HI')
+            ->where('upcomingSessions.0.players.0.initials', 'HH')
             ->where('openSessionsThisWeek', 1)
         );
 });
@@ -167,7 +171,7 @@ test('the home sessions section matches the PDF placement copy and card', functi
 
     expect($homeCard)
         ->toContain('Doe mee')
-        ->toContain('Je speelt mee ✓')
+        ->toContain('U speelt mee ✓')
         ->toContain('storePendingSessionJoin')
         ->toContain("openAuth('register')");
 

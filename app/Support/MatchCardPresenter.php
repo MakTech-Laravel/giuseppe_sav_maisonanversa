@@ -127,6 +127,7 @@ final class MatchCardPresenter
             $session->loadMissing('participants.user');
 
             return $session->participants
+                ->where('for_chat_only', false)
                 ->sortBy(fn (CommunitySessionParticipant $row): array => [
                     $row->user_id === $session->host_id ? 0 : 1,
                     $row->created_at?->getTimestamp() ?? 0,
@@ -149,11 +150,9 @@ final class MatchCardPresenter
     public function player(User $user): array
     {
         $given = PersonName::given($user);
-        $family = PersonName::family($user);
-        $initials = mb_strtoupper(mb_substr($given, 0, 1).mb_substr($family, 0, 1));
 
         return [
-            'initials' => $initials !== '' ? $initials : mb_strtoupper(mb_substr((string) $user->name, 0, 1)),
+            'initials' => PersonName::initials($user),
             'first_name' => $user->show_first_name_on_cards
                 ? ($given !== '' ? $given : null)
                 : null,

@@ -2,6 +2,7 @@
 
 namespace App\Services\Locale;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Cookie as CookieContract;
@@ -24,6 +25,8 @@ class LocalePreferenceService
 
     /**
      * Persist the visitor's locale choice across logout and bare `/` visits.
+     * Authenticated customers also sync `users.locale` so session mail and
+     * in-app notices follow the language they are browsing.
      */
     public function remember(Request $request, string $locale): void
     {
@@ -36,6 +39,15 @@ class LocalePreferenceService
         }
 
         Cookie::queue($this->cookie($locale));
+
+        $user = $request->user();
+
+        if ($user instanceof User
+            && $user->isCustomer()
+            && $user->locale !== $locale
+        ) {
+            $user->forceFill(['locale' => $locale])->saveQuietly();
+        }
     }
 
     public function cookie(string $locale): CookieContract

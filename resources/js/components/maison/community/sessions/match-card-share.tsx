@@ -126,7 +126,7 @@ export function MatchCardShare({
                     disabled={sharing}
                     className={cn(solidButton, 'col-span-2')}
                 >
-                    {t('Deel je kaart')}
+                    {t('Deel uw kaart')}
                 </button>
                 <a href={downloadUrl} className={outlineButton}>
                     {t('Download')}

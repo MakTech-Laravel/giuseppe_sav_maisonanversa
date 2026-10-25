@@ -6,8 +6,17 @@ const INTL_LOCALES: Record<string, string> = {
     fr: 'fr-BE',
 };
 
+/** Antwerp / Belgium — all Maison session times are this wall clock. */
+export const SESSION_TIME_ZONE = 'Europe/Brussels';
+
 function intlLocale(locale: Locale | string): string {
     return INTL_LOCALES[locale] ?? 'nl-BE';
+}
+
+function sessionDateOptions(
+    options: Intl.DateTimeFormatOptions,
+): Intl.DateTimeFormatOptions {
+    return { ...options, timeZone: SESSION_TIME_ZONE };
 }
 
 /** "Za 24 mei" — the short weekday + day + month the session cards use. */
@@ -15,11 +24,14 @@ export function formatSessionDate(
     iso: string,
     locale: Locale | string,
 ): string {
-    return new Date(iso).toLocaleDateString(intlLocale(locale), {
-        weekday: 'short',
-        day: 'numeric',
-        month: 'short',
-    });
+    return new Date(iso).toLocaleDateString(
+        intlLocale(locale),
+        sessionDateOptions({
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+        }),
+    );
 }
 
 /** Split parts for the homepage session date block (e.g. Di / 6 / Okt). */
@@ -31,22 +43,44 @@ export function formatSessionDateParts(
     const resolved = intlLocale(locale);
 
     return {
-        weekday: date.toLocaleDateString(resolved, { weekday: 'short' }),
-        day: date.toLocaleDateString(resolved, { day: 'numeric' }),
-        month: date.toLocaleDateString(resolved, { month: 'short' }),
+        weekday: date.toLocaleDateString(
+            resolved,
+            sessionDateOptions({ weekday: 'short' }),
+        ),
+        day: date.toLocaleDateString(
+            resolved,
+            sessionDateOptions({ day: 'numeric' }),
+        ),
+        month: date.toLocaleDateString(
+            resolved,
+            sessionDateOptions({ month: 'short' }),
+        ),
     };
 }
 
-/** "24 mei 2025" for the fuller detail header. */
+/** "24 mei 2025" for the fuller detail header. Dutch months stay lowercase. */
 export function formatSessionDateLong(
     iso: string,
     locale: Locale | string,
 ): string {
-    return new Date(iso).toLocaleDateString(intlLocale(locale), {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    });
+    const formatted = new Date(iso).toLocaleDateString(
+        intlLocale(locale),
+        sessionDateOptions({
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        }),
+    );
+
+    if (locale === 'nl' || locale.startsWith('nl')) {
+        return formatted.replace(
+            /(\d+)\s+(\p{L}+)/u,
+            (_, day: string, month: string) =>
+                `${day} ${month.toLocaleLowerCase('nl-BE')}`,
+        );
+    }
+
+    return formatted;
 }
 
 /** "10:30" in 24-hour form, which is what the mockup shows. */
@@ -54,11 +88,22 @@ export function formatSessionTime(
     iso: string,
     locale: Locale | string,
 ): string {
-    return new Date(iso).toLocaleTimeString(intlLocale(locale), {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-    });
+    return new Date(iso).toLocaleTimeString(
+        intlLocale(locale),
+        sessionDateOptions({
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        }),
+    );
+}
+
+/** "24 mei 2025, 10:30" for admin tables and dashboards. */
+export function formatSessionDateTime(
+    iso: string,
+    locale: Locale | string,
+): string {
+    return `${formatSessionDateLong(iso, locale)}, ${formatSessionTime(iso, locale)}`;
 }
 
 export function formatDuration(minutes: number): string {

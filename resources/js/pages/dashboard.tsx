@@ -27,6 +27,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { usePermission } from '@/hooks/use-permissions';
+import { formatSessionDateTime } from '@/lib/session-format';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import admins from '@/routes/admin/admins';
@@ -188,9 +189,10 @@ export default function Dashboard({
                                                 {nextCommunityEvent.title}
                                             </p>
                                             <p className="text-xs text-muted-foreground">
-                                                {new Date(
+                                                {formatSessionDateTime(
                                                     nextCommunityEvent.starts_at,
-                                                ).toLocaleString()}
+                                                    wayfinderLocale(),
+                                                )}
                                             </p>
                                         </div>
                                     </div>

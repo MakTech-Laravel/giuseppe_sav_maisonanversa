@@ -12,6 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatSessionDateTime } from '@/lib/session-format';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import clubsRoutes from '@/routes/admin/clubs';
@@ -110,7 +111,7 @@ export default function CommunitySessionShow({
                     </Detail>
                     <Detail label={t('Sport')}>{t(session.sport_label)}</Detail>
                     <Detail label={t('Datum')}>
-                        {new Date(session.starts_at).toLocaleString()}
+                        {formatSessionDateTime(session.starts_at, locale)}
                     </Detail>
                     <Detail label={t('Duur')}>
                         {session.duration_minutes} min

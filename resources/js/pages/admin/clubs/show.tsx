@@ -31,6 +31,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatSessionDateTime } from '@/lib/session-format';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import clubsRoutes from '@/routes/admin/clubs';
@@ -396,9 +397,10 @@ export default function ClubShow({
                                             {t(session.sport_label)}
                                         </TableCell>
                                         <TableCell>
-                                            {new Date(
+                                            {formatSessionDateTime(
                                                 session.starts_at,
-                                            ).toLocaleString()}
+                                                locale,
+                                            )}
                                         </TableCell>
                                         <TableCell>
                                             {session.participants_count} /{' '}

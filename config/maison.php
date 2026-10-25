@@ -23,7 +23,7 @@ return [
     | than the site default.
     */
 
-    'notification_fallback_locale' => 'en',
+    'notification_fallback_locale' => 'nl',
 
     /*
     |--------------------------------------------------------------------------

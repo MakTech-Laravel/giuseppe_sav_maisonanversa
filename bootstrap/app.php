@@ -113,7 +113,9 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->respond(function (Response $response, Throwable $e, Request $request) {
-            if ($response->getStatusCode() !== 404 || $request->expectsJson()) {
+            $status = $response->getStatusCode();
+
+            if (! in_array($status, [403, 404], true) || $request->expectsJson()) {
                 return $response;
             }
 
@@ -134,8 +136,8 @@ return Application::configure(basePath: dirname(__DIR__))
             Inertia::share(app(HandleInertiaRequests::class)->share($request));
             Inertia::share('seo', MaisonSeo::document($request));
 
-            return Inertia::render('errors/404')
+            return Inertia::render($status === 403 ? 'errors/403' : 'errors/404')
                 ->toResponse($request)
-                ->setStatusCode(404);
+                ->setStatusCode($status);
         });
     })->create();

@@ -195,7 +195,7 @@ final class SessionFeed
         return [
             'id' => $user->id,
             'name' => $redactName ? '' : $user->name,
-            'initials' => mb_strtoupper(mb_substr($user->name, 0, 2)),
+            'initials' => PersonName::initials($user),
             'avatar_url' => $redactName || ! $user->avatar
                 ? null
                 : Storage::disk('public')->url($user->avatar),

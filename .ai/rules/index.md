@@ -8,8 +8,10 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Services/Brevo/**, app/Contracts/BrevoContacts.php, app/Jobs/SyncOrderToBrevo.php | .ai/rules/brevo.md |
 | app/Services/FoundingCircle/**,app/Support/PassportPresenter.php,app/Services/Checkout/OrderFulfillment.php | .ai/rules/checkout.md |
 | app/Console/Commands/Community/** | .ai/rules/commands-community.md |
+| app/Services/Locale/**,app/Services/Community/SessionNotificationService.php,app/Support/MailLocale.php,config/maison.php | .ai/rules/community-support.md |
 | app/Http/Controllers/Community/ClubController.php, app/Http/Controllers/Community/SessionController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |
+| app/Support/SessionFeed.php,resources/js/lib/session-format.ts,config/app.php,app/Http/Controllers/Community/SessionController.php | .ai/rules/controllers-community.md |
 | app/Http/Controllers/Maison/VerificationController.php, app/Http/Controllers/Maison/SessionShareController.php, app/Http/Controllers/Maison/GuestReturnLinkRequestController.php | .ai/rules/controllers-maison.md |
 | resources/js/pages/maison/home.tsx,resources/js/components/maison/home/**,app/Support/SessionFeed.php,app/Http/Controllers/MaisonController.php | .ai/rules/controllers.md |
 | docker/** | .ai/rules/docker.md |
