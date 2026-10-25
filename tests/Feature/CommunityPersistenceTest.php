@@ -53,8 +53,9 @@ test('verified members can create and join a session', function () {
         ->post(route('community.sessions.join', ['locale' => 'nl', 'communitySession' => $session->id]))
         ->assertRedirect();
 
-    expect($session->participants()->count())->toBe(1)
-        ->and($session->joinRequests()->where('user_id', $guest->id)->exists())->toBeTrue();
+    expect($session->participants()->count())->toBe(2)
+        ->and($session->participants()->where('user_id', $guest->id)->exists())->toBeTrue()
+        ->and($session->joinRequests()->where('user_id', $guest->id)->exists())->toBeFalse();
 });
 
 test('staff can publish an official community post', function () {

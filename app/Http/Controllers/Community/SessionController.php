@@ -207,12 +207,12 @@ class SessionController extends Controller
     }
 
     /**
-     * Joining is a request: it reserves a seat (confirmed + pending never
-     * exceeds capacity) and waits for the host's decision.
+     * Open sessions confirm immediately; request sessions reserve a pending
+     * seat (confirmed + pending never exceeds capacity) until the host decides.
      */
     public function join(Request $request, string $locale, CommunitySession $communitySession): RedirectResponse
     {
-        $requested = DB::transaction(function () use ($request, $communitySession): bool {
+        $outcome = DB::transaction(function () use ($request, $communitySession): string {
             $locked = CommunitySession::query()
                 ->whereKey($communitySession->id)
                 ->lockForUpdate()
@@ -230,7 +230,7 @@ class SessionController extends Controller
                     __('De organisator heeft uw aanvraag voor deze sessie niet aanvaard.'),
                 );
 
-                return false;
+                return 'noop';
             }
 
             abort_if($locked->isCancelled(), 422, __('Deze sessie is geannuleerd.'));
@@ -243,24 +243,37 @@ class SessionController extends Controller
                 __('Alle vrije plaatsen zijn al aangevraagd. Probeer het later opnieuw.'),
             );
 
+            $requiresRequest = $locked->requiresJoinRequests();
+
             CommunitySessionParticipant::query()->create([
                 'community_session_id' => $locked->id,
                 'user_id' => $request->user()->id,
-                'status' => SessionParticipantStatus::Pending,
+                'status' => $requiresRequest
+                    ? SessionParticipantStatus::Pending
+                    : SessionParticipantStatus::Confirmed,
+                'decided_at' => $requiresRequest ? null : now(),
             ]);
 
-            return true;
+            return $requiresRequest ? 'pending' : 'confirmed';
         });
 
-        if ($requested) {
+        if ($outcome === 'pending') {
             $this->notifier->requested($communitySession, $request->user());
+        }
+
+        if ($outcome === 'confirmed') {
+            $this->notifier->joined($communitySession, $request->user());
         }
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => $requested
-                ? __('Uw aanvraag is verstuurd naar de organisator.')
-                : __('U heeft deze sessie al aangevraagd.'),
+            'message' => match ($outcome) {
+                'pending' => __('Uw aanvraag is verstuurd naar de organisator.'),
+                'confirmed' => __('Je speelt mee.'),
+                default => $communitySession->requiresJoinRequests()
+                    ? __('U heeft deze sessie al aangevraagd.')
+                    : __('U speelt al mee in deze sessie.'),
+            },
         ]);
 
         return back();

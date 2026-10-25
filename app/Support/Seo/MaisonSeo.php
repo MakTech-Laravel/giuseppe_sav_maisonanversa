@@ -343,6 +343,7 @@ final class MaisonSeo
 
         return CommunitySession::query()
             ->with('club')
+            ->withCount(['playParticipants', 'joinRequests'])
             ->where('share_token', $token)
             ->whereNull('cancelled_at')
             ->first();
@@ -354,10 +355,20 @@ final class MaisonSeo
     private static function sharedSessionCopy(CommunitySession $session): array
     {
         $club = (string) ($session->club?->name ?? __('Sessie'));
+        $when = $session->starts_at->translatedFormat('l j F Y, H:i');
+        $free = $session->openSlots();
+
+        $places = $free === 1
+            ? __('1 plaats vrij')
+            : __(':count plaatsen vrij', ['count' => $free]);
 
         return [
             'title' => __('Sessie').' · '.$session->sport->label().' — '.$club,
-            'description' => __('Bekijk en deel de wedstrijdkaart van deze sessie bij :club.', ['club' => $club]),
+            'description' => __(':club · :when · :places', [
+                'club' => $club,
+                'when' => $when,
+                'places' => $places,
+            ]),
         ];
     }
 

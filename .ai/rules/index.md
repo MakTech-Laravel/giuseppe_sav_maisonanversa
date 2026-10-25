@@ -4,13 +4,13 @@ Before planning or editing, find the row whose globs match the file's path and r
 
 | Applies to | Rule file |
 | --- | --- |
-| app/Http/Controllers/Admin/CommunityEventController.php | .ai/rules/admin.md |
+| app/Http/Controllers/Admin/CommunityEventController.php, app/Http/Controllers/Admin/OpsController.php | .ai/rules/admin.md |
 | app/Services/Brevo/**, app/Contracts/BrevoContacts.php, app/Jobs/SyncOrderToBrevo.php | .ai/rules/brevo.md |
 | app/Services/FoundingCircle/**,app/Support/PassportPresenter.php,app/Services/Checkout/OrderFulfillment.php | .ai/rules/checkout.md |
 | app/Console/Commands/Community/** | .ai/rules/commands-community.md |
-| app/Http/Controllers/Community/ClubController.php | .ai/rules/community.md |
+| app/Http/Controllers/Community/ClubController.php, app/Http/Controllers/Community/SessionController.php | .ai/rules/community.md |
 | resources/js/components/admin/** | .ai/rules/components-admin.md |
-| app/Http/Controllers/Maison/VerificationController.php, app/Http/Controllers/Maison/SessionShareController.php | .ai/rules/controllers-maison.md |
+| app/Http/Controllers/Maison/VerificationController.php, app/Http/Controllers/Maison/SessionShareController.php, app/Http/Controllers/Maison/GuestReturnLinkRequestController.php | .ai/rules/controllers-maison.md |
 | resources/js/pages/maison/home.tsx,resources/js/components/maison/home/**,app/Support/SessionFeed.php,app/Http/Controllers/MaisonController.php | .ai/rules/controllers.md |
 | docker/** | .ai/rules/docker.md |
 | Dockerfile | .ai/rules/dockerfile.md |
@@ -40,8 +40,9 @@ Before planning or editing, find the row whose globs match the file's path and r
 | routes/web.php | .ai/rules/routes.md |
 | app/Support/Seo/** | .ai/rules/seo.md |
 | app/Services/Checkout/** | .ai/rules/services-checkout.md |
-| app/Services/Community/ClubMerger.php, app/Services/Community/SessionNotificationService.php | .ai/rules/services-community.md |
+| app/Services/Community/ClubMerger.php, app/Services/Community/SessionNotificationService.php, app/Services/Community/SessionChatService.php | .ai/rules/services-community.md |
 | app/Http/Controllers/Maison/GuestOrderReturnController.php,app/Services/Returns/GuestReturnLink.php | .ai/rules/services-returns.md |
+| resources/js/components/maison/community/sessions/** | .ai/rules/sessions.md |
 | resources/js/pages/admin/site-settings/**, resources/js/components/maison/shell/**, resources/js/lib/maison-navigation.ts, app/Support/Seo/**, app/Models/SiteSetting.php | .ai/rules/site-settings.md |
-| app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php, app/Support/HomeHeroPresenter.php, app/Support/SessionFeed.php, app/Support/MatchScore.php | .ai/rules/support.md |
+| app/Support/PassportPresenter.php, app/Support/ClubDirectory.php, app/Http/Controllers/Maison/VerificationController.php, app/Support/HomeHeroPresenter.php, app/Support/SessionFeed.php, app/Support/MatchScore.php, app/Support/MatchCardPresenter.php | .ai/rules/support.md |
 | app/Services/Translation/** | .ai/rules/translation.md |

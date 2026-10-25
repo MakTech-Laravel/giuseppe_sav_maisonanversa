@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PartnerBadge } from '@/components/maison/community/partner-badge';
 import { SessionChatButton } from '@/components/maison/community/sessions/chat/session-chat-button';
 import { PlayerSlots } from '@/components/maison/community/sessions/player-slots';
+import { ShareSessionButton } from '@/components/maison/community/sessions/share-session-button';
 import { useOptionalShellActions } from '@/components/maison/shell/shell-actions';
 import { storePendingSessionJoin } from '@/lib/pending-session-join';
 import {
@@ -29,7 +30,7 @@ export function SessionCard({ session }: SessionCardProps) {
     function handleJoin() {
         if (!auth?.user) {
             storePendingSessionJoin(session.id);
-            shellActions?.openAuth('login');
+            shellActions?.openAuth('register');
 
             return;
         }
@@ -65,6 +66,12 @@ export function SessionCard({ session }: SessionCardProps) {
 
                 {session.club?.is_partner && <PartnerBadge className="mt-2" />}
 
+                <p className="mt-2 font-sans text-[11px] tracking-[0.08em] text-stone">
+                    {t('Georganiseerd door {{name}}', {
+                        name: session.host.name || session.host.initials,
+                    })}
+                </p>
+
                 <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 font-sans text-[11px] tracking-[0.08em] text-stone">
                     <span className="inline-flex items-center gap-1.5">
                         <CalendarDays className="size-3.5" aria-hidden="true" />
@@ -93,14 +100,25 @@ export function SessionCard({ session }: SessionCardProps) {
                 />
 
                 <span className="font-sans text-[10px] tracking-[0.16em] text-stone uppercase">
-                    {session.participants_count} / {session.capacity}{' '}
-                    {t('spelers')}
+                    {session.is_full || session.open_slots <= 0
+                        ? t('Volzet')
+                        : session.open_slots === 1
+                          ? t('1 plaats vrij')
+                          : t('{{count}} plaatsen vrij', {
+                                count: session.open_slots,
+                            })}
                     {pendingCount > 0 &&
                         ` · ${t('{{count}} in afwachting', { count: pendingCount })}`}
                 </span>
 
                 <div className="flex flex-wrap items-center gap-3 md:justify-end">
                     <SessionChatButton session={session} />
+                    {session.share_url && (
+                        <ShareSessionButton
+                            url={session.share_url}
+                            title={session.club?.name ?? t('Sessie')}
+                        />
+                    )}
                     <SessionAction
                         session={session}
                         onJoin={handleJoin}
@@ -191,7 +209,7 @@ function SessionAction({
 
     return (
         <button type="button" onClick={onJoin} className={cn(solidButton)}>
-            {t('Sluit aan')}
+            {t('Doe mee')}
         </button>
     );
 }

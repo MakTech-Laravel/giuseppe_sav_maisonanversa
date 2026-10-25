@@ -37,6 +37,7 @@ interface Order {
     status: string;
     status_key: string;
     summary: string;
+    delivered_on?: string | null;
     items: { name: string; qty: number; price: string }[];
     billing?: { name: string; email: string; phone?: string; address?: string };
     shipping?: {
@@ -69,6 +70,9 @@ export default function ShowOrder({ order }: { order: Order }) {
             | 'refunded'
             | 'canceled',
         message: '',
+    });
+    const deliveryForm = useForm({
+        delivered_on: order.delivered_on ?? '',
     });
 
     const canProcess = order.status_key === 'paid';
@@ -198,6 +202,58 @@ export default function ShowOrder({ order }: { order: Order }) {
                             </Button>
                         )}
                     </div>
+                </div>
+
+                <div className="rounded-xl border bg-card p-6 shadow-sm">
+                    <h2 className="mb-3 text-sm font-semibold">
+                        {t('Leveringsdatum')}
+                    </h2>
+                    <p className="mb-3 text-sm text-muted-foreground">
+                        {t(
+                            'Gebruikt voor de 14-dagen bedenktijd en de Founding Circle-inschrijving. Geen automatische carrierfeed — handmatig zetten of corrigeren.',
+                        )}
+                    </p>
+                    <form
+                        className="flex flex-wrap items-end gap-3"
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            deliveryForm.patch(
+                                orders.deliveredOn({
+                                    locale: wayfinderLocale(),
+                                    order: Number(order.id),
+                                }).url,
+                                { preserveScroll: true },
+                            );
+                        }}
+                    >
+                        <div className="space-y-2">
+                            <Label htmlFor="delivered-on">
+                                {t('Geleverd op')}
+                            </Label>
+                            <input
+                                id="delivered-on"
+                                type="date"
+                                value={deliveryForm.data.delivered_on}
+                                onChange={(event) =>
+                                    deliveryForm.setData(
+                                        'delivered_on',
+                                        event.target.value,
+                                    )
+                                }
+                                className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
+                            />
+                            <InputError
+                                message={deliveryForm.errors.delivered_on}
+                            />
+                        </div>
+                        <Button
+                            type="submit"
+                            variant="secondary"
+                            disabled={deliveryForm.processing}
+                        >
+                            {t('Opslaan')}
+                        </Button>
+                    </form>
                 </div>
 
                 <div className="grid w-full gap-6 lg:grid-cols-3">

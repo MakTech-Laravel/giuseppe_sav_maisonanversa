@@ -232,7 +232,9 @@ export default function SessionShow({
                                         onClick={handleJoin}
                                         className={solidButton}
                                     >
-                                        {t('Vraag om mee te spelen')}
+                                        {session.requests_required
+                                            ? t('Vraag om mee te spelen')
+                                            : t('Doe mee')}
                                     </button>
                                 )}
 

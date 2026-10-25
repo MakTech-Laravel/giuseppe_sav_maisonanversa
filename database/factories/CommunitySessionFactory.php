@@ -30,11 +30,17 @@ class CommunitySessionFactory extends Factory
             'duration_minutes' => 90,
             'court_status' => SessionCourtStatus::NotBooked,
             'capacity' => 4,
+            'requests_required' => false,
             'level' => SessionLevel::Intermediate,
             'gender' => SessionGender::Everyone,
             'notes' => $notes[array_rand($notes)],
             'cancelled_at' => null,
         ];
+    }
+
+    public function requiresRequests(): static
+    {
+        return $this->state(fn (): array => ['requests_required' => true]);
     }
 
     public function tennis(): static

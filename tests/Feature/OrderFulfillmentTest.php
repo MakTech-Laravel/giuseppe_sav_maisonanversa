@@ -73,6 +73,7 @@ test('paying for heritage no.001 inscribes the buyer as a private member on the 
         ->and($order->fresh()->edition_number)->toBe(42)
         ->and($entry)->not->toBeNull()
         ->and($entry->edition_number)->toBe(42)
+        ->and($entry->inscribed_at)->toBeNull()
         ->and($entry->register_visibility)->toBe(RegisterVisibility::Private)
         ->and($entry->register_consent_at)->toBeNull()
         ->and(FoundingCircleClaim::query()->where('order_id', $order->id)->exists())->toBeFalse();

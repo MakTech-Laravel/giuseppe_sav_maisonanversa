@@ -26,6 +26,8 @@ type ChatMessageListProps = {
     className?: string;
     onRetry?: (message: ChatMessage) => void;
     onDismissFailed?: (message: ChatMessage) => void;
+    onReport?: (message: ChatMessage) => void;
+    onDelete?: (message: ChatMessage) => void;
 };
 
 type ChatRow =
@@ -45,6 +47,8 @@ export function ChatMessageList({
     className,
     onRetry,
     onDismissFailed,
+    onReport,
+    onDelete,
 }: ChatMessageListProps) {
     const { t } = useTranslation();
     const rows = useMemo(() => buildRows(messages), [messages]);
@@ -94,6 +98,8 @@ export function ChatMessageList({
                                                         onDismissFailed={
                                                             onDismissFailed
                                                         }
+                                                        onReport={onReport}
+                                                        onDelete={onDelete}
                                                     />
                                                 ),
                                             )}

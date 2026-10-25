@@ -15,6 +15,33 @@ class GuestReturnLink
             && app(ReturnEligibility::class)->canRequestReturn($order);
     }
 
+    /**
+     * Resolve a guest checkout order from the public MA-YYYY-#### reference
+     * and matching email. Returns null when the pair does not match or the
+     * order is not eligible for a guest return link.
+     */
+    public function findEligibleGuestOrder(string $reference, string $email): ?Order
+    {
+        if (! preg_match('/^MA-(\d{4})-(\d+)$/i', trim($reference), $matches)) {
+            return null;
+        }
+
+        $order = Order::query()
+            ->whereKey((int) $matches[2])
+            ->whereNull('user_id')
+            ->first();
+
+        if ($order === null || ! $this->emailMatches($order, $email)) {
+            return null;
+        }
+
+        if ((string) $order->created_at?->format('Y') !== $matches[1]) {
+            return null;
+        }
+
+        return $this->canIssue($order) ? $order : null;
+    }
+
     public function createUrl(Order $order, ?string $locale = null): ?string
     {
         if (! $this->canIssue($order)) {

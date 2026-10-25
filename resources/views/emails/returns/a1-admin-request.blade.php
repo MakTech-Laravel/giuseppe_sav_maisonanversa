@@ -14,7 +14,7 @@
         {{ $orderReturn->items->map(fn ($item) => $item->product?->name)->filter()->implode(', ') ?: ($orderReturn->order?->product?->name ?? '—') }}
     </p>
     <p style="margin:0 0 8px;">
-        Reason: {{ $orderReturn->reason?->label() ?? 'none' }}
+        Reason: {{ $orderReturn->reason?->englishLabel() ?? 'none' }}
     </p>
     <p style="margin:0;">
         Refund due by: {{ $orderReturn->refund_due_by?->toDateString() }}

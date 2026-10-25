@@ -12,6 +12,8 @@ type SessionChatProps = {
     onSend?: (body: string, files: File[]) => void;
     onRetry?: (message: ChatMessage) => void;
     onDismissFailed?: (message: ChatMessage) => void;
+    onReport?: (message: ChatMessage) => void;
+    onDelete?: (message: ChatMessage) => void;
     title?: string;
     subtitle?: string;
     /** Rendered at the right of the header, e.g. a participant stack. */
@@ -32,6 +34,8 @@ export function SessionChat({
     onSend,
     onRetry,
     onDismissFailed,
+    onReport,
+    onDelete,
     title,
     subtitle,
     headerAside,
@@ -68,6 +72,8 @@ export function SessionChat({
                 currentUserId={currentUserId}
                 onRetry={onRetry}
                 onDismissFailed={onDismissFailed}
+                onReport={onReport}
+                onDelete={onDelete}
             />
 
             {canSend && onSend ? (

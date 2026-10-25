@@ -32,7 +32,7 @@ beforeEach(function () {
     $this->host = User::factory()->create(['name' => 'Host Name']);
     $this->player = User::factory()->create(['name' => 'First Player']);
 
-    $this->session = CommunitySession::factory()->create([
+    $this->session = CommunitySession::factory()->requiresRequests()->create([
         'host_id' => $this->host->id,
         'capacity' => 4,
         'starts_at' => now()->addDays(3),

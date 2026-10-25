@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\StoreSessionChatMessageRequest;
 use App\Models\CommunitySession;
+use App\Models\CommunitySessionMessage;
 use App\Models\User;
 use App\Services\Community\SessionChatService;
 use App\Support\SessionFeed;
@@ -54,6 +55,23 @@ class SessionChatController extends Controller
         return back();
     }
 
+    public function destroyMessage(
+        string $locale,
+        CommunitySession $communitySession,
+        CommunitySessionMessage $message,
+    ): RedirectResponse {
+        abort_unless($message->community_session_id === $communitySession->id, 404);
+
+        $this->chat->deleteMessage($message);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Bericht verwijderd.'),
+        ]);
+
+        return back();
+    }
+
     private function render(User $viewer, string $locale, ?CommunitySession $active): Response
     {
         $sessions = $this->chatSessions();
@@ -69,12 +87,13 @@ class SessionChatController extends Controller
             'messages' => $active === null ? [] : $this->chat->listFor($active),
             'can_send' => $canSend,
             'messages_purge_at' => $purgeAt?->toIso8601String(),
+            'can_moderate' => true,
         ]);
     }
 
     /**
      * Every session with a chat roster: host plus confirmed players, including
-     * past and cancelled while still inside the 7-day retention window.
+     * past and cancelled while still inside the retention window.
      *
      * @return Collection<int, CommunitySession>
      */

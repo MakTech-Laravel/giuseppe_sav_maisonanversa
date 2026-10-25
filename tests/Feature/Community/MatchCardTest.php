@@ -83,32 +83,28 @@ test('the card prints initials and first names, organiser first, never last name
         ->and($payload['height'])->toBe(1920);
 });
 
-test('members who hide their first name show the Private label', function () {
+test('members who hide their first name show initials only', function () {
     $this->player->update(['show_first_name_on_cards' => false]);
 
     $nl = app(MatchCardPresenter::class)->payload($this->session->fresh(), 'nl', 'story');
     $en = app(MatchCardPresenter::class)->payload($this->session->fresh(), 'en', 'story');
 
-    expect($nl['players'][1])->toBe(['initials' => 'JP', 'first_name' => 'Privé', 'edition' => null])
-        ->and($en['players'][1]['first_name'])->toBe('Private')
+    expect($nl['players'][1])->toBe(['initials' => 'JP', 'first_name' => null, 'edition' => null])
+        ->and($en['players'][1]['first_name'])->toBeNull()
         ->and($en['players'][1]['initials'])->toBe('JP');
 });
 
-test('the share page Private label follows the URL locale', function (string $locale, string $label) {
+test('the share page hides the first name when privacy is off', function (string $locale) {
     $this->player->update(['show_first_name_on_cards' => false]);
 
     $this->get(shareUrlFor($this->session, ['locale' => $locale]))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('players.1.first_name', $label)
+            ->where('players.1.first_name', null)
             ->where('players.1.initials', 'JP')
             ->where('players.0.first_name', 'Sofia')
         );
-})->with([
-    ['nl', 'Privé'],
-    ['en', 'Private'],
-    ['fr', 'Privé'],
-]);
+})->with(['nl', 'en', 'fr']);
 
 test('founding circle members carry their edition number', function () {
     $this->player->assignRole(RoleEnum::FOUNDING_CIRCLE->value);

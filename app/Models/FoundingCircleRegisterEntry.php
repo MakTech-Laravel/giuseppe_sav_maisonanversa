@@ -35,6 +35,7 @@ class FoundingCircleRegisterEntry extends Model
         'name',
         'edition_number',
         'joined_at',
+        'inscribed_at',
         'register_visibility',
         'register_consent_at',
         'register_hidden_by_admin',
@@ -56,10 +57,21 @@ class FoundingCircleRegisterEntry extends Model
         return [
             'edition_number' => 'integer',
             'joined_at' => 'datetime',
+            'inscribed_at' => 'datetime',
             'register_visibility' => RegisterVisibility::class,
             'register_consent_at' => 'datetime',
             'register_hidden_by_admin' => 'boolean',
         ];
+    }
+
+    public function isInscribed(): bool
+    {
+        return $this->inscribed_at !== null;
+    }
+
+    public function isReservedOnLedger(): bool
+    {
+        return ! $this->isInscribed();
     }
 
     /**

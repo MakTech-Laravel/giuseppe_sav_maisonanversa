@@ -114,7 +114,8 @@ test('verified members can join a session listed on the home page', function () 
         ]))
         ->assertRedirect();
 
-    expect($session->joinRequests()->where('user_id', $guest->id)->exists())->toBeTrue();
+    expect($session->participants()->where('user_id', $guest->id)->exists())->toBeTrue()
+        ->and($session->joinRequests()->where('user_id', $guest->id)->exists())->toBeFalse();
 });
 
 test('the home page returns an empty upcomingSessions list when none are joinable', function () {
@@ -168,9 +169,12 @@ test('the home sessions section matches the PDF placement copy and card', functi
         ->toContain('Doe mee')
         ->toContain('Je speelt mee ✓')
         ->toContain('storePendingSessionJoin')
-        ->toContain("openAuth('login')");
+        ->toContain("openAuth('register')");
 
     expect($sessionCard)
         ->toContain('storePendingSessionJoin')
-        ->toContain('useOptionalShellActions');
+        ->toContain('useOptionalShellActions')
+        ->toContain('ShareSessionButton')
+        ->toContain('Doe mee')
+        ->toContain('Georganiseerd door');
 });

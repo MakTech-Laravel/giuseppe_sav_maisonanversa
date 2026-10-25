@@ -41,6 +41,7 @@ test('session join request mails the host and adds an in-app notification', func
         'host_id' => $host->id,
         'capacity' => 4,
         'starts_at' => now()->addDay(),
+        'requests_required' => false,
     ]);
 
     CommunitySessionParticipant::factory()->create([
@@ -55,7 +56,7 @@ test('session join request mails the host and adds an in-app notification', func
     Mail::assertQueued(SessionNoticeMail::class, function (SessionNoticeMail $mail) use ($host, $guest): bool {
         return $mail->hasTo($host->email)
             && $mail->subjectName === $guest->name
-            && $mail->notice === SessionNotice::JoinRequested;
+            && $mail->notice === SessionNotice::NewPlayer;
     });
 
     $row = $host->userNotifications()->with('notification')->first();

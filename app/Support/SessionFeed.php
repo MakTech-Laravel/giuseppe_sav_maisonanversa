@@ -160,6 +160,7 @@ final class SessionFeed
             'gender' => $session->gender->value,
             'gender_label' => $session->gender->label(),
             'capacity' => $session->capacity,
+            'requests_required' => $session->requiresJoinRequests(),
             'participants_count' => $session->participantsCount(),
             'open_slots' => max(0, $session->capacity - $session->participantsCount() - $waitingCount),
             'players' => $players,
@@ -182,6 +183,7 @@ final class SessionFeed
             'lifecycle' => $lifecycle->value,
             'lifecycle_label' => $lifecycle->label(),
             'is_locked' => $session->isScoreboardLocked(),
+            'share_url' => $session->isCancelled() ? null : $session->shareUrl($locale),
         ];
     }
 

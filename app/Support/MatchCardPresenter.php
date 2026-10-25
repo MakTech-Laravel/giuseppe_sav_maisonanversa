@@ -11,8 +11,8 @@ use Illuminate\Support\Traits\Localizable;
  * Everything printed on a match card, in the language of whoever opens it.
  *
  * Players appear as initials plus their first name. When
- * `show_first_name_on_cards` is off, the first-name slot prints the
- * translated Private label instead. Last names never leave this class.
+ * `show_first_name_on_cards` is off, only initials are printed. Last names
+ * never leave this class.
  *
  * @phpstan-type CardPlayer array{initials: string, first_name: string|null, edition: string|null}
  * @phpstan-type CardPayload array{
@@ -156,7 +156,7 @@ final class MatchCardPresenter
             'initials' => $initials !== '' ? $initials : mb_strtoupper(mb_substr((string) $user->name, 0, 1)),
             'first_name' => $user->show_first_name_on_cards
                 ? ($given !== '' ? $given : null)
-                : __('Privé'),
+                : null,
             'edition' => $this->edition($user),
         ];
     }

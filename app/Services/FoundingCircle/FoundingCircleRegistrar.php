@@ -6,6 +6,7 @@ use App\Enums\EditionPieceStatus;
 use App\Enums\GuardEnum;
 use App\Enums\RegisterVisibility;
 use App\Enums\RoleEnum;
+use App\Mail\FoundingCircle\InscriptionMail;
 use App\Models\EditionPiece;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
@@ -13,15 +14,16 @@ use App\Models\Product;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
 
 /**
- * Inscribes Heritage No.001 buyers into the live Founding Circle register.
+ * Places Heritage No.001 buyers on the Founding Circle register.
  *
- * Payment confirms the place the buyer picked. The public name stays private
- * until the member opts in. A refund frees the number. Admin assign is an
- * override that still requires a free, non-archived number.
+ * Payment creates a Reserved place (no public name) until delivery + the
+ * withdrawal window; then a daily job promotes to Inscribed and mails the
+ * member. Admin assign is immediately Inscribed. A refund frees the number.
  */
 class FoundingCircleRegistrar
 {
@@ -50,12 +52,36 @@ class FoundingCircleRegistrar
                 $product,
                 $number,
                 $order,
+                inscribedImmediately: false,
             );
 
             $this->snapshot->bust();
 
             return $entry;
         });
+    }
+
+    /**
+     * Promote a Reserved place to Inscribed and queue the inscription email.
+     */
+    public function promoteToInscribed(FoundingCircleRegisterEntry $entry): bool
+    {
+        if ($entry->isInscribed()) {
+            return false;
+        }
+
+        $entry->fill(['inscribed_at' => now()])->save();
+        $this->snapshot->bust();
+
+        $entry->loadMissing('user', 'order');
+
+        if ($entry->user?->email) {
+            Mail::to($entry->user->email)
+                ->locale($entry->order?->locale ?? $entry->user->locale)
+                ->queue(new InscriptionMail($entry->fresh(['user', 'order'])));
+        }
+
+        return true;
     }
 
     public function releaseForOrder(Order $order): void
@@ -106,8 +132,9 @@ class FoundingCircleRegistrar
     }
 
     /**
-     * After a declined or cancelled return, restore the piece to Allocated
-     * so the public ledger shows the member again (Inscribed).
+     * After a declined or cancelled return, restore the piece to Allocated.
+     * Public ledger returns to Reserved (no inscribed_at) or Inscribed
+     * depending on whether the withdrawal window has already closed.
      */
     public function restoreAllocatedForOrder(Order $order): void
     {
@@ -151,7 +178,7 @@ class FoundingCircleRegistrar
             $this->holdPiece($piece);
             $this->grantRole($user);
 
-            $entry = $this->writePlace($user, $product, $editionNumber, null);
+            $entry = $this->writePlace($user, $product, $editionNumber, null, inscribedImmediately: true);
             $this->inventory->bust($product);
             $this->snapshot->bust();
 
@@ -222,6 +249,12 @@ class FoundingCircleRegistrar
             ]);
         }
 
+        if (! $entry->isInscribed()) {
+            throw ValidationException::withMessages([
+                'visibility' => __('Uw plaats is nog gereserveerd. Na de bedenktijd kunt u uw vermelding beheren.'),
+            ]);
+        }
+
         if ($visibility->isPublic() && ! $consent) {
             throw ValidationException::withMessages([
                 'consent' => __('Vink de toestemming aan om uw naam in het publieke register te tonen.'),
@@ -246,8 +279,13 @@ class FoundingCircleRegistrar
         return $entry->refresh();
     }
 
-    private function writePlace(User $user, Product $product, int $editionNumber, ?Order $order): FoundingCircleRegisterEntry
-    {
+    private function writePlace(
+        User $user,
+        Product $product,
+        int $editionNumber,
+        ?Order $order,
+        bool $inscribedImmediately,
+    ): FoundingCircleRegisterEntry {
         $entry = FoundingCircleRegisterEntry::query()->firstOrNew(['user_id' => $user->id]);
         $creating = ! $entry->exists;
 
@@ -263,6 +301,9 @@ class FoundingCircleRegistrar
             $entry->register_visibility = RegisterVisibility::Private;
             $entry->register_consent_at = null;
             $entry->register_hidden_by_admin = false;
+            $entry->inscribed_at = $inscribedImmediately ? now() : null;
+        } elseif ($inscribedImmediately && $entry->inscribed_at === null) {
+            $entry->inscribed_at = now();
         }
 
         $entry->save();

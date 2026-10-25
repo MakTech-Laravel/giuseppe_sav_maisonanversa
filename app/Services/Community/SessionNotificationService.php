@@ -41,6 +41,22 @@ class SessionNotificationService
     }
 
     /**
+     * Instant join on an open session: the organiser hears NewPlayer; a join
+     * that fills the session also fires SessionFull (E3) for everyone.
+     */
+    public function joined(CommunitySession $session, User $player): void
+    {
+        $session->loadMissing('host');
+
+        $this->deliver(SessionNotice::NewPlayer, $this->hostOnly($session), $session, $player, $player);
+
+        if ($this->freshPlayerCount($session) >= $session->capacity) {
+            $this->deliver(SessionNotice::SessionFull, $this->everyone($session), $session, $player, $player);
+            $this->deliver(SessionNotice::AdminFull, $this->admins(), $session, $player, $player);
+        }
+    }
+
+    /**
      * The organiser approved a request: the player is confirmed (E2), and
      * the approval that fills the session tells everyone (E3).
      */
@@ -212,7 +228,7 @@ class SessionNotificationService
                 );
                 $isMatchCard = $notice === SessionNotice::MatchCardReady;
 
-                notify_users(
+                \notify_users(
                     $group,
                     NotificationType::Community,
                     $notice->subject(),

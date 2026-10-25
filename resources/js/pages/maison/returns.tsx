@@ -1,7 +1,9 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PageHero } from '@/components/maison/ui/page-hero';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
+import { PageHero } from '@/components/maison/ui/page-hero';
+import { Wrap } from '@/components/maison/ui/section';
 
 export default function MaisonReturns({
     returnAddress,
@@ -12,6 +14,10 @@ export default function MaisonReturns({
 }) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
+    const guestForm = useForm({
+        reference: '',
+        email: '',
+    });
 
     /**
      * Always hit the protected member orders URL. Guests get url.intended set
@@ -20,6 +26,14 @@ export default function MaisonReturns({
      */
     function startReturn() {
         window.location.assign(loginRedirect);
+    }
+
+    function requestGuestLink(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        guestForm.post(`/${locale}/returns/guest-link`, {
+            preserveScroll: true,
+            onSuccess: () => guestForm.reset(),
+        });
     }
 
     return (
@@ -60,6 +74,81 @@ export default function MaisonReturns({
                     </aside>
                 </div>
             </PageHero>
+
+            <div className="bg-cream py-14">
+                <Wrap className="max-w-xl px-6 md:px-10">
+                    <h2 className="font-serif text-2xl text-choc">
+                        {t('Gastbestelling?')}
+                    </h2>
+                    <p className="mt-3 font-serif text-base leading-relaxed text-stone">
+                        {t(
+                            'Heb je zonder account besteld? Vul je bestelnummer en e-mail in. We sturen je een eenmalige link om een retour te starten.',
+                        )}
+                    </p>
+
+                    <form
+                        onSubmit={requestGuestLink}
+                        className="mt-8 flex flex-col gap-4"
+                    >
+                        <label className="flex flex-col gap-1.5">
+                            <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
+                                {t('Bestelnummer')}
+                            </span>
+                            <input
+                                type="text"
+                                value={guestForm.data.reference}
+                                onChange={(event) =>
+                                    guestForm.setData(
+                                        'reference',
+                                        event.target.value,
+                                    )
+                                }
+                                placeholder="MA-2026-0001"
+                                autoComplete="off"
+                                className="border border-gold/20 bg-cream2 px-4 py-3 font-serif text-base text-choc outline-none focus:border-gold2"
+                                required
+                            />
+                            {guestForm.errors.reference && (
+                                <span className="font-sans text-xs text-red-700">
+                                    {guestForm.errors.reference}
+                                </span>
+                            )}
+                        </label>
+
+                        <label className="flex flex-col gap-1.5">
+                            <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
+                                {t('E-mail bij de bestelling')}
+                            </span>
+                            <input
+                                type="email"
+                                value={guestForm.data.email}
+                                onChange={(event) =>
+                                    guestForm.setData(
+                                        'email',
+                                        event.target.value,
+                                    )
+                                }
+                                autoComplete="email"
+                                className="border border-gold/20 bg-cream2 px-4 py-3 font-serif text-base text-choc outline-none focus:border-gold2"
+                                required
+                            />
+                            {guestForm.errors.email && (
+                                <span className="font-sans text-xs text-red-700">
+                                    {guestForm.errors.email}
+                                </span>
+                            )}
+                        </label>
+
+                        <button
+                            type="submit"
+                            disabled={guestForm.processing}
+                            className="mt-2 inline-flex min-h-11 cursor-pointer items-center justify-center bg-choc px-6 font-sans text-[10px] tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2 disabled:opacity-50"
+                        >
+                            {t('Stuur retourlink')}
+                        </button>
+                    </form>
+                </Wrap>
+            </div>
         </>
     );
 }

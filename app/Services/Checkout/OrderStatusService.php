@@ -79,6 +79,10 @@ class OrderStatusService
                 $locked->delivered_at = now();
             }
 
+            if ($status === OrderStatus::Delivered && $locked->delivered_on === null) {
+                $locked->delivered_on = now()->toDateString();
+            }
+
             $locked->save();
 
             $event = $this->recordEvent($locked, $status, $message, $admin);

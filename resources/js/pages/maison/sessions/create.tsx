@@ -66,6 +66,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
         level: 'intermediate',
         gender: 'everyone',
         capacity: 4,
+        requests_required: false,
         notes: '',
     });
 
@@ -86,6 +87,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
             level: data.level,
             gender: data.gender,
             capacity: data.capacity,
+            requests_required: data.requests_required,
             notes: data.notes || null,
         }));
 
@@ -276,6 +278,32 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                             withLabels
                                         />
                                     </div>
+
+                                    <label className="mt-6 flex cursor-pointer items-start gap-3">
+                                        <input
+                                            type="checkbox"
+                                            checked={form.data.requests_required}
+                                            onChange={(event) =>
+                                                form.setData(
+                                                    'requests_required',
+                                                    event.target.checked,
+                                                )
+                                            }
+                                            className="mt-1 size-4 shrink-0 border border-gold/40 accent-choc"
+                                        />
+                                        <span className="flex flex-col gap-1">
+                                            <span className="font-sans text-[10px] tracking-[0.16em] text-choc uppercase">
+                                                {t(
+                                                    'Aanvragen goedkeuren',
+                                                )}
+                                            </span>
+                                            <span className="font-serif text-sm leading-snug text-stone">
+                                                {t(
+                                                    'Standaard speelt iedereen meteen mee. Schakel dit in als u elke aanvraag eerst wilt goedkeuren.',
+                                                )}
+                                            </span>
+                                        </span>
+                                    </label>
 
                                     <label className="mt-6 flex flex-col gap-1.5">
                                         <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">

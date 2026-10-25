@@ -6,6 +6,7 @@ paths:
   - app/Support/HomeHeroPresenter.php
   - app/Support/SessionFeed.php
   - app/Support/MatchScore.php
+  - app/Support/MatchCardPresenter.php
 ---
 
 # Support
@@ -43,3 +44,6 @@ toCard and present take nullable User. Guests get can_join when the session is s
 
 ## Session match results follow FIP/ITF scoring
 One official match per session; the submitter picks who played (others sit out). Padel is doubles only; tennis is singles or doubles (SessionSport::matchTypes()). Formats (SessionMatchFormat) follow FIP/ITF: sets to 6 by 2 with a 7-point tie-break at 6-6, short sets to 4, super tie-break to 10 replacing the 3rd set. App\Support\MatchScore is the single source of truth for validation, winner and notation (6-4, 6-7(5), [10-7]); resources/js/lib/match-score.ts only mirrors it for live feedback. A session with fewer confirmed players than the sport's minimum can be finished without a result.
+
+## Match card privacy is initials only
+When show_first_name_on_cards is false, first_name is null — cards print initials only, never the Private/Privé label.

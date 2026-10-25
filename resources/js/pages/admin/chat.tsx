@@ -22,6 +22,7 @@ type AdminChatPageProps = {
     messages: ChatMessage[];
     can_send: boolean;
     messages_purge_at: string | null;
+    can_moderate?: boolean;
 };
 
 export default function AdminChatPage({
@@ -31,6 +32,7 @@ export default function AdminChatPage({
     messages: initialMessages,
     can_send: canSend,
     messages_purge_at: messagesPurgeAt,
+    can_moderate: canModerate = true,
 }: AdminChatPageProps) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
@@ -101,6 +103,7 @@ export default function AdminChatPage({
                                     initialMessages={initialMessages}
                                     canSend={canSend}
                                     messagesPurgeAt={messagesPurgeAt}
+                                    canModerate={canModerate}
                                 />
                             </>
                         ) : (
@@ -119,12 +122,14 @@ function AdminActiveSessionChat({
     initialMessages,
     canSend,
     messagesPurgeAt,
+    canModerate,
 }: {
     session: SessionCard;
     viewer: SessionPlayer;
     initialMessages: ChatMessage[];
     canSend: boolean;
     messagesPurgeAt: string | null;
+    canModerate: boolean;
 }) {
     const { t } = useTranslation();
     const locale = wayfinderLocale();
@@ -288,12 +293,23 @@ function AdminActiveSessionChat({
 
     const closedMessage = purgeLabel
         ? t(
-              'Deze chat is gesloten. Berichten worden op {{date}} verwijderd (7 dagen na afsluiting).',
+              'Deze chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).',
               { date: purgeLabel },
           )
         : t(
               'Deze chat is gesloten. Er kunnen geen berichten meer worden verstuurd.',
           );
+
+    function handleDelete(message: ChatMessage) {
+        router.delete(
+            adminChat.messages.destroy.url({
+                locale,
+                communitySession: Number(session.id),
+                message: Number(message.id),
+            }),
+            { preserveScroll: true },
+        );
+    }
 
     return (
         <SessionChat
@@ -303,6 +319,7 @@ function AdminActiveSessionChat({
             onSend={handleSend}
             onRetry={handleRetry}
             onDismissFailed={handleDismissFailed}
+            onDelete={canModerate ? handleDelete : undefined}
             title={session.club?.name ?? t('Sessie')}
             subtitle={`${formatSessionDateLong(session.starts_at, locale)} · ${formatSessionTime(session.starts_at, locale)}`}
             headerAside={<ChatMembersButton players={session.players} />}

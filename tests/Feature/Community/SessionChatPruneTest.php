@@ -8,14 +8,14 @@ use App\Services\Community\SessionChatService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
-test('the prune command deletes messages only after seven days past close', function () {
+test('the prune command deletes messages only after thirty days past close', function () {
     Storage::fake('public');
 
     $host = User::factory()->create();
 
     $oldClosed = CommunitySession::factory()->create([
         'host_id' => $host->id,
-        'starts_at' => now()->subDays(10),
+        'starts_at' => now()->subDays(40),
         'cancelled_at' => null,
     ]);
     $oldClosed->refresh();
@@ -30,7 +30,7 @@ test('the prune command deletes messages only after seven days past close', func
     $cancelledOld = CommunitySession::factory()->create([
         'host_id' => $host->id,
         'starts_at' => now()->addDays(3),
-        'cancelled_at' => now()->subDays(8),
+        'cancelled_at' => now()->subDays(35),
     ]);
 
     $stillOpen = CommunitySession::factory()->create([
@@ -68,8 +68,8 @@ test('the prune command deletes messages only after seven days past close', func
         'body' => 'open',
     ]);
 
-    expect(app(SessionChatService::class)->closedAt($oldClosed)?->lte(now()->subDays(7)))->toBeTrue()
-        ->and(app(SessionChatService::class)->closedAt($recentClosed)?->lte(now()->subDays(7)))->toBeFalse();
+    expect(app(SessionChatService::class)->closedAt($oldClosed)?->lte(now()->subDays(30)))->toBeTrue()
+        ->and(app(SessionChatService::class)->closedAt($recentClosed)?->lte(now()->subDays(30)))->toBeFalse();
 
     Artisan::call('sessions:prune-chat-messages');
 
@@ -81,7 +81,7 @@ test('the prune command deletes messages only after seven days past close', func
     Storage::disk('public')->assertMissing($oldPath);
 });
 
-test('session chat service reports open and purge dates correctly', function () {
+test('session chat stays writable for forty-eight hours after the end', function () {
     $service = app(SessionChatService::class);
     $host = User::factory()->create();
 
@@ -94,15 +94,25 @@ test('session chat service reports open and purge dates correctly', function () 
         ->and($service->closedAt($open))->toBeNull()
         ->and($service->messagesPurgeAt($open))->toBeNull();
 
-    $past = CommunitySession::factory()->create([
+    $justEnded = CommunitySession::factory()->create([
         'host_id' => $host->id,
         'starts_at' => now()->subHours(3),
+        'duration_minutes' => 90,
     ]);
-    $past->refresh();
+    $justEnded->refresh();
 
-    expect($service->isOpen($past))->toBeFalse()
-        ->and($service->closedAt($past)?->equalTo($past->ends_at))->toBeTrue()
-        ->and($service->messagesPurgeAt($past)?->equalTo($past->ends_at->copy()->addDays(7)))->toBeTrue();
+    expect($service->isOpen($justEnded))->toBeTrue()
+        ->and($service->closedAt($justEnded)?->equalTo($justEnded->ends_at))->toBeTrue();
+
+    $longPast = CommunitySession::factory()->create([
+        'host_id' => $host->id,
+        'starts_at' => now()->subDays(3),
+        'duration_minutes' => 90,
+    ]);
+    $longPast->refresh();
+
+    expect($service->isOpen($longPast))->toBeFalse()
+        ->and($service->messagesPurgeAt($longPast)?->equalTo($longPast->ends_at->copy()->addDays(30)))->toBeTrue();
 
     $cancelled = CommunitySession::factory()->create([
         'host_id' => $host->id,
@@ -114,7 +124,7 @@ test('session chat service reports open and purge dates correctly', function () 
         ->and($service->closedAt($cancelled)?->equalTo($cancelled->cancelled_at))->toBeTrue();
 });
 
-test('retention helpers match the seven-day purge window', function () {
+test('retention helpers match the thirty-day purge window', function () {
     $service = app(SessionChatService::class);
     $host = User::factory()->create();
 
@@ -132,7 +142,7 @@ test('retention helpers match the seven-day purge window', function () {
 
     $old = CommunitySession::factory()->create([
         'host_id' => $host->id,
-        'starts_at' => now()->subDays(10),
+        'starts_at' => now()->subDays(40),
         'cancelled_at' => null,
     ]);
     $old->refresh();

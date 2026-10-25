@@ -38,8 +38,16 @@ class StoreCommunitySessionRequest extends FormRequest
             'level' => ['required', Rule::enum(SessionLevel::class)],
             'gender' => ['required', Rule::enum(SessionGender::class)],
             'capacity' => ['required', 'integer', 'min:2', 'max:8'],
+            'requests_required' => ['sometimes', 'boolean'],
             'notes' => ['nullable', 'string', 'max:500'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if (! $this->exists('requests_required')) {
+            $this->merge(['requests_required' => false]);
+        }
     }
 
     /**

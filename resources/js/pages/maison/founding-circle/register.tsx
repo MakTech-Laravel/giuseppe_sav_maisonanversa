@@ -5,10 +5,17 @@ import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { cn } from '@/lib/utils';
 
+export type PlaceState =
+    | 'inscribed'
+    | 'reserved'
+    | 'returning'
+    | 'available'
+    | 'archive';
+
 type Place = {
     number: string;
     sequence: number;
-    state: 'inscribed' | 'available' | 'archive';
+    state: PlaceState;
     label_key: string | null;
     name: string | null;
     year: string | null;
@@ -16,7 +23,7 @@ type Place = {
     you: boolean;
 };
 
-type Filter = 'all' | 'inscribed' | 'available';
+type Filter = 'all' | 'inscribed' | 'reserved' | 'available';
 
 function placeText(place: Place, t: (key: string) => string): string {
     if (place.name) {
@@ -41,6 +48,10 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
 
         if (filter === 'inscribed') {
             return place.state === 'inscribed';
+        }
+
+        if (filter === 'reserved') {
+            return place.state === 'reserved' || place.state === 'returning';
         }
 
         return place.state === 'available';
@@ -113,6 +124,7 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                             [
                                 ['all', t('Alle 100')],
                                 ['inscribed', t('Ingeschreven')],
+                                ['reserved', t('Gereserveerd')],
                                 ['available', t('Beschikbaar')],
                             ] as const
                         ).map(([value, label]) => (
@@ -211,7 +223,10 @@ function PlaceRow({
 }) {
     const { t } = useTranslation();
     const isPlaceholder =
-        place.state === 'available' || place.state === 'archive';
+        place.state === 'available' ||
+        place.state === 'archive' ||
+        place.state === 'reserved' ||
+        place.state === 'returning';
 
     return (
         <li

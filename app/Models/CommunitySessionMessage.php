@@ -18,13 +18,29 @@ class CommunitySessionMessage extends Model
         'user_id',
         'body',
         'is_system',
+        'reported_by_id',
+        'reported_at',
     ];
 
     protected function casts(): array
     {
         return [
             'is_system' => 'boolean',
+            'reported_at' => 'datetime',
         ];
+    }
+
+    public function isReported(): bool
+    {
+        return $this->reported_at !== null;
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function reportedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reported_by_id');
     }
 
     /**

@@ -35,6 +35,7 @@ export type SessionCard = {
     gender: string;
     gender_label: string;
     capacity: number;
+    requests_required?: boolean;
     participants_count: number;
     open_slots: number;
     players: SessionPlayer[];
@@ -57,6 +58,7 @@ export type SessionCard = {
     lifecycle?: SessionLifecycle;
     lifecycle_label?: string;
     is_locked?: boolean;
+    share_url?: string | null;
 };
 
 export type SessionParticipantStatus = 'pending' | 'confirmed' | 'rejected';

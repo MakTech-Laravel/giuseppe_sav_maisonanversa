@@ -16,8 +16,11 @@ class RegisterListingController extends Controller
 {
     public function edit(Request $request, string $locale, FoundingCircleRegisterPresenter $presenter): Response
     {
+        $listing = $presenter->listingPreview($request->user());
+
         return Inertia::render('member/register-listing', [
-            'listing' => $presenter->listingPreview($request->user()),
+            'listing' => $listing,
+            'canManage' => (bool) ($listing['inscribed'] ?? false),
         ]);
     }
 

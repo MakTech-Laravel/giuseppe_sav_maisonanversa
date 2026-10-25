@@ -187,6 +187,22 @@ class OpsController extends Controller
         return back();
     }
 
+    public function updateDeliveredOn(Request $request, string $locale, Order $order): RedirectResponse
+    {
+        $validated = $request->validate([
+            'delivered_on' => ['required', 'date'],
+        ]);
+
+        $order->fill([
+            'delivered_on' => $validated['delivered_on'],
+            'delivered_at' => $order->delivered_at ?? now(),
+        ])->save();
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Leveringsdatum bijgewerkt.')]);
+
+        return back();
+    }
+
     public function community(Request $request, string $locale): Response
     {
         $filters = $this->communityFilters($request);
@@ -289,7 +305,7 @@ class OpsController extends Controller
     public function circleRegister(Request $request, string $locale, FoundingCircleRegisterPresenter $presenter): Response
     {
         $status = $request->string('status')->toString();
-        $status = in_array($status, ['inscribed', 'available', 'archive'], true) ? $status : 'all';
+        $status = in_array($status, ['inscribed', 'reserved', 'returning', 'available', 'archive'], true) ? $status : 'all';
         $entries = $presenter->adminLedger($request->string('search')->toString() ?: null);
 
         if ($status !== 'all') {
@@ -356,6 +372,38 @@ class OpsController extends Controller
         $registrar->setHidden($entry, $request->boolean('hidden', true));
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Registervermelding bijgewerkt.')]);
+
+        return back();
+    }
+
+    public function markCircleRegisterReturning(
+        string $locale,
+        FoundingCircleRegisterEntry $entry,
+        FoundingCircleRegistrar $registrar,
+    ): RedirectResponse {
+        $entry->loadMissing('order');
+
+        abort_if($entry->order === null, 422, __('Geen bestelling gekoppeld aan deze plaats.'));
+
+        $registrar->markReturningForOrder($entry->order);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Plaats gemarkeerd als Returning.')]);
+
+        return back();
+    }
+
+    public function markCircleRegisterRefunded(
+        string $locale,
+        FoundingCircleRegisterEntry $entry,
+        FoundingCircleRegistrar $registrar,
+    ): RedirectResponse {
+        $entry->loadMissing('order');
+
+        abort_if($entry->order === null, 422, __('Geen bestelling gekoppeld aan deze plaats.'));
+
+        $registrar->releaseForOrder($entry->order);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Plaats vrijgegeven na retour/refund.')]);
 
         return back();
     }

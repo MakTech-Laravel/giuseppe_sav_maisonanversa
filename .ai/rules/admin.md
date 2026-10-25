@@ -1,6 +1,7 @@
 ---
 paths:
   - app/Http/Controllers/Admin/CommunityEventController.php
+  - app/Http/Controllers/Admin/OpsController.php
 ---
 
 # Admin
@@ -19,3 +20,6 @@ Community events store status (opening|ongoing|closed) on community_events.statu
 
 ## Event translations: same pattern as FAQ
 Community events follow the FAQ translation flow. Source text lives on community_events (title, description, location). Create/update queues TranslateModelJob for all locales (nl, en, fr) via TranslatesWithDeepL with auto-detect. Edit form always shows source columns. Vertalingen dialog on show saves all locales via PUT `admin.events.translations.update`; single-locale or bulk DeepL retranslate via POST `admin.events.translate` with optional `target_locale`.
+
+## Admin can edit orders.delivered_on
+PATCH admin.orders.delivered-on sets delivered_on (and delivered_at if empty). Marking status Delivered also fills delivered_on when null. Carrier webhooks remain out of scope.

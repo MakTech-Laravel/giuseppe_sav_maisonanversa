@@ -111,12 +111,16 @@ class FoundingCircleRegisterPresenter
                 'sequence' => $sequence,
                 'state' => $isReturning
                     ? 'returning'
-                    : ($entry !== null ? 'inscribed' : (in_array($sequence, $archived, true) ? 'archive' : 'available')),
-                'member_name' => $isReturning ? null : $entry?->user?->name,
-                'email' => $isReturning ? null : $entry?->user?->email,
-                'visibility' => $isReturning ? null : $entry?->register_visibility->value,
-                'visibility_label' => $isReturning ? __('Gereserveerd') : $entry?->register_visibility->label(),
-                'consent_at' => $isReturning ? null : $entry?->register_consent_at?->toDateString(),
+                    : ($entry === null
+                        ? (in_array($sequence, $archived, true) ? 'archive' : 'available')
+                        : ($entry->isInscribed() ? 'inscribed' : 'reserved')),
+                'member_name' => ($isReturning || ($entry !== null && ! $entry->isInscribed())) ? null : $entry?->user?->name,
+                'email' => ($isReturning || ($entry !== null && ! $entry->isInscribed())) ? null : $entry?->user?->email,
+                'visibility' => ($isReturning || ($entry !== null && ! $entry->isInscribed())) ? null : $entry?->register_visibility->value,
+                'visibility_label' => $isReturning || ($entry !== null && ! $entry->isInscribed())
+                    ? __('Gereserveerd')
+                    : $entry?->register_visibility->label(),
+                'consent_at' => ($isReturning || ($entry !== null && ! $entry->isInscribed())) ? null : $entry?->register_consent_at?->toDateString(),
                 'hidden' => (bool) $entry?->register_hidden_by_admin,
                 'user_id' => $entry?->user_id,
             ];
@@ -165,6 +169,7 @@ class FoundingCircleRegisterPresenter
             'private' => $number.'  '.__('Privélid'),
             'visibility' => $entry->register_visibility->value,
             'consent' => $entry->register_consent_at !== null,
+            'inscribed' => $entry->isInscribed(),
         ];
     }
 
@@ -216,7 +221,22 @@ class FoundingCircleRegisterPresenter
         }
 
         $you = $viewer !== null && (int) $entry->user_id === (int) $viewer->id;
-        $year = $entry->joined_at?->format('Y');
+
+        // Paid but still inside the withdrawal window: public Reserved, no name.
+        if (! $entry->isInscribed()) {
+            return [
+                'number' => $number,
+                'sequence' => $sequence,
+                'state' => 'reserved',
+                'label_key' => 'Gereserveerd',
+                'name' => null,
+                'year' => null,
+                'italic' => true,
+                'you' => $you,
+            ];
+        }
+
+        $year = $entry->inscribed_at?->format('Y') ?? $entry->joined_at?->format('Y');
 
         if ($entry->showsPrivateLabel() || $entry->user === null) {
             return [

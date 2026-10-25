@@ -319,16 +319,28 @@ function ActiveSessionChat({
     const closedMessage = session.is_cancelled
         ? purgeLabel
             ? t(
-                  'Deze sessie is geannuleerd. De chat is gesloten. Berichten worden op {{date}} verwijderd (7 dagen na afsluiting).',
+                  'Deze sessie is geannuleerd. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).',
                   { date: purgeLabel },
               )
             : t('Deze sessie is geannuleerd. De chat is gesloten.')
         : purgeLabel
           ? t(
-                'Deze sessie is afgelopen. De chat is gesloten. Berichten worden op {{date}} verwijderd (7 dagen na afsluiting).',
+                'Deze sessie is afgelopen. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).',
                 { date: purgeLabel },
             )
           : t('Deze sessie is afgelopen. De chat is gesloten.');
+
+    function handleReport(message: ChatMessage) {
+        router.post(
+            memberChat.messages.report.url({
+                locale,
+                communitySession: Number(session.id),
+                message: Number(message.id),
+            }),
+            {},
+            { preserveScroll: true },
+        );
+    }
 
     return (
         <SessionChat
@@ -338,6 +350,7 @@ function ActiveSessionChat({
             onSend={handleSend}
             onRetry={handleRetry}
             onDismissFailed={handleDismissFailed}
+            onReport={handleReport}
             title={clubName}
             subtitle={`${formatSessionDateLong(session.starts_at, locale)} · ${formatSessionTime(session.starts_at, locale)}`}
             headerAside={<ChatMembersButton players={session.players} />}

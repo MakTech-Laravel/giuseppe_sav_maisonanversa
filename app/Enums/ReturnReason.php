@@ -28,4 +28,18 @@ enum ReturnReason: string
     {
         return $this === self::Damaged;
     }
+
+    /**
+     * English label for staff-facing mail (A1) — not routed through NL source keys.
+     */
+    public function englishLabel(): string
+    {
+        return match ($this) {
+            self::NotExpected => 'Not what I expected',
+            self::WrongItem => 'Wrong item ordered',
+            self::Damaged => 'Arrived damaged or defective',
+            self::Other => 'Other',
+            self::PreferNotToSay => 'Prefer not to say',
+        };
+    }
 }

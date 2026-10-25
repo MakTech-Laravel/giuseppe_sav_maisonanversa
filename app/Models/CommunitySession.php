@@ -48,6 +48,7 @@ class CommunitySession extends Model
         'ends_at',
         'court_status',
         'capacity',
+        'requests_required',
         'level',
         'gender',
         'notes',
@@ -88,6 +89,7 @@ class CommunitySession extends Model
             'finished_at' => 'datetime',
             'capacity' => 'integer',
             'duration_minutes' => 'integer',
+            'requests_required' => 'boolean',
             'sport' => SessionSport::class,
             'level' => SessionLevel::class,
             'gender' => SessionGender::class,
@@ -244,8 +246,16 @@ class CommunitySession extends Model
     }
 
     /**
-     * A new request still fits next to the confirmed players and the
-     * requests already waiting.
+     * Host opted into approve/reject instead of instant join.
+     */
+    public function requiresJoinRequests(): bool
+    {
+        return (bool) $this->requests_required;
+    }
+
+    /**
+     * A new join (instant or request) still fits next to confirmed players
+     * and any seats held by pending requests.
      */
     public function acceptsRequests(): bool
     {

@@ -6,6 +6,7 @@ use App\Console\Commands\Community\SendOpenSpotsAlerts;
 use App\Console\Commands\Community\SendSessionChatDigestsCommand;
 use App\Console\Commands\Community\SendSessionReminders;
 use App\Console\Commands\Editions\ReleaseExpiredHolds;
+use App\Console\Commands\FoundingCircle\PromoteRegisterInscriptionsCommand;
 use App\Console\Commands\Mail\SendPostDeliveryFollowUps;
 use App\Console\Commands\Monitoring\PruneMonitoringHistoryCommand;
 use App\Console\Commands\Monitoring\RunHealthChecksCommand;
@@ -29,6 +30,11 @@ Schedule::command(SendPostDeliveryFollowUps::class)
     ->onOneServer();
 
 Schedule::command(SendAdminReturnDigestCommand::class)
+    ->daily()
+    ->withoutOverlapping()
+    ->onOneServer();
+
+Schedule::command(PromoteRegisterInscriptionsCommand::class)
     ->daily()
     ->withoutOverlapping()
     ->onOneServer();

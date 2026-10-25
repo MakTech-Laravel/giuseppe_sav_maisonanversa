@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\StoreSessionChatMessageRequest;
 use App\Models\CommunitySession;
+use App\Models\CommunitySessionMessage;
 use App\Models\User;
 use App\Services\Community\SessionChatService;
 use App\Support\SessionFeed;
@@ -73,6 +74,25 @@ class SessionChatController extends Controller
         return back();
     }
 
+    public function report(
+        Request $request,
+        string $locale,
+        CommunitySession $communitySession,
+        CommunitySessionMessage $message,
+    ): RedirectResponse {
+        $this->authorize('chat', $communitySession);
+        abort_unless($message->community_session_id === $communitySession->id, 404);
+
+        $this->chat->report($message, $request->user());
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Bericht gemeld. Ons team bekijkt het.'),
+        ]);
+
+        return back();
+    }
+
     private function render(User $viewer, string $locale, ?CommunitySession $active): Response
     {
         $sessions = $this->chatSessions($viewer);
@@ -95,7 +115,7 @@ class SessionChatController extends Controller
 
     /**
      * Sessions the member may open: host or confirmed participant, including
-     * past and cancelled while still inside the 7-day retention window.
+     * past and cancelled while still inside the retention window.
      *
      * @return Collection<int, CommunitySession>
      */

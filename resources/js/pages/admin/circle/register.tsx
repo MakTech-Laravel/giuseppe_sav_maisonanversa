@@ -27,7 +27,7 @@ interface AdminPlace {
     id: string | null;
     number: string;
     sequence: number;
-    state: 'inscribed' | 'available' | 'archive';
+    state: 'inscribed' | 'reserved' | 'returning' | 'available' | 'archive';
     member_name: string | null;
     email: string | null;
     visibility: string | null;
@@ -153,6 +153,8 @@ export default function CircleRegister({
                             [
                                 ['all', t('Alle 100')],
                                 ['inscribed', t('Ingeschreven')],
+                                ['reserved', t('Gereserveerd')],
+                                ['returning', t('Returning')],
                                 ['available', t('Beschikbaar')],
                                 ['archive', t('Niet te koop')],
                             ] as const
@@ -276,6 +278,58 @@ export default function CircleRegister({
                                                     </Button>
                                                 ) : (
                                                     <>
+                                                        {(entry.state ===
+                                                            'inscribed' ||
+                                                            entry.state ===
+                                                                'reserved') &&
+                                                            entry.id !==
+                                                                null && (
+                                                                <Button
+                                                                    type="button"
+                                                                    size="sm"
+                                                                    variant="outline"
+                                                                    onClick={() =>
+                                                                        router.post(
+                                                                            `/${locale}/admin/circle/register/${entry.id}/returning`,
+                                                                            {},
+                                                                            {
+                                                                                preserveScroll: true,
+                                                                            },
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {t(
+                                                                        'Mark returning',
+                                                                    )}
+                                                                </Button>
+                                                            )}
+                                                        {(entry.state ===
+                                                            'returning' ||
+                                                            entry.state ===
+                                                                'reserved' ||
+                                                            entry.state ===
+                                                                'inscribed') &&
+                                                            entry.id !==
+                                                                null && (
+                                                                <Button
+                                                                    type="button"
+                                                                    size="sm"
+                                                                    variant="outline"
+                                                                    onClick={() =>
+                                                                        router.post(
+                                                                            `/${locale}/admin/circle/register/${entry.id}/refunded`,
+                                                                            {},
+                                                                            {
+                                                                                preserveScroll: true,
+                                                                            },
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {t(
+                                                                        'Mark returned & refunded',
+                                                                    )}
+                                                                </Button>
+                                                            )}
                                                         <Button
                                                             type="button"
                                                             size="sm"
@@ -368,6 +422,10 @@ function stateLabel(state: AdminPlace['state']): string {
 
     if (state === 'available') {
         return 'Beschikbaar';
+    }
+
+    if (state === 'reserved' || state === 'returning') {
+        return 'Gereserveerd';
     }
 
     return 'Ingeschreven';

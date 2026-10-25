@@ -95,6 +95,7 @@ class OrderPresenter
                 'stripe_payment_intent_id' => $payment->stripe_payment_intent_id,
                 'amount' => Money::format((string) $payment->amount).__(' €'),
             ],
+            'delivered_on' => $order->delivered_on?->toDateString(),
             'timeline' => $this->timeline($order),
             'events' => $order->statusEvents
                 ->map(fn ($event) => [

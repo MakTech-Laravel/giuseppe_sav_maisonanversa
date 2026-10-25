@@ -25,9 +25,17 @@ class FoundingCircleRegisterEntryFactory extends Factory
             'name' => fake()->name(),
             'edition_number' => fake()->unique()->numberBetween(1, 100),
             'joined_at' => now(),
+            'inscribed_at' => now(),
             'register_visibility' => RegisterVisibility::Private,
             'register_consent_at' => null,
             'register_hidden_by_admin' => false,
         ];
+    }
+
+    public function reserved(): static
+    {
+        return $this->state(fn (): array => [
+            'inscribed_at' => null,
+        ]);
     }
 }

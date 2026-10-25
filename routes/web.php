@@ -40,6 +40,7 @@ use App\Http\Controllers\FileUploadDemoController;
 use App\Http\Controllers\Maison\CheckoutController;
 use App\Http\Controllers\Maison\FoundingCircleRegisterController;
 use App\Http\Controllers\Maison\GuestOrderReturnController;
+use App\Http\Controllers\Maison\GuestReturnLinkRequestController;
 use App\Http\Controllers\Maison\InquiryController;
 use App\Http\Controllers\Maison\NewsletterController;
 use App\Http\Controllers\Maison\ProductEditionController;
@@ -141,6 +142,9 @@ Route::prefix('{locale}')
 
         Route::get('returns', ReturnsPageController::class)
             ->name('returns');
+        Route::post('returns/guest-link', GuestReturnLinkRequestController::class)
+            ->middleware('throttle:5,60')
+            ->name('returns.guest-link');
         Route::get('retour', fn (string $locale) => redirect()->route('maison.returns', ['locale' => $locale]))
             ->name('returns.retour');
         Route::get('retours', fn (string $locale) => redirect()->route('maison.returns', ['locale' => $locale]))
@@ -315,6 +319,8 @@ Route::prefix('{locale}')
                     ->name('chat.show');
                 Route::post('chat/{communitySession}/messages', [SessionChatController::class, 'store'])
                     ->name('chat.messages.store');
+                Route::post('chat/{communitySession}/messages/{message}/report', [SessionChatController::class, 'report'])
+                    ->name('chat.messages.report');
                 Route::post('chat/{communitySession}/read', [SessionChatController::class, 'markRead'])
                     ->name('chat.read');
             });
@@ -412,6 +418,8 @@ Route::prefix('{locale}')
                     ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
                 Route::patch('orders/{order}', 'updateOrderStatus')->name('orders.update')
                     ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
+                Route::patch('orders/{order}/delivered-on', 'updateDeliveredOn')->name('orders.delivered-on')
+                    ->middleware('permission:'.PermissionEnum::ORDERS_MANAGE->value);
                 Route::get('returns', [ReturnController::class, 'index'])
                     ->name('returns.index')
                     ->middleware('permission:'.PermissionEnum::RETURNS_MANAGE->value);
@@ -453,6 +461,10 @@ Route::prefix('{locale}')
                 Route::patch('circle/register/{entry}', 'updateCircleRegisterNumber')->name('circle.register.number')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::patch('circle/register/{entry}/visibility', 'hideCircleRegisterEntry')->name('circle.register.hide')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::post('circle/register/{entry}/returning', 'markCircleRegisterReturning')->name('circle.register.returning')
+                    ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
+                Route::post('circle/register/{entry}/refunded', 'markCircleRegisterRefunded')->name('circle.register.refunded')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
                 Route::get('circle/{member}', 'circleShow')->name('circle.show')
                     ->middleware('permission:'.PermissionEnum::DASHBOARD_VIEW->value);
@@ -705,6 +717,8 @@ Route::prefix('{locale}')
                     Route::get('chat/{communitySession}', 'show')->name('chat.show');
                     Route::post('chat/{communitySession}/messages', 'store')
                         ->name('chat.messages.store');
+                    Route::delete('chat/{communitySession}/messages/{message}', 'destroyMessage')
+                        ->name('chat.messages.destroy');
                 });
 
             Route::controller(AdminClubController::class)

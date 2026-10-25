@@ -24,6 +24,8 @@ type ChatMessageItemProps = {
     isLastInGroup: boolean;
     onRetry?: (message: ChatMessage) => void;
     onDismissFailed?: (message: ChatMessage) => void;
+    onReport?: (message: ChatMessage) => void;
+    onDelete?: (message: ChatMessage) => void;
 };
 
 export function ChatMessageItem({
@@ -33,6 +35,8 @@ export function ChatMessageItem({
     isLastInGroup,
     onRetry,
     onDismissFailed,
+    onReport,
+    onDelete,
 }: ChatMessageItemProps) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
@@ -137,10 +141,30 @@ export function ChatMessageItem({
                         )}
                     </MessageFooter>
                 ) : showOtherFooter ? (
-                    <MessageFooter className="px-0 font-sans text-[10px] font-normal tracking-[0.08em] text-stone">
+                    <MessageFooter className="gap-2 px-0 font-sans text-[10px] font-normal tracking-[0.08em] text-stone">
                         <time dateTime={message.sent_at}>
                             {formatSessionTime(message.sent_at, locale)}
                         </time>
+                        {message.is_reported ? (
+                            <span className="text-sand">{t('Gemeld')}</span>
+                        ) : onReport && !message.is_system ? (
+                            <button
+                                type="button"
+                                onClick={() => onReport(message)}
+                                className="text-sand underline-offset-2 hover:underline"
+                            >
+                                {t('Melden')}
+                            </button>
+                        ) : null}
+                        {onDelete && !message.is_system ? (
+                            <button
+                                type="button"
+                                onClick={() => onDelete(message)}
+                                className="text-sand underline-offset-2 hover:underline"
+                            >
+                                {t('Verwijderen')}
+                            </button>
+                        ) : null}
                     </MessageFooter>
                 ) : null}
             </MessageContent>

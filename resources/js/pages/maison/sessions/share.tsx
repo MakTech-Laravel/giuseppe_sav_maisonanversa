@@ -45,10 +45,20 @@ export default function SessionShare({
     const { auth, locale } = usePage().props;
     const shellActions = useOptionalShellActions();
     const title = session.club?.name ?? t('Sessie');
-    const hasActions = session.can_join || memberUrl || (!card && shareUrl);
     const isUpcoming = !session.is_past && !session.is_cancelled;
     const pendingCount = isUpcoming ? (session.pending_count ?? 0) : 0;
     const openSlots = isUpcoming ? session.open_slots : 0;
+    const guestCanJoin =
+        !auth?.user &&
+        isUpcoming &&
+        !session.is_full &&
+        !session.registration_closed &&
+        openSlots > 0;
+    const hasActions =
+        session.can_join ||
+        guestCanJoin ||
+        memberUrl ||
+        (!card && shareUrl);
 
     function freePlacesLabel(): string {
         if (session.is_full || openSlots <= 0) {
@@ -67,7 +77,7 @@ export default function SessionShare({
     function handleJoin() {
         if (!auth?.user) {
             storePendingSessionJoin(session.id);
-            shellActions?.openAuth('login');
+            shellActions?.openAuth('register');
 
             return;
         }
@@ -78,6 +88,11 @@ export default function SessionShare({
             {},
             { preserveScroll: true },
         );
+    }
+
+    function handleCreateAccount() {
+        storePendingSessionJoin(session.id);
+        shellActions?.openAuth('register');
     }
 
     return (
@@ -245,13 +260,27 @@ export default function SessionShare({
 
                             {hasActions && (
                                 <div className="flex flex-wrap gap-3 border-t border-gold/15 px-7 py-6">
+                                    {guestCanJoin && (
+                                        <button
+                                            type="button"
+                                            onClick={handleCreateAccount}
+                                            className="cursor-pointer border-none bg-choc px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2"
+                                        >
+                                            {t(
+                                                'Maak een account om mee te doen',
+                                            )}
+                                        </button>
+                                    )}
+
                                     {session.can_join && (
                                         <button
                                             type="button"
                                             onClick={handleJoin}
                                             className="cursor-pointer border-none bg-choc px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2"
                                         >
-                                            {t('Vraag om mee te spelen')}
+                                            {session.requests_required
+                                                ? t('Vraag om mee te spelen')
+                                                : t('Doe mee')}
                                         </button>
                                     )}
 

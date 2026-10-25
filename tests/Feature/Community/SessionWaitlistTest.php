@@ -1,6 +1,11 @@
 <?php
 
+use App\Enums\SessionCourtStatus;
+use App\Enums\SessionGender;
+use App\Enums\SessionLevel;
 use App\Enums\SessionParticipantStatus;
+use App\Enums\SessionSport;
+use App\Models\Club;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
@@ -14,7 +19,7 @@ beforeEach(function () {
     Queue::fake();
 
     $this->host = User::factory()->create();
-    $this->session = CommunitySession::factory()->create([
+    $this->session = CommunitySession::factory()->requiresRequests()->create([
         'host_id' => $this->host->id,
         'capacity' => 3,
     ]);
@@ -402,4 +407,45 @@ test('the host can still decide earlier requests after the deadline, until the s
     $this->actingAs($this->host)
         ->patch(waitlistRoute('community.sessions.requests.approve', $this->session, $late))
         ->assertForbidden();
+});
+
+test('open sessions confirm joins immediately without a host decision', function () {
+    $open = CommunitySession::factory()->create([
+        'host_id' => $this->host->id,
+        'capacity' => 3,
+        'requests_required' => false,
+    ]);
+    waitlistSeat($open, $this->host);
+
+    $member = User::factory()->create();
+
+    $this->actingAs($member)
+        ->post(waitlistRoute('community.sessions.join', $open))
+        ->assertRedirect();
+
+    expect(waitlistStatus($open, $member))->toBe(SessionParticipantStatus::Confirmed)
+        ->and($open->participantsCount())->toBe(2)
+        ->and($open->pendingCount())->toBe(0);
+});
+
+test('creating a session defaults to open joins unless requests_required is set', function () {
+    $club = Club::factory()->create();
+
+    $this->actingAs($this->host)
+        ->post(route('community.sessions.store', ['locale' => 'nl']), [
+            'sport' => SessionSport::Padel->value,
+            'club_id' => $club->id,
+            'starts_at' => now()->addDay()->toDateTimeString(),
+            'duration_minutes' => 90,
+            'court_status' => SessionCourtStatus::NotBooked->value,
+            'level' => SessionLevel::Intermediate->value,
+            'gender' => SessionGender::Everyone->value,
+            'capacity' => 4,
+        ])
+        ->assertRedirect();
+
+    $session = CommunitySession::query()->latest('id')->first();
+
+    expect($session)->not->toBeNull()
+        ->and($session->requests_required)->toBeFalse();
 });

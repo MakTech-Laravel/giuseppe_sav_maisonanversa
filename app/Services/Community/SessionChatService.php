@@ -23,27 +23,47 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 /**
- * Persisted session chat: open while the session is still ahead, read-only
- * after close, and hard-deleted seven days past closed_at.
+ * Persisted session chat: writable until ends_at + WRITE_WINDOW_HOURS (or until
+ * cancelled), read-only after that, and hard-deleted RETENTION_DAYS past closed_at.
  */
 class SessionChatService
 {
-    public const RETENTION_DAYS = 7;
+    public const RETENTION_DAYS = 30;
+
+    /** Members may still post this many hours after the session ends. */
+    public const WRITE_WINDOW_HOURS = 48;
 
     public const MAX_IMAGES = 4;
 
     public function isOpen(CommunitySession $session): bool
     {
-        return ! $session->isCancelled() && ! $session->isPast();
-    }
-
-    public function closedAt(CommunitySession $session): ?CarbonInterface
-    {
-        if ($this->isOpen($session)) {
-            return null;
+        if ($session->isCancelled()) {
+            return false;
         }
 
-        return $session->cancelled_at ?? $session->ends_at;
+        if (! $session->isPast()) {
+            return true;
+        }
+
+        return $session->ends_at !== null
+            && now()->lt($session->ends_at->copy()->addHours(self::WRITE_WINDOW_HOURS));
+    }
+
+    /**
+     * When the retention clock starts: cancel time, or ends_at once the match
+     * is past — independent of the post-end write window.
+     */
+    public function closedAt(CommunitySession $session): ?CarbonInterface
+    {
+        if ($session->isCancelled()) {
+            return $session->cancelled_at;
+        }
+
+        if ($session->isPast()) {
+            return $session->ends_at;
+        }
+
+        return null;
     }
 
     public function messagesPurgeAt(CommunitySession $session): ?CarbonInterface
@@ -54,12 +74,13 @@ class SessionChatService
     }
 
     /**
-     * True while the session is open or still inside the 7-day post-close window.
-     * Past that, messages are pruned and the chat disappears from lists.
+     * True while the session is writable or still inside the post-close
+     * retention window. Past that, messages are pruned and the chat disappears
+     * from lists.
      */
     public function isWithinRetention(CommunitySession $session): bool
     {
-        if ($this->isOpen($session)) {
+        if (! $session->isCancelled() && ! $session->isPast()) {
             return true;
         }
 
@@ -67,6 +88,35 @@ class SessionChatService
 
         return $closedAt !== null
             && $closedAt->gt(now()->subDays(self::RETENTION_DAYS));
+    }
+
+    public function report(CommunitySessionMessage $message, User $reporter): void
+    {
+        abort_if($message->is_system, 422, __('Systeemberichten kun je niet melden.'));
+        abort_if($message->user_id === $reporter->id, 422, __('Je kunt je eigen bericht niet melden.'));
+
+        if ($message->isReported()) {
+            return;
+        }
+
+        $message->fill([
+            'reported_by_id' => $reporter->id,
+            'reported_at' => now(),
+        ])->save();
+    }
+
+    public function deleteMessage(CommunitySessionMessage $message): void
+    {
+        DB::transaction(function () use ($message): void {
+            $message->loadMissing('attachments');
+
+            foreach ($message->attachments as $attachment) {
+                Storage::disk('public')->delete($attachment->path);
+                $attachment->delete();
+            }
+
+            $message->delete();
+        });
     }
 
     /**
@@ -443,11 +493,12 @@ class SessionChatService
                 ->all(),
             'sent_at' => $message->created_at?->toIso8601String(),
             'is_system' => (bool) $message->is_system,
+            'is_reported' => $message->isReported(),
         ];
     }
 
     /**
-     * Hard-delete messages (and storage files) for sessions closed ≥ 7 days ago.
+     * Hard-delete messages (and storage files) for sessions closed ≥ RETENTION_DAYS ago.
      */
     public function pruneExpired(): int
     {

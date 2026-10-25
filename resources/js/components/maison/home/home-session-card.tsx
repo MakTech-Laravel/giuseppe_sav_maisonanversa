@@ -34,7 +34,7 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
 
         if (!auth?.user) {
             storePendingSessionJoin(session.id);
-            shellActions?.openAuth('login');
+            shellActions?.openAuth('register');
 
             return;
         }
