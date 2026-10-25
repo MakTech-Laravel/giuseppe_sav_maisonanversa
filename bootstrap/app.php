@@ -9,6 +9,7 @@ use App\Http\Middleware\SetLocale;
 use App\Services\Auth\PostLoginRedirectService;
 use App\Services\Locale\LocalePreferenceService;
 use App\Support\Seo\MaisonSeo;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -85,6 +86,32 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        /*
+         * Store a relative url.intended and redirect without redirect()->guest().
+         * guest() persists an absolute URL via UrlGenerator::full(), which breaks
+         * post-login Inertia redirects when APP_URL host ≠ the browser host
+         * (localhost vs 127.0.0.1, Docker published ports, etc.).
+         */
+        $exceptions->render(function (AuthenticationException $e, Request $request) {
+            if ($request->expectsJson() && ! $request->header('X-Inertia')) {
+                return response()->json(['message' => $e->getMessage()], 401);
+            }
+
+            app(PostLoginRedirectService::class)->rememberFromRequest($request);
+
+            $redirectTo = $e->redirectTo($request);
+
+            if (! is_string($redirectTo) || $redirectTo === '') {
+                $redirects = app(PostLoginRedirectService::class);
+
+                $redirectTo = route('maison.home', [
+                    'locale' => $redirects->resolveLocale($request),
+                ], absolute: false);
+            }
+
+            return redirect()->to($redirectTo);
+        });
+
         $exceptions->respond(function (Response $response, Throwable $e, Request $request) {
             if ($response->getStatusCode() !== 404 || $request->expectsJson()) {
                 return $response;

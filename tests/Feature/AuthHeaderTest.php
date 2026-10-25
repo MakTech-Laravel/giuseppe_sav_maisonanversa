@@ -60,7 +60,9 @@ test('frontend layout closes the auth modal once the visitor is authenticated', 
         ->toContain('isAuthenticated')
         ->toContain("userModal !== 'auth'")
         ->toContain('setUserModal(null)')
-        ->toContain('!isAuthenticated &&');
+        ->toContain('!isAuthenticated &&')
+        ->toContain("fetch('/auth/intended'")
+        ->toContain('rememberAuthReturnUrl');
 });
 
 test('guests visiting home receive auth flash props when redirected from a protected route', function () {

@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\StoryPageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
 use App\Http\Controllers\Auth\PasswordResetOtpController;
+use App\Http\Controllers\Auth\RememberIntendedUrlController;
 use App\Http\Controllers\Community\ClubController;
 use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\Community\EventController as CommunityEventPageController;
@@ -85,6 +86,10 @@ Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 Route::post('cookie-consent', [CookieConsentController::class, 'store'])
     ->middleware('throttle:20,1')
     ->name('cookie-consent.store');
+
+Route::post('auth/intended', [RememberIntendedUrlController::class, 'store'])
+    ->middleware('throttle:60,1')
+    ->name('auth.intended');
 
 Route::middleware('web')->controller(AuthModalRedirectController::class)->group(function () {
     Route::get('login', 'login')->name('login');
@@ -826,9 +831,14 @@ Route::get('admin/{path?}', function (Request $request, PostLoginRedirectService
     $locale = $redirects->resolveLocale($request);
 
     if ($user === null) {
-        return redirect()
-            ->route('maison.home', ['locale' => $locale])
-            ->with('open_auth_modal', 'login');
+        $target = is_string($path) && $path !== ''
+            ? '/'.$locale.'/admin/'.$path
+            : '/'.$locale.'/admin/dashboard';
+
+        $redirects->remember($request, $target);
+        $request->session()->flash('open_auth_modal', 'login');
+
+        return redirect()->route('maison.home', ['locale' => $locale]);
     }
 
     if (! $user->isAdmin()) {

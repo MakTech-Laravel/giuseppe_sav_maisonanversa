@@ -36,10 +36,21 @@ class AuthModalRedirectController extends Controller
         $user = $request->user();
 
         if ($user !== null) {
-            return redirect()->to($this->redirects->urlFor($user, $request));
+            return redirect()->to($this->redirects->intendedUrlFor($user, $request));
         }
 
+        $this->rememberRedirectQuery($request);
+
         return $this->redirectWithModal($request, $view);
+    }
+
+    private function rememberRedirectQuery(Request $request): void
+    {
+        $redirect = $request->query('redirect');
+
+        if (is_string($redirect) && $redirect !== '') {
+            $this->redirects->remember($request, $redirect);
+        }
     }
 
     private function redirectWithModal(Request $request, string $view): RedirectResponse

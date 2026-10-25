@@ -128,16 +128,43 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
 
     useReveal(main);
 
+    const rememberAuthReturnUrl = useCallback((): void => {
+        const returnUrl = `${window.location.pathname}${window.location.search}`;
+        const token = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith('XSRF-TOKEN='))
+            ?.split('=')
+            .slice(1)
+            .join('=');
+
+        if (!token) {
+            return;
+        }
+
+        void fetch('/auth/intended', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-XSRF-TOKEN': decodeURIComponent(token),
+            },
+            body: JSON.stringify({ url: returnUrl }),
+        });
+    }, []);
+
     const requireAuthForCheckout = useCallback((): boolean => {
         if (props.auth?.user) {
             return true;
         }
 
+        rememberAuthReturnUrl();
         setUserAuthView('login');
         setUserModal('auth');
 
         return false;
-    }, [props.auth?.user]);
+    }, [props.auth?.user, rememberAuthReturnUrl]);
 
     const actions = useMemo<ShellActions>(
         () => ({
@@ -171,11 +198,12 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
             },
             openCertificate: () => setUserModal('certificate'),
             openAuth: (view: AuthView = 'login') => {
+                rememberAuthReturnUrl();
                 setUserAuthView(view);
                 setUserModal('auth');
             },
         }),
-        [props.checkout, requireAuthForCheckout],
+        [props.checkout, rememberAuthReturnUrl, requireAuthForCheckout],
     );
 
     function closeModal(): void {
