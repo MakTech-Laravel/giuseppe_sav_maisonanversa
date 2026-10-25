@@ -3,6 +3,7 @@
   "branches": [
     "28_8_26_S",
     "8_18_2026",
+    "additional_fixes_on_Home_page_3/11",
     "backup_8_18_2026",
     "community",
     "conversation",
@@ -38,9 +39,11 @@
     "mahfuz_23_08",
     "main",
     "monirul",
+    "new_home_page_design",
     "notification",
     "phase_one_qa",
     "production",
+    "production-freeze-oct14",
     "reverb_server",
     "session_fixing",
     "site-settings-&-seo"
@@ -48,6 +51,7 @@
   "parent": {
     "28_8_26_S": "main",
     "8_18_2026": "main",
+    "additional_fixes_on_Home_page_3/11": "main",
     "backup_8_18_2026": "main",
     "community": "main",
     "conversation": "main",
@@ -83,9 +87,11 @@
     "mahfuz_23_08": "main",
     "main": null,
     "monirul": "main",
+    "new_home_page_design": "main",
     "notification": "main",
     "phase_one_qa": "main",
     "production": "main",
+    "production-freeze-oct14": "production",
     "reverb_server": "main",
     "session_fixing": "main",
     "site-settings-&-seo": "main"
@@ -94,6 +100,7 @@
     "main",
     "28_8_26_S",
     "8_18_2026",
+    "additional_fixes_on_Home_page_3/11",
     "backup_8_18_2026",
     "community",
     "conversation",
@@ -128,11 +135,13 @@
     "mahfuz/ui-primitives",
     "mahfuz_23_08",
     "monirul",
+    "new_home_page_design",
     "notification",
     "phase_one_qa",
     "production",
     "reverb_server",
     "session_fixing",
-    "site-settings-&-seo"
+    "site-settings-&-seo",
+    "production-freeze-oct14"
   ]
 }
