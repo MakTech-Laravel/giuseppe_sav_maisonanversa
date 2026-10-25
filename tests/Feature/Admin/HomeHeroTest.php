@@ -228,6 +228,25 @@ test('a hidden button slot is omitted from the homepage', function () {
     );
 });
 
+test('english home hero buttons fall back through lang files when DeepL rows are missing', function () {
+    HomeHero::current()->update([
+        'primary_label' => 'Ontdek Heritage No.001 →',
+        'secondary_label' => 'Betreed het Huis',
+        'tertiary_label' => 'Heritage Letter',
+    ]);
+
+    $this->get('/en')->assertInertia(fn (Assert $page) => $page
+        ->where('hero.buttons', function ($buttons) {
+            $labels = collect($buttons)->pluck('label');
+
+            return $labels->contains('Discover Heritage No.001 →')
+                && $labels->contains('Enter the House')
+                && $labels->doesntContain('Ontdek Heritage No.001 →')
+                && $labels->doesntContain('Betreed het Huis');
+        })
+    );
+});
+
 /**
  * @param  array<string, mixed>  $overrides
  * @return array<string, mixed>

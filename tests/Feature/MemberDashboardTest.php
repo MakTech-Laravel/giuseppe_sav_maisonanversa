@@ -38,6 +38,18 @@ test('members can view the dashboard shell', function () {
         );
 });
 
+test('english member dashboard translates the circle not-yet status', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('member.dashboard', ['locale' => 'en']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('member/dashboard')
+            ->where('stats.2.value', 'Not yet')
+        );
+});
+
 test('members can view heritage under a locale prefix', function () {
     $user = User::factory()->create();
     $user->assignRole(RoleEnum::FOUNDING_CIRCLE->value);

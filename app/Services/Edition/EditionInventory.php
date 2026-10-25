@@ -76,8 +76,11 @@ class EditionInventory
         });
 
         $snapshot['productName'] = $product->translated('name');
-        $snapshot['deliveryLabel'] = $product->translated('expected_delivery_label')
+        $deliveryLabel = $product->translated('expected_delivery_label')
             ?: $snapshot['deliveryLabel'];
+        $snapshot['deliveryLabel'] = is_string($deliveryLabel) && $deliveryLabel !== ''
+            ? __($deliveryLabel)
+            : $deliveryLabel;
 
         return $snapshot;
     }

@@ -416,9 +416,14 @@ final class MaisonSeo
                 ->first();
 
             if ($meta !== null) {
+                $title = trim((string) $meta->translated('title'));
+                $description = trim((string) $meta->translated('description'));
+
+                // DeepL wins when present; otherwise lang/{locale}.json covers seeded
+                // Dutch defaults so EN/FR storefronts do not leak NL titles.
                 return [
-                    'title' => $meta->translated('title'),
-                    'description' => $meta->translated('description'),
+                    'title' => __($title !== '' ? $title : self::PAGES[$page]['title']),
+                    'description' => __($description !== '' ? $description : self::PAGES[$page]['description']),
                 ];
             }
 

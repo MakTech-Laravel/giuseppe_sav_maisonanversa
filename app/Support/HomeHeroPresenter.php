@@ -71,18 +71,31 @@ class HomeHeroPresenter
     {
         return [
             'imageUrl' => $this->imageUrl($hero),
-            'eyebrow' => $hero->translated('eyebrow', $locale),
+            'eyebrow' => $this->localizeCopy($hero->translated('eyebrow', $locale), $locale),
             'title' => (string) $hero->title,
             'titleAccent' => (string) $hero->title_accent,
             // Brand line uses the source column as-is on every locale (never DeepL).
             'tagline' => (string) $hero->tagline,
             'showCounter' => $hero->show_counter,
             'counterLines' => [
-                $hero->translated('counter_line_one', $locale),
-                $hero->translated('counter_line_two', $locale),
+                $this->localizeCopy($hero->translated('counter_line_one', $locale), $locale),
+                $this->localizeCopy($hero->translated('counter_line_two', $locale), $locale),
             ],
             'buttons' => $this->buttons($hero, $locale),
         ];
+    }
+
+    /**
+     * When DeepL rows are missing, CMS still stores Dutch source text. Map known
+     * phrases through lang/{locale}.json so EN/FR storefronts do not leak NL.
+     */
+    private function localizeCopy(string $value, string $locale): string
+    {
+        if ($value === '') {
+            return $value;
+        }
+
+        return __($value, [], $locale);
     }
 
     public function imageUrl(HomeHero $hero): ?string
@@ -121,7 +134,7 @@ class HomeHeroPresenter
             }
 
             $buttons[] = [
-                'label' => $label,
+                'label' => $this->localizeCopy($label, $locale),
                 ...$resolved,
             ];
         }

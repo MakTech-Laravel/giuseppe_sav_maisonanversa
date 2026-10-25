@@ -478,6 +478,9 @@ class Product extends Model
             ? ($product->translated('expected_delivery_label')
                 ?: CommerceSetting::current()->translated('default_expected_delivery_label'))
             : CommerceSetting::current()->translated('default_expected_delivery_label');
+        $deliveryLabel = is_string($deliveryLabel) && $deliveryLabel !== ''
+            ? __($deliveryLabel)
+            : $deliveryLabel;
 
         if ($amount === null) {
             return [

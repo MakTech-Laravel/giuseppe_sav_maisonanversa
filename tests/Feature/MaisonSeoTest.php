@@ -26,10 +26,8 @@ test('public maison pages receive unique titles and indexable robots', function 
 });
 
 test('english house copy is translated in the seo document', function () {
-    // Every page has an admin-editable SeoMeta override (seeded with the
-    // Dutch default), which takes precedence over the static __() copy and
-    // is translated per-locale through the DeepL pipeline, not Laravel's
-    // translation files.
+    // Admin SeoMeta overrides take precedence. DeepL translations win when
+    // present; otherwise __() resolves seeded Dutch defaults via lang/*.json.
     fakeDeepLTranslations();
 
     $meta = SeoMeta::query()->where('page_key', 'house')->firstOrFail();
@@ -38,6 +36,14 @@ test('english house copy is translated in the seo document', function () {
     $this->get('/en/huis')->assertOk()->assertInertia(fn ($page) => $page
         ->where('seo.title', 'EN Het Huis — vertaald')
         ->where('seo.canonical', url('/en/huis'))
+    );
+});
+
+test('english home seo falls back to lang json when deepl is missing', function () {
+    $this->get('/en')->assertOk()->assertInertia(fn ($page) => $page
+        ->where('seo.title', 'Maison Anversa — European heritage house for sport and lifestyle')
+        ->where('seo.description', 'A European heritage house, rooted in Antwerp. Heritage No.001 — limited to 100 pieces. Each numbered. The Founding Edition is never repeated.')
+        ->where('seo.canonical', url('/en'))
     );
 });
 
