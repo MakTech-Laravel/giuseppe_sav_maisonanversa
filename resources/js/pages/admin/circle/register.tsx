@@ -154,7 +154,7 @@ export default function CircleRegister({
                                 ['all', t('Alle 100')],
                                 ['inscribed', t('Ingeschreven')],
                                 ['reserved', t('Gereserveerd')],
-                                ['returning', t('Returning')],
+                                ['returning', t('Retour')],
                                 ['available', t('Beschikbaar')],
                                 ['archive', t('Niet te koop')],
                             ] as const
@@ -299,7 +299,7 @@ export default function CircleRegister({
                                                                     }
                                                                 >
                                                                     {t(
-                                                                        'Mark returning',
+                                                                        'Markeer als retour',
                                                                     )}
                                                                 </Button>
                                                             )}
@@ -326,7 +326,7 @@ export default function CircleRegister({
                                                                     }
                                                                 >
                                                                     {t(
-                                                                        'Mark returned & refunded',
+                                                                        'Markeer als terugbetaald',
                                                                     )}
                                                                 </Button>
                                                             )}

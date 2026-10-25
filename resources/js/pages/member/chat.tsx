@@ -338,7 +338,20 @@ function ActiveSessionChat({
                 message: Number(message.id),
             }),
             {},
-            { preserveScroll: true },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                only: ['messages', 'unread_counts', 'chat'],
+                onSuccess: (page) => {
+                    const serverMessages = page.props.messages as
+                        | ChatMessage[]
+                        | undefined;
+
+                    if (Array.isArray(serverMessages)) {
+                        setMessages(serverMessages);
+                    }
+                },
+            },
         );
     }
 
