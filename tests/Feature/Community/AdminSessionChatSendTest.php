@@ -8,6 +8,7 @@ use App\Models\CommunitySession;
 use App\Models\CommunitySessionMessage;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
+use App\Services\Community\SessionChatService;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Support\Facades\Event;
@@ -97,7 +98,9 @@ test('staff already confirmed as a player keep for_chat_only false when sending'
 });
 
 test('staff cannot send once the session has ended', function () {
-    $this->session->update(['starts_at' => now()->subHours(3)]);
+    $this->session->update([
+        'starts_at' => now()->subHours(SessionChatService::WRITE_WINDOW_HOURS + 4),
+    ]);
 
     // Super-admin Gate::before authorizes the FormRequest; sendAsStaff still
     // refuses closed sessions via validation.

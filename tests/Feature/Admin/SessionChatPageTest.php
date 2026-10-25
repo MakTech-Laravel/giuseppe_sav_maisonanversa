@@ -6,6 +6,7 @@ use App\Enums\SessionParticipantStatus;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
+use App\Services\Community\SessionChatService;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -62,7 +63,10 @@ test('staff open an open session chat with can_send', function () {
 });
 
 test('staff open a past session chat as read-only', function () {
-    $this->session->update(['starts_at' => now()->subHours(3)]);
+    // Past the 48h post-end write window — still within 30-day retention.
+    $this->session->update([
+        'starts_at' => now()->subHours(SessionChatService::WRITE_WINDOW_HOURS + 4),
+    ]);
     $this->session->refresh();
 
     $this->actingAs($this->admin)

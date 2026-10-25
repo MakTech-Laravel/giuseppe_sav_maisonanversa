@@ -106,8 +106,10 @@ test('the host can send a message with images', function () {
     Storage::disk('public')->assertExists($message->attachments->first()->path);
 });
 
-test('sending is forbidden once the session has ended', function () {
-    $this->session->update(['starts_at' => now()->subHours(3)]);
+test('sending is forbidden once the post-end write window has closed', function () {
+    $this->session->update([
+        'starts_at' => now()->subHours(SessionChatService::WRITE_WINDOW_HOURS + 4),
+    ]);
 
     $this->actingAs($this->host)
         ->post(storeMessageUrl($this->session), ['body' => 'Te laat'])
@@ -162,7 +164,9 @@ test('the chat show page loads persisted messages and can_send', function () {
 });
 
 test('a closed session is read-only and exposes messages_purge_at', function () {
-    $this->session->update(['starts_at' => now()->subHours(3)]);
+    $this->session->update([
+        'starts_at' => now()->subHours(SessionChatService::WRITE_WINDOW_HOURS + 4),
+    ]);
     $this->session->refresh();
 
     $purgeAt = app(SessionChatService::class)->messagesPurgeAt($this->session);

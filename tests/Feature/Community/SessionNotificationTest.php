@@ -11,6 +11,7 @@ use App\Models\Club;
 use App\Models\CommunitySession;
 use App\Models\CommunitySessionParticipant;
 use App\Models\User;
+use App\Support\MailLocale;
 use App\Support\SessionCalendar;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -82,18 +83,22 @@ function mailsTo(User $user): int
     return Mail::queued(SessionNoticeMail::class, fn (SessionNoticeMail $mail): bool => $mail->hasTo($user->email))->count();
 }
 
-function joinSession(User $user, CommunitySession $session): void
+function joinSession(User $user, CommunitySession $session, ?string $locale = null): void
 {
+    $locale ??= MailLocale::resolve($user->locale);
+
     test()->actingAs($user)
-        ->post(route('community.sessions.join', ['locale' => 'nl', 'communitySession' => $session->id]))
+        ->post(route('community.sessions.join', ['locale' => $locale, 'communitySession' => $session->id]))
         ->assertRedirect();
 }
 
-function approveRequest(User $host, User $requester, CommunitySession $session): void
+function approveRequest(User $host, User $requester, CommunitySession $session, ?string $locale = null): void
 {
+    $locale ??= MailLocale::resolve($host->locale);
+
     test()->actingAs($host)
         ->patch(route('community.sessions.requests.approve', [
-            'locale' => 'nl',
+            'locale' => $locale,
             'communitySession' => $session->id,
             'user' => $requester->id,
         ]))
@@ -441,6 +446,7 @@ test('the confirmation and full mails carry the session details and a calendar f
 
     expect($reminder->attachments())->toBe([]);
 
+    app()->setLocale('en');
     $reminder->assertHasSubject('Tomorrow on the court');
 });
 
@@ -530,7 +536,7 @@ test('a player approved after the 24-hour reminder gets E2 with the details, nev
         ->and($mail->timingNote)->toBe('Uw sessie is morgen om 10:00.');
 });
 
-test('a member without a supported language gets session notices in english', function () {
+test('a member without a supported language gets session notices in the Belgian fallback', function () {
     $this->player->forceFill(['locale' => 'xx'])->save();
 
     $this->actingAs($this->host)
@@ -539,10 +545,10 @@ test('a member without a supported language gets session notices in english', fu
 
     $notification = $this->player->userNotifications()->with('notification')->first()->notification;
 
-    expect($notification->title)->toBe('Session cancelled');
+    expect($notification->title)->toBe('Sessie geannuleerd');
 
     Mail::assertQueued(
         SessionNoticeMail::class,
-        fn (SessionNoticeMail $mail): bool => $mail->hasTo($this->player->email) && $mail->locale === 'en',
+        fn (SessionNoticeMail $mail): bool => $mail->hasTo($this->player->email) && $mail->locale === 'nl',
     );
 });
