@@ -2,9 +2,10 @@
 paths:
   - 'resources/js/pages/admin/site-settings/**'
   - 'resources/js/components/maison/shell/**'
-  - 'resources/js/lib/maison-navigation.ts'
+  - resources/js/lib/maison-navigation.ts
   - 'app/Support/Seo/**'
-  - 'app/Models/SiteSetting.php'
+  - app/Models/SiteSetting.php
+  - resources/js/lib/session-format.ts
 ---
 
 # Site Settings

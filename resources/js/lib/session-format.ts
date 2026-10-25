@@ -133,6 +133,37 @@ export function parseDateInputValue(value: string): Date | undefined {
     return Number.isNaN(parsed.getTime()) ? undefined : parsed;
 }
 
+/**
+ * Brussels UTC offset for a calendar date (`+01:00` / `+02:00`).
+ * Midday probe avoids the rare 02:00–03:00 DST fold.
+ */
+function brusselsUtcOffset(date: string): string {
+    const probe = new Date(`${date}T12:00:00Z`);
+    const name =
+        new Intl.DateTimeFormat('en-US', {
+            timeZone: SESSION_TIME_ZONE,
+            timeZoneName: 'longOffset',
+            hour: 'numeric',
+        })
+            .formatToParts(probe)
+            .find((part) => part.type === 'timeZoneName')?.value ?? 'GMT+1';
+
+    const match = /GMT([+-])(\d{1,2})(?::?(\d{2}))?/.exec(name);
+
+    if (!match) {
+        return '+01:00';
+    }
+
+    return `${match[1]}${match[2].padStart(2, '0')}:${(match[3] ?? '00').padStart(2, '0')}`;
+}
+
+/**
+ * Form date + time are Belgium wall clock. Embed the Brussels offset so
+ * formatSessionTime() does not reinterpret the naive string in the browser TZ
+ * (e.g. Dhaka would show 05:30 for a 10:30 form value).
+ */
 export function combineDateAndTime(date: string, time: string): string {
-    return `${date}T${time}`;
+    const normalized = /^\d{2}:\d{2}$/.test(time) ? `${time}:00` : time;
+
+    return `${date}T${normalized}${brusselsUtcOffset(date)}`;
 }
