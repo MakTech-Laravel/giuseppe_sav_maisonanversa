@@ -9,12 +9,13 @@
 /.auth.json
 /auth.json
 
-# Git / IDE
+# Git / IDE / agent
 .git
 .github
 .cursor
 .claude
 .agents
+.ai
 .idea
 .vscode
 .fleet
@@ -22,6 +23,9 @@
 .zed
 *.md
 !README.md
+pnpm-lock.yaml
+agent-transcripts
+*.canvas.tsx
 
 # Build / test artifacts
 /public/build

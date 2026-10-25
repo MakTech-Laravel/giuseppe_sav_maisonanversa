@@ -13,6 +13,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | app/Http/Controllers/Maison/VerificationController.php, app/Http/Controllers/Maison/SessionShareController.php | .ai/rules/controllers-maison.md |
 | resources/js/pages/maison/home.tsx,resources/js/components/maison/home/**,app/Support/SessionFeed.php,app/Http/Controllers/MaisonController.php | .ai/rules/controllers.md |
 | docker/** | .ai/rules/docker.md |
+| Dockerfile | .ai/rules/dockerfile.md |
 | app/Services/Edition/** | .ai/rules/edition.md |
 | app/Services/FoundingCircle/** | .ai/rules/founding-circle.md |
 | resources/js/components/maison/home/** | .ai/rules/home.md |
