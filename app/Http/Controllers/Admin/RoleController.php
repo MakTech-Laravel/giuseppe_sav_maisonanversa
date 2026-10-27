@@ -50,7 +50,7 @@ class RoleController extends Controller
 
         $role->syncPermissions($request->validated('permissions', []));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Role created successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Rol aangemaakt.')]);
 
         return redirect()->route('admin.roles.index');
     }
@@ -75,7 +75,7 @@ class RoleController extends Controller
         $role->update(['name' => $request->validated('name')]);
         $role->syncPermissions($request->validated('permissions', []));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Role updated successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Rol bijgewerkt.')]);
 
         return redirect()->route('admin.roles.index');
     }
@@ -83,14 +83,14 @@ class RoleController extends Controller
     public function destroy(string $locale, Role $role): RedirectResponse
     {
         if ($role->name === RoleEnum::SUPER_ADMIN->value) {
-            Inertia::flash('toast', ['type' => 'error', 'message' => 'The super-admin role cannot be deleted.']);
+            Inertia::flash('toast', ['type' => 'error', 'message' => __('De super-adminrol kan niet worden verwijderd.')]);
 
             return redirect()->back();
         }
 
         $role->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Role deleted successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Rol verwijderd.')]);
 
         return redirect()->back();
     }

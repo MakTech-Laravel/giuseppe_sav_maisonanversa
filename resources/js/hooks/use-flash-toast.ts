@@ -1,4 +1,5 @@
 import { router } from '@inertiajs/react';
+import type { i18n as I18n } from 'i18next';
 import { toast } from 'sonner';
 import type { FlashToast } from '@/types/ui';
 
@@ -7,6 +8,15 @@ const TOAST_TYPES = new Set(['success', 'info', 'warning', 'error'] as const);
 type ToastType = FlashToast['type'];
 
 let registered = false;
+let translator: I18n | null = null;
+
+function translate(key: string, options?: Record<string, unknown>): string {
+    if (!translator) {
+        return key;
+    }
+
+    return String(translator.t(key, options));
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null;
@@ -32,7 +42,7 @@ function resolveFlashToast(flash: unknown): FlashToast | null {
 }
 
 function showFlashToast(data: FlashToast): void {
-    toast[data.type](data.message);
+    toast[data.type](translate(data.message));
 }
 
 function firstValidationMessage(errors: unknown): string | null {
@@ -76,9 +86,14 @@ function flashFromEvent(event: Event): unknown {
 
 /**
  * Register once at module scope so Strict Mode remounts of <Toaster /> cannot
- * drop the listener. Safe to call repeatedly.
+ * drop the listener. Pass the app i18n instance so HTTP/network toasts follow
+ * the active locale (Dutch source keys).
  */
-export function registerFlashToasts(): void {
+export function registerFlashToasts(i18n?: I18n): void {
+    if (i18n) {
+        translator = i18n;
+    }
+
     if (registered || typeof window === 'undefined') {
         return;
     }
@@ -100,7 +115,7 @@ export function registerFlashToasts(): void {
             firstValidationMessage(detail);
 
         if (message) {
-            toast.error(message);
+            toast.error(translate(message));
         }
     });
 
@@ -109,14 +124,14 @@ export function registerFlashToasts(): void {
         const status = response?.status;
         const message =
             typeof status === 'number'
-                ? `Verzoek mislukt (${status})`
-                : 'Verzoek mislukt';
+                ? translate('Verzoek mislukt ({{status}})', { status })
+                : translate('Verzoek mislukt');
 
         toast.error(message);
     });
 
     router.on('networkError', () => {
-        toast.error('Netwerkfout. Probeer het opnieuw.');
+        toast.error(translate('Netwerkfout. Probeer het opnieuw.'));
     });
 }
 

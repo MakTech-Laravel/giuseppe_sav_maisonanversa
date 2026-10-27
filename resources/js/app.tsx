@@ -14,7 +14,6 @@ import { useDevErrorFallback } from '@/hooks/useDevErrorFallback';
 import { createI18nForLocale } from '@/lib/i18n';
 import { resolvePageLayout } from '@/lib/inertia-layouts';
 
-registerFlashToasts();
 logEchoConfig();
 
 const appName = import.meta.env.VITE_APP_NAME || 'Maison Anversa';
@@ -24,6 +23,8 @@ const appName = import.meta.env.VITE_APP_NAME || 'Maison Anversa';
  * in the visitor's language instead of flashing the Dutch source copy.
  */
 const i18n = await createI18nForLocale(readInitialLocale());
+
+registerFlashToasts(i18n);
 
 createInertiaApp({
     title: (title) => title || appName,

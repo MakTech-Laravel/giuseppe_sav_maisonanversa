@@ -7,20 +7,23 @@ type Translate = (key: string) => string;
 function NotificationToastTitle({
     payload,
     eyebrow,
+    t,
 }: {
     payload: NotificationItem;
     eyebrow: string;
+    t: Translate;
 }) {
+    const typeLabel = payload.type_label?.trim()
+        ? t(payload.type_label)
+        : null;
+    const title = payload.title?.trim() ? t(payload.title) : eyebrow;
+
     return (
         <span className="flex flex-col gap-0.5">
             <span className="text-[10px] font-medium tracking-[0.16em] text-white/70 uppercase">
-                {payload.type_label
-                    ? `${eyebrow} · ${payload.type_label}`
-                    : eyebrow}
+                {typeLabel ? `${eyebrow} · ${typeLabel}` : eyebrow}
             </span>
-            <span className="text-sm font-semibold text-white">
-                {payload.title?.trim() || eyebrow}
-            </span>
+            <span className="text-sm font-semibold text-white">{title}</span>
         </span>
     );
 }
@@ -34,15 +37,22 @@ export function showNotificationToast(
     t: Translate,
 ): void {
     const href = payload.href;
+    const description = payload.message?.trim()
+        ? t(payload.message)
+        : undefined;
+    const actionLabel = payload.link_label?.trim()
+        ? t(payload.link_label)
+        : t('Openen');
 
     toast(
         <NotificationToastTitle
             payload={payload}
             eyebrow={t('Nieuwe melding')}
+            t={t}
         />,
         {
             id: `inbox-${payload.id}`,
-            description: payload.message?.trim() || undefined,
+            description,
             icon: <BellRing className="size-4 text-gold" />,
             richColors: false,
             duration: 8000,
@@ -59,7 +69,7 @@ export function showNotificationToast(
             },
             action: href
                 ? {
-                      label: payload.link_label || t('Openen'),
+                      label: actionLabel,
                       onClick: () => window.location.assign(href),
                   }
                 : undefined,

@@ -109,7 +109,7 @@ class CustomerController extends Controller
         $customer->syncRoles([RoleEnum::USER->value]);
         $customer->syncTypeFromRoles();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Customer created successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Klant aangemaakt.')]);
 
         return redirect()->route('admin.customers.index');
     }
@@ -158,7 +158,7 @@ class CustomerController extends Controller
         $user->syncRoles([RoleEnum::USER->value]);
         $user->syncTypeFromRoles();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Customer updated successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Klant bijgewerkt.')]);
 
         return redirect()->route('admin.customers.index');
     }
@@ -171,7 +171,7 @@ class CustomerController extends Controller
         $this->deleteAvatar($user);
         $user->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Customer deleted successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Klant verwijderd.')]);
 
         return redirect()->back();
     }

@@ -60,7 +60,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profiel bijgewerkt.')]);
 
         return to_route('profile.edit');
     }

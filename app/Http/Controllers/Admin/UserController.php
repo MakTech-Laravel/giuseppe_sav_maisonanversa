@@ -70,7 +70,7 @@ class UserController extends Controller
         $user->syncRoles([RoleEnum::ADMIN->value]);
         $user->syncTypeFromRoles();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Administrator created successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Beheerder aangemaakt.')]);
 
         return redirect()->route('admin.admins.index');
     }
@@ -118,7 +118,7 @@ class UserController extends Controller
 
         $user->update(collect($data)->except(['roles', 'remove_avatar'])->all());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Administrator updated successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Beheerder bijgewerkt.')]);
 
         return redirect()->route('admin.admins.index');
     }
@@ -131,7 +131,7 @@ class UserController extends Controller
         if (SuperAdmin::isLast($user)) {
             Inertia::flash('toast', [
                 'type' => 'error',
-                'message' => 'The last super administrator account cannot be deleted.',
+                'message' => __('Het laatste superbeheerderaccount kan niet worden verwijderd.'),
             ]);
 
             return redirect()->back();
@@ -140,7 +140,7 @@ class UserController extends Controller
         $this->deleteAvatar($user);
         $user->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => 'Administrator deleted successfully.']);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Beheerder verwijderd.')]);
 
         return redirect()->back();
     }

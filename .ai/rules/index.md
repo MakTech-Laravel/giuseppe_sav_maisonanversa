@@ -21,6 +21,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/components/maison/home/** | .ai/rules/home.md |
 | resources/js/pages/maison/house.tsx,resources/js/components/maison/house/** | .ai/rules/house.md |
 | app/Support/Html/** | .ai/rules/html.md |
+| resources/js/hooks/use-flash-toast.ts,resources/js/components/notifications/**,app/Http/Controllers/**/*Controller.php | .ai/rules/http-controllers.md |
 | app/Jobs/TranslateModelJob.php | .ai/rules/jobs.md |
 | app/Services/Auth/**,bootstrap/app.php,app/Http/Controllers/Auth/**,resources/js/layouts/frontend-layout.tsx | .ai/rules/js-layouts.md |
 | resources/js/components/member/**,resources/js/layouts/member-layout.tsx | .ai/rules/layouts.md |

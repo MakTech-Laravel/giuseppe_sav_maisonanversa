@@ -1,20 +1,27 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { getEcho } from '@/echo';
 import { useEchoGeneration } from '@/hooks/use-echo-connection';
 import { privateUserChannel, REALTIME_TEST_EVENT } from '@/realtime/types';
 import type { RealtimeTestPayload } from '@/realtime/types';
 
+type Translate = (key: string) => string;
+
 /** Stable toast id so Sonner collapses the same payload arriving twice. */
-export function showRealtimeTestToast(payload: RealtimeTestPayload): void {
-    const message =
-        payload.message?.trim() || 'Realtime notification received.';
+export function showRealtimeTestToast(
+    payload: RealtimeTestPayload,
+    t: Translate = (key) => key,
+): void {
+    const message = t(
+        payload.message?.trim() || 'Realtime melding ontvangen.',
+    );
 
     toast.success(message, {
         id:
             payload.triggered_at?.trim() ||
             `realtime-test-${payload.user_id ?? 'anon'}-${message}`,
-        description: 'Private realtime channel',
+        description: t('Privé realtime-kanaal'),
         duration: 6000,
     });
 }
@@ -26,6 +33,7 @@ export function showRealtimeTestToast(payload: RealtimeTestPayload): void {
  */
 export function usePrivateRealtimeToast(userId?: number | null): void {
     const generation = useEchoGeneration();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!userId) {
@@ -40,15 +48,18 @@ export function usePrivateRealtimeToast(userId?: number | null): void {
 
         const channel = echo.private(privateUserChannel(userId));
         const event = `.${REALTIME_TEST_EVENT}`;
+        const onTest = (payload: RealtimeTestPayload) => {
+            showRealtimeTestToast(payload, t);
+        };
 
-        channel.listen(event, showRealtimeTestToast);
+        channel.listen(event, onTest);
 
         return () => {
             try {
-                channel.stopListening(event, showRealtimeTestToast);
+                channel.stopListening(event, onTest);
             } catch {
                 // Echo may already be torn down during a reconnect.
             }
         };
-    }, [userId, generation]);
+    }, [userId, generation, t]);
 }
