@@ -1,6 +1,6 @@
 import { router, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { loadDictionary } from '@/lib/i18n';
+import { switchInstanceLocale } from '@/lib/i18n';
 import { isLocale, LOCALES, SOURCE_LOCALE } from '@/types/locale';
 import type { Locale } from '@/types/locale';
 
@@ -24,21 +24,22 @@ export function localizePath(path: string, locale: Locale): string {
 
 export function useLocale() {
     const { locale, availableLocales } = usePage().props;
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const current = isLocale(locale) ? locale : SOURCE_LOCALE;
     const locales = availableLocales ?? [...LOCALES];
 
     /**
-     * Fetch the dictionary before navigating so the new page paints in its own
-     * language rather than briefly falling back to the Dutch source copy.
+     * Switch i18n (dictionary + active language) before navigating so flash /
+     * httpException toasts during the visit already use the target locale —
+     * not the previous one.
      */
     async function switchLocale(next: Locale): Promise<void> {
         if (next === current) {
             return;
         }
 
-        await loadDictionary(next);
+        await switchInstanceLocale(i18n, next);
 
         const { pathname, search, hash } = window.location;
 

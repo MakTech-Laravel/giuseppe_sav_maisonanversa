@@ -1,21 +1,84 @@
 import { router } from '@inertiajs/react';
 import type { i18n as I18n } from 'i18next';
 import { toast } from 'sonner';
+import { isLocale } from '@/types/locale';
+import type { Locale } from '@/types/locale';
 import type { FlashToast } from '@/types/ui';
 
 const TOAST_TYPES = new Set(['success', 'info', 'warning', 'error'] as const);
+const I18N_NAMESPACE = 'translation';
 
 type ToastType = FlashToast['type'];
 
 let registered = false;
 let translator: I18n | null = null;
+/** Locale of the in-flight Inertia visit (URL prefix), if any. */
+let pendingVisitLocale: Locale | null = null;
+
+function localeFromPath(path: string): Locale | null {
+    const segment = path.split('/').filter((part) => part !== '')[0];
+
+    return isLocale(segment) ? segment : null;
+}
+
+function localeFromVisitUrl(url: unknown): Locale | null {
+    if (url instanceof URL) {
+        return localeFromPath(url.pathname);
+    }
+
+    if (typeof url !== 'string' || url.trim() === '') {
+        return null;
+    }
+
+    try {
+        const path = url.startsWith('http')
+            ? new URL(url).pathname
+            : (url.split(/[?#]/)[0] ?? url);
+
+        return localeFromPath(path);
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Prefer the visit target locale when its dictionary is already on the
+ * instance (language switcher awaits that). Falls back to active language.
+ */
+function resolveToastLocale(): Locale | null {
+    const candidates = [
+        pendingVisitLocale,
+        typeof window !== 'undefined'
+            ? localeFromPath(window.location.pathname)
+            : null,
+    ];
+
+    for (const candidate of candidates) {
+        if (
+            candidate &&
+            translator?.hasResourceBundle(candidate, I18N_NAMESPACE)
+        ) {
+            return candidate;
+        }
+    }
+
+    if (translator && isLocale(translator.language)) {
+        return translator.language;
+    }
+
+    return null;
+}
 
 function translate(key: string, options?: Record<string, unknown>): string {
     if (!translator) {
         return key;
     }
 
-    return String(translator.t(key, options));
+    const lng = resolveToastLocale();
+
+    return String(
+        translator.t(key, lng ? { ...options, lng } : options),
+    );
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -99,6 +162,16 @@ export function registerFlashToasts(i18n?: I18n): void {
     }
 
     registered = true;
+
+    router.on('before', (event) => {
+        pendingVisitLocale = localeFromVisitUrl(
+            (event as CustomEvent).detail?.visit?.url,
+        );
+    });
+
+    router.on('finish', () => {
+        pendingVisitLocale = null;
+    });
 
     router.on('flash', (event) => {
         const data = resolveFlashToast(flashFromEvent(event as Event));

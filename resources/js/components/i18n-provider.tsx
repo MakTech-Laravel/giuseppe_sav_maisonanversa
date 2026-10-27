@@ -53,12 +53,20 @@ export function I18nProvider({
             router.on('navigate', (event) => {
                 const next = event.detail.page.props.locale;
 
-                if (isLocale(next)) {
-                    setLocale(next);
-                    syncWayfinderLocale(next);
+                if (!isLocale(next)) {
+                    return;
+                }
+
+                setLocale(next);
+                syncWayfinderLocale(next);
+
+                // Eager switch so toasts in the same navigation turn do not
+                // wait on the React effect below (still async, but starts now).
+                if (next !== i18n.language) {
+                    void switchInstanceLocale(i18n, next);
                 }
             }),
-        [],
+        [i18n],
     );
 
     useEffect(() => {

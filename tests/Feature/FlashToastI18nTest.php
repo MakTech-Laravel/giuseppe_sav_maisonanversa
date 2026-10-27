@@ -21,7 +21,13 @@ test('http and network flash toast strings have en and fr dictionary keys', func
         ->toContain("translate('Verzoek mislukt ({{status}})'")
         ->toContain("translate('Netwerkfout. Probeer het opnieuw.')")
         ->toContain('translate(data.message)')
+        ->toContain('pendingVisitLocale')
+        ->toContain('resolveToastLocale')
         ->not->toContain('`Verzoek mislukt (${status})`');
+
+    expect(File::get(resource_path('js/hooks/use-locale.ts')))
+        ->toContain('switchInstanceLocale(i18n, next)')
+        ->not->toContain('await loadDictionary(next)');
 });
 
 test('admin and settings flash toast strings use dutch keys with en and fr entries', function () {
