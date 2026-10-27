@@ -111,3 +111,17 @@ test('organization structured data uses site settings contact channels', functio
             ->and($organization['sameAs'])->toBe(['https://www.instagram.com/maison-anversa-test/']);
     });
 });
+
+test('site settings return address appears on the public returns page', function () {
+    $address = "Maison Anversa\nReturns desk\n2000 Antwerpen";
+
+    SiteSetting::current()->update([
+        'return_address' => $address,
+    ]);
+
+    $this->get(route('maison.returns', ['locale' => 'nl']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('maison/returns')
+            ->where('returnAddress', $address));
+});

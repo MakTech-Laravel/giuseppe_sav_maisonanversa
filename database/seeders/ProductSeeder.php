@@ -31,7 +31,7 @@ class ProductSeeder extends Seeder
                 'grants_founding_circle' => true,
                 'expected_delivery_label' => 'Q1 2027 — ONDER VOORBEHOUD VAN PRODUCTIE',
                 'eyebrow' => 'Maison Anversa · Founding Edition',
-                'hero_eyebrow' => 'Founding Edition · 100 Stuks Wereldwijd',
+                'hero_eyebrow' => 'Founding Edition · 100 Stuks in Europa',
                 'hero_subtitle' => 'Het eerste hoofdstuk van Maison Anversa. Beperkt tot 100 stuks. Elk genummerd. De Founding Edition wordt nooit herhaald.',
                 'description' => 'Heritage No.001 is niet zomaar een padelracket. Het is het eerste object van een huis dat wordt gebouwd voor de lange termijn. Elk van de 100 stuks is individueel genummerd en wordt vergezeld van een volledige Heritage ervaring.',
                 'sort_order' => 0,

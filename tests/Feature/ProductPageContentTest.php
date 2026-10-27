@@ -16,7 +16,7 @@ test('product page uses dynamic content and faq props', function () {
             ->where('product.slug', Product::FOUNDING_SLUG)
             ->where('product.name', 'Heritage No.001 — Founding Edition')
             ->where('product.eyebrow', 'Maison Anversa · Founding Edition')
-            ->where('product.hero_eyebrow', 'Founding Edition · 100 Stuks Wereldwijd')
+            ->where('product.hero_eyebrow', 'Founding Edition · 100 Stuks in Europa')
             ->where('product.description', 'Heritage No.001 is niet zomaar een padelracket. Het is het eerste object van een huis dat wordt gebouwd voor de lange termijn. Elk van de 100 stuks is individueel genummerd en wordt vergezeld van een volledige Heritage ervaring.')
             ->has('product.gallery', 4)
             // Sections are ordered by sort_order (ProductSectionKey::defaultSortOrder()):

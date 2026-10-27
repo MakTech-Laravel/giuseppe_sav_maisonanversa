@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\EditionPieceStatus;
+use App\Enums\NotificationType;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Enums\ReturnReason;
@@ -11,6 +12,7 @@ use App\Jobs\Returns\SendReturnCustomerMail;
 use App\Mail\OrderConfirmation;
 use App\Mail\Orders\OrderStatusUpdated;
 use App\Mail\ShippingNotification;
+use App\Models\AppNotification;
 use App\Models\EditionPiece;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
@@ -18,7 +20,9 @@ use App\Models\OrderReturn;
 use App\Models\OrderStatusEvent;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Services\FoundingCircle\FoundingCircleRegistrar;
 use App\Services\Returns\GuestReturnLink;
 use App\Services\Returns\ReturnEligibility;
@@ -164,7 +168,13 @@ test('full racket return flow marks returning then available after refund', func
     expect($return->fresh()->status)->toBe(ReturnStatus::Refunded)
         ->and($return->fresh()->stripe_refund_id)->toBe('re_full_1')
         ->and(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeFalse()
-        ->and(EditionPiece::query()->find($order->edition_piece_id)?->status)->toBe(EditionPieceStatus::Available);
+        ->and(EditionPiece::query()->find($order->edition_piece_id)?->status)->toBe(EditionPieceStatus::Available)
+        ->and(AppNotification::query()->where('type', NotificationType::Order)->where('title', 'Retour terugbetaald')->exists())->toBeTrue()
+        ->and(UserNotification::query()->where('user_id', $user->id)->exists())->toBeTrue();
+
+    app()->setLocale('en');
+
+    expect(__('Retour terugbetaald'))->toBe('Return refunded');
 });
 
 test('partial refund stores amount and frees the founding number', function () {
@@ -422,6 +432,11 @@ test('member return show hides ship instructions after refund', function () {
     Queue::fake();
     fakeStripeRefund('re_show_1');
 
+    $address = "Maison Anversa\nMember Returns Desk\nAntwerpen";
+    SiteSetting::current()->update([
+        'return_address' => $address,
+    ]);
+
     $user = User::factory()->create();
     $order = heritagePaidOrder($user, 43);
     $order->update([
@@ -444,7 +459,8 @@ test('member return show hides ship instructions after refund', function () {
             ->component('member/returns/show')
             ->where('return.is_refunded', true)
             ->where('return.show_ship_instructions', false)
-            ->where('return.refund_amount', '249.00'));
+            ->where('return.refund_amount', '249.00')
+            ->where('return.return_address', $address));
 });
 
 test('admin cancel stores the dutch source note for translation', function () {

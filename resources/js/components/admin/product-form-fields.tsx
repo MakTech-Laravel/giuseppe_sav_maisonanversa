@@ -257,7 +257,7 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                             setData('hero_eyebrow', event.target.value)
                         }
                         placeholder={t(
-                            'bijv. Founding Edition · 100 Stuks Wereldwijd',
+                            'bijv. Founding Edition · 100 Stuks in Europa',
                         )}
                     />
                     <InputError message={errors.hero_eyebrow} />
