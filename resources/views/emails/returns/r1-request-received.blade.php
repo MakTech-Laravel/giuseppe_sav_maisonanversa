@@ -1,5 +1,5 @@
 @component('emails.layouts.maison', [
-    'title' => __('Je retouraanvraag'),
+    'title' => __('Uw retouraanvraag'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $returnUrl,
     'ctaLabel' => __('Bekijk mijn retour'),

@@ -40,6 +40,7 @@ class CheckoutRequest extends FormRequest
             'shipping_country' => ['required', 'string', 'size:2'],
             'gift_wrap' => ['sometimes', 'boolean'],
             'gift_message' => ['nullable', 'string', 'max:500'],
+            'accept_terms' => ['accepted'],
         ];
     }
 
@@ -56,6 +57,7 @@ class CheckoutRequest extends FormRequest
             'shipping_postal_code.required' => __('Vul a.u.b. uw verzendadres in.'),
             'shipping_country.required' => __('Vul a.u.b. uw verzendadres in.'),
             'edition_piece_id.required' => __('Kies a.u.b. een beschikbaar editienummer.'),
+            'accept_terms.accepted' => __('Ik heb de Algemene voorwaarden en het Retourbeleid gelezen en ga ermee akkoord.'),
         ];
     }
 
@@ -87,22 +89,14 @@ class CheckoutRequest extends FormRequest
 
             $editionPieceId = $this->integer('edition_piece_id') ?: null;
 
-            if ($editionPieceId === null) {
-                $validator->errors()->add(
-                    'edition_piece_id',
-                    __('Kies a.u.b. een beschikbaar editienummer.'),
-                );
-
-                return;
-            }
-
-            $piece = EditionPiece::query()
-                ->whereKey($editionPieceId)
-                ->where('product_id', $product->id)
-                ->first();
+            $piece = $editionPieceId === null
+                ? null
+                : EditionPiece::query()
+                    ->whereKey($editionPieceId)
+                    ->where('product_id', $product->id)
+                    ->first();
 
             $heldByBuyer = $piece?->isHeldBy($this->user()) ?? false;
-
             $available = app(EditionInventory::class)->snapshot($product)['available'];
 
             if ($available === 0 && ! $heldByBuyer) {
@@ -111,6 +105,15 @@ class CheckoutRequest extends FormRequest
                     __(':product is uitverkocht.', [
                         'product' => $product->translated('name'),
                     ]),
+                );
+
+                return;
+            }
+
+            if ($editionPieceId === null) {
+                $validator->errors()->add(
+                    'edition_piece_id',
+                    __('Kies a.u.b. een beschikbaar editienummer.'),
                 );
 
                 return;

@@ -17,6 +17,7 @@ class SiteSetting extends Model
         'instagram_url',
         'boutique_lat',
         'boutique_lng',
+        'return_address',
     ];
 
     /**

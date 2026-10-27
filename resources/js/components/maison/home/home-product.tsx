@@ -54,7 +54,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                         </h2>
                         <p className="mb-5 text-[15px] leading-[1.8] text-choc3">
                             {t(
-                                'The Founding Edition. Beperkt tot 100 stuks wereldwijd. Elk vergezeld van een Heritage Certificaat, Paspoort en een persoonlijke brief.',
+                                'The Founding Edition. Beperkt tot 100 stuks in Europa. Elk vergezeld van een Heritage Certificaat, Paspoort en een persoonlijke brief.',
                             )}
                         </p>
                         <ul className="mb-8 flex flex-col gap-2">
@@ -120,7 +120,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                             <div className="font-sans text-[8px] font-light tracking-[0.28em] text-choc3 uppercase">
                                 {t('Stuks Alleen')}
                                 <br />
-                                {t('Wereldwijd')}
+                                {t('Europa')}
                             </div>
                             <div className="mx-auto my-3.5 h-px w-7 bg-gold/30" />
                             <div className="font-sans text-[8px] leading-[2] font-light tracking-[0.2em] text-choc3 uppercase">

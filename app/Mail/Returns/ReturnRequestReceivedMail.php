@@ -6,6 +6,7 @@ use App\Models\OrderReturn;
 use App\Services\Returns\GuestReturnLink;
 use App\Support\BrandsMaisonMail;
 use App\Support\MailLocale;
+use App\Support\ReturnAddress;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -24,7 +25,7 @@ class ReturnRequestReceivedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Je retouraanvraag · :rma', ['rma' => $this->orderReturn->number]),
+            subject: __('Uw retouraanvraag · :rma', ['rma' => $this->orderReturn->number]),
         );
     }
 
@@ -44,7 +45,7 @@ class ReturnRequestReceivedMail extends Mailable
             with: [
                 ...$this->maisonBrandData($this->orderReturn->order?->locale),
                 'returnUrl' => $returnUrl,
-                'returnAddress' => (string) config('maison.returns.return_address'),
+                'returnAddress' => ReturnAddress::resolve(),
             ],
         );
     }

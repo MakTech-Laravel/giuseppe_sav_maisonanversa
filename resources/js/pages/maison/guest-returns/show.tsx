@@ -12,6 +12,11 @@ type Props = {
         can_add_tracking: boolean;
         carrier: string | null;
         tracking_number: string | null;
+        refund_amount?: string | null;
+        resolved_at?: string | null;
+        payment_method?: string | null;
+        is_refunded?: boolean;
+        show_ship_instructions?: boolean;
         order: { id: number; reference?: string };
         trackingUrl: string;
     };
@@ -21,6 +26,8 @@ export default function GuestReturnShow({
     return: orderReturn,
 }: Props) {
     const { t } = useTranslation();
+    const showShip = orderReturn.show_ship_instructions ?? true;
+    const isRefunded = orderReturn.is_refunded ?? false;
 
     return (
         <>
@@ -37,21 +44,71 @@ export default function GuestReturnShow({
                         <p className="font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
                             {t('Status')}
                         </p>
-                        <p className="mt-2 font-medium">{t(orderReturn.status_label)}</p>
+                        <p className="mt-2 font-medium">
+                            {t(orderReturn.status_label)}
+                        </p>
 
-                        <p className="mt-6 font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
-                            {t('Instructies')}
-                        </p>
-                        <p className="mt-3 text-[#5C4A3D]">
-                            {t('Stuur het artikel binnen 14 dagen naar:')}
-                        </p>
-                        <p className="mt-2 whitespace-pre-line text-choc">
-                            {orderReturn.return_address}
-                        </p>
-                        {orderReturn.ship_by ? (
-                            <p className="mt-4 font-sans text-sm text-[#8A6A3B]">
-                                {t('Versturen tot')} {orderReturn.ship_by}
-                            </p>
+                        {isRefunded ? (
+                            <>
+                                <p className="mt-6 font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
+                                    {t('Terugbetaling voltooid')}
+                                </p>
+                                <p className="mt-3 text-[#5C4A3D]">
+                                    {t(
+                                        'Uw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op uw rekening.',
+                                    )}
+                                </p>
+                                <dl className="mt-4 space-y-2 font-sans text-sm">
+                                    {orderReturn.refund_amount ? (
+                                        <div className="flex justify-between gap-4">
+                                            <dt className="text-[#8A7363]">
+                                                {t('Bedrag')}
+                                            </dt>
+                                            <dd>
+                                                €{orderReturn.refund_amount}
+                                            </dd>
+                                        </div>
+                                    ) : null}
+                                    {orderReturn.resolved_at ? (
+                                        <div className="flex justify-between gap-4">
+                                            <dt className="text-[#8A7363]">
+                                                {t('Datum')}
+                                            </dt>
+                                            <dd>{orderReturn.resolved_at}</dd>
+                                        </div>
+                                    ) : null}
+                                    {orderReturn.payment_method ? (
+                                        <div className="flex justify-between gap-4">
+                                            <dt className="text-[#8A7363]">
+                                                {t('Betaalmethode')}
+                                            </dt>
+                                            <dd>
+                                                {t(orderReturn.payment_method)}
+                                            </dd>
+                                        </div>
+                                    ) : null}
+                                </dl>
+                            </>
+                        ) : showShip ? (
+                            <>
+                                <p className="mt-6 font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
+                                    {t('Instructies')}
+                                </p>
+                                <p className="mt-3 text-[#5C4A3D]">
+                                    {t(
+                                        'Stuur het artikel binnen 14 dagen naar:',
+                                    )}
+                                </p>
+                                <p className="mt-2 whitespace-pre-line text-choc">
+                                    {orderReturn.return_address}
+                                </p>
+                                {orderReturn.ship_by ? (
+                                    <p className="mt-4 font-sans text-sm text-[#8A6A3B]">
+                                        {t('Versturen tot')}{' '}
+                                        {orderReturn.ship_by}
+                                    </p>
+                                ) : null}
+                            </>
                         ) : null}
                     </div>
 
@@ -95,7 +152,10 @@ export default function GuestReturnShow({
                             </Form>
                         ) : (
                             <p className="mt-4 text-[#5C4A3D]">
-                                {[orderReturn.carrier, orderReturn.tracking_number]
+                                {[
+                                    orderReturn.carrier,
+                                    orderReturn.tracking_number,
+                                ]
                                     .filter(Boolean)
                                     .join(' · ') || t('Nog geen tracking')}
                             </p>

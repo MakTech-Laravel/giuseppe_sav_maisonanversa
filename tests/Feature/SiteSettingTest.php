@@ -3,6 +3,7 @@
 use App\Enums\RoleEnum;
 use App\Models\SiteSetting;
 use App\Models\User;
+use App\Support\ReturnAddress;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -53,13 +54,31 @@ test('admin can update site settings', function () {
             'instagram_url' => 'https://www.instagram.com/maisonanversa',
             'boutique_lat' => '51.221',
             'boutique_lng' => '4.405',
+            'return_address' => "Maison Anversa\nReturns desk\nAntwerp",
         ])
         ->assertRedirect();
 
     expect(SiteSetting::current())
         ->phone->toBe('+32999888777')
         ->email_hello->toBe('contact@maison.test')
-        ->instagram_url->toBe('https://www.instagram.com/maisonanversa');
+        ->instagram_url->toBe('https://www.instagram.com/maisonanversa')
+        ->return_address->toBe("Maison Anversa\nReturns desk\nAntwerp");
+});
+
+test('return address resolves from site settings over config', function () {
+    config(['maison.returns.return_address' => 'Config fallback address']);
+
+    SiteSetting::current()->update([
+        'return_address' => null,
+    ]);
+
+    expect(ReturnAddress::resolve())->toBe('Config fallback address');
+
+    SiteSetting::current()->update([
+        'return_address' => 'Site settings return desk',
+    ]);
+
+    expect(ReturnAddress::resolve())->toBe('Site settings return desk');
 });
 
 test('staff can open the site settings form', function () {
@@ -70,6 +89,7 @@ test('staff can open the site settings form', function () {
             ->component('admin/site-settings/edit')
             ->has('settings.phone')
             ->has('settings.instagram_url')
+            ->has('settings.return_address')
             ->missing('settings.announcement_text')
             ->missing('translations')
             ->missing('translationStatus'));

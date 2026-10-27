@@ -2,6 +2,7 @@
 
 namespace App\Services\Returns;
 
+use App\Enums\NotificationType;
 use App\Enums\ReturnReason;
 use App\Enums\ReturnStatus;
 use App\Jobs\Returns\SendReturnAdminRequestMail;
@@ -121,6 +122,11 @@ class ReturnService
 
         SendReturnCustomerMail::dispatch($return, 'r1');
         SendReturnAdminRequestMail::dispatch($return);
+        $this->notifyBuyer(
+            $return,
+            'Retour aangevraagd',
+            'Uw retouraanvraag is ingediend.',
+        );
 
         return $return;
     }
@@ -203,6 +209,7 @@ class ReturnService
 
         $this->recordEvent($return, $from, ReturnStatus::Refunded, $actor, 'Volledige terugbetaling uitgevoerd.');
         SendReturnCustomerMail::dispatch($return->refresh(), 'r3');
+        $this->notifyBuyer($return, 'Retour terugbetaald', 'Uw retour is terugbetaald.');
 
         return $return->refresh();
     }
@@ -249,6 +256,7 @@ class ReturnService
 
         $this->recordEvent($return, $from, ReturnStatus::PartiallyRefunded, $actor, $reason);
         SendReturnCustomerMail::dispatch($return->refresh(), 'r4');
+        $this->notifyBuyer($return, 'Retour terugbetaald', 'Uw retour is terugbetaald.');
 
         return $return->refresh();
     }
@@ -342,6 +350,31 @@ class ReturnService
         }
 
         return $return->refresh();
+    }
+
+    private function notifyBuyer(OrderReturn $return, string $title, string $message): void
+    {
+        $userId = $return->user_id ?? $return->order?->user_id;
+
+        if ($userId === null) {
+            return;
+        }
+
+        $locale = $return->order?->locale ?? config('app.locale');
+
+        notify_user(
+            $userId,
+            NotificationType::Order,
+            $title,
+            $message,
+            [
+                'link_url' => route('member.returns.show', [
+                    'locale' => $locale,
+                    'orderReturn' => $return->id,
+                ]),
+                'link_label' => 'Bekijk retour',
+            ],
+        );
     }
 
     private function recordEvent(

@@ -11,6 +11,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { wayfinderLocale } from '@/lib/wayfinder-defaults';
 import { dashboard } from '@/routes/admin';
 import siteSettings from '@/routes/admin/site-settings';
@@ -23,6 +24,7 @@ interface SiteSettingsForm {
     instagram_url: string;
     boutique_lat: string;
     boutique_lng: string;
+    return_address: string;
 }
 
 export default function SiteSettingsEdit({
@@ -39,6 +41,7 @@ export default function SiteSettingsEdit({
         instagram_url: settings.instagram_url,
         boutique_lat: settings.boutique_lat,
         boutique_lng: settings.boutique_lng,
+        return_address: settings.return_address ?? '',
     });
 
     const submit = (event: FormEvent) => {
@@ -227,6 +230,33 @@ export default function SiteSettingsEdit({
                                         message={form.errors.boutique_lng}
                                     />
                                 </div>
+                            </div>
+                        </AdminPanel>
+
+                        <AdminPanel
+                            title={t('Retouradres')}
+                            description={t(
+                                'Adres waar klanten hun retour naartoe sturen. Leeg laten om de standaard uit de configuratie te gebruiken.',
+                            )}
+                        >
+                            <div className="grid gap-2">
+                                <Label htmlFor="return_address">
+                                    {t('Retouradres')}
+                                </Label>
+                                <Textarea
+                                    id="return_address"
+                                    rows={4}
+                                    value={form.data.return_address}
+                                    onChange={(event) =>
+                                        form.setData(
+                                            'return_address',
+                                            event.target.value,
+                                        )
+                                    }
+                                />
+                                <InputError
+                                    message={form.errors.return_address}
+                                />
                             </div>
                         </AdminPanel>
                     </AdminResourceShell>

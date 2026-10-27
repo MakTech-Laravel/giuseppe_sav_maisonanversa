@@ -14,6 +14,7 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
+import { returns as returnsPage } from '@/routes/maison';
 
 type OrderModalProps = {
     onClose: () => void;
@@ -60,6 +61,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
     const [shippingCountry, setShippingCountry] = useState('BE');
     const [giftWrap, setGiftWrap] = useState(false);
     const [giftMessage, setGiftMessage] = useState('');
+    const [acceptTerms, setAcceptTerms] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -103,6 +105,16 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
             return;
         }
 
+        if (!acceptTerms) {
+            setError(
+                t(
+                    'Ik heb de Algemene voorwaarden en het Retourbeleid gelezen en ga ermee akkoord.',
+                ),
+            );
+
+            return;
+        }
+
         setError(null);
         setProcessing(true);
 
@@ -123,6 +135,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                 shipping_country: shippingCountry.trim().toUpperCase(),
                 gift_wrap: giftWrap,
                 gift_message: giftMessage.trim() || null,
+                accept_terms: acceptTerms,
             },
             {
                 onError: (errors) => {
@@ -132,6 +145,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         errors.shipping_line1 ||
                         errors.email ||
                         errors.name ||
+                        errors.accept_terms ||
                         Object.values(errors)[0];
 
                     setError(
@@ -302,6 +316,19 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         editionLabel={selectedEditionLabel}
                     />
 
+                    {isLimitedEdition && (
+                        <p
+                            className={cn(
+                                modalNoteClassName,
+                                'mb-4 text-left',
+                            )}
+                        >
+                            {t(
+                                'De Founding Edition wordt in één beperkte productieronde vervaardigd. Levertermijnen zijn indicatief.',
+                            )}
+                        </p>
+                    )}
+
                     <label className="mb-4 flex cursor-pointer items-start gap-3">
                         <input
                             type="checkbox"
@@ -338,6 +365,35 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         </div>
                     )}
 
+                    <label className="mb-4 flex cursor-pointer items-start gap-3">
+                        <input
+                            type="checkbox"
+                            required
+                            checked={acceptTerms}
+                            onChange={(event) =>
+                                setAcceptTerms(event.target.checked)
+                            }
+                            className="mt-1"
+                        />
+                        <span className="text-[13px] leading-[1.5] text-choc3">
+                            {t('Ik heb de')}{' '}
+                            <MaisonLink
+                                to="terms"
+                                className="underline underline-offset-2 hover:text-gold"
+                            >
+                                {t('Algemene voorwaarden')}
+                            </MaisonLink>{' '}
+                            {t('en het')}{' '}
+                            <a
+                                href={returnsPage.url(locale)}
+                                className="underline underline-offset-2 hover:text-gold"
+                            >
+                                {t('Retourbeleid')}
+                            </a>{' '}
+                            {t('gelezen en ga ermee akkoord.')}
+                        </span>
+                    </label>
+
                     {error && (
                         <p role="alert" className="mb-3 text-[13px] text-choc3">
                             {error}
@@ -357,7 +413,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             type="button"
                             variant="filled"
                             block
-                            disabled={processing}
+                            disabled={processing || !acceptTerms}
                             onClick={onPay}
                         >
                             {processing
@@ -473,6 +529,9 @@ function OrderSummary({
                 </>
             )}
             <SummaryRow label={t('Totaal')} value={priceLabel} total />
+            <p className="-mt-1 text-right font-sans text-[10px] text-choc3">
+                {t('incl. 21% btw')}
+            </p>
         </div>
     );
 }

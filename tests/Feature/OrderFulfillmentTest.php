@@ -2,19 +2,24 @@
 
 use App\Enums\EditionPieceStatus;
 use App\Enums\GuardEnum;
+use App\Enums\NotificationType;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Enums\RegisterVisibility;
 use App\Enums\RoleEnum;
 use App\Jobs\SyncOrderToBrevo;
+use App\Models\AppNotification;
 use App\Models\EditionPiece;
 use App\Models\FoundingCircleClaim;
 use App\Models\FoundingCircleRegisterEntry;
 use App\Models\Order;
+use App\Models\OrderStatusEvent;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Services\Checkout\OrderFulfillment;
+use App\Support\OrderPresenter;
 use Illuminate\Support\Facades\Queue;
 use Spatie\Permission\Models\Role;
 
@@ -40,6 +45,34 @@ test('order fulfillment is idempotent for paid sessions', function () {
     expect($first->isPaid())->toBeTrue()
         ->and($second->isPaid())->toBeTrue()
         ->and(Order::query()->where('status', OrderStatus::Paid)->count())->toBe(1);
+});
+
+test('paying an order stores dutch timeline source and notifies the buyer', function () {
+    Queue::fake();
+
+    $user = User::factory()->create();
+    $order = Order::factory()->forUser($user)->create([
+        'status' => OrderStatus::Incomplete,
+        'locale' => 'nl',
+    ]);
+
+    app(OrderFulfillment::class)->markPaidFromSession((object) [
+        'id' => 'cs_test_notify_paid',
+        'payment_status' => 'paid',
+        'payment_intent' => 'pi_test_notify_paid',
+        'metadata' => ['order_id' => (string) $order->id],
+    ]);
+
+    $event = OrderStatusEvent::query()->where('order_id', $order->id)->first();
+
+    expect($event?->message)->toBe('Betaling ontvangen. Uw bestelling is aangemaakt.')
+        ->and(AppNotification::query()->where('type', NotificationType::Order)->where('title', 'Bestelling betaald')->exists())->toBeTrue()
+        ->and(UserNotification::query()->where('user_id', $user->id)->exists())->toBeTrue();
+
+    app()->setLocale('en');
+    $detail = app(OrderPresenter::class)->detail($order->fresh()->load('statusEvents'));
+
+    expect($detail['events'][0]['message'])->toBe('Payment received. Your order has been created.');
 });
 
 test('paying for heritage no.001 inscribes the buyer as a private member on the picked number', function () {

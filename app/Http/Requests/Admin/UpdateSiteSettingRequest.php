@@ -25,6 +25,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'instagram_url' => ['required', 'url', 'max:255'],
             'boutique_lat' => ['required', 'numeric', 'between:-90,90'],
             'boutique_lng' => ['required', 'numeric', 'between:-180,180'],
+            'return_address' => ['nullable', 'string', 'max:2000'],
         ];
     }
 }

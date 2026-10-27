@@ -77,8 +77,11 @@ class ReturnController extends Controller
 
     public function refundPartial(Request $request, string $locale, OrderReturn $orderReturn, ReturnService $returns): RedirectResponse
     {
+        $orderReturn->loadMissing('order');
+        $maxAmount = (string) ($orderReturn->expected_refund_amount ?? $orderReturn->order?->amount ?? '0');
+
         $data = $request->validate([
-            'refund_amount' => ['required', 'numeric', 'min:0.01'],
+            'refund_amount' => ['required', 'numeric', 'min:0.01', 'max:'.$maxAmount],
             'refund_reason' => ['required', 'string', 'max:2000'],
         ]);
 
@@ -215,8 +218,10 @@ class ReturnController extends Controller
                 'to' => $event->to_status->label(),
                 'note' => $event->note,
                 'user' => $event->user?->name,
-                'at' => $event->created_at?->toDateTimeString(),
+                'at' => $event->created_at?->timezone(config('app.timezone'))->format('Y-m-d H:i'),
             ])->values(),
+            'payment_method' => __('Stripe'),
+            'resolved_at' => $return->resolved_at?->timezone(config('app.timezone'))->format('Y-m-d H:i'),
             'can_receive' => in_array($return->status, [ReturnStatus::Requested, ReturnStatus::InTransit], true),
             'can_refund' => in_array($return->status, [ReturnStatus::InTransit, ReturnStatus::Received], true),
             'can_decline' => $return->status->isOpen(),

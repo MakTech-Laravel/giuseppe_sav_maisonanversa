@@ -25,6 +25,7 @@ class SiteSettingController extends Controller
                 'instagram_url' => $settings->instagram_url,
                 'boutique_lat' => (string) $settings->boutique_lat,
                 'boutique_lng' => (string) $settings->boutique_lng,
+                'return_address' => (string) ($settings->return_address ?? ''),
             ],
         ]);
     }

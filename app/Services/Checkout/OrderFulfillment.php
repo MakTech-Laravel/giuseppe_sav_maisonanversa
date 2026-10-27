@@ -2,6 +2,7 @@
 
 namespace App\Services\Checkout;
 
+use App\Enums\NotificationType;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Jobs\Orders\SendOrderPaidAdminMail;
@@ -103,7 +104,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Paid,
                 ],
                 [
-                    'message' => __('Betaling ontvangen. Uw bestelling is aangemaakt.'),
+                    'message' => 'Betaling ontvangen. Uw bestelling is aangemaakt.',
                     'user_id' => null,
                 ],
             );
@@ -122,6 +123,22 @@ class OrderFulfillment
             SendOrderPaidBuyerMail::dispatch($fulfilled);
             SendOrderPaidAdminMail::dispatch($fulfilled);
             SyncOrderToBrevo::dispatch($fulfilled);
+
+            if ($fulfilled->user_id !== null) {
+                notify_user(
+                    $fulfilled->user_id,
+                    NotificationType::Order,
+                    'Bestelling betaald',
+                    'Uw bestelling is betaald.',
+                    [
+                        'link_url' => route('member.orders.show', [
+                            'locale' => $fulfilled->locale ?? config('app.locale'),
+                            'order' => $fulfilled->id,
+                        ]),
+                        'link_label' => 'Bekijk bestelling',
+                    ],
+                );
+            }
 
             if ($this->inventory->snapshot($fulfilled->product)['soldOut']) {
                 $this->notifySoldOut();
@@ -234,7 +251,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Refunded,
                 ],
                 [
-                    'message' => __('Betaling terugbetaald.'),
+                    'message' => 'Betaling terugbetaald.',
                     'user_id' => null,
                 ],
             );
@@ -289,7 +306,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Failed,
                 ],
                 [
-                    'message' => __('Betaling mislukt. De reservering is vrijgegeven.'),
+                    'message' => 'Betaling mislukt. De reservering is vrijgegeven.',
                     'user_id' => null,
                 ],
             );
@@ -354,7 +371,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Canceled,
                 ],
                 [
-                    'message' => __('Checkout geannuleerd. De reservering is vrijgegeven.'),
+                    'message' => 'Checkout geannuleerd. De reservering is vrijgegeven.',
                     'user_id' => null,
                 ],
             );

@@ -9,6 +9,7 @@ use App\Models\OrderReturn;
 use App\Services\Returns\ReturnEligibility;
 use App\Services\Returns\ReturnService;
 use App\Support\OrderPresenter;
+use App\Support\ReturnAddress;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -37,7 +38,7 @@ class OrderReturnController extends Controller
                 'label' => $reason->label(),
                 'maison_pays_shipping' => $reason->maisonPaysReturnShipping(),
             ])->values(),
-            'returnAddress' => (string) config('maison.returns.return_address'),
+            'returnAddress' => ReturnAddress::resolve(),
             'expectedRefund' => (string) $order->amount,
         ]);
     }
@@ -71,7 +72,7 @@ class OrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Je retouraanvraag is ontvangen.'),
+            'message' => __('Uw retouraanvraag is ontvangen.'),
         ]);
 
         return redirect()->route('member.returns.show', [
@@ -148,12 +149,16 @@ class OrderReturnController extends Controller
             'refund_amount' => $return->refund_amount,
             'carrier' => $return->carrier,
             'tracking_number' => $return->tracking_number,
-            'requested_at' => $return->requested_at?->toDateTimeString(),
+            'requested_at' => $return->requested_at?->timezone(config('app.timezone'))->format('Y-m-d H:i'),
+            'resolved_at' => $return->resolved_at?->timezone(config('app.timezone'))->format('Y-m-d H:i'),
             'ship_by' => $return->ship_by?->toDateString(),
             'refund_due_by' => $return->refund_due_by?->toDateString(),
+            'payment_method' => __('Stripe'),
+            'is_refunded' => in_array($return->status->value, ['refunded', 'partially_refunded'], true),
+            'show_ship_instructions' => in_array($return->status->value, ['requested', 'in_transit', 'received'], true),
             'can_add_tracking' => in_array($return->status->value, ['requested', 'in_transit'], true),
             'can_cancel' => $return->status->value === 'requested',
-            'return_address' => (string) config('maison.returns.return_address'),
+            'return_address' => ReturnAddress::resolve(),
             'order' => [
                 'id' => $return->order_id,
                 'reference' => $return->order?->reference(),

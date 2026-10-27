@@ -118,6 +118,7 @@ function checkoutPayload(array $overrides = []): array
         'shipping_country' => 'BE',
         'edition_piece_id' => $editionPieceId,
         'gift_wrap' => false,
+        'accept_terms' => '1',
         ...$overrides,
     ];
 }

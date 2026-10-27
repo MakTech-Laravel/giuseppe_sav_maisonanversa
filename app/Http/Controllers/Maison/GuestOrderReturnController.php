@@ -11,6 +11,7 @@ use App\Services\Returns\GuestReturnLink;
 use App\Services\Returns\ReturnEligibility;
 use App\Services\Returns\ReturnService;
 use App\Support\OrderPresenter;
+use App\Support\ReturnAddress;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -44,7 +45,7 @@ class GuestOrderReturnController extends Controller
                 'label' => $reason->label(),
                 'maison_pays_shipping' => $reason->maisonPaysReturnShipping(),
             ])->values(),
-            'returnAddress' => (string) config('maison.returns.return_address'),
+            'returnAddress' => ReturnAddress::resolve(),
             'expectedRefund' => (string) $order->amount,
             'storeUrl' => route('maison.guest-returns.store', [
                 'locale' => $locale,
@@ -89,7 +90,7 @@ class GuestOrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Je retouraanvraag is ontvangen.'),
+            'message' => __('Uw retouraanvraag is ontvangen.'),
         ]);
 
         return redirect()->to($guestLinks->showUrl($return, $locale));
@@ -104,16 +105,27 @@ class GuestOrderReturnController extends Controller
         $orderReturn->loadMissing(['order.product', 'items.product', 'photos']);
         $this->assertGuestReturnAccess($request, $orderReturn, $guestLinks);
 
+        $status = $orderReturn->status;
+
         return Inertia::render('maison/guest-returns/show', [
             'return' => [
                 'id' => $orderReturn->id,
                 'number' => $orderReturn->number,
-                'status' => $orderReturn->status->value,
-                'status_label' => $orderReturn->status->label(),
+                'status' => $status->value,
+                'status_label' => $status->label(),
                 'ship_by' => $orderReturn->ship_by?->toDateString(),
-                'return_address' => (string) config('maison.returns.return_address'),
+                'return_address' => ReturnAddress::resolve(),
+                'refund_amount' => $orderReturn->refund_amount,
+                'resolved_at' => $orderReturn->resolved_at?->timezone(config('app.timezone'))->format('Y-m-d H:i'),
+                'payment_method' => __('Stripe'),
+                'is_refunded' => in_array($status, [ReturnStatus::Refunded, ReturnStatus::PartiallyRefunded], true),
+                'show_ship_instructions' => in_array(
+                    $status,
+                    [ReturnStatus::Requested, ReturnStatus::InTransit, ReturnStatus::Received],
+                    true,
+                ),
                 'can_add_tracking' => in_array(
-                    $orderReturn->status,
+                    $status,
                     [ReturnStatus::Requested, ReturnStatus::InTransit],
                     true,
                 ),

@@ -102,8 +102,10 @@ class OrderPresenter
                     'id' => (string) $event->id,
                     'status' => $this->statusLabel($event->status),
                     'status_key' => $event->status->value,
-                    'message' => $event->message,
-                    'at' => $event->created_at?->toDateTimeString() ?? '',
+                    'message' => $event->message !== null && $event->message !== ''
+                        ? __($event->message)
+                        : null,
+                    'at' => $event->created_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
                 ])
                 ->values()
                 ->all(),
@@ -121,22 +123,22 @@ class OrderPresenter
             [
                 'key' => OrderStatus::Paid,
                 'label' => __('Aangemaakt'),
-                'at' => $order->created_at?->toDateTimeString() ?? '',
+                'at' => $order->created_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
             [
                 'key' => OrderStatus::Processing,
                 'label' => __('In verwerking'),
-                'at' => $order->processing_at?->toDateTimeString() ?? '',
+                'at' => $order->processing_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
             [
                 'key' => OrderStatus::Shipped,
                 'label' => __('Verzonden'),
-                'at' => $order->shipped_at?->toDateTimeString() ?? '',
+                'at' => $order->shipped_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
             [
                 'key' => OrderStatus::Delivered,
                 'label' => __('Geleverd'),
-                'at' => $order->delivered_at?->toDateTimeString() ?? '',
+                'at' => $order->delivered_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
         ];
 

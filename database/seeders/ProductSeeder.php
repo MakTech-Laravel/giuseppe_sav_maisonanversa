@@ -113,7 +113,7 @@ class ProductSeeder extends Seeder
             ProductSectionKey::Guarantees->value => [
                 'items' => [
                     ['icon' => '◇', 'title' => 'Veilige reservering'],
-                    ['icon' => '◆', 'title' => 'Wereldwijde verzending'],
+                    ['icon' => '◆', 'title' => 'Verzending in Europa'],
                     ['icon' => '◈', 'title' => 'Authenticiteit gegarandeerd'],
                 ],
             ],

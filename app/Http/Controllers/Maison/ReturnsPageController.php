@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Maison;
 
 use App\Http\Controllers\Controller;
+use App\Support\ReturnAddress;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,7 +20,7 @@ class ReturnsPageController extends Controller
         }
 
         return Inertia::render('maison/returns', [
-            'returnAddress' => (string) config('maison.returns.return_address'),
+            'returnAddress' => ReturnAddress::resolve(),
             'loginRedirect' => route('member.orders', ['locale' => $locale]),
         ]);
     }

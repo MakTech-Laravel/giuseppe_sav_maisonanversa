@@ -2,6 +2,7 @@ import { Head, Link, router, useForm } from '@inertiajs/react';
 import { ArrowLeft, ReceiptText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
+import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import InputError from '@/components/input-error';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -192,14 +193,24 @@ export default function ShowOrder({ order }: { order: Order }) {
                             </Button>
                         )}
                         {canRefund && (
-                            <Button
-                                type="button"
-                                variant="destructive"
-                                disabled={form.processing}
-                                onClick={() => submitStatus('refunded')}
+                            <ConfirmDeleteDialog
+                                title={t('Terugbetaling bevestigen')}
+                                description={t(
+                                    '€{{amount}} terugbetalen aan de klant?',
+                                    { amount: order.amount },
+                                )}
+                                confirmLabel={t('Markeer als terugbetaald')}
+                                processing={form.processing}
+                                onConfirm={() => submitStatus('refunded')}
                             >
-                                {t('Markeer als terugbetaald')}
-                            </Button>
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    disabled={form.processing}
+                                >
+                                    {t('Markeer als terugbetaald')}
+                                </Button>
+                            </ConfirmDeleteDialog>
                         )}
                     </div>
                 </div>

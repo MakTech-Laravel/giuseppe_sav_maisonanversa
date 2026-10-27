@@ -1,10 +1,11 @@
-import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { Form, Head, Link, router, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
     AdminPanel,
     AdminResourceShell,
 } from '@/components/admin/admin-resource-shell';
+import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,6 +27,8 @@ type ReturnDetail = {
     carrier: string | null;
     tracking_number: string | null;
     maison_pays_return_shipping: boolean;
+    payment_method?: string | null;
+    resolved_at?: string | null;
     can_receive: boolean;
     can_refund: boolean;
     can_decline: boolean;
@@ -48,6 +51,7 @@ export default function AdminReturnShow({
 }) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
+    const expectedAmount = orderReturn.expected_refund_amount ?? '';
 
     return (
         <>
@@ -86,17 +90,33 @@ export default function AdminReturnShow({
                                     ) : null}
 
                                     {orderReturn.can_refund ? (
-                                        <Form
-                                            action={`/${locale}/admin/returns/${orderReturn.id}/refund`}
-                                            method="post"
+                                        <ConfirmDeleteDialog
+                                            title={t(
+                                                'Terugbetaling bevestigen',
+                                            )}
+                                            description={t(
+                                                '€{{amount}} terugbetalen aan de klant?',
+                                                {
+                                                    amount:
+                                                        expectedAmount || '—',
+                                                },
+                                            )}
+                                            confirmLabel={t(
+                                                'Volledig terugbetalen',
+                                            )}
+                                            onConfirm={() =>
+                                                router.post(
+                                                    `/${locale}/admin/returns/${orderReturn.id}/refund`,
+                                                )
+                                            }
                                         >
                                             <Button
-                                                type="submit"
+                                                type="button"
                                                 className="w-full"
                                             >
                                                 {t('Volledig terugbetalen')}
                                             </Button>
-                                        </Form>
+                                        </ConfirmDeleteDialog>
                                     ) : null}
 
                                     {orderReturn.can_cancel ? (
@@ -132,13 +152,18 @@ export default function AdminReturnShow({
                                             id="refund_amount"
                                             name="refund_amount"
                                             type="number"
+                                            min="0.01"
+                                            max={expectedAmount || undefined}
                                             step="0.01"
                                             required
-                                            defaultValue={
-                                                orderReturn.expected_refund_amount ??
-                                                ''
-                                            }
+                                            defaultValue={expectedAmount}
                                         />
+                                        {expectedAmount ? (
+                                            <p className="text-xs text-muted-foreground">
+                                                {t('Maximum')}: €
+                                                {expectedAmount}
+                                            </p>
+                                        ) : null}
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label htmlFor="partial_reason">
@@ -302,10 +327,28 @@ export default function AdminReturnShow({
                             </div>
                             <div className="flex gap-3">
                                 <dt className="w-28 shrink-0 text-muted-foreground">
+                                    {t('Vervoerder')}
+                                </dt>
+                                <dd className="font-medium">
+                                    {orderReturn.carrier || '—'}
+                                </dd>
+                            </div>
+                            <div className="flex gap-3">
+                                <dt className="w-28 shrink-0 text-muted-foreground">
+                                    {t('Trackingnummer')}
+                                </dt>
+                                <dd className="font-medium break-all">
+                                    {orderReturn.tracking_number || '—'}
+                                </dd>
+                            </div>
+                            <div className="flex gap-3">
+                                <dt className="w-28 shrink-0 text-muted-foreground">
                                     {t('Verwacht')}
                                 </dt>
                                 <dd className="font-medium">
-                                    €{orderReturn.expected_refund_amount}
+                                    {expectedAmount
+                                        ? `€${expectedAmount}`
+                                        : '—'}
                                 </dd>
                             </div>
                             {orderReturn.refund_amount ? (

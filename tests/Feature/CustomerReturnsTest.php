@@ -389,6 +389,64 @@ test('guest signed return link creates a return without an account', function ()
             ->where('return.number', $return->number));
 });
 
+test('admin partial refund rejects amounts above the expected maximum', function () {
+    Queue::fake();
+    fakeStripeRefund('re_partial_over');
+
+    $user = User::factory()->create();
+    $order = heritagePaidOrder($user, 42);
+    $order->update([
+        'status' => OrderStatus::Delivered,
+        'shipped_at' => now()->subDays(3),
+        'delivered_at' => now()->subDay(),
+        'delivered_on' => now()->subDay()->toDateString(),
+    ]);
+
+    $return = app(ReturnService::class)->request($order, $user, null, null, true);
+    app(ReturnService::class)->addTracking($return, $user, 'Bpost', 'TRACK-MAX');
+
+    $admin = User::factory()->admin()->create();
+    $admin->assignRole(RoleEnum::ADMIN->value);
+
+    $this->actingAs($admin)
+        ->post(route('admin.returns.partial-refund', ['locale' => 'nl', 'orderReturn' => $return->id]), [
+            'refund_amount' => '9999.00',
+            'refund_reason' => 'Too much',
+        ])
+        ->assertSessionHasErrors('refund_amount');
+
+    expect($return->fresh()->status)->toBe(ReturnStatus::InTransit);
+});
+
+test('member return show hides ship instructions after refund', function () {
+    Queue::fake();
+    fakeStripeRefund('re_show_1');
+
+    $user = User::factory()->create();
+    $order = heritagePaidOrder($user, 43);
+    $order->update([
+        'status' => OrderStatus::Delivered,
+        'shipped_at' => now()->subDays(3),
+        'delivered_at' => now()->subDay(),
+        'delivered_on' => now()->subDay()->toDateString(),
+    ]);
+
+    $return = app(ReturnService::class)->request($order, $user, null, null, true);
+    $admin = User::factory()->admin()->create();
+    app(ReturnService::class)->addTracking($return, $user, 'Bpost', 'TRACK-SHOW');
+    app(ReturnService::class)->markReceived($return->fresh(), $admin);
+    app(ReturnService::class)->refundFull($return->fresh(), $admin);
+
+    $this->actingAs($user)
+        ->get(route('member.returns.show', ['locale' => 'nl', 'orderReturn' => $return->id]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('member/returns/show')
+            ->where('return.is_refunded', true)
+            ->where('return.show_ship_instructions', false)
+            ->where('return.refund_amount', '249.00'));
+});
+
 test('admin cancel stores the dutch source note for translation', function () {
     $user = User::factory()->create();
     $order = heritagePaidOrder($user, 41);

@@ -166,6 +166,16 @@ test('checkout requires reservation details', function () {
         ->assertSessionHasErrors(['name', 'email', 'shipping_line1', 'shipping_city', 'shipping_postal_code', 'shipping_country']);
 });
 
+test('checkout requires accepting terms and return policy', function () {
+    actingAsCheckoutUser();
+
+    $payload = checkoutPayload();
+    unset($payload['accept_terms']);
+
+    $this->post(localized('maison.checkout.store'), $payload)
+        ->assertSessionHasErrors('accept_terms');
+});
+
 test('checkout creates an incomplete order and redirects to stripe', function () {
     config([
         'cashier.secret' => 'sk_test_fake',

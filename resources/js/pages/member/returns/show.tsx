@@ -18,6 +18,11 @@ type ReturnPayload = {
     can_cancel: boolean;
     carrier: string | null;
     tracking_number: string | null;
+    refund_amount?: string | null;
+    resolved_at?: string | null;
+    payment_method?: string | null;
+    is_refunded?: boolean;
+    show_ship_instructions?: boolean;
     order: { id: number; reference?: string; label?: string };
 };
 
@@ -28,6 +33,8 @@ export default function MemberReturnShow({
 }) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
+    const showShip = orderReturn.show_ship_instructions ?? true;
+    const isRefunded = orderReturn.is_refunded ?? false;
 
     return (
         <>
@@ -55,16 +62,72 @@ export default function MemberReturnShow({
 
             <div className="grid gap-6 lg:grid-cols-2">
                 <MemberPanel>
-                    <MemberSectionTitle title={t('Instructies')} />
-                    <p className="text-sand">
-                        {t('Stuur het artikel binnen 14 dagen naar:')}
-                    </p>
-                    <p className="mt-2 text-cream">{orderReturn.return_address}</p>
-                    {orderReturn.ship_by ? (
-                        <p className="mt-4 font-sans text-sm text-gold">
-                            {t('Versturen tot')} {orderReturn.ship_by}
-                        </p>
-                    ) : null}
+                    {isRefunded ? (
+                        <>
+                            <MemberSectionTitle
+                                title={t('Terugbetaling voltooid')}
+                            />
+                            <p className="text-sand">
+                                {t(
+                                    'Uw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op uw rekening.',
+                                )}
+                            </p>
+                            <dl className="mt-4 space-y-2 font-sans text-sm">
+                                {orderReturn.refund_amount ? (
+                                    <div className="flex justify-between gap-4">
+                                        <dt className="text-sand">
+                                            {t('Bedrag')}
+                                        </dt>
+                                        <dd className="text-cream">
+                                            €{orderReturn.refund_amount}
+                                        </dd>
+                                    </div>
+                                ) : null}
+                                {orderReturn.resolved_at ? (
+                                    <div className="flex justify-between gap-4">
+                                        <dt className="text-sand">
+                                            {t('Datum')}
+                                        </dt>
+                                        <dd className="text-cream">
+                                            {orderReturn.resolved_at}
+                                        </dd>
+                                    </div>
+                                ) : null}
+                                {orderReturn.payment_method ? (
+                                    <div className="flex justify-between gap-4">
+                                        <dt className="text-sand">
+                                            {t('Betaalmethode')}
+                                        </dt>
+                                        <dd className="text-cream">
+                                            {t(orderReturn.payment_method)}
+                                        </dd>
+                                    </div>
+                                ) : null}
+                            </dl>
+                        </>
+                    ) : showShip ? (
+                        <>
+                            <MemberSectionTitle title={t('Instructies')} />
+                            <p className="text-sand">
+                                {t('Stuur het artikel binnen 14 dagen naar:')}
+                            </p>
+                            <p className="mt-2 whitespace-pre-line text-cream">
+                                {orderReturn.return_address}
+                            </p>
+                            {orderReturn.ship_by ? (
+                                <p className="mt-4 font-sans text-sm text-gold">
+                                    {t('Versturen tot')} {orderReturn.ship_by}
+                                </p>
+                            ) : null}
+                        </>
+                    ) : (
+                        <>
+                            <MemberSectionTitle title={t('Status')} />
+                            <p className="text-sand">
+                                {t(orderReturn.status_label)}
+                            </p>
+                        </>
+                    )}
                 </MemberPanel>
 
                 <MemberPanel>
