@@ -132,7 +132,11 @@ export default function MemberReturnShow({
 
                 <MemberPanel>
                     <MemberSectionTitle
-                        title={t('Trackingnummer toevoegen')}
+                        title={
+                            orderReturn.can_add_tracking
+                                ? t('Trackingnummer toevoegen')
+                                : t('Tracking')
+                        }
                     />
                     {orderReturn.can_add_tracking ? (
                         <Form

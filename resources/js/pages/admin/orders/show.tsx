@@ -196,7 +196,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                             <ConfirmDeleteDialog
                                 title={t('Terugbetaling bevestigen')}
                                 description={t(
-                                    '€{{amount}} terugbetalen aan de klant?',
+                                    '{{amount}} terugbetalen aan de klant?',
                                     { amount: order.amount },
                                 )}
                                 confirmLabel={t('Markeer als terugbetaald')}

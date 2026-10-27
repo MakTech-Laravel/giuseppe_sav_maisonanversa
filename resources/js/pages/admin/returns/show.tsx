@@ -95,10 +95,11 @@ export default function AdminReturnShow({
                                                 'Terugbetaling bevestigen',
                                             )}
                                             description={t(
-                                                '€{{amount}} terugbetalen aan de klant?',
+                                                '{{amount}} terugbetalen aan de klant?',
                                                 {
-                                                    amount:
-                                                        expectedAmount || '—',
+                                                    amount: expectedAmount
+                                                        ? `€${expectedAmount}`
+                                                        : '—',
                                                 },
                                             )}
                                             confirmLabel={t(

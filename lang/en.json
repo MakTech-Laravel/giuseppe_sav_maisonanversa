@@ -2882,7 +2882,7 @@
     "— Yusuf Savran, Oprichter Maison Anversa": "— Yusuf Savran, Founder Maison Anversa",
     "“{{name}}” definitief verwijderen?": "Permanently delete “{{name}}”?",
     "“{{title}}” en bijbehorende bijlagen permanent verwijderen?": "Permanently delete “{{title}}” and its attachments?",
-    "€{{amount}} terugbetalen aan de klant?": "Refund €{{amount}} to the customer?",
+    "{{amount}} terugbetalen aan de klant?": "Refund {{amount}} to the customer?",
     "← Terug": "← Back",
     "← Terug naar de Kleedkamer": "← Back to the Dressing Room",
     "← Terug naar het Journal": "← Back to the Journal",
