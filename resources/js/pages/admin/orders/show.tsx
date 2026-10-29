@@ -1,6 +1,7 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { ArrowLeft, ReceiptText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { AdminDatePicker } from '@/components/admin/admin-date-picker';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { ConfirmDeleteDialog } from '@/components/admin/confirm-delete-dialog';
 import InputError from '@/components/input-error';
@@ -241,17 +242,12 @@ export default function ShowOrder({ order }: { order: Order }) {
                             <Label htmlFor="delivered-on">
                                 {t('Geleverd op')}
                             </Label>
-                            <input
+                            <AdminDatePicker
                                 id="delivered-on"
-                                type="date"
                                 value={deliveryForm.data.delivered_on}
-                                onChange={(event) =>
-                                    deliveryForm.setData(
-                                        'delivered_on',
-                                        event.target.value,
-                                    )
+                                onChange={(next) =>
+                                    deliveryForm.setData('delivered_on', next)
                                 }
-                                className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
                             />
                             <InputError
                                 message={deliveryForm.errors.delivered_on}

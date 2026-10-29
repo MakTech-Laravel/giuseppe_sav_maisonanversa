@@ -17,7 +17,6 @@ import {
     MessageCircle,
     MessagesSquare,
     Package,
-    Radio,
     RotateCcw,
     ServerCog,
     Settings2,
@@ -66,7 +65,6 @@ import adminNotifications from '@/routes/admin/notifications';
 import adminNotificationTest from '@/routes/admin/notifications/test';
 import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
-import adminRealtime from '@/routes/admin/realtime';
 import adminServersMaintenance from '@/routes/admin/servers-maintenance';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSiteSettings from '@/routes/admin/site-settings';
@@ -103,12 +101,6 @@ function buildNavGroups(
                     href: adminNotificationTest.index(locale),
                     icon: BellRing,
                     permissions: [PERMISSIONS.NOTIFICATIONS.TEST],
-                },
-                {
-                    title: t('Realtime console'),
-                    href: adminRealtime.index(locale),
-                    icon: Radio,
-                    permissions: [PERMISSIONS.REALTIME.VIEW],
                 },
                 {
                     title: t('Reverb Server'),

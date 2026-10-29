@@ -123,14 +123,10 @@ test('the health endpoint reports the target without leaking the secret', functi
         ->not->toContain('abcdefghijklmnop');
 });
 
-test('the sidebar links the realtime console behind realtime.view', function () {
+test('the sidebar hides the realtime console', function () {
     $source = file_get_contents(resource_path('js/components/app-sidebar.tsx'));
 
-    $title = strpos($source, "t('Realtime console')");
-    $next = strpos($source, 'title:', $title + 1);
-
-    expect($title)->not->toBeFalse()
-        ->and(substr($source, $title, $next - $title))
-        ->toContain('adminRealtime.index(locale)')
-        ->toContain('PERMISSIONS.REALTIME.VIEW');
+    expect($source)
+        ->not->toContain("t('Realtime console')")
+        ->not->toContain('adminRealtime');
 });

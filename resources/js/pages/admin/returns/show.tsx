@@ -1,6 +1,7 @@
 import { Form, Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AdminDatePicker } from '@/components/admin/admin-date-picker';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
     AdminPanel,
@@ -60,6 +61,7 @@ export default function AdminReturnShow({
     const [editingTracking, setEditingTracking] = useState(
         !orderReturn.tracking_number,
     );
+    const [deadline, setDeadline] = useState('');
 
     useEffect(() => {
         if (orderReturn.tracking_number) {
@@ -70,6 +72,7 @@ export default function AdminReturnShow({
     return (
         <>
             <Head title={orderReturn.number} />
+            <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
             <AdminPageHeader
                 title={orderReturn.number}
                 description={`${orderReturn.order_reference ?? ''} · ${orderReturn.customer ?? ''}`}
@@ -362,17 +365,20 @@ export default function AdminReturnShow({
                                     <Label htmlFor="return_deadline_at">
                                         {t('Nieuwe deadline')}
                                     </Label>
-                                    <Input
+                                    <AdminDatePicker
                                         id="return_deadline_at"
                                         name="return_deadline_at"
-                                        type="date"
+                                        value={deadline}
+                                        onChange={setDeadline}
                                         required
+                                        disablePast
                                     />
                                 </div>
                                 <Button
                                     type="submit"
                                     variant="outline"
                                     className="w-full"
+                                    disabled={!deadline}
                                 >
                                     {t('Opslaan')}
                                 </Button>
@@ -540,6 +546,7 @@ export default function AdminReturnShow({
                     </AdminPanel>
                 </div>
             </AdminResourceShell>
+            </div>
         </>
     );
 }
