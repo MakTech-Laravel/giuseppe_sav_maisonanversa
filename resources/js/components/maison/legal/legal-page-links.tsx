@@ -59,7 +59,7 @@ export function LegalPageLinks({ slug, preview = false }: LegalPageLinksProps) {
         );
     }
 
-    if (slug === 'care') {
+    if (slug === 'care' || slug === 'shipping') {
         return (
             <p>
                 {t('Vragen? Bezoek de')}{' '}

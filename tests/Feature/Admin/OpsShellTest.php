@@ -289,6 +289,32 @@ test('charge.refunded webhook marks the order refunded idempotently', function (
     expect($order->fresh()->status)->toBe(OrderStatus::Refunded);
 });
 
+test('partial charge.refunded webhook does not mark the order refunded', function () {
+    $order = Order::factory()->paid()->create([
+        'stripe_payment_intent_id' => 'pi_webhook_partial_refund',
+        'status' => OrderStatus::Delivered,
+    ]);
+
+    $listener = app(StripeEventListener::class);
+    $payload = [
+        'type' => 'charge.refunded',
+        'data' => [
+            'object' => [
+                'id' => 'ch_partial_1',
+                'object' => 'charge',
+                'payment_intent' => 'pi_webhook_partial_refund',
+                'refunded' => false,
+                'amount' => 10000,
+                'amount_refunded' => 1000,
+            ],
+        ],
+    ];
+
+    $listener->handle(new WebhookReceived($payload));
+
+    expect($order->fresh()->status)->toBe(OrderStatus::Delivered);
+});
+
 test('staff can view community moderation', function () {
     CommunityPost::factory()->create();
 

@@ -22,7 +22,7 @@ export function SiteTopbar({ onNewsletter }: { onNewsletter: () => void }) {
             </span>
 
             <span className="min-w-0 truncate text-center font-serif text-[10px] font-medium tracking-[0.12em] text-gold uppercase ma-lg:text-[13px] ma-lg:tracking-[0.2em]">
-                {t('Eerste Editie — Beperkt tot 100 Stuks')}
+                {t('Founding Edition — 100 Genummerde Stuks')}
             </span>
 
             <div className="hidden items-center gap-6 ma-lg:flex">

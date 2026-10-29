@@ -37,24 +37,46 @@ HTML,
 <p>Meld problemen binnen 14 dagen na levering zodat we een passende oplossing kunnen bieden.</p>
 HTML,
             'shipping' => <<<'HTML'
-<h2>Verzending &amp; Retour</h2>
-<p>Europa: verzending inbegrepen. Buiten Europa: op aanvraag.</p>
+<h1>Verzending &amp; Retour</h1>
+<p>Elk Heritage No.001-racket wordt met de hand gecontroleerd, verpakt en verzekerd verzonden.</p>
+<h2>Verzending</h2>
+<p>Binnen Europa is verzending inbegrepen.</p>
+<p>Elke zending is verzekerd en volgbaar. Zodra je racket vertrekt, ontvang je een e-mail met je trackinglink.</p>
+<p>Buiten Europa verzenden we op aanvraag. Eventuele invoerrechten en lokale taksen zijn dan voor de koper.</p>
+<h2>Bij ontvangst</h2>
+<p>Controleer je pakket bij levering. Is de verpakking beschadigd of ontbreekt er iets? Laat het ons binnen 48 uur weten, met foto's, via de <a href="/nl/contact">contactpagina</a>.</p>
 <h2>Retour</h2>
-<p>U heeft 14 dagen bedenktijd vanaf de dag na levering. Start een retour via Mijn account → Bestellingen → Retourneren, of via <a href="/nl/returns">maisonanversa.com/nl/retour</a> (EN: <a href="/en/returns">/en/returns</a>, FR: <a href="/fr/returns">/fr/retours</a>). Stuur het artikel ongebruikt mee met originele verpakking, Heritage Passport en accessoires. De kosten van de retourzending zijn voor u, tenzij het artikel beschadigd of defect aankwam.</p>
+<p>Je hebt 14 dagen na levering om je aankoop te herroepen, zonder opgave van reden. Laat het ons binnen die termijn weten via de <a href="/nl/contact">contactpagina</a>, met je bestelnummer. Daarna heb je nog 14 dagen om het racket terug te sturen.</p>
+<p>Het racket moet ongebruikt zijn: niet bespeeld, en de beschermfolie en labels zijn intact. Het moet ook volledig zijn, met het Heritage Passport, de dust bag, de rackettas en de originele verpakking.</p>
+<p>De kosten van de retourzending zijn voor jou. We raden een verzekerde zending met tracking aan, want tot het racket bij ons is aangekomen, ligt het risico bij de afzender.</p>
+<p>Annuleer je vóór verzending? Dan betalen we het volledige bedrag terug.</p>
+<h2>De Founding Circle</h2>
+<p>Je nummer wordt voor je gereserveerd zodra je bestelling betaald is. 14 dagen na levering is je inschrijving in het register definitief.</p>
+<p>Stuur je het racket terug, dan komt je nummer opnieuw vrij en wordt je naam uit het register verwijderd.</p>
 <h2>Terugbetaling</h2>
-<p>Na ontvangst of bewijs van verzending betalen we binnen 14 dagen terug via het oorspronkelijke betaalmiddel.</p>
+<p>Zodra we het racket ontvangen en gecontroleerd hebben, betalen we je terug, binnen 14 dagen, via het oorspronkelijke betaalmiddel. De oorspronkelijke standaard verzendkosten zitten daar ook in.</p>
+<p>Komt het racket gebruikt, beschadigd of onvolledig terug? Dan kunnen we een vergoeding inhouden voor de waardevermindering.</p>
+<p>Vragen? Neem contact met ons op via de <a href="/nl/contact">contactpagina</a>.</p>
 HTML,
             'care' => <<<'HTML'
-<h2>Zorg &amp; Garantie</h2>
-<p>Heritage No.001 is gebouwd om lang mee te gaan.</p>
-<h2>Onderhoud</h2>
-<ul>
-<li>Leder: tweemaal per jaar neutrale balsem.</li>
-<li>Carbon: reinigen met zachte droge doek.</li>
-<li>Bewaring: droog en uit direct zonlicht.</li>
-</ul>
+<h1>Zorg &amp; Garantie</h1>
+<p>Heritage No.001 is gebouwd om lang mee te gaan. Met de juiste zorg blijft het jaren mooi en speelklaar.</p>
+<h2>Het slagvlak</h2>
+<p>Reinig het matte oppervlak en het reliëf van het huis met een zachte, droge doek.</p>
+<p>Gebruik geen water, zeep, alcohol of oplosmiddelen, en schrob niet over het reliëf.</p>
+<h2>De lederen grip</h2>
+<p>Laat de grip na het spelen aan de lucht drogen.</p>
+<p>Verzorg het leder twee keer per jaar met een neutrale lederbalsem.</p>
+<p>Leder werkt en verkleurt licht met de tijd. Dat hoort bij het karakter van het materiaal.</p>
+<h2>Bewaring</h2>
+<p>Bewaar je racket in zijn tas of dust bag, op een droge plaats en uit direct zonlicht.</p>
+<p>Laat het nooit in een warme auto liggen. Hitte kan de kern van EVA aantasten.</p>
 <h2>Garantie</h2>
-<p>Garantie dekt fabricagefouten, niet normale slijtage.</p>
+<p>Je hebt recht op de wettelijke garantie van 2 jaar vanaf levering. Die dekt fabricagefouten en gebreken die al aanwezig waren bij levering.</p>
+<p>Niet gedekt zijn normale slijtage van de grip en het oppervlak, krassen, schade door een slag tegen de muur, de vloer of een ander racket, barsten door impact, schade door verkeerde bewaring zoals hitte of vocht, en aanpassingen aan het racket.</p>
+<p>Een garantievraag? Stuur ons via de <a href="/nl/contact">contactpagina</a> je bestelnummer, het serienummer uit je Heritage Passport (Nº 001–100) en duidelijke foto's. We bekijken elke vraag persoonlijk en zoeken een oplossing: herstelling, vervanging of terugbetaling, zoals de wet voorziet.</p>
+<p>Bewaar je Heritage Passport goed. Het is je bewijs van echtheid en van aankoop.</p>
+<p>Vragen? Neem contact met ons op via de <a href="/nl/contact">contactpagina</a>.</p>
 HTML,
         ];
 

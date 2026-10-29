@@ -13,7 +13,7 @@ class OrderPresenter
      */
     public function summary(Order $order): array
     {
-        $order->loadMissing('product');
+        $order->loadMissing(['product', 'latestPayment']);
 
         $amount = Money::format((string) $order->amount).__(' €');
         $name = $order->product?->translated('name') ?? __('Product');
@@ -31,7 +31,7 @@ class OrderPresenter
             'label' => $label,
             'date' => $order->created_at?->toDateString() ?? '',
             'amount' => $amount,
-            'status' => $this->statusLabel($order->status),
+            'status' => $this->displayStatusLabel($order),
             'status_key' => $order->status->value,
             'method' => __('Stripe'),
         ];
@@ -122,7 +122,7 @@ class OrderPresenter
         $stages = [
             [
                 'key' => OrderStatus::Paid,
-                'label' => __('Aangemaakt'),
+                'label' => __('Betaald'),
                 'at' => $order->created_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
             [
@@ -168,7 +168,7 @@ class OrderPresenter
     {
         return match ($status) {
             OrderStatus::Incomplete => __('In behandeling'),
-            OrderStatus::Paid => __('Aangemaakt'),
+            OrderStatus::Paid => __('Betaald'),
             OrderStatus::Processing => __('In verwerking'),
             OrderStatus::Canceled => __('Geannuleerd'),
             OrderStatus::Failed => __('Mislukt'),
@@ -185,7 +185,25 @@ class OrderPresenter
             PaymentStatus::Paid => __('Betaald'),
             PaymentStatus::Failed => __('Betaling mislukt'),
             PaymentStatus::Canceled => __('Betaling geannuleerd'),
+            PaymentStatus::PartiallyRefunded => __('Gedeeltelijk terugbetaald'),
             PaymentStatus::Refunded => __('Terugbetaald'),
         };
+    }
+
+    /**
+     * Order status stays delivered/shipped after a partial refund; the badge
+     * still reads Partially refunded so admin and member UIs match payment.
+     */
+    private function displayStatusLabel(Order $order): string
+    {
+        $payment = $order->relationLoaded('latestPayment')
+            ? $order->latestPayment
+            : $order->latestPayment()->first();
+
+        if ($payment?->status === PaymentStatus::PartiallyRefunded) {
+            return __('Gedeeltelijk terugbetaald');
+        }
+
+        return $this->statusLabel($order->status);
     }
 }

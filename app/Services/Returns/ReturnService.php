@@ -3,6 +3,7 @@
 namespace App\Services\Returns;
 
 use App\Enums\NotificationType;
+use App\Enums\PaymentStatus;
 use App\Enums\ReturnReason;
 use App\Enums\ReturnStatus;
 use App\Jobs\Returns\SendReturnAdminRequestMail;
@@ -241,8 +242,18 @@ class ReturnService
             'return-partial-'.$return->id.'-'.$cents,
         );
 
+        // Partial compensation keeps the Heritage number. Restore Allocated if
+        // the piece was marked Returning for this RMA; never releaseForOrder.
         if ($return->includesFoundingRacket()) {
-            $this->registrar->releaseForOrder($return->order);
+            $this->registrar->restoreAllocatedForOrder($return->order);
+        }
+
+        $order = $return->order->loadMissing('latestPayment');
+
+        if ($order->latestPayment !== null) {
+            $order->latestPayment->fill([
+                'status' => PaymentStatus::PartiallyRefunded,
+            ])->save();
         }
 
         $from = $return->status;

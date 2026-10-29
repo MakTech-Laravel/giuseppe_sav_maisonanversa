@@ -47,7 +47,7 @@ final class MaisonSeo
     private const PAGES = [
         'home' => [
             'title' => 'Maison Anversa — Europees erfgoedhuis voor sport en lifestyle',
-            'description' => 'Een Europees erfgoedhuis, geworteld in Antwerpen. Heritage No.001 — beperkt tot 100 stuks. Elk genummerd. De Founding Edition wordt nooit herhaald.',
+            'description' => 'Een Europees erfgoedhuis, geworteld in Antwerpen. De Founding Edition is beperkt tot 100 genummerde stuks en wordt nooit opnieuw gemaakt.',
         ],
         'house' => [
             'title' => 'Het Huis — Maison Anversa',

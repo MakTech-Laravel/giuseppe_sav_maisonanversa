@@ -1,4 +1,5 @@
 import { Form, Head, Link, router, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import {
@@ -52,6 +53,19 @@ export default function AdminReturnShow({
     const { t } = useTranslation();
     const { locale } = usePage().props;
     const expectedAmount = orderReturn.expected_refund_amount ?? '';
+    const [partialAmount, setPartialAmount] = useState(
+        expectedAmount || '',
+    );
+    const [partialReason, setPartialReason] = useState('');
+    const [editingTracking, setEditingTracking] = useState(
+        !orderReturn.tracking_number,
+    );
+
+    useEffect(() => {
+        if (orderReturn.tracking_number) {
+            setEditingTracking(false);
+        }
+    }, [orderReturn.tracking_number, orderReturn.carrier]);
 
     return (
         <>
@@ -140,11 +154,7 @@ export default function AdminReturnShow({
 
                         {orderReturn.can_refund ? (
                             <AdminPanel title={t('Gedeeltelijk terugbetalen')}>
-                                <Form
-                                    action={`/${locale}/admin/returns/${orderReturn.id}/partial-refund`}
-                                    method="post"
-                                    className="space-y-3"
-                                >
+                                <div className="space-y-3">
                                     <div className="space-y-1.5">
                                         <Label htmlFor="refund_amount">
                                             {t('Gedeeltelijk bedrag')}
@@ -157,7 +167,12 @@ export default function AdminReturnShow({
                                             max={expectedAmount || undefined}
                                             step="0.01"
                                             required
-                                            defaultValue={expectedAmount}
+                                            value={partialAmount}
+                                            onChange={(event) =>
+                                                setPartialAmount(
+                                                    event.target.value,
+                                                )
+                                            }
                                         />
                                         {expectedAmount ? (
                                             <p className="text-xs text-muted-foreground">
@@ -175,16 +190,59 @@ export default function AdminReturnShow({
                                             name="refund_reason"
                                             required
                                             rows={3}
+                                            value={partialReason}
+                                            onChange={(event) =>
+                                                setPartialReason(
+                                                    event.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
-                                    <Button
-                                        type="submit"
-                                        variant="outline"
-                                        className="w-full"
+                                    <ConfirmDeleteDialog
+                                        title={t('Terugbetaling bevestigen')}
+                                        description={t(
+                                            '{{amount}} terugbetalen aan de klant?',
+                                            {
+                                                amount: partialAmount
+                                                    ? `€${partialAmount}`
+                                                    : '—',
+                                            },
+                                        )}
+                                        confirmLabel={t(
+                                            'Gedeeltelijk terugbetalen',
+                                        )}
+                                        onConfirm={() => {
+                                            if (
+                                                !partialAmount ||
+                                                !partialReason.trim()
+                                            ) {
+                                                return;
+                                            }
+
+                                            router.post(
+                                                `/${locale}/admin/returns/${orderReturn.id}/partial-refund`,
+                                                {
+                                                    refund_amount:
+                                                        partialAmount,
+                                                    refund_reason:
+                                                        partialReason,
+                                                },
+                                            );
+                                        }}
                                     >
-                                        {t('Gedeeltelijk terugbetalen')}
-                                    </Button>
-                                </Form>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full"
+                                            disabled={
+                                                !partialAmount ||
+                                                !partialReason.trim()
+                                            }
+                                        >
+                                            {t('Gedeeltelijk terugbetalen')}
+                                        </Button>
+                                    </ConfirmDeleteDialog>
+                                </div>
                             </AdminPanel>
                         ) : null}
 
@@ -218,45 +276,80 @@ export default function AdminReturnShow({
                         ) : null}
 
                         <AdminPanel title={t('Tracking')}>
-                            <Form
-                                action={`/${locale}/admin/returns/${orderReturn.id}/tracking`}
-                                method="post"
-                                className="space-y-3"
-                            >
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="carrier">
-                                        {t('Vervoerder')}
-                                    </Label>
-                                    <Input
-                                        id="carrier"
-                                        name="carrier"
-                                        defaultValue={
-                                            orderReturn.carrier ?? ''
+                            {!editingTracking &&
+                            orderReturn.tracking_number ? (
+                                <div className="space-y-3">
+                                    <dl className="space-y-2 text-sm">
+                                        <div className="flex gap-3">
+                                            <dt className="w-28 shrink-0 text-muted-foreground">
+                                                {t('Vervoerder')}
+                                            </dt>
+                                            <dd className="font-medium">
+                                                {orderReturn.carrier || '—'}
+                                            </dd>
+                                        </div>
+                                        <div className="flex gap-3">
+                                            <dt className="w-28 shrink-0 text-muted-foreground">
+                                                {t('Trackingnummer')}
+                                            </dt>
+                                            <dd className="font-medium break-all">
+                                                {orderReturn.tracking_number}
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="w-full"
+                                        onClick={() =>
+                                            setEditingTracking(true)
                                         }
-                                        required
-                                    />
+                                    >
+                                        {t('Tracking bewerken')}
+                                    </Button>
                                 </div>
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="tracking_number">
-                                        {t('Trackingnummer')}
-                                    </Label>
-                                    <Input
-                                        id="tracking_number"
-                                        name="tracking_number"
-                                        defaultValue={
-                                            orderReturn.tracking_number ?? ''
-                                        }
-                                        required
-                                    />
-                                </div>
-                                <Button
-                                    type="submit"
-                                    variant="outline"
-                                    className="w-full"
+                            ) : (
+                                <Form
+                                    action={`/${locale}/admin/returns/${orderReturn.id}/tracking`}
+                                    method="post"
+                                    className="space-y-3"
                                 >
-                                    {t('Tracking opslaan')}
-                                </Button>
-                            </Form>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="carrier">
+                                            {t('Vervoerder')}
+                                        </Label>
+                                        <Input
+                                            id="carrier"
+                                            name="carrier"
+                                            defaultValue={
+                                                orderReturn.carrier ?? ''
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="tracking_number">
+                                            {t('Trackingnummer')}
+                                        </Label>
+                                        <Input
+                                            id="tracking_number"
+                                            name="tracking_number"
+                                            defaultValue={
+                                                orderReturn.tracking_number ??
+                                                ''
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        variant="outline"
+                                        className="w-full"
+                                    >
+                                        {t('Tracking opslaan')}
+                                    </Button>
+                                </Form>
+                            )}
                         </AdminPanel>
 
                         <AdminPanel title={t('Termijn verlengen')}>

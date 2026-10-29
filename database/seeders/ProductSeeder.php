@@ -20,7 +20,7 @@ class ProductSeeder extends Seeder
         $product = Product::query()->updateOrCreate(
             ['slug' => Product::FOUNDING_SLUG],
             [
-                'name' => 'Heritage No.001 — Founding Edition',
+                'name' => 'Heritage No.001 · Founding Edition',
                 'type' => ProductType::LimitedEdition,
                 'status' => ProductStatus::Active,
                 'amount' => '249.00',
@@ -31,9 +31,9 @@ class ProductSeeder extends Seeder
                 'grants_founding_circle' => true,
                 'expected_delivery_label' => 'Q1 2027 — ONDER VOORBEHOUD VAN PRODUCTIE',
                 'eyebrow' => 'Maison Anversa · Founding Edition',
-                'hero_eyebrow' => 'Founding Edition · 100 Stuks in Europa',
-                'hero_subtitle' => 'Het eerste hoofdstuk van Maison Anversa. Beperkt tot 100 stuks. Elk genummerd. De Founding Edition wordt nooit herhaald.',
-                'description' => 'Heritage No.001 is niet zomaar een padelracket. Het is het eerste object van een huis dat wordt gebouwd voor de lange termijn. Elk van de 100 stuks is individueel genummerd en wordt vergezeld van een volledige Heritage ervaring.',
+                'hero_eyebrow' => 'Founding Edition · 100 Genummerde Stuks',
+                'hero_subtitle' => 'Founding Edition 2026',
+                'description' => 'De Founding Edition is beperkt tot 100 genummerde stuks en wordt nooit opnieuw gemaakt.',
                 'sort_order' => 0,
                 'gallery' => [
                     'heritage-001-front',
@@ -194,17 +194,17 @@ class ProductSeeder extends Seeder
             ProductSectionKey::Service->value => [
                 'eyebrow' => 'Service & Veiligheid',
                 'heading' => 'Met zorg geleverd.',
-                'intro' => 'Voorgenomen servicebeleid — definitief bij lancering.',
+                'intro' => 'Elke zending is verzekerd en volgbaar. Retour binnen 14 dagen na levering.',
                 'items' => [
                     [
                         'icon' => '◆',
                         'title' => 'Verzending',
-                        'body' => 'Gratis verzekerd verzonden binnen de Benelux. EU-levering in 3–5 werkdagen. Elk pakket handmatig gecontroleerd en verzegeld.',
+                        'body' => 'Binnen Europa is verzending inbegrepen. Elke zending is verzekerd en volgbaar.',
                     ],
                     [
                         'icon' => '↺',
-                        'title' => '30 dagen retour',
-                        'body' => 'Niet overtuigd? Retour binnen 30 dagen, mits ongebruikt. Volledige terugbetaling, zonder vragen.',
+                        'title' => '14 dagen retour',
+                        'body' => 'Je hebt 14 dagen na levering om je aankoop te herroepen, zonder opgave van reden.',
                     ],
                     [
                         'icon' => '◇',
@@ -232,7 +232,7 @@ class ProductSeeder extends Seeder
         return [
             [
                 'question' => 'Wanneer wordt mijn racket geleverd?',
-                'answer' => 'De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie. Verwachte levering is Q1 2027. U ontvangt tussentijds updates over de voortgang.',
+                'answer' => 'De Founding Edition wordt in één beperkte productieronde van 100 genummerde stuks vervaardigd en wordt nooit opnieuw gemaakt. Verwachte levering is Q1 2027 — onder voorbehoud van productie.',
             ],
             [
                 'question' => 'Hoe weet ik dat mijn nummer uniek is?',

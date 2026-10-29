@@ -8,6 +8,7 @@ enum PaymentStatus: string
     case Paid = 'paid';
     case Failed = 'failed';
     case Canceled = 'canceled';
+    case PartiallyRefunded = 'partially_refunded';
     case Refunded = 'refunded';
 
     public function isTerminal(): bool
@@ -22,6 +23,6 @@ enum PaymentStatus: string
 
     public function isPaid(): bool
     {
-        return $this === self::Paid;
+        return $this === self::Paid || $this === self::PartiallyRefunded;
     }
 }

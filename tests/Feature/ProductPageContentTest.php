@@ -14,10 +14,11 @@ test('product page uses dynamic content and faq props', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('product.slug', Product::FOUNDING_SLUG)
-            ->where('product.name', 'Heritage No.001 — Founding Edition')
+            ->where('product.name', 'Heritage No.001 · Founding Edition')
             ->where('product.eyebrow', 'Maison Anversa · Founding Edition')
-            ->where('product.hero_eyebrow', 'Founding Edition · 100 Stuks in Europa')
-            ->where('product.description', 'Heritage No.001 is niet zomaar een padelracket. Het is het eerste object van een huis dat wordt gebouwd voor de lange termijn. Elk van de 100 stuks is individueel genummerd en wordt vergezeld van een volledige Heritage ervaring.')
+            ->where('product.hero_eyebrow', 'Founding Edition · 100 Genummerde Stuks')
+            ->where('product.hero_subtitle', 'Founding Edition 2026')
+            ->where('product.description', 'De Founding Edition is beperkt tot 100 genummerde stuks en wordt nooit opnieuw gemaakt.')
             ->has('product.gallery', 4)
             // Sections are ordered by sort_order (ProductSectionKey::defaultSortOrder()):
             // specs=0, includes=1, guarantees=2, unboxing=3, craft=4, trust=5, service=6, faq=7, related=8.
@@ -32,6 +33,35 @@ test('product page uses dynamic content and faq props', function () {
             ->has('product.sections.5.items', 4)
             ->has('product.faqs')
             ->has('related'));
+});
+
+test('english product page uses founding edition translations', function () {
+    Artisan::call('app:import-static-content-command');
+
+    $product = Product::founding();
+    expect($product)->not->toBeNull();
+
+    $product->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'hero_eyebrow'],
+        [
+            'value' => 'Founding Edition · 100 Numbered Pieces',
+            'source_hash' => $product->translationSourceHash('hero_eyebrow'),
+        ],
+    );
+    $product->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'description'],
+        [
+            'value' => 'The Founding Edition is limited to 100 numbered pieces and will never be made again.',
+            'source_hash' => $product->translationSourceHash('description'),
+        ],
+    );
+
+    $this->get('/en/products/'.Product::FOUNDING_SLUG)
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('product.hero_eyebrow', 'Founding Edition · 100 Numbered Pieces')
+            ->where('product.description', 'The Founding Edition is limited to 100 numbered pieces and will never be made again.')
+            ->where('product.name', 'Heritage No.001 · Founding Edition'));
 });
 
 test('staff can update product storefront copy fields', function () {

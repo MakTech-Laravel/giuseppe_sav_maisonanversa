@@ -275,19 +275,44 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             className={modalInputClassName}
                         />
                     </div>
-                    <input
-                        type="text"
+                    <select
                         required
-                        maxLength={2}
                         value={shippingCountry}
                         onChange={(event) =>
-                            setShippingCountry(
-                                event.target.value.toUpperCase().slice(0, 2),
-                            )
+                            setShippingCountry(event.target.value)
                         }
-                        placeholder={t('Land (ISO, bv. BE)')}
-                        className={modalInputClassName}
-                    />
+                        className={cn(modalInputClassName, 'cursor-pointer')}
+                        aria-label={t('Land')}
+                    >
+                        <option value="" disabled>
+                            {t('Land')}
+                        </option>
+                        {[
+                            ['BE', 'Belgium'],
+                            ['NL', 'Netherlands'],
+                            ['FR', 'France'],
+                            ['DE', 'Germany'],
+                            ['LU', 'Luxembourg'],
+                            ['AT', 'Austria'],
+                            ['IT', 'Italy'],
+                            ['ES', 'Spain'],
+                            ['PT', 'Portugal'],
+                            ['IE', 'Ireland'],
+                            ['GB', 'United Kingdom'],
+                            ['CH', 'Switzerland'],
+                            ['SE', 'Sweden'],
+                            ['DK', 'Denmark'],
+                            ['FI', 'Finland'],
+                            ['NO', 'Norway'],
+                            ['PL', 'Poland'],
+                            ['CZ', 'Czechia'],
+                            ['US', 'United States'],
+                        ].map(([code, label]) => (
+                            <option key={code} value={code}>
+                                {label} ({code})
+                            </option>
+                        ))}
+                    </select>
 
                     {error && (
                         <p role="alert" className="text-[13px] text-choc3">

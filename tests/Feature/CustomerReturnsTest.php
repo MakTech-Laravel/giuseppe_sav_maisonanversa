@@ -177,7 +177,7 @@ test('full racket return flow marks returning then available after refund', func
     expect(__('Retour terugbetaald'))->toBe('Return refunded');
 });
 
-test('partial refund stores amount and frees the founding number', function () {
+test('partial refund stores amount and keeps the founding number', function () {
     Queue::fake();
     fakeStripeRefund('re_partial_1');
 
@@ -202,10 +202,16 @@ test('partial refund stores amount and frees the founding number', function () {
     app(ReturnService::class)->addTracking($return, $user, 'DHL', 'DHL1');
     app(ReturnService::class)->refundPartial($return->fresh(), $admin, '200.00', 'Loss in value');
 
+    $order->refresh()->load('latestPayment', 'editionPiece');
+
     expect($return->fresh()->status)->toBe(ReturnStatus::PartiallyRefunded)
         ->and((string) $return->fresh()->refund_amount)->toBe('200.00')
         ->and($return->fresh()->refund_reason)->toBe('Loss in value')
-        ->and(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeFalse();
+        ->and(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeTrue()
+        ->and($order->edition_number)->toBe(18)
+        ->and($order->status)->toBe(OrderStatus::Delivered)
+        ->and($order->latestPayment?->status)->toBe(PaymentStatus::PartiallyRefunded)
+        ->and($order->editionPiece?->status)->toBe(EditionPieceStatus::Allocated);
 });
 
 test('declined return restores the inscribed edition', function () {

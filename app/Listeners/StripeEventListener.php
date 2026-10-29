@@ -119,6 +119,17 @@ class StripeEventListener
             return;
         }
 
+        // Partial refunds also emit charge.refunded with refunded=false.
+        // Only full charge refunds unwind order + edition inventory.
+        if (($object['refunded'] ?? false) !== true) {
+            Log::info('Stripe partial charge.refunded ignored for full unwind.', [
+                'charge_id' => is_string($object['id'] ?? null) ? $object['id'] : null,
+                'payment_intent' => is_string($object['payment_intent'] ?? null) ? $object['payment_intent'] : null,
+            ]);
+
+            return;
+        }
+
         $paymentIntent = $object['payment_intent'] ?? null;
 
         if (! is_string($paymentIntent) || $paymentIntent === '') {

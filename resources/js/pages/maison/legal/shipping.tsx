@@ -1,5 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import { LegalPageLayout } from '@/components/maison/legal/legal-page-layout';
+import { LegalPageLinks } from '@/components/maison/legal/legal-page-links';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 
 export default function Shipping() {
@@ -14,7 +15,9 @@ export default function Shipping() {
             <LegalPageLayout
                 title="Verzending & Retour"
                 body={legalPage.body}
-            />
+            >
+                <LegalPageLinks slug="shipping" />
+            </LegalPageLayout>
         </>
     );
 }
