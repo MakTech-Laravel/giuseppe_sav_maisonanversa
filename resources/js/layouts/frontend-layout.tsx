@@ -125,38 +125,44 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
 
     useReveal(main);
 
-    const rememberAuthReturnUrl = useCallback((): void => {
-        const returnUrl = `${window.location.pathname}${window.location.search}`;
-        const token = document.cookie
-            .split('; ')
-            .find((row) => row.startsWith('XSRF-TOKEN='))
-            ?.split('=')
-            .slice(1)
-            .join('=');
+    const rememberAuthReturnUrl = useCallback(
+        (options?: { forceHome?: boolean }): void => {
+            const returnUrl = `${window.location.pathname}${window.location.search}`;
+            const token = document.cookie
+                .split('; ')
+                .find((row) => row.startsWith('XSRF-TOKEN='))
+                ?.split('=')
+                .slice(1)
+                .join('=');
 
-        if (!token) {
-            return;
-        }
+            if (!token) {
+                return;
+            }
 
-        void fetch('/auth/intended', {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-XSRF-TOKEN': decodeURIComponent(token),
-            },
-            body: JSON.stringify({ url: returnUrl }),
-        });
-    }, []);
+            void fetch('/auth/intended', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-XSRF-TOKEN': decodeURIComponent(token),
+                },
+                body: JSON.stringify({
+                    url: returnUrl,
+                    force: Boolean(options?.forceHome),
+                }),
+            });
+        },
+        [],
+    );
 
     const requireAuthForCheckout = useCallback((): boolean => {
         if (props.auth?.user) {
             return true;
         }
 
-        rememberAuthReturnUrl();
+        rememberAuthReturnUrl({ forceHome: true });
         setUserAuthView('login');
         setUserModal('auth');
 
@@ -194,8 +200,10 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 setUserModal('order');
             },
             openCertificate: () => setUserModal('certificate'),
-            openAuth: (view: AuthView = 'login') => {
-                rememberAuthReturnUrl();
+            openAuth: (view: AuthView = 'login', options) => {
+                rememberAuthReturnUrl({
+                    forceHome: Boolean(options?.forceHome),
+                });
                 setUserAuthView(view);
                 setUserModal('auth');
             },

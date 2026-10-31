@@ -6,6 +6,7 @@ use App\Enums\EditionPieceStatus;
 use App\Enums\ProductType;
 use App\Models\EditionPiece;
 use App\Models\Product;
+use App\Services\Home\OpeningRegisterSnapshot;
 use Illuminate\Support\Facades\Cache;
 
 class EditionInventory
@@ -89,6 +90,7 @@ class EditionInventory
     {
         if ($product !== null) {
             Cache::forget($this->cacheKey($product));
+            app(OpeningRegisterSnapshot::class)->bust($product);
 
             return;
         }
@@ -98,6 +100,8 @@ class EditionInventory
         if ($founding !== null) {
             Cache::forget($this->cacheKey($founding));
         }
+
+        app(OpeningRegisterSnapshot::class)->bust();
     }
 
     public function cacheKey(Product $product): string

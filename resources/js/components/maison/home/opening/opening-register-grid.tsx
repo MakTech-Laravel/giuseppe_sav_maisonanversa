@@ -1,17 +1,14 @@
 import { useTranslation } from 'react-i18next';
-
-function pad(n: number): string {
-    return String(n).padStart(3, '0');
-}
+import type { OpeningRegisterPlace } from '@/types/opening-register';
 
 type OpeningRegisterGridProps = {
-    reserved: ReadonlySet<number>;
+    places: OpeningRegisterPlace[];
     selected: number | null;
     onSelect: (n: number | null) => void;
 };
 
 export function OpeningRegisterGrid({
-    reserved,
+    places,
     selected,
     onSelect,
 }: OpeningRegisterGridProps) {
@@ -19,30 +16,28 @@ export function OpeningRegisterGrid({
 
     return (
         <div className="opening-grid" id="opening-grid" role="group">
-            {Array.from({ length: 100 }, (_, index) => {
-                const n = index + 1;
-                const isReserved = reserved.has(n);
-                const isSelected = selected === n;
-                const label = pad(n);
+            {places.map((place) => {
+                const isReserved = place.reserved;
+                const isSelected = selected === place.sequence;
 
                 return (
                     <button
-                        key={n}
+                        key={place.sequence}
                         type="button"
                         className="opening-num"
-                        disabled={isReserved}
+                        disabled={isReserved || place.edition_piece_id === null}
                         aria-pressed={isSelected}
                         aria-label={t(
                             isReserved
                                 ? 'Nº {{n}}, gereserveerd'
                                 : 'Nº {{n}}, beschikbaar',
-                            { n: label },
+                            { n: place.label },
                         )}
                         onClick={() => {
-                            onSelect(isSelected ? null : n);
+                            onSelect(isSelected ? null : place.sequence);
                         }}
                     >
-                        {label}
+                        {place.label}
                     </button>
                 );
             })}

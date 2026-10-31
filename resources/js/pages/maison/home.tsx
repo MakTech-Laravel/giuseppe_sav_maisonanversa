@@ -16,6 +16,7 @@ import { HomeUnboxing } from '@/components/maison/home/home-unboxing';
 import { HomeOpening } from '@/components/maison/home/opening/home-opening';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import type { Edition } from '@/types/edition';
+import type { OpeningRegister } from '@/types/opening-register';
 import type { SessionCard } from '@/types/session';
 
 type HomeProductData = {
@@ -28,19 +29,21 @@ export default function Home({
     edition,
     product,
     hero,
+    openingRegister,
     upcomingSessions = [],
     openSessionsThisWeek = 0,
 }: {
     edition: Edition;
     product?: HomeProductData | null;
     hero: HomeHeroContent;
+    openingRegister: OpeningRegister;
     upcomingSessions?: SessionCard[];
     openSessionsThisWeek?: number;
 }) {
     return (
         <>
             <MaisonSeoHead />
-            <HomeOpening />
+            <HomeOpening openingRegister={openingRegister} />
             <HomeHero edition={edition} hero={hero} />
             <HomeMarquee />
             <HomeIntro />

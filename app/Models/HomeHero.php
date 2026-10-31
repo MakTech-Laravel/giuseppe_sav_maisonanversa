@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\HomeHeroAction;
 use App\Models\Concerns\TranslatesWithDeepL;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HomeHero extends Model
 {
@@ -70,6 +71,7 @@ class HomeHero extends Model
         'title_accent',
         'tagline',
         'show_counter',
+        'opening_product_id',
         'counter_line_one',
         'counter_line_two',
         'primary_label',
@@ -82,6 +84,14 @@ class HomeHero extends Model
         'tertiary_action',
         'tertiary_target',
     ];
+
+    /**
+     * @return BelongsTo<Product, $this>
+     */
+    public function openingProduct(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'opening_product_id');
+    }
 
     /**
      * @return array<string, string>

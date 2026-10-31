@@ -55,8 +55,12 @@ class PostLoginRedirectService
      *
      * Used when auth middleware blocks a guest, and when the Maison auth modal
      * opens on a public page that never hit a protected route.
+     *
+     * Localized home is ignored for casual Log in (role dashboard after login).
+     * Pass $forceHome when the guest was mid-action (Claim / checkout) so they
+     * return to home; never overwrite a non-home intended with home.
      */
-    public function remember(Request $request, ?string $url = null): void
+    public function remember(Request $request, ?string $url = null, bool $forceHome = false): void
     {
         if (! $request->hasSession()) {
             return;
@@ -65,8 +69,27 @@ class PostLoginRedirectService
         $candidate = $url ?? $this->requestUri($request);
         $path = $this->normalizeToRelativePath($candidate, $request);
 
-        if ($path === null || $this->isAuthEntryPath($path) || $this->isLocalizedHomePath($path)) {
+        if ($path === null || $this->isAuthEntryPath($path)) {
             return;
+        }
+
+        if ($this->isLocalizedHomePath($path)) {
+            if (! $forceHome) {
+                return;
+            }
+
+            $existing = $request->session()->get('url.intended');
+            $existingPath = $this->normalizeToRelativePath(
+                is_string($existing) ? $existing : null,
+                $request,
+            );
+
+            if (
+                $existingPath !== null
+                && ! $this->isLocalizedHomePath($existingPath)
+            ) {
+                return;
+            }
         }
 
         $request->session()->put('url.intended', $path);
@@ -221,6 +244,11 @@ class PostLoginRedirectService
 
         if (preg_match('#^/('.$locales.')/admin(?:/|$)#', $path) === 1) {
             return $user->isAdmin();
+        }
+
+        // Staff only resume admin destinations; public/member intended → admin dashboard.
+        if ($user->isAdmin()) {
+            return false;
         }
 
         if (preg_match('#^/('.$locales.')/member(?:/|$)#', $path) === 1) {

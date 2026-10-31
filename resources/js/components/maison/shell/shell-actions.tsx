@@ -13,12 +13,17 @@ export type OrderProductContext = CheckoutShared;
  * The shell owns the modals, so any page that needs to open one reaches through
  * here rather than inventing its own overlay.
  */
+export type OpenAuthOptions = {
+    /** Mid-action resume (Claim / checkout): allow remembering localized home. */
+    forceHome?: boolean;
+};
+
 export type ShellActions = {
     openNewsletter: () => void;
     openOrder: (product?: OrderProductContext) => void;
     openPurchase: (product?: OrderProductContext) => void;
     openCertificate: () => void;
-    openAuth: (view?: AuthView) => void;
+    openAuth: (view?: AuthView, options?: OpenAuthOptions) => void;
 };
 
 const ShellActionsContext = createContext<ShellActions | null>(null);

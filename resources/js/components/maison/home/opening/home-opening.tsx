@@ -2,20 +2,24 @@ import { useTranslation } from 'react-i18next';
 import { OpeningEditionCopy } from '@/components/maison/home/opening/opening-edition-copy';
 import { OpeningGreeting } from '@/components/maison/home/opening/opening-greeting';
 import { OpeningHouse } from '@/components/maison/home/opening/opening-house';
-import {
-    OpeningRegister,
-    openingAvailableCount,
-} from '@/components/maison/home/opening/opening-register';
+import { OpeningRegister } from '@/components/maison/home/opening/opening-register';
 import { OpeningWordmark } from '@/components/maison/home/opening/opening-wordmark';
 import { useHomeOpening } from '@/components/maison/home/opening/use-home-opening';
+import { useResumePendingOpeningClaim } from '@/hooks/use-resume-pending-opening-claim';
+import type { OpeningRegister as OpeningRegisterData } from '@/types/opening-register';
 
 /**
- * Homepage opening: SVG door sequence + static register (Phase 1).
- * Ported from new_home_page/opening-reference.html.
+ * Homepage opening: SVG door sequence + live register (Phase 2).
  */
-export function HomeOpening() {
+export function HomeOpening({
+    openingRegister,
+}: {
+    openingRegister: OpeningRegisterData;
+}) {
     const { t } = useTranslation();
     const { rootRef, className, onHeroClick } = useHomeOpening();
+
+    useResumePendingOpeningClaim(openingRegister);
 
     return (
         <div ref={rootRef} className={className}>
@@ -28,10 +32,14 @@ export function HomeOpening() {
                 <OpeningGreeting />
                 <OpeningHouse />
                 <OpeningWordmark />
-                <OpeningEditionCopy availableCount={openingAvailableCount()} />
+                <OpeningEditionCopy
+                    productName={openingRegister.product.productName}
+                    editionTotal={openingRegister.product.editionTotal}
+                    availableCount={openingRegister.available_count}
+                />
             </section>
 
-            <OpeningRegister />
+            <OpeningRegister openingRegister={openingRegister} />
         </div>
     );
 }
