@@ -15,8 +15,9 @@
         "cashier-stripe-development",
         "fortify-development",
         "laravel-best-practices",
+        "testing-best-practices",
+        "telescope-debugging",
         "wayfinder-development",
-        "pest-testing",
         "inertia-react-development",
         "tailwindcss-development"
     ]
