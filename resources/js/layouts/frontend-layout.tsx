@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
 import { CookieConsentBanner } from '@/components/maison/cookie-consent-banner';
-import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
 import type { AuthView } from '@/components/maison/modals/auth-modal';
 import { MaisonModals } from '@/components/maison/modals/maison-modals';
 import { ContactDock } from '@/components/maison/shell/contact-dock';
@@ -21,8 +20,6 @@ import { SiteTopbar } from '@/components/maison/shell/site-topbar';
 import { RealtimeListeners } from '@/components/realtime/realtime-listeners';
 import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
-import { activePage } from '@/lib/maison-navigation';
-
 type ModalKind =
     | 'newsletter'
     | 'order'
@@ -250,8 +247,6 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                     <EtchingBand />
                     <ContactDock />
                     <CookieConsentBanner />
-
-                    {activePage(url, locale) === 'home' && <ImmersiveIntro />}
 
                     {modal && (
                         <MaisonModals

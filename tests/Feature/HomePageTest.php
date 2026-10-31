@@ -151,11 +151,11 @@ test('the home story section keeps a three-column layout with values always visi
         ->not->toContain('hidden flex-col');
 });
 
-test('the document paints a boot cover before React so the home page cannot flash under the loader', function () {
+test('the home document does not paint the immersive intro boot cover', function () {
     $this->get('/nl')
         ->assertOk()
-        ->assertSee('maison-boot-cover', false)
-        ->assertSee('maison.intro.seen', false);
+        ->assertDontSee('maison-boot-cover', false)
+        ->assertDontSee('maison.intro.seen', false);
 });
 
 test('the intro holds room photography back until the preloader curtain has lifted', function () {

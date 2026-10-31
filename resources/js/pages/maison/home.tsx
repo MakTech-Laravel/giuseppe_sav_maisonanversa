@@ -13,6 +13,7 @@ import { HomeRegister } from '@/components/maison/home/home-register';
 import { HomeSessions } from '@/components/maison/home/home-sessions';
 import { HomeStory } from '@/components/maison/home/home-story';
 import { HomeUnboxing } from '@/components/maison/home/home-unboxing';
+import { HomeOpening } from '@/components/maison/home/opening/home-opening';
 import { MaisonSeoHead } from '@/components/maison/seo/maison-seo-head';
 import type { Edition } from '@/types/edition';
 import type { SessionCard } from '@/types/session';
@@ -39,6 +40,7 @@ export default function Home({
     return (
         <>
             <MaisonSeoHead />
+            <HomeOpening />
             <HomeHero edition={edition} hero={hero} />
             <HomeMarquee />
             <HomeIntro />

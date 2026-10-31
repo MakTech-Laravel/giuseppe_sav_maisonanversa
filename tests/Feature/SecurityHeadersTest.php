@@ -73,9 +73,8 @@ test('https responses send hsts', function () {
         ->toBe('max-age=31536000; includeSubDomains');
 });
 
-test('the boot cover script carries the csp nonce', function () {
-    $response = $this->get('/nl')->assertOk();
-
-    $response->assertSee('nonce=', false);
-    $response->assertSee("cover.id = 'maison-boot-cover'", false);
+test('html responses do not inject the immersive intro boot cover', function () {
+    $this->get('/nl')
+        ->assertOk()
+        ->assertDontSee("cover.id = 'maison-boot-cover'", false);
 });

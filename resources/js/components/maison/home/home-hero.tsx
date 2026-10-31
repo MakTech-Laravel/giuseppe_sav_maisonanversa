@@ -36,7 +36,10 @@ export function HomeHero({
     const { openNewsletter } = useShellActions();
 
     return (
-        <section className="relative flex min-h-[calc(100vh-var(--topbar-h)-var(--nav-h))] items-end overflow-hidden bg-choc">
+        <section
+            id="home-hero"
+            className="relative flex min-h-[calc(100vh-var(--topbar-h)-var(--nav-h))] items-end overflow-hidden bg-choc"
+        >
             {/*
              * The photograph must sit above the section's solid fill — a negative
              * z-index drops it behind `bg-choc` and the mansion never appears.

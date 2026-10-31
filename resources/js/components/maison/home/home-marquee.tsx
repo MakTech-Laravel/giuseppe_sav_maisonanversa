@@ -49,7 +49,10 @@ export function HomeMarquee() {
     );
 
     return (
-        <div className="overflow-hidden border-y border-gold/20 bg-choc py-3.5 whitespace-nowrap">
+        <div
+            id="home-marquee"
+            className="overflow-hidden border-y border-gold/20 bg-choc py-3.5 whitespace-nowrap"
+        >
             <div className="marquee-track" aria-hidden="true">
                 {row}
                 {row}
