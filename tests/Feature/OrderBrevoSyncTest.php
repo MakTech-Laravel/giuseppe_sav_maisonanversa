@@ -46,7 +46,7 @@ test('the order sync job upserts the login email onto the product list', functio
             && ! in_array(12, $payload['listIds'], true)
             && $payload['attributes']['FIRSTNAME'] === 'Ada Lovelace'
             && $payload['attributes']['SMS'] === '+32470123456'
-            && $payload['attributes']['PRODUCT'] === 'Heritage No.001 — Founding Edition'
+            && $payload['attributes']['PRODUCT'] === 'Heritage No.001 · Founding Edition'
             && str_contains($note, $order->reference())
             && str_contains($note, 'Heritage No.001')
             && str_contains($note, 'For the archive')
@@ -106,6 +106,38 @@ test('the order sync job skips brevo when the order has no product', function ()
     (new SyncOrderToBrevo($order))->handle(new HttpBrevoContacts);
 
     Http::assertNothingSent();
+});
+
+test('the order sync job includes the edition number in the note', function () {
+    Http::preventStrayRequests();
+    Http::fake([
+        'https://api.brevo.com/v3/contacts' => Http::response(['id' => 49]),
+    ]);
+
+    config([
+        'services.brevo.api_key' => 'test-key',
+    ]);
+
+    $product = Product::factory()->create([
+        'brevo_list_id' => 55,
+        'name' => 'Atelier Coat',
+    ]);
+    $order = Order::factory()->create([
+        'product_id' => $product->id,
+        'email' => 'buyer@example.com',
+        'edition_number' => '017',
+        'gift_message' => null,
+    ]);
+
+    (new SyncOrderToBrevo($order))->handle(new HttpBrevoContacts);
+
+    Http::assertSent(function (Request $request): bool {
+        $note = $request->data()['attributes']['NOTE'] ?? '';
+
+        return $request->url() === 'https://api.brevo.com/v3/contacts'
+            && str_contains($note, 'Nº 017')
+            && str_contains($note, 'Atelier Coat');
+    });
 });
 
 test('the order sync job uses only the stored product list', function () {

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\HomeHeroAction;
+use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TranslateHomeHeroRequest;
 use App\Http\Requests\Admin\UpdateHomeHeroRequest;
 use App\Http\Requests\Admin\UpdateHomeHeroTranslationsRequest;
 use App\Models\HomeHero;
+use App\Models\Product;
 use App\Support\HomeHeroPresenter;
 use App\Support\Imagery;
 use Illuminate\Http\RedirectResponse;
@@ -27,6 +29,7 @@ class HomeHeroController extends Controller
             'hero' => $this->formPayload($hero, $presenter),
             'actions' => $this->actionOptions(),
             'pages' => $this->pageOptions(),
+            'openingProducts' => $this->openingProductOptions(),
             'fallbackImageUrl' => Imagery::assetUrl('hero-mansion'),
             'locales' => array_values(config('maison.locales')),
             'translations' => $this->translationBundle($hero),
@@ -139,6 +142,7 @@ class HomeHeroController extends Controller
         $payload = [
             'image_url' => $presenter->imageUrl($hero),
             'show_counter' => $hero->show_counter,
+            'opening_product_id' => $hero->opening_product_id,
         ];
 
         foreach ([
@@ -191,6 +195,26 @@ class HomeHeroController extends Controller
         }
 
         return $pages;
+    }
+
+    /**
+     * Published limited editions that may power the homepage opening register.
+     *
+     * @return list<array{value: string, label: string}>
+     */
+    private function openingProductOptions(): array
+    {
+        return Product::query()
+            ->where('is_published', true)
+            ->where('type', ProductType::LimitedEdition)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get(['id', 'name', 'slug'])
+            ->map(fn (Product $product): array => [
+                'value' => (string) $product->id,
+                'label' => $product->translated('name').' ('.$product->slug.')',
+            ])
+            ->all();
     }
 
     /**

@@ -1,20 +1,21 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { OpeningRegisterCtas } from '@/components/maison/home/opening/opening-register-ctas';
 import { OpeningRegisterGrid } from '@/components/maison/home/opening/opening-register-grid';
+import type { OpeningRegister as OpeningRegisterData } from '@/types/opening-register';
 
-/** Phase 1 static reserved numbers — replaced by live inventory in Phase 2. */
-const STATIC_RESERVED = [1, 2] as const;
+type OpeningRegisterProps = {
+    openingRegister: OpeningRegisterData;
+};
 
-function pad(n: number): string {
-    return String(n).padStart(3, '0');
-}
-
-export function OpeningRegister() {
+export function OpeningRegister({ openingRegister }: OpeningRegisterProps) {
     const { t } = useTranslation();
-    const reserved = useMemo(() => new Set(STATIC_RESERVED), []);
     const [selected, setSelected] = useState<number | null>(null);
-    const availableCount = 100 - reserved.size;
+    const selectedPlace =
+        selected === null
+            ? null
+            : (openingRegister.places.find((place) => place.sequence === selected) ??
+              null);
 
     return (
         <section
@@ -37,32 +38,33 @@ export function OpeningRegister() {
             </div>
 
             <p className="sr-only">
-                {t('{{count}} nummers beschikbaar', { count: availableCount })}
+                {t('{{count}} nummers beschikbaar', {
+                    count: openingRegister.available_count,
+                })}
             </p>
 
             <OpeningRegisterGrid
-                reserved={reserved}
+                places={openingRegister.places}
                 selected={selected}
                 onSelect={setSelected}
             />
 
             <p
                 className="opening-picked"
-                hidden={selected === null}
+                hidden={selectedPlace === null}
                 aria-live="polite"
             >
-                {selected
+                {selectedPlace
                     ? t('Nº {{n}}: van jou, als je het neemt.', {
-                          n: pad(selected),
+                          n: selectedPlace.label,
                       })
                     : null}
             </p>
 
-            <OpeningRegisterCtas selected={selected} />
+            <OpeningRegisterCtas
+                selected={selected}
+                openingRegister={openingRegister}
+            />
         </section>
     );
-}
-
-export function openingAvailableCount(): number {
-    return 100 - STATIC_RESERVED.length;
 }

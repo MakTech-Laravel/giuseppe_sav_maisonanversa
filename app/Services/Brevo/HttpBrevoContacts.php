@@ -346,6 +346,10 @@ class HttpBrevoContacts implements BrevoContacts
             $parts[] = $productName;
         }
 
+        if ($order->edition_number !== null) {
+            $parts[] = 'Nº '.str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
+        }
+
         if (filled($order->gift_message)) {
             $parts[] = $order->gift_message;
         }

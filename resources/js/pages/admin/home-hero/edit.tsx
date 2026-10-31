@@ -39,6 +39,7 @@ type HeroForm = {
     title_accent: string;
     tagline: string;
     show_counter: boolean;
+    opening_product_id: string;
     counter_line_one: string;
     counter_line_two: string;
     primary_label: string;
@@ -68,14 +69,16 @@ export default function HomeHeroEdit({
     hero,
     actions,
     pages,
+    openingProducts,
     fallbackImageUrl,
     locales,
     translations,
     translationStatus,
 }: {
-    hero: HeroRecord;
+    hero: HeroRecord & { opening_product_id: number | null };
     actions: Option[];
     pages: Option[];
+    openingProducts: Option[];
     fallbackImageUrl: string | null;
     locales: string[];
     translations: Record<string, Record<string, string>>;
@@ -89,6 +92,9 @@ export default function HomeHeroEdit({
         title_accent: hero.title_accent,
         tagline: hero.tagline,
         show_counter: hero.show_counter,
+        opening_product_id: hero.opening_product_id
+            ? String(hero.opening_product_id)
+            : '',
         counter_line_one: hero.counter_line_one,
         counter_line_two: hero.counter_line_two,
         primary_label: hero.primary_label,
@@ -286,6 +292,57 @@ export default function HomeHeroEdit({
                                         onChange={setSlot}
                                     />
                                 ))}
+                            </div>
+                        </AdminPanel>
+
+                        <AdminPanel
+                            title={t('Opening-register')}
+                            description={t(
+                                'Welk limited-edition product op de homepage-opening-register staat. Leeg = Founding Edition (fallback).',
+                            )}
+                        >
+                            <div className="space-y-2">
+                                <Label htmlFor="opening_product_id">
+                                    {t('Product voor nummerregister')}
+                                </Label>
+                                <Select
+                                    value={
+                                        form.data.opening_product_id ||
+                                        '__none__'
+                                    }
+                                    onValueChange={(value) =>
+                                        form.setData(
+                                            'opening_product_id',
+                                            value === '__none__' ? '' : value,
+                                        )
+                                    }
+                                >
+                                    <SelectTrigger id="opening_product_id">
+                                        <SelectValue
+                                            placeholder={t(
+                                                'Founding Edition (standaard)',
+                                            )}
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="__none__">
+                                            {t(
+                                                'Founding Edition (standaard)',
+                                            )}
+                                        </SelectItem>
+                                        {openingProducts.map((product) => (
+                                            <SelectItem
+                                                key={product.value}
+                                                value={product.value}
+                                            >
+                                                {product.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <InputError
+                                    message={form.errors.opening_product_id}
+                                />
                             </div>
                         </AdminPanel>
 

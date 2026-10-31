@@ -17,6 +17,7 @@ use App\Models\Product;
 use App\Models\StoryPage;
 use App\Models\User;
 use App\Services\Edition\EditionInventory;
+use App\Services\Home\OpeningRegisterSnapshot;
 use App\Services\Inquiry\InquiryDeviceCookie;
 use App\Support\CommunityFeed;
 use App\Support\HomeHeroPresenter;
@@ -48,6 +49,8 @@ class MaisonController extends Controller
                 HomeHero::current(),
                 $locale,
             ),
+            'openingRegister' => app(OpeningRegisterSnapshot::class)
+                ->forViewer($viewer),
             'upcomingSessions' => SessionFeed::present(
                 $upcoming,
                 $viewer,

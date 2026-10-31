@@ -150,13 +150,55 @@ test('auth intended endpoint stores a public page for modal login', function () 
     ])->assertRedirect($target);
 });
 
-test('auth intended endpoint refuses to remember the localized home', function () {
+test('auth intended endpoint ignores localized home without force', function () {
+    $home = localized('maison.home', absolute: false);
+
+    $this->post(route('auth.intended'), ['url' => $home])
+        ->assertNoContent()
+        ->assertSessionMissing('url.intended');
+});
+
+test('auth intended endpoint does not overwrite a better intended with forced home', function () {
     $home = localized('maison.home', absolute: false);
 
     $this->withSession(['url.intended' => localized('member.orders', absolute: false)])
-        ->post(route('auth.intended'), ['url' => $home])
+        ->post(route('auth.intended'), ['url' => $home, 'force' => true])
         ->assertNoContent()
         ->assertSessionHas('url.intended', localized('member.orders', absolute: false));
+});
+
+test('forced home intended returns customer to home after login for claim resume', function () {
+    $user = User::factory()->create();
+    $home = localized('maison.home', absolute: false);
+
+    $this->post(route('auth.intended'), ['url' => $home, 'force' => true])
+        ->assertNoContent()
+        ->assertSessionHas('url.intended', $home);
+
+    $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ])->assertRedirect($home);
+});
+
+test('staff login ignores a public home intended and goes to admin dashboard', function () {
+    $this->seed([
+        PermissionSeeder::class,
+        RoleSeeder::class,
+    ]);
+
+    $admin = User::factory()->admin()->create();
+    $admin->assignRole('admin');
+    $admin->syncTypeFromRoles();
+
+    $home = localized('maison.home', absolute: false);
+
+    $this->withSession(['url.intended' => $home])
+        ->post(route('login.store'), [
+            'email' => $admin->email,
+            'password' => 'password',
+        ])
+        ->assertRedirect(localized('admin.dashboard', absolute: false));
 });
 
 test('bare admin urls remember a localized admin destination for staff', function () {

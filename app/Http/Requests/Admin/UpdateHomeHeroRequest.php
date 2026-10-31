@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Enums\HomeHeroAction;
+use App\Enums\ProductType;
 use App\Models\HomeHero;
 use App\Support\HomeHeroPresenter;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -19,9 +20,12 @@ class UpdateHomeHeroRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $openingProductId = $this->input('opening_product_id');
+
         $this->merge([
             'show_counter' => $this->boolean('show_counter'),
             'remove_image' => $this->boolean('remove_image'),
+            'opening_product_id' => filled($openingProductId) ? $openingProductId : null,
         ]);
     }
 
@@ -38,6 +42,14 @@ class UpdateHomeHeroRequest extends FormRequest
             'title_accent' => ['required', 'string', 'max:80'],
             'tagline' => ['required', 'string', 'max:255'],
             'show_counter' => ['required', 'boolean'],
+            'opening_product_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('products', 'id')->where(function ($query): void {
+                    $query->where('is_published', true)
+                        ->where('type', ProductType::LimitedEdition->value);
+                }),
+            ],
             'counter_line_one' => ['required', 'string', 'max:80'],
             'counter_line_two' => ['required', 'string', 'max:80'],
         ];

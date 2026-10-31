@@ -34,6 +34,8 @@ test('heritage staff can open the home hero editor', function () {
             ->where('hero.title', 'Maison')
             ->has('actions', count(HomeHeroAction::cases()))
             ->has('pages', count(HomeHeroPresenter::PAGES))
+            ->has('openingProducts')
+            ->where('hero.opening_product_id', null)
             ->where('actions', function ($actions) {
                 $values = collect($actions)->pluck('value');
 
@@ -261,6 +263,7 @@ function homeHeroPayload(array $overrides = []): array
         'title_accent' => $hero->title_accent,
         'tagline' => $hero->tagline,
         'show_counter' => $hero->show_counter,
+        'opening_product_id' => $hero->opening_product_id,
         'counter_line_one' => $hero->counter_line_one,
         'counter_line_two' => $hero->counter_line_two,
         'primary_label' => $hero->primary_label,

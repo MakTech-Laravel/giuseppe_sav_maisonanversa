@@ -22,9 +22,14 @@ class RememberIntendedUrlController extends Controller
     {
         $validated = $request->validate([
             'url' => ['required', 'string', 'max:2048'],
+            'force' => ['sometimes', 'boolean'],
         ]);
 
-        $this->redirects->remember($request, $validated['url']);
+        $this->redirects->remember(
+            $request,
+            $validated['url'],
+            (bool) ($validated['force'] ?? false),
+        );
 
         return response()->noContent();
     }
