@@ -25,4 +25,5 @@ yarn-error.log
 /.nova
 /.zed
 config.bat
-.env
+.env 
+.env.backup
