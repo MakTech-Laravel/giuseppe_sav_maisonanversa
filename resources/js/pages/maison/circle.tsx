@@ -6,6 +6,7 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { PageHero } from '@/components/maison/ui/page-hero';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Section, Wrap } from '@/components/maison/ui/section';
+import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
 
 const BENEFITS = [
     {
@@ -43,6 +44,7 @@ const BENEFITS = [
 export default function Circle() {
     const { t } = useTranslation();
     const { openPurchase } = useShellActions();
+    const purchasesPaused = usePurchasesPaused();
 
     return (
         <>
@@ -108,11 +110,17 @@ export default function Circle() {
                     <div className="mt-10 text-center">
                         <MaisonButton
                             variant="choc"
+                            disabled={purchasesPaused}
                             onClick={() => openPurchase()}
                             className="max-w-full px-4 text-center whitespace-normal"
                         >
                             {t('Word Founding Member — Bekijk Heritage No.001')}
                         </MaisonButton>
+                        {purchasesPaused ? (
+                            <p className="mt-3 font-sans text-[10px] tracking-[0.12em] text-choc3">
+                                {t('Reserveren is tijdelijk gepauzeerd.')}
+                            </p>
+                        ) : null}
                     </div>
                 </Wrap>
             </Section>

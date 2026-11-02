@@ -102,6 +102,12 @@ return [
     */
 
     'checkout' => [
+        /*
+         * Master switch for starting purchases. Set MAISON_CHECKOUT_ENABLED=false
+         * to pause "Reserve your number" / Buy site-wide; payments already in
+         * flight (Stripe webhook, success, cancel) keep working.
+         */
+        'enabled' => (bool) env('MAISON_CHECKOUT_ENABLED', true),
         'currency' => 'eur',
         'hold_minutes' => 15,
     ],

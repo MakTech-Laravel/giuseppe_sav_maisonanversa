@@ -38,6 +38,12 @@ class CheckoutController extends Controller
         EditionAllocator $allocator,
         EditionInventory $inventory,
     ): SymfonyResponse {
+        if (! config('maison.checkout.enabled')) {
+            throw ValidationException::withMessages([
+                'checkout' => __('Reserveren is tijdelijk gepauzeerd. Probeer het binnenkort opnieuw.'),
+            ]);
+        }
+
         $product = $request->resolveProduct();
 
         $allocator->releaseExpiredHolds();

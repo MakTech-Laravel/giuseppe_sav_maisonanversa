@@ -4,6 +4,8 @@ import type { SharedNotifications } from '@/types/notification';
 import type { SeoDocument } from '@/types/seo';
 
 export type CheckoutShared = {
+    /** False while purchases are paused (MAISON_CHECKOUT_ENABLED=false). */
+    enabled?: boolean;
     productId: number | null;
     productSlug?: string | null;
     currency: string;

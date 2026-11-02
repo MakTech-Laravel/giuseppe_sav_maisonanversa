@@ -6,6 +6,7 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Reveal } from '@/components/maison/ui/reveal';
 import { Wrap } from '@/components/maison/ui/section';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
+import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
 import type { Edition } from '@/types/edition';
 
 const DEFAULT_INCLUDES = [
@@ -35,6 +36,7 @@ export function HomePreorder({
     const { t } = useTranslation();
     const { openPurchase, openCertificate, openNewsletter } = useShellActions();
     const { priceLabel, deliveryLabel } = useCheckoutDisplay();
+    const purchasesPaused = usePurchasesPaused();
     const section = useRef<HTMLDivElement>(null);
     const [shown, setShown] = useState(0);
     const [fill, setFill] = useState(0);
@@ -182,11 +184,19 @@ export function HomePreorder({
                                 <MaisonButton
                                     variant="gold"
                                     block
+                                    disabled={purchasesPaused}
                                     onClick={() => openPurchase()}
                                     className="mb-3"
                                 >
                                     {t('Reserveer Uw Nummer')}
                                 </MaisonButton>
+                                {purchasesPaused ? (
+                                    <p className="mb-3 text-center font-sans text-[10px] tracking-[0.12em] text-cream/70">
+                                        {t(
+                                            'Reserveren is tijdelijk gepauzeerd.',
+                                        )}
+                                    </p>
+                                ) : null}
                                 <MaisonButton
                                     variant="outlineCream"
                                     block
