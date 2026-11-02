@@ -468,7 +468,7 @@ class Product extends Model
      * (global storefront CTAs); pass a specific product for per-product
      * checkout contexts such as the products catalog detail page.
      *
-     * @return array{productId: int|null, currency: string, amount: string, displayAmount: string, productName: string, deliveryLabel: string|null, productType: string}
+     * @return array{enabled: bool, productId: int|null, currency: string, amount: string, displayAmount: string, productName: string, deliveryLabel: string|null, productType: string}
      */
     public static function checkoutShare(?self $product = null): array
     {
@@ -484,6 +484,7 @@ class Product extends Model
 
         if ($amount === null) {
             return [
+                'enabled' => (bool) config('maison.checkout.enabled'),
                 'productId' => $product?->id,
                 'productSlug' => $product?->slug,
                 'currency' => 'eur',
@@ -496,6 +497,7 @@ class Product extends Model
         }
 
         return [
+            'enabled' => (bool) config('maison.checkout.enabled'),
             'productId' => $product->id,
             'productSlug' => $product->slug,
             'currency' => $product->currency,

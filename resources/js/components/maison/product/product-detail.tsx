@@ -8,6 +8,7 @@ import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { Section, Wrap } from '@/components/maison/ui/section';
 import { useCheckoutDisplay } from '@/hooks/use-checkout-display';
 import { useLocale } from '@/hooks/use-locale';
+import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
 import { FOUNDING_PRODUCT_SLUG } from '@/lib/maison-navigation';
 import type { Edition } from '@/types/edition';
 import type { ProductPageData } from '@/types/product';
@@ -27,6 +28,7 @@ export function ProductDetail({
     const { locale } = useLocale();
     const { foundingRegister } = usePage().props;
     const { openPurchase, openNewsletter } = useShellActions();
+    const purchasesPaused = usePurchasesPaused();
     const isFoundingProduct = product.slug === FOUNDING_PRODUCT_SLUG;
     const { priceLabel, deliveryLabel } = useCheckoutDisplay(checkout);
     const isSoldOut = edition.soldOut || product.status === 'archived';
@@ -102,10 +104,13 @@ export function ProductDetail({
                                     )}
                                 </p>
                                 <p className="mt-3 font-serif text-lg text-choc">
-                                    {t('{{count}} van {{total}} plaatsen resterend', {
-                                        count: foundingRegister.remaining_count,
-                                        total: foundingRegister.places_total,
-                                    })}
+                                    {t(
+                                        '{{count}} van {{total}} plaatsen resterend',
+                                        {
+                                            count: foundingRegister.remaining_count,
+                                            total: foundingRegister.places_total,
+                                        },
+                                    )}
                                 </p>
                                 <Link
                                     href={`/${locale}/founding-circle/register`}
@@ -117,14 +122,24 @@ export function ProductDetail({
                         ) : null}
 
                         {canReserve ? (
-                            <MaisonButton
-                                variant="filled"
-                                block
-                                onClick={() => openPurchase(checkout)}
-                                className="mb-3"
-                            >
-                                {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
-                            </MaisonButton>
+                            <>
+                                <MaisonButton
+                                    variant="filled"
+                                    block
+                                    disabled={purchasesPaused}
+                                    onClick={() => openPurchase(checkout)}
+                                    className="mb-3"
+                                >
+                                    {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
+                                </MaisonButton>
+                                {purchasesPaused ? (
+                                    <p className="mb-3 text-center font-sans text-[10px] tracking-[0.12em] text-choc3">
+                                        {t(
+                                            'Reserveren is tijdelijk gepauzeerd.',
+                                        )}
+                                    </p>
+                                ) : null}
+                            </>
                         ) : (
                             <MaisonButton
                                 variant="filled"

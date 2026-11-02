@@ -154,7 +154,13 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         });
     }, []);
 
+    const purchasesPaused = props.checkout?.enabled === false;
+
     const requireAuthForCheckout = useCallback((): boolean => {
+        if (purchasesPaused) {
+            return false;
+        }
+
         if (props.auth?.user) {
             return true;
         }
@@ -164,7 +170,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         setUserModal('auth');
 
         return false;
-    }, [props.auth?.user, rememberAuthReturnUrl]);
+    }, [props.auth?.user, purchasesPaused, rememberAuthReturnUrl]);
 
     const actions = useMemo<ShellActions>(
         () => ({

@@ -159,6 +159,29 @@ test('checkout requires authentication', function () {
     expect(Order::query()->count())->toBe(0);
 });
 
+test('checkout is rejected without creating anything while purchases are paused', function () {
+    config(['maison.checkout.enabled' => false]);
+
+    actingAsCheckoutUser();
+
+    $this->mock(ProductCheckout::class, function (MockInterface $mock) {
+        $mock->shouldNotReceive('create');
+    });
+
+    $this->post(localized('maison.checkout.store'), checkoutPayload())
+        ->assertSessionHasErrors('checkout');
+
+    expect(Order::query()->count())->toBe(0)
+        ->and(Payment::query()->count())->toBe(0);
+});
+
+test('shared checkout prop reports whether purchases are enabled', function () {
+    config(['maison.checkout.enabled' => false]);
+
+    $this->get(localized('maison.home'))
+        ->assertInertia(fn ($page) => $page->where('checkout.enabled', false));
+});
+
 test('checkout requires reservation details', function () {
     actingAsCheckoutUser();
 
