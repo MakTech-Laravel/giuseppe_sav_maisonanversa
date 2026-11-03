@@ -13,6 +13,7 @@ import { EtchingBand } from '@/components/maison/shell/etching-band';
 import { ShellActionsProvider } from '@/components/maison/shell/shell-actions';
 import type {
     OrderProductContext,
+    PreselectedEdition,
     ShellActions,
 } from '@/components/maison/shell/shell-actions';
 import { SiteFooter } from '@/components/maison/shell/site-footer';
@@ -79,6 +80,9 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     const [userModal, setUserModal] = useState<ModalKind>(null);
     const [orderProduct, setOrderProduct] = useState<
         OrderProductContext | undefined
+    >(undefined);
+    const [preselectedEdition, setPreselectedEdition] = useState<
+        PreselectedEdition | undefined
     >(undefined);
     const [userAuthView, setUserAuthView] = useState<AuthView>('login');
     const [dismissedAuthPromptKey, setDismissedAuthPromptKey] = useState<
@@ -183,10 +187,15 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 setOrderProduct(product);
                 setUserModal('order');
             },
-            openPurchase: (product?: OrderProductContext) => {
+            openPurchase: (
+                product?: OrderProductContext,
+                edition?: PreselectedEdition,
+            ) => {
                 if (!requireAuthForCheckout()) {
                     return;
                 }
+
+                setPreselectedEdition(edition);
 
                 const context = product ?? props.checkout;
                 const isLimited =
@@ -219,9 +228,11 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
 
         setUserModal(null);
         setOrderProduct(undefined);
+        setPreselectedEdition(undefined);
     }
 
     function onEditionSelected(product: OrderProductContext): void {
+        setPreselectedEdition(undefined);
         setOrderProduct(product);
         setUserModal('order');
     }
@@ -264,6 +275,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                             kind={modal}
                             authView={authView}
                             orderProduct={orderProduct}
+                            preselectedEdition={preselectedEdition}
                             onAuthViewChange={setUserAuthView}
                             onClose={closeModal}
                             onEditionSelected={onEditionSelected}

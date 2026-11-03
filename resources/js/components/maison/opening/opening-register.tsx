@@ -24,8 +24,9 @@ type OpeningRegisterProps = {
  *   It leaves the opening first, because those modals sit below it.
  * - "Enter the house" leaves the opening for the home page behind it.
  *
- * A tile highlights but does not pre-select a number in the picker: the picker is
- * where the number is chosen and held, so the purchase procedure stays as it was.
+ * A tile highlights. If one is chosen when "Choose your number" is pressed, it is
+ * handed to the picker, which holds it with its normal hold request and goes on to
+ * the order modal without asking again. With no tile chosen, the picker lists them.
  */
 export function OpeningRegister({
     copy,
@@ -48,7 +49,15 @@ export function OpeningRegister({
 
     function reserve() {
         onLeave();
-        openPurchase(register.product);
+
+        const tile = register.tiles.find((entry) => entry.id === selected);
+
+        openPurchase(
+            register.product,
+            tile?.available
+                ? { editionPieceId: tile.id, editionLabel: tile.label }
+                : undefined,
+        );
     }
 
     return (
