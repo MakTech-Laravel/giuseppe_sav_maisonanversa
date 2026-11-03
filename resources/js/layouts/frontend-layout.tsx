@@ -5,14 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
 import { CookieConsentBanner } from '@/components/maison/cookie-consent-banner';
-import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
 import type { AuthView } from '@/components/maison/modals/auth-modal';
 import { MaisonModals } from '@/components/maison/modals/maison-modals';
+import { Opening } from '@/components/maison/opening/opening';
 import { ContactDock } from '@/components/maison/shell/contact-dock';
 import { EtchingBand } from '@/components/maison/shell/etching-band';
 import { ShellActionsProvider } from '@/components/maison/shell/shell-actions';
 import type {
     OrderProductContext,
+    PreselectedEdition,
     ShellActions,
 } from '@/components/maison/shell/shell-actions';
 import { SiteFooter } from '@/components/maison/shell/site-footer';
@@ -79,6 +80,9 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     const [userModal, setUserModal] = useState<ModalKind>(null);
     const [orderProduct, setOrderProduct] = useState<
         OrderProductContext | undefined
+    >(undefined);
+    const [preselectedEdition, setPreselectedEdition] = useState<
+        PreselectedEdition | undefined
     >(undefined);
     const [userAuthView, setUserAuthView] = useState<AuthView>('login');
     const [dismissedAuthPromptKey, setDismissedAuthPromptKey] = useState<
@@ -183,10 +187,15 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 setOrderProduct(product);
                 setUserModal('order');
             },
-            openPurchase: (product?: OrderProductContext) => {
+            openPurchase: (
+                product?: OrderProductContext,
+                edition?: PreselectedEdition,
+            ) => {
                 if (!requireAuthForCheckout()) {
                     return;
                 }
+
+                setPreselectedEdition(edition);
 
                 const context = product ?? props.checkout;
                 const isLimited =
@@ -219,9 +228,11 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
 
         setUserModal(null);
         setOrderProduct(undefined);
+        setPreselectedEdition(undefined);
     }
 
     function onEditionSelected(product: OrderProductContext): void {
+        setPreselectedEdition(undefined);
         setOrderProduct(product);
         setUserModal('order');
     }
@@ -257,13 +268,14 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                     <ContactDock />
                     <CookieConsentBanner />
 
-                    {activePage(url, locale) === 'home' && <ImmersiveIntro />}
+                    {activePage(url, locale) === 'home' && <Opening />}
 
                     {modal && (
                         <MaisonModals
                             kind={modal}
                             authView={authView}
                             orderProduct={orderProduct}
+                            preselectedEdition={preselectedEdition}
                             onAuthViewChange={setUserAuthView}
                             onClose={closeModal}
                             onEditionSelected={onEditionSelected}

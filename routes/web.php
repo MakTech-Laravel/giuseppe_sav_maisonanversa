@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\JournalArticleController;
 use App\Http\Controllers\Admin\LegalPageController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\NotificationTestController;
+use App\Http\Controllers\Admin\OpeningOfferController;
 use App\Http\Controllers\Admin\OpsController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -637,6 +638,21 @@ Route::prefix('{locale}')
                 Route::put('dressing-items/{dressingItem}', 'update')->name('dressing-items.update')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::delete('dressing-items/{dressingItem}', 'destroy')->name('dressing-items.destroy')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+            });
+
+            Route::controller(OpeningOfferController::class)->group(function () {
+                Route::get('opening-offers', 'index')->name('opening-offers.index')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('opening-offers/create', 'create')->name('opening-offers.create')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::post('opening-offers', 'store')->name('opening-offers.store')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::get('opening-offers/{openingOffer}/edit', 'edit')->name('opening-offers.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::put('opening-offers/{openingOffer}', 'update')->name('opening-offers.update')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::delete('opening-offers/{openingOffer}', 'destroy')->name('opening-offers.destroy')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
             });
 

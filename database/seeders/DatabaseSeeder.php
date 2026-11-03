@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             LegalPageSeeder::class,
             SeoMetaSeeder::class,
             EditionPieceSeeder::class,
+            OpeningOfferSeeder::class,
             CommerceSettingSeeder::class,
             SiteSettingSeeder::class,
             HomeHeroSeeder::class,

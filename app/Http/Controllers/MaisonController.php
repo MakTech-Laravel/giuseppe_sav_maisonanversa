@@ -22,6 +22,7 @@ use App\Support\CommunityFeed;
 use App\Support\HomeHeroPresenter;
 use App\Support\Html\LegalHtml;
 use App\Support\Journal;
+use App\Support\OpeningRegisterPresenter;
 use App\Support\SessionFeed;
 use App\Support\StoryPagePresenter;
 use Illuminate\Http\Request;
@@ -56,6 +57,8 @@ class MaisonController extends Controller
             'openSessionsThisWeek' => SessionFeed::joinable()
                 ->where('starts_at', '<=', now()->addDays(7))
                 ->count(),
+            // The opening's register: the admin-chosen product and its edition numbers.
+            'opening' => app(OpeningRegisterPresenter::class)->forUser($viewer),
         ]);
     }
 

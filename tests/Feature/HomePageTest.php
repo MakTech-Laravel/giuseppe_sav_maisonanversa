@@ -151,17 +151,10 @@ test('the home story section keeps a three-column layout with values always visi
         ->not->toContain('hidden flex-col');
 });
 
-test('the document paints a boot cover before React so the home page cannot flash under the loader', function () {
+test('the document sets the right light and the once-per-session flag before the first paint', function () {
     $this->get('/nl')
         ->assertOk()
-        ->assertSee('maison-boot-cover', false)
-        ->assertSee('maison.intro.seen', false);
-});
-
-test('the intro holds room photography back until the preloader curtain has lifted', function () {
-    $source = file_get_contents(resource_path('js/components/maison/intro/immersive-intro.tsx'));
-
-    expect($source)
-        ->toContain('panel={curtainLifted ? introPanel(slide) : -1}')
-        ->not->toContain('panel={loaderDone ? introPanel(slide) : -1}');
+        ->assertSee('root.dataset.light', false)
+        ->assertSee('maison.opening.seen', false)
+        ->assertDontSee('maison-boot-cover', false);
 });

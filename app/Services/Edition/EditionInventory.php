@@ -6,6 +6,7 @@ use App\Enums\EditionPieceStatus;
 use App\Enums\ProductType;
 use App\Models\EditionPiece;
 use App\Models\Product;
+use App\Support\OpeningRegisterPresenter;
 use Illuminate\Support\Facades\Cache;
 
 class EditionInventory
@@ -87,17 +88,15 @@ class EditionInventory
 
     public function bust(?Product $product = null): void
     {
-        if ($product !== null) {
-            Cache::forget($this->cacheKey($product));
+        $product ??= Product::founding();
 
+        if ($product === null) {
             return;
         }
 
-        $founding = Product::founding();
-
-        if ($founding !== null) {
-            Cache::forget($this->cacheKey($founding));
-        }
+        Cache::forget($this->cacheKey($product));
+        // The opening's number tiles show the same state, so they refresh with it.
+        Cache::forget(OpeningRegisterPresenter::cacheKey($product));
     }
 
     public function cacheKey(Product $product): string

@@ -10,7 +10,10 @@ import {
     modalInputClassName,
     modalNoteClassName,
 } from '@/components/maison/modals/maison-modal';
-import type { OrderProductContext } from '@/components/maison/shell/shell-actions';
+import type {
+    OrderProductContext,
+    PreselectedEdition,
+} from '@/components/maison/shell/shell-actions';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { useLocale } from '@/hooks/use-locale';
 import { cn } from '@/lib/utils';
@@ -44,6 +47,8 @@ type EditionsResponse = {
 
 type EditionPickerModalProps = {
     product: OrderProductContext;
+    /** A number chosen earlier (the opening): it is held straight away, without asking again. */
+    preselected?: PreselectedEdition;
     onClose: () => void;
     onSelect: (edition: {
         editionPieceId: number;
@@ -67,6 +72,7 @@ function statusLabelKey(status: EditionOption['status']): string {
 
 export function EditionPickerModal({
     product,
+    preselected,
     onClose,
     onSelect,
 }: EditionPickerModalProps) {
@@ -187,7 +193,9 @@ export function EditionPickerModal({
         return () => observer.disconnect();
     }, [lastPage, loadPage, page]);
 
-    async function selectEdition(item: EditionOption): Promise<void> {
+    async function selectEdition(
+        item: Pick<EditionOption, 'id' | 'edition_number' | 'label'>,
+    ): Promise<void> {
         if (!productSlug || holdingId !== null) {
             return;
         }
@@ -223,6 +231,27 @@ export function EditionPickerModal({
             setHoldingId(null);
         }
     }
+
+    /*
+     * A number chosen before the picker opened (the opening's register) is held
+     * once, here, through the same hold request as a tap in the list. If it was
+     * taken meanwhile, the hold fails and the list stays open with the usual message.
+     */
+    const preselectedHold = useRef(false);
+
+    useEffect(() => {
+        if (!preselected || preselectedHold.current) {
+            return;
+        }
+
+        preselectedHold.current = true;
+        void selectEdition({
+            id: preselected.editionPieceId,
+            edition_number: Number.parseInt(preselected.editionLabel, 10) || 0,
+            label: preselected.editionLabel,
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once for the number the picker opened with
+    }, [preselected]);
 
     return (
         <MaisonModal

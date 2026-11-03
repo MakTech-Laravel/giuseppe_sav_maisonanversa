@@ -73,9 +73,9 @@ test('https responses send hsts', function () {
         ->toBe('max-age=31536000; includeSubDomains');
 });
 
-test('the boot cover script carries the csp nonce', function () {
+test('the opening head script carries the csp nonce', function () {
     $response = $this->get('/nl')->assertOk();
 
     $response->assertSee('nonce=', false);
-    $response->assertSee("cover.id = 'maison-boot-cover'", false);
+    $response->assertSee("root.dataset.opening = 'seen'", false);
 });
