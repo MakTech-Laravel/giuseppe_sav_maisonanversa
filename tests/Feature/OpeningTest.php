@@ -115,7 +115,9 @@ test('the register has two buttons: one starts the real reservation, one goes to
         ->toContain('usePurchasesPaused')
         ->toContain('onClick={reserve}')
         // ... for the product the admin chose, after leaving the opening (the modals sit below it).
-        ->toMatch('/onLeave\(\);\s*openPurchase\(register\.product\);/')
+        ->toMatch('/onLeave\(\);[\s\S]*openPurchase\(\s*register\.product,/')
+        // ... handing over the number the visitor already chose, so the picker does not ask again.
+        ->toContain('editionPieceId: tile.id')
         // Home page: leaves the opening for the page behind it.
         ->toContain('onClick={onLeave}')
         ->toContain('copy.enterHouse')

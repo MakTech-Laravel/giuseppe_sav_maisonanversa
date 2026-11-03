@@ -4,7 +4,10 @@ import { CertificateModal } from '@/components/maison/modals/certificate-modal';
 import { EditionPickerModal } from '@/components/maison/modals/edition-picker-modal';
 import { NewsletterModal } from '@/components/maison/modals/newsletter-modal';
 import { OrderModal } from '@/components/maison/modals/order-modal';
-import type { OrderProductContext } from '@/components/maison/shell/shell-actions';
+import type {
+    OrderProductContext,
+    PreselectedEdition,
+} from '@/components/maison/shell/shell-actions';
 
 export type MaisonModalKind =
     | 'newsletter'
@@ -17,6 +20,7 @@ type MaisonModalsProps = {
     kind: MaisonModalKind;
     authView?: AuthView;
     orderProduct?: OrderProductContext;
+    preselectedEdition?: PreselectedEdition;
     onClose: () => void;
     onAuthViewChange?: (view: AuthView) => void;
     onEditionSelected?: (product: OrderProductContext) => void;
@@ -26,6 +30,7 @@ export function MaisonModals({
     kind,
     authView = 'login',
     orderProduct,
+    preselectedEdition,
     onClose,
     onAuthViewChange = () => undefined,
     onEditionSelected = () => undefined,
@@ -41,6 +46,7 @@ export function MaisonModals({
             return (
                 <EditionPickerModal
                     product={orderProduct}
+                    preselected={preselectedEdition}
                     onClose={onClose}
                     onSelect={({
                         editionPieceId,
