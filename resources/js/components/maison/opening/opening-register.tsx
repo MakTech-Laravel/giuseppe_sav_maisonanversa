@@ -1,50 +1,54 @@
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
-import {
-    OPENING_EDITION_SIZE,
-    OPENING_RESERVED_NUMBERS,
-    padNumber,
-} from './opening-data';
+import type { OpeningRegisterData } from '@/types/opening';
 import type { OpeningCopy } from './opening-data';
 
 type OpeningRegisterProps = {
     copy: OpeningCopy;
+    register: OpeningRegisterData;
     /** The visitor is leaving the opening, for the home page or for the reservation. */
     onLeave: () => void;
 };
 
 /**
- * The register: the hundred numbered rackets as tiles, under the house, and the
- * two ways out of the opening.
+ * The register: the edition numbers of the product an admin chose for the opening,
+ * under the house, and the two ways out of it.
  *
- * - "Choose your number" starts the site's own reservation: the shell's
- *   `openPurchase()`, which asks a visitor who is not signed in to log in, then
- *   opens the edition picker (the real, live list of numbers) and the order modal.
+ * - Available numbers print as available; every other number (held, sold, returning,
+ *   not for sale) prints in the "reserved" colour. There is no fixed count.
+ * - "Choose your number" starts the site's own reservation for that product: the
+ *   shell's `openPurchase()`, which asks a visitor who is not signed in to log in,
+ *   then opens the edition picker (the live list of numbers) and the order modal.
  *   It leaves the opening first, because those modals sit below it.
  * - "Enter the house" leaves the opening for the home page behind it.
  *
- * The tiles are static for now (the reserved numbers are a placeholder until the
- * live register is wired), so a tile highlights but does not pre-select a number
- * in the picker: that needs the real edition piece, which arrives with the data.
+ * A tile highlights but does not pre-select a number in the picker: the picker is
+ * where the number is chosen and held, so the purchase procedure stays as it was.
  */
-export function OpeningRegister({ copy, onLeave }: OpeningRegisterProps) {
+export function OpeningRegister({
+    copy,
+    register,
+    onLeave,
+}: OpeningRegisterProps) {
     const { openPurchase } = useShellActions();
     const purchasesPaused = usePurchasesPaused();
     const [selected, setSelected] = useState<number | null>(null);
 
-    const numbers = Array.from(
-        { length: OPENING_EDITION_SIZE },
-        (_, index) => index + 1,
+    // Labels such as EXC001ST are wider than 001, so the tiles size to the longest.
+    const longestLabel = register.tiles.reduce(
+        (longest, tile) => Math.max(longest, tile.label.length),
+        0,
     );
 
-    function pick(value: number) {
-        setSelected((current) => (current === value ? null : value));
+    function pick(id: number) {
+        setSelected((current) => (current === id ? null : id));
     }
 
     function reserve() {
         onLeave();
-        openPurchase();
+        openPurchase(register.product);
     }
 
     return (
@@ -67,35 +71,38 @@ export function OpeningRegister({ copy, onLeave }: OpeningRegisterProps) {
                 </div>
             </div>
 
-            <div className="op-numbers">
-                {numbers.map((value) => {
-                    const reserved = OPENING_RESERVED_NUMBERS.includes(value);
-
-                    return (
-                        <button
-                            key={value}
-                            type="button"
-                            className="op-num"
-                            disabled={reserved}
-                            aria-pressed={selected === value}
-                            aria-label={`Nº ${padNumber(value)}, ${
-                                reserved
-                                    ? copy.tileReserved
-                                    : copy.tileAvailable
-                            }`}
-                            onClick={() => pick(value)}
-                        >
-                            {padNumber(value)}
-                        </button>
-                    );
-                })}
+            <div
+                className="op-numbers"
+                style={
+                    {
+                        '--op-tile': `${Math.max(52, longestLabel * 9 + 20)}px`,
+                    } as CSSProperties
+                }
+            >
+                {register.tiles.map((tile) => (
+                    <button
+                        key={tile.id}
+                        type="button"
+                        className="op-num"
+                        disabled={!tile.available}
+                        aria-pressed={selected === tile.id}
+                        aria-label={`Nº ${tile.label}, ${
+                            tile.available
+                                ? copy.tileAvailable
+                                : copy.tileReserved
+                        }`}
+                        onClick={() => pick(tile.id)}
+                    >
+                        {tile.label}
+                    </button>
+                ))}
             </div>
 
             <div className="op-ctas">
                 <button
                     type="button"
                     className="op-cta op-cta-1"
-                    disabled={purchasesPaused}
+                    disabled={purchasesPaused || register.available === 0}
                     onClick={reserve}
                 >
                     {copy.chooseNumber}

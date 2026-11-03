@@ -2,16 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/types/locale';
 import doorHouseArt from './art/door-house.html?raw';
 import wordmarkArt from './art/wordmark.html?raw';
-import {
-    fillCopy,
-    OPENING_EDITION_SIZE,
-    OPENING_MOODS,
-    OPENING_RESERVED_NUMBERS,
-    OPENING_ROOMS,
-} from './opening-data';
+import { fillCopy, OPENING_MOODS, OPENING_ROOMS } from './opening-data';
 import type { OpeningCopy } from './opening-data';
 import { OpeningRegister } from './opening-register';
 import { RoomCard, RoomList } from './opening-rooms';
+import { useOpeningRegister } from './use-opening-register';
 
 type OpeningSceneProps = {
     copy: OpeningCopy;
@@ -48,7 +43,7 @@ export function OpeningScene({
     const art = useRef<HTMLDivElement>(null);
     const card = useRef<HTMLDivElement>(null);
 
-    const available = OPENING_EDITION_SIZE - OPENING_RESERVED_NUMBERS.length;
+    const register = useOpeningRegister();
     const room = selected === null ? null : OPENING_ROOMS[selected];
 
     function pick(index: number | null) {
@@ -96,10 +91,19 @@ export function OpeningScene({
                         />
                     </h1>
 
-                    <p className="op-edition op-in op-t2">{copy.edition}</p>
-                    <p className="op-limit op-in op-t2">
-                        {fillCopy(copy.limit, { n: available })}
-                    </p>
+                    {register !== null ? (
+                        <>
+                            <p className="op-edition op-in op-t2">
+                                {register.name}
+                            </p>
+                            <p className="op-limit op-in op-t2">
+                                {fillCopy(copy.limit, {
+                                    total: register.total,
+                                    n: register.available,
+                                })}
+                            </p>
+                        </>
+                    ) : null}
                 </header>
 
                 <div className="op-cols">
@@ -171,7 +175,13 @@ export function OpeningScene({
                 </div>
             </section>
 
-            <OpeningRegister copy={copy} onLeave={onLeave} />
+            {register !== null ? (
+                <OpeningRegister
+                    copy={copy}
+                    register={register}
+                    onLeave={onLeave}
+                />
+            ) : null}
         </div>
     );
 }

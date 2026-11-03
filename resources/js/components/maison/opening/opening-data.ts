@@ -264,15 +264,9 @@ export function openingPhotoSources(photo: string): {
     return { avif: `${base}.avif`, webp: `${base}.webp` };
 }
 
-/** Placeholder until the live register is wired: numbers already taken. */
-export const OPENING_RESERVED_NUMBERS: readonly number[] = [1, 2];
-
-export const OPENING_EDITION_SIZE = 100;
-
 export type OpeningCopy = {
     greeting: Record<OpeningMood, string>;
-    edition: string;
-    /** `{n}` is the count of numbers still available. */
+    /** `{total}` is the size of the edition, `{n}` the count of numbers still available. */
     limit: string;
     replay: string;
     registerTitle: string;
@@ -281,7 +275,6 @@ export type OpeningCopy = {
     chooseNumber: string;
     /** The way out to the home page. */
     enterHouse: string;
-    /** `{n}` is the padded number, e.g. 007. */
     tileAvailable: string;
     tileReserved: string;
     houseHint: string;
@@ -305,8 +298,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
             evening: 'Goedenavond vanuit Antwerpen',
             night: 'Goedenacht vanuit Antwerpen',
         },
-        edition: 'Heritage Nº 001 · Founding Edition',
-        limit: 'Beperkt tot 100 genummerde rackets · {n} nummers beschikbaar',
+        limit: 'Beperkt tot {total} genummerde stuks · {n} nummers beschikbaar',
         replay: 'Open de deur opnieuw',
         registerTitle: 'Het register',
         available: 'Beschikbaar',
@@ -329,8 +321,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
             evening: 'Good evening from Antwerp',
             night: 'Good night from Antwerp',
         },
-        edition: 'Heritage Nº 001 · Founding Edition',
-        limit: 'Limited to 100 numbered rackets · {n} numbers available',
+        limit: 'Limited to {total} numbered pieces · {n} numbers available',
         replay: 'Open the door again',
         registerTitle: 'The register',
         available: 'Available',
@@ -352,8 +343,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
             evening: 'Bonsoir depuis Anvers',
             night: 'Bonne nuit depuis Anvers',
         },
-        edition: 'Heritage Nº 001 · Founding Edition',
-        limit: 'Limitée à 100 raquettes numérotées · {n} numéros disponibles',
+        limit: 'Limitée à {total} pièces numérotées · {n} numéros disponibles',
         replay: 'Rouvrir la porte',
         registerTitle: 'Le registre',
         available: 'Disponible',
@@ -379,11 +369,6 @@ export function fillCopy(
         (text, [key, value]) => text.replaceAll(`{${key}}`, String(value)),
         template,
     );
-}
-
-/** 7 → "007", as the register prints it. */
-export function padNumber(value: number): string {
-    return String(value).padStart(3, '0');
 }
 
 export const OPENING_SEEN_KEY = 'maison.opening.seen';

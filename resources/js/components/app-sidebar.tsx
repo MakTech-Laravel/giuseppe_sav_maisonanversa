@@ -7,6 +7,7 @@ import {
     CalendarCheck,
     CalendarDays,
     CircleHelp,
+    DoorOpen,
     MessageSquareQuote,
     FileText,
     Globe,
@@ -63,6 +64,7 @@ import adminLegalPages from '@/routes/admin/legal-pages';
 import adminLetter from '@/routes/admin/letter';
 import adminNotifications from '@/routes/admin/notifications';
 import adminNotificationTest from '@/routes/admin/notifications/test';
+import adminOpeningOffers from '@/routes/admin/opening-offers';
 import adminOrders from '@/routes/admin/orders';
 import adminProducts from '@/routes/admin/products';
 import adminServersMaintenance from '@/routes/admin/servers-maintenance';
@@ -249,6 +251,12 @@ function buildNavGroups(
                     title: t('Home hero'),
                     href: adminHomeHero.edit(locale),
                     icon: ImageIcon,
+                    permissions: [PERMISSIONS.HERITAGE.VIEW],
+                },
+                {
+                    title: t('Opening-aanbod'),
+                    href: adminOpeningOffers.index(locale),
+                    icon: DoorOpen,
                     permissions: [PERMISSIONS.HERITAGE.VIEW],
                 },
                 {

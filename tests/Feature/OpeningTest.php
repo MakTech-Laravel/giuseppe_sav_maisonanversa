@@ -114,8 +114,8 @@ test('the register has two buttons: one starts the real reservation, one goes to
         ->toContain('openPurchase')
         ->toContain('usePurchasesPaused')
         ->toContain('onClick={reserve}')
-        // ... after leaving the opening, because the modals sit below it.
-        ->toMatch('/onLeave\(\);\s*openPurchase\(\);/')
+        // ... for the product the admin chose, after leaving the opening (the modals sit below it).
+        ->toMatch('/onLeave\(\);\s*openPurchase\(register\.product\);/')
         // Home page: leaves the opening for the page behind it.
         ->toContain('onClick={onLeave}')
         ->toContain('copy.enterHouse')
@@ -125,6 +125,32 @@ test('the register has two buttons: one starts the real reservation, one goes to
     expect(File::get(resource_path('js/components/maison/modals/maison-modal.tsx')))->toContain('z-9990');
 
     expect(openingSource('opening-data.ts'))->toContain("enterHouse: 'Enter the house'");
+});
+
+test('the register prints the real edition numbers of the chosen product, never a fixed 100', function () {
+    $register = openingSource('opening-register.tsx');
+    $data = openingSource('opening-data.ts');
+
+    expect($register)
+        ->toContain('register.tiles.map')
+        ->toContain('disabled={!tile.available}')
+        ->toContain('{tile.label}');
+
+    // Nothing hard-coded is left: no fixed size, no placeholder reserved numbers.
+    foreach (['OPENING_EDITION_SIZE', 'OPENING_RESERVED_NUMBERS', 'padNumber'] as $gone) {
+        expect($data)->not->toContain($gone)
+            ->and($register)->not->toContain($gone);
+    }
+
+    // The header's product and counts come from the register, and hide with it.
+    expect(openingSource('opening-scene.tsx'))
+        ->toContain('useOpeningRegister()')
+        ->toContain('register.name')
+        ->toContain('total: register.total')
+        ->toContain('register !== null')
+        ->not->toContain('Heritage Nº 001');
+
+    expect($data)->toContain('{total}')->not->toContain('rackets');
 });
 
 test('the opening has a skip, a language switcher, and never leaves on its own', function () {
