@@ -10,6 +10,7 @@ use Database\Seeders\FaqSeeder;
 use Database\Seeders\HomeHeroSeeder;
 use Database\Seeders\JournalArticleSeeder;
 use Database\Seeders\LegalPageSeeder;
+use Database\Seeders\OpeningOfferSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\SeoMetaSeeder;
 use Database\Seeders\SiteSettingSeeder;
@@ -35,6 +36,7 @@ pest()->extend(TestCase::class)
         $this->seed([
             ProductSeeder::class,
             EditionPieceSeeder::class,
+            OpeningOfferSeeder::class,
             JournalArticleSeeder::class,
             SiteSettingSeeder::class,
             HomeHeroSeeder::class,

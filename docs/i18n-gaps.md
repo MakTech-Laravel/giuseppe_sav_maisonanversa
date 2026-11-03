@@ -50,10 +50,12 @@ removed once the real Spatie-role-based Founding Circle/Passport system
 replaced it, and those four keys had no other call site, so they were removed
 too.
 
-## Copy the dictionary does not carry: the intro slides
+## Copy the dictionary does not carry: the opening
 
-The seven intro rooms name themselves in `resources/js/lib/maison-intro.ts`
-rather than through `t()`. That mirrors the prototype, which assembled the slide
+The opening (the door and the lit house) and its eight rooms carry their own
+nl/en/fr copy in `resources/js/components/maison/opening/opening-data.ts`
+rather than through `t()`; only the Skip label reuses the dictionary. This
+mirrors the prototype, which assembled the slide
 copy in script from an array carrying its own `_en` and `_fr` fields — the words
 were never in the page, so the dictionary never saw them. Translating a room
 means editing that file, not this dictionary.

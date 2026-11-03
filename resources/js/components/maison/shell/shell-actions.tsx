@@ -9,6 +9,12 @@ import type { CheckoutShared } from '@/types/global';
  */
 export type OrderProductContext = CheckoutShared;
 
+/** A number the visitor already chose (e.g. in the opening), so the picker need not ask again. */
+export type PreselectedEdition = {
+    editionPieceId: number;
+    editionLabel: string;
+};
+
 /**
  * The shell owns the modals, so any page that needs to open one reaches through
  * here rather than inventing its own overlay.
@@ -16,7 +22,10 @@ export type OrderProductContext = CheckoutShared;
 export type ShellActions = {
     openNewsletter: () => void;
     openOrder: (product?: OrderProductContext) => void;
-    openPurchase: (product?: OrderProductContext) => void;
+    openPurchase: (
+        product?: OrderProductContext,
+        edition?: PreselectedEdition,
+    ) => void;
     openCertificate: () => void;
     openAuth: (view?: AuthView) => void;
 };

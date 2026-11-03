@@ -32,7 +32,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         Telescope::avatar(function (?string $id, ?string $email) {
             return ! is_null($id)
-                ? '/avatars/' . User::find($id)->avatar_path
+                ? '/avatars/'.User::find($id)->avatar_path
                 : '/generic-avatar.jpg';
         });
     }
