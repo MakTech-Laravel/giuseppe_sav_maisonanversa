@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { CinematicLayer } from '@/components/maison/cinematic/cinematic-layer';
 import { PageTransition } from '@/components/maison/cinematic/page-transition';
 import { CookieConsentBanner } from '@/components/maison/cookie-consent-banner';
-import { ImmersiveIntro } from '@/components/maison/intro/immersive-intro';
 import type { AuthView } from '@/components/maison/modals/auth-modal';
 import { MaisonModals } from '@/components/maison/modals/maison-modals';
+import { Opening } from '@/components/maison/opening/opening';
 import { ContactDock } from '@/components/maison/shell/contact-dock';
 import { EtchingBand } from '@/components/maison/shell/etching-band';
 import { ShellActionsProvider } from '@/components/maison/shell/shell-actions';
@@ -257,7 +257,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                     <ContactDock />
                     <CookieConsentBanner />
 
-                    {activePage(url, locale) === 'home' && <ImmersiveIntro />}
+                    {activePage(url, locale) === 'home' && <Opening />}
 
                     {modal && (
                         <MaisonModals

@@ -25,39 +25,27 @@
         </x-inertia::head>
 
         {{--
-            Paint the arrival curtain before React boots so the home page never
-            flashes underneath the preloader. ImmersiveIntro / Preloader remove
-            #maison-boot-cover once they own the screen.
+            The right light, and "once per session", decided before first paint so
+            the opening never flashes the wrong colours or replays. The opening
+            itself is in the server HTML, so it paints before any JavaScript runs.
+            ?light=morning|afternoon|evening|night overrides the visitor's clock
+            for testing; ?intro=1 plays the opening again.
         --}}
         <script @if (\Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}" @endif>
             (function () {
+                var root = document.documentElement;
+
                 try {
-                    if (sessionStorage.getItem('maison.intro.seen')) {
-                        return;
+                    var forced = (location.search.match(/[?&]light=(morning|afternoon|evening|night)/) || [])[1];
+                    var hour = new Date().getHours();
+
+                    root.dataset.light = forced || (hour >= 5 && hour < 12 ? 'morning' : hour >= 12 && hour < 18 ? 'afternoon' : hour >= 18 && hour < 23 ? 'evening' : 'night');
+
+                    if (!/[?&]intro(=|&|$)/.test(location.search) && sessionStorage.getItem('maison.opening.seen')) {
+                        root.dataset.opening = 'seen';
                     }
-
-                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                        return;
-                    }
-
-                    var locales = @json(config('maison.locales'));
-                    var path = location.pathname.replace(/\/+$/, '') || '/';
-                    var home = locales.some(function (locale) {
-                        return path === '/' + locale;
-                    });
-
-                    if (!home && path !== '/') {
-                        return;
-                    }
-
-                    var cover = document.createElement('div');
-                    cover.id = 'maison-boot-cover';
-                    cover.setAttribute('aria-hidden', 'true');
-                    cover.style.cssText =
-                        'position:fixed;inset:0;z-index:100000;background:#291c18;';
-                    document.documentElement.appendChild(cover);
                 } catch (e) {
-                    // Storage or matchMedia can fail; React will still mount the loader.
+                    // Storage can be denied; the opening then simply plays.
                 }
             })();
         </script>
