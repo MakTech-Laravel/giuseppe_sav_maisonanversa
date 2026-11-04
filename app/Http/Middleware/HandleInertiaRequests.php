@@ -100,9 +100,10 @@ class HandleInertiaRequests extends Middleware
 
             /*
              * Which of the site's photographs exist yet. Everything else falls
-             * back to a placeholder rather than requesting a missing file.
+             * back to a placeholder rather than requesting a missing file. The
+             * original room PNGs are left out: only their AVIF/WebP are served.
              */
-            'availableImages' => Inertia::always(Imagery::existingPaths()),
+            'availableImages' => Inertia::always(Imagery::sharedPaths()),
             'notifications' => fn (): ?array => $user ? [
                 'unreadCount' => app(InboxService::class)->unreadCount($user),
                 'preview' => app(InboxService::class)->preview($user),

@@ -73,9 +73,9 @@ return [
     */
 
     'seo' => [
-        'image' => '/images/rooms/room-entrance.png',
-        'image_width' => 1024,
-        'image_height' => 682,
+        'image' => '/images/brand/og-maison-anversa.jpg',
+        'image_width' => 1200,
+        'image_height' => 630,
         'sitemap_cache_seconds' => (int) env('MAISON_SITEMAP_CACHE_SECONDS', 3600),
         'disallow_paths' => [
             '/login',

@@ -16,6 +16,14 @@
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+        {{--
+            Only the two Latin fonts the first screen is set in are preloaded
+            (Baskervville 400 and Montserrat 300); the other subsets load on demand.
+        --}}
+        @foreach (\App\Support\FontPreloads::latin() as $fontUrl)
+            <link rel="preload" href="{{ $fontUrl }}" as="font" type="font/woff2" crossorigin>
+        @endforeach
+
         @fonts
 
         @viteReactRefresh
@@ -52,6 +60,11 @@
     </head>
     <body class="antialiased">
         <x-inertia::app />
+
+        {{-- The house, in the first HTML; React takes it over and removes it. --}}
+        @if (($page['component'] ?? null) === 'maison/home')
+            @include('opening-boot')
+        @endif
         @php
             $consent = json_decode(request()->cookie('maison_consent', ''), true);
             $allowAnalytics = is_array($consent) && ($consent['analytics'] ?? false);

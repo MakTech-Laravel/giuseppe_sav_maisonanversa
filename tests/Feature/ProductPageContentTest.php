@@ -14,7 +14,7 @@ test('product page uses dynamic content and faq props', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('product.slug', Product::FOUNDING_SLUG)
-            ->where('product.name', 'Heritage No.001 · Founding Edition')
+            ->where('product.name', 'Heritage Nº 001 · Founding Edition')
             ->where('product.eyebrow', 'Maison Anversa · Founding Edition')
             ->where('product.hero_eyebrow', 'Founding Edition · 100 Genummerde Stuks')
             ->where('product.hero_subtitle', 'Founding Edition 2026')
@@ -61,7 +61,57 @@ test('english product page uses founding edition translations', function () {
         ->assertInertia(fn ($page) => $page
             ->where('product.hero_eyebrow', 'Founding Edition · 100 Numbered Pieces')
             ->where('product.description', 'The Founding Edition is limited to 100 numbered pieces and will never be made again.')
-            ->where('product.name', 'Heritage No.001 · Founding Edition'));
+            ->where('product.name', 'Heritage Nº 001 · Founding Edition'));
+});
+
+test('the rename migration fixes the live founding product name and its translations, and nothing else', function () {
+    Artisan::call('app:import-static-content-command');
+
+    $product = Product::founding();
+    $product->name = 'Heritage No.001 · Founding Edition';
+    $product->description = 'Edited by an admin.';
+    $product->saveQuietly();
+
+    foreach (['en', 'fr'] as $locale) {
+        $product->translations()->updateOrCreate(
+            ['locale' => $locale, 'column' => 'name'],
+            ['value' => 'Heritage No.001 · Founding Edition', 'source_hash' => 'stale'],
+        );
+    }
+
+    $migration = require database_path('migrations/2026_11_04_072559_rename_founding_product_to_ordinal_sign.php');
+    $migration->up();
+
+    $product->refresh();
+
+    expect($product->name)->toBe('Heritage Nº 001 · Founding Edition')
+        ->and($product->description)->toBe('Edited by an admin.')
+        ->and($product->translated('name', 'en'))->toBe('Heritage Nº 001 · Founding Edition')
+        ->and($product->translated('name', 'fr'))->toBe('Heritage Nº 001 · Founding Edition');
+
+    // A name an admin has already changed to something else is left alone.
+    $product->name = 'Heritage Nº 001 · Custom';
+    $product->saveQuietly();
+    $migration->up();
+
+    expect($product->refresh()->name)->toBe('Heritage Nº 001 · Custom');
+});
+
+test('the seeder names the founding product with the ordinal sign, in every language', function () {
+    Artisan::call('app:import-static-content-command');
+
+    $product = Product::founding();
+
+    expect($product->name)->toBe('Heritage Nº 001 · Founding Edition');
+
+    // Stored as the English and French name too, so they never wait for DeepL or keep the old spelling.
+    foreach (['en', 'fr'] as $locale) {
+        $row = $product->translations()->where('locale', $locale)->where('column', 'name')->first();
+
+        expect($row->value)->toBe('Heritage Nº 001 · Founding Edition')
+            ->and($row->source_hash)->toBe($product->translationSourceHash('name'))
+            ->and($product->translated('name', $locale))->toBe('Heritage Nº 001 · Founding Edition');
+    }
 });
 
 test('staff can update product storefront copy fields', function () {

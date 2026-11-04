@@ -125,8 +125,8 @@ test('a house default open graph image is used when a product has no seo or gall
             ->where('seo.title', 'Plain Product — Maison Anversa')
             ->where('seo.keywords', null)
             ->where('seo.ogImage', url((string) config('maison.seo.image')))
-            ->where('seo.ogImageWidth', 1024)
-            ->where('seo.ogImageHeight', 682));
+            ->where('seo.ogImageWidth', 1200)
+            ->where('seo.ogImageHeight', 630));
 });
 
 test('the catalog hides early-access products from guests', function () {

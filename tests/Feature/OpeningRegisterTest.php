@@ -64,6 +64,35 @@ test('the tiles follow the chosen product, never a fixed 100', function () {
         ->and(presented()['product']['productSlug'])->toBe($other->product->slug);
 });
 
+test('the register hands the page every number, however many: paging is the page\'s job', function (int $total) {
+    offerFor($total);
+
+    $register = presented();
+
+    expect($register['tiles'])->toHaveCount($total)
+        ->and($register['total'])->toBe($total)
+        ->and($register['available'])->toBe($total);
+})->with([
+    'exactly one page' => 100,
+    'one more than a page' => 101,
+    'three pages' => 250,
+]);
+
+test('the edition name is the chosen product\'s, in the visitor\'s language', function () {
+    $offer = offerFor(12, ['name' => 'Heritage Nº 002 · Second Edition']);
+
+    $offer->product->translations()->updateOrCreate(
+        ['locale' => 'en', 'column' => 'name'],
+        ['value' => 'Heritage Nº 002 · Second Edition (EN)', 'source_hash' => $offer->product->translationSourceHash('name')],
+    );
+
+    expect(presented()['name'])->toBe('Heritage Nº 002 · Second Edition');
+
+    app()->setLocale('en');
+
+    expect(presented()['name'])->toBe('Heritage Nº 002 · Second Edition (EN)');
+});
+
 test('only pieces that can be bought print as available', function () {
     $offer = offerFor(12);
     $product = $offer->product;

@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { useLocale } from '@/hooks/use-locale';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
+import { cn } from '@/lib/utils';
 import { OPENING_COPY, OPENING_SEEN_KEY } from './opening-data';
 import { OpeningScene } from './opening-scene';
 
@@ -31,6 +32,51 @@ function writeSession(key: string, value: string): void {
 }
 
 /**
+ * The Blade layer (resources/views/opening-boot.blade.php): the house as plain
+ * HTML in the first response, drawing itself before any script has run.
+ */
+const BOOT_ID = 'op-boot';
+
+/**
+ * Takes over from the Blade layer without restarting the animation: every
+ * animation in the opening is set to the clock the Blade layer has reached, then
+ * the Blade layer is removed. Returns true when it had already played to the end.
+ */
+function takeOverFromBoot(overlay: HTMLElement | null): boolean {
+    const boot = document.getElementById(BOOT_ID);
+
+    if (boot === null) {
+        return false;
+    }
+
+    const all = boot.getAnimations({ subtree: true });
+    const running = all.filter(
+        (animation) => animation.playState === 'running',
+    );
+
+    boot.remove();
+
+    if (running.length === 0) {
+        // Nothing left to play, unless there was nothing to begin with (reduced motion).
+        return all.length > 0;
+    }
+
+    const elapsed = Math.max(
+        ...running.map((animation) =>
+            typeof animation.currentTime === 'number'
+                ? animation.currentTime
+                : 0,
+        ),
+    );
+
+    overlay?.getAnimations({ subtree: true }).forEach((animation) => {
+        animation.currentTime = elapsed;
+    });
+
+    return false;
+}
+
+/**
  * The opening plays once per browser session; `?intro=1` plays it again. The
  * inline script in app.blade.php applies the same rule before first paint, by
  * setting <html data-opening="seen"> so that repeat visits never flash it.
@@ -44,9 +90,10 @@ function shouldRun(): boolean {
 }
 
 /**
- * The arrival: one scene. The house draws itself, the door opens, and the eight
- * windows light up one by one; the room list appears beside it. Each window and
- * each name is a room.
+ * The arrival: one scene, in one column. The house draws itself, the door opens,
+ * and the eight windows light up one by one. Under it come the wordmark, the
+ * register with its two buttons, and the room list. Each window and each name is
+ * a room.
  *
  * Mounted by the shell on the home page only. It is part of the server HTML, so
  * the house paints before any JavaScript has run; the first client render matches
@@ -64,13 +111,21 @@ export function Opening() {
     const [replays, setReplays] = useState(0);
 
     const leaveTimer = useRef<number | null>(null);
+    const overlay = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
         // Deferred to after mount: sessionStorage is invisible to the server, and
         // reading it during render would desync from the server-rendered markup.
         if (!shouldRun()) {
+            document.getElementById(BOOT_ID)?.remove();
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setOpen(false);
+
+            return;
+        }
+
+        if (takeOverFromBoot(overlay.current)) {
+            setDone(true);
         }
     }, []);
 
@@ -140,7 +195,8 @@ export function Opening() {
 
     return (
         <div
-            className={`ma-opening${leaving ? 'is-leaving' : ''}`}
+            ref={overlay}
+            className={cn('ma-opening', leaving && 'is-leaving')}
             role="dialog"
             aria-modal="true"
             aria-label={copy.dialog}
