@@ -64,6 +64,24 @@ test('the available images are shared with the front end', function () {
 
     $this->get('/nl')->assertInertia(fn ($page) => $page
         ->where('availableImages', fn ($images) => collect($images)->contains('images/brand/__test-facade.png')
-            && collect($images)->contains('images/rooms/room-entrance.png'))
+            && collect($images)->contains('images/optimized/rooms/room-entrance-768.webp'))
+    );
+});
+
+test('the page data never names an original room png, only its avif and webp', function () {
+    File::put(public_path('images/rooms/__test-room.png'), 'not really a png');
+
+    expect(Imagery::sharedPaths())
+        ->not->toContain('images/rooms/room-entrance.png')
+        ->not->toContain('images/rooms/__test-room.png')
+        ->toContain('images/optimized/rooms/room-entrance-768.avif')
+        ->toContain('images/brand/hero-mansion.png');
+
+    expect(collect(Imagery::sharedPaths())->filter(fn ($path) => preg_match('/room[^\/]*\.png$/i', $path)))->toBeEmpty();
+
+    $this->get('/nl')->assertOk()->assertInertia(fn ($page) => $page
+        ->where('availableImages', fn ($images) => ! collect($images)->contains(
+            fn ($path) => preg_match('/room[^\/]*\.png$/i', $path) === 1
+        ))
     );
 });

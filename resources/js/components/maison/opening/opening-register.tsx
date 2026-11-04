@@ -1,9 +1,32 @@
 import { useState } from 'react';
-import type { CSSProperties } from 'react';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
 import type { OpeningRegisterData } from '@/types/opening';
+import { fillCopy, OPENING_PAGE_SIZE } from './opening-data';
 import type { OpeningCopy } from './opening-data';
+
+/**
+ * The page buttons to show: every page up to seven, else the first, the last and
+ * the pages around the current one, with `null` standing for a gap ("…").
+ *
+ * @returns zero-based page numbers
+ */
+function pageItems(current: number, pages: number): (number | null)[] {
+    if (pages <= 7) {
+        return Array.from({ length: pages }, (_, index) => index);
+    }
+
+    const shown = new Set([0, pages - 1, current - 1, current, current + 1]);
+    const sorted = [...shown]
+        .filter((index) => index >= 0 && index < pages)
+        .sort((a, b) => a - b);
+
+    return sorted.flatMap((index, position) =>
+        position > 0 && index - sorted[position - 1] > 1
+            ? [null, index]
+            : [index],
+    );
+}
 
 type OpeningRegisterProps = {
     copy: OpeningCopy;
@@ -24,6 +47,10 @@ type OpeningRegisterProps = {
  *   It leaves the opening first, because those modals sit below it.
  * - "Enter the house" leaves the opening for the home page behind it.
  *
+ * The tiles sit in a fixed grid: ten per row on desktop and tablet, five on a phone.
+ * An edition of more than OPENING_PAGE_SIZE (100) numbers is paged, one 10 × 10 grid
+ * per page; 100 or fewer shows no pager. Every tile stays in `register.tiles`, so a
+ * chosen number survives a change of page and still reaches the picker.
  * A tile highlights. If one is chosen when "Choose your number" is pressed, it is
  * handed to the picker, which holds it with its normal hold request and goes on to
  * the order modal without asking again. With no tile chosen, the picker lists them.
@@ -36,12 +63,17 @@ export function OpeningRegister({
     const { openPurchase } = useShellActions();
     const purchasesPaused = usePurchasesPaused();
     const [selected, setSelected] = useState<number | null>(null);
+    const [page, setPage] = useState(0);
 
-    // Labels such as EXC001ST are wider than 001, so the tiles size to the longest.
-    const longestLabel = register.tiles.reduce(
-        (longest, tile) => Math.max(longest, tile.label.length),
-        0,
-    );
+    // Paged only above one page: 100 numbers or fewer are shown whole, no pager.
+    const paged = register.tiles.length > OPENING_PAGE_SIZE;
+    const pages = Math.ceil(register.tiles.length / OPENING_PAGE_SIZE);
+    // Clamped, so an edition that shrinks never leaves the visitor on an empty page.
+    const currentPage = Math.min(page, Math.max(pages - 1, 0));
+    const firstOnPage = paged ? currentPage * OPENING_PAGE_SIZE : 0;
+    const visibleTiles = paged
+        ? register.tiles.slice(firstOnPage, firstOnPage + OPENING_PAGE_SIZE)
+        : register.tiles;
 
     function pick(id: number) {
         setSelected((current) => (current === id ? null : id));
@@ -80,15 +112,8 @@ export function OpeningRegister({
                 </div>
             </div>
 
-            <div
-                className="op-numbers"
-                style={
-                    {
-                        '--op-tile': `${Math.max(52, longestLabel * 9 + 20)}px`,
-                    } as CSSProperties
-                }
-            >
-                {register.tiles.map((tile) => (
+            <div className="op-numbers">
+                {visibleTiles.map((tile) => (
                     <button
                         key={tile.id}
                         type="button"
@@ -106,6 +131,63 @@ export function OpeningRegister({
                     </button>
                 ))}
             </div>
+
+            {paged ? (
+                <nav className="op-pager" aria-label={copy.pagination}>
+                    <button
+                        type="button"
+                        className="op-page op-page-step"
+                        disabled={currentPage === 0}
+                        onClick={() => setPage(currentPage - 1)}
+                    >
+                        ← {copy.previousPage}
+                    </button>
+
+                    {pageItems(currentPage, pages).map((item, index) =>
+                        item === null ? (
+                            <span
+                                key={`gap-${index}`}
+                                className="op-page-gap"
+                                aria-hidden="true"
+                            >
+                                …
+                            </span>
+                        ) : (
+                            <button
+                                key={item}
+                                type="button"
+                                className="op-page op-page-num"
+                                aria-label={fillCopy(copy.pageLabel, {
+                                    n: item + 1,
+                                })}
+                                aria-current={
+                                    item === currentPage ? 'page' : undefined
+                                }
+                                onClick={() => setPage(item)}
+                            >
+                                {item + 1}
+                            </button>
+                        ),
+                    )}
+
+                    <button
+                        type="button"
+                        className="op-page op-page-step"
+                        disabled={currentPage === pages - 1}
+                        onClick={() => setPage(currentPage + 1)}
+                    >
+                        {copy.nextPage} →
+                    </button>
+
+                    <p className="op-page-range" aria-live="polite">
+                        {fillCopy(copy.numbersRange, {
+                            from: firstOnPage + 1,
+                            to: firstOnPage + visibleTiles.length,
+                            total: register.tiles.length,
+                        })}
+                    </p>
+                </nav>
+            ) : null}
 
             <div className="op-ctas">
                 <button

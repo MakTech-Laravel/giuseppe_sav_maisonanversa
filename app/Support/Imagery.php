@@ -64,6 +64,21 @@ final class Imagery
     }
 
     /**
+     * The paths the page data carries to the front end: everything on disk except
+     * the original room photographs. Those PNGs are several megabytes and are only
+     * ever served as the AVIF and WebP files made from them, so no page names them.
+     *
+     * @return array<int, string>
+     */
+    public static function sharedPaths(): array
+    {
+        return array_values(array_filter(
+            self::existingPaths(),
+            fn (string $path): bool => ! preg_match('#/[^/]*room[^/]*\.png$#i', $path),
+        ));
+    }
+
+    /**
      * Paths relative to the public root, e.g. `images/rooms/room-entrance.png`.
      *
      * @return array<int, string>

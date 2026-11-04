@@ -50,7 +50,6 @@ export function PlaceholderImage({
         ground,
     } = imageAsset(asset);
 
-    const exists = availableImages.includes(path);
     const aspectRatio = ratio === null ? undefined : (ratio ?? naturalRatio);
     const available = new Set(availableImages);
     const variants = imageVariants(path).filter(
@@ -60,10 +59,24 @@ export function PlaceholderImage({
         variants.filter((variant) => available.has(variant.avif)),
         'avif',
     );
-    const webpSrcset = srcset(
-        variants.filter((variant) => available.has(variant.webp)),
-        'webp',
+    const webpVariants = variants.filter((variant) =>
+        available.has(variant.webp),
     );
+    const webpSrcset = srcset(webpVariants, 'webp');
+    /*
+     * The <img> is the fallback every browser can use, so it takes the largest
+     * WebP rather than the original PNG, which is never requested. Only an image
+     * with no generated variants still falls back to the file itself.
+     */
+    const fallbackSrc =
+        webpVariants.length > 0
+            ? `/${webpVariants[webpVariants.length - 1].webp}`
+            : `/${path}`;
+    /*
+     * The server leaves the original room PNGs out of the list, so a photograph
+     * exists when the original is listed or when any of its variants is.
+     */
+    const exists = availableImages.includes(path) || variants.length > 0;
 
     return (
         <div
@@ -87,7 +100,7 @@ export function PlaceholderImage({
                         />
                     )}
                     <img
-                        src={`/${path}`}
+                        src={fallbackSrc}
                         alt={alt ?? label}
                         loading={loading}
                         fetchPriority={fetchPriority}

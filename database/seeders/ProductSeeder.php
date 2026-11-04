@@ -12,6 +12,13 @@ use Illuminate\Database\Seeder;
 class ProductSeeder extends Seeder
 {
     /**
+     * The product's name, as the opening prints it under the wordmark. "Nº" is the
+     * ordinal sign (U+00BA). The name is the same in every language, so it is also
+     * stored as the English and French translation, instead of waiting for DeepL.
+     */
+    public const FOUNDING_NAME = 'Heritage Nº 001 · Founding Edition';
+
+    /**
      * Seed the Founding Edition catalog product with storefront content.
      * Stripe IDs are created on first purchase or when Stripe keys are present.
      */
@@ -20,7 +27,7 @@ class ProductSeeder extends Seeder
         $product = Product::query()->updateOrCreate(
             ['slug' => Product::FOUNDING_SLUG],
             [
-                'name' => 'Heritage No.001 · Founding Edition',
+                'name' => self::FOUNDING_NAME,
                 'type' => ProductType::LimitedEdition,
                 'status' => ProductStatus::Active,
                 'amount' => '249.00',
@@ -43,6 +50,16 @@ class ProductSeeder extends Seeder
                 ],
             ],
         );
+
+        foreach ($product->translationTargetLocales() as $locale) {
+            $product->translations()->updateOrCreate(
+                ['locale' => $locale, 'column' => 'name'],
+                [
+                    'value' => self::FOUNDING_NAME,
+                    'source_hash' => $product->translationSourceHash('name'),
+                ],
+            );
+        }
 
         foreach (self::sections() as $key => $definition) {
             $section = ProductSection::query()->updateOrCreate(

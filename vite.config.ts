@@ -13,7 +13,7 @@ export default defineConfig({
         port: 5173,
         strictPort: true,
         hmr: { host: '127.0.0.1' },
-      },
+    },
     resolve: {
         dedupe: ['react', 'react-dom'],
         alias: {
@@ -33,14 +33,16 @@ export default defineConfig({
                     weights: [400],
                     styles: ['normal', 'italic'],
                     subsets: ['latin'],
-                    preload: [{ weight: 400, style: 'normal' }],
+                    // Preloaded by hand in app.blade.php (App\Support\FontPreloads):
+                    // the plugin would preload every unicode-range subset.
+                    preload: false,
                     fallbacks: ['Georgia', 'serif'],
                 }),
                 bunny('Montserrat', {
                     weights: [300, 400, 500],
                     styles: ['normal'],
                     subsets: ['latin'],
-                    preload: [{ weight: 300, style: 'normal' }],
+                    preload: false,
                     fallbacks: ['sans-serif'],
                 }),
             ],

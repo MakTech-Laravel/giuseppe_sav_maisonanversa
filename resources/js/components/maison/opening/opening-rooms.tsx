@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Ref } from 'react';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { foundingProductUrl } from '@/lib/maison-navigation';
+import { cn } from '@/lib/utils';
 import type { Locale } from '@/types/locale';
 import { fillCopy, OPENING_ROOMS, openingPhotoSources } from './opening-data';
 import type { OpeningCopy, OpeningRoom } from './opening-data';
@@ -12,7 +13,7 @@ type RoomListProps = {
     onPick: (index: number) => void;
 };
 
-/** The eight rooms as real buttons, beside the house. It appears once the windows are lit. */
+/** The eight rooms as real buttons, under the register. It appears once the windows are lit. */
 export function RoomList({ copy, locale, onPick }: RoomListProps) {
     return (
         <div className="op-rooms op-in">
@@ -50,8 +51,10 @@ type RoomCardProps = {
 };
 
 /**
- * A room's card: its photo, its line and the way in. The photo is requested only
- * when the card is on screen, never before a room is chosen.
+ * A room, full screen: its photo fills the screen, and the name, the line and the
+ * way in sit on top of it. The photo is requested only when this is on screen,
+ * never before a room is chosen. A room without a photo yet gets the plain
+ * background, with the same text and buttons.
  */
 export function RoomCard({
     room,
@@ -66,54 +69,67 @@ export function RoomCard({
     const photo = room.photo === null ? null : openingPhotoSources(room.photo);
 
     return (
-        <div className="op-room" ref={ref} tabIndex={-1}>
-            <p className="op-k">
-                {fillCopy(copy.roomKicker, {
-                    n: room.numeral,
-                    sub: text.subtitle,
-                })}
-            </p>
-            <h2>{text.name}</h2>
-            <p className="op-line">{text.line}</p>
-
-            <div className="op-photo">
-                {photo !== null && (
+        <div
+            className={cn('op-room', photo !== null && 'has-photo')}
+            ref={ref}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label={text.name}
+        >
+            {photo !== null && (
+                <div className="op-photo" aria-hidden="true">
                     <picture>
                         <source srcSet={photo.avif} type="image/avif" />
                         <img
                             src={photo.webp}
-                            alt={text.name}
+                            alt=""
                             width={768}
                             height={512}
                             className={loaded ? 'ok' : undefined}
                             onLoad={() => setLoaded(true)}
                         />
                     </picture>
-                )}
-            </div>
+                </div>
+            )}
 
-            <div className="op-room-actions">
-                {'page' in room.destination ? (
-                    <MaisonLink
-                        className="op-btn op-b1"
-                        to={room.destination.page}
-                        onClick={onLeave}
-                    >
-                        {text.enter}
-                    </MaisonLink>
-                ) : (
-                    <MaisonLink
-                        className="op-btn op-b1"
-                        href={foundingProductUrl(locale)}
-                        onClick={onLeave}
-                    >
-                        {text.enter}
-                    </MaisonLink>
-                )}
+            <div className="op-room-body">
+                <p className="op-k">
+                    {fillCopy(copy.roomKicker, {
+                        n: room.numeral,
+                        sub: text.subtitle,
+                    })}
+                </p>
+                <h2>{text.name}</h2>
+                <p className="op-line">{text.line}</p>
 
-                <button type="button" className="op-btn op-b2" onClick={onBack}>
-                    {copy.allRooms}
-                </button>
+                <div className="op-room-actions">
+                    {'page' in room.destination ? (
+                        <MaisonLink
+                            className="op-btn op-b1"
+                            to={room.destination.page}
+                            onClick={onLeave}
+                        >
+                            {text.enter}
+                        </MaisonLink>
+                    ) : (
+                        <MaisonLink
+                            className="op-btn op-b1"
+                            href={foundingProductUrl(locale)}
+                            onClick={onLeave}
+                        >
+                            {text.enter}
+                        </MaisonLink>
+                    )}
+
+                    <button
+                        type="button"
+                        className="op-btn op-b2"
+                        onClick={onBack}
+                    >
+                        {copy.allRooms}
+                    </button>
+                </div>
             </div>
         </div>
     );

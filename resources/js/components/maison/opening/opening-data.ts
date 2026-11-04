@@ -264,6 +264,12 @@ export function openingPhotoSources(photo: string): {
     return { avif: `${base}.avif`, webp: `${base}.webp` };
 }
 
+/**
+ * How many numbers one page of the register holds: the 10 × 10 grid. An edition
+ * of this size or smaller is shown whole, with no pager; a larger one is paged.
+ */
+export const OPENING_PAGE_SIZE = 100;
+
 export type OpeningCopy = {
     greeting: Record<OpeningMood, string>;
     /** `{total}` is the size of the edition, `{n}` the count of numbers still available. */
@@ -272,6 +278,14 @@ export type OpeningCopy = {
     registerTitle: string;
     available: string;
     reserved: string;
+    /** The register's page controls, shown only above OPENING_PAGE_SIZE numbers. */
+    pagination: string;
+    previousPage: string;
+    nextPage: string;
+    /** `{n}` is the page number. */
+    pageLabel: string;
+    /** `{from}` and `{to}` are the numbers on this page, `{total}` the edition's size. */
+    numbersRange: string;
     chooseNumber: string;
     /** The way out to the home page. */
     enterHouse: string;
@@ -298,11 +312,16 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
             evening: 'Goedenavond vanuit Antwerpen',
             night: 'Goedenacht vanuit Antwerpen',
         },
-        limit: 'Beperkt tot {total} genummerde stuks · {n} nummers beschikbaar',
+        limit: 'Beperkt tot {total} genummerde rackets · nog {n} nummers vrij',
         replay: 'Open de deur opnieuw',
         registerTitle: 'Het register',
         available: 'Beschikbaar',
         reserved: 'Gereserveerd',
+        pagination: 'Pagina’s van het register',
+        previousPage: 'Vorige',
+        nextPage: 'Volgende',
+        pageLabel: 'Pagina {n}',
+        numbersRange: 'Nummers {from}–{to} van {total}',
         chooseNumber: 'Kies uw nummer',
         enterHouse: 'Betreed het huis',
         tileAvailable: 'beschikbaar',
@@ -321,11 +340,16 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
             evening: 'Good evening from Antwerp',
             night: 'Good night from Antwerp',
         },
-        limit: 'Limited to {total} numbered pieces · {n} numbers available',
+        limit: 'Limited to {total} numbered rackets · {n} numbers available',
         replay: 'Open the door again',
         registerTitle: 'The register',
         available: 'Available',
         reserved: 'Reserved',
+        pagination: 'Register pages',
+        previousPage: 'Previous',
+        nextPage: 'Next',
+        pageLabel: 'Page {n}',
+        numbersRange: 'Numbers {from}–{to} of {total}',
         chooseNumber: 'Choose your number',
         enterHouse: 'Enter the house',
         tileAvailable: 'available',
@@ -343,11 +367,16 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
             evening: 'Bonsoir depuis Anvers',
             night: 'Bonne nuit depuis Anvers',
         },
-        limit: 'Limitée à {total} pièces numérotées · {n} numéros disponibles',
+        limit: 'Limitée à {total} raquettes numérotées · {n} numéros disponibles',
         replay: 'Rouvrir la porte',
         registerTitle: 'Le registre',
         available: 'Disponible',
         reserved: 'Réservé',
+        pagination: 'Pages du registre',
+        previousPage: 'Précédent',
+        nextPage: 'Suivant',
+        pageLabel: 'Page {n}',
+        numbersRange: 'Numéros {from}–{to} sur {total}',
         chooseNumber: 'Choisissez votre numéro',
         enterHouse: 'Entrer dans la maison',
         tileAvailable: 'disponible',
