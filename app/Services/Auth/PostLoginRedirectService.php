@@ -55,8 +55,14 @@ class PostLoginRedirectService
      *
      * Used when auth middleware blocks a guest, and when the Maison auth modal
      * opens on a public page that never hit a protected route.
+     *
+     * The localized home is refused, since it is where a guest is sent back to
+     * and would otherwise overwrite the page they really wanted. The one
+     * exception is `$allowHome`: a guest who starts a reservation on the home
+     * page (the opening's register) and must log in first, who has to come back
+     * to the home page so the reservation can carry on.
      */
-    public function remember(Request $request, ?string $url = null): void
+    public function remember(Request $request, ?string $url = null, bool $allowHome = false): void
     {
         if (! $request->hasSession()) {
             return;
@@ -65,7 +71,11 @@ class PostLoginRedirectService
         $candidate = $url ?? $this->requestUri($request);
         $path = $this->normalizeToRelativePath($candidate, $request);
 
-        if ($path === null || $this->isAuthEntryPath($path) || $this->isLocalizedHomePath($path)) {
+        if ($path === null || $this->isAuthEntryPath($path)) {
+            return;
+        }
+
+        if (! $allowHome && $this->isLocalizedHomePath($path)) {
             return;
         }
 

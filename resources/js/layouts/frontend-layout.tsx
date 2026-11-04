@@ -23,6 +23,12 @@ import { RealtimeListeners } from '@/components/realtime/realtime-listeners';
 import { useLocale } from '@/hooks/use-locale';
 import { useReveal } from '@/hooks/use-reveal';
 import { activePage } from '@/lib/maison-navigation';
+import {
+    clearPendingPurchase,
+    storePendingPurchase,
+    takePendingPurchase,
+} from '@/lib/pending-purchase';
+import type { PendingPurchase } from '@/lib/pending-purchase';
 
 type ModalKind =
     | 'newsletter'
@@ -132,7 +138,11 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
 
     useReveal(main);
 
-    const rememberAuthReturnUrl = useCallback((): void => {
+    /**
+     * `resume` is true when the guest is in the middle of a reservation: the
+     * server then remembers the home page too, so login brings them back to it.
+     */
+    const rememberAuthReturnUrl = useCallback((resume = false): void => {
         const returnUrl = `${window.location.pathname}${window.location.search}`;
         const token = document.cookie
             .split('; ')
@@ -154,33 +164,48 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-XSRF-TOKEN': decodeURIComponent(token),
             },
-            body: JSON.stringify({ url: returnUrl }),
+            body: JSON.stringify(
+                resume ? { url: returnUrl, resume: true } : { url: returnUrl },
+            ),
         });
     }, []);
 
     const purchasesPaused = props.checkout?.enabled === false;
 
-    const requireAuthForCheckout = useCallback((): boolean => {
-        if (purchasesPaused) {
+    /*
+     * A guest who starts a reservation is asked to log in first. What they were
+     * doing is kept (the product and the number they chose) and the page they
+     * are on is remembered, home included; once they are signed in, the effect
+     * below carries on with the same number.
+     */
+    const requireAuthForCheckout = useCallback(
+        (pending?: PendingPurchase): boolean => {
+            if (purchasesPaused) {
+                return false;
+            }
+
+            if (props.auth?.user) {
+                return true;
+            }
+
+            if (pending) {
+                storePendingPurchase(pending);
+            }
+
+            rememberAuthReturnUrl(pending !== undefined);
+            setUserAuthView('login');
+            setUserModal('auth');
+
             return false;
-        }
-
-        if (props.auth?.user) {
-            return true;
-        }
-
-        rememberAuthReturnUrl();
-        setUserAuthView('login');
-        setUserModal('auth');
-
-        return false;
-    }, [props.auth?.user, purchasesPaused, rememberAuthReturnUrl]);
+        },
+        [props.auth?.user, purchasesPaused, rememberAuthReturnUrl],
+    );
 
     const actions = useMemo<ShellActions>(
         () => ({
             openNewsletter: () => setUserModal('newsletter'),
             openOrder: (product?: OrderProductContext) => {
-                if (!requireAuthForCheckout()) {
+                if (!requireAuthForCheckout({ kind: 'order', product })) {
                     return;
                 }
 
@@ -191,7 +216,13 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
                 product?: OrderProductContext,
                 edition?: PreselectedEdition,
             ) => {
-                if (!requireAuthForCheckout()) {
+                if (
+                    !requireAuthForCheckout({
+                        kind: 'purchase',
+                        product,
+                        edition,
+                    })
+                ) {
                     return;
                 }
 
@@ -221,10 +252,38 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         [props.checkout, rememberAuthReturnUrl, requireAuthForCheckout],
     );
 
+    /*
+     * Signed in after starting a reservation (login, registration or two-factor):
+     * carry on with the same product and number, through the same steps as a
+     * signed-in visitor. Taken once, so it never runs twice.
+     */
+    useEffect(() => {
+        if (!isAuthenticated) {
+            return;
+        }
+
+        const pending = takePendingPurchase();
+
+        if (pending === null) {
+            return;
+        }
+
+        if (pending.kind === 'order') {
+            actions.openOrder(pending.product);
+
+            return;
+        }
+
+        actions.openPurchase(pending.product, pending.edition);
+    }, [isAuthenticated, actions]);
+
     function closeModal(): void {
         if (autoOpenAuth || modal === 'auth') {
             setDismissedAuthPromptKey(currentAuthPromptKey);
         }
+
+        // Closing the login window cancels the reservation that was waiting on it.
+        clearPendingPurchase();
 
         setUserModal(null);
         setOrderProduct(undefined);
