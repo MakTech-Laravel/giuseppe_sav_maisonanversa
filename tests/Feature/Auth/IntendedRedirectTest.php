@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserGender;
 use App\Models\User;
 use App\Services\Auth\PostLoginRedirectService;
 use Database\Seeders\PermissionSeeder;
@@ -155,6 +156,57 @@ test('auth intended endpoint refuses to remember the localized home', function (
 
     $this->withSession(['url.intended' => localized('member.orders', absolute: false)])
         ->post(route('auth.intended'), ['url' => $home])
+        ->assertNoContent()
+        ->assertSessionHas('url.intended', localized('member.orders', absolute: false));
+});
+
+test('a guest who starts a reservation on the home page is sent back to it after login', function () {
+    $user = User::factory()->create();
+    $home = localized('maison.home', absolute: false);
+
+    $this->post(route('auth.intended'), ['url' => $home, 'resume' => true])
+        ->assertNoContent()
+        ->assertSessionHas('url.intended', $home);
+
+    $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ])->assertRedirect($home);
+});
+
+test('a guest who registers in the middle of a reservation is sent back to the home page too', function () {
+    $home = localized('maison.home', absolute: false);
+
+    $this->post(route('auth.intended'), ['url' => $home, 'resume' => true])
+        ->assertSessionHas('url.intended', $home);
+
+    $this->post(route('register.store'), [
+        'name' => 'Ada Lovelace',
+        'email' => 'ada@example.com',
+        'gender' => UserGender::Female->value,
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ])->assertRedirect($home);
+});
+
+test('the resume flag opens nothing but the home page: auth entries and other hosts are still refused', function () {
+    $this->withSession(['url.intended' => localized('member.orders', absolute: false)])
+        ->post(route('auth.intended'), ['url' => '/login', 'resume' => true])
+        ->assertSessionHas('url.intended', localized('member.orders', absolute: false));
+
+    $this->withSession(['url.intended' => localized('member.orders', absolute: false)])
+        ->post(route('auth.intended'), ['url' => 'https://evil.example/nl', 'resume' => true])
+        ->assertSessionHas('url.intended', localized('member.orders', absolute: false));
+
+    $this->post(route('auth.intended'), ['url' => localized('maison.home', absolute: false), 'resume' => 'nope'])
+        ->assertSessionHasErrors('resume');
+});
+
+test('without the resume flag the home page is still never remembered', function () {
+    $home = localized('maison.home', absolute: false);
+
+    $this->withSession(['url.intended' => localized('member.orders', absolute: false)])
+        ->post(route('auth.intended'), ['url' => $home, 'resume' => false])
         ->assertNoContent()
         ->assertSessionHas('url.intended', localized('member.orders', absolute: false));
 });
