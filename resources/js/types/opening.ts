@@ -1,5 +1,8 @@
 import type { OrderProductContext } from '@/components/maison/shell/shell-actions';
 
+/** How the opening paints one edition number. */
+export type OpeningTileStatus = 'available' | 'reserved' | 'archive';
+
 /** One edition number in the opening's register. */
 export type OpeningTile = {
     id: number;
@@ -7,6 +10,8 @@ export type OpeningTile = {
     label: string;
     /** False for numbers that are held, sold, returning or not for sale. */
     available: boolean;
+    /** Archive (Maison Archive) is distinct from reserved/sold. */
+    status: OpeningTileStatus;
 };
 
 /**

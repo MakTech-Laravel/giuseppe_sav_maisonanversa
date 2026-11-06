@@ -41,8 +41,9 @@ test('the seeded opening offers the founding product with its real numbers', fun
     expect($register)->not->toBeNull()
         ->and($register['product']['productSlug'])->toBe(Product::FOUNDING_SLUG)
         ->and($register['tiles'])->toHaveCount(100)
-        // The founding product archives number 1, so that tile is not available.
+        // The founding product archives number 1 as Maison Archive.
         ->and($register['tiles'][0]['available'])->toBeFalse()
+        ->and($register['tiles'][0]['status'])->toBe('archive')
         ->and($register['available'])->toBe(count(array_filter($register['tiles'], fn ($t) => $t['available'])));
 });
 
@@ -108,7 +109,8 @@ test('only pieces that can be bought print as available', function () {
     $tiles = collect(presented()['tiles']);
 
     expect($tiles->take(5)->pluck('available')->all())->toBe([false, false, false, true, false])
-        ->and($tiles->skip(5)->every(fn (array $tile): bool => $tile['available']))->toBeTrue()
+        ->and($tiles->take(5)->pluck('status')->all())->toBe(['reserved', 'archive', 'reserved', 'available', 'reserved'])
+        ->and($tiles->skip(5)->every(fn (array $tile): bool => $tile['available'] && $tile['status'] === 'available'))->toBeTrue()
         ->and(presented()['available'])->toBe(8)
         ->and(presented()['tiles'])->toHaveCount(12);
 });
@@ -121,7 +123,8 @@ test('the tile labels are the picker labels, with the product affixes, and carry
     $tile = presented()['tiles'][0];
 
     expect($tile['label'])->toBe('EXC001ST')
-        ->and(array_keys($tile))->toBe(['id', 'label', 'available']);
+        ->and(array_keys($tile))->toBe(['id', 'label', 'available', 'status'])
+        ->and($tile['status'])->toBe('available');
 });
 
 test('nothing is printed when no offer is active or the product cannot be offered', function () {
