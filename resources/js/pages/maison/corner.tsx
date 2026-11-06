@@ -18,12 +18,12 @@ const PACKAGE_ITEMS = [
     {
         num: '01',
         title: 'Heritage Display',
-        desc: 'Een elegant display materiaal om Heritage No.001 te presenteren. Ontworpen in de Maison Anversa stijl — crème, chocolade, goud.',
+        desc: 'Een elegant display materiaal om Heritage Nº 001 te presenteren. Ontworpen in de Maison Anversa stijl — crème, chocolade, goud.',
     },
     {
         num: '02',
         title: 'Demo Racket',
-        desc: 'Eén Heritage No.001 demo racket voor leden om aan te raken en te voelen. Het verschil zit in de eerste aanraking.',
+        desc: 'Eén Heritage Nº 001 demo racket voor leden om aan te raken en te voelen. Het verschil zit in de eerste aanraking.',
     },
     {
         num: '03',
@@ -49,7 +49,7 @@ const PACKAGE_ITEMS = [
 
 const FORMAT_A_INCLUDES = [
     '1 Heritage Display unit',
-    '1 Demo racket Heritage No.001',
+    '1 Demo racket Heritage Nº 001',
     '10 Heritage Paspoorten',
     'Branded kaarten en materialen',
     'Toegang tot Heritage Letter voor leden',

@@ -95,10 +95,7 @@ export function RoomCard({
 
             <div className="op-room-body">
                 <p className="op-k">
-                    {fillCopy(copy.roomKicker, {
-                        n: room.numeral,
-                        sub: text.subtitle,
-                    })}
+                    {fillCopy(copy.roomKicker, { n: room.numeral })}
                 </p>
                 <h2>{text.name}</h2>
                 <p className="op-line">{text.line}</p>
@@ -127,7 +124,7 @@ export function RoomCard({
                         className="op-btn op-b2"
                         onClick={onBack}
                     >
-                        {copy.allRooms}
+                        {copy.back}
                     </button>
                 </div>
             </div>

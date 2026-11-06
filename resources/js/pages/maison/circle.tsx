@@ -70,7 +70,7 @@ export default function Circle() {
                         </h2>
                         <p className="text-base leading-[1.85] text-choc3">
                             {t(
-                                'De Founding Circle is de permanente gemeenschap van iedereen die Heritage No.001 koopt. Uw lidmaatschap is levenslang. Uw nummer is van u — voor altijd. Dit is geen loyaliteitsprogramma. Dit is een erkenning.',
+                                'De Founding Circle is de permanente gemeenschap van iedereen die Heritage Nº 001 koopt. Uw lidmaatschap is levenslang. Uw nummer is van u — voor altijd. Dit is geen loyaliteitsprogramma. Dit is een erkenning.',
                             )}
                         </p>
                     </Reveal>
@@ -114,7 +114,7 @@ export default function Circle() {
                             onClick={() => openPurchase()}
                             className="max-w-full px-4 text-center whitespace-normal"
                         >
-                            {t('Word Founding Member — Bekijk Heritage No.001')}
+                            {t('Word Founding Member — Bekijk Heritage Nº 001')}
                         </MaisonButton>
                         {purchasesPaused ? (
                             <p className="mt-3 font-sans text-[10px] tracking-[0.12em] text-choc3">

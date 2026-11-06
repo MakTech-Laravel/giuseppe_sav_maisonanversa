@@ -10,7 +10,7 @@ import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
 import type { Edition } from '@/types/edition';
 
 const DEFAULT_INCLUDES = [
-    'Heritage No.001 racket (individueel genummerd)',
+    'Heritage Nº 001 racket (individueel genummerd)',
     'Heritage Certificaat met oprichterzegel',
     "Heritage Paspoort (24 pagina's)",
     'Welkomstkaart & Oprichtersbrief',
@@ -106,7 +106,7 @@ export function HomePreorder({
                         </h2>
                         <p className="mb-6 text-[15px] leading-[1.85] text-sand">
                             {t(
-                                'Heritage No.001 is beschikbaar via pre-order. U betaalt volledig vooraf en ontvangt uw unieke editienummer. De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie.',
+                                'Heritage Nº 001 is beschikbaar via pre-order. U betaalt volledig vooraf en ontvangt uw unieke editienummer. De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie.',
                             )}
                         </p>
 
