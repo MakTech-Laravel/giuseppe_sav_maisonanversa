@@ -189,6 +189,13 @@ html[data-opening='seen'] .ma-opening {
     gap: 12px;
     padding: 6px 8px;
     pointer-events: none;
+    /* Soft strip so Skip stays readable over the scrolling scene */
+    background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--ivory) 92%, transparent) 0%,
+        color-mix(in srgb, var(--ivory) 70%, transparent) 70%,
+        transparent 100%
+    );
 }
 
 .op-top > * {
@@ -205,7 +212,7 @@ html[data-opening='seen'] .ma-opening {
     gap: 4px;
     padding: 2px;
     border-radius: 2px;
-    background: color-mix(in srgb, var(--ivory) 82%, transparent);
+    background: color-mix(in srgb, var(--ivory) 88%, transparent);
     backdrop-filter: blur(6px);
 }
 
@@ -228,6 +235,11 @@ html[data-opening='seen'] .ma-opening {
     transition:
         color 0.2s,
         border-color 0.2s;
+}
+
+.op-skip {
+    background: color-mix(in srgb, var(--ivory) 88%, transparent);
+    backdrop-filter: blur(6px);
 }
 
 .op-lang button:hover,
@@ -336,13 +348,14 @@ html[data-opening='seen'] .ma-opening {
     font-family: Baskervville, Georgia, serif;
     font-style: italic;
     font-size: clamp(18px, 2.1vw, 23px);
+    color: var(--choc);
 }
 
 .op-limit {
     margin: 0;
     font-size: 13px;
     letter-spacing: 0.08em;
-    color: var(--muted);
+    color: var(--choc);
 }
 
 .op-replay {
@@ -487,6 +500,12 @@ html[data-opening='seen'] .ma-opening {
     opacity: 0;
     transform: translateY(10px);
     animation: ma-rise 0.9s ease-out forwards;
+}
+
+/* After the rise finishes, keep full opacity (avoids a washed-out end state). */
+.op-edition.op-in,
+.op-limit.op-in {
+    animation-fill-mode: forwards;
 }
 
 .op-t0 {
@@ -857,12 +876,26 @@ html[data-opening='seen'] .ma-opening {
 .op-sw-r {
     background: var(--gold);
 }
+.op-sw-archive {
+    border: 1px solid var(--taupe);
+    background: #ede3d8;
+    position: relative;
+}
+.op-sw-archive::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--taupe);
+}
 
-/* ten per row on desktop and tablet (10 × 10), five on a phone */
+/* ten per row on desktop and tablet (10 × 10), five on a phone.
+ * Cap width so tiles stay near-square (~600px), centred under the house. */
 .op-numbers {
     display: grid;
     grid-template-columns: repeat(10, minmax(0, 1fr));
     gap: 6px;
+    max-width: 600px;
+    margin-inline: auto;
 }
 
 .op-num {
@@ -896,6 +929,15 @@ html[data-opening='seen'] .ma-opening {
     border-color: var(--gold);
     color: #291c18;
     cursor: default;
+}
+
+/* Maison Archive: taupe outline, not the reserved gold */
+.op-num.op-num-archive:disabled {
+    background: #ede3d8;
+    border-color: var(--taupe);
+    border-style: dashed;
+    color: var(--taupe);
+    font-weight: 600;
 }
 
 /*
@@ -986,8 +1028,20 @@ html[data-opening='seen'] .ma-opening {
     justify-content: center;
 }
 
-/* ---------- phone: five numbers per row, on a longer scene ---------- */
+/* ---------- phone: five numbers per row, tighter scene under the house ---------- */
 @media (max-width: 639px) {
+    .op-scene {
+        min-height: 0;
+        padding: 48px 16px 56px;
+        gap: 16px;
+    }
+
+    .op-house {
+        width: min(440px, 78vw, calc((100vh - 150px) * 0.8317));
+        width: min(440px, 78vw, calc((100dvh - 150px) * 0.8317));
+        min-width: 200px;
+    }
+
     .op-numbers {
         grid-template-columns: repeat(5, minmax(0, 1fr));
     }
