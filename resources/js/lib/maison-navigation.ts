@@ -29,10 +29,10 @@ export function maisonUrl(page: MaisonPage, locale: Locale): string {
     return maison[page].url(locale);
 }
 
-/** Heritage No.001's product slug — the founding SKU, always shown first in the catalog. */
+/** Heritage Nº 001's product slug — the founding SKU, always shown first in the catalog. */
 export const FOUNDING_PRODUCT_SLUG = 'heritage-no-001';
 
-/** For CTAs that specifically mean "go look at Heritage No.001", not "browse products". */
+/** For CTAs that specifically mean "go look at Heritage Nº 001", not "browse products". */
 export function foundingProductUrl(locale: Locale): string {
     return `${maisonUrl('products', locale)}/${FOUNDING_PRODUCT_SLUG}`;
 }

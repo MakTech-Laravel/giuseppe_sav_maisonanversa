@@ -159,12 +159,16 @@ class DeepLTranslator
     }
 
     /**
+     * Wraps every fixed name (config maison.fixed_names) in an ignored tag so DeepL
+     * leaves it as written. "Maison Anversa" matches in any case; the others match
+     * as written, so a Dutch common word such as "atelier" in prose is translated.
+     *
      * @param  list<string>  $spellings
      */
     private function maskBrandName(string $text, array &$spellings): string
     {
         $masked = preg_replace_callback(
-            '/Maison\s+Anversa/iu',
+            $this->fixedNamesPattern(),
             function (array $match) use (&$spellings): string {
                 $index = count($spellings);
                 $spellings[] = $match[0];
@@ -175,6 +179,23 @@ class DeepLTranslator
         );
 
         return is_string($masked) ? $masked : $text;
+    }
+
+    private function fixedNamesPattern(): string
+    {
+        /** @var list<string> $names */
+        $names = array_values(array_filter((array) config('maison.fixed_names', ['Maison Anversa'])));
+
+        usort($names, fn (string $a, string $b): int => mb_strlen($b) <=> mb_strlen($a));
+
+        $parts = array_map(
+            fn (string $name): string => $name === 'Maison Anversa'
+                ? '(?i:Maison\s+Anversa)'
+                : preg_quote($name, '/'),
+            $names,
+        );
+
+        return '/(?<![\p{L}\p{N}])(?:'.implode('|', $parts).')(?![\p{L}\p{N}])/u';
     }
 
     /**

@@ -42,7 +42,7 @@ test('english house copy is translated in the seo document', function () {
 test('english home seo falls back to lang json when deepl is missing', function () {
     $this->get('/en')->assertOk()->assertInertia(fn ($page) => $page
         ->where('seo.title', 'Maison Anversa — European heritage house for sport and lifestyle')
-        ->where('seo.description', 'A European heritage house, rooted in Antwerp. Heritage No.001 — limited to 100 pieces. Each numbered. The Founding Edition is never repeated.')
+        ->where('seo.description', 'A European heritage house, rooted in Antwerp. Heritage Nº 001 — limited to 100 pieces. Each numbered. The Founding Edition is never repeated.')
         ->where('seo.canonical', url('/en'))
     );
 });

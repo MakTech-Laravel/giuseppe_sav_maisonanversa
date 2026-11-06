@@ -281,9 +281,9 @@ final class Journal
                         'fr' => 'Le tennis est un duel. Le padel est une conversation. Les clubs qui l’ont compris ne construisent pas des rangées de courts. Ils construisent une maison.',
                     ],
                     [
-                        'nl' => 'Maison Anversa bestaat omdat die gemeenschap een taal verdient die even verzorgd is als het spel. Heritage No.001 is daarvoor gemaakt — niet om te schreeuwen op de baan, maar om tot de mensen te behoren die na de set nog blijven.',
-                        'en' => 'Maison Anversa exists because that community deserves a language as considered as the game. Heritage No.001 was made for that — not to shout on court, but to belong to the people who stay after the set.',
-                        'fr' => 'Maison Anversa existe parce que cette communauté mérite un langage aussi soigné que le jeu. Heritage No.001 a été fait pour cela.',
+                        'nl' => 'Maison Anversa bestaat omdat die gemeenschap een taal verdient die even verzorgd is als het spel. Heritage Nº 001 is daarvoor gemaakt — niet om te schreeuwen op de baan, maar om tot de mensen te behoren die na de set nog blijven.',
+                        'en' => 'Maison Anversa exists because that community deserves a language as considered as the game. Heritage Nº 001 was made for that — not to shout on court, but to belong to the people who stay after the set.',
+                        'fr' => 'Maison Anversa existe parce que cette communauté mérite un langage aussi soigné que le jeu. Heritage Nº 001 a été fait pour cela.',
                     ],
                 ],
             ],
@@ -331,9 +331,9 @@ final class Journal
                     'fr' => 'Carbone 3K — pourquoi nous avons choisi l’armure la plus exigeante de l’industrie',
                 ],
                 'excerpt' => [
-                    'nl' => 'Niet elke carbon is gelijk. De keuze voor 3K carbon bij Heritage No.001 was een bewuste — en dure — beslissing.',
-                    'en' => 'Not all carbon is equal. The choice of 3K carbon for Heritage No.001 was a deliberate — and expensive — decision.',
-                    'fr' => 'Tous les carbones ne se valent pas. Le 3K de Heritage No.001 fut une décision délibérée — et coûteuse.',
+                    'nl' => 'Niet elke carbon is gelijk. De keuze voor 3K carbon bij Heritage Nº 001 was een bewuste — en dure — beslissing.',
+                    'en' => 'Not all carbon is equal. The choice of 3K carbon for Heritage Nº 001 was a deliberate — and expensive — decision.',
+                    'fr' => 'Tous les carbones ne se valent pas. Le 3K de Heritage Nº 001 fut une décision délibérée — et coûteuse.',
                 ],
                 'author' => $house,
                 'date' => ['nl' => 'Maart 2026', 'en' => 'March 2026', 'fr' => 'Mars 2026'],
@@ -344,9 +344,9 @@ final class Journal
                         'fr' => 'Le 3K, ce sont trois mille filaments par tow. Plus fin, plus lent, plus cher à poser. La plupart des raquettes choisissent plus gros parce que la ligne va plus vite.',
                     ],
                     [
-                        'nl' => 'Het oppervlak van Heritage No.001 is geen decor. Het is de structuur die het gewicht verdeelt, de twist weigert, en de gravure een grond geeft. Wie het racket in handen neemt, begrijpt de prijs zonder brochure.',
-                        'en' => 'The face of Heritage No.001 is not decoration. It is the structure that spreads the weight, refuses twist, and gives the engraving a ground. Whoever holds the racket understands the price without a brochure.',
-                        'fr' => 'La face de Heritage No.001 n’est pas un décor. C’est la structure qui répartit le poids et offre un sol à la gravure.',
+                        'nl' => 'Het oppervlak van Heritage Nº 001 is geen decor. Het is de structuur die het gewicht verdeelt, de twist weigert, en de gravure een grond geeft. Wie het racket in handen neemt, begrijpt de prijs zonder brochure.',
+                        'en' => 'The face of Heritage Nº 001 is not decoration. It is the structure that spreads the weight, refuses twist, and gives the engraving a ground. Whoever holds the racket understands the price without a brochure.',
+                        'fr' => 'La face de Heritage Nº 001 n’est pas un décor. C’est la structure qui répartit le poids et offre un sol à la gravure.',
                     ],
                     [
                         'nl' => 'Vakmanschap is kiezen voor de weg die langer duurt. Niet omdat langzaam romantisch is, maar omdat het resultaat niet anders kan. De Founding Edition wordt nooit herhaald. Het carbon mag dat waardig zijn.',
@@ -467,16 +467,16 @@ final class Journal
                     'fr' => 'Le Dressing — des vêtements qui murmurent, sur le court et hors du court',
                 ],
                 'excerpt' => [
-                    'nl' => 'Geen neon. Geen seizoenstrend. Activewear die dezelfde filosofie draagt als Heritage No.001: materialen eerst, logo\'s nooit.',
-                    'en' => 'No neon. No seasonal trend. Activewear that carries the same philosophy as Heritage No.001: materials first, logos never.',
-                    'fr' => 'Pas de néon. Pas de tendance. Une activewear qui porte la même philosophie que Heritage No.001.',
+                    'nl' => 'Geen neon. Geen seizoenstrend. Activewear die dezelfde filosofie draagt als Heritage Nº 001: materialen eerst, logo\'s nooit.',
+                    'en' => 'No neon. No seasonal trend. Activewear that carries the same philosophy as Heritage Nº 001: materials first, logos never.',
+                    'fr' => 'Pas de néon. Pas de tendance. Une activewear qui porte la même philosophie que Heritage Nº 001.',
                 ],
                 'author' => $house,
                 'date' => ['nl' => 'November 2025', 'en' => 'November 2025', 'fr' => 'Novembre 2025'],
                 'body' => [
                     [
-                        'nl' => 'De Kleedkamer is de derde kamer die het huis uitbreidt voorbij het racket. Polo, short, jack, pet, handdoek, grip — zes stukken, kleine oplage, het palet van het huis. Wie Heritage No.001 vasthoudt, moet de kleding herkennen.',
-                        'en' => 'The Dressing Room is the third room that extends the house beyond the racket. Polo, short, jacket, cap, towel, grip — six pieces, small run, the palette of the house. Whoever holds Heritage No.001 should recognise the clothes.',
+                        'nl' => 'De Kleedkamer is de derde kamer die het huis uitbreidt voorbij het racket. Polo, short, jack, pet, handdoek, grip — zes stukken, kleine oplage, het palet van het huis. Wie Heritage Nº 001 vasthoudt, moet de kleding herkennen.',
+                        'en' => 'The Dressing Room is the third room that extends the house beyond the racket. Polo, short, jacket, cap, towel, grip — six pieces, small run, the palette of the house. Whoever holds Heritage Nº 001 should recognise the clothes.',
                         'fr' => 'Le Dressing prolonge la maison au-delà de la raquette. Six pièces, petite série, la palette de la maison.',
                     ],
                     [
@@ -485,9 +485,9 @@ final class Journal
                         'fr' => 'Des tissus techniques italiens, coupés pour jouer et pour exister ensuite. Les membres du Founding Circle voient la collection quarante-huit heures plus tôt.',
                     ],
                     [
-                        'nl' => 'De collectie wordt op dit moment ontworpen. Zij verschijnt met de levering van Heritage No.001. Tot die tijd fluistert de Kleedkamer alleen in het Journal — en in de kamers van het huis.',
-                        'en' => 'The collection is being designed now. It appears with the delivery of Heritage No.001. Until then the Dressing Room whispers only in the Journal — and in the rooms of the house.',
-                        'fr' => 'La collection s’écrit maintenant. Elle paraîtra avec Heritage No.001. En attendant, le Dressing ne murmure que dans le Journal.',
+                        'nl' => 'De collectie wordt op dit moment ontworpen. Zij verschijnt met de levering van Heritage Nº 001. Tot die tijd fluistert de Kleedkamer alleen in het Journal — en in de kamers van het huis.',
+                        'en' => 'The collection is being designed now. It appears with the delivery of Heritage Nº 001. Until then the Dressing Room whispers only in the Journal — and in the rooms of the house.',
+                        'fr' => 'La collection s’écrit maintenant. Elle paraîtra avec Heritage Nº 001. En attendant, le Dressing ne murmure que dans le Journal.',
                     ],
                 ],
             ],
@@ -548,9 +548,9 @@ final class Journal
                         'fr' => 'Le monogramme n’est pas une marque pour le spectateur. C’est un sceau : petit, doré, pour la main qui tient la raquette.',
                     ],
                     [
-                        'nl' => 'Op Heritage No.001 zit de gravure waar u haar voelt, niet waar een camera haar zoekt. Op de polo is het borduurwerk crème-op-crème tot het licht het vindt. Wie het zoekt, vindt het. Wie het niet zoekt, ziet een schoon vlak.',
-                        'en' => 'On Heritage No.001 the engraving sits where you feel it, not where a camera looks. On the polo the embroidery is cream-on-cream until the light finds it. Whoever looks, finds it. Whoever does not, sees a clean field.',
-                        'fr' => 'Sur Heritage No.001, la gravure est là où on la sent. Sur le polo, la broderie est crème sur crème jusqu’à ce que la lumière la trouve.',
+                        'nl' => 'Op Heritage Nº 001 zit de gravure waar u haar voelt, niet waar een camera haar zoekt. Op de polo is het borduurwerk crème-op-crème tot het licht het vindt. Wie het zoekt, vindt het. Wie het niet zoekt, ziet een schoon vlak.',
+                        'en' => 'On Heritage Nº 001 the engraving sits where you feel it, not where a camera looks. On the polo the embroidery is cream-on-cream until the light finds it. Whoever looks, finds it. Whoever does not, sees a clean field.',
+                        'fr' => 'Sur Heritage Nº 001, la gravure est là où on la sent. Sur le polo, la broderie est crème sur crème jusqu’à ce que la lumière la trouve.',
                     ],
                     [
                         'nl' => 'Dat is de afspraak van het huis: herkenning onder gelijken, geen reclame voor de tribune. Het monogram is een handdruk, geen vlag.',
@@ -577,8 +577,8 @@ final class Journal
                 'date' => ['nl' => 'Augustus 2025', 'en' => 'August 2025', 'fr' => 'Août 2025'],
                 'body' => [
                     [
-                        'nl' => 'Een machine kan honderd identieke frames per uur. Een hand kan er een paar, en elk raam is een beslissing. Heritage No.001 kiest de tweede lijn: niet omdat wij machines wantrouwen, maar omdat een numbered edition geen identieke menigte mag zijn.',
-                        'en' => 'A machine can make a hundred identical frames an hour. A hand can make a few, and each frame is a decision. Heritage No.001 chooses the second line: not because we distrust machines, but because a numbered edition must not be an identical crowd.',
+                        'nl' => 'Een machine kan honderd identieke frames per uur. Een hand kan er een paar, en elk raam is een beslissing. Heritage Nº 001 kiest de tweede lijn: niet omdat wij machines wantrouwen, maar omdat een numbered edition geen identieke menigte mag zijn.',
+                        'en' => 'A machine can make a hundred identical frames an hour. A hand can make a few, and each frame is a decision. Heritage Nº 001 chooses the second line: not because we distrust machines, but because a numbered edition must not be an identical crowd.',
                         'fr' => 'Une machine fait cent cadres identiques à l’heure. Une main en fait quelques-uns, et chaque cadre est une décision.',
                     ],
                     [
@@ -603,17 +603,17 @@ final class Journal
                     'fr' => 'Du court à la ville : comment une raquette porte une maison',
                 ],
                 'excerpt' => [
-                    'nl' => 'Heritage No.001 is geen uitrusting die u achterlaat in de kleedkamer. Het is het voorwerp waarmee het huis de stad in loopt.',
-                    'en' => 'Heritage No.001 is not kit you leave in the changing room. It is the object with which the house walks into the city.',
-                    'fr' => 'Heritage No.001 n’est pas un équipement que l’on laisse au vestiaire. C’est l’objet avec lequel la maison entre en ville.',
+                    'nl' => 'Heritage Nº 001 is geen uitrusting die u achterlaat in de kleedkamer. Het is het voorwerp waarmee het huis de stad in loopt.',
+                    'en' => 'Heritage Nº 001 is not kit you leave in the changing room. It is the object with which the house walks into the city.',
+                    'fr' => 'Heritage Nº 001 n’est pas un équipement que l’on laisse au vestiaire. C’est l’objet avec lequel la maison entre en ville.',
                 ],
                 'author' => $house,
                 'date' => ['nl' => 'Juli 2025', 'en' => 'July 2025', 'fr' => 'Juillet 2025'],
                 'body' => [
                     [
-                        'nl' => 'De meeste sportobjecten hebben twee levens: op de baan, en in een tas. Heritage No.001 is gemaakt voor een derde — over de schouder, in de foyer, op tafel na de set. Daarom het leder, daarom de gravure, daarom geen schreeuw.',
-                        'en' => 'Most sports objects have two lives: on court, and in a bag. Heritage No.001 is made for a third — over the shoulder, in the foyer, on the table after the set. Hence the leather, the engraving, the refusal to shout.',
-                        'fr' => 'La plupart des objets de sport ont deux vies. Heritage No.001 en a une troisième — sur l’épaule, dans le foyer, sur la table après le set.',
+                        'nl' => 'De meeste sportobjecten hebben twee levens: op de baan, en in een tas. Heritage Nº 001 is gemaakt voor een derde — over de schouder, in de foyer, op tafel na de set. Daarom het leder, daarom de gravure, daarom geen schreeuw.',
+                        'en' => 'Most sports objects have two lives: on court, and in a bag. Heritage Nº 001 is made for a third — over the shoulder, in the foyer, on the table after the set. Hence the leather, the engraving, the refusal to shout.',
+                        'fr' => 'La plupart des objets de sport ont deux vies. Heritage Nº 001 en a une troisième — sur l’épaule, dans le foyer, sur la table après le set.',
                     ],
                     [
                         'nl' => 'Een huis dat alleen op de baan bestaat, is een merk. Een huis dat de stad in mag, is architectuur. Maison Anversa bouwt het tweede. Het racket is de sleutel, niet de reclame.',
@@ -781,9 +781,9 @@ final class Journal
                 'date' => ['nl' => 'Februari 2025', 'en' => 'February 2025', 'fr' => 'Février 2025'],
                 'body' => [
                     [
-                        'nl' => 'Tussen de smash en de lob zit een stilte die de camera niet filmt. Daarin besluit u. Een racket met te veel gewicht in de kop vult die stilte met haast. Heritage No.001 is gebalanceerd om die seconde leeg te laten.',
-                        'en' => 'Between the smash and the lob sits a silence the camera does not film. That is where you decide. A racket with too much weight in the head fills that silence with hurry. Heritage No.001 is balanced to leave that second empty.',
-                        'fr' => 'Entre le smash et le lob, un silence que la caméra ne filme pas. Heritage No.001 est équilibré pour laisser cette seconde vide.',
+                        'nl' => 'Tussen de smash en de lob zit een stilte die de camera niet filmt. Daarin besluit u. Een racket met te veel gewicht in de kop vult die stilte met haast. Heritage Nº 001 is gebalanceerd om die seconde leeg te laten.',
+                        'en' => 'Between the smash and the lob sits a silence the camera does not film. That is where you decide. A racket with too much weight in the head fills that silence with hurry. Heritage Nº 001 is balanced to leave that second empty.',
+                        'fr' => 'Entre le smash et le lob, un silence que la caméra ne filme pas. Heritage Nº 001 est équilibré pour laisser cette seconde vide.',
                     ],
                     [
                         'nl' => 'Wij spreken over feel alsof het mystiek is. Het is geometrie, carbon, de grip in de palm. Quiet luxury op de baan is niet een kleur. Het is de afwezigheid van ruis in de hand.',

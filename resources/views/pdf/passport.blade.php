@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <title>{{ __('Heritage Paspoort') }} · No.{{ $passport['editionNumber'] }}</title>
+    <title>{{ __('Heritage Paspoort') }} · Nº {{ $passport['editionNumber'] }}</title>
     <style>
         @page { margin: 28mm 22mm; }
         body {

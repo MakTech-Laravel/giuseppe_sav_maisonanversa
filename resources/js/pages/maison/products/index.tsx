@@ -28,7 +28,7 @@ export default function ProductsIndex({
                     </>
                 }
                 subtitle={t(
-                    'De volledige collectie van Maison Anversa — van Heritage No.001 tot de volgende hoofdstukken van het huis.',
+                    'De volledige collectie van Maison Anversa — van Heritage Nº 001 tot de volgende hoofdstukken van het huis.',
                 )}
             />
 

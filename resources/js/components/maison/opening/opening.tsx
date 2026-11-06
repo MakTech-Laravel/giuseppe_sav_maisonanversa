@@ -202,7 +202,7 @@ export function Opening() {
             aria-label={copy.dialog}
             onScroll={finish}
         >
-            <OpeningTopBar onSkip={dismiss} />
+            <OpeningTopBar onSkip={dismiss} skip={copy.skip} />
 
             <div className="op-scroll">
                 <div className="op-sun" aria-hidden="true" />
@@ -224,7 +224,13 @@ export function Opening() {
 }
 
 /** Language switcher (left) and Skip (right). */
-function OpeningTopBar({ onSkip }: { onSkip: () => void }) {
+function OpeningTopBar({
+    onSkip,
+    skip,
+}: {
+    onSkip: () => void;
+    skip: string;
+}) {
     const { locale, availableLocales, switchLocale, t } = useLocale();
 
     return (
@@ -244,7 +250,7 @@ function OpeningTopBar({ onSkip }: { onSkip: () => void }) {
             </div>
 
             <button type="button" className="op-skip" onClick={onSkip}>
-                {t('Overslaan →')}
+                {skip}
             </button>
         </div>
     );

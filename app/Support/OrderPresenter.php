@@ -22,7 +22,7 @@ class OrderPresenter
             : null;
 
         $label = $number !== null
-            ? __(':product — No. :number', ['product' => $name, 'number' => $number])
+            ? __(':product — Nº :number', ['product' => $name, 'number' => $number])
             : $name;
 
         return [
@@ -53,7 +53,7 @@ class OrderPresenter
             : __('—');
 
         $editionSummary = $total > 0 && $order->edition_number !== null
-            ? __(':product · No. :number / :total', [
+            ? __(':product · Nº :number / :total', [
                 'product' => $name,
                 'number' => $number,
                 'total' => $total,
