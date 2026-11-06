@@ -141,7 +141,7 @@ test('founding circle members carry their edition number', function () {
 
     $players = app(MatchCardPresenter::class)->players($this->session->fresh());
 
-    expect($players[1]['edition'])->toBe('No. 012');
+    expect($players[1]['edition'])->toBe('Nº 012');
 });
 
 test('the result only appears once the official score is approved', function () {

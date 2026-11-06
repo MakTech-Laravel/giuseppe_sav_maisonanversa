@@ -120,7 +120,7 @@ export default function CircleRegister({
                 <AdminPageHeader
                     title={t('Naamregister')}
                     description={t(
-                        'Alle honderd plaatsen van Heritage No.001. Wijs een klant toe, verberg een vermelding, of exporteer het register.',
+                        'Alle honderd plaatsen van Heritage Nº 001. Wijs een klant toe, verberg een vermelding, of exporteer het register.',
                     )}
                     icon={BookText}
                 >

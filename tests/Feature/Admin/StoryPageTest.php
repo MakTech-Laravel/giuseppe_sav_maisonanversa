@@ -63,7 +63,7 @@ test('the seeded story renders every section', function () {
             ->where('story.ritual.steps.3.title', 'De baan')
             ->where('story.name.title', 'Anversa')
             ->where('story.name.pronunciation', '/anˈvɛrsa/')
-            ->where('story.make.title', 'Heritage No.001')
+            ->where('story.make.title', 'Heritage Nº 001')
             ->where('story.make.buttonHref', route('maison.products.show', [
                 'locale' => 'nl',
                 'product' => Product::FOUNDING_SLUG,

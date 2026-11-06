@@ -43,7 +43,14 @@ test('the lit house has eight rooms, in window order I to VIII, with nl, en and 
         expect(substr_count($source, "name: '{$name}'"))->toBe(3);
     }
 
-    expect(substr_count($source, "subtitle: 'In your club'"))->toBe(3);
+    foreach (['In jouw club', 'In your club', 'Dans votre club'] as $label) {
+        expect(substr_count($source, "subtitle: '{$label}'"))->toBe(1);
+    }
+
+    // Every room button reads "Step inside →" in its own language, never "Enter the X".
+    foreach (['Stap binnen →', 'Step inside →', 'Entrer →'] as $enter) {
+        expect(substr_count($source, "enter: '{$enter}'"))->toBe(8);
+    }
 
     expect($source)
         ->not->toContain("subtitle: 'The Playroom'")
@@ -194,7 +201,7 @@ test('the limit line reads as the client wrote it, in every language, and the ed
         ->not->toMatch('/^\s*edition:/m')
         ->toContain("'Limited to {total} numbered rackets · {n} numbers available'")
         ->toContain("'Beperkt tot {total} genummerde rackets · nog {n} nummers vrij'")
-        ->toContain("'Limitée à {total} raquettes numérotées · {n} numéros disponibles'")
+        ->toContain("'Édition limitée à {total} raquettes numérotées · encore {n} numéros disponibles'")
         ->not->toContain('pieces')
         ->not->toContain('stuks');
 });
@@ -385,7 +392,8 @@ test('the opening has a skip, a language switcher, and never leaves on its own',
     $source = openingSource('opening.tsx');
 
     expect($source)
-        ->toContain("t('Overslaan →')")
+        ->toContain('copy.skip')
+        ->not->toContain("t('Overslaan")
         ->toContain('switchLocale')
         ->toContain("event.key === 'Escape'")
         ->not->toContain('setInterval')
@@ -394,8 +402,10 @@ test('the opening has a skip, a language switcher, and never leaves on its own',
     // The one timer is the fade after the visitor has chosen to leave.
     expect(substr_count($source, 'window.setTimeout('))->toBe(1);
 
-    foreach (['en', 'fr'] as $locale) {
-        expect(json_decode(File::get(base_path("lang/{$locale}.json")), true))->toHaveKey('Overslaan →');
+    $data = openingSource('opening-data.ts');
+
+    foreach (["skip: 'Overslaan'", "skip: 'Skip'", "skip: 'Passer'"] as $skip) {
+        expect($data)->toContain($skip);
     }
 });
 
@@ -448,4 +458,57 @@ test('the windows light up in order after the door opens, then the list appears'
     expect($css)
         ->not->toContain('op-slide')
         ->toMatch('/\.op-rooms\.op-in\s*\{\s*animation-delay:\s*4\.4s;/');
+});
+
+test('the final greetings follow Antwerp time, and at night use the evening greeting', function () {
+    $data = openingSource('opening-data.ts');
+
+    expect($data)
+        ->toContain("morning: 'Goedemorgen uit Antwerpen'")
+        ->toContain("afternoon: 'Goedemiddag uit Antwerpen'")
+        ->toContain("night: 'Goedenavond uit Antwerpen'")
+        ->toContain("night: 'Good evening from Antwerp'")
+        ->toContain("morning: 'Bonjour d’Anvers'")
+        ->toContain("afternoon: 'Bonjour d’Anvers'")
+        ->toContain("night: 'Bonsoir d’Anvers'")
+        ->not->toContain('Goedenacht')
+        ->not->toContain('Good night')
+        ->not->toContain('Bonne nuit')
+        ->not->toContain('Bon après-midi');
+});
+
+test('the register has the final button, pick and pre-launch texts, with je in Dutch and vous in French', function () {
+    $data = openingSource('opening-data.ts');
+    $register = openingSource('opening-register.tsx');
+
+    expect($data)
+        ->toContain("chooseNumber: 'Kies je nummer'")
+        ->toContain("claimNumber: 'Reserveer Nº {n}'")
+        ->toContain("claimNumber: 'Claim Nº {n}'")
+        ->toContain("claimNumber: 'Réserver le Nº {n}'")
+        ->toContain("joinList: 'Schrijf je in'")
+        ->toContain("joinList: 'Join the list'")
+        ->toContain("joinList: 'M’inscrire'")
+        ->toContain("pickedLine: 'Nº {n} — het jouwe, als je het kiest.'")
+        ->toContain("enterHouse: 'Kom binnen'")
+        ->toContain("back: '← Terug naar het huis'")
+        ->toContain("roomKicker: 'Kamer {n} van VIII'")
+        ->toContain("archiveTooltip: 'La pièce de la Maison'")
+        ->not->toContain("'Kies uw")
+        ->not->toContain('Kies uw')
+        ->not->toContain('Betreed');
+
+    expect($register)
+        ->toContain('copy.joinList')
+        ->toContain('openNewsletter()')
+        ->toContain('copy.claimNumber')
+        ->toContain('copy.pickedLine');
+});
+
+test('the top bar is one strip with its own background, so Skip and the language switch never cover content', function () {
+    $css = File::get(resource_path('css/opening.css'));
+
+    expect($css)
+        ->toMatch('/\.op-top\s*\{[^}]*justify-content:\s*space-between;[^}]*border-bottom:/')
+        ->not->toMatch('/\.op-lang\s*\{[^}]*position:\s*fixed/');
 });

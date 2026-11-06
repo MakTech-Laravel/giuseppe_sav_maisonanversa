@@ -23,7 +23,7 @@ class SoldOutNotice extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Heritage No.001 is uitverkocht'),
+            subject: __('Heritage Nº 001 is uitverkocht'),
         );
     }
 

@@ -60,7 +60,7 @@ export function OpeningRegister({
     register,
     onLeave,
 }: OpeningRegisterProps) {
-    const { openPurchase } = useShellActions();
+    const { openPurchase, openNewsletter } = useShellActions();
     const purchasesPaused = usePurchasesPaused();
     const [selected, setSelected] = useState<number | null>(null);
     const [page, setPage] = useState(0);
@@ -79,8 +79,19 @@ export function OpeningRegister({
         setSelected((current) => (current === id ? null : id));
     }
 
+    const pickedTile = register.tiles.find(
+        (entry) => entry.id === selected && entry.available,
+    );
+
     function reserve() {
         onLeave();
+
+        // Before launch the button joins the list instead.
+        if (purchasesPaused) {
+            openNewsletter();
+
+            return;
+        }
 
         const tile = register.tiles.find((entry) => entry.id === selected);
 
@@ -134,6 +145,7 @@ export function OpeningRegister({
                             }
                             disabled={!tile.available}
                             aria-pressed={selected === tile.id}
+                            title={isArchive ? copy.archiveTooltip : undefined}
                             aria-label={`Nº ${tile.label}, ${statusLabel}`}
                             onClick={() => pick(tile.id)}
                         >
@@ -200,14 +212,24 @@ export function OpeningRegister({
                 </nav>
             ) : null}
 
+            {pickedTile !== undefined ? (
+                <p className="op-picked" aria-live="polite">
+                    {fillCopy(copy.pickedLine, { n: pickedTile.label })}
+                </p>
+            ) : null}
+
             <div className="op-ctas">
                 <button
                     type="button"
                     className="op-cta op-cta-1"
-                    disabled={purchasesPaused || register.available === 0}
+                    disabled={!purchasesPaused && register.available === 0}
                     onClick={reserve}
                 >
-                    {copy.chooseNumber}
+                    {purchasesPaused
+                        ? copy.joinList
+                        : pickedTile !== undefined
+                          ? fillCopy(copy.claimNumber, { n: pickedTile.label })
+                          : copy.chooseNumber}
                 </button>
 
                 <button

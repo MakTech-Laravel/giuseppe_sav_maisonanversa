@@ -232,6 +232,31 @@ test('deepl keeps the brand spelling in any capitalization', function () {
         ->toBe('EN MAISON ANVERSA-account en Anversa');
 });
 
+test('deepl never translates a fixed name of the house', function () {
+    config(['services.deepl.key' => 'test-key:fx']);
+
+    Http::fake([
+        '*' => function ($request) {
+            $text = (string) $request->data()['text'][0];
+            $text = (string) preg_replace('/(<x id="\d+">).*?(<\/x>)/', '$1TRANSLATED$2', $text);
+
+            return Http::response(['translations' => [['text' => 'EN '.$text]]]);
+        },
+    ]);
+
+    $translator = app(DeepLTranslator::class);
+
+    foreach ((array) config('maison.fixed_names') as $name) {
+        expect($translator->translate("Welkom in {$name} vandaag", 'en'))
+            ->toBe("EN Welkom in {$name} vandaag");
+    }
+
+    expect($translator->translate('Heritage Nº 001 · Founding Edition', 'fr'))
+        ->toBe('EN Heritage Nº 001 · Founding Edition')
+        // Ordinary words that match a room name only in lower case still go to DeepL.
+        ->and($translator->translate('het atelier', 'en'))->toBe('EN het atelier');
+});
+
 test('a deepl quota error does not persist translation rows', function () {
     Queue::fake();
 
@@ -263,6 +288,8 @@ test('admin event show uses translated copy while product edit stays dutch', fun
     ]);
 
     $product = Product::founding();
+    // Fixed names are never translated, so this test uses an ordinary name.
+    $product->forceFill(['name' => 'Founding Racket'])->saveQuietly();
     TranslateModelJob::dispatchSync(Product::class, (int) $product->id);
 
     $this->actingAs($admin)
@@ -287,6 +314,8 @@ test('member heritage shows translated product copy', function () {
     fakeDeepLTranslations();
 
     $product = Product::founding();
+    // Fixed names are never translated, so this test uses an ordinary name.
+    $product->forceFill(['name' => 'Founding Racket'])->saveQuietly();
     TranslateModelJob::dispatchSync(Product::class, (int) $product->id);
 
     $user = User::factory()->create();
@@ -307,6 +336,8 @@ test('the public verify page uses the translated product name', function () {
     fakeDeepLTranslations();
 
     $product = Product::founding();
+    // Fixed names are never translated, so this test uses an ordinary name.
+    $product->forceFill(['name' => 'Founding Racket'])->saveQuietly();
     TranslateModelJob::dispatchSync(Product::class, (int) $product->id);
 
     $piece = EditionPiece::query()
@@ -325,6 +356,8 @@ test('checkout sold-out errors use the translated product name', function () {
     fakeDeepLTranslations();
 
     $product = Product::founding();
+    // Fixed names are never translated, so this test uses an ordinary name.
+    $product->forceFill(['name' => 'Founding Racket'])->saveQuietly();
     TranslateModelJob::dispatchSync(Product::class, (int) $product->id);
 
     EditionPiece::query()
@@ -349,6 +382,8 @@ test('order confirmation mail uses the order locale for the product name', funct
     fakeDeepLTranslations();
 
     $product = Product::founding();
+    // Fixed names are never translated, so this test uses an ordinary name.
+    $product->forceFill(['name' => 'Founding Racket'])->saveQuietly();
     TranslateModelJob::dispatchSync(Product::class, (int) $product->id);
 
     $order = Order::factory()->create(['locale' => 'en']);

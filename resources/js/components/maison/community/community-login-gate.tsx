@@ -69,7 +69,7 @@ export function CommunityLoginGate() {
 
                 <p className="mb-4 text-sm text-choc3">
                     {t(
-                        'Nog geen lid? Koop Heritage No.001 en word automatisch Founding Member.',
+                        'Nog geen lid? Koop Heritage Nº 001 en word automatisch Founding Member.',
                     )}
                 </p>
 
@@ -77,7 +77,7 @@ export function CommunityLoginGate() {
                     href={foundingProductUrl(locale)}
                     className="inline-block font-sans text-[10px] tracking-[0.2em] text-choc3 uppercase underline-offset-4 hover:text-choc hover:underline"
                 >
-                    {t('Bekijk Heritage No.001 →')}
+                    {t('Bekijk Heritage Nº 001 →')}
                 </MaisonLink>
             </Wrap>
         </Section>

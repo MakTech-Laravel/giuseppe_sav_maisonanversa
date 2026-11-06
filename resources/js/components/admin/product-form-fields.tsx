@@ -139,7 +139,7 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                         onChange={(event) =>
                             setData('name', event.target.value)
                         }
-                        placeholder={t('bijv. Heritage No.002')}
+                        placeholder={t('bijv. Heritage Nº 002')}
                         autoFocus
                     />
                     <InputError message={errors.name} />

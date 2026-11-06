@@ -62,7 +62,7 @@ export default function MemberLidpaspoort({
                         </p>
                         {passport.membership.edition_number && (
                             <p className="mt-2 font-sans text-sm text-sand">
-                                {t('Heritage No.{{number}}', {
+                                {t('Heritage Nº {{number}}', {
                                     number: passport.membership.edition_number,
                                 })}
                             </p>

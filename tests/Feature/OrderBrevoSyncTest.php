@@ -46,9 +46,9 @@ test('the order sync job upserts the login email onto the product list', functio
             && ! in_array(12, $payload['listIds'], true)
             && $payload['attributes']['FIRSTNAME'] === 'Ada Lovelace'
             && $payload['attributes']['SMS'] === '+32470123456'
-            && $payload['attributes']['PRODUCT'] === 'Heritage No.001 — Founding Edition'
+            && $payload['attributes']['PRODUCT'] === 'Heritage Nº 001 — Founding Edition'
             && str_contains($note, $order->reference())
-            && str_contains($note, 'Heritage No.001')
+            && str_contains($note, 'Heritage Nº 001')
             && str_contains($note, 'For the archive')
             && $payload['updateEnabled'] === true;
     });

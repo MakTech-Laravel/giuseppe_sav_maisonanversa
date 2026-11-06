@@ -65,11 +65,11 @@ test('changing only the name updates stripe without creating a new price', funct
     app(StripeCatalog::class)->sync($product);
     $product->refresh();
 
-    $product->update(['name' => 'Heritage No.001 — Revised']);
+    $product->update(['name' => 'Heritage Nº 001 — Revised']);
     $product->refresh();
 
     expect($product->stripe_price_id)->toBe('price_fake_1')
-        ->and($gateway->products[$product->stripe_product_id])->toBe('Heritage No.001 — Revised')
+        ->and($gateway->products[$product->stripe_product_id])->toBe('Heritage Nº 001 — Revised')
         ->and($gateway->archived)->toBeEmpty();
 });
 

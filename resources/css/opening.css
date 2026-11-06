@@ -185,35 +185,20 @@ html[data-opening='seen'] .ma-opening {
     z-index: 5;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 12px;
-    padding: 6px 8px;
-    pointer-events: none;
-    /* Soft strip so Skip stays readable over the scrolling scene */
-    background: linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--ivory) 92%, transparent) 0%,
-        color-mix(in srgb, var(--ivory) 70%, transparent) 70%,
-        transparent 100%
-    );
+    padding: 4px 8px;
+    /* One thin bar with its own background: nothing scrolls under the controls. */
+    background: color-mix(in srgb, var(--ivory) 96%, transparent);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(6px);
 }
 
-.op-top > * {
-    pointer-events: auto;
-}
-
-/* language switcher: bottom-right corner of the screen, over the scrolling content */
+/* language switcher: left of the bar, Skip on the right */
 .op-lang {
-    position: fixed;
-    right: 8px;
-    bottom: 8px;
     display: flex;
     align-items: center;
     gap: 4px;
-    padding: 2px;
-    border-radius: 2px;
-    background: color-mix(in srgb, var(--ivory) 88%, transparent);
-    backdrop-filter: blur(6px);
 }
 
 .op-lang button,
@@ -235,11 +220,6 @@ html[data-opening='seen'] .ma-opening {
     transition:
         color 0.2s,
         border-color 0.2s;
-}
-
-.op-skip {
-    background: color-mix(in srgb, var(--ivory) 88%, transparent);
-    backdrop-filter: blur(6px);
 }
 
 .op-lang button:hover,
@@ -1014,6 +994,7 @@ html[data-opening='seen'] .ma-opening {
 .op-picked {
     margin: 0;
     width: 100%;
+    margin-top: 20px;
     text-align: center;
     font-family: Baskervville, Georgia, serif;
     font-size: 22px;
@@ -1032,7 +1013,7 @@ html[data-opening='seen'] .ma-opening {
 @media (max-width: 639px) {
     .op-scene {
         min-height: 0;
-        padding: 48px 16px 56px;
+        padding: 64px 16px 48px;
         gap: 16px;
     }
 

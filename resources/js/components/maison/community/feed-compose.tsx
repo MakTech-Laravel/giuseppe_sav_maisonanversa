@@ -34,7 +34,7 @@ export function FeedCompose({ initials, onPublish }: FeedComposeProps) {
                     placeholder={t(
                         isMobile
                             ? 'Deel uw ervaring...'
-                            : 'Deel uw ervaring met Heritage No.001, een sessie, een gedachte...',
+                            : 'Deel uw ervaring met Heritage Nº 001, een sessie, een gedachte...',
                     )}
                     className="h-20 flex-1 resize-none border border-gold/20 bg-cream px-4 py-3 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
                 />

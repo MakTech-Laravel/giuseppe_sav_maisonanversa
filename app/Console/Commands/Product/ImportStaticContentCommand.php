@@ -38,7 +38,7 @@ class ImportStaticContentCommand extends Command
     {
         return [
             'heritage-no-002' => [
-                'name' => 'Heritage No.002',
+                'name' => 'Heritage Nº 002',
                 'type' => ProductType::LimitedEdition,
                 'status' => ProductStatus::ComingSoon,
                 'amount' => '0.00',
@@ -55,7 +55,7 @@ class ImportStaticContentCommand extends Command
                 'description' => '',
             ],
             'heritage-no-003' => [
-                'name' => 'Heritage No.003',
+                'name' => 'Heritage Nº 003',
                 'type' => ProductType::LimitedEdition,
                 'status' => ProductStatus::ComingSoon,
                 'amount' => '0.00',

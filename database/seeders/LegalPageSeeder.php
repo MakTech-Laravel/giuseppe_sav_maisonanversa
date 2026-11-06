@@ -26,7 +26,7 @@ class LegalPageSeeder extends Seeder
 <h2>Uw rechten</h2>
 <p>U heeft recht op inzage, correctie, verwijdering en bezwaar.</p>
 <h2>Publiek register</h2>
-<p>Als u Heritage No.001 koopt, wordt u ingeschreven in het officiële Founding Circle-register. Standaard verschijnt alleen uw nummer als Privélid. U kiest in uw account of uw volledige naam, uw voornaam en initiaal, of alleen uw nummer publiek zichtbaar is. U kunt die keuze op elk moment wijzigen of intrekken.</p>
+<p>Als u Heritage Nº 001 koopt, wordt u ingeschreven in het officiële Founding Circle-register. Standaard verschijnt alleen uw nummer als Privélid. U kiest in uw account of uw volledige naam, uw voornaam en initiaal, of alleen uw nummer publiek zichtbaar is. U kunt die keuze op elk moment wijzigen of intrekken.</p>
 HTML,
             'terms' => <<<'HTML'
 <h2>Algemene voorwaarden</h2>
@@ -38,7 +38,7 @@ HTML,
 HTML,
             'shipping' => <<<'HTML'
 <h1>Verzending &amp; Retour</h1>
-<p>Elk Heritage No.001-racket wordt met de hand gecontroleerd, verpakt en verzekerd verzonden.</p>
+<p>Elk Heritage Nº 001-racket wordt met de hand gecontroleerd, verpakt en verzekerd verzonden.</p>
 <h2>Verzending</h2>
 <p>Binnen Europa is verzending inbegrepen.</p>
 <p>Elke zending is verzekerd en volgbaar. Zodra je racket vertrekt, ontvang je een e-mail met je trackinglink.</p>
@@ -60,7 +60,7 @@ HTML,
 HTML,
             'care' => <<<'HTML'
 <h1>Zorg &amp; Garantie</h1>
-<p>Heritage No.001 is gebouwd om lang mee te gaan. Met de juiste zorg blijft het jaren mooi en speelklaar.</p>
+<p>Heritage Nº 001 is gebouwd om lang mee te gaan. Met de juiste zorg blijft het jaren mooi en speelklaar.</p>
 <h2>Het slagvlak</h2>
 <p>Reinig het matte oppervlak en het reliëf van het huis met een zachte, droge doek.</p>
 <p>Gebruik geen water, zeep, alcohol of oplosmiddelen, en schrob niet over het reliëf.</p>

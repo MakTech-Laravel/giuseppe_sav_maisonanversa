@@ -19,7 +19,7 @@ use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
 
 /**
- * Places Heritage No.001 buyers on the Founding Circle register.
+ * Places Heritage Nº 001 buyers on the Founding Circle register.
  *
  * Payment creates a Reserved place (no public name) until delivery + the
  * withdrawal window; then a daily job promotes to Inscribed and mails the

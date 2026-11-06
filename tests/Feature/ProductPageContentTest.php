@@ -68,14 +68,14 @@ test('the rename migration fixes the live founding product name and its translat
     Artisan::call('app:import-static-content-command');
 
     $product = Product::founding();
-    $product->name = 'Heritage No.001 · Founding Edition';
+    $product->name = 'Heritage Nº 001 · Founding Edition';
     $product->description = 'Edited by an admin.';
     $product->saveQuietly();
 
     foreach (['en', 'fr'] as $locale) {
         $product->translations()->updateOrCreate(
             ['locale' => $locale, 'column' => 'name'],
-            ['value' => 'Heritage No.001 · Founding Edition', 'source_hash' => 'stale'],
+            ['value' => 'Heritage Nº 001 · Founding Edition', 'source_hash' => 'stale'],
         );
     }
 

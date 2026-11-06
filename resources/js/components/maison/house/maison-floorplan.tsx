@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { FloorplanRoom } from '@/components/maison/house/floorplan-room';
+import { roomText } from '@/components/maison/opening/opening-data';
 import { useLocale } from '@/hooks/use-locale';
 import { foundingProductUrl } from '@/lib/maison-navigation';
 
@@ -10,6 +11,7 @@ import { foundingProductUrl } from '@/lib/maison-navigation';
 export function MaisonFloorplan() {
     const { t } = useTranslation();
     const { locale } = useLocale();
+    const room = (numeral: string) => roomText(locale, numeral);
 
     return (
         <svg
@@ -63,7 +65,7 @@ export function MaisonFloorplan() {
                     y="330"
                     textAnchor="middle"
                 >
-                    Club Corner
+                    {room('VIII').name}
                 </text>
                 <text
                     className="room-label-sub"
@@ -71,7 +73,7 @@ export function MaisonFloorplan() {
                     y="352"
                     textAnchor="middle"
                 >
-                    {t('De speelkamer')}
+                    {room('VIII').subtitle}
                 </text>
             </FloorplanRoom>
 
@@ -113,10 +115,10 @@ export function MaisonFloorplan() {
                     <circle cx="340" cy="640" r="12" />
                 </g>
                 <text className="room-label-name" x="430" y="510">
-                    Le Cercle
+                    {room('III').name}
                 </text>
                 <text className="room-label-sub" x="430" y="530">
-                    Founding Circle
+                    {room('III').subtitle}
                 </text>
             </FloorplanRoom>
             <FloorplanRoom to="journal">
@@ -150,7 +152,7 @@ export function MaisonFloorplan() {
                     y="610"
                     textAnchor="middle"
                 >
-                    {t('Bibliotheek')}
+                    {room('VI').name}
                 </text>
                 <text
                     className="room-label-sub"
@@ -158,7 +160,7 @@ export function MaisonFloorplan() {
                     y="632"
                     textAnchor="middle"
                 >
-                    Journal
+                    {room('VI').subtitle}
                 </text>
             </FloorplanRoom>
 
@@ -198,10 +200,10 @@ export function MaisonFloorplan() {
                     <line x1="498" y1="890" x2="498" y2="940" />
                 </g>
                 <text className="room-label-name" x="430" y="760">
-                    {t('Atelier')}
+                    {room('VII').name}
                 </text>
                 <text className="room-label-sub" x="430" y="780">
-                    {t('Ons Verhaal')}
+                    {room('VII').subtitle}
                 </text>
             </FloorplanRoom>
             <FloorplanRoom to="community">
@@ -243,7 +245,7 @@ export function MaisonFloorplan() {
                     y="752"
                     textAnchor="middle"
                 >
-                    Salle Commune
+                    {room('V').name}
                 </text>
                 <text
                     className="room-label-sub"
@@ -251,7 +253,7 @@ export function MaisonFloorplan() {
                     y="776"
                     textAnchor="middle"
                 >
-                    Community
+                    {room('V').subtitle}
                 </text>
             </FloorplanRoom>
 
@@ -295,7 +297,7 @@ export function MaisonFloorplan() {
                     y="1060"
                     textAnchor="middle"
                 >
-                    Salon
+                    {room('I').name}
                 </text>
                 <text
                     className="room-label-sub"
@@ -303,7 +305,7 @@ export function MaisonFloorplan() {
                     y="1080"
                     textAnchor="middle"
                 >
-                    {t('Onthaal · Home')}
+                    {room('I').subtitle}
                 </text>
             </FloorplanRoom>
             <FloorplanRoom href={foundingProductUrl(locale)}>
@@ -343,7 +345,7 @@ export function MaisonFloorplan() {
                     y="990"
                     textAnchor="middle"
                 >
-                    {t('Galerie')}
+                    {room('IV').name}
                 </text>
                 <text
                     className="room-label-sub"
@@ -351,7 +353,7 @@ export function MaisonFloorplan() {
                     y="1010"
                     textAnchor="middle"
                 >
-                    Heritage No.001
+                    {room('IV').subtitle}
                 </text>
             </FloorplanRoom>
             <FloorplanRoom to="contact">
@@ -392,7 +394,7 @@ export function MaisonFloorplan() {
                     y="990"
                     textAnchor="middle"
                 >
-                    {t('Bureau')}
+                    {room('II').name}
                 </text>
                 <text
                     className="room-label-sub"
@@ -400,7 +402,7 @@ export function MaisonFloorplan() {
                     y="1010"
                     textAnchor="middle"
                 >
-                    {t('Contact')}
+                    {room('II').subtitle}
                 </text>
             </FloorplanRoom>
 
