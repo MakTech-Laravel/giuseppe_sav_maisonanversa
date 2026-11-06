@@ -2,8 +2,8 @@ import type { MaisonPage } from '@/lib/maison-navigation';
 import type { Locale } from '@/types/locale';
 
 /**
- * The right light: the visitor's local time, picked before first paint by the
- * inline script in app.blade.php. The copy below only needs the four names.
+ * The right light: Antwerp time (Europe/Brussels), picked before first paint by
+ * the inline script in app.blade.php. The copy below only needs the four names.
  */
 export type OpeningMood = 'morning' | 'afternoon' | 'evening' | 'night';
 
@@ -83,10 +83,10 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
                 enter: 'Betreed het Bureau →',
             },
             en: {
-                name: 'Office',
+                name: 'Bureau',
                 subtitle: 'Contact',
                 line: 'Questions, care and appointments.',
-                enter: 'Enter the Office →',
+                enter: 'Enter the Bureau →',
             },
             fr: {
                 name: 'Bureau',
@@ -135,10 +135,10 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
                 enter: 'Betreed de Galerie →',
             },
             en: {
-                name: 'Gallery',
+                name: 'Galerie',
                 subtitle: 'Heritage Nº 001',
                 line: 'The first racket of the house.',
-                enter: 'Enter the Gallery →',
+                enter: 'Enter the Galerie →',
             },
             fr: {
                 name: 'Galerie',
@@ -181,16 +181,16 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
         hotspot: { left: 17.976, top: 17.211, width: 7.553, height: 11.181 },
         text: {
             nl: {
-                name: 'Bibliotheek',
+                name: 'Bibliothèque',
                 subtitle: 'Journal',
                 line: 'Verhalen over sport, cultuur en vakmanschap.',
-                enter: 'Betreed de Bibliotheek →',
+                enter: 'Betreed de Bibliothèque →',
             },
             en: {
-                name: 'Library',
+                name: 'Bibliothèque',
                 subtitle: 'Journal',
                 line: 'Stories about sport, culture and craft.',
-                enter: 'Enter the Library →',
+                enter: 'Enter the Bibliothèque →',
             },
             fr: {
                 name: 'Bibliothèque',
@@ -234,19 +234,19 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
         text: {
             nl: {
                 name: 'Club Corner',
-                subtitle: 'De speelkamer',
+                subtitle: 'In your club',
                 line: 'Maison Anversa in uw padelclub.',
                 enter: 'Betreed Club Corner →',
             },
             en: {
                 name: 'Club Corner',
-                subtitle: 'The Playroom',
+                subtitle: 'In your club',
                 line: 'Maison Anversa in your padel club.',
                 enter: 'Enter Club Corner →',
             },
             fr: {
                 name: 'Club Corner',
-                subtitle: 'La salle de jeux',
+                subtitle: 'In your club',
                 line: 'Maison Anversa dans votre club de padel.',
                 enter: 'Entrer dans Club Corner →',
             },
@@ -278,6 +278,8 @@ export type OpeningCopy = {
     registerTitle: string;
     available: string;
     reserved: string;
+    /** Proper name — same in every locale. */
+    archive: string;
     /** The register's page controls, shown only above OPENING_PAGE_SIZE numbers. */
     pagination: string;
     previousPage: string;
@@ -291,6 +293,7 @@ export type OpeningCopy = {
     enterHouse: string;
     tileAvailable: string;
     tileReserved: string;
+    tileArchive: string;
     houseHint: string;
     roomsKicker: string;
     /** `{n}` is the numeral, `{sub}` the room's subtitle. */
@@ -317,6 +320,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
         registerTitle: 'Het register',
         available: 'Beschikbaar',
         reserved: 'Gereserveerd',
+        archive: 'Maison Archive',
         pagination: 'Pagina’s van het register',
         previousPage: 'Vorige',
         nextPage: 'Volgende',
@@ -326,6 +330,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
         enterHouse: 'Betreed het huis',
         tileAvailable: 'beschikbaar',
         tileReserved: 'gereserveerd',
+        tileArchive: 'Maison Archive',
         houseHint:
             'Elk verlicht raam is een kamer. Tik op een raam om binnen te stappen.',
         roomsKicker: 'De kamers',
@@ -345,6 +350,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
         registerTitle: 'The register',
         available: 'Available',
         reserved: 'Reserved',
+        archive: 'Maison Archive',
         pagination: 'Register pages',
         previousPage: 'Previous',
         nextPage: 'Next',
@@ -354,6 +360,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
         enterHouse: 'Enter the house',
         tileAvailable: 'available',
         tileReserved: 'reserved',
+        tileArchive: 'Maison Archive',
         houseHint: 'Every lit window is a room. Tap one to step inside.',
         roomsKicker: 'The rooms',
         roomKicker: 'Room {n} · {sub}',
@@ -372,6 +379,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
         registerTitle: 'Le registre',
         available: 'Disponible',
         reserved: 'Réservé',
+        archive: 'Maison Archive',
         pagination: 'Pages du registre',
         previousPage: 'Précédent',
         nextPage: 'Suivant',
@@ -381,6 +389,7 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
         enterHouse: 'Entrer dans la maison',
         tileAvailable: 'disponible',
         tileReserved: 'réservé',
+        tileArchive: 'Maison Archive',
         houseHint:
             'Chaque fenêtre éclairée est une pièce. Touchez-en une pour entrer.',
         roomsKicker: 'Les pièces',

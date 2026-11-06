@@ -39,8 +39,8 @@ type OpeningRegisterProps = {
  * The register: the edition numbers of the product an admin chose for the opening,
  * under the house, and the two ways out of it.
  *
- * - Available numbers print as available; every other number (held, sold, returning,
- *   not for sale) prints in the "reserved" colour. There is no fixed count.
+ * - Available numbers print as available; archived numbers (Maison Archive) have
+ *   their own mark; every other held, sold or returning number prints as reserved.
  * - "Choose your number" starts the site's own reservation for that product: the
  *   shell's `openPurchase()`, which asks a visitor who is not signed in to log in,
  *   then opens the edition picker (the live list of numbers) and the order modal.
@@ -109,27 +109,38 @@ export function OpeningRegister({
                         <i className="op-sw op-sw-r" />
                         {copy.reserved}
                     </span>
+                    <span>
+                        <i className="op-sw op-sw-archive" />
+                        {copy.archive}
+                    </span>
                 </div>
             </div>
 
             <div className="op-numbers">
-                {visibleTiles.map((tile) => (
-                    <button
-                        key={tile.id}
-                        type="button"
-                        className="op-num"
-                        disabled={!tile.available}
-                        aria-pressed={selected === tile.id}
-                        aria-label={`Nº ${tile.label}, ${
-                            tile.available
-                                ? copy.tileAvailable
-                                : copy.tileReserved
-                        }`}
-                        onClick={() => pick(tile.id)}
-                    >
-                        {tile.label}
-                    </button>
-                ))}
+                {visibleTiles.map((tile) => {
+                    const isArchive = tile.status === 'archive';
+                    const statusLabel = isArchive
+                        ? copy.tileArchive
+                        : tile.available
+                          ? copy.tileAvailable
+                          : copy.tileReserved;
+
+                    return (
+                        <button
+                            key={tile.id}
+                            type="button"
+                            className={
+                                isArchive ? 'op-num op-num-archive' : 'op-num'
+                            }
+                            disabled={!tile.available}
+                            aria-pressed={selected === tile.id}
+                            aria-label={`Nº ${tile.label}, ${statusLabel}`}
+                            onClick={() => pick(tile.id)}
+                        >
+                            {tile.label}
+                        </button>
+                    );
+                })}
             </div>
 
             {paged ? (
