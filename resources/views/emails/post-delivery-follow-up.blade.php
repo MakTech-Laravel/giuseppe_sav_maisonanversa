@@ -1,5 +1,5 @@
 @component('emails.layouts.maison', [
-    'title' => __('Hoe bevalt Heritage No.001?'),
+    'title' => __('Hoe bevalt Heritage Nº 001?'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
     'ctaLabel' => __('Bezoek het huis'),

@@ -31,7 +31,7 @@ test('staff can update the founding product name and amount', function () {
     $this->actingAs($this->admin)
         ->from(route('admin.heritage.index'))
         ->patch(route('admin.heritage.update', ['product' => $product->id]), [
-            'name' => 'Heritage No.001 — Atelier',
+            'name' => 'Heritage Nº 001 — Atelier',
             'amount' => '99.99',
             'edition_number_prefix' => 'MA-',
             'edition_number_postfix' => '',
@@ -42,7 +42,7 @@ test('staff can update the founding product name and amount', function () {
 
     $product->refresh();
 
-    expect($product->name)->toBe('Heritage No.001 — Atelier')
+    expect($product->name)->toBe('Heritage Nº 001 — Atelier')
         ->and($product->amount)->toBe('99.99')
         ->and($product->edition_number_prefix)->toBe('MA-')
         ->and($product->formatEditionSku(1))->toBe('MA-001')

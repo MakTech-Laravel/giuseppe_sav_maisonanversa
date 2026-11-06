@@ -211,7 +211,7 @@ final class MatchCardPresenter
     }
 
     /**
-     * "No. 012" for Heritage No.001 owners (order first, then an approved claim).
+     * "Nº 012" for Heritage Nº 001 owners (order first, then an approved claim).
      */
     private function edition(User $user): ?string
     {
@@ -222,11 +222,11 @@ final class MatchCardPresenter
         $order = $this->passports->heritageOrder($user);
 
         if ($order !== null && $order->edition_number !== null) {
-            return 'No. '.str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
+            return 'Nº '.str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT);
         }
 
         $claim = $this->passports->approvedClaim($user);
 
-        return $claim !== null ? 'No. '.$claim->paddedEditionNumber() : null;
+        return $claim !== null ? 'Nº '.$claim->paddedEditionNumber() : null;
     }
 }

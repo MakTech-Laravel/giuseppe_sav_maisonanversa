@@ -55,7 +55,7 @@ final class MaisonSeo
         ],
         'products' => [
             'title' => 'Producten — Maison Anversa',
-            'description' => 'Ontdek de collectie van Maison Anversa — Heritage No.001 en de volgende hoofdstukken van het huis.',
+            'description' => 'Ontdek de collectie van Maison Anversa — Heritage Nº 001 en de volgende hoofdstukken van het huis.',
         ],
         'story' => [
             'title' => 'Ons Verhaal — Maison Anversa',
@@ -83,7 +83,7 @@ final class MaisonSeo
         ],
         'contact' => [
             'title' => 'Contact — Maison Anversa',
-            'description' => 'Neem contact op met Maison Anversa — vragen over Heritage No.001, bestellingen of pers.',
+            'description' => 'Neem contact op met Maison Anversa — vragen over Heritage Nº 001, bestellingen of pers.',
         ],
         'privacy' => [
             'title' => 'Privacybeleid — Maison Anversa',
@@ -99,7 +99,7 @@ final class MaisonSeo
         ],
         'care' => [
             'title' => 'Zorg & Garantie — Maison Anversa',
-            'description' => 'Zorg en garantie voor Heritage No.001 — onderhoud, reparatie en klantenservice van Maison Anversa.',
+            'description' => 'Zorg en garantie voor Heritage Nº 001 — onderhoud, reparatie en klantenservice van Maison Anversa.',
         ],
     ];
 

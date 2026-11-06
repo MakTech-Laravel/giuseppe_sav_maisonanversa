@@ -4,7 +4,7 @@ const ITEMS = [
     'Gebouwd voor generaties',
     'Maison Anversa',
     'European Heritage Sports and Lifestyle House',
-    'Heritage No.001',
+    'Heritage Nº 001',
     'Founding Edition',
     'Antwerpen, België',
     '100 stuks',
@@ -15,7 +15,7 @@ const ITEMS = [
 const LITERAL = new Set<string>([
     'Maison Anversa',
     'European Heritage Sports and Lifestyle House',
-    'Heritage No.001',
+    'Heritage Nº 001',
     'Founding Edition',
 ]);
 

@@ -44,7 +44,7 @@ export const IMAGE_ASSETS = {
     'room-library': {
         path: 'images/rooms/room-library.png',
         ratio: '16 / 9',
-        label: 'Bibliotheek',
+        label: 'Bibliothèque',
         gradient: `linear-gradient(200deg, ${CHOC2} 0%, ${CHOC} 100%)`,
     },
     'room-atelier': {
@@ -105,7 +105,7 @@ export const IMAGE_ASSETS = {
     'heritage-001-front': {
         path: 'images/product/heritage-001-front.png',
         ratio: '3 / 4',
-        label: 'Heritage No.001',
+        label: 'Heritage Nº 001',
         gradient: `linear-gradient(140deg, ${CHOC2} 0%, ${CHOC} 100%)`,
     },
     'heritage-001-detail-gravure': {

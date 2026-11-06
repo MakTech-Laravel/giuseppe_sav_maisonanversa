@@ -23,7 +23,7 @@ class PostDeliveryFollowUp extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Hoe bevalt Heritage No.001?'),
+            subject: __('Hoe bevalt Heritage Nº 001?'),
         );
     }
 

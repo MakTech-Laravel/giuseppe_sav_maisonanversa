@@ -60,7 +60,7 @@ test('the seeded hero renders on the homepage', function () {
             ->where('hero.counterLines.1', 'beschikbaar')
             ->where('hero.imageUrl', null)
             ->has('hero.buttons', 3)
-            ->where('hero.buttons.0.label', 'Ontdek Heritage No.001 →')
+            ->where('hero.buttons.0.label', 'Ontdek Heritage Nº 001 →')
             ->where('hero.buttons.0.kind', 'link')
             ->where('hero.buttons.0.href', route('maison.products.show', [
                 'locale' => 'nl',
@@ -222,7 +222,7 @@ test('a hidden button slot is omitted from the homepage', function () {
             $labels = collect($buttons)->pluck('label');
 
             return $labels->doesntContain('Betreed het Huis')
-                && $labels->contains('Ontdek Heritage No.001 →')
+                && $labels->contains('Ontdek Heritage Nº 001 →')
                 && $labels->contains('Heritage Letter');
         })
     );
@@ -230,7 +230,7 @@ test('a hidden button slot is omitted from the homepage', function () {
 
 test('english home hero buttons fall back through lang files when DeepL rows are missing', function () {
     HomeHero::current()->update([
-        'primary_label' => 'Ontdek Heritage No.001 →',
+        'primary_label' => 'Ontdek Heritage Nº 001 →',
         'secondary_label' => 'Betreed het Huis',
         'tertiary_label' => 'Heritage Letter',
     ]);
@@ -239,9 +239,9 @@ test('english home hero buttons fall back through lang files when DeepL rows are
         ->where('hero.buttons', function ($buttons) {
             $labels = collect($buttons)->pluck('label');
 
-            return $labels->contains('Discover Heritage No.001 →')
+            return $labels->contains('Discover Heritage Nº 001 →')
                 && $labels->contains('Enter the House')
-                && $labels->doesntContain('Ontdek Heritage No.001 →')
+                && $labels->doesntContain('Ontdek Heritage Nº 001 →')
                 && $labels->doesntContain('Betreed het Huis');
         })
     );

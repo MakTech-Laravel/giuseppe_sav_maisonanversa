@@ -171,7 +171,7 @@ export function OpeningOfferFormAside() {
                 </li>
                 <li>
                     {t(
-                        'Alleen Heritage No.001 geeft lidmaatschap van de Founding Circle.',
+                        'Alleen Heritage Nº 001 geeft lidmaatschap van de Founding Circle.',
                     )}
                 </li>
                 <li>

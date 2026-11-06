@@ -1,19 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { MaisonLink } from '@/components/maison/maison-link';
+import { roomText } from '@/components/maison/opening/opening-data';
 import { useLocale } from '@/hooks/use-locale';
 import type { MaisonPage } from '@/lib/maison-navigation';
 import { foundingProductUrl } from '@/lib/maison-navigation';
 
 type Room = {
-    /** Omitted for the Heritage No.001 room, which links to the founding product instead. */
+    /** Omitted for the Heritage Nº 001 room, which links to the founding product instead. */
     to?: MaisonPage;
     num: string;
-    name: string;
-    /** When set, the name is left alone — French room titles stay as brand. */
-    brand?: true;
-    sub: string;
-    /** When set, the subtitle is a brand term rather than a dictionary key. */
-    brandSub?: true;
+    /** Name and label come from the opening's room texts, never from the dictionary. */
+    numeral: string;
 };
 
 type Floor = {
@@ -25,66 +22,29 @@ const FLOORS: readonly Floor[] = [
     {
         label: 'Rez-de-chaussée',
         rooms: [
-            {
-                to: 'home',
-                num: '01',
-                name: 'Salon',
-                brand: true,
-                sub: 'Onthaal · Home',
-            },
-            {
-                num: '02',
-                name: 'Galerie',
-                sub: 'Heritage No.001',
-                brandSub: true,
-            },
-            { to: 'contact', num: '03', name: 'Bureau', sub: 'Contact' },
+            { to: 'home', num: '01', numeral: 'I' },
+            { num: '02', numeral: 'IV' },
+            { to: 'contact', num: '03', numeral: 'II' },
         ],
     },
     {
         label: 'Premier étage',
         rooms: [
-            { to: 'story', num: '04', name: 'Atelier', sub: 'Ons Verhaal' },
-            {
-                to: 'community',
-                num: '05',
-                name: 'Salle Commune',
-                brand: true,
-                sub: 'Community',
-                brandSub: true,
-            },
+            { to: 'story', num: '04', numeral: 'VII' },
+            { to: 'community', num: '05', numeral: 'V' },
         ],
     },
     {
         label: 'Deuxième étage',
         rooms: [
-            {
-                to: 'circle',
-                num: '06',
-                name: 'Le Cercle',
-                brand: true,
-                sub: 'Founding Circle',
-                brandSub: true,
-            },
-            {
-                to: 'journal',
-                num: '07',
-                name: 'Bibliotheek',
-                sub: 'Journal',
-                brandSub: true,
-            },
+            { to: 'circle', num: '06', numeral: 'III' },
+            { to: 'journal', num: '07', numeral: 'VI' },
         ],
     },
     {
         label: 'Grenier',
         rooms: [
-            {
-                to: 'corner',
-                num: '08',
-                name: 'Club Corner',
-                brand: true,
-                sub: 'De speelkamer',
-            },
+            { to: 'corner', num: '08', numeral: 'VIII' },
         ],
     },
 ] as const;
@@ -111,10 +71,10 @@ export function MaisonRoomList() {
                                     {room.num}
                                 </span>
                                 <span className="flex-1 font-serif text-[21px] text-cream transition-colors hover:text-gold">
-                                    {room.brand ? room.name : t(room.name)}
+                                    {roomText(locale, room.numeral).name}
                                 </span>
                                 <span className="font-sans text-[9px] tracking-[0.2em] text-sand uppercase">
-                                    {room.brandSub ? room.sub : t(room.sub)}
+                                    {roomText(locale, room.numeral).subtitle}
                                 </span>
                                 <span
                                     aria-hidden="true"

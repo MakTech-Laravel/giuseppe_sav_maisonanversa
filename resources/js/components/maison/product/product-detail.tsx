@@ -100,7 +100,7 @@ export function ProductDetail({
                                 </p>
                                 <p className="mt-2 text-sm leading-relaxed text-choc3">
                                     {t(
-                                        'Elke eigenaar van Heritage No.001 wordt ingeschreven. U kiest zelf uw nummer bij het afrekenen.',
+                                        'Elke eigenaar van Heritage Nº 001 wordt ingeschreven. U kiest zelf uw nummer bij het afrekenen.',
                                     )}
                                 </p>
                                 <p className="mt-3 font-serif text-lg text-choc">

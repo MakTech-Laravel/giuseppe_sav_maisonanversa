@@ -18,7 +18,7 @@ enum HomeHeroAction: string
     public function label(): string
     {
         return match ($this) {
-            self::FoundingProduct => 'Heritage No.001',
+            self::FoundingProduct => 'Heritage Nº 001',
             self::FoundingCircle => 'Founding Circle',
             self::RegisterFoundingCircle => 'Founding Circle registreren',
             self::Community => 'Gemeenschap',

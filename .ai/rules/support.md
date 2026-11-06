@@ -12,7 +12,7 @@ paths:
 # Support
 
 ## Founding Circle / Heritage Passport is a composite, not a model
-"Founding Circle" and "Heritage Passport" have no dedicated passport tables. They're derived at read time from: the Spatie `founding-circle` role on `User` (checked via `User::isFoundingCircle()`), an approved `FoundingCircleClaim` and/or `PassportPresenter::heritageOrder()` (latest paid/shipped/delivered founding order with `edition_number`). Enrollment is automatic when Heritage No.001 payment succeeds: `OrderFulfillment` assigns `founding-circle` and writes a private register row for the picked number. Don't build a `FoundingCircleMember` or `HeritagePassport` model.
+"Founding Circle" and "Heritage Passport" have no dedicated passport tables. They're derived at read time from: the Spatie `founding-circle` role on `User` (checked via `User::isFoundingCircle()`), an approved `FoundingCircleClaim` and/or `PassportPresenter::heritageOrder()` (latest paid/shipped/delivered founding order with `edition_number`). Enrollment is automatic when Heritage Nº 001 payment succeeds: `OrderFulfillment` assigns `founding-circle` and writes a private register row for the picked number. Don't build a `FoundingCircleMember` or `HeritagePassport` model.
 
 Deliberately out of scope, don't "fix" these: no CMS editor for the Passport's 4 page bodies (hardcoded in `PassportPresenter`); no tiers/points/loyalty mechanics (binary membership is intentional). Member nav shows Heritage, Passport, the Circle card, and Register listing only for Founding Circle members. Lidpaspoort stays for every customer. There is no racket-registration screen.
 
