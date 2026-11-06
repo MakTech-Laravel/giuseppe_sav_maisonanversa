@@ -37,6 +37,21 @@ test('the lit house has eight rooms, in window order I to VIII, with nl, en and 
         // Each room carries one text block per locale, plus the copy block.
         expect(preg_match_all("/\b{$locale}: \{/", $source))->toBe(9);
     }
+
+    // House names stay the same in every language; only the small label is translated.
+    foreach (['Salon', 'Bureau', 'Le Cercle', 'Galerie', 'Salle Commune', 'Bibliothèque', 'Atelier', 'Club Corner'] as $name) {
+        expect(substr_count($source, "name: '{$name}'"))->toBe(3);
+    }
+
+    expect(substr_count($source, "subtitle: 'In your club'"))->toBe(3);
+
+    expect($source)
+        ->not->toContain("subtitle: 'The Playroom'")
+        ->not->toContain('speelkamer')
+        ->not->toContain('salle de jeux')
+        ->not->toContain("name: 'Office'")
+        ->not->toContain("name: 'Gallery'")
+        ->not->toContain("name: 'Library'");
 });
 
 test('every room opens an existing page', function () {
@@ -138,11 +153,19 @@ test('the register has two buttons: one starts the real reservation, one goes to
 test('the register prints the real edition numbers of the chosen product, never a fixed 100', function () {
     $register = openingSource('opening-register.tsx');
     $data = openingSource('opening-data.ts');
+    $css = File::get(resource_path('css/opening.css'));
 
     expect($register)
         ->toContain('visibleTiles.map')
         ->toContain('disabled={!tile.available}')
-        ->toContain('{tile.label}');
+        ->toContain('{tile.label}')
+        ->toContain("tile.status === 'archive'")
+        ->toContain('op-num-archive')
+        ->toContain('copy.archive');
+
+    expect($data)->toContain("archive: 'Maison Archive'")
+        ->and($css)->toContain('.op-num-archive')
+        ->and($css)->toContain('.op-sw-archive');
 
     // Nothing hard-coded is left: no fixed size, no placeholder reserved numbers.
     foreach (['OPENING_EDITION_SIZE', 'OPENING_RESERVED_NUMBERS', 'padNumber'] as $gone) {
@@ -181,7 +204,8 @@ test('the register grid is ten per row on desktop and tablet, five on a phone', 
 
     expect($css)
         ->toMatch('/\.op-numbers\s*\{[^}]*grid-template-columns:\s*repeat\(10,/')
-        ->toMatch('/@media \(max-width: 639px\)\s*\{\s*\.op-numbers\s*\{\s*grid-template-columns:\s*repeat\(5,/')
+        ->toMatch('/\.op-numbers\s*\{[^}]*max-width:\s*600px;/')
+        ->toMatch('/@media \(max-width: 639px\)\s*\{[\s\S]*?\.op-numbers\s*\{\s*grid-template-columns:\s*repeat\(5,/')
         ->not->toContain('--op-tile')
         ->not->toContain('auto-fill');
 
@@ -399,6 +423,14 @@ test('the right light has four moods, driven by css variables', function () {
         ->toContain('prefers-reduced-motion: reduce');
 
     expect(File::get(resource_path('css/app.css')))->toContain("@import './opening.css'");
+
+    // Mood follows Antwerp time; ?light= still overrides for testing.
+    $blade = File::get(resource_path('views/app.blade.php'));
+
+    expect($blade)
+        ->toContain('Europe/Brussels')
+        ->toContain('light=(morning|afternoon|evening|night)')
+        ->not->toContain('new Date().getHours()');
 });
 
 test('the windows light up in order after the door opens, then the list appears', function () {

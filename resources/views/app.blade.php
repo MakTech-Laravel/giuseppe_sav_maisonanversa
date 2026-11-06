@@ -36,8 +36,9 @@
             The right light, and "once per session", decided before first paint so
             the opening never flashes the wrong colours or replays. The opening
             itself is in the server HTML, so it paints before any JavaScript runs.
-            ?light=morning|afternoon|evening|night overrides the visitor's clock
-            for testing; ?intro=1 plays the opening again.
+            Mood follows Antwerp time (Europe/Brussels), not the visitor's clock.
+            ?light=morning|afternoon|evening|night overrides for testing;
+            ?intro=1 plays the opening again.
         --}}
         <script @if (\Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}" @endif>
             (function () {
@@ -45,7 +46,13 @@
 
                 try {
                     var forced = (location.search.match(/[?&]light=(morning|afternoon|evening|night)/) || [])[1];
-                    var hour = new Date().getHours();
+                    var hour = Number(
+                        new Intl.DateTimeFormat('en-GB', {
+                            timeZone: 'Europe/Brussels',
+                            hour: 'numeric',
+                            hourCycle: 'h23',
+                        }).format(new Date())
+                    );
 
                     root.dataset.light = forced || (hour >= 5 && hour < 12 ? 'morning' : hour >= 12 && hour < 18 ? 'afternoon' : hour >= 18 && hour < 23 ? 'evening' : 'night');
 
