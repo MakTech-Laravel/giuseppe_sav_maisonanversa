@@ -18,6 +18,33 @@ return [
     'default_locale' => 'nl',
 
     /*
+    |--------------------------------------------------------------------------
+    | Fixed names
+    |--------------------------------------------------------------------------
+    |
+    | Proper names of the house: written the same in every language, never
+    | translated by hand, by DeepL or through a dictionary key. "Nº" is the
+    | ordinal sign (U+00BA).
+    |
+    */
+
+    'fixed_names' => [
+        'Maison Anversa',
+        'Heritage Nº 001',
+        'Founding Edition',
+        'Founding Circle',
+        'Maison Archive',
+        'Salon',
+        'Bureau',
+        'Le Cercle',
+        'Galerie',
+        'Salle Commune',
+        'Bibliothèque',
+        'Atelier',
+        'Club Corner',
+    ],
+
+    /*
     | Mails and in-app notifications follow the recipient's `users.locale`.
     | When that is empty or unsupported, they fall back to this locale rather
     | than the site default.

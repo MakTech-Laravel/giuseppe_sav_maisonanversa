@@ -13,16 +13,16 @@ function formatEditionNumber(value: string): string {
     const trimmed = value.trim();
 
     if (!trimmed) {
-        return '№ 0__';
+        return 'Nº 0__';
     }
 
     const parsed = Number.parseInt(trimmed, 10);
 
     if (Number.isNaN(parsed)) {
-        return '№ 0__';
+        return 'Nº 0__';
     }
 
-    return `№ ${String(parsed).padStart(3, '0')}`;
+    return `Nº ${String(parsed).padStart(3, '0')}`;
 }
 
 /**
@@ -75,7 +75,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                     )}
                 </p>
                 <p className="my-3.5 font-serif text-lg text-choc italic">
-                    {t('Heritage No.001 — Founding Edition')}
+                    {t('Heritage Nº 001 — Founding Edition')}
                 </p>
                 <p className="mx-auto max-w-[380px] font-sans text-xs leading-[1.7] text-choc3">
                     {t(

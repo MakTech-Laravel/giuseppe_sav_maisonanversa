@@ -159,7 +159,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Eens Heritage No.001 levert, volgt u hier de status van uw editienummer. Tot die tijd zoeken wij uw reservering handmatig op — stuur ons uw naam of reserveringsnummer via WhatsApp of e-mail.',
+                            'Eens Heritage Nº 001 levert, volgt u hier de status van uw editienummer. Tot die tijd zoeken wij uw reservering handmatig op — stuur ons uw naam of reserveringsnummer via WhatsApp of e-mail.',
                         )}
                     </p>
                     <BureauNote>

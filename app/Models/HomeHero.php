@@ -123,7 +123,7 @@ class HomeHero extends Model
             'show_counter' => true,
             'counter_line_one' => 'Nummers nog',
             'counter_line_two' => 'beschikbaar',
-            'primary_label' => 'Ontdek Heritage No.001 →',
+            'primary_label' => 'Ontdek Heritage Nº 001 →',
             'primary_action' => HomeHeroAction::FoundingProduct,
             'primary_target' => null,
             'secondary_label' => 'Betreed het Huis',

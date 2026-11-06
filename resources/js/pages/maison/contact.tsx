@@ -11,7 +11,7 @@ export default function Contact() {
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={t('Bureau')}
+                eyebrow="Bureau"
                 title={
                     <>
                         {t('Hoe kunnen wij u')} <em>{t('helpen?')}</em>

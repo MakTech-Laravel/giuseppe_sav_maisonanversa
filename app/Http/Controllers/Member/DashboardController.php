@@ -111,8 +111,8 @@ class DashboardController extends Controller implements HasMiddleware
                 'deliveryWindow' => $order->product?->translated('expected_delivery_label')
                     ?? $order->shipped_at?->toDateString()
                     ?? __('In productie'),
-                'certificate' => __('Gekoppeld aan No. :number', ['number' => $number]),
-                'passport' => __('Vier pagina\'s · gekoppeld aan No. :number', ['number' => $number]),
+                'certificate' => __('Gekoppeld aan Nº :number', ['number' => $number]),
+                'passport' => __('Vier pagina\'s · gekoppeld aan Nº :number', ['number' => $number]),
             ],
         ]);
     }

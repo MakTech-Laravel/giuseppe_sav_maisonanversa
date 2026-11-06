@@ -90,7 +90,7 @@ export default function DressingShow({
                                     href={foundingProductUrl(locale)}
                                     className="w-fit"
                                 >
-                                    {t('Ontdek Heritage No.001 →')}
+                                    {t('Ontdek Heritage Nº 001 →')}
                                 </MaisonButton>
                             )}
 

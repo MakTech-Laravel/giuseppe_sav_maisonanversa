@@ -17,7 +17,7 @@ class FaqSeeder extends Seeder
         $rows = [
             FaqContext::Contact->value => [
                 [
-                    'question' => 'Wanneer levert Heritage No.001?',
+                    'question' => 'Wanneer levert Heritage Nº 001?',
                     'answer' => 'Levering is gepland in Q1 2027. De Founding Edition levert in volgorde van reservering — hoe vroeger u reserveert, hoe lager uw nummer.',
                 ],
                 [

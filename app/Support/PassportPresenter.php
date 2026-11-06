@@ -173,7 +173,7 @@ class PassportPresenter
                 'number' => $number,
                 'name' => $user->name,
                 'since' => $order->created_at?->translatedFormat('j F Y') ?? '',
-                'productName' => $order->product?->translated('name') ?? __('Heritage No.001'),
+                'productName' => $order->product?->translated('name') ?? __('Heritage Nº 001'),
                 'racketLabel' => $number.'/'.str_pad((string) $total, 3, '0', STR_PAD_LEFT),
             ];
         }
@@ -194,7 +194,7 @@ class PassportPresenter
             'since' => $claim->reviewed_at?->translatedFormat('j F Y')
                 ?? $claim->created_at?->translatedFormat('j F Y')
                 ?? '',
-            'productName' => $claim->product?->translated('name') ?? __('Heritage No.001'),
+            'productName' => $claim->product?->translated('name') ?? __('Heritage Nº 001'),
             'racketLabel' => $number.'/'.str_pad((string) $total, 3, '0', STR_PAD_LEFT),
         ];
     }

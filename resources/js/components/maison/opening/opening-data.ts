@@ -54,19 +54,19 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
                 name: 'Salon',
                 subtitle: 'Ontvangst',
                 line: 'Waar elk bezoek begint.',
-                enter: 'Betreed de Salon →',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Salon',
                 subtitle: 'Reception',
                 line: 'Where every visit begins.',
-                enter: 'Enter the Salon →',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Salon',
                 subtitle: 'Réception',
-                line: 'Là où chaque visite commence.',
-                enter: 'Entrer dans le Salon →',
+                line: 'Là où commence chaque visite.',
+                enter: 'Entrer →',
             },
         },
     },
@@ -79,20 +79,20 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
             nl: {
                 name: 'Bureau',
                 subtitle: 'Contact',
-                line: 'Vragen, zorg en afspraken.',
-                enter: 'Betreed het Bureau →',
+                line: 'Vragen, bestellingen en onderhoud.',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Bureau',
                 subtitle: 'Contact',
-                line: 'Questions, care and appointments.',
-                enter: 'Enter the Bureau →',
+                line: 'Questions, orders and care.',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Bureau',
                 subtitle: 'Contact',
-                line: 'Questions, soins et rendez-vous.',
-                enter: 'Entrer dans le Bureau →',
+                line: 'Questions, commandes et entretien.',
+                enter: 'Entrer →',
             },
         },
     },
@@ -105,20 +105,20 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
             nl: {
                 name: 'Le Cercle',
                 subtitle: 'Founding Circle',
-                line: 'De eerste honderd, en wat zij delen.',
-                enter: 'Betreed Le Cercle →',
+                line: 'De eerste honderd, en wat hen verbindt.',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Le Cercle',
                 subtitle: 'Founding Circle',
                 line: 'The first hundred, and what they share.',
-                enter: 'Enter Le Cercle →',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Le Cercle',
                 subtitle: 'Founding Circle',
-                line: 'Les cent premiers, et ce qu’ils partagent.',
-                enter: 'Entrer dans Le Cercle →',
+                line: 'Les cent premiers, et ce qui les unit.',
+                enter: 'Entrer →',
             },
         },
     },
@@ -132,19 +132,19 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
                 name: 'Galerie',
                 subtitle: 'Heritage Nº 001',
                 line: 'Het eerste racket van het huis.',
-                enter: 'Betreed de Galerie →',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Galerie',
                 subtitle: 'Heritage Nº 001',
                 line: 'The first racket of the house.',
-                enter: 'Enter the Galerie →',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Galerie',
                 subtitle: 'Heritage Nº 001',
-                line: 'La première raquette de la maison.',
-                enter: 'Entrer dans la Galerie →',
+                line: 'La première raquette de la Maison.',
+                enter: 'Entrer →',
             },
         },
     },
@@ -156,21 +156,21 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
         text: {
             nl: {
                 name: 'Salle Commune',
-                subtitle: 'Community',
+                subtitle: 'Gemeenschap',
                 line: 'Sessies, clubs en de mensen die spelen.',
-                enter: 'Betreed de Salle Commune →',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Salle Commune',
                 subtitle: 'Community',
                 line: 'Sessions, clubs and the people who play.',
-                enter: 'Enter the Salle Commune →',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Salle Commune',
                 subtitle: 'Communauté',
                 line: 'Sessions, clubs et ceux qui jouent.',
-                enter: 'Entrer dans la Salle Commune →',
+                enter: 'Entrer →',
             },
         },
     },
@@ -184,19 +184,19 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
                 name: 'Bibliothèque',
                 subtitle: 'Journal',
                 line: 'Verhalen over sport, cultuur en vakmanschap.',
-                enter: 'Betreed de Bibliothèque →',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Bibliothèque',
                 subtitle: 'Journal',
                 line: 'Stories about sport, culture and craft.',
-                enter: 'Enter the Bibliothèque →',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Bibliothèque',
                 subtitle: 'Journal',
-                line: 'Récits de sport, de culture et d’artisanat.',
-                enter: 'Entrer dans la Bibliothèque →',
+                line: 'Récits de sport, de culture et de savoir-faire.',
+                enter: 'Entrer →',
             },
         },
     },
@@ -210,19 +210,19 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
                 name: 'Atelier',
                 subtitle: 'Ons verhaal',
                 line: 'Hoe het huis begon.',
-                enter: 'Betreed het Atelier →',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Atelier',
                 subtitle: 'Our Story',
                 line: 'How the house began.',
-                enter: 'Enter the Atelier →',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Atelier',
                 subtitle: 'Notre histoire',
-                line: 'Comment la maison est née.',
-                enter: 'Entrer dans l’Atelier →',
+                line: 'Comment la Maison est née.',
+                enter: 'Entrer →',
             },
         },
     },
@@ -234,21 +234,21 @@ export const OPENING_ROOMS: readonly OpeningRoom[] = [
         text: {
             nl: {
                 name: 'Club Corner',
-                subtitle: 'In your club',
-                line: 'Maison Anversa in uw padelclub.',
-                enter: 'Betreed Club Corner →',
+                subtitle: 'In jouw club',
+                line: 'Maison Anversa in jouw padelclub.',
+                enter: 'Stap binnen →',
             },
             en: {
                 name: 'Club Corner',
                 subtitle: 'In your club',
                 line: 'Maison Anversa in your padel club.',
-                enter: 'Enter Club Corner →',
+                enter: 'Step inside →',
             },
             fr: {
                 name: 'Club Corner',
-                subtitle: 'In your club',
+                subtitle: 'Dans votre club',
                 line: 'Maison Anversa dans votre club de padel.',
-                enter: 'Entrer dans Club Corner →',
+                enter: 'Entrer →',
             },
         },
     },
@@ -274,12 +274,15 @@ export type OpeningCopy = {
     greeting: Record<OpeningMood, string>;
     /** `{total}` is the size of the edition, `{n}` the count of numbers still available. */
     limit: string;
+    skip: string;
     replay: string;
     registerTitle: string;
     available: string;
     reserved: string;
     /** Proper name — same in every locale. */
     archive: string;
+    /** Tooltip on Nº 001. */
+    archiveTooltip: string;
     /** The register's page controls, shown only above OPENING_PAGE_SIZE numbers. */
     pagination: string;
     previousPage: string;
@@ -288,54 +291,68 @@ export type OpeningCopy = {
     pageLabel: string;
     /** `{from}` and `{to}` are the numbers on this page, `{total}` the edition's size. */
     numbersRange: string;
+    /** Button 1: no number picked. */
     chooseNumber: string;
-    /** The way out to the home page. */
+    /** Button 1 with a pick; `{n}` is the number, e.g. 017. */
+    claimNumber: string;
+    /** Button 1 before launch (purchases paused). */
+    joinList: string;
+    /** Shown under the grid after a pick; `{n}` is the number. */
+    pickedLine: string;
+    /** Button 2: the way out to the home page. */
     enterHouse: string;
     tileAvailable: string;
     tileReserved: string;
     tileArchive: string;
     houseHint: string;
     roomsKicker: string;
-    /** `{n}` is the numeral, `{sub}` the room's subtitle. */
+    /** `{n}` is the room's Roman numeral. */
     roomKicker: string;
-    allRooms: string;
+    back: string;
     dialog: string;
 };
 
 /**
- * Opening copy for the three locales. It lives here rather than in the i18n
- * dictionaries for the same reason the old intro's did: it is a closed set,
- * written per locale, and read by the pre-hydration markup too.
+ * Opening copy for the three locales, written by the client (final texts, Nov 2026)
+ * and used exactly as written: never translated here, never run through t(). NL
+ * always "je", FR always "vous". It lives here rather than in the i18n dictionaries
+ * because it is a closed set, written per locale, and read by the pre-hydration
+ * markup too. At night the evening greeting is used, because a night greeting is a farewell.
  */
 export const OPENING_COPY: Record<Locale, OpeningCopy> = {
     nl: {
         greeting: {
-            morning: 'Goedemorgen vanuit Antwerpen',
-            afternoon: 'Goedemiddag vanuit Antwerpen',
-            evening: 'Goedenavond vanuit Antwerpen',
-            night: 'Goedenacht vanuit Antwerpen',
+            morning: 'Goedemorgen uit Antwerpen',
+            afternoon: 'Goedemiddag uit Antwerpen',
+            evening: 'Goedenavond uit Antwerpen',
+            night: 'Goedenavond uit Antwerpen',
         },
         limit: 'Beperkt tot {total} genummerde rackets · nog {n} nummers vrij',
+        skip: 'Overslaan',
         replay: 'Open de deur opnieuw',
         registerTitle: 'Het register',
         available: 'Beschikbaar',
         reserved: 'Gereserveerd',
         archive: 'Maison Archive',
+        archiveTooltip: 'Het eigen exemplaar van het huis',
         pagination: 'Pagina’s van het register',
         previousPage: 'Vorige',
         nextPage: 'Volgende',
         pageLabel: 'Pagina {n}',
         numbersRange: 'Nummers {from}–{to} van {total}',
-        chooseNumber: 'Kies uw nummer',
-        enterHouse: 'Betreed het huis',
+        chooseNumber: 'Kies je nummer',
+        claimNumber: 'Reserveer Nº {n}',
+        joinList: 'Schrijf je in',
+        pickedLine: 'Nº {n} — het jouwe, als je het kiest.',
+        enterHouse: 'Kom binnen',
         tileAvailable: 'beschikbaar',
         tileReserved: 'gereserveerd',
         tileArchive: 'Maison Archive',
         houseHint:
-            'Elk verlicht raam is een kamer. Tik op een raam om binnen te stappen.',
+            'Elk verlicht raam is een kamer. Kies er een om binnen te stappen.',
         roomsKicker: 'De kamers',
-        roomKicker: 'Kamer {n} · {sub}',
-        allRooms: 'Alle kamers',
+        roomKicker: 'Kamer {n} van VIII',
+        back: '← Terug naar het huis',
         dialog: 'Welkom bij Maison Anversa',
     },
     en: {
@@ -343,61 +360,82 @@ export const OPENING_COPY: Record<Locale, OpeningCopy> = {
             morning: 'Good morning from Antwerp',
             afternoon: 'Good afternoon from Antwerp',
             evening: 'Good evening from Antwerp',
-            night: 'Good night from Antwerp',
+            night: 'Good evening from Antwerp',
         },
         limit: 'Limited to {total} numbered rackets · {n} numbers available',
+        skip: 'Skip',
         replay: 'Open the door again',
         registerTitle: 'The register',
         available: 'Available',
         reserved: 'Reserved',
         archive: 'Maison Archive',
+        archiveTooltip: 'The house’s own piece',
         pagination: 'Register pages',
         previousPage: 'Previous',
         nextPage: 'Next',
         pageLabel: 'Page {n}',
         numbersRange: 'Numbers {from}–{to} of {total}',
         chooseNumber: 'Choose your number',
+        claimNumber: 'Claim Nº {n}',
+        joinList: 'Join the list',
+        pickedLine: 'Nº {n} — yours, if you claim it.',
         enterHouse: 'Enter the house',
         tileAvailable: 'available',
         tileReserved: 'reserved',
         tileArchive: 'Maison Archive',
-        houseHint: 'Every lit window is a room. Tap one to step inside.',
+        houseHint: 'Every lit window is a room. Choose one to step inside.',
         roomsKicker: 'The rooms',
-        roomKicker: 'Room {n} · {sub}',
-        allRooms: 'All rooms',
+        roomKicker: 'Room {n} of VIII',
+        back: '← Back to the house',
         dialog: 'Welcome to Maison Anversa',
     },
     fr: {
         greeting: {
-            morning: 'Bonjour depuis Anvers',
-            afternoon: 'Bon après-midi depuis Anvers',
-            evening: 'Bonsoir depuis Anvers',
-            night: 'Bonne nuit depuis Anvers',
+            morning: 'Bonjour d’Anvers',
+            afternoon: 'Bonjour d’Anvers',
+            evening: 'Bonsoir d’Anvers',
+            night: 'Bonsoir d’Anvers',
         },
-        limit: 'Limitée à {total} raquettes numérotées · {n} numéros disponibles',
+        limit: 'Édition limitée à {total} raquettes numérotées · encore {n} numéros disponibles',
+        skip: 'Passer',
         replay: 'Rouvrir la porte',
         registerTitle: 'Le registre',
         available: 'Disponible',
         reserved: 'Réservé',
         archive: 'Maison Archive',
+        archiveTooltip: 'La pièce de la Maison',
         pagination: 'Pages du registre',
         previousPage: 'Précédent',
         nextPage: 'Suivant',
         pageLabel: 'Page {n}',
         numbersRange: 'Numéros {from}–{to} sur {total}',
         chooseNumber: 'Choisissez votre numéro',
+        claimNumber: 'Réserver le Nº {n}',
+        joinList: 'M’inscrire',
+        pickedLine: 'Nº {n} — le vôtre, si vous le réservez.',
         enterHouse: 'Entrer dans la maison',
         tileAvailable: 'disponible',
         tileReserved: 'réservé',
         tileArchive: 'Maison Archive',
         houseHint:
-            'Chaque fenêtre éclairée est une pièce. Touchez-en une pour entrer.',
+            'Chaque fenêtre éclairée est une pièce. Choisissez-en une pour entrer.',
         roomsKicker: 'Les pièces',
-        roomKicker: 'Pièce {n} · {sub}',
-        allRooms: 'Toutes les pièces',
+        roomKicker: 'Pièce {n} sur VIII',
+        back: '← Retour à la Maison',
         dialog: 'Bienvenue chez Maison Anversa',
     },
 };
+
+/** A room's name and label, for the pages that show the house too (/huis). */
+export function roomText(locale: Locale, numeral: string): OpeningRoomText {
+    const room = OPENING_ROOMS.find((entry) => entry.numeral === numeral);
+
+    if (room === undefined) {
+        throw new Error(`Unknown room ${numeral}`);
+    }
+
+    return room.text[locale];
+}
 
 export function fillCopy(
     template: string,

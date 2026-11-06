@@ -131,7 +131,7 @@ export function ProductGallery({
     productName?: string;
 }) {
     const { t } = useTranslation();
-    const resolvedProductName = productName ?? t('Heritage No.001');
+    const resolvedProductName = productName ?? t('Heritage Nº 001');
     const slides = useMemo(
         () => (gallery.length > 0 ? gallery : [...DEFAULT_GALLERY]),
         [gallery],

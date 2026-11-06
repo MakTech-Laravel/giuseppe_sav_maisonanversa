@@ -21,7 +21,7 @@ const MAISON_UNTRANSLATED_BRAND_TERMS = [
     'Club Corner',
     'Founding Circle',
     'Founding Edition',
-    'Heritage No.001',
+    'Heritage Nº 001',
     'Journal',
 ];
 

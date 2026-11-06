@@ -39,7 +39,7 @@ export function CirclePortal() {
             </p>
             <p className="mt-3 text-sm text-choc3">
                 {t(
-                    'Honderd plaatsen. Bekijk wie het huis vanaf het begin steunt, of kies Heritage No.001 om uw nummer te reserveren.',
+                    'Honderd plaatsen. Bekijk wie het huis vanaf het begin steunt, of kies Heritage Nº 001 om uw nummer te reserveren.',
                 )}
             </p>
             <Link

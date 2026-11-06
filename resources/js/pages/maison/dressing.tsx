@@ -59,7 +59,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                     </>
                 }
                 subtitle={t(
-                    "Activewear en accessoires voor de padelspeler die waarde hecht aan stille luxe. Elk stuk is ontworpen met dezelfde filosofie als Heritage No.001 — materialen eerst, logo's nooit.",
+                    "Activewear en accessoires voor de padelspeler die waarde hecht aan stille luxe. Elk stuk is ontworpen met dezelfde filosofie als Heritage Nº 001 — materialen eerst, logo's nooit.",
                 )}
             />
 
@@ -74,7 +74,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                     </h2>
                     <p className="mb-8 text-base leading-[1.85] text-sand">
                         {t(
-                            'Onze activewear verschijnt in een beperkte eerste editie, gelijktijdig met de levering van Heritage No.001 in Q1 2027. Leden van de Founding Circle krijgen als eerste toegang.',
+                            'Onze activewear verschijnt in een beperkte eerste editie, gelijktijdig met de levering van Heritage Nº 001 in Q1 2027. Leden van de Founding Circle krijgen als eerste toegang.',
                         )}
                     </p>
                     <MaisonButton
@@ -245,7 +245,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                         variant="choc"
                         href={foundingProductUrl(locale)}
                     >
-                        {t('Ontdek Heritage No.001 →')}
+                        {t('Ontdek Heritage Nº 001 →')}
                     </MaisonButton>
                 </Wrap>
             </Section>

@@ -31,7 +31,7 @@ class ProductFactory extends Factory
     public function founding(): static
     {
         return $this->state(fn (): array => [
-            'name' => 'Heritage No.001 — Founding Edition',
+            'name' => 'Heritage Nº 001 — Founding Edition',
             'slug' => Product::FOUNDING_SLUG,
             'type' => ProductType::LimitedEdition,
             'amount' => '249.00',

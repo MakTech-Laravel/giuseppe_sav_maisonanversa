@@ -20,7 +20,7 @@
     @if ($order->edition_number !== null)
         <p style="margin:0 0 12px;">
             <strong style="color:#291C18;">{{ __('Editienummer') }}:</strong>
-            No.{{ str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT) }}
+            Nº {{ str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT) }}
         </p>
     @endif
 

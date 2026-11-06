@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Live Founding Circle place for Heritage No.001.
+ * Live Founding Circle place for Heritage Nº 001.
  *
  * One row per member. `edition_number` is the same number as the racket,
  * certificate, and Heritage Passport. `name` is a snapshot taken when the

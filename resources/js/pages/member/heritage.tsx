@@ -46,7 +46,7 @@ export default function MemberHeritage({
             <Head title={t('Mijn Heritage')} />
             <MemberPageHeader
                 eyebrow={heritage.productName ?? t('Heritage')}
-                title={t('Editie No.{{number}}', {
+                title={t('Editie Nº {{number}}', {
                     number: heritage.editionNumber,
                 })}
                 description={t(

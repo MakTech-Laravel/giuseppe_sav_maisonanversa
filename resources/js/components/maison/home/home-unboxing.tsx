@@ -35,7 +35,7 @@ const STEPS = [
     },
     {
         num: '06',
-        title: 'Heritage No.001',
+        title: 'Heritage Nº 001',
         desc: 'In premium canvas stofdoek. Als laatste. Zoals het hoort.',
     },
 ] as const;
@@ -59,7 +59,7 @@ export function HomeUnboxing() {
                     <div>
                         <p className="mb-5 text-[15px] leading-[1.85] text-sand">
                             {t(
-                                'Elk Heritage No.001 pakket is een volledige ervaring. Elk element is intentioneel gekozen. De volgorde is nooit toevallig.',
+                                'Elk Heritage Nº 001 pakket is een volledige ervaring. Elk element is intentioneel gekozen. De volgorde is nooit toevallig.',
                             )}
                         </p>
                         <TextLink
@@ -83,7 +83,7 @@ export function HomeUnboxing() {
                             </div>
                             <div className="mb-2 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
                                 {step.title === 'Founding Circle' ||
-                                step.title === 'Heritage No.001'
+                                step.title === 'Heritage Nº 001'
                                     ? step.title
                                     : t(step.title)}
                             </div>

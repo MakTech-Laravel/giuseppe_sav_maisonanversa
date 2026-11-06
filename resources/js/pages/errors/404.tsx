@@ -37,7 +37,7 @@ export default function Error404() {
                         href={foundingProductUrl(locale)}
                         variant="ghost"
                     >
-                        {t('Ontdek Heritage No.001 →')}
+                        {t('Ontdek Heritage Nº 001 →')}
                     </MaisonButton>
                     <MaisonButton as={MaisonLink} to="journal" variant="ghost">
                         {t('Verken het Journal →')}

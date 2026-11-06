@@ -119,7 +119,7 @@ class ProductSeeder extends Seeder
             ],
             ProductSectionKey::Includes->value => [
                 'items' => [
-                    ['title' => 'Heritage No.001 racket (individueel genummerd)'],
+                    ['title' => 'Heritage Nº 001 racket (individueel genummerd)'],
                     ['title' => 'Heritage Certificaat met oprichterzegel'],
                     ['title' => "Heritage Paspoort (24 pagina's)"],
                     ['title' => 'Welkomstkaart & Oprichtersbrief'],
@@ -137,7 +137,7 @@ class ProductSeeder extends Seeder
             ProductSectionKey::Unboxing->value => [
                 'eyebrow' => 'Wat in de Doos Zit',
                 'heading' => 'De volledige Heritage Ervaring',
-                'intro' => 'Elke Heritage No.001 wordt geleverd als één complete ervaring. De volgorde is intentioneel.',
+                'intro' => 'Elke Heritage Nº 001 wordt geleverd als één complete ervaring. De volgorde is intentioneel.',
                 'items' => [
                     [
                         'number_label' => '01',
@@ -166,7 +166,7 @@ class ProductSeeder extends Seeder
                     ],
                     [
                         'number_label' => '06',
-                        'title' => 'Heritage No.001',
+                        'title' => 'Heritage Nº 001',
                         'body' => 'Premium canvas stofdoek · MA monogram · Individueel genummerd',
                     ],
                 ],
@@ -175,7 +175,7 @@ class ProductSeeder extends Seeder
                 'eyebrow' => 'Vakmanschap',
                 'heading' => 'Elk detail',
                 'subheading' => 'met opzet.',
-                'intro' => 'Heritage No.001 wordt gebouwd met materialen die zelden in padel voorkomen. Niet voor de show — voor hoe het voelt in de hand en hoe het veroudert door de jaren.',
+                'intro' => 'Heritage Nº 001 wordt gebouwd met materialen die zelden in padel voorkomen. Niet voor de show — voor hoe het voelt in de hand en hoe het veroudert door de jaren.',
                 'image_key' => 'atelier-workshop',
                 'items' => [
                     [
@@ -260,8 +260,8 @@ class ProductSeeder extends Seeder
                 'answer' => 'Binnen de beschikbare nummers kunt u een voorkeur opgeven bij reservering. Leden van de Founding Circle hebben voorrang op lagere nummers.',
             ],
             [
-                'question' => 'Wordt Heritage No.001 opnieuw gemaakt?',
-                'answer' => 'Nee. De Founding Edition wordt niet herhaald — 100 stuks, eenmalig. Heritage No.001 kan daarna als reguliere collectie beschikbaar blijven. Toekomstige releases dragen andere nummers (No.002, No.003).',
+                'question' => 'Wordt Heritage Nº 001 opnieuw gemaakt?',
+                'answer' => 'Nee. De Founding Edition wordt niet herhaald — 100 stuks, eenmalig. Heritage Nº 001 kan daarna als reguliere collectie beschikbaar blijven. Toekomstige releases dragen andere nummers (Nº 002, Nº 003).',
             ],
         ];
     }
