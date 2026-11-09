@@ -70,6 +70,7 @@ import adminProducts from '@/routes/admin/products';
 import adminServersMaintenance from '@/routes/admin/servers-maintenance';
 import adminSeoMetas from '@/routes/admin/seo-metas';
 import adminSiteSettings from '@/routes/admin/site-settings';
+import adminStorefrontAccess from '@/routes/admin/storefront-access';
 import adminStoryPage from '@/routes/admin/story-page';
 import { PERMISSIONS } from '@/types/permissions';
 
@@ -270,6 +271,12 @@ function buildNavGroups(
                     href: adminSiteSettings.edit(locale),
                     icon: Globe,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
+                },
+                {
+                    title: t('Storefront-toegang'),
+                    href: adminStorefrontAccess.edit(locale),
+                    icon: Store,
+                    permissions: [PERMISSIONS.HERITAGE.VIEW],
                 },
                 {
                     title: t("Juridische Pagina's"),

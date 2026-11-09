@@ -25,6 +25,8 @@ class CommerceSetting extends Model
         'shipping_eu_included',
         'default_expected_delivery_label',
         'prices_include_tax',
+        'purchases_enabled',
+        'registration_enabled',
     ];
 
     /**
@@ -37,6 +39,8 @@ class CommerceSetting extends Model
             'shipping_estimate_max' => 'decimal:2',
             'shipping_eu_included' => 'boolean',
             'prices_include_tax' => 'boolean',
+            'purchases_enabled' => 'boolean',
+            'registration_enabled' => 'boolean',
         ];
     }
 
@@ -54,6 +58,8 @@ class CommerceSetting extends Model
             'shipping_eu_included' => true,
             'default_expected_delivery_label' => 'Q1 2027 — ONDER VOORBEHOUD VAN PRODUCTIE',
             'prices_include_tax' => true,
+            'purchases_enabled' => true,
+            'registration_enabled' => true,
         ]);
     }
 

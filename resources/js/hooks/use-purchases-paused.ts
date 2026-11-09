@@ -1,7 +1,7 @@
 import { usePage } from '@inertiajs/react';
 
 /**
- * True while the server has paused purchases (MAISON_CHECKOUT_ENABLED=false).
+ * True while the server has paused purchases (env kill switch and/or Admin).
  * Reads the shared `checkout` prop, which every page receives.
  */
 export function usePurchasesPaused(): boolean {

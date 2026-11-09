@@ -182,6 +182,13 @@ test('shared checkout prop reports whether purchases are enabled', function () {
         ->assertInertia(fn ($page) => $page->where('checkout.enabled', false));
 });
 
+test('shared checkout prop stays enabled by default', function () {
+    $this->get(localized('maison.home'))
+        ->assertInertia(fn ($page) => $page
+            ->where('checkout.enabled', true)
+            ->where('registration.enabled', true));
+});
+
 test('checkout requires reservation details', function () {
     actingAsCheckoutUser();
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\Auth\PostLoginRedirectService;
+use App\Support\StorefrontGates;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,9 @@ class AuthModalRedirectController extends Controller
 
     public function register(Request $request): RedirectResponse
     {
-        return $this->redirectAuthenticatedOrModal($request, 'register');
+        $view = StorefrontGates::registrationEnabled() ? 'register' : 'login';
+
+        return $this->redirectAuthenticatedOrModal($request, $view);
     }
 
     public function forgotPassword(Request $request): RedirectResponse

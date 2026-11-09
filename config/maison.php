@@ -130,13 +130,28 @@ return [
 
     'checkout' => [
         /*
-         * Master switch for starting purchases. Set MAISON_CHECKOUT_ENABLED=false
+         * Env kill switch for starting purchases. Set MAISON_CHECKOUT_ENABLED=false
          * to pause "Reserve your number" / Buy site-wide; payments already in
-         * flight (Stripe webhook, success, cancel) keep working.
+         * flight (Stripe webhook, success, cancel) keep working. Effective
+         * enablement also requires commerce_settings.purchases_enabled (Admin).
          */
         'enabled' => (bool) env('MAISON_CHECKOUT_ENABLED', true),
         'currency' => 'eur',
         'hold_minutes' => 15,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Registration
+    |--------------------------------------------------------------------------
+    |
+    | Env kill switch for new customer sign-ups. Effective enablement also
+    | requires commerce_settings.registration_enabled (Admin). Login and
+    | existing accounts are unaffected.
+    |
+    */
+    'registration' => [
+        'enabled' => (bool) env('MAISON_REGISTRATION_ENABLED', true),
     ],
 
     /*

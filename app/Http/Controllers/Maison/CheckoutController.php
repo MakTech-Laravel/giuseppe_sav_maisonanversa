@@ -17,6 +17,7 @@ use App\Services\Checkout\ProductCheckout;
 use App\Services\Edition\EditionAllocator;
 use App\Services\Edition\EditionInventory;
 use App\Services\Edition\SimpleStock;
+use App\Support\StorefrontGates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -38,7 +39,7 @@ class CheckoutController extends Controller
         EditionAllocator $allocator,
         EditionInventory $inventory,
     ): SymfonyResponse {
-        if (! config('maison.checkout.enabled')) {
+        if (! StorefrontGates::purchasesEnabled()) {
             throw ValidationException::withMessages([
                 'checkout' => __('Reserveren is tijdelijk gepauzeerd. Probeer het binnenkort opnieuw.'),
             ]);

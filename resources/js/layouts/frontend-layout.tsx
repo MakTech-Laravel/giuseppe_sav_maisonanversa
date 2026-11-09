@@ -69,6 +69,21 @@ function parseAuthFromUrl(pageUrl: string): AuthView | null {
     return null;
 }
 
+function clampAuthView(
+    view: AuthView | null | undefined,
+    registrationEnabled: boolean,
+): AuthView | null {
+    if (view == null) {
+        return null;
+    }
+
+    if (view === 'register' && !registrationEnabled) {
+        return 'login';
+    }
+
+    return view;
+}
+
 function authPromptKey(
     flashView: AuthView | undefined,
     pageUrl: string,
@@ -95,8 +110,11 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         string | null
     >(null);
 
-    const promptedAuthView =
-        props.flash?.open_auth_modal ?? parseAuthFromUrl(url);
+    const registrationEnabled = props.registration?.enabled !== false;
+    const promptedAuthView = clampAuthView(
+        props.flash?.open_auth_modal ?? parseAuthFromUrl(url),
+        registrationEnabled,
+    );
     const currentAuthPromptKey = authPromptKey(
         props.flash?.open_auth_modal,
         url,
@@ -111,7 +129,10 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
     const authView = promptedAuthView ?? userAuthView;
 
     useEffect(() => {
-        const flashView = props.flash?.open_auth_modal;
+        const flashView = clampAuthView(
+            props.flash?.open_auth_modal,
+            registrationEnabled,
+        );
 
         if (!flashView || isAuthenticated) {
             return;
@@ -120,7 +141,12 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         setUserAuthView(flashView);
         setUserModal('auth');
         setDismissedAuthPromptKey(null);
-    }, [props.flash?.open_auth_modal, currentAuthPromptKey, isAuthenticated]);
+    }, [
+        props.flash?.open_auth_modal,
+        currentAuthPromptKey,
+        isAuthenticated,
+        registrationEnabled,
+    ]);
 
     /*
      * Login keeps FrontendLayout mounted when the intended URL is a public
@@ -245,11 +271,18 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
             openCertificate: () => setUserModal('certificate'),
             openAuth: (view: AuthView = 'login') => {
                 rememberAuthReturnUrl();
-                setUserAuthView(view);
+                setUserAuthView(
+                    clampAuthView(view, registrationEnabled) ?? 'login',
+                );
                 setUserModal('auth');
             },
         }),
-        [props.checkout, rememberAuthReturnUrl, requireAuthForCheckout],
+        [
+            props.checkout,
+            rememberAuthReturnUrl,
+            registrationEnabled,
+            requireAuthForCheckout,
+        ],
     );
 
     /*
