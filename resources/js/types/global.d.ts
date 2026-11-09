@@ -3,8 +3,13 @@ import type { Locale } from '@/types/locale';
 import type { SharedNotifications } from '@/types/notification';
 import type { SeoDocument } from '@/types/seo';
 
+export type RegistrationShared = {
+    /** False while new sign-ups are paused (env and/or Admin). */
+    enabled?: boolean;
+};
+
 export type CheckoutShared = {
-    /** False while purchases are paused (MAISON_CHECKOUT_ENABLED=false). */
+    /** False while purchases are paused (env and/or Admin). */
     enabled?: boolean;
     productId: number | null;
     productSlug?: string | null;
@@ -59,6 +64,7 @@ declare module '@inertiajs/core' {
             availableLocales: Locale[];
             availableImages: string[];
             checkout: CheckoutShared;
+            registration: RegistrationShared;
             foundingRegister: {
                 inscribed_count: number;
                 remaining_count: number;

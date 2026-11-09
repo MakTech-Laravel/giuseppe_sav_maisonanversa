@@ -10,6 +10,7 @@ import {
 } from '@/components/maison/modals/maison-modal';
 import { ModalPasswordInput } from '@/components/maison/modals/modal-password-input';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
+import { useRegistrationEnabled } from '@/hooks/use-registration-enabled';
 import { cn } from '@/lib/utils';
 import { store as loginStore } from '@/routes/login';
 import { email as passwordEmail, update as passwordUpdate } from '@/routes/password';
@@ -36,18 +37,31 @@ export function AuthModal({
     onSwitchView,
 }: AuthModalProps) {
     const { t } = useTranslation();
+    const registrationEnabled = useRegistrationEnabled();
     const [view, setView] = useState<AuthView>(initialView);
     const [forgotSent, setForgotSent] = useState(false);
     const [forgotEmail, setForgotEmail] = useState('');
     const [showRecoveryInput, setShowRecoveryInput] = useState(false);
 
     useEffect(() => {
-        setView(initialView);
+        const next =
+            initialView === 'register' && !registrationEnabled
+                ? 'login'
+                : initialView;
 
-        if (initialView !== 'forgot') {
+        setView(next);
+
+        if (next !== 'forgot') {
             setForgotSent(false);
         }
-    }, [initialView]);
+    }, [initialView, registrationEnabled]);
+
+    useEffect(() => {
+        if (view === 'register' && !registrationEnabled) {
+            setView('login');
+            onSwitchView('login');
+        }
+    }, [view, registrationEnabled, onSwitchView]);
 
     const copy = useMemo<ViewCopy>(() => {
         switch (view) {
@@ -95,11 +109,14 @@ export function AuthModal({
     }, [forgotSent, showRecoveryInput, t, view]);
 
     function switchView(next: AuthView): void {
-        setView(next);
+        const resolved =
+            next === 'register' && !registrationEnabled ? 'login' : next;
+
+        setView(resolved);
         setForgotSent(false);
         setForgotEmail('');
         setShowRecoveryInput(false);
-        onSwitchView(next);
+        onSwitchView(resolved);
     }
 
     return (
@@ -188,18 +205,20 @@ export function AuthModal({
                         >
                             {t('Wachtwoord vergeten?')}
                         </button>
-                        <button
-                            type="button"
-                            className="font-sans tracking-[0.12em] uppercase transition-colors hover:text-choc"
-                            onClick={() => switchView('register')}
-                        >
-                            {t('Nog geen account? Registreren')}
-                        </button>
+                        {registrationEnabled && (
+                            <button
+                                type="button"
+                                className="font-sans tracking-[0.12em] uppercase transition-colors hover:text-choc"
+                                onClick={() => switchView('register')}
+                            >
+                                {t('Nog geen account? Registreren')}
+                            </button>
+                        )}
                     </div>
                 </>
             )}
 
-            {view === 'register' && (
+            {view === 'register' && registrationEnabled && (
                 <>
                     <p className="mb-7 text-[15px] leading-[1.8] text-choc3">
                         {copy.description}

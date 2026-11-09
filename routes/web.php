@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SessionChatController as AdminSessionChatController;
 use App\Http\Controllers\Admin\SiteSettingController;
+use App\Http\Controllers\Admin\StorefrontAccessController;
 use App\Http\Controllers\Admin\StoryPageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthModalRedirectController;
@@ -660,6 +661,13 @@ Route::prefix('{locale}')
                 Route::get('site-settings', 'edit')->name('site-settings.edit')
                     ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
                 Route::patch('site-settings', 'update')->name('site-settings.update')
+                    ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
+            });
+
+            Route::controller(StorefrontAccessController::class)->group(function () {
+                Route::get('storefront-access', 'edit')->name('storefront-access.edit')
+                    ->middleware('permission:'.PermissionEnum::HERITAGE_VIEW->value);
+                Route::patch('storefront-access', 'update')->name('storefront-access.update')
                     ->middleware(['permission:'.PermissionEnum::HERITAGE_VIEW->value, HandlePrecognitiveRequests::class]);
             });
 

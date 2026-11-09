@@ -7,8 +7,10 @@ use App\Concerns\ProfileValidationRules;
 use App\Enums\UserGender;
 use App\Models\User;
 use App\Services\Auth\UserRegistrationService;
+use App\Support\StorefrontGates;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -24,6 +26,12 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        if (! StorefrontGates::registrationEnabled()) {
+            throw ValidationException::withMessages([
+                'email' => __('Registratie is tijdelijk gepauzeerd. Probeer het binnenkort opnieuw.'),
+            ]);
+        }
+
         Validator::make($input, [
             ...$this->profileRules(),
             'gender' => ['required', Rule::enum(UserGender::class)],

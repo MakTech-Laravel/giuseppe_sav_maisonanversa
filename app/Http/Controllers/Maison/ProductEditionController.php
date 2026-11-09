@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EditionPiece;
 use App\Models\Product;
 use App\Services\Edition\EditionAllocator;
+use App\Support\StorefrontGates;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -105,6 +106,12 @@ class ProductEditionController extends Controller
 
         abort_unless($user !== null, 401);
         abort_unless($user->isCustomer(), 403);
+
+        if (! StorefrontGates::purchasesEnabled()) {
+            throw ValidationException::withMessages([
+                'checkout' => __('Reserveren is tijdelijk gepauzeerd. Probeer het binnenkort opnieuw.'),
+            ]);
+        }
 
         $allocator->releaseExpiredHolds();
 

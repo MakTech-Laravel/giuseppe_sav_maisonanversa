@@ -9,6 +9,7 @@ use App\Models\Concerns\TranslatesWithDeepL;
 use App\Observers\ProductObserver;
 use App\Support\Imagery;
 use App\Support\Money;
+use App\Support\StorefrontGates;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -484,7 +485,7 @@ class Product extends Model
 
         if ($amount === null) {
             return [
-                'enabled' => (bool) config('maison.checkout.enabled'),
+                'enabled' => StorefrontGates::purchasesEnabled(),
                 'productId' => $product?->id,
                 'productSlug' => $product?->slug,
                 'currency' => 'eur',
@@ -497,7 +498,7 @@ class Product extends Model
         }
 
         return [
-            'enabled' => (bool) config('maison.checkout.enabled'),
+            'enabled' => StorefrontGates::purchasesEnabled(),
             'productId' => $product->id,
             'productSlug' => $product->slug,
             'currency' => $product->currency,

@@ -14,6 +14,7 @@ use App\Services\Notifications\InboxService;
 use App\Support\AdminTypePermissionBypass;
 use App\Support\Imagery;
 use App\Support\Seo\MaisonSeo;
+use App\Support\StorefrontGates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -94,6 +95,9 @@ class HandleInertiaRequests extends Middleware
             'seo' => Inertia::always(fn (): array => MaisonSeo::document($request)),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
             'checkout' => fn (): array => Product::checkoutShare(),
+            'registration' => fn (): array => [
+                'enabled' => StorefrontGates::registrationEnabled(),
+            ],
             'foundingRegister' => Inertia::always(fn (): array => app(FoundingCircleRegisterSnapshot::class)->share()),
             'commerce' => fn (): array => CommerceSetting::current()->toShare(),
             'site' => Inertia::always(fn (): array => SiteSetting::current()->toShare()),
