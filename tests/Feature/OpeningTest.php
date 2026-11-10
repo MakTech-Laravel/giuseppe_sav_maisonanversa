@@ -47,12 +47,11 @@ test('the lit house has eight rooms, in window order I to VIII, with nl, en and 
         expect(substr_count($source, "subtitle: '{$label}'"))->toBe(1);
     }
 
-    // Every room button reads "Step inside →" in its own language, never "Enter the X".
-    foreach (['Stap binnen →', 'Step inside →', 'Entrer →'] as $enter) {
-        expect(substr_count($source, "enter: '{$enter}'"))->toBe(8);
-    }
-
+    // A window and a name go straight to the room's page: no room view, so no "Step inside" button.
     expect($source)
+        ->not->toContain('enter:')
+        ->not->toContain('Step inside')
+        ->not->toContain('line:')
         ->not->toContain("subtitle: 'The Playroom'")
         ->not->toContain('speelkamer')
         ->not->toContain('salle de jeux')
@@ -74,21 +73,26 @@ test('every room opens an existing page', function () {
     }
 });
 
-test('a room photo exists only as avif and webp, and is never a png', function () {
-    $source = openingSource('opening-data.ts');
-
-    preg_match_all("/photo: '(room-[a-z]+)'/", $source, $photos);
-
-    expect($photos[1])->not->toBeEmpty();
-
-    foreach ($photos[1] as $photo) {
-        expect(public_path("images/optimized/rooms/{$photo}-768.avif"))->toBeFile()
-            ->and(public_path("images/optimized/rooms/{$photo}-768.webp"))->toBeFile();
-    }
-
+test('the opening has no room photos and no room view, and requests no room image', function () {
     foreach (['opening-data.ts', 'opening.tsx', 'opening-scene.tsx', 'opening-rooms.tsx', 'opening-register.tsx'] as $file) {
-        expect(openingSource($file))->not->toMatch('/\.png|images\/rooms\//');
+        expect(openingSource($file))
+            ->not->toMatch('/\.png|\.avif|\.webp|images\/(optimized\/)?rooms\//')
+            ->not->toContain('photo:')
+            ->not->toContain('openingPhotoSources')
+            ->not->toContain('RoomCard')
+            ->not->toContain('<picture')
+            ->not->toContain('<img');
     }
+
+    $css = File::get(resource_path('css/opening.css'));
+
+    expect($css)
+        ->not->toMatch('/\.op-room(?!s)/')
+        ->not->toContain('.op-photo')
+        ->not->toContain('hw-sel');
+
+    // The photos stay on disk: the Journal and the imagery helper still use them.
+    expect(public_path('images/optimized/rooms/room-library-768.avif'))->toBeFile();
 });
 
 test('the house is inline svg, with no image requests until a room is chosen', function () {
@@ -99,28 +103,36 @@ test('the house is inline svg, with no image requests until a room is chosen', f
             ->not->toContain('href="http');
     }
 
-    // The only <img> lives in the room card, which exists only once a window is chosen.
-    expect(openingSource('opening-scene.tsx'))->not->toContain('<img')
-        ->and(openingSource('opening.tsx'))->not->toContain('<img')
-        ->and(openingSource('opening-register.tsx'))->not->toContain('<img');
-
-    expect(openingSource('opening-rooms.tsx'))->toContain('export function RoomCard');
+    // No <img> anywhere in the opening: the room view with photos is gone.
+    foreach (['opening-scene.tsx', 'opening.tsx', 'opening-register.tsx', 'opening-rooms.tsx'] as $file) {
+        expect(openingSource($file))->not->toContain('<img');
+    }
 });
 
-test('it is one scene: the windows are the room buttons on the animated house, with no second screen', function () {
+test('it is one scene: the windows are the room links on the animated house, with no second screen', function () {
     $scene = openingSource('opening-scene.tsx');
+    $rooms = openingSource('opening-rooms.tsx');
 
-    // Eight highlight overlays live in the artwork, one transparent button per window over it.
-    expect(substr_count(File::get(openingPath('art/door-house.html')), 'class="hw-sel"'))->toBe(8);
+    // The artwork carries the eight lit windows only; selecting a window no longer exists.
+    $art = File::get(openingPath('art/door-house.html'));
 
+    expect(substr_count($art, '<g class="lw'))->toBe(8)
+        ->and($art)->not->toContain('hw-sel');
+
+    // One transparent link per window over the artwork, and one link per name in the list.
     expect($scene)
-        ->toContain('className="hw-btn"')
-        ->toContain('aria-pressed={selected === index}')
+        ->toContain('<RoomWindow')
         ->toContain('<RoomList')
-        ->toContain('<RoomCard');
+        ->not->toContain('selected')
+        ->not->toContain('<RoomCard');
+
+    expect($rooms)
+        ->toContain("cn('hw-btn'")
+        ->toContain('<MaisonLink')
+        ->toContain('<ol className="op-rl">');
 
     // One column, top to bottom: the house, then the wordmark and edition, then the register
-    // with its two buttons, then the list of rooms. A chosen room opens over all of it.
+    // with its two buttons, then the list of rooms.
     expect(strpos($scene, 'className="op-house"'))->toBeLessThan(strpos($scene, 'className="op-identity"'))
         ->and(strpos($scene, 'className="op-identity"'))->toBeLessThan(strpos($scene, '<OpeningRegister'))
         ->and(strpos($scene, '<OpeningRegister'))->toBeLessThan(strpos($scene, '<RoomList'))
@@ -206,15 +218,37 @@ test('the limit line reads as the client wrote it, in every language, and the ed
         ->not->toContain('stuks');
 });
 
-test('the register grid is ten per row on desktop and tablet, five on a phone', function () {
+test('the register is one centred column of 600 px, ten per row on every screen', function () {
     $css = File::get(resource_path('css/opening.css'));
 
+    // The register and the room list share the same 600 px column, centred.
     expect($css)
-        ->toMatch('/\.op-numbers\s*\{[^}]*grid-template-columns:\s*repeat\(10,/')
-        ->toMatch('/\.op-numbers\s*\{[^}]*max-width:\s*600px;/')
-        ->toMatch('/@media \(max-width: 639px\)\s*\{[\s\S]*?\.op-numbers\s*\{\s*grid-template-columns:\s*repeat\(5,/')
+        ->toMatch('/\.op-register\s*\{[^}]*max-width:\s*600px;[^}]*margin:\s*0 auto;/')
+        ->toMatch('/\.op-rooms\s*\{[^}]*max-width:\s*600px;[^}]*margin:\s*0 auto;/')
+        // Title and legend are centred, not split left and right.
+        ->toMatch('/\.op-reg-head\s*\{[^}]*text-align:\s*center;/')
+        ->toMatch('/\.op-legend\s*\{[^}]*justify-content:\s*center;/')
+        ->not->toContain('justify-content: space-between;
+    align-items: baseline;');
+
+    // 10 per row, gap 6 px, tiles 5:4 and at least 44 px high.
+    expect($css)
+        ->toMatch('/\.op-numbers\s*\{[^}]*grid-template-columns:\s*repeat\(10,[^}]*gap:\s*6px;/')
+        ->toMatch('/\.op-num\s*\{[^}]*aspect-ratio:\s*5 \/ 4;[^}]*min-height:\s*44px;/')
         ->not->toContain('--op-tile')
         ->not->toContain('auto-fill');
+
+    // On a phone it stays 10 x 10, compact: gap 3 px, tiles 34 px high, numbers 10.5 px.
+    expect($css)
+        ->toMatch('/@media \(max-width: 560px\)\s*\{[\s\S]*?\.op-numbers\s*\{\s*gap:\s*3px;/')
+        ->toMatch('/@media \(max-width: 560px\)\s*\{[\s\S]*?\.op-num\s*\{[^}]*height:\s*34px;[^}]*font-size:\s*10\.5px;/')
+        ->toMatch('/@media \(max-width: 560px\)\s*\{[\s\S]*?\.op-rl-lb\s*\{\s*display:\s*none;/')
+        ->not->toMatch('/repeat\(5,/');
+
+    // Maison Archive: same dashed taupe tile and the same legend swatch, not selectable.
+    expect($css)
+        ->toMatch('/\.op-num\.op-num-archive:disabled\s*\{[^}]*#ede3d8;[^}]*1px dashed #8d705a;[^}]*#6e5644;/')
+        ->toMatch('/\.op-sw-archive\s*\{[^}]*1px dashed #8d705a;[^}]*#ede3d8;/');
 
     expect(openingSource('opening-register.tsx'))->not->toContain('--op-tile');
 });
@@ -234,23 +268,68 @@ test('by day a window is a soft reflection that lights fully on hover, focus or 
         ->toMatch("/data-light='night'\] \.ma-opening\s*\{[^}]*--lit:\s*0;[^}]*--lit-key:\s*0\.9;/")
         ->toMatch('/\.mh-house \.lw3,\s*\.mh-house \.lw6\s*\{\s*opacity:\s*var\(--lit-key\);/');
 
-    expect($scene)
+    // Hover and keyboard focus (in the house or through the list) light a window in 0.3 s.
+    expect($css)->toMatch("/\.mh-house \[class\^='lw'\]\s*\{[^}]*transition:\s*opacity 0\.3s/");
+
+    expect($scene)->toContain("classList.toggle('is-on', index === hovered)")
+        ->and(openingSource('opening-rooms.tsx'))
         ->toContain('onPointerEnter')
         ->toContain('onFocus')
-        ->toContain("classList.toggle(\n                    'is-on'");
+        ->toContain('onBlur');
 });
 
-test('a chosen room is full screen, with its name and the way in on top of the photo', function () {
+test('a window and a room name are links straight to the room page, with a label on hover and focus', function () {
     $css = File::get(resource_path('css/opening.css'));
     $rooms = openingSource('opening-rooms.tsx');
+    $data = openingSource('opening-data.ts');
 
-    expect($css)->toMatch('/\.op-room\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*0;/')
-        ->and($css)->toMatch('/\.op-photo\s*\{[^}]*position:\s*absolute;[^}]*inset:\s*0;/');
+    // Both are real links, to the same URL, and both leave the opening.
+    expect(substr_count($rooms, 'href={roomHref(room, locale)}'))->toBe(2)
+        ->and(substr_count($rooms, 'onClick={onLeave}'))->toBe(2)
+        ->and($rooms)->toContain('aria-label={`${text.name}, ${text.subtitle}`}')
+        ->toContain('{text.name} · {text.subtitle}')
+        ->not->toContain('role="dialog"');
 
-    // The photo, then the body that sits over it; the card is not rendered beside the house any more.
-    expect(strpos($rooms, 'className="op-photo"'))->toBeLessThan(strpos($rooms, 'className="op-room-body"'))
-        ->and($rooms)->toContain('role="dialog"')
-        ->and(openingSource('opening-scene.tsx'))->toContain("event.key === 'Escape'");
+    // The label shows on hover, on keyboard focus and when the list row is hovered.
+    expect($css)
+        ->toMatch('/\.hw-btn:hover \.op-tip,\s*\.hw-btn:focus-visible \.op-tip,\s*\.hw-btn\.hov \.op-tip\s*\{\s*opacity:\s*1;/')
+        ->toMatch('/\.op-rl a:hover,\s*\.op-rl a\.hov\s*\{/')
+        ->toMatch('/\.hw-btn:focus-visible,[\s\S]*?\{\s*outline:\s*2px solid #8d705a;/');
+
+    // The windows sit where the reference puts them.
+    expect($data)
+        ->toContain('left: 15.71, top: 66.709, width: 12.84, height: 22.864')
+        ->toContain('left: 17.976, top: 17.211, width: 8.157, height: 11.683')
+        ->toContain('left: 74.169, top: 17.211, width: 8.308, height: 11.683');
+
+    // Escape no longer has a room view to close: it leaves the opening, as before.
+    expect(openingSource('opening-scene.tsx'))->not->toContain("event.key === 'Escape'")
+        ->and(openingSource('opening.tsx'))->toContain("event.key === 'Escape'");
+});
+
+test('every room link goes to the page named in the design update', function () {
+    $routes = [
+        'home' => '/{lang}',
+        'contact' => '/{lang}/contact',
+        'circle' => '/{lang}/circle',
+        'community' => '/{lang}/community',
+        'journal' => '/{lang}/journal',
+        'story' => '/{lang}/story',
+        'corner' => '/{lang}/corner',
+    ];
+
+    foreach ($routes as $page => $path) {
+        foreach (['nl', 'en', 'fr'] as $locale) {
+            $uri = trim(config("maison.pages.{$page}"), '/');
+            $expected = str_replace('{lang}', $locale, $path);
+
+            expect(rtrim("/{$locale}/{$uri}", '/'))->toBe($expected);
+        }
+    }
+
+    // Galerie: the founding product.
+    expect(openingSource('opening-data.ts'))->toContain("destination: { product: 'founding' }")
+        ->and(File::get(resource_path('js/lib/maison-navigation.ts')))->toContain("FOUNDING_PRODUCT_SLUG = 'heritage-no-001'");
 });
 
 test('the wordmark and edition fade in after the door has opened, not from the start', function () {
@@ -269,8 +348,6 @@ test('the leaving class is joined with its space, so the overlay fades out in it
     expect(openingSource('opening.tsx'))
         ->toContain("cn('ma-opening', leaving && 'is-leaving')")
         ->not->toContain('`ma-opening');
-
-    expect(openingSource('opening-rooms.tsx'))->toContain("cn('op-room', photo !== null && 'has-photo')");
 });
 
 test('the house is in the first html, with the edition under it, before any script runs', function () {
@@ -491,8 +568,8 @@ test('the register has the final button, pick and pre-launch texts, with je in D
         ->toContain("joinList: 'M’inscrire'")
         ->toContain("pickedLine: 'Nº {n} — het jouwe, als je het kiest.'")
         ->toContain("enterHouse: 'Kom binnen'")
-        ->toContain("back: '← Terug naar het huis'")
-        ->toContain("roomKicker: 'Kamer {n} van VIII'")
+        ->not->toContain('roomKicker')
+        ->not->toContain('← Terug naar het huis')
         ->toContain("archiveTooltip: 'La pièce de la Maison'")
         ->not->toContain("'Kies uw")
         ->not->toContain('Kies uw')
