@@ -5,7 +5,7 @@ import wordmarkArt from './art/wordmark.html?raw';
 import { fillCopy, OPENING_MOODS, OPENING_ROOMS } from './opening-data';
 import type { OpeningCopy } from './opening-data';
 import { OpeningRegister } from './opening-register';
-import { RoomCard, RoomList } from './opening-rooms';
+import { RoomList, RoomWindow } from './opening-rooms';
 import { useOpeningRegister } from './use-opening-register';
 
 type OpeningSceneProps = {
@@ -26,8 +26,9 @@ type OpeningSceneProps = {
  * The house draws itself, the door opens, and the eight windows light up one by
  * one, I → VIII. Once the door is open the wordmark and the edition appear under
  * the house, then the register with its two buttons, then the list of rooms.
- * Every window is a real transparent button over the artwork, and so is every
- * name: either opens the room's photo, full screen, with the way in on top of it.
+ * Every window is a real transparent link over the artwork, and so is every
+ * name in the list: either goes straight to the room's page. Hovering or focusing
+ * one lights its window and shows a small label above it.
  *
  * The artwork is the client's SVG, rendered as markup so it is in the server
  * HTML and paints before any JavaScript has run. The greeting carries all four
@@ -40,63 +41,24 @@ export function OpeningScene({
     onFinish,
     onLeave,
 }: OpeningSceneProps) {
-    const [selected, setSelected] = useState<number | null>(null);
+    /** The room whose window is lit: hovered or focused in the house or in the list. */
     const [hovered, setHovered] = useState<number | null>(null);
     const art = useRef<HTMLDivElement>(null);
-    const card = useRef<HTMLDivElement>(null);
 
     const register = useOpeningRegister();
-    const room = selected === null ? null : OPENING_ROOMS[selected];
-
-    function pick(index: number | null) {
-        setSelected((current) => (current === index ? null : index));
-        setHovered(null);
-    }
 
     /*
-     * The chosen window brightens: the artwork's own .hw-sel overlays. A window
-     * that is hovered, focused or chosen also lights up fully (.is-on), which is
-     * what turns the soft daytime reflection into a lit window.
+     * A window that is hovered or focused, in the house or through its name in the
+     * list, lights up fully (.is-on): that is what turns the soft daytime
+     * reflection into a lit window.
      */
     useEffect(() => {
-        art.current?.querySelectorAll<SVGElement>('.hw-sel').forEach((node) => {
-            node.classList.toggle('on', Number(node.dataset.i) === selected);
-        });
-
         OPENING_ROOMS.forEach((_, index) => {
             art.current
                 ?.querySelector(`.lw${index}`)
-                ?.classList.toggle(
-                    'is-on',
-                    index === selected || index === hovered,
-                );
+                ?.classList.toggle('is-on', index === hovered);
         });
-
-        if (selected !== null) {
-            card.current?.focus({ preventScroll: true });
-        }
-    }, [selected, hovered]);
-
-    /*
-     * Escape closes the photo first. It listens in the capture phase so that it
-     * runs before the opening's own Escape, which would leave the whole opening.
-     */
-    useEffect(() => {
-        if (selected === null) {
-            return;
-        }
-
-        function onKeyDown(event: KeyboardEvent) {
-            if (event.key === 'Escape') {
-                event.stopImmediatePropagation();
-                setSelected(null);
-            }
-        }
-
-        window.addEventListener('keydown', onKeyDown, true);
-
-        return () => window.removeEventListener('keydown', onKeyDown, true);
-    }, [selected]);
+    }, [hovered]);
 
     return (
         <div className={done ? 'is-done' : undefined}>
@@ -125,30 +87,17 @@ export function OpeningScene({
                         dangerouslySetInnerHTML={{ __html: doorHouseArt }}
                     />
 
-                    {OPENING_ROOMS.map((entry, index) => {
-                        const text = entry.text[locale];
-
-                        return (
-                            <button
-                                key={entry.numeral}
-                                type="button"
-                                className="hw-btn"
-                                aria-label={`${text.name}, ${text.subtitle}`}
-                                aria-pressed={selected === index}
-                                onClick={() => pick(index)}
-                                onPointerEnter={() => setHovered(index)}
-                                onPointerLeave={() => setHovered(null)}
-                                onFocus={() => setHovered(index)}
-                                onBlur={() => setHovered(null)}
-                                style={{
-                                    left: `${entry.hotspot.left}%`,
-                                    top: `${entry.hotspot.top}%`,
-                                    width: `${entry.hotspot.width}%`,
-                                    height: `${entry.hotspot.height}%`,
-                                }}
-                            />
-                        );
-                    })}
+                    {OPENING_ROOMS.map((entry, index) => (
+                        <RoomWindow
+                            key={entry.numeral}
+                            room={entry}
+                            index={index}
+                            locale={locale}
+                            hovered={hovered}
+                            onHover={setHovered}
+                            onLeave={onLeave}
+                        />
+                    ))}
                 </div>
 
                 {/* Under the house, and only once the door has opened. */}
@@ -200,20 +149,14 @@ export function OpeningScene({
                  * </button>
                  */}
 
-                <RoomList copy={copy} locale={locale} onPick={pick} />
-            </section>
-
-            {room !== null ? (
-                <RoomCard
-                    key={selected}
-                    ref={card}
-                    room={room}
+                <RoomList
                     copy={copy}
                     locale={locale}
-                    onBack={() => pick(null)}
+                    hovered={hovered}
+                    onHover={setHovered}
                     onLeave={onLeave}
                 />
-            ) : null}
+            </section>
         </div>
     );
 }

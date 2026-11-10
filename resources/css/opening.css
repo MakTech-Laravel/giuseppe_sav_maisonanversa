@@ -4,10 +4,13 @@
  * and the room list.
  *
  * Ported from the client's reference pages (opening-reference.html and
- * house-lit-reference.html, v2). Everything is scoped under .ma-opening and the
- * generic class names are prefixed `op-`, so none of it can collide with the
- * Tailwind utilities used elsewhere. The SVG artwork keeps the reference's own
- * class names (mh-*, lw0-7, hw-sel), which only exist inside that artwork.
+ * house-lit-reference.html, v2; the register column, the room list and the window
+ * links follow opening-reference-v3.html). There is no room view and no room
+ * photo: a window or a room name links straight to the room's page. Everything is
+ * scoped under .ma-opening and the generic class names are prefixed `op-`, so none
+ * of it can collide with the Tailwind utilities used elsewhere. The SVG artwork
+ * keeps the reference's own class names (mh-*, lw0-7), which only exist inside
+ * that artwork.
  *
  * The right light: <html data-light="morning|afternoon|evening|night"> is set by
  * the inline script in app.blade.php before the first paint, so there is no
@@ -235,14 +238,18 @@ html[data-opening='seen'] .ma-opening {
 
 .op-lang button:focus-visible,
 .op-skip:focus-visible,
-.op-num:focus-visible,
 .op-page:focus-visible,
-.op-cta:focus-visible,
-.op-btn:focus-visible,
-.op-replay:focus-visible,
-.hw-btn:focus-visible,
-.hw-row:focus-visible {
+.op-replay:focus-visible {
     outline: 2px solid var(--choc);
+    outline-offset: 2px;
+}
+
+/* Keyboard focus only (never on a mouse click): 2 px taupe, as in the reference. */
+.op-num:focus-visible,
+.op-cta:focus-visible,
+.hw-btn:focus-visible,
+.op-rl a:focus-visible {
+    outline: 2px solid #8d705a;
     outline-offset: 2px;
 }
 
@@ -455,7 +462,7 @@ html[data-opening='seen'] .ma-opening {
  */
 .mh-house [class^='lw'] {
     opacity: var(--lit);
-    transition: opacity 0.35s ease;
+    transition: opacity 0.3s ease;
 }
 
 .mh-house .lw3,
@@ -464,15 +471,6 @@ html[data-opening='seen'] .ma-opening {
 }
 
 .mh-house [class^='lw'].is-on {
-    opacity: 1;
-}
-
-.hw-sel {
-    opacity: 0;
-    transition: opacity 0.35s;
-}
-
-.hw-sel.on {
     opacity: 1;
 }
 
@@ -558,25 +556,63 @@ html[data-opening='seen'] .ma-opening {
     transform: scaleX(0.12);
 }
 
-/* ---------- a real transparent button over each window ---------- */
+/*
+ * ---------- a real link over each window ----------
+ * Every window of the house is a link straight to its room's page. Hover or
+ * keyboard focus lights it (the scene toggles .is-on on the artwork) and shows a
+ * small label above it.
+ */
 .hw-btn {
     position: absolute;
-    background: transparent;
-    border: 1px solid transparent;
+    display: block;
     border-radius: 2px;
-    padding: 0;
     cursor: pointer;
-    transition: border-color 0.2s;
 }
 
-.hw-btn:hover {
-    border-color: #b2915c;
+.hw-btn:hover,
+.hw-btn:focus-visible,
+.hw-btn.hov {
+    z-index: 2;
 }
 
-/* ---------- the room list, under the register ---------- */
+.op-tip {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background: var(--choc);
+    color: var(--ivory);
+    font:
+        500 10px Montserrat,
+        system-ui,
+        sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.hw-btn:hover .op-tip,
+.hw-btn:focus-visible .op-tip,
+.hw-btn.hov .op-tip {
+    opacity: 1;
+}
+
+/*
+ * ---------- the room list: the register's own column ----------
+ * Numeral, name, label, gold arrow. The whole row is a link; hovering it (or a
+ * window) lights the row and the matching window.
+ */
 .op-rooms {
     width: 100%;
-    max-width: 620px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 8px 0 0;
+    /* the reference's own line height, not the site body's 1.7 */
+    line-height: normal;
 }
 
 .op-k {
@@ -585,195 +621,70 @@ html[data-opening='seen'] .ma-opening {
     letter-spacing: 0.24em;
     text-transform: uppercase;
     color: var(--muted);
+    text-align: center;
 }
 
 .op-hint {
-    margin: 8px 0 10px;
-    font-size: 13px;
+    margin: 8px 0 18px;
+    font-size: 14px;
     color: var(--muted);
+    text-align: center;
 }
 
-.hw-row {
+.op-rl {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+}
+
+.op-rl a {
     display: flex;
     align-items: baseline;
     gap: 16px;
-    width: 100%;
-    min-height: 42px;
-    padding: 8px 4px;
-    background: none;
-    border: 0;
+    min-height: 52px;
+    padding: 12px 4px;
     border-bottom: 1px solid var(--line);
-    text-align: left;
-    cursor: pointer;
+    text-decoration: none;
     color: var(--choc);
-    font-family: Montserrat, system-ui, sans-serif;
 }
 
-.hw-row:hover {
-    background: var(--hover);
+.op-rl a:hover,
+.op-rl a.hov {
+    background: rgb(178 145 92 / 0.1);
 }
 
-.hw-row-num {
-    width: 44px;
+.op-rl-n {
+    width: 40px;
     font-family: Baskervville, Georgia, serif;
     font-size: 15px;
-    color: var(--taupe);
+    color: var(--muted);
 }
 
-.hw-row-name {
+.op-rl-nm {
     flex: 1;
     font-family: Baskervville, Georgia, serif;
-    font-size: 19px;
+    font-size: 21px;
 }
 
-.hw-row-sub {
+.op-rl-lb {
     font-size: 11px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--muted);
 }
 
-/*
- * ---------- a room, full screen ----------
- * The photo fills the screen; the name, the line and the buttons sit on top of
- * it, over a dark gradient so the text stays readable. A room with no photo yet
- * keeps the page's own colours.
- */
-.op-room {
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0 clamp(16px, 4vw, 56px) clamp(32px, 8vh, 72px);
-    overflow-y: auto;
-    background-color: var(--ivory);
-    background-image: var(--bgimg);
-    animation: ma-fade-in 0.45s ease-out both;
+.op-rl-ar {
+    color: var(--gold);
+    font-size: 14px;
 }
 
-.op-room:focus {
-    outline: none;
-}
-
-/* the page behind does not scroll while a room is open */
-.op-room {
-    overscroll-behavior: contain;
-}
-
-/*
- * Skip and the language switcher sit above the scene, so they would sit on top of
- * the photo and its buttons. Hidden while a room is open: "All rooms" or Escape
- * brings them back.
- */
-.ma-opening:has(.op-room) .op-top {
-    visibility: hidden;
-}
-
-.op-room.has-photo {
-    --choc: #f6efe6;
-    --muted: #e3d6c4;
-    --ivory: #291c18;
-    --line: rgb(246 239 230 / 0.6);
-
-    background: var(--ph);
-}
-
-/* the photo, edge to edge */
-.op-photo {
-    position: absolute;
-    inset: 0;
-    background: var(--ph);
-}
-
-.op-photo::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to top,
-        rgb(20 12 9 / 0.82) 0%,
-        rgb(20 12 9 / 0.5) 38%,
-        rgb(20 12 9 / 0.12) 70%,
-        rgb(20 12 9 / 0.28) 100%
-    );
-}
-
-.op-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    opacity: 0;
-    transition: opacity 0.6s;
-}
-
-.op-photo img.ok {
-    opacity: 1;
-}
-
-.op-room-body {
-    position: relative;
-    width: 100%;
-    max-width: 720px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    text-align: center;
-    color: var(--choc);
-}
-
-.op-room h2 {
-    margin: 0;
-    font-family: Baskervville, Georgia, serif;
-    font-weight: 400;
-    font-size: clamp(38px, 6vw, 68px);
-    line-height: 1.05;
-}
-
-.op-line {
-    margin: 0;
-    font-family: Baskervville, Georgia, serif;
-    font-style: italic;
-    font-size: clamp(17px, 2vw, 21px);
-    color: var(--choc);
-}
-
-.op-room-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 8px;
-}
-
-/* on a photo the primary button is light, and the other is an outline */
-.op-room.has-photo .op-b1 {
-    background: #f6efe6;
-    border-color: #f6efe6;
-    color: #291c18;
-}
-
-.op-room.has-photo .op-b2 {
-    border-color: rgb(246 239 230 / 0.7);
-    color: #f6efe6;
-}
-
-@keyframes ma-fade-in {
-    from {
-        opacity: 0;
-    }
-}
-
-.op-cta,
-.op-btn {
+.op-cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 52px;
-    padding: 0 28px;
+    padding: 0 30px;
     text-decoration: none;
     font:
         600 12px Montserrat,
@@ -784,15 +695,13 @@ html[data-opening='seen'] .ma-opening {
     cursor: pointer;
 }
 
-.op-cta-1,
-.op-b1 {
+.op-cta-1 {
     background: var(--choc);
     color: var(--ivory);
-    border: 1px solid var(--choc);
+    border: 0;
 }
 
-.op-cta-2,
-.op-b2 {
+.op-cta-2 {
     background: none;
     border: 1px solid var(--choc);
     color: var(--choc);
@@ -804,37 +713,41 @@ html[data-opening='seen'] .ma-opening {
     cursor: not-allowed;
 }
 
-/* ---------- the register, under the house ---------- */
+/*
+ * ---------- the register: ONE centred column of 600 px ----------
+ * Title, legend, grid, the chosen number and the buttons all sit in it; the room
+ * list below uses the same column.
+ */
 .op-register {
     width: 100%;
-    max-width: 1100px;
+    max-width: 600px;
     margin: 0 auto;
-    padding: 8px 24px 24px;
+    padding: 8px 0 12px;
+    /* the reference's own line height, not the site body's 1.7 */
+    line-height: normal;
 }
 
 .op-reg-head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 8px 24px;
     border-top: 1px solid var(--line);
-    padding-top: 24px;
-    margin-bottom: 20px;
+    padding-top: 36px;
+    text-align: center;
 }
 
 .op-reg-head h2 {
-    margin: 0;
+    margin: 0 0 14px;
     font-family: Baskervville, Georgia, serif;
     font-weight: 400;
-    font-size: clamp(26px, 3vw, 34px);
+    font-size: clamp(28px, 3vw, 36px);
 }
 
 .op-legend {
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 22px;
     font-size: 12px;
     color: var(--muted);
+    margin-bottom: 22px;
 }
 
 .op-legend span {
@@ -857,41 +770,38 @@ html[data-opening='seen'] .ma-opening {
     background: var(--gold);
 }
 .op-sw-archive {
-    border: 1px solid var(--taupe);
+    border: 1px dashed #8d705a;
     background: #ede3d8;
-    position: relative;
-}
-.op-sw-archive::after {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    border: 1px solid var(--taupe);
 }
 
-/* ten per row on desktop and tablet (10 × 10), five on a phone.
- * Cap width so tiles stay near-square (~600px), centred under the house. */
+/* ten per row on every screen: 10 × 10, gap 6 px, tiles ± 55 × 44 px in 600 px */
 .op-numbers {
     display: grid;
     grid-template-columns: repeat(10, minmax(0, 1fr));
     gap: 6px;
-    max-width: 600px;
-    margin-inline: auto;
 }
 
 .op-num {
     min-width: 0;
+    aspect-ratio: 5 / 4;
     min-height: 44px;
-    border: 1px solid var(--line);
+    border: 1px solid #d8c9b6;
     background: #fbf7f2;
     color: #291c18;
-    /* labels such as EXC001ST are long, and ten tiles share one row */
     font:
-        500 clamp(10px, 1.4vw, 13px) Montserrat,
+        500 13px Montserrat,
         system-ui,
         sans-serif;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
     cursor: pointer;
     padding: 0;
+    overflow: hidden;
+}
+
+/* labels such as EXC007ST are long, and ten tiles share one row */
+.op-num-long {
+    font-size: 9px;
+    letter-spacing: 0;
 }
 
 .op-num:hover {
@@ -911,13 +821,11 @@ html[data-opening='seen'] .ma-opening {
     cursor: default;
 }
 
-/* Maison Archive: taupe outline, not the reserved gold */
+/* Maison Archive: taupe dashed outline, not the reserved gold, not selectable */
 .op-num.op-num-archive:disabled {
     background: #ede3d8;
-    border-color: var(--taupe);
-    border-style: dashed;
-    color: var(--taupe);
-    font-weight: 600;
+    border: 1px dashed #8d705a;
+    color: #6e5644;
 }
 
 /*
@@ -992,24 +900,23 @@ html[data-opening='seen'] .ma-opening {
 }
 
 .op-picked {
-    margin: 0;
+    margin: 22px 0 0;
     width: 100%;
-    margin-top: 20px;
     text-align: center;
     font-family: Baskervville, Georgia, serif;
     font-size: 22px;
 }
 
 .op-ctas {
-    margin-top: 28px;
+    margin-top: 24px;
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
     justify-content: center;
 }
 
-/* ---------- phone: five numbers per row, tighter scene under the house ---------- */
+/* ---------- phone: the scene is tighter under the house ---------- */
 @media (max-width: 639px) {
     .op-scene {
         min-height: 0;
@@ -1023,16 +930,45 @@ html[data-opening='seen'] .ma-opening {
         min-width: 200px;
     }
 
-    .op-numbers {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+    /* the column keeps 24 px from each screen edge, as in the reference */
+    .op-register,
+    .op-rooms {
+        padding-inline: 8px;
     }
 
     .op-register {
-        padding-inline: 0;
+        padding-bottom: 24px;
+    }
+}
+
+/*
+ * ---------- small phone: the full 10 × 10 register on one screen ----------
+ * Compact tiles (± 33 × 34 px, gap 3 px, 10.5 px numbers); the room labels hide,
+ * numeral, name and arrow stay.
+ */
+@media (max-width: 560px) {
+    .op-reg-head {
+        padding-top: 28px;
     }
 
-    .op-cta {
-        width: 100%;
+    .op-numbers {
+        gap: 3px;
+    }
+
+    .op-num {
+        aspect-ratio: auto;
+        min-height: 0;
+        height: 34px;
+        font-size: 10.5px;
+        letter-spacing: 0;
+    }
+
+    .op-num-long {
+        font-size: 6.5px;
+    }
+
+    .op-rl-lb {
+        display: none;
     }
 }
 

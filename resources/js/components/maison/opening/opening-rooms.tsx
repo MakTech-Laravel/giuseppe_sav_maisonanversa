@@ -1,133 +1,114 @@
-import { useState } from 'react';
-import type { Ref } from 'react';
 import { MaisonLink } from '@/components/maison/maison-link';
-import { foundingProductUrl } from '@/lib/maison-navigation';
 import { cn } from '@/lib/utils';
 import type { Locale } from '@/types/locale';
-import { fillCopy, OPENING_ROOMS, openingPhotoSources } from './opening-data';
+import { OPENING_ROOMS, roomHref } from './opening-data';
 import type { OpeningCopy, OpeningRoom } from './opening-data';
+
+type RoomLinkProps = {
+    room: OpeningRoom;
+    index: number;
+    locale: Locale;
+    /** The room whose window is lit by a hover or focus, in the house or in the list. */
+    hovered: number | null;
+    onHover: (index: number | null) => void;
+    /** The visitor is leaving the opening for the room's page. */
+    onLeave: () => void;
+};
+
+/**
+ * A window of the house: a real link over the artwork, straight to the room's
+ * page. Hover or keyboard focus lights the window (the scene does that through
+ * `hovered`) and shows a small label above it, e.g. "Bibliothèque · Journal".
+ */
+export function RoomWindow({
+    room,
+    index,
+    locale,
+    hovered,
+    onHover,
+    onLeave,
+}: RoomLinkProps) {
+    const text = room.text[locale];
+
+    return (
+        <MaisonLink
+            href={roomHref(room, locale)}
+            className={cn('hw-btn', hovered === index && 'hov')}
+            aria-label={`${text.name}, ${text.subtitle}`}
+            onClick={onLeave}
+            onPointerEnter={() => onHover(index)}
+            onPointerLeave={() => onHover(null)}
+            onFocus={() => onHover(index)}
+            onBlur={() => onHover(null)}
+            style={{
+                left: `${room.hotspot.left}%`,
+                top: `${room.hotspot.top}%`,
+                width: `${room.hotspot.width}%`,
+                height: `${room.hotspot.height}%`,
+            }}
+        >
+            <span className="op-tip" aria-hidden="true">
+                {text.name} · {text.subtitle}
+            </span>
+        </MaisonLink>
+    );
+}
 
 type RoomListProps = {
     copy: OpeningCopy;
     locale: Locale;
-    onPick: (index: number) => void;
-};
-
-/** The eight rooms as real buttons, under the register. It appears once the windows are lit. */
-export function RoomList({ copy, locale, onPick }: RoomListProps) {
-    return (
-        <div className="op-rooms op-in">
-            <p className="op-k">{copy.roomsKicker}</p>
-            <p className="op-hint">{copy.houseHint}</p>
-
-            {OPENING_ROOMS.map((entry, index) => {
-                const text = entry.text[locale];
-
-                return (
-                    <button
-                        key={entry.numeral}
-                        type="button"
-                        className="hw-row"
-                        onClick={() => onPick(index)}
-                    >
-                        <span className="hw-row-num">{entry.numeral}</span>
-                        <span className="hw-row-name">{text.name}</span>
-                        <span className="hw-row-sub">{text.subtitle}</span>
-                    </button>
-                );
-            })}
-        </div>
-    );
-}
-
-type RoomCardProps = {
-    room: OpeningRoom;
-    copy: OpeningCopy;
-    locale: Locale;
-    onBack: () => void;
-    /** The visitor is leaving the opening for the room's page. */
+    hovered: number | null;
+    onHover: (index: number | null) => void;
     onLeave: () => void;
-    ref: Ref<HTMLDivElement>;
 };
 
 /**
- * A room, full screen: its photo fills the screen, and the name, the line and the
- * way in sit on top of it. The photo is requested only when this is on screen,
- * never before a room is chosen. A room without a photo yet gets the plain
- * background, with the same text and buttons.
+ * The eight rooms as links, in the register's column under it. The whole row is a
+ * link to the room's page; hovering or focusing one lights the same window in the
+ * house, and the other way round. It appears once the windows are lit.
  */
-export function RoomCard({
-    room,
+export function RoomList({
     copy,
     locale,
-    onBack,
+    hovered,
+    onHover,
     onLeave,
-    ref,
-}: RoomCardProps) {
-    const [loaded, setLoaded] = useState(false);
-    const text = room.text[locale];
-    const photo = room.photo === null ? null : openingPhotoSources(room.photo);
-
+}: RoomListProps) {
     return (
-        <div
-            className={cn('op-room', photo !== null && 'has-photo')}
-            ref={ref}
-            tabIndex={-1}
-            role="dialog"
-            aria-modal="true"
-            aria-label={text.name}
-        >
-            {photo !== null && (
-                <div className="op-photo" aria-hidden="true">
-                    <picture>
-                        <source srcSet={photo.avif} type="image/avif" />
-                        <img
-                            src={photo.webp}
-                            alt=""
-                            width={768}
-                            height={512}
-                            className={loaded ? 'ok' : undefined}
-                            onLoad={() => setLoaded(true)}
-                        />
-                    </picture>
-                </div>
-            )}
+        <section className="op-rooms op-in" aria-labelledby="op-rooms-title">
+            <p className="op-k" id="op-rooms-title">
+                {copy.roomsKicker}
+            </p>
+            <p className="op-hint">{copy.houseHint}</p>
 
-            <div className="op-room-body">
-                <p className="op-k">
-                    {fillCopy(copy.roomKicker, { n: room.numeral })}
-                </p>
-                <h2>{text.name}</h2>
-                <p className="op-line">{text.line}</p>
+            <ol className="op-rl">
+                {OPENING_ROOMS.map((room, index) => {
+                    const text = room.text[locale];
 
-                <div className="op-room-actions">
-                    {'page' in room.destination ? (
-                        <MaisonLink
-                            className="op-btn op-b1"
-                            to={room.destination.page}
-                            onClick={onLeave}
-                        >
-                            {text.enter}
-                        </MaisonLink>
-                    ) : (
-                        <MaisonLink
-                            className="op-btn op-b1"
-                            href={foundingProductUrl(locale)}
-                            onClick={onLeave}
-                        >
-                            {text.enter}
-                        </MaisonLink>
-                    )}
-
-                    <button
-                        type="button"
-                        className="op-btn op-b2"
-                        onClick={onBack}
-                    >
-                        {copy.back}
-                    </button>
-                </div>
-            </div>
-        </div>
+                    return (
+                        <li key={room.numeral}>
+                            <MaisonLink
+                                href={roomHref(room, locale)}
+                                className={cn(hovered === index && 'hov')}
+                                onClick={onLeave}
+                                onPointerEnter={() => onHover(index)}
+                                onPointerLeave={() => onHover(null)}
+                                onFocus={() => onHover(index)}
+                                onBlur={() => onHover(null)}
+                            >
+                                <span className="op-rl-n">{room.numeral}</span>
+                                <span className="op-rl-nm">{text.name}</span>
+                                <span className="op-rl-lb">
+                                    {text.subtitle}
+                                </span>
+                                <span className="op-rl-ar" aria-hidden="true">
+                                    →
+                                </span>
+                            </MaisonLink>
+                        </li>
+                    );
+                })}
+            </ol>
+        </section>
     );
 }
