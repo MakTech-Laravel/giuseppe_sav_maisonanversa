@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useShellActions } from '@/components/maison/shell/shell-actions';
 import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
+import { cn } from '@/lib/utils';
 import type { OpeningRegisterData } from '@/types/opening';
 import { fillCopy, OPENING_PAGE_SIZE } from './opening-data';
 import type { OpeningCopy } from './opening-data';
@@ -47,7 +48,9 @@ type OpeningRegisterProps = {
  *   It leaves the opening first, because those modals sit below it.
  * - "Enter the house" leaves the opening for the home page behind it.
  *
- * The tiles sit in a fixed grid: ten per row on desktop and tablet, five on a phone.
+ * Everything sits in one centred column of 600 px: title, legend, grid, the chosen
+ * number and the two buttons. The tiles sit in a fixed grid, ten per row on every
+ * screen (compact on a phone, so all 100 fit on one screen).
  * An edition of more than OPENING_PAGE_SIZE (100) numbers is paged, one 10 × 10 grid
  * per page; 100 or fewer shows no pager. Every tile stays in `register.tiles`, so a
  * chosen number survives a change of page and still reaches the picker.
@@ -140,9 +143,11 @@ export function OpeningRegister({
                         <button
                             key={tile.id}
                             type="button"
-                            className={
-                                isArchive ? 'op-num op-num-archive' : 'op-num'
-                            }
+                            className={cn(
+                                'op-num',
+                                isArchive && 'op-num-archive',
+                                tile.label.length > 3 && 'op-num-long',
+                            )}
                             disabled={!tile.available}
                             aria-pressed={selected === tile.id}
                             title={isArchive ? copy.archiveTooltip : undefined}
