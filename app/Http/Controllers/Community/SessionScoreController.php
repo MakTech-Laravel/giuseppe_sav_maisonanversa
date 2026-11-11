@@ -30,7 +30,7 @@ class SessionScoreController extends Controller
             'type' => 'success',
             'message' => $isHost
                 ? __('De uitslag is opgeslagen.')
-                : __('Uw score is ingediend en wacht op goedkeuring van de organisator.'),
+                : __('Jouw score is ingediend en wacht op goedkeuring van de organisator.'),
         ]);
 
         return back();

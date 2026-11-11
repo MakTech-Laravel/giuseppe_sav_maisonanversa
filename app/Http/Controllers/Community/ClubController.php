@@ -100,7 +100,7 @@ class ClubController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Bedankt. Uw club is ingediend en wacht op goedkeuring.'),
+            'message' => __('Bedankt. Jouw club is ingediend en wacht op goedkeuring.'),
         ]);
 
         return back();

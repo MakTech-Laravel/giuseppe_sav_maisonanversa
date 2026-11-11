@@ -46,7 +46,7 @@ export default function MemberChatPage({
                 eyebrow={t('Gemeenschap')}
                 title={t('Chat')}
                 description={t(
-                    'Berichten met de spelers van uw sessies. Selecteer een sessie om te beginnen.',
+                    'Berichten met de spelers van jouw sessies. Selecteer een sessie om te beginnen.',
                 )}
             />
 

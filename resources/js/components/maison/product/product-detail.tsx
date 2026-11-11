@@ -96,11 +96,11 @@ export function ProductDetail({
                         {isFoundingProduct && canReserve ? (
                             <div className="mb-6 border border-gold/30 p-4">
                                 <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                                    {t('Uw plaats in het register')}
+                                    {t('Jouw plaats in het register')}
                                 </p>
                                 <p className="mt-2 text-sm leading-relaxed text-choc3">
                                     {t(
-                                        'Elke eigenaar van Heritage Nº 001 wordt ingeschreven. U kiest zelf uw nummer bij het afrekenen.',
+                                        'Elke eigenaar van Heritage Nº 001 wordt ingeschreven. Je kiest zelf jouw nummer bij het afrekenen.',
                                     )}
                                 </p>
                                 <p className="mt-3 font-serif text-lg text-choc">
@@ -130,7 +130,7 @@ export function ProductDetail({
                                     onClick={() => openPurchase(checkout)}
                                     className="mb-3"
                                 >
-                                    {`${t('Reserveer Uw Nummer —')} ${priceLabel}`}
+                                    {`${t('Reserveer Jouw Nummer —')} ${priceLabel}`}
                                 </MaisonButton>
                                 {purchasesPaused ? (
                                     <p className="mb-3 text-center font-sans text-[10px] tracking-[0.12em] text-choc3">

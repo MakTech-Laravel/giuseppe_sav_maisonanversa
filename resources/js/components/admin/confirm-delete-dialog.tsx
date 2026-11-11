@@ -44,7 +44,7 @@ export function ConfirmDeleteDialog({
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        {title ?? t('Weet u het absoluut zeker?')}
+                        {title ?? t('Weet je het absoluut zeker?')}
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                         {description}

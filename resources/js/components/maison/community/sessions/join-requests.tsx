@@ -27,7 +27,7 @@ export function JoinRequests({ sessionId, requests }: JoinRequestsProps) {
                 {t('Aanvragen')}
             </h2>
             <p className="mb-5 font-sans text-[11px] text-stone">
-                {t('Deze spelers wachten op uw goedkeuring.')}
+                {t('Deze spelers wachten op jouw goedkeuring.')}
             </p>
 
             <ul className="flex flex-col gap-3">

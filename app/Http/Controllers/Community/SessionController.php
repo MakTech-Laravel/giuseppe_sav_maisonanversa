@@ -227,7 +227,7 @@ class SessionController extends Controller
                 abort_if(
                     $existing->status === SessionParticipantStatus::Rejected,
                     422,
-                    __('De organisator heeft uw aanvraag voor deze sessie niet aanvaard.'),
+                    __('De organisator heeft jouw aanvraag voor deze sessie niet aanvaard.'),
                 );
 
                 return 'noop';
@@ -268,11 +268,11 @@ class SessionController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => match ($outcome) {
-                'pending' => __('Uw aanvraag is verstuurd naar de organisator.'),
-                'confirmed' => __('U speelt mee.'),
+                'pending' => __('Jouw aanvraag is verstuurd naar de organisator.'),
+                'confirmed' => __('Je speelt mee.'),
                 default => $communitySession->requiresJoinRequests()
-                    ? __('U heeft deze sessie al aangevraagd.')
-                    : __('U speelt al mee in deze sessie.'),
+                    ? __('Je hebt deze sessie al aangevraagd.')
+                    : __('Je speelt al mee in deze sessie.'),
             },
         ]);
 
@@ -386,7 +386,7 @@ class SessionController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => $wasPending ? __('Uw aanvraag is ingetrokken.') : __('U heeft de sessie verlaten.'),
+            'message' => $wasPending ? __('Jouw aanvraag is ingetrokken.') : __('Je hebt de sessie verlaten.'),
         ]);
 
         return back();

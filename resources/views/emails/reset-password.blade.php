@@ -12,6 +12,6 @@
         {{ __('Deze code verloopt over :count minuten.', ['count' => $expireMinutes]) }}
     </p>
     <p style="margin:0;">
-        {{ __('Als u geen wachtwoordreset heeft aangevraagd, hoeft u niets te doen.') }}
+        {{ __('Als je geen wachtwoordreset hebt aangevraagd, hoef je niets te doen.') }}
     </p>
 @endcomponent

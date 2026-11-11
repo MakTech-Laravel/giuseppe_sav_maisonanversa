@@ -18,7 +18,7 @@ export default function MemberNotificationShow({
     const locale = wayfinderLocale();
 
     const destroy = () => {
-        if (!window.confirm(t('Deze melding uit uw inbox verwijderen?'))) {
+        if (!window.confirm(t('Deze melding uit jouw inbox verwijderen?'))) {
             return;
         }
 

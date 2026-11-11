@@ -49,7 +49,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
         <aside className="space-y-5">
             <div className="border border-gold/15 bg-cream2 p-6">
                 <span className="mb-4 block font-sans text-[9px] font-medium tracking-[0.25em] text-gold2 uppercase">
-                    {t('Uw Profiel')}
+                    {t('Jouw Profiel')}
                 </span>
 
                 <div className="flex items-center gap-3.5 border-b border-gold/10 pb-4">

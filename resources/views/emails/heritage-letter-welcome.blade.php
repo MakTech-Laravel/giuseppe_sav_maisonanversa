@@ -38,12 +38,12 @@
                     </tr>
                     <tr>
                         <td align="center" style="padding:0 8px 16px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.75;color:#41332D;">
-                            {{ __('Hartelijk dank voor uw inschrijving op de Heritage Letter van Maison Anversa.') }}
+                            {{ __('Hartelijk dank voor jouw inschrijving op de Heritage Letter van Maison Anversa.') }}
                         </td>
                     </tr>
                     <tr>
                         <td align="center" style="padding:0 8px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.75;color:#8A7D72;">
-                            {{ __('Via deze brief deelt het huis verhalen, nieuws over onze edities en exclusieve uitnodigingen — zorgvuldig gekozen, in de taal die u koos.') }}
+                            {{ __('Via deze brief deelt het huis verhalen, nieuws over onze edities en exclusieve uitnodigingen — zorgvuldig gekozen, in de taal die je koos.') }}
                         </td>
                     </tr>
                     <tr>

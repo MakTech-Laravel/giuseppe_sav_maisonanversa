@@ -16,7 +16,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
             {status === 'verification-link-sent' && (
                 <div className="mb-6 border border-gold/30 bg-cream2 px-4 py-3 text-center font-sans text-[13px] leading-[1.6] text-choc3">
                     {t(
-                        'Er is een nieuwe verificatielink naar uw e-mailadres gestuurd.',
+                        'Er is een nieuwe verificatielink naar jouw e-mailadres gestuurd.',
                     )}
                 </div>
             )}
@@ -52,5 +52,5 @@ export default function VerifyEmail({ status }: { status?: string }) {
 VerifyEmail.layout = {
     title: 'E-mail verifiëren',
     description:
-        'Bevestig uw e-mailadres via de link die we zojuist hebben gestuurd.',
+        'Bevestig jouw e-mailadres via de link die we zojuist hebben gestuurd.',
 };

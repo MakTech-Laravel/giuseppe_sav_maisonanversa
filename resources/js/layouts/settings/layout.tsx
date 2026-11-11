@@ -43,7 +43,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 </h1>
                 <p className="max-w-2xl text-sm text-muted-foreground">
                     {t(
-                        'Beheer uw profielfoto, accountgegevens en beveiliging.',
+                        'Beheer jouw profielfoto, accountgegevens en beveiliging.',
                     )}
                 </p>
             </header>

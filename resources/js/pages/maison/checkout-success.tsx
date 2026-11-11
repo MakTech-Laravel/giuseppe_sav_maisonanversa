@@ -70,10 +70,10 @@ export default function CheckoutSuccess({
                 subtitle={
                     paid
                         ? t(
-                              'Dank u. Uw bestelling is ontvangen. U ontvangt een bevestiging per e-mail.',
+                              'Dank je. Jouw bestelling is ontvangen. Je ontvangt een bevestiging per e-mail.',
                           )
                         : t(
-                              'Als uw betaling zojuist is afgerond, kan de bevestiging even op zich laten wachten. Controleer uw e-mail of neem contact op met het bureau.',
+                              'Als jouw betaling zojuist is afgerond, kan de bevestiging even op zich laten wachten. Controleer jouw e-mail of neem contact op met het bureau.',
                           )
                 }
             />

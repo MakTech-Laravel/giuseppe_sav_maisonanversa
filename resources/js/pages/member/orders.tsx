@@ -35,7 +35,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                 eyebrow={t('Account')}
                 title={t('Bestellingen & betalingen')}
                 description={t(
-                    'Uw aankopen, betalingen en verzendstatus in één overzicht.',
+                    'Jouw aankopen, betalingen en verzendstatus in één overzicht.',
                 )}
             />
 

@@ -34,7 +34,7 @@ export default function MemberHeritage({
                 <MemberEmptyState
                     title={t('Nog geen editie toegewezen')}
                     description={t(
-                        'U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
                     )}
                 />
             </>
@@ -50,7 +50,7 @@ export default function MemberHeritage({
                     number: heritage.editionNumber,
                 })}
                 description={t(
-                    'Uw Founding Edition-stuk — status, leveringsvenster en de artefacten die ermee meegaan.',
+                    'Jouw Founding Edition-stuk — status, leveringsvenster en de artefacten die ermee meegaan.',
                 )}
             />
 

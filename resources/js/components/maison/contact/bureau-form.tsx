@@ -39,7 +39,7 @@ export function BureauForm({
             {({ processing, recentlySuccessful, errors }) =>
                 recentlySuccessful ? (
                     <SuccessPanel
-                        title={t('Uw bericht is ontvangen.')}
+                        title={t('Jouw bericht is ontvangen.')}
                         icon="✓"
                         className="text-left [&_div]:text-sand [&_h3]:text-cream"
                     >

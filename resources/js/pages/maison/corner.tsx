@@ -78,7 +78,7 @@ const PROCESS_STEPS = [
     {
         num: '01',
         title: 'Aanvraag',
-        desc: 'Vul het formulier in met de details van uw club.',
+        desc: 'Vul het formulier in met de details van jouw club.',
     },
     {
         num: '02',
@@ -88,12 +88,12 @@ const PROCESS_STEPS = [
     {
         num: '03',
         title: 'Voorstel',
-        desc: 'Een gepersonaliseerd Club Corner voorstel op maat van uw club.',
+        desc: 'Een gepersonaliseerd Club Corner voorstel op maat van jouw club.',
     },
     {
         num: '04',
         title: 'Lancering',
-        desc: 'Uw Club Corner gaat live — met volledige ondersteuning van Maison Anversa.',
+        desc: 'Jouw Club Corner gaat live — met volledige ondersteuning van Maison Anversa.',
     },
 ] as const;
 
@@ -138,7 +138,7 @@ export default function Corner({
                     </>
                 }
                 subtitle={t(
-                    'Breng Maison Anversa naar uw padelclub. Een curated ervaring voor clubs die begrijpen dat padel meer is dan een sport.',
+                    'Breng Maison Anversa naar jouw padelclub. Een curated ervaring voor clubs die begrijpen dat padel meer is dan een sport.',
                 )}
             />
 
@@ -152,7 +152,7 @@ export default function Corner({
                             <GoldRule />
                             <h2 className="mb-6 font-serif text-[clamp(28px,3.5vw,48px)] leading-[1.1] font-medium [&_em]:text-gold2 [&_em]:italic">
                                 {t('Een')} <em>{t('thuis')}</em>{' '}
-                                {t('voor Maison Anversa in uw club')}
+                                {t('voor Maison Anversa in jouw club')}
                             </h2>
                             <p className="mb-5 text-base leading-[1.9] text-choc3">
                                 {t(
@@ -161,7 +161,7 @@ export default function Corner({
                             </p>
                             <p className="mb-5 text-base leading-[1.9] text-choc3">
                                 {t(
-                                    'Het is geen klassiek verkooppunt. Het is een ervaringsruimte. Uw leden worden deel van het Maison Anversa verhaal.',
+                                    'Het is geen klassiek verkooppunt. Het is een ervaringsruimte. Jouw leden worden deel van het Maison Anversa verhaal.',
                                 )}
                             </p>
                             <p className="text-base leading-[1.9] text-choc3">
@@ -204,7 +204,7 @@ export default function Corner({
                     <Eyebrow>{t('Het Club Corner Pakket')}</Eyebrow>
                     <GoldRule />
                     <h2 className="mb-3 font-serif text-[clamp(28px,3.5vw,44px)] leading-[1.1] font-medium [&_em]:text-gold [&_em]:italic">
-                        {t('Wat uw club')} <em>{t('ontvangt')}</em>
+                        {t('Wat jouw club')} <em>{t('ontvangt')}</em>
                     </h2>
                     <p className="mb-14 max-w-140 text-base leading-[1.85] text-sand">
                         {t(
@@ -241,11 +241,11 @@ export default function Corner({
                         </Eyebrow>
                         <GoldRule center className="mx-auto" />
                         <h2 className="mb-4 font-serif text-[clamp(28px,3.5vw,44px)] leading-[1.1] font-medium [&_em]:text-gold2 [&_em]:italic">
-                            {t('Kies uw')} <em>{t('formaat')}</em>
+                            {t('Kies jouw')} <em>{t('formaat')}</em>
                         </h2>
                         <p className="text-base leading-[1.85] text-choc3">
                             {t(
-                                'Maison Anversa biedt twee Club Corner formaten — afhankelijk van de grootte van uw club en uw ambitie als partner.',
+                                'Maison Anversa biedt twee Club Corner formaten — afhankelijk van de grootte van jouw club en jouw ambitie als partner.',
                             )}
                         </p>
                     </Reveal>
@@ -328,7 +328,7 @@ export default function Corner({
                             </p>
                             <p className="text-base leading-[1.85] text-choc3">
                                 {t(
-                                    'Als u deze criteria herkent in uw club, nodigen wij u uit om contact op te nemen.',
+                                    'Als je deze criteria herkent in jouw club, nodigen wij je uit om contact op te nemen.',
                                 )}
                             </p>
                         </Reveal>
@@ -419,7 +419,7 @@ export default function Corner({
                                 </h2>
                                 <p className="mb-8 text-base leading-[1.85] text-choc3">
                                     {t(
-                                        'Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek over wat een partnership voor uw club kan betekenen.',
+                                        'Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek over wat een partnership voor jouw club kan betekenen.',
                                     )}
                                 </p>
 
@@ -523,7 +523,7 @@ function CornerPartnershipForm({
                     onChange={(event) =>
                         form.setData('club_name', event.target.value)
                     }
-                    placeholder={t('Naam van uw padelclub')}
+                    placeholder={t('Naam van jouw padelclub')}
                     className={fieldClassName}
                 />
                 {form.errors.club_name && (
@@ -549,7 +549,7 @@ function CornerPartnershipForm({
                     onChange={(event) =>
                         form.setData('name', event.target.value)
                     }
-                    placeholder={t('Uw naam en functie')}
+                    placeholder={t('Jouw naam en functie')}
                     className={fieldClassName}
                 />
                 {form.errors.name && (
@@ -575,7 +575,7 @@ function CornerPartnershipForm({
                     onChange={(event) =>
                         form.setData('email', event.target.value)
                     }
-                    placeholder={t('uw@emailadres.be')}
+                    placeholder={t('jouw@emailadres.be')}
                     className={fieldClassName}
                 />
                 {form.errors.email && (
@@ -666,7 +666,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-about"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('Vertel ons over uw club')}
+                    {t('Vertel ons over jouw club')}
                 </label>
                 <textarea
                     id="corner-about"
@@ -677,7 +677,7 @@ function CornerPartnershipForm({
                         form.setData('message', event.target.value)
                     }
                     placeholder={t(
-                        'Beschrijf kort de sfeer en identiteit van uw club...',
+                        'Beschrijf kort de sfeer en identiteit van jouw club...',
                     )}
                     className={`${fieldClassName} min-h-25 resize-y`}
                 />

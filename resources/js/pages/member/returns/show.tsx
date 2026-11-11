@@ -69,7 +69,7 @@ export default function MemberReturnShow({
                             />
                             <p className="text-sand">
                                 {t(
-                                    'Uw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op uw rekening.',
+                                    'Jouw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op jouw rekening.',
                                 )}
                             </p>
                             <dl className="mt-4 space-y-2 font-sans text-sm">

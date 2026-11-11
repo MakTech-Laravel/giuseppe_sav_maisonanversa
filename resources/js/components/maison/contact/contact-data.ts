@@ -81,7 +81,7 @@ export function buildBureauBubbles(site: SiteShared): BureauBubble[] {
             kind: 'panel',
             icon: Package,
             name: 'Bestelstatus',
-            sub: 'Volg uw bestelling',
+            sub: 'Volg jouw bestelling',
             panel: 'bestel',
         },
         {
@@ -122,7 +122,7 @@ export function buildBureauBubbles(site: SiteShared): BureauBubble[] {
         {
             kind: 'panel',
             icon: MessageSquare,
-            name: 'Uw mening',
+            name: 'Jouw mening',
             sub: 'Feedback',
             panel: 'feedback',
         },
@@ -145,7 +145,7 @@ export function buildContactDockItems(
         { icon: Video, label: 'Privé consult', panel: 'concierge' },
         { icon: MapPin, label: 'Vind ons atelier', panel: 'atelier' },
         { icon: HelpCircle, label: 'Veelgestelde vragen', panel: 'faq' },
-        { icon: MessageSquare, label: 'Uw mening', panel: 'feedback' },
+        { icon: MessageSquare, label: 'Jouw mening', panel: 'feedback' },
     ];
 }
 

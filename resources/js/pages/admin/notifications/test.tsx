@@ -193,7 +193,7 @@ export default function NotificationTest({
             ...initialForm(),
             type: 'success',
             title: `Snelle test ${clock()}`,
-            message: t('Als u deze toast ziet, werkt realtime.'),
+            message: t('Als je deze toast ziet, werkt realtime.'),
         });
 
     const previewToast = () =>

@@ -40,7 +40,7 @@ class OrderStatusService
             $refunded = $this->fulfillment->refund($order)['order'];
             $event = $this->recordEvent($refunded, $status, $message, $admin);
             SendOrderStatusUpdatedBuyerMail::dispatch($refunded, $event);
-            $this->notifyBuyer($refunded, 'Bestelling terugbetaald', 'Uw bestelling is terugbetaald.');
+            $this->notifyBuyer($refunded, 'Bestelling terugbetaald', 'Jouw bestelling is terugbetaald.');
 
             return $refunded->load('statusEvents');
         }
@@ -97,11 +97,11 @@ class OrderStatusService
         SendOrderStatusUpdatedBuyerMail::dispatch($orderResult, $event);
 
         if ($status === OrderStatus::Shipped) {
-            $this->notifyBuyer($orderResult, 'Bestelling verzonden', 'Uw bestelling is verzonden.');
+            $this->notifyBuyer($orderResult, 'Bestelling verzonden', 'Jouw bestelling is verzonden.');
         }
 
         if ($status === OrderStatus::Delivered) {
-            $this->notifyBuyer($orderResult, 'Bestelling geleverd', 'Uw bestelling is geleverd.');
+            $this->notifyBuyer($orderResult, 'Bestelling geleverd', 'Jouw bestelling is geleverd.');
         }
 
         return $orderResult->load('statusEvents');

@@ -27,12 +27,12 @@ const BENEFITS = [
     {
         num: '04',
         title: 'Naamregistratie',
-        desc: 'Uw naam wordt opgenomen in het officiële Founding Circle register — een document dat bij het merk bewaard wordt voor altijd.',
+        desc: 'Jouw naam wordt opgenomen in het officiële Founding Circle register — een document dat bij het merk bewaard wordt voor altijd.',
     },
     {
         num: '05',
         title: 'Uniek Editienummer',
-        desc: 'Uw editienummer (001–100) staat op het racket, het certificaat en het paspoort. Van u. Voor altijd.',
+        desc: 'Jouw editienummer (001–100) staat op het racket, het certificaat en het paspoort. Van je. Voor altijd.',
     },
     {
         num: '06',
@@ -70,7 +70,7 @@ export default function Circle() {
                         </h2>
                         <p className="text-base leading-[1.85] text-choc3">
                             {t(
-                                'De Founding Circle is de permanente gemeenschap van iedereen die Heritage Nº 001 koopt. Uw lidmaatschap is levenslang. Uw nummer is van u — voor altijd. Dit is geen loyaliteitsprogramma. Dit is een erkenning.',
+                                'De Founding Circle is de permanente gemeenschap van iedereen die Heritage Nº 001 koopt. Jouw lidmaatschap is levenslang. Jouw nummer is van jou — voor altijd. Dit is geen loyaliteitsprogramma. Dit is een erkenning.',
                             )}
                         </p>
                     </Reveal>

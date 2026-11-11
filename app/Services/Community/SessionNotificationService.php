@@ -237,7 +237,7 @@ class SessionNotificationService
                         'session_id' => $session->id,
                         'notice' => $notice->value,
                         'link_url' => $sessionUrl,
-                        'link_label' => $isMatchCard ? __('Deel uw kaart') : __('Bekijk sessie'),
+                        'link_label' => $isMatchCard ? __('Deel jouw kaart') : __('Bekijk sessie'),
                     ],
                     $actor,
                 );

@@ -85,7 +85,7 @@ export function SessionScoreboard({
                     <h3 className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
                         {scoreboard.can_review
                             ? t('Ingediende scores')
-                            : t('Uw ingediende score')}
+                            : t('Jouw ingediende score')}
                     </h3>
 
                     {scoreboard.submissions.map((submission) => (

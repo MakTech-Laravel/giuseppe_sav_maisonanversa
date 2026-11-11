@@ -89,7 +89,7 @@ class FoundingCircleClaimService
                 ->pending()
                 ->exists()) {
                 throw ValidationException::withMessages([
-                    'serial' => __('U heeft al een registratie in afwachting. Wacht op goedkeuring of neem contact op met het team.'),
+                    'serial' => __('Je hebt al een registratie in afwachting. Wacht op goedkeuring of neem contact op met het team.'),
                 ]);
             }
 

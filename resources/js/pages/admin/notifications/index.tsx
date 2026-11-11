@@ -110,7 +110,7 @@ export default function NotificationsIndex({
                 <AdminPageHeader
                     title={t('Meldingen')}
                     description={t(
-                        'Uw persoonlijke meldingen en systeemberichten.',
+                        'Jouw persoonlijke meldingen en systeemberichten.',
                     )}
                     icon={Bell}
                 >
@@ -274,7 +274,7 @@ export default function NotificationsIndex({
                                     ) : null}
                                     <ConfirmDeleteDialog
                                         description={t(
-                                            'Deze melding uit uw inbox verwijderen?',
+                                            'Deze melding uit jouw inbox verwijderen?',
                                         )}
                                         onConfirm={() =>
                                             router.delete(

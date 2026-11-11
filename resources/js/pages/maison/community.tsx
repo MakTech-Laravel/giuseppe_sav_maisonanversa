@@ -29,7 +29,7 @@ export default function Community({ posts }: CommunityPageProps) {
                 eyebrow={t('Founding Circle')}
                 title={t('De Community')}
                 subtitle={t(
-                    'Een besloten ruimte voor leden van het huis. Deel uw ervaringen, plan sessies en ontdek exclusieve evenementen.',
+                    'Een besloten ruimte voor leden van het huis. Deel jouw ervaringen, plan sessies en ontdek exclusieve evenementen.',
                 )}
             />
 

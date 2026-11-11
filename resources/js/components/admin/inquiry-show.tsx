@@ -19,7 +19,7 @@ const META_LABELS: Record<string, string> = {
     datum: 'Datum',
     moment: 'Voorkeur moment',
     soort: 'Soort',
-    ervaring: 'Uw ervaring',
+    ervaring: 'Jouw ervaring',
     club_name: 'Club',
     location: 'Locatie',
     courts: 'Courts',

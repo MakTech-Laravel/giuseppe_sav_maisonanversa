@@ -9,6 +9,6 @@
     </p>
 
     <p style="margin:0;color:#8A7D72;font-size:14px;">
-        {{ __('Schrijf u in op de Heritage Letter voor het volgende hoofdstuk.') }}
+        {{ __('Schrijf je in op de Heritage Letter voor het volgende hoofdstuk.') }}
     </p>
 @endcomponent
