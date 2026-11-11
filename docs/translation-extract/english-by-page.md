@@ -1,0 +1,2862 @@
+# English static UI copy (customer-facing)
+
+Strings that change when switching language (NL ↔ EN ↔ FR). Values are the **English** the visitor sees. Dutch key is the translation ID in `lang/en.json` (except opening/aria rows).
+
+- Generated: 2026-11-11
+- Total rows: **901**
+- Missing English in en.json: **20**
+- Excluded: admin UI, CMS/DB bodies (hero, story, legal, journal articles, product copy)
+
+## Counts by section
+
+- **Shared shell (nav, footer, modals, cookie)**: 253
+- **Home + Opening**: 114
+- **Het Huis**: 3
+- **Products**: 15
+- **Ons Verhaal (UI chrome; body is CMS)**: 0
+- **Founding Circle**: 26
+- **Kleedkamer**: 20
+- **Journal (UI chrome; articles are CMS)**: 6
+- **Community hub + feed**: 146
+- **Community events / sessions / clubs**: 50
+- **Club Corner**: 56
+- **Contact**: 13
+- **Legal wrappers (privacy, terms, shipping, care; body is CMS)**: 10
+- **Returns, checkout, verify, guest returns, newsletter**: 29
+- **Member area**: 138
+- **Auth full pages (reset / verify / confirm)**: 3
+- **Settings**: 12
+- **Error pages**: 7
+
+## Shared shell (nav, footer, modals, cookie)
+
+- Route: `(all public + member pages)`
+- Count: 253
+
+- **{{count}} pending**
+  - Key (NL): {{count}} in afwachting
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **{{count}} spots left**
+  - Key (NL): {{count}} plaatsen vrij
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **© 2026 Maison Anversa. All rights reserved.**
+  - Key (NL): © 2026 Maison Anversa. Alle rechten voorbehouden.
+  - File: `components/maison/shell/site-footer.tsx`
+- **← Back**
+  - Key (NL): ← Terug
+  - File: `components/maison/modals/order-modal.tsx`
+- **1 spot left**
+  - Key (NL): 1 plaats vrij
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **6-digit code**
+  - Key (NL): 6-cijferige code
+  - File: `components/maison/modals/auth-modal.tsx`
+- **A European heritage house rooted in Antwerp. We build products for people who understand that the most beautiful things in life take time.**
+  - Key (NL): Een Europees erfgoedhuis geworteld in Antwerpen. Wij bouwen producten voor mensen die begrijpen dat de mooiste dingen in het leven tijd kosten.
+  - File: `components/maison/shell/site-footer.tsx`
+- **A new verification link has been sent to your email address.**
+  - Key (NL): Er is een nieuwe verificatielink naar uw e-mailadres gestuurd.
+  - File: `pages/auth/verify-email.tsx`
+- **Account**
+  - Key (NL): Account
+  - File: `layouts/settings/layout.tsx`
+- **Add a second step at login with a code from an authenticator app on your phone.**
+  - Key (NL): Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op uw telefoon.
+  - File: `pages/member/security.tsx`
+- **Add gift wrapping**
+  - Key (NL): Cadeauverpakking toevoegen
+  - File: `components/maison/modals/order-modal.tsx`
+- **Add tracking number**
+  - Key (NL): Trackingnummer toevoegen
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Address line 2 (optional)**
+  - Key (NL): Adresregel 2 (optioneel)
+  - File: `components/maison/modals/order-modal.tsx`
+- **All places requested**
+  - Key (NL): Alle plaatsen aangevraagd
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Already have an account? Log in**
+  - Key (NL): Al een account? Inloggen
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Amount**
+  - Key (NL): Bedrag
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Analytics**
+  - Key (NL): Analytics
+  - File: `components/maison/cookie-consent-banner.tsx`
+- **and agree to them.**
+  - Key (NL): gelezen en ga ermee akkoord.
+  - File: `components/maison/modals/order-modal.tsx`
+- **and the**
+  - Key (NL): en het
+  - File: `components/maison/legal/legal-page-links.tsx`
+- **Antwerp, Belgium · maisonanversa.com**
+  - Key (NL): Antwerpen, België · maisonanversa.com
+  - File: `components/maison/shell/site-footer.tsx`
+- **Anversa · Antwerp**
+  - Key (NL): Anversa · Antwerpen
+  - File: `components/maison/shell/etching-band.tsx`
+- **Authentication code**
+  - Key (NL): Authenticatiecode
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Available**
+  - Key (NL): Beschikbaar
+  - File: `components/maison/product/product-catalog-card.tsx`
+- **Back**
+  - Key (NL): Terug
+  - File: `components/maison/community/sessions/cancel-session-dialog.tsx`
+- **Back home**
+  - Key (NL): Terug naar huis
+  - File: `pages/errors/403.tsx`
+- **Back to log in**
+  - Key (NL): Terug naar inloggen
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Be the first to receive stories, news and exclusive invitations from Maison Anversa.**
+  - Key (NL): Als eerste verhalen, nieuws en exclusieve uitnodigingen ontvangen van Maison Anversa.
+  - File: `components/maison/home/home-newsletter.tsx`
+- **By signing up you agree to our privacy policy.**
+  - Key (NL): Door u in te schrijven gaat u akkoord met onze privacyverklaring.
+  - File: `components/maison/heritage-letter-form.tsx`
+- **Cancel**
+  - Key (NL): Annuleren
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **Canceled**
+  - Key (NL): Geannuleerd
+  - File: `components/member/chat/chat-session-list.tsx`
+- **Care & Warranty**
+  - Key (NL): Zorg & Garantie
+  - File: `lib/maison-navigation.ts`
+- **Carrier**
+  - Key (NL): Vervoerder
+  - File: `pages/maison/guest-returns/show.tsx`
+- **carries us**
+  - Key (NL): draagt
+  - File: `components/maison/shell/etching-band.tsx`
+- **Certificate of Authenticity**
+  - Key (NL): Certificaat van Echtheid
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Change photo**
+  - Key (NL): Foto wijzigen
+  - File: `pages/member/profile.tsx`
+- **Chat**
+  - Key (NL): Chat
+  - File: `components/maison/community/sessions/chat/session-chat-button.tsx`
+- **Choose your edition number**
+  - Key (NL): Kies uw editienummer
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **City**
+  - Key (NL): Stad
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Close**
+  - Key (NL): Sluiten
+  - File: `components/maison/modals/maison-modal.tsx`
+- **Club**
+  - Key (NL): Club
+  - File: `pages/maison/corner.tsx`
+- **Club Corner** _(missing from en.json)_
+  - Key (NL): Club Corner
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `lib/maison-navigation.ts`
+- **Coming soon**
+  - Key (NL): Binnenkort
+  - File: `components/maison/community/community-courts.tsx`
+- **Community**
+  - Key (NL): Community
+  - File: `components/maison/community/community-tabs.tsx`
+- **Community**
+  - Key (NL): Gemeenschap
+  - File: `components/member/member-nav.tsx`
+- **Confirm new password**
+  - Key (NL): Bevestig nieuw wachtwoord
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Confirm password**
+  - Key (NL): Bevestig wachtwoord
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Confirm return**
+  - Key (NL): Retour bevestigen
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Contact**
+  - Key (NL): Contact
+  - File: `lib/maison-navigation.ts`
+- **Continue**
+  - Key (NL): Doorgaan
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Continue setup**
+  - Key (NL): Setup voortzetten
+  - File: `pages/member/security.tsx`
+- **Cookies**
+  - Key (NL): Cookies
+  - File: `components/maison/cookie-consent-banner.tsx`
+- **Country**
+  - Key (NL): Land
+  - File: `components/maison/modals/order-modal.tsx`
+- **Create your account and access your personal dashboard, Heritage Letter and Founding Circle.**
+  - Key (NL): Maak uw account aan en krijg toegang tot uw persoonlijke dashboard, Heritage Letter en Founding Circle.
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Current password**
+  - Key (NL): Huidig wachtwoord
+  - File: `pages/member/security.tsx`
+- **Dashboard**
+  - Key (NL): Dashboard
+  - File: `components/maison/shell/auth-menu.tsx`
+- **Date**
+  - Key (NL): Datum
+  - File: `components/maison/community/sessions/session-schedule-fields.tsx`
+- **Details**
+  - Key (NL): Gegevens
+  - File: `components/maison/modals/order-modal.tsx`
+- **Digital Heritage Passport**
+  - Key (NL): Digitaal Heritage Passport
+  - File: `components/member/member-nav.tsx`
+- **Disable 2FA**
+  - Key (NL): 2FA uitschakelen
+  - File: `pages/member/security.tsx`
+- **Discover Heritage Nº 001 →**
+  - Key (NL): Ontdek Heritage Nº 001 →
+  - File: `pages/errors/403.tsx`
+- **Dressing Room**
+  - Key (NL): Kleedkamer
+  - File: `lib/maison-navigation.ts`
+- **Early access · Exclusive updates · Free**
+  - Key (NL): Vroege toegang · Exclusieve updates · Gratis
+  - File: `components/maison/modals/newsletter-modal.tsx`
+- **Edition number**
+  - Key (NL): Editienummer
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Edition number (e.g. 7)**
+  - Key (NL): Editienummer (bijv. 7)
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Edition numbers could not be loaded.**
+  - Key (NL): Editienummers konden niet worden geladen.
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **Edition range**
+  - Key (NL): Editierange
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **Email**
+  - Key (NL): E-mail
+  - File: `components/maison/modals/order-modal.tsx`
+- **Email address**
+  - Key (NL): E-mailadres
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Email preferences**
+  - Key (NL): E-mailvoorkeuren
+  - File: `components/member/member-nav.tsx`
+- **Enable 2FA**
+  - Key (NL): 2FA inschakelen
+  - File: `pages/member/security.tsx`
+- **Engraved in the leather**
+  - Key (NL): Gegraveerd in het leder
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Enter one of your recovery codes to continue.**
+  - Key (NL): Voer een van uw herstelcodes in om verder te gaan.
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Enter the code from your authenticator app to continue.**
+  - Key (NL): Voer de code in van uw authenticator-app om verder te gaan.
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Enter the code from your email and choose a new password.**
+  - Key (NL): Voer de code uit uw e-mail in en kies een nieuw wachtwoord.
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Enter your email address and we will send you a one-time code to reset your password.**
+  - Key (NL): Vul uw e-mailadres in en wij sturen u een eenmalige code om uw wachtwoord opnieuw in te stellen.
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Events**
+  - Key (NL): Events
+  - File: `components/member/member-nav.tsx`
+- **Expected refund amount**
+  - Key (NL): Verwacht terugbetalingsbedrag
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Explore**
+  - Key (NL): Verkennen
+  - File: `lib/maison-navigation.ts`
+- **FAQ**
+  - Key (NL): FAQ
+  - File: `lib/maison-navigation.ts`
+- **Follow Us**
+  - Key (NL): Volg Ons
+  - File: `lib/maison-navigation.ts`
+- **Forgot password**
+  - Key (NL): Wachtwoord vergeten
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Forgot password?**
+  - Key (NL): Wachtwoord vergeten?
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Founder · Antwerp**
+  - Key (NL): Oprichter · Antwerpen
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Founding Circle** _(missing from en.json)_
+  - Key (NL): Founding Circle
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key) | also: components/member/member-nav.tsx; lib/maison-navigation.ts; pages/maison/community.tsx; pages/member/circle.tsx; pages/member/dashboard.tsx; pages/member/passport.tsx
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **Founding Circle · Since {{since}}**
+  - Key (NL): Founding Circle · sinds {{since}}
+  - File: `pages/maison/verify.tsx`
+- **Founding Edition — 100 numbered pieces**
+  - Key (NL): Founding Edition — 100 Genummerde Stuks
+  - File: `components/maison/shell/site-topbar.tsx`
+- **From**
+  - Key (NL): Van
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Full**
+  - Key (NL): Volzet
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Full name**
+  - Key (NL): Volledige naam
+  - File: `components/maison/modals/order-modal.tsx`
+- **Gender**
+  - Key (NL): Geslacht
+  - File: `components/gender-select.tsx`
+- **Gift message (optional)**
+  - Key (NL): Cadeauboodschap (optioneel)
+  - File: `components/maison/modals/order-modal.tsx`
+- **Gift packaging**
+  - Key (NL): Cadeauverpakking
+  - File: `components/maison/modals/order-modal.tsx`
+- **Go to payment —**
+  - Key (NL): Ga naar betaling —
+  - File: `components/maison/modals/order-modal.tsx`
+- **Heritage Letter**
+  - Key (NL): Heritage Letter
+  - File: `components/maison/shell/site-footer.tsx`
+- **Heritage Letter · Become a member · Dashboard**
+  - Key (NL): Heritage Letter · Lid worden · Dashboard
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Heritage Nº 001** _(missing from en.json)_
+  - Key (NL): Heritage Nº 001
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key) | also: components/maison/product/product-gallery.tsx
+  - File: `components/maison/home/home-product.tsx`
+- **Heritage Nº 001 — Founding Edition**
+  - Key (NL): Heritage Nº 001 — Founding Edition
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Hide password**
+  - Key (NL): Wachtwoord verbergen
+  - File: `components/maison/modals/modal-password-input.tsx`
+- **Holder**
+  - Key (NL): Houder
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **How can we help you?**
+  - Key (NL): Hoe kunnen wij u helpen?
+  - File: `components/maison/shell/contact-dock.tsx`
+- **I confirm that I want to return these items.**
+  - Key (NL): Ik bevestig dat ik deze artikelen wil retourneren.
+  - File: `pages/maison/guest-returns/create.tsx`
+- **I have read the**
+  - Key (NL): Ik heb de
+  - File: `components/maison/modals/order-modal.tsx`
+- **I have read the Terms & Conditions and the Return Policy and agree to them.**
+  - Key (NL): Ik heb de Algemene voorwaarden en het Retourbeleid gelezen en ga ermee akkoord.
+  - File: `components/maison/modals/order-modal.tsx`
+- **incl. 21% VAT**
+  - Key (NL): incl. 21% btw
+  - File: `components/maison/modals/order-modal.tsx`
+- **Include everything that came with it: box, Heritage Passport, cards and accessories.**
+  - Key (NL): Stuur alles mee wat erbij hoorde: doos, Heritage Passport, kaarten en accessoires.
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Instagram**
+  - Key (NL): Instagram
+  - File: `lib/maison-navigation.ts`
+- **Instructions**
+  - Key (NL): Instructies
+  - File: `pages/maison/guest-returns/show.tsx`
+- **is an original, hand-finished heritage piece, individually numbered**
+  - Key (NL): een origineel, met de hand afgewerkt erfgoedstuk is, individueel genummerd
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Items**
+  - Key (NL): Artikelen
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Join**
+  - Key (NL): Doe mee
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Join**
+  - Key (NL): Word Lid
+  - File: `components/maison/heritage-letter-form.tsx`
+- **Journal** _(missing from en.json)_
+  - Key (NL): Journal
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `lib/maison-navigation.ts`
+- **Language**
+  - Key (NL): Taal
+  - File: `components/maison/opening/opening.tsx`
+- **Latest inscription**
+  - Key (NL): Laatste inschrijving
+  - File: `components/maison/shell/site-nav.tsx`
+- **Leave session**
+  - Key (NL): Sessie verlaten
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Loading…**
+  - Key (NL): Laden…
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **Log in**
+  - Key (NL): Inloggen
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Log in with authentication code**
+  - Key (NL): Inloggen met authenticatiecode
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Log in with recovery code**
+  - Key (NL): Inloggen met herstelcode
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Log in with your username or email address and password to access your Maison Anversa account.**
+  - Key (NL): Log in met uw gebruikersnaam of e-mailadres en wachtwoord om toegang te krijgen tot uw Maison Anversa-account.
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Log out**
+  - Key (NL): Uitloggen
+  - File: `components/maison/shell/auth-menu.tsx`
+- **Maison Anversa — help**
+  - Key (NL): Maison Anversa — hulp
+  - File: `components/maison/shell/contact-dock.tsx`
+- **Maison Anversa · Antwerp · MMXXVI**
+  - Key (NL): Maison Anversa · Antwerpen · MMXXVI
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Maison Anversa · Become a member**
+  - Key (NL): Maison Anversa · Lid worden
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Marketing**
+  - Key (NL): Marketing
+  - File: `components/maison/cookie-consent-banner.tsx`
+- **Member**
+  - Key (NL): Lid
+  - File: `components/member/member-nav.tsx`
+- **Member passport**
+  - Key (NL): Lidpaspoort
+  - File: `components/member/member-nav.tsx`
+- **Membership**
+  - Key (NL): Lidmaatschap
+  - File: `pages/maison/verify.tsx`
+- **Menu**
+  - Key (NL): Menu
+  - File: `components/maison/shell/site-nav.tsx`
+- **Message**
+  - Key (NL): Boodschap
+  - File: `components/maison/modals/order-modal.tsx`
+- **Monogram (3 letters)**
+  - Key (NL): Monogram (3 letters)
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **My Heritage**
+  - Key (NL): Mijn Heritage
+  - File: `components/member/member-nav.tsx`
+- **Name**
+  - Key (NL): Naam
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Name of the holder**
+  - Key (NL): Naam van de houder
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Necessary**
+  - Key (NL): Noodzakelijk
+  - File: `components/maison/cookie-consent-banner.tsx`
+- **New password**
+  - Key (NL): Nieuw wachtwoord
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Next — Payment**
+  - Key (NL): Volgende — Betaling
+  - File: `components/maison/modals/order-modal.tsx`
+- **Next page**
+  - Key (NL): Volgende pagina
+  - File: `components/maison/journal/journal-pagination.tsx`
+- **Nº {{number}}**
+  - Key (NL): Nr. {{number}}
+  - File: `components/maison/community/feed-post-card.tsx`
+- **No account yet? Register**
+  - Key (NL): Nog geen account? Registreren
+  - File: `components/maison/modals/auth-modal.tsx`
+- **No edition found for this search.**
+  - Key (NL): Geen editie gevonden voor deze zoekopdracht.
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **No edition numbers found.**
+  - Key (NL): Geen editienummers gevonden.
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **No spam. Only what truly matters. Unsubscribe anytime.**
+  - Key (NL): Geen spam. Alleen wat er echt toe doet. Uitschrijven kan altijd.
+  - File: `components/maison/modals/newsletter-modal.tsx`
+- **No tracking yet**
+  - Key (NL): Nog geen tracking
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Notifications**
+  - Key (NL): Meldingen
+  - File: `components/member/member-nav.tsx`
+- **Open**
+  - Key (NL): Vrij
+  - File: `components/maison/community/sessions/player-slots.tsx`
+- **Optional comment**
+  - Key (NL): Optionele toelichting
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Orders**
+  - Key (NL): Bestellingen
+  - File: `components/member/member-nav.tsx`
+- **Our Story**
+  - Key (NL): Ons Verhaal
+  - File: `components/maison/home/home-story.tsx`
+- **Password**
+  - Key (NL): Wachtwoord
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Payment**
+  - Key (NL): Betaling
+  - File: `components/maison/modals/order-modal.tsx`
+- **Payment could not be started. Please try again.**
+  - Key (NL): Betaling kon niet worden gestart. Probeer opnieuw.
+  - File: `components/maison/modals/order-modal.tsx`
+- **Payment method**
+  - Key (NL): Betaalmethode
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Pending**
+  - Key (NL): In afwachting
+  - File: `components/maison/community/sessions/player-slots.tsx`
+- **Phone**
+  - Key (NL): Telefoon
+  - File: `components/maison/modals/order-modal.tsx`
+- **Phone number (optional)**
+  - Key (NL): Telefoonnummer (optioneel)
+  - File: `components/maison/modals/order-modal.tsx`
+- **Please choose an available edition number.**
+  - Key (NL): Kies a.u.b. een beschikbaar editienummer.
+  - File: `components/maison/modals/order-modal.tsx`
+- **Please enter your contact and shipping details.**
+  - Key (NL): Vul a.u.b. uw contact- en verzendgegevens in.
+  - File: `components/maison/modals/order-modal.tsx`
+- **Postal code**
+  - Key (NL): Postcode
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Press**
+  - Key (NL): Pers
+  - File: `lib/maison-navigation.ts`
+- **Previous page**
+  - Key (NL): Vorige pagina
+  - File: `components/maison/journal/journal-pagination.tsx`
+- **Privacy Policy**
+  - Key (NL): Privacybeleid
+  - File: `components/maison/heritage-letter-form.tsx`
+- **Product**
+  - Key (NL): Product
+  - File: `components/maison/modals/order-modal.tsx`
+- **Products**
+  - Key (NL): Producten
+  - File: `lib/maison-navigation.ts`
+- **Profile**
+  - Key (NL): Profiel
+  - File: `components/maison/shell/auth-menu.tsx`
+- **Profile & account**
+  - Key (NL): Profiel & account
+  - File: `components/member/member-nav.tsx`
+- **Reason (optional)**
+  - Key (NL): Reden (optioneel)
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Recovery · Secure and discreet**
+  - Key (NL): Herstel · Veilig en discreet
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Recovery code**
+  - Key (NL): Herstelcode
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Reference**
+  - Key (NL): Referentie
+  - File: `pages/maison/checkout-success.tsx`
+- **Refund completed**
+  - Key (NL): Terugbetaling voltooid
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Register**
+  - Key (NL): Registreren
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Register listing**
+  - Key (NL): Registervermelding
+  - File: `components/member/member-nav.tsx`
+- **Registration closed**
+  - Key (NL): Inschrijving gesloten
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Remember me**
+  - Key (NL): Onthoud mij
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Remove**
+  - Key (NL): Verwijderen
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Request another code**
+  - Key (NL): Andere code aanvragen
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Request declined**
+  - Key (NL): Aanvraag geweigerd
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Request pending**
+  - Key (NL): Aanvraag in behandeling
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Resend verification email**
+  - Key (NL): Verificatie-e-mail opnieuw versturen
+  - File: `pages/auth/verify-email.tsx`
+- **Reservations are temporarily paused.**
+  - Key (NL): Reserveren is tijdelijk gepauzeerd.
+  - File: `components/maison/home/home-preorder.tsx`
+- **Result**
+  - Key (NL): Uitslag
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Return**
+  - Key (NL): Retour
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Return Policy**
+  - Key (NL): Retourbeleid
+  - File: `components/maison/modals/order-modal.tsx`
+- **Return shipping costs are yours. We recommend insured shipping with tracking.**
+  - Key (NL): De kosten van de retourzending zijn voor jou. We raden een verzekerde zending met tracking aan.
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Returns**
+  - Key (NL): Retourneren
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Sample — final certificate upon delivery**
+  - Key (NL): Voorbeeld — definitief certificaat bij levering
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **Save password**
+  - Key (NL): Wachtwoord opslaan
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Save preferences**
+  - Key (NL): Voorkeuren opslaan
+  - File: `components/maison/cookie-consent-banner.tsx`
+- **Search by edition number**
+  - Key (NL): Zoek op editienummer
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **Secure payment via Stripe · SSL encrypted ·**
+  - Key (NL): Beveiligde betaling via Stripe · SSL-versleuteld ·
+  - File: `components/maison/modals/order-modal.tsx`
+- **Security**
+  - Key (NL): Beveiliging
+  - File: `components/maison/shell/auth-menu.tsx`
+- **Security · Extra verification**
+  - Key (NL): Beveiliging · Extra verificatie
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Send code**
+  - Key (NL): Verstuur code
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Session**
+  - Key (NL): Sessie
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Session complete**
+  - Key (NL): Sessie afgerond
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Session full**
+  - Key (NL): Sessie compleet
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Sessions**
+  - Key (NL): Sessies
+  - File: `components/member/chat/chat-session-list.tsx`
+- **Set new password**
+  - Key (NL): Nieuw wachtwoord instellen
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Ship by**
+  - Key (NL): Versturen tot
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Ship the item within 14 days to:**
+  - Key (NL): Stuur het artikel binnen 14 dagen naar:
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Shipping & Returns**
+  - Key (NL): Verzending & Retour
+  - File: `lib/maison-navigation.ts`
+- **Shipping address**
+  - Key (NL): Verzendadres
+  - File: `components/maison/modals/order-modal.tsx`
+- **Shipping charged later — estimate {{min}}–{{max}} €.**
+  - Key (NL): Verzending later in rekening gebracht — indicatie {{min}}–{{max}} €.
+  - File: `components/maison/modals/order-modal.tsx`
+- **Shipping included in the EU (indicative).**
+  - Key (NL): Verzending inbegrepen in de EU (indicatie).
+  - File: `components/maison/modals/order-modal.tsx`
+- **Show password**
+  - Key (NL): Wachtwoord tonen
+  - File: `components/maison/modals/modal-password-input.tsx`
+- **Sign up and be the first to access Heritage Nº 001 and all future releases from Maison Anversa.**
+  - Key (NL): Schrijf u in en ontvang als eerste toegang tot Heritage Nº 001 en alle toekomstige releases van Maison Anversa.
+  - File: `components/maison/modals/newsletter-modal.tsx`
+- **Sign up for the Heritage Letter**
+  - Key (NL): Schrijf in voor Heritage Letter
+  - File: `components/maison/home/home-preorder.tsx`
+- **Skip to content**
+  - Key (NL): Ga naar de inhoud
+  - File: `layouts/frontend-layout.tsx`
+- **Status**
+  - Key (NL): Status
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Street and number**
+  - Key (NL): Straat en huisnummer
+  - File: `components/maison/modals/order-modal.tsx`
+- **Summary**
+  - Key (NL): Samenvatting
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Support**
+  - Key (NL): Support
+  - File: `lib/maison-navigation.ts`
+- **Terms**
+  - Key (NL): Voorwaarden
+  - File: `components/maison/modals/order-modal.tsx`
+- **Terms & Conditions**
+  - Key (NL): Algemene voorwaarden
+  - File: `components/maison/modals/order-modal.tsx`
+- **The**
+  - Key (NL): De
+  - File: `components/maison/home/home-circle.tsx`
+- **The city that**
+  - Key (NL): De stad die ons
+  - File: `components/maison/shell/etching-band.tsx`
+- **The first 100**
+  - Key (NL): De eerste 100
+  - File: `components/maison/home/home-circle.tsx`
+- **The Founding Edition is produced in a single limited production run. Delivery times are indicative.**
+  - Key (NL): De Founding Edition wordt in één beperkte productieronde vervaardigd. Levertermijnen zijn indicatief.
+  - File: `components/maison/modals/order-modal.tsx`
+- **The Heritage Letter**
+  - Key (NL): De Heritage Letter
+  - File: `components/maison/home/home-newsletter.tsx`
+- **The House**
+  - Key (NL): Het Huis
+  - File: `components/maison/product/product-related.tsx`
+- **The Register**
+  - Key (NL): Het register
+  - File: `components/maison/shell/site-nav.tsx`
+- **This certifies that the work described below**
+  - Key (NL): Hiermee wordt verklaard dat het hieronder beschreven werk
+  - File: `components/maison/modals/certificate-modal.tsx`
+- **This edition number is no longer available. Please choose another.**
+  - Key (NL): Dit editienummer is niet meer beschikbaar. Kies een ander nummer.
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **Total**
+  - Key (NL): Totaal
+  - File: `components/maison/modals/order-modal.tsx`
+- **Tracking number**
+  - Key (NL): Trackingnummer
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Two-factor authentication**
+  - Key (NL): Tweestapsverificatie
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Unknown club**
+  - Key (NL): Onbekende club
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Upcoming sessions**
+  - Key (NL): Komende sessies
+  - File: `pages/maison/clubs/show.tsx`
+- **Update password**
+  - Key (NL): Wachtwoord bijwerken
+  - File: `pages/member/security.tsx`
+- **Upload photo**
+  - Key (NL): Foto uploaden
+  - File: `pages/member/profile.tsx`
+- **Use a long, unique password. You will need your current password to change it.**
+  - Key (NL): Gebruik een lang, uniek wachtwoord. U hebt uw huidige wachtwoord nodig om het te wijzigen.
+  - File: `pages/member/security.tsx`
+- **Username**
+  - Key (NL): Gebruikersnaam
+  - File: `pages/member/profile.tsx`
+- **Username / Email**
+  - Key (NL): Gebruikersnaam / E-mail
+  - File: `components/maison/modals/auth-modal.tsx`
+- **View the Register**
+  - Key (NL): Bekijk het register
+  - File: `components/maison/circle/circle-portal.tsx`
+- **We use necessary cookies for the site. Analytics and marketing load only after your consent.**
+  - Key (NL): Wij gebruiken noodzakelijke cookies voor de site. Analytics en marketing laden alleen na uw toestemming.
+  - File: `components/maison/cookie-consent-banner.tsx`
+- **We will contact you about return shipping at our expense.**
+  - Key (NL): We nemen contact met je op over de retourzending op onze kosten.
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Website**
+  - Key (NL): Website
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Welcome to the Heritage Letter.**
+  - Key (NL): Welkom bij de Heritage Letter.
+  - File: `components/maison/heritage-letter-form.tsx`
+- **What would you like to return?**
+  - Key (NL): Wat wil je retourneren?
+  - File: `pages/maison/guest-returns/create.tsx`
+- **When enabled, you will be prompted for a secure code during login. This code comes from a TOTP-supported application on your phone.**
+  - Key (NL): Wanneer ingeschakeld, wordt u bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op uw telefoon.
+  - File: `pages/member/security.tsx`
+- **Withdraw request**
+  - Key (NL): Aanvraag intrekken
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Working…**
+  - Key (NL): Bezig…
+  - File: `components/maison/contact/bureau-form.tsx`
+- **Yes · no price on packing slip**
+  - Key (NL): Ja · geen prijs op pakbon
+  - File: `components/maison/modals/order-modal.tsx`
+- **You can select available numbers. Not for sale, reserved, or sold cannot be selected.**
+  - Key (NL): Beschikbare nummers kunt u selecteren. Niet te koop, gereserveerd of verkocht zijn niet selecteerbaar.
+  - File: `components/maison/modals/edition-picker-modal.tsx`
+- **You will be prompted for a secure code during login, which you can retrieve from a TOTP-supported application on your phone.**
+  - Key (NL): U wordt bij het inloggen gevraagd om een beveiligingscode, die u uit een TOTP-ondersteunde app op uw telefoon haalt.
+  - File: `pages/member/security.tsx`
+- **You will be redirected to our secure payment page. Payment via Stripe.**
+  - Key (NL): U wordt doorgestuurd naar onze beveiligde betaalpagina. Betaling via Stripe.
+  - File: `components/maison/modals/order-modal.tsx`
+- **You will receive a confirmation shortly.**
+  - Key (NL): U ontvangt binnenkort een bevestiging.
+  - File: `components/maison/heritage-letter-form.tsx`
+- **Your data is handled securely. Only what is needed for your Maison Anversa account.**
+  - Key (NL): Uw gegevens worden veilig behandeld. Alleen wat nodig is voor uw Maison Anversa-account.
+  - File: `components/maison/modals/auth-modal.tsx`
+- **Your email address**
+  - Key (NL): Uw e-mailadres
+  - File: `components/maison/heritage-letter-form.tsx`
+- **Your name**
+  - Key (NL): Uw naam
+  - File: `components/maison/heritage-letter-form.tsx`
+- **Your refund has been processed. The amount will appear on your account within a few business days.**
+  - Key (NL): Uw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op uw rekening.
+  - File: `pages/maison/guest-returns/show.tsx`
+- **Yusuf Savran**
+  - Key (NL): Yusuf Savran
+  - File: `components/maison/community/feed-sidebar.tsx`
+
+## Home + Opening
+
+- Route: `/{locale}/`
+- Count: 114
+
+- **.**
+  - Key (NL): nodig.
+  - File: `components/maison/home/home-intro.tsx`
+- **{{count}} open sessions this week**
+  - Key (NL): {{count}} open sessies deze week
+  - File: `components/maison/home/home-sessions.tsx`
+- **+ Plan a session**
+  - Key (NL): + Plan een sessie
+  - File: `components/maison/home/home-sessions.tsx`
+- **A city of**
+  - Key (NL): Een stad van
+  - File: `components/maison/home/home-antwerp.tsx`
+- **A house of**
+  - Key (NL): Een huis van
+  - File: `components/maison/home/home-antwerp.tsx`
+- **a Racket.**
+  - Key (NL): een Racket.
+  - File: `components/maison/home/home-unboxing.tsx`
+- **After the coffee, the court.**
+  - Key (NL): Na de koffie, de baan.
+  - File: `components/maison/home/home-sessions.tsx`
+- **Antwerp · Belgium**
+  - Key (NL): Antwerp · Belgium
+  - File: `components/maison/home/home-product.tsx`
+- **Antwerp is no accidental choice. For centuries a city of craftsmen, merchants and artists — from diamond cutters to master carpenters. A place where patience, precision and beauty go hand in hand.**
+  - Key (NL): Antwerpen is geen toevallige keuze. Eeuwenlang een stad van ambachtslieden, handelaren en kunstenaars — van diamantslijpers tot meester-timmerlieden. Een plaats waar geduld, precisie en schoonheid hand in hand gaan.
+  - File: `components/maison/home/home-antwerp.tsx`
+- **Antwerp.**
+  - Key (NL): Antwerpen.
+  - File: `components/maison/home/home-story.tsx`
+- **Atelier**
+  - Source: OPENING_ROOMS[6].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **available**
+  - Source: OPENING_COPY.en.tileAvailable
+  - File: `components/maison/opening/opening-data.ts`
+- **Available**
+  - Source: OPENING_COPY.en.available
+  - File: `components/maison/opening/opening-data.ts`
+- **Bibliothèque**
+  - Source: OPENING_ROOMS[5].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **Built for**
+  - Key (NL): Gebouwd voor
+  - File: `components/maison/home/home-story.tsx`
+- **Bureau**
+  - Source: OPENING_ROOMS[1].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **carries us**
+  - Key (NL): ons draagt
+  - File: `components/maison/home/home-antwerp.tsx`
+- **Choose your number**
+  - Source: OPENING_COPY.en.chooseNumber
+  - File: `components/maison/opening/opening-data.ts`
+- **City that**
+  - Key (NL): Stad die
+  - File: `components/maison/home/home-antwerp.tsx`
+- **Claim Nº {n}**
+  - Source: OPENING_COPY.en.claimNumber
+  - File: `components/maison/opening/opening-data.ts`
+- **Club Corner**
+  - Source: OPENING_ROOMS[7].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **Community**
+  - Source: OPENING_ROOMS[4].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **Community · Sessions**
+  - Key (NL): Community · Sessies
+  - File: `components/maison/home/home-sessions.tsx`
+- **Contact**
+  - Source: OPENING_ROOMS[1].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **Discover the full experience →**
+  - Key (NL): Ontdek de volledige ervaring →
+  - File: `components/maison/home/home-unboxing.tsx`
+- **Discover the Racket →**
+  - Key (NL): Ontdek het Racket →
+  - File: `components/maison/home/home-product.tsx`
+- **Each Heritage Nº 001 package is a complete experience. Every element is intentionally chosen. The order is never accidental.**
+  - Key (NL): Elk Heritage Nº 001 pakket is een volledige ervaring. Elk element is intentioneel gekozen. De volgorde is nooit toevallig.
+  - File: `components/maison/home/home-unboxing.tsx`
+- **Each piece individually**
+  - Key (NL): Elk stuk individueel
+  - File: `components/maison/home/home-product.tsx`
+- **Enter the house**
+  - Source: OPENING_COPY.en.enterHouse
+  - File: `components/maison/opening/opening-data.ts`
+- **Europe**
+  - Key (NL): Europa
+  - File: `components/maison/home/home-product.tsx`
+- **Every lit window is a room. Choose one to step inside.**
+  - Source: OPENING_COPY.en.houseHint
+  - File: `components/maison/opening/opening-data.ts`
+- **Every member of the Founding Circle is inscribed in the official register of the House, in the order they joined. Once all one hundred places are taken, the first chapter closes for good.**
+  - Key (NL): Elk lid van de Founding Circle wordt ingeschreven in het officiële register van het Huis, in de volgorde waarin zij toetraden. Zodra alle honderd plaatsen zijn ingenomen, sluit het eerste hoofdstuk voorgoed.
+  - File: `components/maison/home/home-register.tsx`
+- **Founding**
+  - Key (NL): Oprichting
+  - File: `components/maison/home/home-antwerp.tsx`
+- **Founding Circle**
+  - Source: OPENING_ROOMS[2].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **Founding Edition** _(missing from en.json)_
+  - Key (NL): Founding Edition
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `components/maison/home/home-product.tsx`
+- **Founding Edition Progress**
+  - Key (NL): Voortgang Founding Edition
+  - File: `components/maison/home/home-preorder.tsx`
+- **Full upfront · Including Heritage Experience**
+  - Key (NL): Volledig vooraf · Inclusief Heritage Ervaring
+  - File: `components/maison/home/home-preorder.tsx`
+- **Galerie**
+  - Source: OPENING_ROOMS[3].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **generations.**
+  - Key (NL): generaties.
+  - File: `components/maison/home/home-story.tsx`
+- **Good afternoon from Antwerp**
+  - Source: OPENING_COPY.en.greeting.afternoon
+  - File: `components/maison/opening/opening-data.ts`
+- **Good evening from Antwerp**
+  - Source: OPENING_COPY.en.greeting.evening
+  - File: `components/maison/opening/opening-data.ts`
+- **Good evening from Antwerp**
+  - Source: OPENING_COPY.en.greeting.night
+  - File: `components/maison/opening/opening-data.ts`
+- **Good morning from Antwerp**
+  - Source: OPENING_COPY.en.greeting.morning
+  - File: `components/maison/opening/opening-data.ts`
+- **Heritage Letter**
+  - Key (NL): de Heritage Letter
+  - File: `components/maison/home/home-newsletter.tsx`
+- **Heritage Nº 001**
+  - Source: OPENING_ROOMS[3].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **Heritage Nº 001 is available via pre-order. You pay in full upfront and receive your unique edition number. The Founding Edition is produced in a single limited production run of 100 pieces. Orders are delivered after final quality control and production approval.**
+  - Key (NL): Heritage Nº 001 is beschikbaar via pre-order. U betaalt volledig vooraf en ontvangt uw unieke editienummer. De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie.
+  - File: `components/maison/home/home-preorder.tsx`
+- **heritage.**
+  - Key (NL): erfgoed.
+  - File: `components/maison/home/home-antwerp.tsx`
+- **in Antwerp**
+  - Key (NL): in Antwerpen
+  - File: `components/maison/home/home-antwerp.tsx`
+- **In your club**
+  - Source: OPENING_ROOMS[7].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **It needs more**
+  - Key (NL): Zij heeft meer
+  - File: `components/maison/home/home-intro.tsx`
+- **Join the**
+  - Key (NL): Word lid van
+  - File: `components/maison/home/home-newsletter.tsx`
+- **Join the list**
+  - Source: OPENING_COPY.en.joinList
+  - File: `components/maison/opening/opening-data.ts`
+- **Journal**
+  - Source: OPENING_ROOMS[5].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **Le Cercle**
+  - Source: OPENING_ROOMS[2].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **Limited to {total} numbered rackets · {n} numbers available**
+  - Source: OPENING_COPY.en.limit
+  - File: `components/maison/opening/opening-data.ts`
+- **Maison Anversa**
+  - Key (NL): (hardcoded aria-label)
+  - Kind: hardcoded aria-label
+  - File: `components/maison/opening/opening-scene.tsx`
+- **Maison Anversa carries that spirit. Each racket is designed with the same reverence for material and detail that defined this city for centuries. Antwerp is not our background — it is our conviction.**
+  - Key (NL): Maison Anversa draagt die geest in zich. Elk racket wordt ontworpen met dezelfde eerbied voor materiaal en detail die deze stad eeuwenlang definieerde. Antwerpen is niet onze achtergrond — het is onze overtuiging.
+  - File: `components/maison/home/home-antwerp.tsx`
+- **Maison Anversa is a European heritage house. Not a sports brand. A house — with values, with stories, with products that people keep and do not discard.**
+  - Key (NL): Maison Anversa is een Europees erfgoedhuis. Niet een sportmerk. Een huis — met waarden, met verhalen, met producten die mensen bewaren en niet weggooien.
+  - File: `components/maison/home/home-story.tsx`
+- **Maison Archive**
+  - Source: OPENING_COPY.en.archive
+  - File: `components/maison/opening/opening-data.ts`
+- **Maison Archive**
+  - Source: OPENING_COPY.en.tileArchive
+  - File: `components/maison/opening/opening-data.ts`
+- **Manually updated · live progress active at launch**
+  - Key (NL): Handmatig bijgewerkt · live-voortgang actief bij lancering
+  - File: `components/maison/home/home-preorder.tsx`
+- **masters.**
+  - Key (NL): meesters.
+  - File: `components/maison/home/home-antwerp.tsx`
+- **meaning**
+  - Key (NL): betekenis
+  - File: `components/maison/home/home-intro.tsx`
+- **More about the Founding Circle →**
+  - Key (NL): Meer over de Founding Circle →
+  - File: `components/maison/home/home-circle.tsx`
+- **More than**
+  - Key (NL): Meer dan
+  - File: `components/maison/home/home-unboxing.tsx`
+- **Next**
+  - Source: OPENING_COPY.en.nextPage
+  - File: `components/maison/opening/opening-data.ts`
+- **Nº {n} — yours, if you claim it.**
+  - Source: OPENING_COPY.en.pickedLine
+  - File: `components/maison/opening/opening-data.ts`
+- **No open sessions at the moment**
+  - Key (NL): Geen open sessies op dit moment
+  - File: `components/maison/home/home-sessions.tsx`
+- **Not the first 100 customers. The first 100 people who believed before everyone knew.**
+  - Key (NL): Niet de eerste 100 klanten. De eerste 100 mensen die geloofden voordat iedereen het wist.
+  - File: `components/maison/home/home-circle.tsx`
+- **number**
+  - Key (NL): nummer
+  - File: `components/maison/home/home-preorder.tsx`
+- **numbered**
+  - Key (NL): genummerd
+  - File: `components/maison/home/home-product.tsx`
+- **Numbers {from}–{to} of {total}**
+  - Source: OPENING_COPY.en.numbersRange
+  - File: `components/maison/opening/opening-data.ts`
+- **One hundred places. One first chapter.**
+  - Key (NL): Honderd plaatsen. Eén eerste hoofdstuk.
+  - File: `components/maison/home/home-register.tsx`
+- **Open the door again**
+  - Source: OPENING_COPY.en.replay
+  - File: `components/maison/opening/opening-data.ts`
+- **Our Story**
+  - Source: OPENING_ROOMS[6].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **Page {n}**
+  - Source: OPENING_COPY.en.pageLabel
+  - File: `components/maison/opening/opening-data.ts`
+- **Pieces**
+  - Key (NL): Stuks
+  - File: `components/maison/home/home-antwerp.tsx`
+- **Pieces Only**
+  - Key (NL): Stuks Alleen
+  - File: `components/maison/home/home-product.tsx`
+- **Places inscribed**
+  - Key (NL): Plaatsen ingeschreven
+  - File: `components/maison/home/home-register.tsx`
+- **Plan the first session of the week.**
+  - Key (NL): Plan de eerste sessie van de week.
+  - File: `components/maison/home/home-sessions.tsx`
+- **Pre-Order Now Open**
+  - Key (NL): Pre-Order Nu Open
+  - File: `components/maison/home/home-preorder.tsx`
+- **Previous**
+  - Source: OPENING_COPY.en.previousPage
+  - File: `components/maison/opening/opening-data.ts`
+- **Read our story →**
+  - Key (NL): Lees ons verhaal →
+  - File: `components/maison/home/home-story.tsx`
+- **Reception**
+  - Source: OPENING_ROOMS[0].text.en.subtitle
+  - File: `components/maison/opening/opening-data.ts`
+- **Register pages**
+  - Source: OPENING_COPY.en.pagination
+  - File: `components/maison/opening/opening-data.ts`
+- **Reserve**
+  - Key (NL): Reserveer
+  - File: `components/maison/home/home-preorder.tsx`
+- **Reserve Your Number**
+  - Key (NL): Reserveer Uw Nummer
+  - File: `components/maison/home/home-preorder.tsx`
+- **reserved**
+  - Source: OPENING_COPY.en.tileReserved
+  - File: `components/maison/opening/opening-data.ts`
+- **Reserved**
+  - Source: OPENING_COPY.en.reserved
+  - File: `components/maison/opening/opening-data.ts`
+- **Rooted in**
+  - Key (NL): Geworteld in
+  - File: `components/maison/home/home-story.tsx`
+- **Rooted in Antwerp**
+  - Key (NL): Geworteld in Antwerpen
+  - File: `components/maison/home/home-antwerp.tsx`
+- **Salle Commune**
+  - Source: OPENING_ROOMS[4].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **Salon**
+  - Source: OPENING_ROOMS[0].text.en.name
+  - File: `components/maison/opening/opening-data.ts`
+- **Skip**
+  - Source: OPENING_COPY.en.skip
+  - File: `components/maison/opening/opening-data.ts`
+- **The First.**
+  - Key (NL): Het Eerste.
+  - File: `components/maison/home/home-product.tsx`
+- **The Founding Circle Register**
+  - Key (NL): Het Founding Circle-register
+  - File: `components/maison/home/home-register.tsx`
+- **The Founding Edition. Limited to 100 pieces in Europe. Each accompanied by a Heritage Certificate, Passport and a personal letter.**
+  - Key (NL): The Founding Edition. Beperkt tot 100 stuks in Europa. Elk vergezeld van een Heritage Certificaat, Paspoort en een persoonlijke brief.
+  - File: `components/maison/home/home-product.tsx`
+- **The Heritage Experience**
+  - Key (NL): The Heritage Experience
+  - File: `components/maison/home/home-unboxing.tsx`
+- **The house’s own piece**
+  - Source: OPENING_COPY.en.archiveTooltip
+  - File: `components/maison/opening/opening-data.ts`
+- **The Original.**
+  - Key (NL): Het Originele.
+  - File: `components/maison/home/home-product.tsx`
+- **The register**
+  - Source: OPENING_COPY.en.registerTitle
+  - File: `components/maison/opening/opening-data.ts`
+- **The rooms**
+  - Source: OPENING_COPY.en.roomsKicker
+  - File: `components/maison/opening/opening-data.ts`
+- **The world does not need more products.**
+  - Key (NL): De wereld heeft geen extra producten nodig.
+  - File: `components/maison/home/home-intro.tsx`
+- **View all sessions**
+  - Key (NL): Bekijk alle sessies
+  - File: `components/maison/home/home-sessions.tsx`
+- **View certificate sample →**
+  - Key (NL): Bekijk certificaatvoorbeeld →
+  - File: `components/maison/home/home-preorder.tsx`
+- **We are building a home for people who share the same values.**
+  - Key (NL): Wij bouwen een thuis voor mensen die dezelfde waarden delen.
+  - File: `components/maison/home/home-manifesto.tsx`
+- **We are building Maison Anversa.**
+  - Key (NL): Wij bouwen Maison Anversa.
+  - File: `components/maison/home/home-manifesto.tsx`
+- **We are not building a sports brand. We are not building a lifestyle brand.**
+  - Key (NL): Wij bouwen geen sportmerk. Wij bouwen geen lifestylemerk.
+  - File: `components/maison/home/home-manifesto.tsx`
+- **We started with padel because it is the perfect convergence of everything we believe in: community, performance and the satisfaction of something well made.**
+  - Key (NL): Wij begonnen met padel omdat het de perfecte samenkomst is van alles waarin wij geloven: gemeenschap, performance en de voldoening van iets goed gemaakt.
+  - File: `components/maison/home/home-story.tsx`
+- **Welcome to Maison Anversa**
+  - Source: OPENING_COPY.en.dialog
+  - File: `components/maison/opening/opening-data.ts`
+- **Why we exist**
+  - Key (NL): Waarom wij bestaan
+  - File: `components/maison/home/home-intro.tsx`
+- **You're in ✓**
+  - Key (NL): U speelt mee ✓
+  - File: `components/maison/home/home-session-card.tsx`
+- **your**
+  - Key (NL): uw
+  - File: `components/maison/home/home-preorder.tsx`
+- **Yours.**
+  - Key (NL): Het Uwe.
+  - File: `components/maison/home/home-product.tsx`
+
+## Het Huis
+
+- Route: `/{locale}/huis`
+- Count: 3
+
+- **8 rooms · 1 house**
+  - Key (NL): 8 kamers · 1 huis
+  - File: `pages/maison/house.tsx`
+- **Click a room to enter**
+  - Key (NL): Klik een kamer om binnen te treden
+  - File: `pages/maison/house.tsx`
+- **Eight rooms, eight chapters. Step inside by clicking on a space — each room takes you to a part of the house.**
+  - Key (NL): Acht kamers, acht hoofdstukken. Stap binnen door op een ruimte te klikken — elke kamer brengt u naar een deel van het huis.
+  - File: `components/maison/house/maison-floorplan.tsx`
+
+## Products
+
+- Route: `/{locale}/products`
+- Count: 15
+
+- **{{count}} of {{total}} places remaining**
+  - Key (NL): {{count}} van {{total}} plaatsen resterend
+  - File: `components/maison/product/product-detail.tsx`
+- **All statuses**
+  - Key (NL): Alle statussen
+  - File: `components/maison/product/product-catalog-filters.tsx`
+- **available**
+  - Key (NL): beschikbaar
+  - File: `components/maison/product/product-detail.tsx`
+- **De volledige collectie van Maison Anversa — van Heritage Nº 001 tot de volgende hoofdstukken van het huis.** _(missing from en.json)_
+  - Key (NL): De volledige collectie van Maison Anversa — van Heritage Nº 001 tot de volgende hoofdstukken van het huis.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/products/index.tsx`
+- **Discover the full story of Maison Anversa**
+  - Key (NL): Ontdek het volledige verhaal van Maison Anversa
+  - File: `components/maison/product/product-related.tsx`
+- **Every owner of Heritage Nº 001 is inscribed. You choose your own number at checkout.**
+  - Key (NL): Elke eigenaar van Heritage Nº 001 wordt ingeschreven. U kiest zelf uw nummer bij het afrekenen.
+  - File: `components/maison/product/product-detail.tsx`
+- **More from us**
+  - Key (NL): Meer van ons
+  - File: `components/maison/product/product-related.tsx`
+- **No products found.**
+  - Key (NL): Geen producten gevonden.
+  - File: `pages/maison/products/index.tsx`
+- **Numbers still**
+  - Key (NL): Nummers nog
+  - File: `components/maison/product/product-detail.tsx`
+- **Products pagination**
+  - Key (NL): Producten paginering
+  - File: `components/maison/product/product-pagination.tsx`
+- **Reserve Your Number —**
+  - Key (NL): Reserveer Uw Nummer —
+  - File: `components/maison/product/product-detail.tsx`
+- **Search by name or slug…**
+  - Key (NL): Zoek op naam of slug…
+  - File: `components/maison/product/product-catalog-filters.tsx`
+- **Search products**
+  - Key (NL): Zoek producten
+  - File: `components/maison/product/product-catalog-filters.tsx`
+- **Sold out**
+  - Key (NL): Uitverkocht
+  - File: `components/maison/product/product-catalog-card.tsx`
+- **Your place in the Register**
+  - Key (NL): Uw plaats in het register
+  - File: `components/maison/product/product-detail.tsx`
+
+## Ons Verhaal (UI chrome; body is CMS)
+
+- Route: `/{locale}/story`
+- Count: 0
+
+_No static UI keys found in scanned files._
+
+## Founding Circle
+
+- Route: `/{locale}/circle`
+- Count: 26
+
+- **All 100**
+  - Key (NL): Alle 100
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Become a Founding Member — View Heritage Nº 001**
+  - Key (NL): Word Founding Member — Bekijk Heritage Nº 001
+  - File: `pages/maison/circle.tsx`
+- **beginning**
+  - Key (NL): begin
+  - File: `pages/maison/circle.tsx`
+- **Every member is in the official archive. Whether your full name, your first name and initial, or only your number appears in public is your choice.**
+  - Key (NL): Elk lid staat in het officiële archief. Of uw volledige naam, uw voornaam en initiaal, of alleen uw nummer publiek verschijnt, kiest u zelf.
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Inscribed**
+  - Key (NL): Ingeschreven
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Inscribed with a name**
+  - Key (NL): Ingeschreven met naam
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Manage my listing**
+  - Key (NL): Beheer mijn vermelding
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Not the first 100 customers. The first 100 people who believed.**
+  - Key (NL): Niet de eerste 100 klanten. De eerste 100 mensen die geloofden.
+  - File: `pages/maison/circle.tsx`
+- **One hundred places. One first chapter. Every member of the Founding Circle is inscribed in the order in which they found the house, and remains part of its history for as long as the house exists.**
+  - Key (NL): Honderd plaatsen. Eén eerste hoofdstuk. Elk lid van de Founding Circle wordt ingeschreven in de volgorde waarin zij het huis vonden, en blijft deel van de geschiedenis zolang het huis bestaat.
+  - File: `pages/maison/founding-circle/register.tsx`
+- **One hundred places. One first chapter. Every member of the Founding Circle is inscribed in the order in which they found the house.**
+  - Key (NL): Honderd plaatsen. Eén eerste hoofdstuk. Elk lid van de Founding Circle wordt ingeschreven in de volgorde waarin zij het huis vonden.
+  - File: `pages/maison/founding-circle/register.tsx`
+- **One hundred places. See who has supported the house from the beginning, or choose Heritage Nº 001 to reserve your number.**
+  - Key (NL): Honderd plaatsen. Bekijk wie het huis vanaf het begin steunt, of kies Heritage Nº 001 om uw nummer te reserveren.
+  - File: `components/maison/circle/circle-portal.tsx`
+- **Open your digital card and Heritage Passport in your account.**
+  - Key (NL): Open uw digitale kaart en Heritage Passport in uw account.
+  - File: `components/maison/circle/circle-portal.tsx`
+- **Places in total**
+  - Key (NL): Plaatsen in totaal
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Places remaining**
+  - Key (NL): Plaatsen resterend
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Private member**
+  - Key (NL): Privélid
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Reserved**
+  - Key (NL): Gereserveerd
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Show all 100 places**
+  - Key (NL): Toon alle 100 plaatsen
+  - File: `pages/maison/founding-circle/register.tsx`
+- **The Founding Circle**
+  - Key (NL): De Founding Circle
+  - File: `pages/maison/founding-circle/register.tsx`
+- **The Founding Circle is the permanent community of everyone who buys Heritage Nº 001. Your membership is lifelong. Your number is yours — forever. This is not a loyalty program. This is a recognition.**
+  - Key (NL): De Founding Circle is de permanente gemeenschap van iedereen die Heritage Nº 001 koopt. Uw lidmaatschap is levenslang. Uw nummer is van u — voor altijd. Dit is geen loyaliteitsprogramma. Dit is een erkenning.
+  - File: `pages/maison/circle.tsx`
+- **The Official Register**
+  - Key (NL): Het officiële register
+  - File: `components/maison/circle/circle-portal.tsx`
+- **To my card**
+  - Key (NL): Naar mijn kaart
+  - File: `components/maison/circle/circle-portal.tsx`
+- **YOU**
+  - Key (NL): U
+  - File: `pages/maison/founding-circle/register.tsx`
+- **You were there at the**
+  - Key (NL): Jij was er bij het
+  - File: `pages/maison/circle.tsx`
+- **Your Founding Circle card**
+  - Key (NL): Uw Founding Circle-kaart
+  - File: `components/maison/circle/circle-portal.tsx`
+- **Your listing**
+  - Key (NL): Uw vermelding
+  - File: `pages/maison/founding-circle/register.tsx`
+- **Your name, your choice.**
+  - Key (NL): Uw naam, uw keuze.
+  - File: `pages/maison/founding-circle/register.tsx`
+
+## Kleedkamer
+
+- Route: `/{locale}/dressing`
+- Count: 20
+
+- **← Back to the Dressing Room**
+  - Key (NL): ← Terug naar de Kleedkamer
+  - File: `pages/maison/dressing-show.tsx`
+- **Activewear and accessories for the padel player who values quiet luxury. Each piece is designed with the same philosophy as Heritage Nº 001 — materials first, logos never.**
+  - Key (NL): Activewear en accessoires voor de padelspeler die waarde hecht aan stille luxe. Elk stuk is ontworpen met dezelfde filosofie als Heritage Nº 001 — materialen eerst, logo's nooit.
+  - File: `pages/maison/dressing.tsx`
+- **Be the first**
+  - Key (NL): Wees de eerste
+  - File: `pages/maison/dressing.tsx`
+- **Clothing that**
+  - Key (NL): Kleding die
+  - File: `pages/maison/dressing.tsx`
+- **currently**
+  - Key (NL): op dit moment
+  - File: `pages/maison/dressing.tsx`
+- **designed**
+  - Key (NL): ontworpen
+  - File: `pages/maison/dressing.tsx`
+- **For**
+  - Key (NL): Voor
+  - File: `pages/maison/dressing.tsx`
+- **Founding Circle members get 48 hours exclusive access to the Dressing Room collection before the public release.**
+  - Key (NL): Founding Circle leden krijgen 48 uur exclusieve toegang tot de Kleedkamer collectie vóór de openbare release.
+  - File: `pages/maison/dressing.tsx`
+- **No loud logos. No neon. No trends that disappear next season. The Dressing Room is for the player who wants to look refined on and off the court — without ever shouting.**
+  - Key (NL): Geen opvallende logo's. Geen neon. Geen trends die volgende seizoenen verdwijnen. De Kleedkamer is voor de speler die er verzorgd wil uitzien op en naast de baan — zonder ooit te schreeuwen.
+  - File: `pages/maison/dressing.tsx`
+- **on the way**
+  - Key (NL): op weg
+  - File: `pages/maison/dressing.tsx`
+- **Our activewear launches in a limited first edition, alongside the delivery of Heritage Nº 001 in Q1 2027. Founding Circle members get first access.**
+  - Key (NL): Onze activewear verschijnt in een beperkte eerste editie, gelijktijdig met de levering van Heritage Nº 001 in Q1 2027. Leden van de Founding Circle krijgen als eerste toegang.
+  - File: `pages/maison/dressing.tsx`
+- **Room III · Maison Anversa**
+  - Key (NL): Kamer III · Maison Anversa
+  - File: `pages/maison/dressing.tsx`
+- **see it**
+  - Key (NL): ziet
+  - File: `pages/maison/dressing.tsx`
+- **The collection is being**
+  - Key (NL): De collectie wordt
+  - File: `pages/maison/dressing.tsx`
+- **The First Collection**
+  - Key (NL): De Eerste Collectie
+  - File: `pages/maison/dressing.tsx`
+- **The Philosophy**
+  - Key (NL): De Filosofie
+  - File: `pages/maison/dressing.tsx`
+- **to**
+  - Key (NL): die het
+  - File: `pages/maison/dressing.tsx`
+- **to the court**
+  - Key (NL): naar de baan
+  - File: `pages/maison/dressing.tsx`
+- **whispers.**
+  - Key (NL): fluistert.
+  - File: `pages/maison/dressing.tsx`
+- **You might also like**
+  - Key (NL): Ook interessant
+  - File: `pages/maison/dressing-show.tsx`
+
+## Journal (UI chrome; articles are CMS)
+
+- Route: `/{locale}/journal`
+- Count: 6
+
+- **← Back to the Journal**
+  - Key (NL): ← Terug naar het Journal
+  - File: `pages/maison/journal/show.tsx`
+- **Journal pagination**
+  - Key (NL): Journal paginering
+  - File: `components/maison/journal/journal-pagination.tsx`
+- **Read on**
+  - Key (NL): Lees verder
+  - File: `components/maison/journal/journal-card.tsx`
+- **Related stories**
+  - Key (NL): Gerelateerde verhalen
+  - File: `pages/maison/journal/show.tsx`
+- **Stories about sport, culture, design and life. From the world of Maison Anversa.**
+  - Key (NL): Verhalen over sport, cultuur, design en het leven. Vanuit de wereld van Maison Anversa.
+  - File: `pages/maison/journal.tsx`
+- **The**
+  - Key (NL): Het
+  - File: `pages/maison/journal.tsx`
+
+## Community hub + feed
+
+- Route: `/{locale}/community`
+- Count: 146
+
+- **{{count}} members going**
+  - Key (NL): {{count}} leden gaan
+  - File: `components/maison/community/community-events.tsx`
+- **{{sport}} needs at least {{count}} confirmed players to record a result.**
+  - Key (NL): Voor {{sport}} zijn minstens {{count}} bevestigde spelers nodig om een uitslag te registreren.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **1 against 1**
+  - Key (NL): 1 tegen 1
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **1 member going**
+  - Key (NL): 1 lid gaat
+  - File: `components/maison/community/community-events.tsx`
+- **2 against 2**
+  - Key (NL): 2 tegen 2
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **A private space for members of the house. Share your experiences, plan sessions and discover exclusive events.**
+  - Key (NL): Een besloten ruimte voor leden van het huis. Deel uw ervaringen, plan sessies en ontdek exclusieve evenementen.
+  - File: `pages/maison/community.tsx`
+- **Active**
+  - Key (NL): Actief
+  - File: `components/maison/community/community-courts.tsx`
+- **Add a club or corner**
+  - Key (NL): Club of corner toevoegen
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Add image**
+  - Key (NL): Afbeelding toevoegen
+  - File: `components/maison/community/sessions/chat/chat-composer.tsx`
+- **All players receive a notification and an email.**
+  - Key (NL): Alle spelers krijgen een melding en een e-mail.
+  - File: `components/maison/community/sessions/cancel-session-dialog.tsx`
+- **Approve**
+  - Key (NL): Goedkeuren
+  - File: `components/maison/community/sessions/join-requests.tsx`
+- **back,**
+  - Key (NL): terug,
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Breadcrumb**
+  - Key (NL): Kruimelpad
+  - File: `components/maison/community/sessions/session-breadcrumb.tsx`
+- **Browse padel and tennis clubs where members plan sessions.**
+  - Key (NL): Bekijk padel- en tennisclubs waar leden sessies plannen.
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Cancel attendance**
+  - Key (NL): Aanmelding annuleren
+  - File: `components/maison/community/community-events.tsx`
+- **Cancel session**
+  - Key (NL): Sessie annuleren
+  - File: `components/maison/community/sessions/cancel-session-dialog.tsx`
+- **Cancel this session?**
+  - Key (NL): Deze sessie annuleren?
+  - File: `components/maison/community/sessions/cancel-session-dialog.tsx`
+- **Chat message**
+  - Key (NL): Chatbericht
+  - File: `components/maison/community/sessions/chat/chat-composer.tsx`
+- **Choose a club or corner.**
+  - Key (NL): Kies een club of corner.
+  - File: `components/maison/community/sessions/session-draft-preview.tsx`
+- **Choose a date**
+  - Key (NL): Kies een datum
+  - File: `components/maison/community/sessions/session-schedule-fields.tsx`
+- **Choose a time**
+  - Key (NL): Kies een tijdstip
+  - File: `components/maison/community/sessions/session-schedule-fields.tsx`
+- **Choose another club**
+  - Key (NL): Andere club kiezen
+  - File: `components/maison/community/sessions/club-search-field.tsx`
+- **Close session**
+  - Key (NL): Sessie afsluiten
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Club Corner active**
+  - Key (NL): Club Corner actief
+  - File: `components/maison/community/community-courts.tsx`
+- **Club Corners**
+  - Key (NL): Club Corners
+  - File: `components/maison/community/community-courts.tsx`
+- **Club not listed? Add one**
+  - Key (NL): Club niet gevonden? Voeg er een toe
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **comments**
+  - Key (NL): reacties
+  - File: `components/maison/community/feed-post-card.tsx`
+- **Confirm attendance →**
+  - Key (NL): Bevestig deelname →
+  - File: `components/maison/community/community-events.tsx`
+- **Copy link**
+  - Key (NL): Kopieer link
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Decline**
+  - Key (NL): Weigeren
+  - File: `components/maison/community/sessions/join-requests.tsx`
+- **Discover exclusive Maison Anversa events.**
+  - Key (NL): Ontdek exclusieve evenementen van Maison Anversa.
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Download**
+  - Key (NL): Download
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Duration**
+  - Key (NL): Duur
+  - File: `components/maison/community/sessions/session-schedule-fields.tsx`
+- **Event finished**
+  - Key (NL): Evenement afgelopen
+  - File: `components/maison/community/community-events.tsx`
+- **Format**
+  - Key (NL): Formaat
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Founding Member · Nº {{num}}**
+  - Key (NL): Founding Member · Nr. {{num}}
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **Fully booked**
+  - Key (NL): Volgeboekt
+  - File: `components/maison/community/community-events.tsx`
+- **Games**
+  - Key (NL): Games
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Hide**
+  - Key (NL): Verbergen
+  - File: `components/maison/community/feed-post-card.tsx`
+- **Host**
+  - Key (NL): Host
+  - File: `components/maison/community/sessions/chat/chat-members-button.tsx`
+- **Hour**
+  - Key (NL): Uur
+  - File: `components/maison/community/sessions/session-schedule-fields.tsx`
+- **Image unavailable**
+  - Key (NL): Afbeelding niet beschikbaar
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Joined**
+  - Key (NL): Aangesloten
+  - File: `components/maison/community/sessions/player-slots.tsx`
+- **Leave a comment**
+  - Key (NL): Plaats uw reactie
+  - File: `components/maison/community/feed-post-card.tsx`
+- **likes**
+  - Key (NL): likes
+  - File: `components/maison/community/feed-post-card.tsx`
+- **Link copied**
+  - Key (NL): Link gekopieerd
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Lock scoreboard**
+  - Key (NL): Scorebord vergrendelen
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Maison Anversa**
+  - Key (NL): Maison Anversa
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **Maison Anversa Partner Club**
+  - Key (NL): Maison Anversa Partner Club
+  - File: `components/maison/community/partner-badge.tsx`
+- **Manage session**
+  - Key (NL): Sessie beheren
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Match**
+  - Key (NL): Wedstrijd
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Match card**
+  - Key (NL): Wedstrijdkaart
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **member**
+  - Key (NL): lid
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Members**
+  - Key (NL): Leden
+  - File: `components/maison/community/sessions/chat/chat-members-button.tsx`
+- **Members only**
+  - Key (NL): Alleen leden
+  - File: `components/maison/community/community-events.tsx`
+- **Message to the players (optional)**
+  - Key (NL): Bericht aan de spelers (optioneel)
+  - File: `components/maison/community/sessions/cancel-session-dialog.tsx`
+- **Messages**
+  - Key (NL): Berichten
+  - File: `components/maison/community/sessions/chat/chat-message-list.tsx`
+- **Minutes**
+  - Key (NL): Minuten
+  - File: `components/maison/community/sessions/session-schedule-fields.tsx`
+- **Next Event**
+  - Key (NL): Volgende Event
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **No Club Corners published yet.**
+  - Key (NL): Nog geen Club Corners gepubliceerd.
+  - File: `components/maison/community/community-courts.tsx`
+- **No club found for this search.**
+  - Key (NL): Geen club gevonden voor deze zoekopdracht.
+  - File: `components/maison/community/sessions/club-search-field.tsx`
+- **No event yet**
+  - Key (NL): Nog geen event
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **No messages yet**
+  - Key (NL): Nog geen berichten
+  - File: `components/maison/community/sessions/chat/chat-message-list.tsx`
+- **No official result yet.**
+  - Key (NL): Nog geen officiële uitslag.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **No one has booked yet.**
+  - Key (NL): Nog niemand heeft geboekt.
+  - File: `components/maison/community/community-events.tsx`
+- **No players yet**
+  - Key (NL): Nog geen spelers
+  - File: `components/maison/community/sessions/chat/chat-members-button.tsx`
+- **Not a member yet? Buy Heritage Nº 001 and automatically become a Founding Member.**
+  - Key (NL): Nog geen lid? Koop Heritage Nº 001 en word automatisch Founding Member.
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Official result**
+  - Key (NL): Officiële uitslag
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Open the session chat**
+  - Key (NL): Open de sessiechat
+  - File: `components/maison/community/sessions/chat/session-chat-button.tsx`
+- **or**
+  - Key (NL): of
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Organised by {{name}}**
+  - Key (NL): Georganiseerd door {{name}}
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Plan padel sessions with other members of the house.**
+  - Key (NL): Plan padelsessies met andere leden van het huis.
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Player A**
+  - Key (NL): Speler A
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Player B**
+  - Key (NL): Speler B
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Points**
+  - Key (NL): Punten
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Post**
+  - Key (NL): Post
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Post published in the Community.**
+  - Key (NL): Post geplaatst in de Community.
+  - File: `components/maison/community/community-layout.tsx`
+- **Preview**
+  - Key (NL): Voorbeeld
+  - File: `components/maison/community/sessions/session-draft-preview.tsx`
+- **Publish**
+  - Key (NL): Publiceer
+  - File: `components/maison/community/feed-compose.tsx`
+- **Read less**
+  - Key (NL): Minder lezen
+  - File: `components/maison/community/feed-post-card.tsx`
+- **Read more**
+  - Key (NL): Meer lezen
+  - File: `components/maison/community/feed-post-card.tsx`
+- **Recent Founding Members**
+  - Key (NL): Recente Founding Members
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **Redo**
+  - Key (NL): Opnieuw
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Remove image**
+  - Key (NL): Afbeelding verwijderen
+  - File: `components/maison/community/sessions/chat/chat-composer.tsx`
+- **Remove player**
+  - Key (NL): Speler verwijderen
+  - File: `components/maison/community/sessions/player-slots.tsx`
+- **Reply**
+  - Key (NL): Reageer
+  - File: `components/maison/community/feed-post-card.tsx`
+- **Report**
+  - Key (NL): Melden
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Reported**
+  - Key (NL): Gemeld
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Requests**
+  - Key (NL): Aanvragen
+  - File: `components/maison/community/sessions/join-requests.tsx`
+- **Scoreboard**
+  - Key (NL): Scorebord
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Scores can be submitted until {{date}} at {{time}}.**
+  - Key (NL): Scores indienen kan tot {{date}} om {{time}}.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Search club, city or postcode...**
+  - Key (NL): Zoek club, stad of postcode...
+  - File: `components/maison/community/sessions/club-search-field.tsx`
+- **Send**
+  - Key (NL): Versturen
+  - File: `components/maison/community/sessions/chat/chat-composer.tsx`
+- **Send failed**
+  - Key (NL): Versturen mislukt
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Send the first message to start the conversation.**
+  - Key (NL): Stuur het eerste bericht om het gesprek te starten.
+  - File: `components/maison/community/sessions/chat/chat-message-list.tsx`
+- **Sending…**
+  - Key (NL): Versturen…
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Sent**
+  - Key (NL): Verstuurd
+  - File: `components/maison/community/sessions/chat/chat-message-item.tsx`
+- **Session cancelled**
+  - Key (NL): Sessie geannuleerd
+  - File: `components/maison/community/sessions/session-card.tsx`
+- **Session closed. This is the official result.**
+  - Key (NL): Sessie afgesloten. Dit is de officiële uitslag.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Set {{number}}**
+  - Key (NL): Set {{number}}
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Sets (to 4 games)**
+  - Key (NL): Sets (tot 4 games)
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Sets (to 6 games)**
+  - Key (NL): Sets (tot 6 games)
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Share**
+  - Key (NL): Deel
+  - File: `components/maison/community/sessions/share-session-button.tsx`
+- **Share the card now, or after the match with the result.**
+  - Key (NL): Deel de kaart nu al, of na de wedstrijd met de uitslag.
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Share your card**
+  - Key (NL): Deel uw kaart
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Sits out**
+  - Key (NL): Zit uit
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Sports**
+  - Key (NL): Sporten
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Story**
+  - Key (NL): Story
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Street and number**
+  - Key (NL): Straat en nummer
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Submit club**
+  - Key (NL): Club indienen
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Submit score**
+  - Key (NL): Score indienen
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Submitted by {{name}}**
+  - Key (NL): Ingediend door {{name}}
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Submitted scores**
+  - Key (NL): Ingediende scores
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Super tie-break (to 10)**
+  - Key (NL): Super tie-break (tot 10)
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **System**
+  - Key (NL): Systeem
+  - File: `components/maison/community/sessions/chat/chat-system-message.tsx`
+- **Team A**
+  - Key (NL): Team A
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Team B**
+  - Key (NL): Team B
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **The Community**
+  - Key (NL): De Community
+  - File: `pages/maison/community.tsx`
+- **The Community is exclusive to signed-in members. Sign in to get access.**
+  - Key (NL): De Community is exclusief voor ingelogde leden. Log in om toegang te krijgen.
+  - File: `components/maison/community/community-login-gate.tsx`
+- **The match has not been decided yet.**
+  - Key (NL): De wedstrijd is nog niet beslist.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **The period for submitting a score has ended.**
+  - Key (NL): De termijn om een score in te dienen is verstreken.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **The scoreboard is locked.**
+  - Key (NL): Het scorebord is vergrendeld.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **These players are waiting for your approval.**
+  - Key (NL): Deze spelers wachten op uw goedkeuring.
+  - File: `components/maison/community/sessions/join-requests.tsx`
+- **This chat is closed. No more messages can be sent.**
+  - Key (NL): Deze chat is gesloten. Er kunnen geen berichten meer worden verstuurd.
+  - File: `components/maison/community/sessions/chat/chat-closed-notice.tsx`
+- **Tie-break**
+  - Key (NL): Tie-break
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Tie-break points (optional)**
+  - Key (NL): Punten tie-break (optioneel)
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Time**
+  - Key (NL): Tijdstip
+  - File: `components/maison/community/sessions/session-schedule-fields.tsx`
+- **Too few players for a result: lock the scoreboard to close the session without a result.**
+  - Key (NL): Te weinig spelers voor een uitslag: vergrendel het scorebord om de sessie zonder uitslag af te sluiten.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Type at least 2 letters to search.**
+  - Key (NL): Typ minstens 2 letters om te zoeken.
+  - File: `components/maison/community/sessions/club-search-field.tsx`
+- **Unlock scoreboard**
+  - Key (NL): Scorebord ontgrendelen
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **View all events →**
+  - Key (NL): Bekijk alle events →
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **View all members**
+  - Key (NL): Bekijk alle leden
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **View Heritage Nº 001 →**
+  - Key (NL): Bekijk Heritage Nº 001 →
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Visible once Maison Anversa approves it.**
+  - Key (NL): Wordt zichtbaar na goedkeuring door Maison Anversa.
+  - File: `components/maison/community/sessions/club-submit-dialog.tsx`
+- **Visible only to signed-in members**
+  - Key (NL): Alleen zichtbaar voor ingelogde leden
+  - File: `components/maison/community/feed-compose.tsx`
+- **Welcome**
+  - Key (NL): Welkom
+  - File: `components/maison/community/community-login-gate.tsx`
+- **Who played?**
+  - Key (NL): Wie speelde er?
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Will be announced soon**
+  - Key (NL): Wordt binnenkort bekendgemaakt
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **Winner**
+  - Key (NL): Winnaar
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Winner: {{side}}**
+  - Key (NL): Winnaar: {{side}}
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **With the official result. Share it with your friends or keep it as a memory.**
+  - Key (NL): Met de officiële uitslag. Deel ze met je vrienden of bewaar ze als herinnering.
+  - File: `components/maison/community/sessions/match-card-share.tsx`
+- **Write a comment**
+  - Key (NL): Schrijf een reactie
+  - File: `components/maison/community/feed-post-card.tsx`
+- **Write a message...**
+  - Key (NL): Schrijf een bericht...
+  - File: `components/maison/community/sessions/chat/chat-composer.tsx`
+- **You can close the session once there is an approved result, no scores are waiting and the scoreboard is locked.**
+  - Key (NL): Afsluiten kan zodra er een goedgekeurde uitslag is, er geen scores meer wachten en het scorebord vergrendeld is.
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+- **Your Profile**
+  - Key (NL): Uw Profiel
+  - File: `components/maison/community/feed-sidebar.tsx`
+- **Your submitted score**
+  - Key (NL): Uw ingediende score
+  - File: `components/maison/community/sessions/session-scoreboard.tsx`
+
+## Community events / sessions / clubs
+
+- Route: `/{locale}/community/{events|sessions|clubs}`
+- Count: 50
+
+- **{{count}} open sessie(s) op deze locatie.** _(missing from en.json)_
+  - Key (NL): {{count}} open sessie(s) op deze locatie.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/clubs/show.tsx`
+- **All cities**
+  - Key (NL): Alle steden
+  - File: `pages/maison/clubs/index.tsx`
+- **All sports**
+  - Key (NL): Alle sporten
+  - File: `pages/maison/clubs/index.tsx`
+- **Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.** _(missing from en.json)_
+  - Key (NL): Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/events/index.tsx`
+- **Approve requests**
+  - Key (NL): Aanvragen goedkeuren
+  - File: `pages/maison/sessions/create.tsx`
+- **Back to sessions**
+  - Key (NL): Terug naar sessies
+  - File: `pages/maison/sessions/show.tsx`
+- **By creating a session you agree to our community guidelines.**
+  - Key (NL): Door een sessie aan te maken gaat u akkoord met onze communityrichtlijnen.
+  - File: `pages/maison/sessions/create.tsx`
+- **By default everyone joins immediately. Turn this on if you want to approve each request first.**
+  - Key (NL): Standaard speelt iedereen meteen mee. Schakel dit in als u elke aanvraag eerst wilt goedkeuren.
+  - File: `pages/maison/sessions/create.tsx`
+- **Choose the sport**
+  - Key (NL): Kies de sport
+  - File: `pages/maison/sessions/create.tsx`
+- **Clubs**
+  - Key (NL): Clubs
+  - File: `pages/maison/clubs/index.tsx`
+- **Court status**
+  - Key (NL): Baanstatus
+  - File: `pages/maison/sessions/create.tsx`
+- **Create a session**
+  - Key (NL): Sessie aanmaken
+  - File: `pages/maison/sessions/create.tsx`
+- **Date, time and duration**
+  - Key (NL): Datum, tijd en duur
+  - File: `pages/maison/sessions/create.tsx`
+- **E.g. level, language, notes...**
+  - Key (NL): Bijv. niveau, taal, bijzonderheden...
+  - File: `pages/maison/sessions/create.tsx`
+- **Exclusive Events**
+  - Key (NL): Exclusieve Evenementen
+  - File: `pages/maison/events/index.tsx`
+- **Filter by city...**
+  - Key (NL): Filter op stad...
+  - File: `pages/maison/clubs/index.tsx`
+- **Find an open session or create your own.**
+  - Key (NL): Vind een open sessie of maak er zelf een aan.
+  - File: `pages/maison/sessions/index.tsx`
+- **Find an open session or create your own. Maison Anversa brings players together; booking and payment stay between you and the club.**
+  - Key (NL): Vind een open sessie of maak uw eigen sessie aan. Maison Anversa brengt spelers samen; boeken en betalen regelt u zelf met de club.
+  - File: `pages/maison/sessions/index.tsx`
+- **Geen clubs gevonden voor deze filters.** _(missing from en.json)_
+  - Key (NL): Geen clubs gevonden voor deze filters.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/clubs/index.tsx`
+- **Hosted by Maison Anversa.**
+  - Key (NL): Georganiseerd door Maison Anversa.
+  - File: `pages/maison/events/index.tsx`
+- **Is the court already booked?**
+  - Key (NL): Is de baan al geboekt?
+  - File: `pages/maison/sessions/create.tsx`
+- **Level**
+  - Key (NL): Niveau
+  - File: `pages/maison/sessions/create.tsx`
+- **Load more**
+  - Key (NL): Meer laden
+  - File: `pages/maison/clubs/index.tsx`
+- **Loading...**
+  - Key (NL): Laden...
+  - File: `pages/maison/clubs/index.tsx`
+- **Maak een account om mee te doen** _(missing from en.json)_
+  - Key (NL): Maak een account om mee te doen
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/sessions/share.tsx`
+- **Nog geen open sessies op deze locatie.** _(missing from en.json)_
+  - Key (NL): Nog geen open sessies op deze locatie.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/clubs/show.tsx`
+- **Nog geen open sessies op deze locatie. Plan de eerste.** _(missing from en.json)_
+  - Key (NL): Nog geen open sessies op deze locatie. Plan de eerste.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/clubs/show.tsx`
+- **Note (optional)**
+  - Key (NL): Notitie (optioneel)
+  - File: `pages/maison/sessions/create.tsx`
+- **Number of players**
+  - Key (NL): Aantal spelers
+  - File: `pages/maison/sessions/create.tsx`
+- **Ontdek padel- en tennisclubs waar leden sessies plannen. Partnerclubs dragen het officiële Maison Anversa-partnerschap.** _(missing from en.json)_
+  - Key (NL): Ontdek padel- en tennisclubs waar leden sessies plannen. Partnerclubs dragen het officiële Maison Anversa-partnerschap.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/clubs/index.tsx`
+- **Plan a session**
+  - Key (NL): Plan een sessie
+  - File: `pages/maison/clubs/show.tsx`
+- **Plan your next match. Meet members. Play together.**
+  - Key (NL): Plan uw volgende partij. Ontmoet leden. Speel samen.
+  - File: `pages/maison/sessions/create.tsx`
+- **Players**
+  - Key (NL): Spelers
+  - File: `pages/maison/sessions/create.tsx`
+- **Playing level**
+  - Key (NL): Spelniveau
+  - File: `pages/maison/sessions/create.tsx`
+- **Publish session**
+  - Key (NL): Sessie publiceren
+  - File: `pages/maison/sessions/create.tsx`
+- **Request to join**
+  - Key (NL): Vraag om mee te spelen
+  - File: `pages/maison/sessions/share.tsx`
+- **Scoreboard locked**
+  - Key (NL): Scorebord vergrendeld
+  - File: `pages/maison/sessions/show.tsx`
+- **Search a club or corner**
+  - Key (NL): Zoek een club of corner
+  - File: `pages/maison/sessions/create.tsx`
+- **Sport**
+  - Key (NL): Sport
+  - File: `pages/maison/sessions/create.tsx`
+- **The host is responsible for booking the court.**
+  - Key (NL): De host is verantwoordelijk voor het boeken van de baan.
+  - File: `pages/maison/sessions/create.tsx`
+- **This club is no longer available.**
+  - Key (NL): Deze club is niet langer beschikbaar.
+  - File: `pages/maison/sessions/show.tsx`
+- **This session has been cancelled.**
+  - Key (NL): Deze sessie is geannuleerd.
+  - File: `pages/maison/sessions/share.tsx`
+- **View session**
+  - Key (NL): Bekijk sessie
+  - File: `pages/maison/sessions/share.tsx`
+- **When**
+  - Key (NL): Wanneer
+  - File: `pages/maison/sessions/create.tsx`
+- **Who can join?**
+  - Key (NL): Wie mag meespelen?
+  - File: `pages/maison/sessions/create.tsx`
+- **Who may take part?**
+  - Key (NL): Wie mag deelnemen?
+  - File: `pages/maison/sessions/create.tsx`
+- **You are automatically player 1.**
+  - Key (NL): U bent automatisch speler 1.
+  - File: `pages/maison/sessions/create.tsx`
+- **Your group is complete. See you on court!**
+  - Key (NL): Uw groep is compleet. Tot op de baan!
+  - File: `pages/maison/sessions/show.tsx`
+- **Zoek een club en bekijk komende sessies op die locatie.** _(missing from en.json)_
+  - Key (NL): Zoek een club en bekijk komende sessies op die locatie.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/clubs/index.tsx`
+- **Zoek op clubnaam...** _(missing from en.json)_
+  - Key (NL): Zoek op clubnaam...
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/clubs/index.tsx`
+
+## Club Corner
+
+- Route: `/{locale}/corner`
+- Count: 56
+
+- **— Yusuf Savran, Founder Maison Anversa**
+  - Key (NL): — Yusuf Savran, Oprichter Maison Anversa
+  - File: `pages/maison/corner.tsx`
+- **"Club Corner is not a sales channel. It is an invitation to become part of something that has only just begun."**
+  - Key (NL): "Club Corner is geen verkoopkanaal. Het is een uitnodiging om deel te worden van iets dat nog maar net begonnen is."
+  - File: `pages/maison/corner.tsx`
+- **A**
+  - Key (NL): Een
+  - File: `pages/maison/corner.tsx`
+- **Antwerp, Belgium**
+  - Key (NL): Antwerpen, België
+  - File: `pages/maison/corner.tsx`
+- **Briefly describe the atmosphere and identity of your club...**
+  - Key (NL): Beschrijf kort de sfeer en identiteit van uw club...
+  - File: `pages/maison/corner.tsx`
+- **Bring Maison Anversa to your padel club. A curated experience for clubs that understand padel is more than a sport.**
+  - Key (NL): Breng Maison Anversa naar uw padelclub. Een curated ervaring voor clubs die begrijpen dat padel meer is dan een sport.
+  - File: `pages/maison/corner.tsx`
+- **Choose your**
+  - Key (NL): Kies uw
+  - File: `pages/maison/corner.tsx`
+- **City & Country**
+  - Key (NL): Stad & Land
+  - File: `pages/maison/corner.tsx`
+- **Club Corner Formats**
+  - Key (NL): Club Corner Formaten
+  - File: `pages/maison/corner.tsx`
+- **Club Corner is the physical distribution program of Maison Anversa. Selected padel clubs in Europe can set up an exclusive Maison Anversa corner — a curated space where members can discover, touch and order Heritage products.**
+  - Key (NL): Club Corner is het fysieke distributieprogramma van Maison Anversa. Geselecteerde padelclubs in Europa kunnen een exclusieve Maison Anversa hoek inrichten — een curated ruimte waar leden Heritage producten kunnen ontdekken, aanraken en bestellen.
+  - File: `pages/maison/corner.tsx`
+- **Club name**
+  - Key (NL): Naam club
+  - File: `pages/maison/corner.tsx`
+- **club.**
+  - Key (NL): club.
+  - File: `pages/maison/corner.tsx`
+- **Contact person**
+  - Key (NL): Contactpersoon
+  - File: `pages/maison/corner.tsx`
+- **Corner**
+  - Key (NL): Corner
+  - File: `pages/maison/corner.tsx`
+- **Corners**
+  - Key (NL): Corners
+  - File: `pages/maison/corner.tsx`
+- **Desired format**
+  - Key (NL): Gewenst formaat
+  - File: `pages/maison/corner.tsx`
+- **Each Club Corner partner receives a complete package to set up the Maison Anversa experience properly. Everything is designed for consistency — so every Club Corner in Europe offers the same premium experience.**
+  - Key (NL): Elke Club Corner partner ontvangt een volledig pakket om de Maison Anversa ervaring correct in te richten. Alles is ontworpen voor consistentie — zodat elk Club Corner in Europa dezelfde premium ervaring biedt.
+  - File: `pages/maison/corner.tsx`
+- **European Heritage House**
+  - Key (NL): European Heritage House
+  - File: `pages/maison/corner.tsx`
+- **for Maison Anversa in your club**
+  - Key (NL): voor Maison Anversa in uw club
+  - File: `pages/maison/corner.tsx`
+- **format**
+  - Key (NL): formaat
+  - File: `pages/maison/corner.tsx`
+- **Format A**
+  - Key (NL): Formaat A
+  - File: `pages/maison/corner.tsx`
+- **Format B**
+  - Key (NL): Formaat B
+  - File: `pages/maison/corner.tsx`
+- **Founding Club Corner**
+  - Key (NL): Founding Club Corner
+  - File: `pages/maison/corner.tsx`
+- **Heritage Corner**
+  - Key (NL): Heritage Corner
+  - File: `pages/maison/corner.tsx`
+- **home**
+  - Key (NL): thuis
+  - File: `pages/maison/corner.tsx`
+- **If you recognize these criteria in your club, we invite you to get in touch.**
+  - Key (NL): Als u deze criteria herkent in uw club, nodigen wij u uit om contact op te nemen.
+  - File: `pages/maison/corner.tsx`
+- **It is not a classic retail point. It is an experience space. Your members become part of the Maison Anversa story.**
+  - Key (NL): Het is geen klassiek verkooppunt. Het is een ervaringsruimte. Uw leden worden deel van het Maison Anversa verhaal.
+  - File: `pages/maison/corner.tsx`
+- **Let's**
+  - Key (NL): Laten we
+  - File: `pages/maison/corner.tsx`
+- **Maison Anversa · Partner Program**
+  - Key (NL): Maison Anversa · Partner Programma
+  - File: `pages/maison/corner.tsx`
+- **Maison Anversa Club Corners are coming to selected cities across Europe. Are you the first in your city?**
+  - Key (NL): Maison Anversa Club Corners komen eraan in geselecteerde steden doorheen Europa. Ben jij de eerste in jouw stad?
+  - File: `pages/maison/corner.tsx`
+- **Maison Anversa offers two Club Corner formats — depending on the size of your club and your ambition as a partner.**
+  - Key (NL): Maison Anversa biedt twee Club Corner formaten — afhankelijk van de grootte van uw club en uw ambitie als partner.
+  - File: `pages/maison/corner.tsx`
+- **Maison Anversa selects Club Corner partners based on shared values — not on size or revenue. We look for clubs that understand that padel is a culture, not a sport.**
+  - Key (NL): Maison Anversa selecteert Club Corner partners op basis van gedeelde waarden — niet op basis van grootte of omzet. Wij zoeken clubs die begrijpen dat padel een cultuur is, geen sport.
+  - File: `pages/maison/corner.tsx`
+- **Name of your padel club**
+  - Key (NL): Naam van uw padelclub
+  - File: `pages/maison/corner.tsx`
+- **Not every club.**
+  - Key (NL): Niet elke club.
+  - File: `pages/maison/corner.tsx`
+- **Number of courts**
+  - Key (NL): Aantal courts
+  - File: `pages/maison/corner.tsx`
+- **Our Club**
+  - Key (NL): Onze Club
+  - File: `pages/maison/corner.tsx`
+- **Partnership Request**
+  - Key (NL): Partnership Aanvraag
+  - File: `pages/maison/corner.tsx`
+- **receives**
+  - Key (NL): ontvangt
+  - File: `pages/maison/corner.tsx`
+- **Request a Partnership Conversation →**
+  - Key (NL): Vraag een Partnership Gesprek Aan →
+  - File: `pages/maison/corner.tsx`
+- **Request received.**
+  - Key (NL): Aanvraag ontvangen.
+  - File: `pages/maison/corner.tsx`
+- **right**
+  - Key (NL): juiste
+  - File: `pages/maison/corner.tsx`
+- **Send Partnership Request**
+  - Key (NL): Verstuur Partnership Aanvraag
+  - File: `pages/maison/corner.tsx`
+- **Send us a message and we will contact you personally within 48 hours. No automated responses — a real conversation about what a partnership could mean for your club.**
+  - Key (NL): Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek over wat een partnership voor uw club kan betekenen.
+  - File: `pages/maison/corner.tsx`
+- **talk**
+  - Key (NL): praten
+  - File: `pages/maison/corner.tsx`
+- **Tell us about your club**
+  - Key (NL): Vertel ons over uw club
+  - File: `pages/maison/corner.tsx`
+- **The Club Corner Package**
+  - Key (NL): Het Club Corner Pakket
+  - File: `pages/maison/corner.tsx`
+- **The entry format for clubs wanting to get to know Maison Anversa. Compact, elegant, impactful.**
+  - Key (NL): Het instapformaat voor clubs die kennis willen maken met Maison Anversa. Compact, elegant, impactvol.
+  - File: `pages/maison/corner.tsx`
+- **The Network**
+  - Key (NL): Het Netwerk
+  - File: `pages/maison/corner.tsx`
+- **The premium partnership for clubs wanting to play a central role in the Maison Anversa network.**
+  - Key (NL): Het premium partnerschap voor clubs die een centrale rol willen spelen in het Maison Anversa netwerk.
+  - File: `pages/maison/corner.tsx`
+- **We select partners carefully. Not every club fits Maison Anversa — and not every club would want to. Club Corner is for clubs that share the same values: quality over quantity, community over commerce.**
+  - Key (NL): Wij selecteren partners zorgvuldig. Niet elke club past bij Maison Anversa — en niet elke club zou dat willen. Club Corner is voor clubs die dezelfde waarden delen: kwaliteit boven kwantiteit, gemeenschap boven commercie.
+  - File: `pages/maison/corner.tsx`
+- **We will personally contact you within 48 hours.**
+  - Key (NL): Wij nemen binnen 48 uur persoonlijk contact op.
+  - File: `pages/maison/corner.tsx`
+- **What is Club Corner?**
+  - Key (NL): Wat is Club Corner?
+  - File: `pages/maison/corner.tsx`
+- **What your club**
+  - Key (NL): Wat uw club
+  - File: `pages/maison/corner.tsx`
+- **Who is eligible?**
+  - Key (NL): Wie komen in aanmerking?
+  - File: `pages/maison/corner.tsx`
+- **Your name and role**
+  - Key (NL): Uw naam en functie
+  - File: `pages/maison/corner.tsx`
+- **your@emailaddress.be**
+  - Key (NL): uw@emailadres.be
+  - File: `pages/maison/corner.tsx`
+
+## Contact
+
+- Route: `/{locale}/contact`
+- Count: 13
+
+- **Central Antwerp · Belgium**
+  - Key (NL): Centrum Antwerpen · België
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **Each Heritage racket is hand-finished and deserves ongoing care. We advise on leather maintenance, repairs and warranty. When in doubt, send the racket back to our atelier in Antwerp for inspection.**
+  - Key (NL): Elke Heritage-racket wordt met de hand afgewerkt en verdient blijvende zorg. Wij adviseren over lederonderhoud, herstellingen en garantie. Bij twijfel stuurt u de racket terug naar ons atelier in Antwerpen voor inspectie.
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **help?**
+  - Key (NL): helpen?
+  - File: `pages/maison/contact.tsx`
+- **How can we**
+  - Key (NL): Hoe kunnen wij u
+  - File: `pages/maison/contact.tsx`
+- **Maison Anversa — Antwerp**
+  - Key (NL): Maison Anversa — Antwerpen
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **Maison Anversa is located in the heart of Antwerp. Visit by appointment — we welcome you personally.**
+  - Key (NL): Maison Anversa is gevestigd in het hart van Antwerpen. Bezoek op afspraak — wij verwelkomen u graag persoonlijk.
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **Once Heritage Nº 001 delivers, you can track the status of your edition number here. Until then, we will look up your reservation manually — send us your name or reservation number via WhatsApp or email.**
+  - Key (NL): Eens Heritage Nº 001 levert, volgt u hier de status van uw editienummer. Tot die tijd zoeken wij uw reservering handmatig op — stuur ons uw naam of reserveringsnummer via WhatsApp of e-mail.
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **Speaking with a Maison specialist: a personal video call about your number, the finish, the leather and the monogram. No pressure, no rush — just tailored advice.**
+  - Key (NL): Sprekend met een Maison-specialist: een persoonlijk videogesprek over uw nummer, de afwerking, het leder en het monogram. Geen druk, geen haast — alleen advies op maat.
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **Visit our atelier in Antwerp for a private experience: hold the racket, feel the leather, and discover your number. Request a moment — we will confirm personally.**
+  - Key (NL): Bezoek ons atelier in Antwerpen voor een privé-beleving: houd de racket vast, voel het leder, en ontdek uw nummer. Vraag een moment aan — wij bevestigen persoonlijk.
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **We will confirm personally as soon as possible.**
+  - Key (NL): Wij bevestigen persoonlijk zo snel mogelijk.
+  - File: `components/maison/contact/bureau-form.tsx`
+- **Welcome to Maison Anversa. Select one of the options below — we always respond personally, within 24 hours on business days.**
+  - Key (NL): Welkom bij Maison Anversa. Selecteer een van de onderstaande opties — wij antwoorden altijd persoonlijk, binnen 24 uur op werkdagen.
+  - File: `pages/maison/contact.tsx`
+- **Your feedback shapes the house. Tell us what you thought — from the site to the racket.**
+  - Key (NL): Uw feedback vormt het huis mee. Vertel ons wat u vond — van de site tot de racket.
+  - File: `components/maison/contact/contact-bureau.tsx`
+- **Your message has been received.**
+  - Key (NL): Uw bericht is ontvangen.
+  - File: `components/maison/contact/bureau-form.tsx`
+
+## Legal wrappers (privacy, terms, shipping, care; body is CMS)
+
+- Route: `/{locale}/{privacy|terms|shipping|care}`
+- Count: 10
+
+- **← Back to home**
+  - Key (NL): ← Terug naar home
+  - File: `components/maison/legal/legal-page-layout.tsx`
+- **care and warranty policy**
+  - Key (NL): zorg- en garantiebeleid
+  - File: `components/maison/legal/legal-page-links.tsx`
+- **contact page**
+  - Key (NL): contactpagina
+  - File: `components/maison/legal/legal-page-links.tsx`
+- **Contact us via**
+  - Key (NL): Contacteer ons via
+  - File: `components/maison/legal/legal-page-links.tsx`
+- **Last updated: July 2026**
+  - Key (NL): Laatst bijgewerkt: juli 2026
+  - File: `components/maison/legal/legal-page-layout.tsx`
+- **Legal**
+  - Key (NL): Juridisch
+  - File: `components/maison/legal/legal-page-layout.tsx`
+- **our contact page**
+  - Key (NL): onze contactpagina
+  - File: `components/maison/legal/legal-page-links.tsx`
+- **Questions? Visit the**
+  - Key (NL): Vragen? Bezoek de
+  - File: `components/maison/legal/legal-page-links.tsx`
+- **See also the**
+  - Key (NL): Zie ook het
+  - File: `components/maison/legal/legal-page-links.tsx`
+- **shipping and return policy**
+  - Key (NL): verzend- en retourbeleid
+  - File: `components/maison/legal/legal-page-links.tsx`
+
+## Returns, checkout, verify, guest returns, newsletter
+
+- Route: `/{locale}/returns|checkout|verify|guest-returns|heritage-letter`
+- Count: 29
+
+- **Allocated**
+  - Key (NL): Toegewezen
+  - File: `pages/maison/verify.tsx`
+- **Authenticity**
+  - Key (NL): Authenticiteit
+  - File: `pages/maison/verify.tsx`
+- **Authenticity guaranteed**
+  - Key (NL): Authenticiteit gegarandeerd
+  - File: `pages/maison/verify.tsx`
+- **Back to the product**
+  - Key (NL): Terug naar het product
+  - File: `pages/maison/checkout-cancel.tsx`
+- **Bestelnummer** _(missing from en.json)_
+  - Key (NL): Bestelnummer
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/returns.tsx`
+- **cancelled**
+  - Key (NL): geannuleerd
+  - File: `pages/maison/checkout-cancel.tsx`
+- **confirmed**
+  - Key (NL): bevestigd
+  - File: `pages/maison/checkout-success.tsx`
+- **E-mail bij de bestelling** _(missing from en.json)_
+  - Key (NL): E-mail bij de bestelling
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/returns.tsx`
+- **Founding Circle member**
+  - Key (NL): Founding Circle-lid
+  - File: `pages/maison/verify.tsx`
+- **Gastbestelling?** _(missing from en.json)_
+  - Key (NL): Gastbestelling?
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/returns.tsx`
+- **Heb je zonder account besteld? Vul je bestelnummer en e-mail in. We sturen je een eenmalige link om een retour te starten.** _(missing from en.json)_
+  - Key (NL): Heb je zonder account besteld? Vul je bestelnummer en e-mail in. We sturen je een eenmalige link om een retour te starten.
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/returns.tsx`
+- **If your payment has just completed, confirmation may take a moment. Check your email or contact the house.**
+  - Key (NL): Als uw betaling zojuist is afgerond, kan de bevestiging even op zich laten wachten. Controleer uw e-mail of neem contact op met het bureau.
+  - File: `pages/maison/checkout-success.tsx`
+- **Maison Anversa Archive — not for sale**
+  - Key (NL): Maison Anversa Archive — niet te koop
+  - File: `pages/maison/verify.tsx`
+- **No holder registered**
+  - Key (NL): Geen houder geregistreerd
+  - File: `pages/maison/verify.tsx`
+- **No worries — nothing was charged. You can restart your reservation when you are ready.**
+  - Key (NL): Geen zorgen — er is niets in rekening gebracht. U kunt uw reservering opnieuw starten wanneer u klaar bent.
+  - File: `pages/maison/checkout-cancel.tsx`
+- **pending**
+  - Key (NL): in behandeling
+  - File: `pages/maison/checkout-success.tsx`
+- **Reservation**
+  - Key (NL): Reservering
+  - File: `pages/maison/checkout-success.tsx`
+- **Return address**
+  - Key (NL): Retouradres
+  - File: `pages/maison/returns.tsx`
+- **Return within 14 days**
+  - Key (NL): Retourneren binnen 14 dagen
+  - File: `pages/maison/returns.tsx`
+- **Shipping & returns policy**
+  - Key (NL): Verzend- en retourbeleid
+  - File: `pages/maison/guest-returns/create.tsx`
+- **Start a return**
+  - Key (NL): Start een retour
+  - File: `pages/maison/returns.tsx`
+- **Stuur retourlink** _(missing from en.json)_
+  - Key (NL): Stuur retourlink
+  - Note: MISSING_EN (not in lang/en.json; EN UI shows this key)
+  - File: `pages/maison/returns.tsx`
+- **Thank you. Your order has been received. You will receive a confirmation by email.**
+  - Key (NL): Dank u. Uw bestelling is ontvangen. U ontvangt een bevestiging per e-mail.
+  - File: `pages/maison/checkout-success.tsx`
+- **Unsubscribed**
+  - Key (NL): Uitgeschreven
+  - File: `pages/maison/newsletter-unsubscribed.tsx`
+- **Verified by Maison Anversa**
+  - Key (NL): Geverifieerd door Maison Anversa
+  - File: `pages/maison/verify.tsx`
+- **Verified Founding Edition piece**
+  - Key (NL): Geverifieerd Founding Edition-stuk
+  - File: `pages/maison/verify.tsx`
+- **View order**
+  - Key (NL): Bekijk bestelling
+  - File: `pages/maison/checkout-success.tsx`
+- **You can start a return via My account → Orders. The legal cooling-off period starts the day after delivery.**
+  - Key (NL): Je kunt een retour starten via Mijn account → Bestellingen. De wettelijke bedenktijd begint de dag na levering.
+  - File: `pages/maison/returns.tsx`
+- **You will no longer receive the Heritage Letter. You can subscribe again at any time.**
+  - Key (NL): U ontvangt geen Heritage Letter meer. U kunt zich altijd opnieuw inschrijven.
+  - File: `pages/maison/newsletter-unsubscribed.tsx`
+
+## Member area
+
+- Route: `/{locale}/member/*`
+- Count: 138
+
+- **A new verification link has been sent.**
+  - Key (NL): Er is een nieuwe verificatielink verstuurd.
+  - File: `pages/member/profile.tsx`
+- **Account details**
+  - Key (NL): Accountgegevens
+  - File: `pages/member/profile.tsx`
+- **Action**
+  - Key (NL): Actie
+  - File: `pages/member/orders.tsx`
+- **Activity**
+  - Key (NL): Activiteit
+  - File: `pages/member/lidpaspoort.tsx`
+- **All events**
+  - Key (NL): Alle evenementen
+  - File: `pages/member/lidpaspoort.tsx`
+- **All notifications**
+  - Key (NL): Alle meldingen
+  - File: `components/member/member-notification-bell.tsx`
+- **All sessions**
+  - Key (NL): Alle sessies
+  - File: `pages/member/lidpaspoort.tsx`
+- **All subscriptions linked to this account.**
+  - Key (NL): Alle inschrijvingen die aan dit account gekoppeld zijn.
+  - File: `pages/member/letter.tsx`
+- **Artefacts**
+  - Key (NL): Artefacten
+  - File: `pages/member/heritage.tsx`
+- **Back to chats**
+  - Key (NL): Terug naar chats
+  - File: `pages/member/chat.tsx`
+- **Back to notifications**
+  - Key (NL): Terug naar meldingen
+  - File: `pages/member/notifications/show.tsx`
+- **Back to order**
+  - Key (NL): Terug naar bestelling
+  - File: `pages/member/returns/create.tsx`
+- **Back to orders**
+  - Key (NL): Terug naar bestellingen
+  - File: `pages/member/order-show.tsx`
+- **Badges**
+  - Key (NL): Badges
+  - File: `pages/member/lidpaspoort.tsx`
+- **Browse Maison Anversa exclusive events in the Community.**
+  - Key (NL): Bekijk de exclusieve evenementen van Maison Anversa in de Community.
+  - File: `pages/member/lidpaspoort.tsx`
+- **Cancel order**
+  - Key (NL): Bestelling annuleren
+  - File: `pages/member/order-show.tsx`
+- **Cancel return**
+  - Key (NL): Retour annuleren
+  - File: `pages/member/returns/show.tsx`
+- **Certificate · {{value}}**
+  - Key (NL): Certificaat · {{value}}
+  - File: `pages/member/heritage.tsx`
+- **Changes appear in the register immediately.**
+  - Key (NL): Wijzigingen verschijnen meteen in het register.
+  - File: `pages/member/register-listing.tsx`
+- **Choose a session on the left to open the chat and send messages.**
+  - Key (NL): Kies links een sessie om de chat te openen en berichten te versturen.
+  - File: `pages/member/chat.tsx`
+- **Confirm**
+  - Key (NL): Bevestigen
+  - File: `pages/member/returns/create.tsx`
+- **Confirm delete**
+  - Key (NL): Verwijderen bevestigen
+  - File: `pages/member/profile.tsx`
+- **Confirm password**
+  - Key (NL): Wachtwoord bevestigen
+  - File: `pages/member/confirm-password.tsx`
+- **Confirm with password**
+  - Key (NL): Bevestig met wachtwoord
+  - File: `pages/member/profile.tsx`
+- **Confirm your password**
+  - Key (NL): Bevestig uw wachtwoord
+  - File: `pages/member/confirm-password.tsx`
+- **Delete account**
+  - Key (NL): Account verwijderen
+  - File: `pages/member/profile.tsx`
+- **Delivery window · {{window}}**
+  - Key (NL): Leveringsvenster · {{window}}
+  - File: `pages/member/heritage.tsx`
+- **Download PDF**
+  - Key (NL): Download PDF
+  - File: `pages/member/passport.tsx`
+- **Edition Nº {{number}}**
+  - Key (NL): Editie Nº {{number}}
+  - File: `pages/member/heritage.tsx`
+- **Emails about my sessions**
+  - Key (NL): E-mails over mijn sessies
+  - File: `pages/member/email-preferences.tsx`
+- **Enabled**
+  - Key (NL): Ingeschakeld
+  - File: `pages/member/security.tsx`
+- **Extra messages**
+  - Key (NL): Extra berichten
+  - File: `pages/member/email-preferences.tsx`
+- **First name**
+  - Key (NL): Voornaam
+  - File: `pages/member/profile.tsx`
+- **Founding Circle · member no. {{number}}**
+  - Key (NL): Founding Circle · lid nr. {{number}}
+  - File: `pages/member/register-listing.tsx`
+- **Founding Circle card**
+  - Key (NL): Founding Circle-kaart
+  - File: `pages/member/circle.tsx`
+- **Four pages of the physical passport — a reading copy until the edition ships.**
+  - Key (NL): Vier pagina's van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.
+  - File: `pages/member/passport.tsx`
+- **Heritage**
+  - Key (NL): Heritage
+  - File: `pages/member/heritage.tsx`
+- **Heritage Nº {{number}}**
+  - Key (NL): Heritage Nº {{number}}
+  - File: `pages/member/lidpaspoort.tsx`
+- **Hosted sessions**
+  - Key (NL): Georganiseerde sessies
+  - File: `pages/member/lidpaspoort.tsx`
+- **I agree that the name above will be published in the public register on maisonanversa.com. I can change or withdraw this at any time.**
+  - Key (NL): Ik ga ermee akkoord dat de naam hierboven wordt gepubliceerd in het publieke register op maisonanversa.com. Ik kan dit op elk moment wijzigen of intrekken.
+  - File: `pages/member/register-listing.tsx`
+- **Identity**
+  - Key (NL): Identiteit
+  - File: `pages/member/profile.tsx`
+- **If this is off, “Private” is shown instead of your first name.**
+  - Key (NL): Staat dit uit, dan staat er “Privé” in plaats van je voornaam.
+  - File: `pages/member/profile.tsx`
+- **In-app notifications always stay on. Here you only choose whether you also receive them by email.**
+  - Key (NL): In-app meldingen blijven altijd aan. Hier kiest u alleen of u ze ook per e-mail ontvangt.
+  - File: `pages/member/email-preferences.tsx`
+- **Issue with your product? Contact us**
+  - Key (NL): Een probleem met je product? Neem contact op
+  - File: `pages/member/order-show.tsx`
+- **Item**
+  - Key (NL): Artikel
+  - File: `pages/member/orders.tsx`
+- **Keep your Maison Anversa account protected with a strong password and optional two-factor authentication.**
+  - Key (NL): Bescherm uw Maison Anversa-account met een sterk wachtwoord en optionele tweestapsverificatie.
+  - File: `pages/member/security.tsx`
+- **Language for emails and notifications**
+  - Key (NL): Taal voor e-mails en meldingen
+  - File: `pages/member/profile.tsx`
+- **Last name**
+  - Key (NL): Achternaam
+  - File: `pages/member/profile.tsx`
+- **Line items**
+  - Key (NL): Regels
+  - File: `pages/member/order-show.tsx`
+- **Manage email preferences**
+  - Key (NL): Beheer e-mailvoorkeuren
+  - File: `pages/member/letter.tsx`
+- **Manage how you appear in the house — photo, name, and how you sign in.**
+  - Key (NL): Beheer hoe u in het huis verschijnt — foto, naam en hoe u inlogt.
+  - File: `pages/member/profile.tsx`
+- **Mark all as read**
+  - Key (NL): Alles gelezen
+  - File: `components/member/member-notification-bell.tsx`
+- **Message could not be sent.**
+  - Key (NL): Bericht kon niet worden verstuurd.
+  - File: `pages/member/chat.tsx`
+- **Messages with the players of your sessions. Select a session to begin.**
+  - Key (NL): Berichten met de spelers van uw sessies. Selecteer een sessie om te beginnen.
+  - File: `pages/member/chat.tsx`
+- **Method**
+  - Key (NL): Methode
+  - File: `pages/member/order-show.tsx`
+- **Name, photo, email**
+  - Key (NL): Naam, foto, e-mail
+  - File: `pages/member/dashboard.tsx`
+- **New notifications appear here as soon as they arrive.**
+  - Key (NL): Nieuwe meldingen verschijnen hier zodra ze binnenkomen.
+  - File: `pages/member/notifications/index.tsx`
+- **New players, confirmations, full and cancelled sessions, opened-up spots and the reminder the day before.**
+  - Key (NL): Nieuwe spelers, bevestigingen, volzette en geannuleerde sessies, vrijgekomen plaatsen en de herinnering de dag voordien.
+  - File: `pages/member/email-preferences.tsx`
+- **Next**
+  - Key (NL): Volgende
+  - File: `pages/member/notifications/index.tsx`
+- **No badges yet. Plan a session or RSVP to an event.**
+  - Key (NL): Nog geen badges. Plan een sessie of meld u aan voor een evenement.
+  - File: `pages/member/lidpaspoort.tsx`
+- **No chats yet**
+  - Key (NL): Nog geen chats
+  - File: `components/member/chat/chat-session-list.tsx`
+- **No edition assigned yet**
+  - Key (NL): Nog geen editie toegewezen
+  - File: `pages/member/circle.tsx`
+- **No notifications found.**
+  - Key (NL): Geen meldingen gevonden.
+  - File: `pages/member/notifications/index.tsx`
+- **No notifications.**
+  - Key (NL): Geen meldingen.
+  - File: `components/member/member-notification-bell.tsx`
+- **No upcoming events**
+  - Key (NL): Geen komende evenementen
+  - File: `pages/member/lidpaspoort.tsx`
+- **No upcoming sessions**
+  - Key (NL): Geen komende sessies
+  - File: `pages/member/lidpaspoort.tsx`
+- **Not enabled**
+  - Key (NL): Niet ingeschakeld
+  - File: `pages/member/security.tsx`
+- **Notification**
+  - Key (NL): Melding
+  - File: `pages/member/notifications/show.tsx`
+- **Once you host a session or are approved, it will appear here.**
+  - Key (NL): Zodra u een sessie host of goedgekeurd bent, verschijnt die hier.
+  - File: `components/member/chat/chat-session-list.tsx`
+- **Open**
+  - Key (NL): Openen
+  - File: `pages/member/notifications/show.tsx`
+- **Order**
+  - Key (NL): Bestelling
+  - File: `pages/member/order-show.tsx`
+- **Order detail**
+  - Key (NL): Besteldetail
+  - File: `pages/member/order-show.tsx`
+- **Orders & payments**
+  - Key (NL): Bestellingen & betalingen
+  - File: `pages/member/orders.tsx`
+- **Page {{number}}**
+  - Key (NL): Pagina {{number}}
+  - File: `pages/member/passport.tsx`
+- **Pagination**
+  - Key (NL): Paginering
+  - File: `pages/member/notifications/index.tsx`
+- **Passport · {{value}}**
+  - Key (NL): Passport · {{value}}
+  - File: `pages/member/heritage.tsx`
+- **Password check**
+  - Key (NL): Wachtwoordcontrole
+  - File: `pages/member/confirm-password.tsx`
+- **Past events**
+  - Key (NL): Afgelopen evenementen
+  - File: `pages/member/lidpaspoort.tsx`
+- **Payment history**
+  - Key (NL): Betalingsgeschiedenis
+  - File: `pages/member/dashboard.tsx`
+- **Permanent membership**
+  - Key (NL): Permanent lidmaatschap
+  - File: `pages/member/circle.tsx`
+- **Permanently remove your account and data from Maison Anversa. This cannot be undone.**
+  - Key (NL): Verwijder uw account en gegevens permanent van Maison Anversa. Dit kan niet ongedaan worden gemaakt.
+  - File: `pages/member/profile.tsx`
+- **Plan a session or join an open session in the Community.**
+  - Key (NL): Plan een sessie of sluit u aan bij een open sessie in de Community.
+  - File: `pages/member/lidpaspoort.tsx`
+- **PNG, JPG or WEBP · max 2 MB**
+  - Key (NL): PNG, JPG of WEBP · max 2 MB
+  - File: `pages/member/profile.tsx`
+- **Preferences**
+  - Key (NL): Voorkeuren
+  - File: `pages/member/dashboard.tsx`
+- **Preferences saved.**
+  - Key (NL): Voorkeuren opgeslagen.
+  - File: `pages/member/email-preferences.tsx`
+- **Previous**
+  - Key (NL): Vorige
+  - File: `pages/member/notifications/index.tsx`
+- **Product updates**
+  - Key (NL): Productupdates
+  - File: `pages/member/email-preferences.tsx`
+- **Qty**
+  - Key (NL): Aantal
+  - File: `pages/member/order-show.tsx`
+- **Racket {{label}}**
+  - Key (NL): Racket {{label}}
+  - File: `pages/member/circle.tsx`
+- **Read**
+  - Key (NL): Gelezen
+  - File: `pages/member/notifications/show.tsx`
+- **Reason**
+  - Key (NL): Reden
+  - File: `pages/member/returns/create.tsx`
+- **Recent orders**
+  - Key (NL): Recente bestellingen
+  - File: `pages/member/dashboard.tsx`
+- **Remove this notification from your inbox?**
+  - Key (NL): Deze melding uit uw inbox verwijderen?
+  - File: `pages/member/notifications/show.tsx`
+- **Required before viewing or changing security settings.**
+  - Key (NL): Vereist voordat u beveiligingsinstellingen bekijkt of wijzigt.
+  - File: `pages/member/confirm-password.tsx`
+- **Resend verification**
+  - Key (NL): Verificatie opnieuw versturen
+  - File: `pages/member/profile.tsx`
+- **Returns accepted until {{date}}**
+  - Key (NL): Retourneren kan tot {{date}}
+  - File: `pages/member/order-show.tsx`
+- **Save**
+  - Key (NL): Opslaan
+  - File: `pages/member/email-preferences.tsx`
+- **Save listing**
+  - Key (NL): Vermelding opslaan
+  - File: `pages/member/register-listing.tsx`
+- **Save profile**
+  - Key (NL): Profiel opslaan
+  - File: `pages/member/profile.tsx`
+- **Select a session**
+  - Key (NL): Selecteer een sessie
+  - File: `pages/member/chat.tsx`
+- **Session emails**
+  - Key (NL): Sessie-e-mails
+  - File: `pages/member/email-preferences.tsx`
+- **Session emails and notifications are sent in this language.**
+  - Key (NL): Sessiemails en meldingen worden in deze taal verstuurd.
+  - File: `pages/member/profile.tsx`
+- **Sessions & events**
+  - Key (NL): Sessies & events
+  - File: `pages/member/email-preferences.tsx`
+- **Sessions joined**
+  - Key (NL): Deelgenomen sessies
+  - File: `pages/member/lidpaspoort.tsx`
+- **Show my first name on match cards**
+  - Key (NL): Toon mijn voornaam op wedstrijdkaarten
+  - File: `pages/member/profile.tsx`
+- **The Heritage Letter is the house newsletter. Choose whether you receive it, and whether we also send product and event notes.**
+  - Key (NL): De Heritage Letter is de nieuwsbrief van het huis. Kies of u die ontvangt, en of we ook product- en eventberichten sturen.
+  - File: `pages/member/email-preferences.tsx`
+- **The return window for this order has ended.**
+  - Key (NL): De retourtermijn voor deze bestelling is voorbij.
+  - File: `pages/member/order-show.tsx`
+- **This is a secure area of your account. Confirm your password to continue.**
+  - Key (NL): Dit is een beveiligd gedeelte van uw account. Bevestig uw wachtwoord om verder te gaan.
+  - File: `pages/member/confirm-password.tsx`
+- **This session has ended. The chat is closed.**
+  - Key (NL): Deze sessie is afgelopen. De chat is gesloten.
+  - File: `pages/member/chat.tsx`
+- **This session has ended. The chat is closed. Messages will be deleted on {{date}} (30 days after closing).**
+  - Key (NL): Deze sessie is afgelopen. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).
+  - File: `pages/member/chat.tsx`
+- **This session was cancelled. The chat is closed.**
+  - Key (NL): Deze sessie is geannuleerd. De chat is gesloten.
+  - File: `pages/member/chat.tsx`
+- **This session was cancelled. The chat is closed. Messages will be deleted on {{date}} (30 days after closing).**
+  - Key (NL): Deze sessie is geannuleerd. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).
+  - File: `pages/member/chat.tsx`
+- **Timeline**
+  - Key (NL): Tijdlijn
+  - File: `pages/member/order-show.tsx`
+- **Tracking**
+  - Key (NL): Tracking
+  - File: `pages/member/returns/show.tsx`
+- **Unread**
+  - Key (NL): Ongelezen
+  - File: `pages/member/notifications/index.tsx`
+- **Upcoming events**
+  - Key (NL): Komende evenementen
+  - File: `pages/member/lidpaspoort.tsx`
+- **Updates**
+  - Key (NL): Updates
+  - File: `pages/member/order-show.tsx`
+- **Username is an alternate way to sign in alongside email.**
+  - Key (NL): Gebruikersnaam is een alternatieve manier om in te loggen naast e-mail.
+  - File: `pages/member/profile.tsx`
+- **View**
+  - Key (NL): Bekijken
+  - File: `pages/member/dashboard.tsx`
+- **View all**
+  - Key (NL): Alles bekijken
+  - File: `pages/member/dashboard.tsx`
+- **Welcome, {{name}}**
+  - Key (NL): Welkom, {{name}}
+  - File: `pages/member/dashboard.tsx`
+- **You are a Founding Circle member, but no Heritage edition is linked to your account yet. Contact the team for more information.**
+  - Key (NL): U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.
+  - File: `pages/member/circle.tsx`
+- **You are not on the Heritage Letter yet.**
+  - Key (NL): U staat nog niet op de Heritage Letter.
+  - File: `pages/member/letter.tsx`
+- **You are not receiving the Heritage Letter yet.**
+  - Key (NL): U ontvangt de Heritage Letter nog niet.
+  - File: `pages/member/email-preferences.tsx`
+- **You receive the Heritage Letter.**
+  - Key (NL): U ontvangt de Heritage Letter.
+  - File: `pages/member/email-preferences.tsx`
+- **Your current password**
+  - Key (NL): Uw huidige wachtwoord
+  - File: `pages/member/confirm-password.tsx`
+- **Your digital card — the number that will not be reissued.**
+  - Key (NL): Uw digitale kaart — het nummer dat niet opnieuw wordt uitgegeven.
+  - File: `pages/member/circle.tsx`
+- **Your digital passport in the house — membership, badges, sessions and events. This is separate from the physical Heritage Passport.**
+  - Key (NL): Uw digitale paspoort in het huis — lidmaatschap, badges, sessies en evenementen. Dit is los van het fysieke Heritage Passport.
+  - File: `pages/member/lidpaspoort.tsx`
+- **Your email is unverified.**
+  - Key (NL): Uw e-mail is niet geverifieerd.
+  - File: `pages/member/profile.tsx`
+- **Your Founding Edition piece — status, delivery window, and the artefacts that travel with it.**
+  - Key (NL): Uw Founding Edition-stuk — status, leveringsvenster en de artefacten die ermee meegaan.
+  - File: `pages/member/heritage.tsx`
+- **Your membership card**
+  - Key (NL): Uw lidmaatschapskaart
+  - File: `pages/member/dashboard.tsx`
+- **Your membership is in the official archive either way. Choose how your place appears in the public Founding Circle register.**
+  - Key (NL): Uw lidmaatschap staat in elk geval in het officiële archief. Kies hoe uw plaats verschijnt in het publieke Founding Circle-register.
+  - File: `pages/member/register-listing.tsx`
+- **Your personal notifications and system messages.**
+  - Key (NL): Uw persoonlijke meldingen en systeemberichten.
+  - File: `pages/member/notifications/index.tsx`
+- **Your photo appears in the member header and community surfaces.**
+  - Key (NL): Uw foto verschijnt in de lidheader en op community-oppervlakken.
+  - File: `pages/member/profile.tsx`
+- **Your purchases, payments and shipping status in one overview.**
+  - Key (NL): Uw aankopen, betalingen en verzendstatus in één overzicht.
+  - File: `pages/member/orders.tsx`
+- **Your register listing**
+  - Key (NL): Uw registervermelding
+  - File: `pages/member/register-listing.tsx`
+- **Your rooms in the house — orders, the Circle and account settings.**
+  - Key (NL): Uw kamers in het huis — bestellingen, de Circle en accountinstellingen.
+  - File: `pages/member/dashboard.tsx`
+- **Your subscriptions**
+  - Key (NL): Uw inschrijvingen
+  - File: `pages/member/dashboard.tsx`
+
+## Auth full pages (reset / verify / confirm)
+
+- Route: `/{locale}/reset-password|email/verify|confirm-password`
+- Count: 3
+
+- **Reset password**
+  - Key (NL): Wachtwoord opnieuw instellen
+  - File: `pages/auth/reset-password.tsx`
+- **Send a new code**
+  - Key (NL): Nieuwe code versturen
+  - File: `pages/auth/reset-password.tsx`
+- **Verify email**
+  - Key (NL): E-mail verifiëren
+  - File: `pages/auth/verify-email.tsx`
+
+## Settings
+
+- Route: `/{locale}/settings/*`
+- Count: 12
+
+- **Manage your profile photo, account details, and security.**
+  - Key (NL): Beheer uw profielfoto, accountgegevens en beveiliging.
+  - File: `layouts/settings/layout.tsx`
+- **PNG, JPG, or WEBP · max 2 MB**
+  - Key (NL): PNG, JPG of WEBP · max. 2 MB
+  - File: `pages/settings/profile.tsx`
+- **Profile information**
+  - Key (NL): Profielgegevens
+  - File: `pages/settings/profile.tsx`
+- **Profile photo**
+  - Key (NL): Profielfoto
+  - File: `pages/settings/profile.tsx`
+- **Profile settings**
+  - Key (NL): Profielinstellingen
+  - File: `pages/settings/profile.tsx`
+- **Save changes**
+  - Key (NL): Wijzigingen opslaan
+  - File: `pages/settings/profile.tsx`
+- **Security settings**
+  - Key (NL): Beveiligingsinstellingen
+  - File: `pages/settings/security.tsx`
+- **Settings**
+  - Key (NL): Instellingen
+  - File: `layouts/settings/layout.tsx`
+- **This image appears in the sidebar and across the admin area.**
+  - Key (NL): Deze afbeelding verschijnt in de zijbalk en in het beheergebied.
+  - File: `pages/settings/profile.tsx`
+- **Update your name, gender, and email address.**
+  - Key (NL): Werk uw naam, geslacht en e-mailadres bij.
+  - File: `pages/settings/profile.tsx`
+- **username**
+  - Key (NL): gebruikersnaam
+  - File: `pages/settings/profile.tsx`
+- **Your email address is unverified.**
+  - Key (NL): Uw e-mailadres is niet geverifieerd.
+  - File: `pages/settings/profile.tsx`
+
+## Error pages
+
+- Route: `404 / 403`
+- Count: 7
+
+- **Explore the Journal →**
+  - Key (NL): Verken het Journal →
+  - File: `pages/errors/403.tsx`
+- **No access**
+  - Key (NL): Geen toegang
+  - File: `pages/errors/403.tsx`
+- **Page not found**
+  - Key (NL): Pagina niet gevonden
+  - File: `pages/errors/404.tsx`
+- **The requested page does not exist or has been moved. Use the links below to continue.**
+  - Key (NL): De gevraagde pagina bestaat niet of is verplaatst. Gebruik de links hieronder om verder te gaan.
+  - File: `pages/errors/404.tsx`
+- **This page does not exist. Return to Maison Anversa.**
+  - Key (NL): Deze pagina bestaat niet. Keer terug naar Maison Anversa.
+  - File: `pages/errors/404.tsx`
+- **You do not have access to this page. Return to Maison Anversa.**
+  - Key (NL): U heeft geen toegang tot deze pagina. Keer terug naar Maison Anversa.
+  - File: `pages/errors/403.tsx`
+- **You may not view this page. Use the links below to continue.**
+  - Key (NL): U mag deze pagina niet bekijken. Gebruik de links hieronder om verder te gaan.
+  - File: `pages/errors/403.tsx`
