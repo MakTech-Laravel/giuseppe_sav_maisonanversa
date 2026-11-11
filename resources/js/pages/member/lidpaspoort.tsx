@@ -47,7 +47,7 @@ export default function MemberLidpaspoort({
                 eyebrow={t('Lidmaatschap')}
                 title={t('Lidpaspoort')}
                 description={t(
-                    'Uw digitale paspoort in het huis — lidmaatschap, badges, sessies en evenementen. Dit is los van het fysieke Heritage Passport.',
+                    'Jouw digitale paspoort in het huis — lidmaatschap, badges, sessies en evenementen. Dit is los van het fysieke Heritage Passport.',
                 )}
             />
 
@@ -76,7 +76,7 @@ export default function MemberLidpaspoort({
                         {passport.badges.length === 0 ? (
                             <p className="mt-4 font-sans text-sm text-sand">
                                 {t(
-                                    'Nog geen badges. Plan een sessie of meld u aan voor een evenement.',
+                                    'Nog geen badges. Plan een sessie of meld je aan voor een evenement.',
                                 )}
                             </p>
                         ) : (
@@ -132,7 +132,7 @@ export default function MemberLidpaspoort({
                             <MemberEmptyState
                                 title={t('Geen komende sessies')}
                                 description={t(
-                                    'Plan een sessie of sluit u aan bij een open sessie in de Community.',
+                                    'Plan een sessie of sluit je aan bij een open sessie in de Community.',
                                 )}
                             />
                         ) : (

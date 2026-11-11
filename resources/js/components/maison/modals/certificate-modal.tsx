@@ -166,7 +166,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                     type="text"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    placeholder={t('Uw naam')}
+                    placeholder={t('Jouw naam')}
                     className={cnInput()}
                 />
                 <input

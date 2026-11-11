@@ -70,7 +70,7 @@ export function AuthModal({
                     title: t('Registreren'),
                     subtitle: t('Maison Anversa · Lid worden'),
                     description: t(
-                        'Maak uw account aan en krijg toegang tot uw persoonlijke dashboard, Heritage Letter en Founding Circle.',
+                        'Maak jouw account aan en krijg toegang tot jouw persoonlijke dashboard, Heritage Letter en Founding Circle.',
                     ),
                 };
             case 'forgot':
@@ -79,10 +79,10 @@ export function AuthModal({
                     subtitle: t('Herstel · Veilig en discreet'),
                     description: forgotSent
                         ? t(
-                              'Voer de code uit uw e-mail in en kies een nieuw wachtwoord.',
+                              'Voer de code uit jouw e-mail in en kies een nieuw wachtwoord.',
                           )
                         : t(
-                              'Vul uw e-mailadres in en wij sturen u een eenmalige code om uw wachtwoord opnieuw in te stellen.',
+                              'Vul jouw e-mailadres in en wij sturen je een eenmalige code om jouw wachtwoord opnieuw in te stellen.',
                           ),
                 };
             case 'two-factor':
@@ -91,10 +91,10 @@ export function AuthModal({
                     subtitle: t('Beveiliging · Extra verificatie'),
                     description: showRecoveryInput
                         ? t(
-                              'Voer een van uw herstelcodes in om verder te gaan.',
+                              'Voer een van jouw herstelcodes in om verder te gaan.',
                           )
                         : t(
-                              'Voer de code in van uw authenticator-app om verder te gaan.',
+                              'Voer de code in van jouw authenticator-app om verder te gaan.',
                           ),
                 };
             default:
@@ -102,7 +102,7 @@ export function AuthModal({
                     title: t('Inloggen'),
                     subtitle: t('Heritage Letter · Lid worden · Dashboard'),
                     description: t(
-                        'Log in met uw gebruikersnaam of e-mailadres en wachtwoord om toegang te krijgen tot uw Maison Anversa-account.',
+                        'Log in met jouw gebruikersnaam of e-mailadres en wachtwoord om toegang te krijgen tot jouw Maison Anversa-account.',
                     ),
                 };
         }
@@ -237,7 +237,7 @@ export function AuthModal({
                                     required
                                     autoFocus
                                     autoComplete="name"
-                                    placeholder={t('Uw naam')}
+                                    placeholder={t('Jouw naam')}
                                     className={modalInputClassName}
                                 />
                                 <InputError message={errors.name} />
@@ -247,7 +247,7 @@ export function AuthModal({
                                     name="email"
                                     required
                                     autoComplete="email"
-                                    placeholder={t('Uw e-mailadres')}
+                                    placeholder={t('Jouw e-mailadres')}
                                     className={modalInputClassName}
                                 />
                                 <InputError message={errors.email} />
@@ -323,7 +323,7 @@ export function AuthModal({
                                         required
                                         autoFocus
                                         autoComplete="email"
-                                        placeholder={t('Uw e-mailadres')}
+                                        placeholder={t('Jouw e-mailadres')}
                                         className={modalInputClassName}
                                         value={forgotEmail}
                                         onChange={(event) =>
@@ -551,7 +551,7 @@ export function AuthModal({
 
             <p className={modalNoteClassName}>
                 {t(
-                    'Uw gegevens worden veilig behandeld. Alleen wat nodig is voor uw Maison Anversa-account.',
+                    'Jouw gegevens worden veilig behandeld. Alleen wat nodig is voor jouw Maison Anversa-account.',
                 )}
             </p>
         </MaisonModal>

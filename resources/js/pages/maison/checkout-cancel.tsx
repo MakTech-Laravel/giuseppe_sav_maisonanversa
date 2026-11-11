@@ -22,7 +22,7 @@ export default function CheckoutCancel() {
                     </>
                 }
                 subtitle={t(
-                    'Geen zorgen — er is niets in rekening gebracht. U kunt uw reservering opnieuw starten wanneer u klaar bent.',
+                    'Geen zorgen — er is niets in rekening gebracht. Je kunt jouw reservering opnieuw starten wanneer je klaar bent.',
                 )}
             />
 

@@ -54,7 +54,7 @@ export default function MemberEmailPreferences({
                 eyebrow={t('De Heritage Letter')}
                 title={t('E-mailvoorkeuren')}
                 description={t(
-                    'De Heritage Letter is de nieuwsbrief van het huis. Kies of u die ontvangt, en of we ook product- en eventberichten sturen.',
+                    'De Heritage Letter is de nieuwsbrief van het huis. Kies of je die ontvangt, en of we ook product- en eventberichten sturen.',
                 )}
             />
 
@@ -64,8 +64,8 @@ export default function MemberEmailPreferences({
                         tone={form.data.heritageLetter ? 'success' : 'warn'}
                     >
                         {form.data.heritageLetter
-                            ? t('U ontvangt de Heritage Letter.')
-                            : t('U ontvangt de Heritage Letter nog niet.')}
+                            ? t('Je ontvangt de Heritage Letter.')
+                            : t('Je ontvangt de Heritage Letter nog niet.')}
                     </MemberStatusPill>
                 </div>
 
@@ -142,7 +142,7 @@ export default function MemberEmailPreferences({
                 <MemberSectionTitle
                     title={t('Sessie-e-mails')}
                     description={t(
-                        'In-app meldingen blijven altijd aan. Hier kiest u alleen of u ze ook per e-mail ontvangt.',
+                        'In-app meldingen blijven altijd aan. Hier kies je alleen of je ze ook per e-mail ontvangt.',
                     )}
                 />
 

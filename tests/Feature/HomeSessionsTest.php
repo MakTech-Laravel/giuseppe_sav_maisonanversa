@@ -171,7 +171,7 @@ test('the home sessions section matches the PDF placement copy and card', functi
 
     expect($homeCard)
         ->toContain('Doe mee')
-        ->toContain('U speelt mee ✓')
+        ->toContain('Je speelt mee ✓')
         ->toContain('storePendingSessionJoin')
         ->toContain("openAuth('register')");
 

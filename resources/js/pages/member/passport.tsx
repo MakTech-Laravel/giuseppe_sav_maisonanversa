@@ -32,7 +32,7 @@ export default function MemberPassport({
                 <MemberEmptyState
                     title={t('Nog geen editie toegewezen')}
                     description={t(
-                        'U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
                     )}
                 />
             </>

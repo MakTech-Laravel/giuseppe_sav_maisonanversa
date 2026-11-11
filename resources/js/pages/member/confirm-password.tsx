@@ -22,9 +22,9 @@ export default function MemberConfirmPassword() {
             <Head title={t('Wachtwoord bevestigen')} />
             <MemberPageHeader
                 eyebrow={t('Beveiliging')}
-                title={t('Bevestig uw wachtwoord')}
+                title={t('Bevestig jouw wachtwoord')}
                 description={t(
-                    'Dit is een beveiligd gedeelte van uw account. Bevestig uw wachtwoord om verder te gaan.',
+                    'Dit is een beveiligd gedeelte van jouw account. Bevestig jouw wachtwoord om verder te gaan.',
                 )}
             />
 
@@ -32,7 +32,7 @@ export default function MemberConfirmPassword() {
                 <MemberSectionTitle
                     title={t('Wachtwoordcontrole')}
                     description={t(
-                        'Vereist voordat u beveiligingsinstellingen bekijkt of wijzigt.',
+                        'Vereist voordat je beveiligingsinstellingen bekijkt of wijzigt.',
                     )}
                 />
                 <Form {...store.form()} resetOnSuccess={['password']}>
@@ -48,7 +48,7 @@ export default function MemberConfirmPassword() {
                                 <PasswordInput
                                     id="password"
                                     name="password"
-                                    placeholder={t('Uw huidige wachtwoord')}
+                                    placeholder={t('Jouw huidige wachtwoord')}
                                     autoComplete="current-password"
                                     autoFocus
                                     className={memberFieldClassName}

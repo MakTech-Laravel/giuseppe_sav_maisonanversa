@@ -26,7 +26,7 @@ class InscriptionMail extends Mailable implements ShouldQueue
         $number = str_pad((string) $this->entry->edition_number, 3, '0', STR_PAD_LEFT);
 
         return new Envelope(
-            subject: __('Nº :number is nu van u — Founding Circle', ['number' => $number]),
+            subject: __('Nº :number is nu van jou — Founding Circle', ['number' => $number]),
         );
     }
 

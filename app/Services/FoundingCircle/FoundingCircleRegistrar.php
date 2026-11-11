@@ -245,19 +245,19 @@ class FoundingCircleRegistrar
 
         if ($entry === null) {
             throw ValidationException::withMessages([
-                'visibility' => __('Er is nog geen Heritage-editie aan uw account gekoppeld.'),
+                'visibility' => __('Er is nog geen Heritage-editie aan jouw account gekoppeld.'),
             ]);
         }
 
         if (! $entry->isInscribed()) {
             throw ValidationException::withMessages([
-                'visibility' => __('Uw plaats is nog gereserveerd. Na de bedenktijd kunt u uw vermelding beheren.'),
+                'visibility' => __('Jouw plaats is nog gereserveerd. Na de bedenktijd kun je jouw vermelding beheren.'),
             ]);
         }
 
         if ($visibility->isPublic() && ! $consent) {
             throw ValidationException::withMessages([
-                'consent' => __('Vink de toestemming aan om uw naam in het publieke register te tonen.'),
+                'consent' => __('Vink de toestemming aan om jouw naam in het publieke register te tonen.'),
             ]);
         }
 

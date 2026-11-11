@@ -15,11 +15,11 @@ export function CirclePortal() {
         return (
             <div className="my-12 border border-gold/25 bg-cream2 p-8 text-center">
                 <p className="font-serif text-2xl text-choc">
-                    {t('Uw Founding Circle-kaart')}
+                    {t('Jouw Founding Circle-kaart')}
                 </p>
                 <p className="mt-3 text-sm text-choc3">
                     {t(
-                        'Open uw digitale kaart en Heritage Passport in uw account.',
+                        'Open jouw digitale kaart en Heritage Passport in jouw account.',
                     )}
                 </p>
                 <Link
@@ -39,7 +39,7 @@ export function CirclePortal() {
             </p>
             <p className="mt-3 text-sm text-choc3">
                 {t(
-                    'Honderd plaatsen. Bekijk wie het huis vanaf het begin steunt, of kies Heritage Nº 001 om uw nummer te reserveren.',
+                    'Honderd plaatsen. Bekijk wie het huis vanaf het begin steunt, of kies Heritage Nº 001 om jouw nummer te reserveren.',
                 )}
             </p>
             <Link

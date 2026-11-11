@@ -104,7 +104,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Paid,
                 ],
                 [
-                    'message' => 'Betaling ontvangen. Uw bestelling is aangemaakt.',
+                    'message' => 'Betaling ontvangen. Jouw bestelling is aangemaakt.',
                     'user_id' => null,
                 ],
             );
@@ -129,7 +129,7 @@ class OrderFulfillment
                     $fulfilled->user_id,
                     NotificationType::Order,
                     'Bestelling betaald',
-                    'Uw bestelling is betaald.',
+                    'Jouw bestelling is betaald.',
                     [
                         'link_url' => route('member.orders.show', [
                             'locale' => $fulfilled->locale ?? config('app.locale'),

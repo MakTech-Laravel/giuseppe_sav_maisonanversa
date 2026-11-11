@@ -43,7 +43,7 @@ class StoreContactInquiryRequest extends FormRequest
         return [
             'kind.required' => __('Kies een formulier.'),
             'kind.Illuminate\Validation\Rules\Enum' => __('Kies een formulier.'),
-            'name.required' => __('Vul uw naam in.'),
+            'name.required' => __('Vul jouw naam in.'),
             'email.required' => __('Vul een geldig e-mailadres in.'),
             'email.email' => __('Vul een geldig e-mailadres in.'),
             'website.prohibited' => __('Vul een geldig e-mailadres in.'),
@@ -66,7 +66,7 @@ class StoreContactInquiryRequest extends FormRequest
                 if (app(InquirySubmissionLimiter::class)->tooMany($this, $kind)) {
                     $validator->errors()->add(
                         'kind',
-                        __('U kunt dit formulier maximaal twee keer per 24 uur versturen.'),
+                        __('Je kunt dit formulier maximaal twee keer per 24 uur versturen.'),
                     );
                 }
             },

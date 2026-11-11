@@ -25,7 +25,7 @@ class ReturnRequestReceivedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Uw retouraanvraag · :rma', ['rma' => $this->orderReturn->number]),
+            subject: __('Jouw retouraanvraag · :rma', ['rma' => $this->orderReturn->number]),
         );
     }
 

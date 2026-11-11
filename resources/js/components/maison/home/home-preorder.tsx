@@ -101,12 +101,12 @@ export function HomePreorder({
                         <h2 className="mt-3 mb-4 font-serif text-[clamp(28px,3.5vw,44px)] leading-[1.1] font-medium">
                             {t('Reserveer')}
                             <br />
-                            {t('uw')}{' '}
+                            {t('jouw')}{' '}
                             <em className="text-gold italic">{t('nummer')}</em>
                         </h2>
                         <p className="mb-6 text-[15px] leading-[1.85] text-sand">
                             {t(
-                                'Heritage Nº 001 is beschikbaar via pre-order. U betaalt volledig vooraf en ontvangt uw unieke editienummer. De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie.',
+                                'Heritage Nº 001 is beschikbaar via pre-order. Je betaalt volledig vooraf en ontvangt jouw unieke editienummer. De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie.',
                             )}
                         </p>
 
@@ -188,7 +188,7 @@ export function HomePreorder({
                                     onClick={() => openPurchase()}
                                     className="mb-3"
                                 >
-                                    {t('Reserveer Uw Nummer')}
+                                    {t('Reserveer Jouw Nummer')}
                                 </MaisonButton>
                                 {purchasesPaused ? (
                                     <p className="mb-3 text-center font-sans text-[10px] tracking-[0.12em] text-cream/70">

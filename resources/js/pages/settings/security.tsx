@@ -65,7 +65,7 @@ export default function Security({
                     variant="small"
                     title={t('Wachtwoord bijwerken')}
                     description={t(
-                        'Gebruik een lang, uniek wachtwoord. U hebt uw huidige wachtwoord nodig om het te wijzigen.',
+                        'Gebruik een lang, uniek wachtwoord. Je hebt jouw huidige wachtwoord nodig om het te wijzigen.',
                     )}
                 />
 
@@ -166,14 +166,14 @@ export default function Security({
                         variant="small"
                         title={t('Tweestapsverificatie')}
                         description={t(
-                            'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op uw telefoon.',
+                            'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op jouw telefoon.',
                         )}
                     />
                     {twoFactorEnabled ? (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
                                 {t(
-                                    'U wordt bij het inloggen gevraagd om een beveiligingscode, die u uit een TOTP-ondersteunde app op uw telefoon haalt.',
+                                    'Je wordt bij het inloggen gevraagd om een beveiligingscode, die je uit een TOTP-ondersteunde app op jouw telefoon haalt.',
                                 )}
                             </p>
 
@@ -201,7 +201,7 @@ export default function Security({
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
                                 {t(
-                                    'Wanneer ingeschakeld, wordt u bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op uw telefoon.',
+                                    'Wanneer ingeschakeld, word je bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op jouw telefoon.',
                                 )}
                             </p>
 

@@ -147,7 +147,7 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                     <ul className="mt-4 hidden items-center justify-end gap-4 font-sans text-[10px] tracking-[0.12em] text-choc3 uppercase md:flex">
                         <li>{t('Ingeschreven met naam')}</li>
                         <li className="italic">{t('Privélid')}</li>
-                        <li>{t('Uw vermelding')}</li>
+                        <li>{t('Jouw vermelding')}</li>
                     </ul>
 
                     <div className="mt-6 hidden gap-8 text-left md:grid md:grid-cols-4">
@@ -190,11 +190,11 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                     <div className="mt-14 flex flex-col items-start gap-6 border border-gold/20 bg-cream2 p-8 text-left md:flex-row md:items-center md:justify-between">
                         <div>
                             <h2 className="font-serif text-3xl">
-                                {t('Uw naam, uw keuze.')}
+                                {t('Jouw naam, jouw keuze.')}
                             </h2>
                             <p className="mt-3 max-w-xl text-sm leading-relaxed text-choc3">
                                 {t(
-                                    'Elk lid staat in het officiële archief. Of uw volledige naam, uw voornaam en initiaal, of alleen uw nummer publiek verschijnt, kiest u zelf.',
+                                    'Elk lid staat in het officiële archief. Of jouw volledige naam, jouw voornaam en initiaal, of alleen jouw nummer publiek verschijnt, kies je zelf.',
                                 )}
                             </p>
                         </div>
@@ -252,7 +252,7 @@ function PlaceRow({
             </span>
             {place.you ? (
                 <span className="font-sans text-[9px] tracking-[0.14em] text-gold2 uppercase">
-                    {t('U')}
+                    {t('Je')}
                 </span>
             ) : (
                 place.year && (

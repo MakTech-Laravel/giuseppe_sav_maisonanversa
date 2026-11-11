@@ -28,7 +28,7 @@ export default function MemberCircle({ card }: { card: Card | null }) {
                 <MemberEmptyState
                     title={t('Nog geen editie toegewezen')}
                     description={t(
-                        'U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
                     )}
                 />
             </>
@@ -42,7 +42,7 @@ export default function MemberCircle({ card }: { card: Card | null }) {
                 eyebrow={t('Lidmaatschap')}
                 title={t('Founding Circle-kaart')}
                 description={t(
-                    'Uw digitale kaart — het nummer dat niet opnieuw wordt uitgegeven.',
+                    'Jouw digitale kaart — het nummer dat niet opnieuw wordt uitgegeven.',
                 )}
             />
 

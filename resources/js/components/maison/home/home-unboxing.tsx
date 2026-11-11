@@ -11,7 +11,7 @@ const STEPS = [
     {
         num: '01',
         title: 'Welkomstkaart',
-        desc: 'Het eerste dat u ziet. Persoonlijk, warm, handgetekend.',
+        desc: 'Het eerste dat je ziet. Persoonlijk, warm, handgetekend.',
     },
     {
         num: '02',
@@ -21,12 +21,12 @@ const STEPS = [
     {
         num: '03',
         title: 'Heritage Paspoort',
-        desc: "24 pagina's. Leder cover. Uw plek in het verhaal.",
+        desc: "24 pagina's. Leder cover. Jouw plek in het verhaal.",
     },
     {
         num: '04',
         title: 'Heritage Certificaat',
-        desc: 'Oprichterzegel. Handtekening. Uw editienummer.',
+        desc: 'Oprichterzegel. Handtekening. Jouw editienummer.',
     },
     {
         num: '05',

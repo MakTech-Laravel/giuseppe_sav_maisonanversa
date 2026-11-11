@@ -115,8 +115,8 @@ function EmptyState({ tab }: { tab: SessionTab }) {
 
     const copy: Record<SessionTab, string> = {
         open: 'Nog geen evenementen gepland.',
-        mine: 'U bent nog niet aangemeld voor een evenement.',
-        past: 'U heeft nog geen afgelopen evenementen.',
+        mine: 'Je bent nog niet aangemeld voor een evenement.',
+        past: 'Je hebt nog geen afgelopen evenementen.',
     };
 
     return (

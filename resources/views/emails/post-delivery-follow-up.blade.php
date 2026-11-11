@@ -5,7 +5,7 @@
     'ctaLabel' => __('Bezoek het huis'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Het is ongeveer dertig dagen sinds uw editie is geleverd. Wij horen graag hoe het huis voor u aanvoelt.') }}
+        {{ __('Het is ongeveer dertig dagen sinds jouw editie is geleverd. Wij horen graag hoe het huis voor je aanvoelt.') }}
     </p>
 
     <p style="margin:0;">

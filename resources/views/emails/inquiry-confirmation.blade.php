@@ -9,7 +9,7 @@
     </p>
 
     <p style="margin:0 0 16px;">
-        {{ __('Wij hebben uw bericht ontvangen en bevestigen persoonlijk zo snel mogelijk.') }}
+        {{ __('Wij hebben jouw bericht ontvangen en bevestigen persoonlijk zo snel mogelijk.') }}
     </p>
 
     @if (filled($inquiry->subject))

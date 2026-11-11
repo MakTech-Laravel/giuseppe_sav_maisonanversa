@@ -32,7 +32,7 @@ export default function NotificationShow({
                     </Button>
                     <ConfirmDeleteDialog
                         description={t(
-                            'Deze melding uit uw inbox verwijderen?',
+                            'Deze melding uit jouw inbox verwijderen?',
                         )}
                         onConfirm={() =>
                             router.delete(

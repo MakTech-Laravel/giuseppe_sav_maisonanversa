@@ -86,7 +86,7 @@ class SendSessionChatDigestsCommand extends Command
 
         $title = __('Nieuwe berichten');
         $message = trans_choice(
-            'U heeft :count ongelezen chatbericht.|U heeft :count ongelezen chatberichten.',
+            'Je hebt :count ongelezen chatbericht.|Je hebt :count ongelezen chatberichten.',
             $unread,
             ['count' => $unread],
         );

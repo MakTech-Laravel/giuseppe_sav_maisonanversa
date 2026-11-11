@@ -230,7 +230,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                             type="text"
                             value={draft}
                             onChange={(event) => setDraft(event.target.value)}
-                            placeholder={t('Plaats uw reactie')}
+                            placeholder={t('Plaats jouw reactie')}
                             className="min-w-0 flex-1 border border-gold/20 bg-cream px-3.5 py-2.5 font-serif text-sm text-choc outline-none focus:border-gold2"
                         />
                         <button

@@ -88,7 +88,7 @@ class CommunityController extends Controller
             'community_post_id' => $communityPost->id,
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht verborgen op uw muur.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht verborgen op jouw muur.')]);
 
         return back();
     }
@@ -145,7 +145,7 @@ class CommunityController extends Controller
 
         Mail::to($request->user())->queue(new RsvpConfirmation($communityEvent));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('U bent aangemeld voor dit evenement.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Je bent aangemeld voor dit evenement.')]);
 
         return back();
     }
@@ -159,7 +159,7 @@ class CommunityController extends Controller
             ->where('user_id', $request->user()->id)
             ->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Uw aanmelding is geannuleerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Jouw aanmelding is geannuleerd.')]);
 
         return back();
     }

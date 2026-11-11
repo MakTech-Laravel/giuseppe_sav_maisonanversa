@@ -67,7 +67,7 @@ export default function MemberNotificationsIndex({
                 eyebrow={t('Account')}
                 title={t('Meldingen')}
                 description={t(
-                    'Uw persoonlijke meldingen en systeemberichten.',
+                    'Jouw persoonlijke meldingen en systeemberichten.',
                 )}
             />
 
