@@ -473,10 +473,10 @@ test('E2 approved on the day of the session says it is today', function () {
 
     $mail = confirmationMailTo($joiner);
 
-    expect($mail->timingNote)->toBe('Uw sessie is vandaag om 18:30.')
-        ->and($mail->render())->toContain('Uw sessie is vandaag om 18:30.')
+    expect($mail->timingNote)->toBe('Jouw sessie is vandaag om 18:30.')
+        ->and($mail->render())->toContain('Jouw sessie is vandaag om 18:30.')
         ->and($mail->attachments())->toHaveCount(1)
-        ->and(latestInAppMessage($joiner))->toContain('Uw sessie is vandaag om 18:30.');
+        ->and(latestInAppMessage($joiner))->toContain('Jouw sessie is vandaag om 18:30.');
 });
 
 test('E2 approved the evening before says it is tomorrow', function () {
@@ -487,7 +487,7 @@ test('E2 approved the evening before says it is tomorrow', function () {
     joinSession($joiner, $this->session);
     approveRequest($this->host, $joiner, $this->session);
 
-    expect(confirmationMailTo($joiner)->timingNote)->toBe('Uw sessie is morgen om 10:00.');
+    expect(confirmationMailTo($joiner)->timingNote)->toBe('Jouw sessie is morgen om 10:00.');
 });
 
 test('E2 more than 24 hours ahead carries no timing line', function () {
@@ -533,7 +533,7 @@ test('a player approved after the 24-hour reminder gets E2 with the details, nev
         ->and(mailedNotice($joiner, SessionNotice::Reminder))->toBeFalse()
         ->and(mailedNotice($this->player, SessionNotice::Reminder))->toBeTrue()
         ->and($mail->attachments())->toHaveCount(1)
-        ->and($mail->timingNote)->toBe('Uw sessie is morgen om 10:00.');
+        ->and($mail->timingNote)->toBe('Jouw sessie is morgen om 10:00.');
 });
 
 test('a member without a supported language gets session notices in the Belgian fallback', function () {

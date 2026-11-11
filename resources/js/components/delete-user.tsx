@@ -29,7 +29,7 @@ export default function DeleteUser() {
                 </h2>
                 <p className="text-sm text-muted-foreground">
                     {t(
-                        'Verwijder uw account en al zijn gegevens permanent. Dit kan niet ongedaan worden gemaakt.',
+                        'Verwijder jouw account en al zijn gegevens permanent. Dit kan niet ongedaan worden gemaakt.',
                     )}
                 </p>
             </header>
@@ -56,12 +56,12 @@ export default function DeleteUser() {
                     <DialogContent>
                         <DialogTitle>
                             {t(
-                                'Weet u zeker dat u uw account wilt verwijderen?',
+                                'Weet je zeker dat je jouw account wilt verwijderen?',
                             )}
                         </DialogTitle>
                         <DialogDescription>
                             {t(
-                                'Zodra uw account is verwijderd, worden al zijn gegevens permanent gewist. Voer uw wachtwoord in om te bevestigen dat u uw account definitief wilt verwijderen.',
+                                'Zodra jouw account is verwijderd, worden al zijn gegevens permanent gewist. Voer jouw wachtwoord in om te bevestigen dat je jouw account definitief wilt verwijderen.',
                             )}
                         </DialogDescription>
 

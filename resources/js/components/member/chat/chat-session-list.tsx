@@ -35,7 +35,7 @@ export function ChatSessionList({
                 </p>
                 <p className="max-w-xs font-sans text-[12px] text-sand">
                     {t(
-                        'Zodra u een sessie host of goedgekeurd bent, verschijnt die hier.',
+                        'Zodra je een sessie host of goedgekeurd bent, verschijnt die hier.',
                     )}
                 </p>
             </div>

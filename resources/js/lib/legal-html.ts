@@ -52,7 +52,7 @@ const ALLOWED_TAGS = new Set([
     'TH',
     'THEAD',
     'TR',
-    'U',
+    'Je',
     'UL',
 ]);
 

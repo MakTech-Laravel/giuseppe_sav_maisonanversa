@@ -255,12 +255,12 @@ export function EditionPickerModal({
 
     return (
         <MaisonModal
-            label={t('Kies uw editienummer')}
+            label={t('Kies jouw editienummer')}
             onClose={onClose}
             panelClassName="max-w-[640px]"
         >
             <h2 className="mb-1.5 font-serif text-[32px] font-medium text-choc">
-                {t('Kies uw editienummer')}
+                {t('Kies jouw editienummer')}
             </h2>
             <span className="mb-1 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
                 {product.productName}
@@ -272,7 +272,7 @@ export function EditionPickerModal({
             )}
             <p className={cn(modalNoteClassName, 'mb-3')}>
                 {t(
-                    'Beschikbare nummers kunt u selecteren. Niet te koop, gereserveerd of verkocht zijn niet selecteerbaar.',
+                    'Beschikbare nummers kun je selecteren. Niet te koop, gereserveerd of verkocht zijn niet selecteerbaar.',
                 )}
             </p>
 

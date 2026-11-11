@@ -73,7 +73,7 @@ test('the alert mail carries the share link and a cancel button', function () {
     $html = $mail->render();
     $sessionUrl = route('community.sessions.show', ['locale' => 'nl', 'communitySession' => $this->session->id]);
 
-    expect($html)->toContain('Uw sessie heeft nog 2 vrije plaatsen. Deel ze, of annuleer ze.')
+    expect($html)->toContain('Jouw sessie heeft nog 2 vrije plaatsen. Deel ze, of annuleer ze.')
         ->and($html)->toContain('Deel deze link')
         ->and($html)->toContain($this->session->shareUrl('nl'))
         ->and($html)->toContain('Sessie annuleren')
@@ -128,7 +128,7 @@ test('a session already alerted is not alerted again', function () {
     expect(openSpotsNotices($this->host))->toBe([]);
 });
 
-test('the alert follows the organiser\'s language, english when none is set', function () {
+test('the alert follows the organiser\'s language, notification fallback when none is set', function () {
     $this->host->update(['locale' => 'fr']);
 
     $this->artisan('sessions:send-open-spots-alerts')->assertSuccessful();
@@ -149,12 +149,13 @@ test('the alert follows the organiser\'s language, english when none is set', fu
 
     $this->artisan('sessions:send-open-spots-alerts')->assertSuccessful();
 
-    $english = openSpotsMailTo($other->host);
+    $fallback = openSpotsMailTo($other->host);
+    $fallbackLocale = (string) config('maison.notification_fallback_locale');
 
-    expect($english->locale)->toBe('en')
+    expect($fallback->locale)->toBe($fallbackLocale)
         ->and($other->host->userNotifications()->with('notification')->first()->notification->title)
-        ->toBe('Your session still has free places');
-    $english->assertHasSubject('Your session still has free places');
+        ->toBe('Jouw sessie heeft nog vrije plaatsen');
+    $fallback->assertHasSubject('Jouw sessie heeft nog vrije plaatsen');
 });
 
 test('an organiser who switched session emails off still gets the in-app alert', function () {

@@ -55,7 +55,7 @@ export default function GuestReturnShow({
                                 </p>
                                 <p className="mt-3 text-[#5C4A3D]">
                                     {t(
-                                        'Uw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op uw rekening.',
+                                        'Jouw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op jouw rekening.',
                                     )}
                                 </p>
                                 <dl className="mt-4 space-y-2 font-sans text-sm">

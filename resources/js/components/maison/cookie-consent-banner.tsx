@@ -24,7 +24,7 @@ export function CookieConsentBanner() {
                     <p className="font-serif text-lg">{t('Cookies')}</p>
                     <p className="mt-1 text-sm text-sand">
                         {t(
-                            'Wij gebruiken noodzakelijke cookies voor de site. Analytics en marketing laden alleen na uw toestemming.',
+                            'Wij gebruiken noodzakelijke cookies voor de site. Analytics en marketing laden alleen na jouw toestemming.',
                         )}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-4 text-sm">

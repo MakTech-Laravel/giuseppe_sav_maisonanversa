@@ -62,7 +62,7 @@ export default function MemberLetter({
             {subscriptions.length === 0 ? (
                 <MemberPanel className="max-w-xl">
                     <p className="text-[15px] leading-relaxed text-sand">
-                        {t('U staat nog niet op de Heritage Letter.')}
+                        {t('Je staat nog niet op de Heritage Letter.')}
                     </p>
                     <Link
                         href={`/${locale}/member/email-preferences`}

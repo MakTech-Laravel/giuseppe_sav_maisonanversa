@@ -41,7 +41,7 @@ class PasswordResetOtpController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Als dit e-mailadres bij ons bekend is, ontvangt u binnen enkele minuten een code.'),
+            'message' => __('Als dit e-mailadres bij ons bekend is, ontvang je binnen enkele minuten een code.'),
         ]);
 
         return back()->with('password_reset_otp_sent', true);

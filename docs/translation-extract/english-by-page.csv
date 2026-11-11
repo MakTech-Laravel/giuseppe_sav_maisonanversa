@@ -1,0 +1,902 @@
+Section,PageTitle,Route,SourceFile,DutchKey,English,Kind,Notes
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,{{count}} in afwachting,{{count}} pending,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/share.tsx; pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,{{count}} plaatsen vrij,{{count}} spots left,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/share.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-footer.tsx,© 2026 Maison Anversa. Alle rechten voorbehouden.,© 2026 Maison Anversa. All rights reserved.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,← Terug,← Back,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,1 plaats vrij,1 spot left,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/share.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,6-cijferige code,6-digit code,ui,also: pages/auth/reset-password.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-footer.tsx,Een Europees erfgoedhuis geworteld in Antwerpen. Wij bouwen producten voor mensen die begrijpen dat de mooiste dingen in het leven tijd kosten.,A European heritage house rooted in Antwerp. We build products for people who understand that the most beautiful things in life take time.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/auth/verify-email.tsx,Er is een nieuwe verificatielink naar jouw e-mailadres gestuurd.,A new verification link has been sent to your email address.,ui,also: pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),layouts/settings/layout.tsx,Account,Account,ui,also: pages/member/notifications/index.tsx; pages/member/orders.tsx; pages/member/profile.tsx; pages/member/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op jouw telefoon.,Add a second step at login with a code from an authenticator app on your phone.,ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Cadeauverpakking toevoegen,Add gift wrapping,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Trackingnummer toevoegen,Add tracking number,ui,also: pages/member/order-show.tsx; pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Adresregel 2 (optioneel),Address line 2 (optional),ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Alle plaatsen aangevraagd,All places requested,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Al een account? Inloggen,Already have an account? Log in,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Bedrag,Amount,ui,also: pages/member/order-show.tsx; pages/member/orders.tsx; pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/cookie-consent-banner.tsx,Analytics,Analytics,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,gelezen en ga ermee akkoord.,and agree to them.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/legal/legal-page-links.tsx,en het,and the,ui,also: components/maison/modals/order-modal.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-footer.tsx,"Antwerpen, België · maisonanversa.com","Antwerp, Belgium · maisonanversa.com",ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/etching-band.tsx,Anversa · Antwerpen,Anversa · Antwerp,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Authenticatiecode,Authentication code,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/product/product-catalog-card.tsx,Beschikbaar,Available,ui,also: components/maison/product/product-catalog-filters.tsx; pages/maison/dressing-show.tsx; pages/maison/dressing.tsx; pages/maison/founding-circle/register.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/cancel-session-dialog.tsx,Terug,Back,ui,also: pages/maison/sessions/create.tsx; pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/errors/403.tsx,Terug naar huis,Back home,ui,also: pages/errors/404.tsx; pages/maison/checkout-success.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Terug naar inloggen,Back to log in,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-newsletter.tsx,"Als eerste verhalen, nieuws en exclusieve uitnodigingen ontvangen van Maison Anversa.","Be the first to receive stories, news and exclusive invitations from Maison Anversa.",ui,also: pages/member/email-preferences.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/heritage-letter-form.tsx,Door je in te schrijven ga je akkoord met onze privacyverklaring.,By signing up you agree to our privacy policy.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Annuleren,Cancel,ui,also: pages/maison/sessions/create.tsx; pages/member/confirm-password.tsx; pages/member/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/chat/chat-session-list.tsx,Geannuleerd,Canceled,ui,also: pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Zorg & Garantie,Care & Warranty,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Vervoerder,Carrier,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/etching-band.tsx,draagt,carries us,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Certificaat van Echtheid,Certificate of Authenticity,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/profile.tsx,Foto wijzigen,Change photo,ui,also: pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/chat/session-chat-button.tsx,Chat,Chat,ui,also: components/member/member-nav.tsx; pages/member/chat.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Kies jouw editienummer,Choose your edition number,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/club-submit-dialog.tsx,Stad,City,ui,also: components/maison/modals/order-modal.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/maison-modal.tsx,Sluiten,Close,ui,also: components/maison/shell/contact-dock.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/corner.tsx,Club,Club,ui,also: pages/maison/sessions/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Club Corner,Club Corner,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/community-courts.tsx,Binnenkort,Coming soon,ui,also: components/maison/product/product-catalog-card.tsx; components/maison/product/product-catalog-filters.tsx; pages/maison/dressing-show.tsx; pages/maison/dressing.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/community-tabs.tsx,Community,Community,ui,also: lib/maison-navigation.ts; pages/maison/clubs/index.tsx; pages/maison/events/index.tsx; pages/maison/sessions/create.tsx; pages/maison/sessions/index.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Gemeenschap,Community,ui,also: pages/member/chat.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Bevestig nieuw wachtwoord,Confirm new password,ui,also: pages/auth/reset-password.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Bevestig wachtwoord,Confirm password,ui,also: pages/auth/reset-password.tsx; pages/member/security.tsx; pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Retour bevestigen,Confirm return,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Contact,Contact,ui,also: pages/errors/403.tsx; pages/errors/404.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Doorgaan,Continue,ui,also: pages/maison/sessions/create.tsx; pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,Setup voortzetten,Continue setup,ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/cookie-consent-banner.tsx,Cookies,Cookies,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Land,Country,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,"Maak jouw account aan en krijg toegang tot jouw persoonlijke dashboard, Heritage Letter en Founding Circle.","Create your account and access your personal dashboard, Heritage Letter and Founding Circle.",ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,Huidig wachtwoord,Current password,ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/auth-menu.tsx,Dashboard,Dashboard,ui,also: components/member/member-nav.tsx; pages/member/dashboard.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-schedule-fields.tsx,Datum,Date,ui,also: pages/maison/guest-returns/show.tsx; pages/member/orders.tsx; pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Gegevens,Details,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Digitaal Heritage Passport,Digital Heritage Passport,ui,also: pages/member/passport.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,2FA uitschakelen,Disable 2FA,ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/errors/403.tsx,Ontdek Heritage Nº 001 →,Discover Heritage Nº 001 →,ui,also: pages/errors/404.tsx; pages/maison/dressing-show.tsx; pages/maison/dressing.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Kleedkamer,Dressing Room,ui,also: pages/maison/dressing.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/newsletter-modal.tsx,Vroege toegang · Exclusieve updates · Gratis,Early access · Exclusive updates · Free,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Editienummer,Edition number,ui,also: components/maison/modals/order-modal.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Editienummer (bijv. 7),Edition number (e.g. 7),ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Editienummers konden niet worden geladen.,Edition numbers could not be loaded.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Editierange,Edition range,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,E-mail,Email,ui,also: pages/member/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,E-mailadres,Email address,ui,also: components/maison/modals/order-modal.tsx; pages/auth/reset-password.tsx; pages/maison/corner.tsx; pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,E-mailvoorkeuren,Email preferences,ui,also: pages/member/dashboard.tsx; pages/member/email-preferences.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,2FA inschakelen,Enable 2FA,ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Gegraveerd in het leder,Engraved in the leather,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Voer een van jouw herstelcodes in om verder te gaan.,Enter one of your recovery codes to continue.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Voer de code in van jouw authenticator-app om verder te gaan.,Enter the code from your authenticator app to continue.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Voer de code uit jouw e-mail in en kies een nieuw wachtwoord.,Enter the code from your email and choose a new password.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Vul jouw e-mailadres in en wij sturen je een eenmalige code om jouw wachtwoord opnieuw in te stellen.,Enter your email address and we will send you a one-time code to reset your password.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Events,Events,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Verwacht terugbetalingsbedrag,Expected refund amount,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Verkennen,Explore,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,FAQ,FAQ,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Volg Ons,Follow Us,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Wachtwoord vergeten,Forgot password,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Wachtwoord vergeten?,Forgot password?,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Oprichter · Antwerpen,Founder · Antwerp,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/feed-sidebar.tsx,Founding Circle,Founding Circle,ui,MISSING_EN (not in lang/en.json; EN UI shows this key) | also: components/member/member-nav.tsx; lib/maison-navigation.ts; pages/maison/community.tsx; pages/member/circle.tsx; pages/member/dashboard.tsx; pages/member/passport.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/verify.tsx,Founding Circle · sinds {{since}},Founding Circle · Since {{since}},ui,also: pages/member/circle.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-topbar.tsx,Founding Edition — 100 Genummerde Stuks,Founding Edition — 100 numbered pieces,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Van,From,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Volzet,Full,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/share.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Volledige naam,Full name,ui,also: pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/gender-select.tsx,Geslacht,Gender,ui,also: components/maison/modals/auth-modal.tsx; pages/auth/register.tsx; pages/member/profile.tsx; pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Cadeauboodschap (optioneel),Gift message (optional),ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Cadeauverpakking,Gift packaging,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Ga naar betaling —,Go to payment —,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-footer.tsx,Heritage Letter,Heritage Letter,ui,also: components/maison/shell/site-topbar.tsx; components/member/member-nav.tsx; lib/maison-navigation.ts; pages/maison/newsletter-unsubscribed.tsx; pages/member/dashboard.tsx; pages/member/email-preferences.tsx; pages/member/letter.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Heritage Letter · Lid worden · Dashboard,Heritage Letter · Become a member · Dashboard,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-product.tsx,Heritage Nº 001,Heritage Nº 001,ui,MISSING_EN (not in lang/en.json; EN UI shows this key) | also: components/maison/product/product-gallery.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Heritage Nº 001 — Founding Edition,Heritage Nº 001 — Founding Edition,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/modal-password-input.tsx,Wachtwoord verbergen,Hide password,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Houder,Holder,ui,also: components/maison/modals/order-modal.tsx; pages/maison/verify.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/contact-dock.tsx,Hoe kunnen wij je helpen?,How can we help you?,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Ik bevestig dat ik deze artikelen wil retourneren.,I confirm that I want to return these items.,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Ik heb de,I have read the,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Ik heb de Algemene voorwaarden en het Retourbeleid gelezen en ga ermee akkoord.,I have read the Terms & Conditions and the Return Policy and agree to them.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,incl. 21% btw,incl. 21% VAT,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,"Stuur alles mee wat erbij hoorde: doos, Heritage Passport, kaarten en accessoires.","Include everything that came with it: box, Heritage Passport, cards and accessories.",ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Instagram,Instagram,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Instructies,Instructions,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,"een origineel, met de hand afgewerkt erfgoedstuk is, individueel genummerd","is an original, hand-finished heritage piece, individually numbered",ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Artikelen,Items,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Doe mee,Join,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/share.tsx; pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/heritage-letter-form.tsx,Word Lid,Join,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Journal,Journal,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/opening/opening.tsx,Taal,Language,ui,also: components/maison/shell/language-switcher.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-nav.tsx,Laatste inschrijving,Latest inscription,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Sessie verlaten,Leave session,ui,also: pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Laden…,Loading…,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/community-login-gate.tsx,Inloggen,Log in,ui,also: components/maison/modals/auth-modal.tsx; components/maison/shell/auth-menu.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Inloggen met authenticatiecode,Log in with authentication code,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Inloggen met herstelcode,Log in with recovery code,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Log in met jouw gebruikersnaam of e-mailadres en wachtwoord om toegang te krijgen tot jouw Maison Anversa-account.,Log in with your username or email address and password to access your Maison Anversa account.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/auth-menu.tsx,Uitloggen,Log out,ui,also: components/member/member-nav.tsx; pages/auth/verify-email.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/contact-dock.tsx,Maison Anversa — hulp,Maison Anversa — help,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Maison Anversa · Antwerpen · MMXXVI,Maison Anversa · Antwerp · MMXXVI,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Maison Anversa · Lid worden,Maison Anversa · Become a member,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/cookie-consent-banner.tsx,Marketing,Marketing,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Lid,Member,ui,also: components/member/member-topbar.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Lidpaspoort,Member passport,ui,also: pages/member/lidpaspoort.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/verify.tsx,Lidmaatschap,Membership,ui,also: pages/member/circle.tsx; pages/member/lidpaspoort.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-nav.tsx,Menu,Menu,ui,also: components/member/member-nav.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Boodschap,Message,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Monogram (3 letters),Monogram (3 letters),ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Mijn Heritage,My Heritage,ui,also: pages/member/heritage.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/club-submit-dialog.tsx,Naam,Name,ui,also: pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Naam van de houder,Name of the holder,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/cookie-consent-banner.tsx,Noodzakelijk,Necessary,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Nieuw wachtwoord,New password,ui,also: pages/auth/reset-password.tsx; pages/member/security.tsx; pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Volgende — Betaling,Next — Payment,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/journal/journal-pagination.tsx,Volgende pagina,Next page,ui,also: components/maison/product/product-pagination.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/feed-post-card.tsx,Nr. {{number}},Nº {{number}},ui,also: components/maison/modals/order-modal.tsx; pages/maison/checkout-success.tsx; pages/maison/verify.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Nog geen account? Registreren,No account yet? Register,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Geen editie gevonden voor deze zoekopdracht.,No edition found for this search.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Geen editienummers gevonden.,No edition numbers found.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/newsletter-modal.tsx,Geen spam. Alleen wat er echt toe doet. Uitschrijven kan altijd.,No spam. Only what truly matters. Unsubscribe anytime.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Nog geen tracking,No tracking yet,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Meldingen,Notifications,ui,also: components/member/member-notification-bell.tsx; pages/member/notifications/index.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/player-slots.tsx,Vrij,Open,ui,also: pages/maison/sessions/share.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Optionele toelichting,Optional comment,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Bestellingen,Orders,ui,also: pages/member/dashboard.tsx; pages/member/orders.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-story.tsx,Ons Verhaal,Our Story,ui,also: lib/maison-navigation.ts
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Wachtwoord,Password,ui,also: pages/member/confirm-password.tsx; pages/member/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Betaling,Payment,ui,also: pages/maison/checkout-cancel.tsx; pages/maison/checkout-success.tsx; pages/member/order-show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Betaling kon niet worden gestart. Probeer opnieuw.,Payment could not be started. Please try again.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Betaalmethode,Payment method,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/player-slots.tsx,In afwachting,Pending,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/share.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Telefoon,Phone,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Telefoonnummer (optioneel),Phone number (optional),ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Kies a.u.b. een beschikbaar editienummer.,Please choose an available edition number.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Vul a.u.b. jouw contact- en verzendgegevens in.,Please enter your contact and shipping details.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/club-submit-dialog.tsx,Postcode,Postal code,ui,also: components/maison/modals/order-modal.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Pers,Press,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/journal/journal-pagination.tsx,Vorige pagina,Previous page,ui,also: components/maison/product/product-pagination.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/heritage-letter-form.tsx,Privacybeleid,Privacy Policy,ui,also: lib/maison-navigation.ts
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Product,Product,ui,also: pages/maison/verify.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Producten,Products,ui,also: pages/maison/products/index.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/auth-menu.tsx,Profiel,Profile,ui,also: layouts/settings/layout.tsx; pages/member/dashboard.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Profiel & account,Profile & account,ui,also: pages/member/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Reden (optioneel),Reason (optional),ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Herstel · Veilig en discreet,Recovery · Secure and discreet,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Herstelcode,Recovery code,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/checkout-success.tsx,Referentie,Reference,ui,also: pages/member/orders.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Terugbetaling voltooid,Refund completed,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Registreren,Register,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/member-nav.tsx,Registervermelding,Register listing,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Inschrijving gesloten,Registration closed,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/share.tsx; pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Onthoud mij,Remember me,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/chat/chat-message-item.tsx,Verwijderen,Remove,ui,also: pages/member/notifications/show.tsx; pages/member/profile.tsx; pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Andere code aanvragen,Request another code,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Aanvraag geweigerd,Request declined,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Aanvraag in behandeling,Request pending,ui,also: components/maison/home/home-session-card.tsx; pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/auth/verify-email.tsx,Verificatie-e-mail opnieuw versturen,Resend verification email,ui,also: pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-preorder.tsx,Reserveren is tijdelijk gepauzeerd.,Reservations are temporarily paused.,ui,also: components/maison/product/product-detail.tsx; pages/maison/circle.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-scoreboard.tsx,Uitslag,Result,ui,also: pages/maison/sessions/share.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Retour,Return,ui,also: pages/maison/guest-returns/show.tsx; pages/member/order-show.tsx; pages/member/returns/create.tsx; pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Retourbeleid,Return Policy,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,De kosten van de retourzending zijn voor jou. We raden een verzekerde zending met tracking aan.,Return shipping costs are yours. We recommend insured shipping with tracking.,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Retourneren,Returns,ui,also: pages/maison/returns.tsx; pages/member/order-show.tsx; pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Voorbeeld — definitief certificaat bij levering,Sample — final certificate upon delivery,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Wachtwoord opslaan,Save password,ui,also: pages/auth/reset-password.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/cookie-consent-banner.tsx,Voorkeuren opslaan,Save preferences,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Zoek op editienummer,Search by edition number,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Beveiligde betaling via Stripe · SSL-versleuteld ·,Secure payment via Stripe · SSL encrypted ·,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/auth-menu.tsx,Beveiliging,Security,ui,also: components/member/member-nav.tsx; layouts/settings/layout.tsx; pages/member/confirm-password.tsx; pages/member/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Beveiliging · Extra verificatie,Security · Extra verification,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Verstuur code,Send code,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Sessie,Session,ui,also: components/maison/community/sessions/share-session-button.tsx; components/member/chat/chat-session-list.tsx; pages/maison/sessions/share.tsx; pages/maison/sessions/show.tsx; pages/member/chat.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Sessie afgerond,Session complete,ui,also: pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Sessie compleet,Session full,ui,also: pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/member/chat/chat-session-list.tsx,Sessies,Sessions,ui,also: components/member/member-nav.tsx; pages/maison/sessions/index.tsx; pages/member/chat.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Nieuw wachtwoord instellen,Set new password,ui,also: pages/auth/reset-password.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Versturen tot,Ship by,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Stuur het artikel binnen 14 dagen naar:,Ship the item within 14 days to:,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Verzending & Retour,Shipping & Returns,ui,also: pages/maison/returns.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Verzendadres,Shipping address,ui,also: pages/member/order-show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Verzending later in rekening gebracht — indicatie {{min}}–{{max}} €.,Shipping charged later — estimate {{min}}–{{max}} €.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Verzending inbegrepen in de EU (indicatie).,Shipping included in the EU (indicative).,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/modal-password-input.tsx,Wachtwoord tonen,Show password,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/newsletter-modal.tsx,Schrijf je in en ontvang als eerste toegang tot Heritage Nº 001 en alle toekomstige releases van Maison Anversa.,Sign up and be the first to access Heritage Nº 001 and all future releases from Maison Anversa.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-preorder.tsx,Schrijf in voor Heritage Letter,Sign up for the Heritage Letter,ui,also: components/maison/product/product-detail.tsx; pages/maison/dressing-show.tsx; pages/maison/dressing.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),layouts/frontend-layout.tsx,Ga naar de inhoud,Skip to content,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Status,Status,ui,also: pages/maison/verify.tsx; pages/member/heritage.tsx; pages/member/orders.tsx; pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Straat en huisnummer,Street and number,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Samenvatting,Summary,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),lib/maison-navigation.ts,Support,Support,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Voorwaarden,Terms,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Algemene voorwaarden,Terms & Conditions,ui,also: lib/maison-navigation.ts
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-circle.tsx,De,The,ui,also: pages/maison/circle.tsx; pages/maison/corner.tsx; pages/maison/dressing.tsx; pages/maison/products/index.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/etching-band.tsx,De stad die ons,The city that,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-circle.tsx,De eerste 100,The first 100,ui,also: pages/maison/circle.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,De Founding Edition wordt in één beperkte productieronde vervaardigd. Levertermijnen zijn indicatief.,The Founding Edition is produced in a single limited production run. Delivery times are indicative.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/home/home-newsletter.tsx,De Heritage Letter,The Heritage Letter,ui,also: components/maison/modals/newsletter-modal.tsx; pages/member/email-preferences.tsx; pages/member/letter.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/product/product-related.tsx,Het Huis,The House,ui,also: lib/maison-navigation.ts; pages/maison/house.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/shell/site-nav.tsx,Het register,The Register,ui,also: lib/maison-navigation.ts
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/certificate-modal.tsx,Hiermee wordt verklaard dat het hieronder beschreven werk,This certifies that the work described below,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,Dit editienummer is niet meer beschikbaar. Kies een ander nummer.,This edition number is no longer available. Please choose another.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Totaal,Total,ui,also: pages/member/order-show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Trackingnummer,Tracking number,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Tweestapsverificatie,Two-factor authentication,ui,also: pages/member/security.tsx; pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Onbekende club,Unknown club,ui,also: components/maison/home/home-session-card.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/clubs/show.tsx,Komende sessies,Upcoming sessions,ui,also: pages/member/lidpaspoort.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,Wachtwoord bijwerken,Update password,ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/profile.tsx,Foto uploaden,Upload photo,ui,also: pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,"Gebruik een lang, uniek wachtwoord. Je hebt jouw huidige wachtwoord nodig om het te wijzigen.","Use a long, unique password. You will need your current password to change it.",ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/profile.tsx,Gebruikersnaam,Username,ui,also: pages/settings/profile.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Gebruikersnaam / E-mail,Username / Email,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/circle/circle-portal.tsx,Bekijk het register,View the Register,ui,also: components/maison/home/home-register.tsx; components/maison/product/product-detail.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/cookie-consent-banner.tsx,Wij gebruiken noodzakelijke cookies voor de site. Analytics en marketing laden alleen na jouw toestemming.,We use necessary cookies for the site. Analytics and marketing load only after your consent.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,We nemen contact met je op over de retourzending op onze kosten.,We will contact you about return shipping at our expense.,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/club-submit-dialog.tsx,Website,Website,ui,also: pages/maison/clubs/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/heritage-letter-form.tsx,Welkom bij de Heritage Letter.,Welcome to the Heritage Letter.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/create.tsx,Wat wil je retourneren?,What would you like to return?,ui,also: pages/member/returns/create.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,"Wanneer ingeschakeld, word je bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op jouw telefoon.","When enabled, you will be prompted for a secure code during login. This code comes from a TOTP-supported application on your phone.",ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/sessions/session-card.tsx,Aanvraag intrekken,Withdraw request,ui,also: pages/maison/sessions/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/contact/bureau-form.tsx,Bezig…,Working…,ui,also: components/maison/heritage-letter-form.tsx; components/maison/modals/order-modal.tsx; pages/auth/verify-email.tsx; pages/maison/corner.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Ja · geen prijs op pakbon,Yes · no price on packing slip,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/edition-picker-modal.tsx,"Beschikbare nummers kun je selecteren. Niet te koop, gereserveerd of verkocht zijn niet selecteerbaar.","You can select available numbers. Not for sale, reserved, or sold cannot be selected.",ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/member/security.tsx,"Je wordt bij het inloggen gevraagd om een beveiligingscode, die je uit een TOTP-ondersteunde app op jouw telefoon haalt.","You will be prompted for a secure code during login, which you can retrieve from a TOTP-supported application on your phone.",ui,also: pages/settings/security.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/order-modal.tsx,Je wordt doorgestuurd naar onze beveiligde betaalpagina. Betaling via Stripe.,You will be redirected to our secure payment page. Payment via Stripe.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/heritage-letter-form.tsx,Je ontvangt binnenkort een bevestiging.,You will receive a confirmation shortly.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/modals/auth-modal.tsx,Jouw gegevens worden veilig behandeld. Alleen wat nodig is voor jouw Maison Anversa-account.,Your data is handled securely. Only what is needed for your Maison Anversa account.,ui,
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/heritage-letter-form.tsx,Jouw e-mailadres,Your email address,ui,also: components/maison/modals/auth-modal.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/heritage-letter-form.tsx,Jouw naam,Your name,ui,also: components/maison/modals/auth-modal.tsx; components/maison/modals/certificate-modal.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),pages/maison/guest-returns/show.tsx,Jouw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op jouw rekening.,Your refund has been processed. The amount will appear on your account within a few business days.,ui,also: pages/member/returns/show.tsx
+00-shared,"Shared shell (nav, footer, modals, cookie)",(all public + member pages),components/maison/community/feed-sidebar.tsx,Yusuf Savran,Yusuf Savran,ui,also: components/maison/modals/certificate-modal.tsx
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-intro.tsx,nodig.,.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-sessions.tsx,{{count}} open sessies deze week,{{count}} open sessions this week,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-sessions.tsx,+ Plan een sessie,+ Plan a session,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,Een stad van,A city of,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,Een huis van,A house of,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-unboxing.tsx,een Racket.,a Racket.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-sessions.tsx,"Na de koffie, de baan.","After the coffee, the court.",ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Antwerp · Belgium,Antwerp · Belgium,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,"Antwerpen is geen toevallige keuze. Eeuwenlang een stad van ambachtslieden, handelaren en kunstenaars — van diamantslijpers tot meester-timmerlieden. Een plaats waar geduld, precisie en schoonheid hand in hand gaan.","Antwerp is no accidental choice. For centuries a city of craftsmen, merchants and artists — from diamond cutters to master carpenters. A place where patience, precision and beauty go hand in hand.",ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-story.tsx,Antwerpen.,Antwerp.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.7.name),Atelier,opening,OPENING_ROOMS[6].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.tileAvailable),available,opening,OPENING_COPY.en.tileAvailable
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.available),Available,opening,OPENING_COPY.en.available
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.6.name),Bibliothèque,opening,OPENING_ROOMS[5].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-story.tsx,Gebouwd voor,Built for,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.2.name),Bureau,opening,OPENING_ROOMS[1].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,ons draagt,carries us,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.chooseNumber),Choose your number,opening,OPENING_COPY.en.chooseNumber
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,Stad die,City that,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.claimNumber),Claim Nº {n},opening,OPENING_COPY.en.claimNumber
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.8.name),Club Corner,opening,OPENING_ROOMS[7].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.5.subtitle),Community,opening,OPENING_ROOMS[4].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-sessions.tsx,Community · Sessies,Community · Sessions,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.2.subtitle),Contact,opening,OPENING_ROOMS[1].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-unboxing.tsx,Ontdek de volledige ervaring →,Discover the full experience →,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Ontdek het Racket →,Discover the Racket →,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-unboxing.tsx,Elk Heritage Nº 001 pakket is een volledige ervaring. Elk element is intentioneel gekozen. De volgorde is nooit toevallig.,Each Heritage Nº 001 package is a complete experience. Every element is intentionally chosen. The order is never accidental.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Elk stuk individueel,Each piece individually,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.enterHouse),Enter the house,opening,OPENING_COPY.en.enterHouse
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Europa,Europe,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.houseHint),Every lit window is a room. Choose one to step inside.,opening,OPENING_COPY.en.houseHint
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-register.tsx,"Elk lid van de Founding Circle wordt ingeschreven in het officiële register van het Huis, in de volgorde waarin zij toetraden. Zodra alle honderd plaatsen zijn ingenomen, sluit het eerste hoofdstuk voorgoed.","Every member of the Founding Circle is inscribed in the official register of the House, in the order they joined. Once all one hundred places are taken, the first chapter closes for good.",ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,Oprichting,Founding,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.3.subtitle),Founding Circle,opening,OPENING_ROOMS[2].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Founding Edition,Founding Edition,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Voortgang Founding Edition,Founding Edition Progress,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Volledig vooraf · Inclusief Heritage Ervaring,Full upfront · Including Heritage Experience,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.4.name),Galerie,opening,OPENING_ROOMS[3].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-story.tsx,generaties.,generations.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.greeting.afternoon),Good afternoon from Antwerp,opening,OPENING_COPY.en.greeting.afternoon
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.greeting.evening),Good evening from Antwerp,opening,OPENING_COPY.en.greeting.evening
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.greeting.night),Good evening from Antwerp,opening,OPENING_COPY.en.greeting.night
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.greeting.morning),Good morning from Antwerp,opening,OPENING_COPY.en.greeting.morning
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-newsletter.tsx,de Heritage Letter,Heritage Letter,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.4.subtitle),Heritage Nº 001,opening,OPENING_ROOMS[3].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Heritage Nº 001 is beschikbaar via pre-order. Je betaalt volledig vooraf en ontvangt jouw unieke editienummer. De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie.,Heritage Nº 001 is available via pre-order. You pay in full upfront and receive your unique edition number. The Founding Edition is produced in a single limited production run of 100 pieces. Orders are delivered after final quality control and production approval.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,erfgoed.,heritage.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,in Antwerpen,in Antwerp,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.8.subtitle),In your club,opening,OPENING_ROOMS[7].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-intro.tsx,Zij heeft meer,It needs more,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-newsletter.tsx,Word lid van,Join the,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.joinList),Join the list,opening,OPENING_COPY.en.joinList
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.6.subtitle),Journal,opening,OPENING_ROOMS[5].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.3.name),Le Cercle,opening,OPENING_ROOMS[2].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.limit),Limited to {total} numbered rackets · {n} numbers available,opening,OPENING_COPY.en.limit
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-scene.tsx,(hardcoded aria-label),Maison Anversa,aria,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,Maison Anversa draagt die geest in zich. Elk racket wordt ontworpen met dezelfde eerbied voor materiaal en detail die deze stad eeuwenlang definieerde. Antwerpen is niet onze achtergrond — het is onze overtuiging.,Maison Anversa carries that spirit. Each racket is designed with the same reverence for material and detail that defined this city for centuries. Antwerp is not our background — it is our conviction.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-story.tsx,"Maison Anversa is een Europees erfgoedhuis. Niet een sportmerk. Een huis — met waarden, met verhalen, met producten die mensen bewaren en niet weggooien.","Maison Anversa is a European heritage house. Not a sports brand. A house — with values, with stories, with products that people keep and do not discard.",ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.archive),Maison Archive,opening,OPENING_COPY.en.archive
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.tileArchive),Maison Archive,opening,OPENING_COPY.en.tileArchive
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Handmatig bijgewerkt · live-voortgang actief bij lancering,Manually updated · live progress active at launch,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,meesters.,masters.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-intro.tsx,betekenis,meaning,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-circle.tsx,Meer over de Founding Circle →,More about the Founding Circle →,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-unboxing.tsx,Meer dan,More than,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.nextPage),Next,opening,OPENING_COPY.en.nextPage
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.pickedLine),"Nº {n} — yours, if you claim it.",opening,OPENING_COPY.en.pickedLine
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-sessions.tsx,Geen open sessies op dit moment,No open sessions at the moment,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-circle.tsx,Niet de eerste 100 klanten. De eerste 100 mensen die geloofden voordat iedereen het wist.,Not the first 100 customers. The first 100 people who believed before everyone knew.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,nummer,number,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,genummerd,numbered,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.numbersRange),Numbers {from}–{to} of {total},opening,OPENING_COPY.en.numbersRange
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-register.tsx,Honderd plaatsen. Eén eerste hoofdstuk.,One hundred places. One first chapter.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.replay),Open the door again,opening,OPENING_COPY.en.replay
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.7.subtitle),Our Story,opening,OPENING_ROOMS[6].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.pageLabel),Page {n},opening,OPENING_COPY.en.pageLabel
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,Stuks,Pieces,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Stuks Alleen,Pieces Only,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-register.tsx,Plaatsen ingeschreven,Places inscribed,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-sessions.tsx,Plan de eerste sessie van de week.,Plan the first session of the week.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Pre-Order Nu Open,Pre-Order Now Open,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.previousPage),Previous,opening,OPENING_COPY.en.previousPage
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-story.tsx,Lees ons verhaal →,Read our story →,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.1.subtitle),Reception,opening,OPENING_ROOMS[0].text.en.subtitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.pagination),Register pages,opening,OPENING_COPY.en.pagination
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Reserveer,Reserve,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Reserveer Jouw Nummer,Reserve Your Number,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.tileReserved),reserved,opening,OPENING_COPY.en.tileReserved
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.reserved),Reserved,opening,OPENING_COPY.en.reserved
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-story.tsx,Geworteld in,Rooted in,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-antwerp.tsx,Geworteld in Antwerpen,Rooted in Antwerp,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.5.name),Salle Commune,opening,OPENING_ROOMS[4].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.room.1.name),Salon,opening,OPENING_ROOMS[0].text.en.name
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.skip),Skip,opening,OPENING_COPY.en.skip
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Het Eerste.,The First.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-register.tsx,Het Founding Circle-register,The Founding Circle Register,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,"The Founding Edition. Beperkt tot 100 stuks in Europa. Elk vergezeld van een Heritage Certificaat, Paspoort en een persoonlijke brief.","The Founding Edition. Limited to 100 pieces in Europe. Each accompanied by a Heritage Certificate, Passport and a personal letter.",ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-unboxing.tsx,The Heritage Experience,The Heritage Experience,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.archiveTooltip),The house’s own piece,opening,OPENING_COPY.en.archiveTooltip
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Het Originele.,The Original.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.registerTitle),The register,opening,OPENING_COPY.en.registerTitle
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.roomsKicker),The rooms,opening,OPENING_COPY.en.roomsKicker
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-intro.tsx,De wereld heeft geen extra producten nodig.,The world does not need more products.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-sessions.tsx,Bekijk alle sessies,View all sessions,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,Bekijk certificaatvoorbeeld →,View certificate sample →,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-manifesto.tsx,Wij bouwen een thuis voor mensen die dezelfde waarden delen.,We are building a home for people who share the same values.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-manifesto.tsx,Wij bouwen Maison Anversa.,We are building Maison Anversa.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-manifesto.tsx,Wij bouwen geen sportmerk. Wij bouwen geen lifestylemerk.,We are not building a sports brand. We are not building a lifestyle brand.,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-story.tsx,"Wij begonnen met padel omdat het de perfecte samenkomst is van alles waarin wij geloven: gemeenschap, performance en de voldoening van iets goed gemaakt.","We started with padel because it is the perfect convergence of everything we believe in: community, performance and the satisfaction of something well made.",ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/opening/opening-data.ts,(opening.dialog),Welcome to Maison Anversa,opening,OPENING_COPY.en.dialog
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-intro.tsx,Waarom wij bestaan,Why we exist,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-session-card.tsx,Je speelt mee ✓,You're in ✓,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-preorder.tsx,jouw,your,ui,
+01-home-opening,Home + Opening,/{locale}/,components/maison/home/home-product.tsx,Het jouwe.,Yours.,ui,
+02-house,Het Huis,/{locale}/huis,pages/maison/house.tsx,8 kamers · 1 huis,8 rooms · 1 house,ui,
+02-house,Het Huis,/{locale}/huis,pages/maison/house.tsx,Klik een kamer om binnen te treden,Click a room to enter,ui,
+02-house,Het Huis,/{locale}/huis,components/maison/house/maison-floorplan.tsx,"Acht kamers, acht hoofdstukken. Stap binnen door op een ruimte te klikken — elke kamer brengt je naar een deel van het huis.","Eight rooms, eight chapters. Step inside by clicking on a space — each room takes you to a part of the house.",ui,also: pages/maison/house.tsx
+03-products,Products,/{locale}/products,components/maison/product/product-detail.tsx,{{count}} van {{total}} plaatsen resterend,{{count}} of {{total}} places remaining,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-catalog-filters.tsx,Alle statussen,All statuses,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-detail.tsx,beschikbaar,available,ui,
+03-products,Products,/{locale}/products,pages/maison/products/index.tsx,De volledige collectie van Maison Anversa — van Heritage Nº 001 tot de volgende hoofdstukken van het huis.,De volledige collectie van Maison Anversa — van Heritage Nº 001 tot de volgende hoofdstukken van het huis.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+03-products,Products,/{locale}/products,components/maison/product/product-related.tsx,Ontdek het volledige verhaal van Maison Anversa,Discover the full story of Maison Anversa,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-detail.tsx,Elke eigenaar van Heritage Nº 001 wordt ingeschreven. Je kiest zelf jouw nummer bij het afrekenen.,Every owner of Heritage Nº 001 is inscribed. You choose your own number at checkout.,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-related.tsx,Meer van ons,More from us,ui,
+03-products,Products,/{locale}/products,pages/maison/products/index.tsx,Geen producten gevonden.,No products found.,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-detail.tsx,Nummers nog,Numbers still,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-pagination.tsx,Producten paginering,Products pagination,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-detail.tsx,Reserveer Jouw Nummer —,Reserve Your Number —,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-catalog-filters.tsx,Zoek op naam of slug…,Search by name or slug…,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-catalog-filters.tsx,Zoek producten,Search products,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-catalog-card.tsx,Uitverkocht,Sold out,ui,
+03-products,Products,/{locale}/products,components/maison/product/product-detail.tsx,Jouw plaats in het register,Your place in the Register,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Alle 100,All 100,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/circle.tsx,Word Founding Member — Bekijk Heritage Nº 001,Become a Founding Member — View Heritage Nº 001,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/circle.tsx,begin,beginning,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,"Elk lid staat in het officiële archief. Of jouw volledige naam, jouw voornaam en initiaal, of alleen jouw nummer publiek verschijnt, kies je zelf.","Every member is in the official archive. Whether your full name, your first name and initial, or only your number appears in public is your choice.",ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Ingeschreven,Inscribed,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Ingeschreven met naam,Inscribed with a name,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Beheer mijn vermelding,Manage my listing,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/circle.tsx,Niet de eerste 100 klanten. De eerste 100 mensen die geloofden.,Not the first 100 customers. The first 100 people who believed.,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,"Honderd plaatsen. Eén eerste hoofdstuk. Elk lid van de Founding Circle wordt ingeschreven in de volgorde waarin zij het huis vonden, en blijft deel van de geschiedenis zolang het huis bestaat.","One hundred places. One first chapter. Every member of the Founding Circle is inscribed in the order in which they found the house, and remains part of its history for as long as the house exists.",ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Honderd plaatsen. Eén eerste hoofdstuk. Elk lid van de Founding Circle wordt ingeschreven in de volgorde waarin zij het huis vonden.,One hundred places. One first chapter. Every member of the Founding Circle is inscribed in the order in which they found the house.,ui,
+05-circle,Founding Circle,/{locale}/circle,components/maison/circle/circle-portal.tsx,"Honderd plaatsen. Bekijk wie het huis vanaf het begin steunt, of kies Heritage Nº 001 om jouw nummer te reserveren.","One hundred places. See who has supported the house from the beginning, or choose Heritage Nº 001 to reserve your number.",ui,
+05-circle,Founding Circle,/{locale}/circle,components/maison/circle/circle-portal.tsx,Open jouw digitale kaart en Heritage Passport in jouw account.,Open your digital card and Heritage Passport in your account.,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Plaatsen in totaal,Places in total,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Plaatsen resterend,Places remaining,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Privélid,Private member,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Gereserveerd,Reserved,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Toon alle 100 plaatsen,Show all 100 places,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,De Founding Circle,The Founding Circle,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/circle.tsx,De Founding Circle is de permanente gemeenschap van iedereen die Heritage Nº 001 koopt. Jouw lidmaatschap is levenslang. Jouw nummer is van jou — voor altijd. Dit is geen loyaliteitsprogramma. Dit is een erkenning.,The Founding Circle is the permanent community of everyone who buys Heritage Nº 001. Your membership is lifelong. Your number is yours — forever. This is not a loyalty program. This is a recognition.,ui,
+05-circle,Founding Circle,/{locale}/circle,components/maison/circle/circle-portal.tsx,Het officiële register,The Official Register,ui,also: pages/maison/founding-circle/register.tsx
+05-circle,Founding Circle,/{locale}/circle,components/maison/circle/circle-portal.tsx,Naar mijn kaart,To my card,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Je,YOU,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/circle.tsx,Jij was er bij het,You were there at the,ui,
+05-circle,Founding Circle,/{locale}/circle,components/maison/circle/circle-portal.tsx,Jouw Founding Circle-kaart,Your Founding Circle card,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,Jouw vermelding,Your listing,ui,
+05-circle,Founding Circle,/{locale}/circle,pages/maison/founding-circle/register.tsx,"Jouw naam, jouw keuze.","Your name, your choice.",ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing-show.tsx,← Terug naar de Kleedkamer,← Back to the Dressing Room,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,"Activewear en accessoires voor de padelspeler die waarde hecht aan stille luxe. Elk stuk is ontworpen met dezelfde filosofie als Heritage Nº 001 — materialen eerst, logo's nooit.","Activewear and accessories for the padel player who values quiet luxury. Each piece is designed with the same philosophy as Heritage Nº 001 — materials first, logos never.",ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,Wees de eerste,Be the first,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,Kleding die,Clothing that,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,op dit moment,currently,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,ontworpen,designed,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,Voor,For,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,Founding Circle leden krijgen 48 uur exclusieve toegang tot de Kleedkamer collectie vóór de openbare release.,Founding Circle members get 48 hours exclusive access to the Dressing Room collection before the public release.,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,Geen opvallende logo's. Geen neon. Geen trends die volgende seizoenen verdwijnen. De Kleedkamer is voor de speler die er verzorgd wil uitzien op en naast de baan — zonder ooit te schreeuwen.,No loud logos. No neon. No trends that disappear next season. The Dressing Room is for the player who wants to look refined on and off the court — without ever shouting.,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,op weg,on the way,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,"Onze activewear verschijnt in een beperkte eerste editie, gelijktijdig met de levering van Heritage Nº 001 in Q1 2027. Leden van de Founding Circle krijgen als eerste toegang.","Our activewear launches in a limited first edition, alongside the delivery of Heritage Nº 001 in Q1 2027. Founding Circle members get first access.",ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,Kamer III · Maison Anversa,Room III · Maison Anversa,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,ziet,see it,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,De collectie wordt,The collection is being,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,De Eerste Collectie,The First Collection,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,De Filosofie,The Philosophy,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,die het,to,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,naar de baan,to the court,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing.tsx,fluistert.,whispers.,ui,
+06-dressing,Kleedkamer,/{locale}/dressing,pages/maison/dressing-show.tsx,Ook interessant,You might also like,ui,
+07-journal,Journal (UI chrome; articles are CMS),/{locale}/journal,pages/maison/journal/show.tsx,← Terug naar het Journal,← Back to the Journal,ui,
+07-journal,Journal (UI chrome; articles are CMS),/{locale}/journal,components/maison/journal/journal-pagination.tsx,Journal paginering,Journal pagination,ui,
+07-journal,Journal (UI chrome; articles are CMS),/{locale}/journal,components/maison/journal/journal-card.tsx,Lees verder,Read on,ui,
+07-journal,Journal (UI chrome; articles are CMS),/{locale}/journal,pages/maison/journal/show.tsx,Gerelateerde verhalen,Related stories,ui,
+07-journal,Journal (UI chrome; articles are CMS),/{locale}/journal,pages/maison/journal.tsx,"Verhalen over sport, cultuur, design en het leven. Vanuit de wereld van Maison Anversa.","Stories about sport, culture, design and life. From the world of Maison Anversa.",ui,
+07-journal,Journal (UI chrome; articles are CMS),/{locale}/journal,pages/maison/journal.tsx,Het,The,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,{{count}} leden gaan,{{count}} members going,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Voor {{sport}} zijn minstens {{count}} bevestigde spelers nodig om een uitslag te registreren.,{{sport}} needs at least {{count}} confirmed players to record a result.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,1 tegen 1,1 against 1,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,1 lid gaat,1 member going,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,2 tegen 2,2 against 2,ui,
+08-community,Community hub + feed,/{locale}/community,pages/maison/community.tsx,"Een besloten ruimte voor leden van het huis. Deel jouw ervaringen, plan sessies en ontdek exclusieve evenementen.","A private space for members of the house. Share your experiences, plan sessions and discover exclusive events.",ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-courts.tsx,Actief,Active,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-submit-dialog.tsx,Club of corner toevoegen,Add a club or corner,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-composer.tsx,Afbeelding toevoegen,Add image,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/cancel-session-dialog.tsx,Alle spelers krijgen een melding en een e-mail.,All players receive a notification and an email.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/join-requests.tsx,Goedkeuren,Approve,ui,also: components/maison/community/sessions/session-scoreboard.tsx
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,"terug,","back,",ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-breadcrumb.tsx,Kruimelpad,Breadcrumb,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,Bekijk padel- en tennisclubs waar leden sessies plannen.,Browse padel and tennis clubs where members plan sessions.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,Aanmelding annuleren,Cancel attendance,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/cancel-session-dialog.tsx,Sessie annuleren,Cancel session,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/cancel-session-dialog.tsx,Deze sessie annuleren?,Cancel this session?,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-composer.tsx,Chatbericht,Chat message,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-draft-preview.tsx,Kies een club of corner.,Choose a club or corner.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-schedule-fields.tsx,Kies een datum,Choose a date,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-schedule-fields.tsx,Kies een tijdstip,Choose a time,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-search-field.tsx,Andere club kiezen,Choose another club,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Sessie afsluiten,Close session,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-courts.tsx,Club Corner actief,Club Corner active,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-courts.tsx,Club Corners,Club Corners,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-submit-dialog.tsx,Club niet gevonden? Voeg er een toe,Club not listed? Add one,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,reacties,comments,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,Bevestig deelname →,Confirm attendance →,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Kopieer link,Copy link,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/join-requests.tsx,Weigeren,Decline,ui,also: components/maison/community/sessions/session-scoreboard.tsx
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,Ontdek exclusieve evenementen van Maison Anversa.,Discover exclusive Maison Anversa events.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Download,Download,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-schedule-fields.tsx,Duur,Duration,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,Evenement afgelopen,Event finished,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Formaat,Format,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Founding Member · Nr. {{num}},Founding Member · Nº {{num}},ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,Volgeboekt,Fully booked,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Games,Games,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,Verbergen,Hide,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-members-button.tsx,Host,Host,ui,also: components/maison/community/sessions/player-slots.tsx
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-schedule-fields.tsx,Uur,Hour,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-item.tsx,Afbeelding niet beschikbaar,Image unavailable,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/player-slots.tsx,Aangesloten,Joined,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,Plaats jouw reactie,Leave a comment,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,likes,likes,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Link gekopieerd,Link copied,ui,also: components/maison/community/sessions/share-session-button.tsx
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Scorebord vergrendelen,Lock scoreboard,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Maison Anversa,Maison Anversa,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/partner-badge.tsx,Maison Anversa Partner Club,Maison Anversa Partner Club,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-card.tsx,Sessie beheren,Manage session,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Wedstrijd,Match,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Wedstrijdkaart,Match card,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,lid,member,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-members-button.tsx,Leden,Members,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,Alleen leden,Members only,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/cancel-session-dialog.tsx,Bericht aan de spelers (optioneel),Message to the players (optional),ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-list.tsx,Berichten,Messages,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-schedule-fields.tsx,Minuten,Minutes,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Volgende Event,Next Event,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-courts.tsx,Nog geen Club Corners gepubliceerd.,No Club Corners published yet.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-search-field.tsx,Geen club gevonden voor deze zoekopdracht.,No club found for this search.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Nog geen event,No event yet,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-list.tsx,Nog geen berichten,No messages yet,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Nog geen officiële uitslag.,No official result yet.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-events.tsx,Nog niemand heeft geboekt.,No one has booked yet.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-members-button.tsx,Nog geen spelers,No players yet,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,Nog geen lid? Koop Heritage Nº 001 en word automatisch Founding Member.,Not a member yet? Buy Heritage Nº 001 and automatically become a Founding Member.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Officiële uitslag,Official result,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/session-chat-button.tsx,Open de sessiechat,Open the session chat,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,of,or,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-card.tsx,Georganiseerd door {{name}},Organised by {{name}},ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,Plan padelsessies met andere leden van het huis.,Plan padel sessions with other members of the house.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Speler A,Player A,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Speler B,Player B,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Punten,Points,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Post,Post,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-layout.tsx,Post geplaatst in de Community.,Post published in the Community.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-draft-preview.tsx,Voorbeeld,Preview,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-compose.tsx,Publiceer,Publish,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,Minder lezen,Read less,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,Meer lezen,Read more,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Recente Founding Members,Recent Founding Members,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-item.tsx,Opnieuw,Redo,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-composer.tsx,Afbeelding verwijderen,Remove image,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/player-slots.tsx,Speler verwijderen,Remove player,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,Reageer,Reply,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-item.tsx,Melden,Report,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-item.tsx,Gemeld,Reported,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/join-requests.tsx,Aanvragen,Requests,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Scorebord,Scoreboard,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Scores indienen kan tot {{date}} om {{time}}.,Scores can be submitted until {{date}} at {{time}}.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-search-field.tsx,"Zoek club, stad of postcode...","Search club, city or postcode...",ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-composer.tsx,Versturen,Send,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-item.tsx,Versturen mislukt,Send failed,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-list.tsx,Stuur het eerste bericht om het gesprek te starten.,Send the first message to start the conversation.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-item.tsx,Versturen…,Sending…,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-message-item.tsx,Verstuurd,Sent,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-card.tsx,Sessie geannuleerd,Session cancelled,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Sessie afgesloten. Dit is de officiële uitslag.,Session closed. This is the official result.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Set {{number}},Set {{number}},ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Sets (tot 4 games),Sets (to 4 games),ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Sets (tot 6 games),Sets (to 6 games),ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/share-session-button.tsx,Deel,Share,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,"Deel de kaart nu al, of na de wedstrijd met de uitslag.","Share the card now, or after the match with the result.",ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Deel jouw kaart,Share your card,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Zit uit,Sits out,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-submit-dialog.tsx,Sporten,Sports,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Story,Story,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-submit-dialog.tsx,Straat en nummer,Street and number,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-submit-dialog.tsx,Club indienen,Submit club,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Score indienen,Submit score,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Ingediend door {{name}},Submitted by {{name}},ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Ingediende scores,Submitted scores,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Super tie-break (tot 10),Super tie-break (to 10),ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-system-message.tsx,Systeem,System,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Team A,Team A,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Team B,Team B,ui,
+08-community,Community hub + feed,/{locale}/community,pages/maison/community.tsx,De Community,The Community,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,De Community is exclusief voor ingelogde leden. Log in om toegang te krijgen.,The Community is exclusive to signed-in members. Sign in to get access.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,De wedstrijd is nog niet beslist.,The match has not been decided yet.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,De termijn om een score in te dienen is verstreken.,The period for submitting a score has ended.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Het scorebord is vergrendeld.,The scoreboard is locked.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/join-requests.tsx,Deze spelers wachten op jouw goedkeuring.,These players are waiting for your approval.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-closed-notice.tsx,Deze chat is gesloten. Er kunnen geen berichten meer worden verstuurd.,This chat is closed. No more messages can be sent.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Tie-break,Tie-break,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Punten tie-break (optioneel),Tie-break points (optional),ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-schedule-fields.tsx,Tijdstip,Time,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Te weinig spelers voor een uitslag: vergrendel het scorebord om de sessie zonder uitslag af te sluiten.,Too few players for a result: lock the scoreboard to close the session without a result.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-search-field.tsx,Typ minstens 2 letters om te zoeken.,Type at least 2 letters to search.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Scorebord ontgrendelen,Unlock scoreboard,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Bekijk alle events →,View all events →,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Bekijk alle leden,View all members,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,Bekijk Heritage Nº 001 →,View Heritage Nº 001 →,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/club-submit-dialog.tsx,Wordt zichtbaar na goedkeuring door Maison Anversa.,Visible once Maison Anversa approves it.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-compose.tsx,Alleen zichtbaar voor ingelogde leden,Visible only to signed-in members,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/community-login-gate.tsx,Welkom,Welcome,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Wie speelde er?,Who played?,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Wordt binnenkort bekendgemaakt,Will be announced soon,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Winnaar,Winner,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Winnaar: {{side}},Winner: {{side}},ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/match-card-share.tsx,Met de officiële uitslag. Deel ze met je vrienden of bewaar ze als herinnering.,With the official result. Share it with your friends or keep it as a memory.,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-post-card.tsx,Schrijf een reactie,Write a comment,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/chat/chat-composer.tsx,Schrijf een bericht...,Write a message...,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,"Afsluiten kan zodra er een goedgekeurde uitslag is, er geen scores meer wachten en het scorebord vergrendeld is.","You can close the session once there is an approved result, no scores are waiting and the scoreboard is locked.",ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/feed-sidebar.tsx,Jouw Profiel,Your Profile,ui,
+08-community,Community hub + feed,/{locale}/community,components/maison/community/sessions/session-scoreboard.tsx,Jouw ingediende score,Your submitted score,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/show.tsx,{{count}} open sessie(s) op deze locatie.,{{count}} open sessie(s) op deze locatie.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Alle steden,All cities,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Alle sporten,All sports,ui,also: pages/maison/sessions/index.tsx
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/events/index.tsx,Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.,Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Aanvragen goedkeuren,Approve requests,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/show.tsx,Terug naar sessies,Back to sessions,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Door een sessie aan te maken ga je akkoord met onze communityrichtlijnen.,By creating a session you agree to our community guidelines.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Standaard speelt iedereen meteen mee. Schakel dit in als je elke aanvraag eerst wilt goedkeuren.,By default everyone joins immediately. Turn this on if you want to approve each request first.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Kies de sport,Choose the sport,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Clubs,Clubs,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Baanstatus,Court status,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Sessie aanmaken,Create a session,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/share.tsx,Maak een account om mee te doen,Create an account to join,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,"Datum, tijd en duur","Date, time and duration",ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,"Bijv. niveau, taal, bijzonderheden...","E.g. level, language, notes...",ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/events/index.tsx,Exclusieve Evenementen,Exclusive Events,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Filter op stad...,Filter by city...,ui,also: pages/maison/sessions/index.tsx
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/index.tsx,Vind een open sessie of maak er zelf een aan.,Find an open session or create your own.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/index.tsx,Vind een open sessie of maak jouw eigen sessie aan. Maison Anversa brengt spelers samen; boeken en betalen regel je zelf met de club.,Find an open session or create your own. Maison Anversa brings players together; booking and payment stay between you and the club.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Geen clubs gevonden voor deze filters.,Geen clubs gevonden voor deze filters.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/events/index.tsx,Georganiseerd door Maison Anversa.,Hosted by Maison Anversa.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Is de baan al geboekt?,Is the court already booked?,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Niveau,Level,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Meer laden,Load more,ui,also: pages/maison/events/index.tsx; pages/maison/sessions/index.tsx
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Laden...,Loading...,ui,also: pages/maison/events/index.tsx; pages/maison/sessions/index.tsx
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/show.tsx,Nog geen open sessies op deze locatie.,Nog geen open sessies op deze locatie.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/show.tsx,Nog geen open sessies op deze locatie. Plan de eerste.,Nog geen open sessies op deze locatie. Plan de eerste.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Notitie (optioneel),Note (optional),ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Aantal spelers,Number of players,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Ontdek padel- en tennisclubs waar leden sessies plannen. Partnerclubs dragen het officiële Maison Anversa-partnerschap.,Ontdek padel- en tennisclubs waar leden sessies plannen. Partnerclubs dragen het officiële Maison Anversa-partnerschap.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/show.tsx,Plan een sessie,Plan a session,ui,also: pages/maison/sessions/index.tsx
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Plan jouw volgende partij. Ontmoet leden. Speel samen.,Plan your next match. Meet members. Play together.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Spelers,Players,ui,also: pages/maison/sessions/share.tsx; pages/maison/sessions/show.tsx
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Spelniveau,Playing level,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Sessie publiceren,Publish session,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/share.tsx,Vraag om mee te spelen,Request to join,ui,also: pages/maison/sessions/show.tsx
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/show.tsx,Scorebord vergrendeld,Scoreboard locked,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Zoek een club of corner,Search a club or corner,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Sport,Sport,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,De host is verantwoordelijk voor het boeken van de baan.,The host is responsible for booking the court.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/show.tsx,Deze club is niet langer beschikbaar.,This club is no longer available.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/share.tsx,Deze sessie is geannuleerd.,This session has been cancelled.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/share.tsx,Bekijk sessie,View session,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Wanneer,When,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Wie mag meespelen?,Who can join?,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Wie mag deelnemen?,Who may take part?,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/create.tsx,Je bent automatisch speler 1.,You are automatically player 1.,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/sessions/show.tsx,Jouw groep is compleet. Tot op de baan!,Your group is complete. See you on court!,ui,
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Zoek een club en bekijk komende sessies op die locatie.,Zoek een club en bekijk komende sessies op die locatie.,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+09-events-sessions-clubs,Community events / sessions / clubs,/{locale}/community/{events|sessions|clubs},pages/maison/clubs/index.tsx,Zoek op clubnaam...,Zoek op clubnaam...,ui,MISSING_EN (not in lang/en.json; EN UI shows this key)
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"— Yusuf Savran, Oprichter Maison Anversa","— Yusuf Savran, Founder Maison Anversa",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"""Club Corner is geen verkoopkanaal. Het is een uitnodiging om deel te worden van iets dat nog maar net begonnen is.""","""Club Corner is not a sales channel. It is an invitation to become part of something that has only just begun.""",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Een,A,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"Antwerpen, België","Antwerp, Belgium",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Beschrijf kort de sfeer en identiteit van jouw club...,Briefly describe the atmosphere and identity of your club...,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Breng Maison Anversa naar jouw padelclub. Een curated ervaring voor clubs die begrijpen dat padel meer is dan een sport.,Bring Maison Anversa to your padel club. A curated experience for clubs that understand padel is more than a sport.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Kies jouw,Choose your,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Stad & Land,City & Country,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Club Corner Formaten,Club Corner Formats,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"Club Corner is het fysieke distributieprogramma van Maison Anversa. Geselecteerde padelclubs in Europa kunnen een exclusieve Maison Anversa hoek inrichten — een curated ruimte waar leden Heritage producten kunnen ontdekken, aanraken en bestellen.","Club Corner is the physical distribution program of Maison Anversa. Selected padel clubs in Europe can set up an exclusive Maison Anversa corner — a curated space where members can discover, touch and order Heritage products.",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Naam club,Club name,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,club.,club.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Contactpersoon,Contact person,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Corner,Corner,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Corners,Corners,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Gewenst formaat,Desired format,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Elke Club Corner partner ontvangt een volledig pakket om de Maison Anversa ervaring correct in te richten. Alles is ontworpen voor consistentie — zodat elk Club Corner in Europa dezelfde premium ervaring biedt.,Each Club Corner partner receives a complete package to set up the Maison Anversa experience properly. Everything is designed for consistency — so every Club Corner in Europe offers the same premium experience.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,European Heritage House,European Heritage House,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,voor Maison Anversa in jouw club,for Maison Anversa in your club,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,formaat,format,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Formaat A,Format A,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Formaat B,Format B,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Founding Club Corner,Founding Club Corner,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Heritage Corner,Heritage Corner,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,thuis,home,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"Als je deze criteria herkent in jouw club, nodigen wij je uit om contact op te nemen.","If you recognize these criteria in your club, we invite you to get in touch.",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Het is geen klassiek verkooppunt. Het is een ervaringsruimte. Jouw leden worden deel van het Maison Anversa verhaal.,It is not a classic retail point. It is an experience space. Your members become part of the Maison Anversa story.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Laten we,Let's,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Maison Anversa · Partner Programma,Maison Anversa · Partner Program,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Maison Anversa Club Corners komen eraan in geselecteerde steden doorheen Europa. Ben jij de eerste in jouw stad?,Maison Anversa Club Corners are coming to selected cities across Europe. Are you the first in your city?,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Maison Anversa biedt twee Club Corner formaten — afhankelijk van de grootte van jouw club en jouw ambitie als partner.,Maison Anversa offers two Club Corner formats — depending on the size of your club and your ambition as a partner.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"Maison Anversa selecteert Club Corner partners op basis van gedeelde waarden — niet op basis van grootte of omzet. Wij zoeken clubs die begrijpen dat padel een cultuur is, geen sport.","Maison Anversa selects Club Corner partners based on shared values — not on size or revenue. We look for clubs that understand that padel is a culture, not a sport.",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Naam van jouw padelclub,Name of your padel club,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Niet elke club.,Not every club.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Aantal courts,Number of courts,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Onze Club,Our Club,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Partnership Aanvraag,Partnership Request,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,ontvangt,receives,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Vraag een Partnership Gesprek Aan →,Request a Partnership Conversation →,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Aanvraag ontvangen.,Request received.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,juiste,right,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Verstuur Partnership Aanvraag,Send Partnership Request,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek over wat een partnership voor jouw club kan betekenen.,Send us a message and we will contact you personally within 48 hours. No automated responses — a real conversation about what a partnership could mean for your club.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,praten,talk,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Vertel ons over jouw club,Tell us about your club,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Het Club Corner Pakket,The Club Corner Package,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"Het instapformaat voor clubs die kennis willen maken met Maison Anversa. Compact, elegant, impactvol.","The entry format for clubs wanting to get to know Maison Anversa. Compact, elegant, impactful.",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Het Netwerk,The Network,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Het premium partnerschap voor clubs die een centrale rol willen spelen in het Maison Anversa netwerk.,The premium partnership for clubs wanting to play a central role in the Maison Anversa network.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,"Wij selecteren partners zorgvuldig. Niet elke club past bij Maison Anversa — en niet elke club zou dat willen. Club Corner is voor clubs die dezelfde waarden delen: kwaliteit boven kwantiteit, gemeenschap boven commercie.","We select partners carefully. Not every club fits Maison Anversa — and not every club would want to. Club Corner is for clubs that share the same values: quality over quantity, community over commerce.",ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Wij nemen binnen 48 uur persoonlijk contact op.,We will personally contact you within 48 hours.,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Wat is Club Corner?,What is Club Corner?,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Wat jouw club,What your club,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Wie komen in aanmerking?,Who is eligible?,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,Jouw naam en functie,Your name and role,ui,
+10-corner,Club Corner,/{locale}/corner,pages/maison/corner.tsx,jouw@emailadres.be,your@emailaddress.be,ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,Centrum Antwerpen · België,Central Antwerp · Belgium,ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,"Elke Heritage-racket wordt met de hand afgewerkt en verdient blijvende zorg. Wij adviseren over lederonderhoud, herstellingen en garantie. Bij twijfel stuur je de racket terug naar ons atelier in Antwerpen voor inspectie.","Each Heritage racket is hand-finished and deserves ongoing care. We advise on leather maintenance, repairs and warranty. When in doubt, send the racket back to our atelier in Antwerp for inspection.",ui,
+11-contact,Contact,/{locale}/contact,pages/maison/contact.tsx,helpen?,help?,ui,
+11-contact,Contact,/{locale}/contact,pages/maison/contact.tsx,Hoe kunnen wij je,How can we,ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,Maison Anversa — Antwerpen,Maison Anversa — Antwerp,ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,Maison Anversa is gevestigd in het hart van Antwerpen. Bezoek op afspraak — wij verwelkomen je graag persoonlijk.,Maison Anversa is located in the heart of Antwerp. Visit by appointment — we welcome you personally.,ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,"Eens Heritage Nº 001 levert, volg je hier de status van jouw editienummer. Tot die tijd zoeken wij jouw reservering handmatig op — stuur ons jouw naam of reserveringsnummer via WhatsApp of e-mail.","Once Heritage Nº 001 delivers, you can track the status of your edition number here. Until then, we will look up your reservation manually — send us your name or reservation number via WhatsApp or email.",ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,"Sprekend met een Maison-specialist: een persoonlijk videogesprek over jouw nummer, de afwerking, het leder en het monogram. Geen druk, geen haast — alleen advies op maat.","Speaking with a Maison specialist: a personal video call about your number, the finish, the leather and the monogram. No pressure, no rush — just tailored advice.",ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,"Bezoek ons atelier in Antwerpen voor een privé-beleving: houd de racket vast, voel het leder, en ontdek jouw nummer. Vraag een moment aan — wij bevestigen persoonlijk.","Visit our atelier in Antwerp for a private experience: hold the racket, feel the leather, and discover your number. Request a moment — we will confirm personally.",ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/bureau-form.tsx,Wij bevestigen persoonlijk zo snel mogelijk.,We will confirm personally as soon as possible.,ui,
+11-contact,Contact,/{locale}/contact,pages/maison/contact.tsx,"Welkom bij Maison Anversa. Selecteer een van de onderstaande opties — wij antwoorden altijd persoonlijk, binnen 24 uur op werkdagen.","Welcome to Maison Anversa. Select one of the options below — we always respond personally, within 24 hours on business days.",ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/contact-bureau.tsx,Jouw feedback vormt het huis mee. Vertel ons wat je vond — van de site tot de racket.,Your feedback shapes the house. Tell us what you thought — from the site to the racket.,ui,
+11-contact,Contact,/{locale}/contact,components/maison/contact/bureau-form.tsx,Jouw bericht is ontvangen.,Your message has been received.,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-layout.tsx,← Terug naar home,← Back to home,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-links.tsx,zorg- en garantiebeleid,care and warranty policy,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-links.tsx,contactpagina,contact page,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-links.tsx,Contacteer ons via,Contact us via,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-layout.tsx,Laatst bijgewerkt: juli 2026,Last updated: July 2026,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-layout.tsx,Juridisch,Legal,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-links.tsx,onze contactpagina,our contact page,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-links.tsx,Vragen? Bezoek de,Questions? Visit the,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-links.tsx,Zie ook het,See also the,ui,
+12-legal,"Legal wrappers (privacy, terms, shipping, care; body is CMS)",/{locale}/{privacy|terms|shipping|care},components/maison/legal/legal-page-links.tsx,verzend- en retourbeleid,shipping and return policy,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Toegewezen,Allocated,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Authenticiteit,Authenticity,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Authenticiteit gegarandeerd,Authenticity guaranteed,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-cancel.tsx,Terug naar het product,Back to the product,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-cancel.tsx,geannuleerd,cancelled,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-success.tsx,bevestigd,confirmed,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,E-mail bij de bestelling,Email used for the order,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Founding Circle-lid,Founding Circle member,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Gastbestelling?,Guest order?,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-success.tsx,"Als jouw betaling zojuist is afgerond, kan de bevestiging even op zich laten wachten. Controleer jouw e-mail of neem contact op met het bureau.","If your payment has just completed, confirmation may take a moment. Check your email or contact the house.",ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Maison Anversa Archive — niet te koop,Maison Anversa Archive — not for sale,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Geen houder geregistreerd,No holder registered,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-cancel.tsx,Geen zorgen — er is niets in rekening gebracht. Je kunt jouw reservering opnieuw starten wanneer je klaar bent.,No worries — nothing was charged. You can restart your reservation when you are ready.,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Bestelnummer,Order number,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Heb je zonder account besteld? Vul je bestelnummer en e-mail in. We sturen je een eenmalige link om een retour te starten.,Ordered without an account? Enter your order number and email. We will send you a one-time link to start a return.,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-success.tsx,in behandeling,pending,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-success.tsx,Reservering,Reservation,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Retouradres,Return address,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Retourneren binnen 14 dagen,Return within 14 days,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Stuur retourlink,Send return link,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/guest-returns/create.tsx,Verzend- en retourbeleid,Shipping & returns policy,ui,also: pages/maison/returns.tsx
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Start een retour,Start a return,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-success.tsx,Dank je. Jouw bestelling is ontvangen. Je ontvangt een bevestiging per e-mail.,Thank you. Your order has been received. You will receive a confirmation by email.,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/newsletter-unsubscribed.tsx,Uitgeschreven,Unsubscribed,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Geverifieerd door Maison Anversa,Verified by Maison Anversa,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/verify.tsx,Geverifieerd Founding Edition-stuk,Verified Founding Edition piece,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/checkout-success.tsx,Bekijk bestelling,View order,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/returns.tsx,Je kunt een retour starten via Mijn account → Bestellingen. De wettelijke bedenktijd begint de dag na levering.,You can start a return via My account → Orders. The legal cooling-off period starts the day after delivery.,ui,
+13-commerce,"Returns, checkout, verify, guest returns, newsletter",/{locale}/returns|checkout|verify|guest-returns|heritage-letter,pages/maison/newsletter-unsubscribed.tsx,Je ontvangt geen Heritage Letter meer. Je kunt zich altijd opnieuw inschrijven.,You will no longer receive the Heritage Letter. You can subscribe again at any time.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Er is een nieuwe verificatielink verstuurd.,A new verification link has been sent.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Accountgegevens,Account details,ui,
+14-member,Member area,/{locale}/member/*,pages/member/orders.tsx,Actie,Action,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Activiteit,Activity,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Alle evenementen,All events,ui,
+14-member,Member area,/{locale}/member/*,components/member/member-notification-bell.tsx,Alle meldingen,All notifications,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Alle sessies,All sessions,ui,
+14-member,Member area,/{locale}/member/*,pages/member/letter.tsx,Alle inschrijvingen die aan dit account gekoppeld zijn.,All subscriptions linked to this account.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/heritage.tsx,Artefacten,Artefacts,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Terug naar chats,Back to chats,ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/show.tsx,Terug naar meldingen,Back to notifications,ui,
+14-member,Member area,/{locale}/member/*,pages/member/returns/create.tsx,Terug naar bestelling,Back to order,ui,also: pages/member/returns/show.tsx
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Terug naar bestellingen,Back to orders,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Badges,Badges,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Bekijk de exclusieve evenementen van Maison Anversa in de Community.,Browse Maison Anversa exclusive events in the Community.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Bestelling annuleren,Cancel order,ui,
+14-member,Member area,/{locale}/member/*,pages/member/returns/show.tsx,Retour annuleren,Cancel return,ui,
+14-member,Member area,/{locale}/member/*,pages/member/heritage.tsx,Certificaat · {{value}},Certificate · {{value}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/register-listing.tsx,Wijzigingen verschijnen meteen in het register.,Changes appear in the register immediately.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Kies links een sessie om de chat te openen en berichten te versturen.,Choose a session on the left to open the chat and send messages.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/returns/create.tsx,Bevestigen,Confirm,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Verwijderen bevestigen,Confirm delete,ui,
+14-member,Member area,/{locale}/member/*,pages/member/confirm-password.tsx,Wachtwoord bevestigen,Confirm password,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Bevestig met wachtwoord,Confirm with password,ui,
+14-member,Member area,/{locale}/member/*,pages/member/confirm-password.tsx,Bevestig jouw wachtwoord,Confirm your password,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Account verwijderen,Delete account,ui,
+14-member,Member area,/{locale}/member/*,pages/member/heritage.tsx,Leveringsvenster · {{window}},Delivery window · {{window}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/passport.tsx,Download PDF,Download PDF,ui,
+14-member,Member area,/{locale}/member/*,pages/member/heritage.tsx,Editie Nº {{number}},Edition Nº {{number}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,E-mails over mijn sessies,Emails about my sessions,ui,
+14-member,Member area,/{locale}/member/*,pages/member/security.tsx,Ingeschakeld,Enabled,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Extra berichten,Extra messages,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Voornaam,First name,ui,
+14-member,Member area,/{locale}/member/*,pages/member/register-listing.tsx,Founding Circle · lid nr. {{number}},Founding Circle · member no. {{number}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/circle.tsx,Founding Circle-kaart,Founding Circle card,ui,
+14-member,Member area,/{locale}/member/*,pages/member/passport.tsx,Vier pagina's van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.,Four pages of the physical passport — a reading copy until the edition ships.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/heritage.tsx,Heritage,Heritage,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Heritage Nº {{number}},Heritage Nº {{number}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Georganiseerde sessies,Hosted sessions,ui,
+14-member,Member area,/{locale}/member/*,pages/member/register-listing.tsx,Ik ga ermee akkoord dat de naam hierboven wordt gepubliceerd in het publieke register op maisonanversa.com. Ik kan dit op elk moment wijzigen of intrekken.,I agree that the name above will be published in the public register on maisonanversa.com. I can change or withdraw this at any time.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Identiteit,Identity,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,"Staat dit uit, dan staat er “Privé” in plaats van je voornaam.","If this is off, “Private” is shown instead of your first name.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,In-app meldingen blijven altijd aan. Hier kies je alleen of je ze ook per e-mail ontvangt.,In-app notifications always stay on. Here you only choose whether you also receive them by email.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Een probleem met je product? Neem contact op,Issue with your product? Contact us,ui,
+14-member,Member area,/{locale}/member/*,pages/member/orders.tsx,Artikel,Item,ui,
+14-member,Member area,/{locale}/member/*,pages/member/security.tsx,Bescherm jouw Maison Anversa-account met een sterk wachtwoord en optionele tweestapsverificatie.,Keep your Maison Anversa account protected with a strong password and optional two-factor authentication.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Taal voor e-mails en meldingen,Language for emails and notifications,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Achternaam,Last name,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Regels,Line items,ui,
+14-member,Member area,/{locale}/member/*,pages/member/letter.tsx,Beheer e-mailvoorkeuren,Manage email preferences,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,"Beheer hoe je in het huis verschijnt — foto, naam en hoe je inlogt.","Manage how you appear in the house — photo, name, and how you sign in.",ui,
+14-member,Member area,/{locale}/member/*,components/member/member-notification-bell.tsx,Alles gelezen,Mark all as read,ui,also: pages/member/notifications/index.tsx
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Bericht kon niet worden verstuurd.,Message could not be sent.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Berichten met de spelers van jouw sessies. Selecteer een sessie om te beginnen.,Messages with the players of your sessions. Select a session to begin.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Methode,Method,ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,"Naam, foto, e-mail","Name, photo, email",ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/index.tsx,Nieuwe meldingen verschijnen hier zodra ze binnenkomen.,New notifications appear here as soon as they arrive.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,"Nieuwe spelers, bevestigingen, volzette en geannuleerde sessies, vrijgekomen plaatsen en de herinnering de dag voordien.","New players, confirmations, full and cancelled sessions, opened-up spots and the reminder the day before.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/index.tsx,Volgende,Next,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Nog geen badges. Plan een sessie of meld je aan voor een evenement.,No badges yet. Plan a session or RSVP to an event.,ui,
+14-member,Member area,/{locale}/member/*,components/member/chat/chat-session-list.tsx,Nog geen chats,No chats yet,ui,
+14-member,Member area,/{locale}/member/*,pages/member/circle.tsx,Nog geen editie toegewezen,No edition assigned yet,ui,also: pages/member/heritage.tsx; pages/member/passport.tsx; pages/member/register-listing.tsx
+14-member,Member area,/{locale}/member/*,pages/member/notifications/index.tsx,Geen meldingen gevonden.,No notifications found.,ui,
+14-member,Member area,/{locale}/member/*,components/member/member-notification-bell.tsx,Geen meldingen.,No notifications.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Geen komende evenementen,No upcoming events,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Geen komende sessies,No upcoming sessions,ui,
+14-member,Member area,/{locale}/member/*,pages/member/security.tsx,Niet ingeschakeld,Not enabled,ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/show.tsx,Melding,Notification,ui,
+14-member,Member area,/{locale}/member/*,components/member/chat/chat-session-list.tsx,"Zodra je een sessie host of goedgekeurd bent, verschijnt die hier.","Once you host a session or are approved, it will appear here.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/show.tsx,Openen,Open,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Bestelling,Order,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Besteldetail,Order detail,ui,
+14-member,Member area,/{locale}/member/*,pages/member/orders.tsx,Bestellingen & betalingen,Orders & payments,ui,
+14-member,Member area,/{locale}/member/*,pages/member/passport.tsx,Pagina {{number}},Page {{number}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/index.tsx,Paginering,Pagination,ui,
+14-member,Member area,/{locale}/member/*,pages/member/heritage.tsx,Passport · {{value}},Passport · {{value}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/confirm-password.tsx,Wachtwoordcontrole,Password check,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Afgelopen evenementen,Past events,ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,Betalingsgeschiedenis,Payment history,ui,
+14-member,Member area,/{locale}/member/*,pages/member/circle.tsx,Permanent lidmaatschap,Permanent membership,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Verwijder jouw account en gegevens permanent van Maison Anversa. Dit kan niet ongedaan worden gemaakt.,Permanently remove your account and data from Maison Anversa. This cannot be undone.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Plan een sessie of sluit je aan bij een open sessie in de Community.,Plan a session or join an open session in the Community.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,"PNG, JPG of WEBP · max 2 MB","PNG, JPG or WEBP · max 2 MB",ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,Voorkeuren,Preferences,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Voorkeuren opgeslagen.,Preferences saved.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/index.tsx,Vorige,Previous,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Productupdates,Product updates,ui,also: pages/member/letter.tsx
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Aantal,Qty,ui,
+14-member,Member area,/{locale}/member/*,pages/member/circle.tsx,Racket {{label}},Racket {{label}},ui,also: pages/member/passport.tsx
+14-member,Member area,/{locale}/member/*,pages/member/notifications/show.tsx,Gelezen,Read,ui,
+14-member,Member area,/{locale}/member/*,pages/member/returns/create.tsx,Reden,Reason,ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,Recente bestellingen,Recent orders,ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/show.tsx,Deze melding uit jouw inbox verwijderen?,Remove this notification from your inbox?,ui,
+14-member,Member area,/{locale}/member/*,pages/member/confirm-password.tsx,Vereist voordat je beveiligingsinstellingen bekijkt of wijzigt.,Required before viewing or changing security settings.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Verificatie opnieuw versturen,Resend verification,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Retourneren kan tot {{date}},Returns accepted until {{date}},ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Opslaan,Save,ui,
+14-member,Member area,/{locale}/member/*,pages/member/register-listing.tsx,Vermelding opslaan,Save listing,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Profiel opslaan,Save profile,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Selecteer een sessie,Select a session,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Sessie-e-mails,Session emails,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Sessiemails en meldingen worden in deze taal verstuurd.,Session emails and notifications are sent in this language.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Sessies & events,Sessions & events,ui,also: pages/member/letter.tsx
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Deelgenomen sessies,Sessions joined,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Toon mijn voornaam op wedstrijdkaarten,Show my first name on match cards,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,"De Heritage Letter is de nieuwsbrief van het huis. Kies of je die ontvangt, en of we ook product- en eventberichten sturen.","The Heritage Letter is the house newsletter. Choose whether you receive it, and whether we also send product and event notes.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,De retourtermijn voor deze bestelling is voorbij.,The return window for this order has ended.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/confirm-password.tsx,Dit is een beveiligd gedeelte van jouw account. Bevestig jouw wachtwoord om verder te gaan.,This is a secure area of your account. Confirm your password to continue.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Deze sessie is afgelopen. De chat is gesloten.,This session has ended. The chat is closed.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Deze sessie is afgelopen. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).,This session has ended. The chat is closed. Messages will be deleted on {{date}} (30 days after closing).,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Deze sessie is geannuleerd. De chat is gesloten.,This session was cancelled. The chat is closed.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/chat.tsx,Deze sessie is geannuleerd. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).,This session was cancelled. The chat is closed. Messages will be deleted on {{date}} (30 days after closing).,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Tijdlijn,Timeline,ui,
+14-member,Member area,/{locale}/member/*,pages/member/returns/show.tsx,Tracking,Tracking,ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/index.tsx,Ongelezen,Unread,ui,also: pages/member/notifications/show.tsx
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,Komende evenementen,Upcoming events,ui,
+14-member,Member area,/{locale}/member/*,pages/member/order-show.tsx,Updates,Updates,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Gebruikersnaam is een alternatieve manier om in te loggen naast e-mail.,Username is an alternate way to sign in alongside email.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,Bekijken,View,ui,also: pages/member/orders.tsx
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,Alles bekijken,View all,ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,"Welkom, {{name}}","Welcome, {{name}}",ui,
+14-member,Member area,/{locale}/member/*,pages/member/circle.tsx,"Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.","You are a Founding Circle member, but no Heritage edition is linked to your account yet. Contact the team for more information.",ui,also: pages/member/heritage.tsx; pages/member/passport.tsx; pages/member/register-listing.tsx
+14-member,Member area,/{locale}/member/*,pages/member/letter.tsx,Je staat nog niet op de Heritage Letter.,You are not on the Heritage Letter yet.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Je ontvangt de Heritage Letter nog niet.,You are not receiving the Heritage Letter yet.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/email-preferences.tsx,Je ontvangt de Heritage Letter.,You receive the Heritage Letter.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/confirm-password.tsx,Jouw huidige wachtwoord,Your current password,ui,
+14-member,Member area,/{locale}/member/*,pages/member/circle.tsx,Jouw digitale kaart — het nummer dat niet opnieuw wordt uitgegeven.,Your digital card — the number that will not be reissued.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/lidpaspoort.tsx,"Jouw digitale paspoort in het huis — lidmaatschap, badges, sessies en evenementen. Dit is los van het fysieke Heritage Passport.","Your digital passport in the house — membership, badges, sessions and events. This is separate from the physical Heritage Passport.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Jouw e-mail is niet geverifieerd.,Your email is unverified.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/heritage.tsx,"Jouw Founding Edition-stuk — status, leveringsvenster en de artefacten die ermee meegaan.","Your Founding Edition piece — status, delivery window, and the artefacts that travel with it.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,Jouw lidmaatschapskaart,Your membership card,ui,
+14-member,Member area,/{locale}/member/*,pages/member/register-listing.tsx,Jouw lidmaatschap staat in elk geval in het officiële archief. Kies hoe jouw plaats verschijnt in het publieke Founding Circle-register.,Your membership is in the official archive either way. Choose how your place appears in the public Founding Circle register.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/notifications/index.tsx,Jouw persoonlijke meldingen en systeemberichten.,Your personal notifications and system messages.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/profile.tsx,Jouw foto verschijnt in de lidheader en op community-oppervlakken.,Your photo appears in the member header and community surfaces.,ui,
+14-member,Member area,/{locale}/member/*,pages/member/orders.tsx,"Jouw aankopen, betalingen en verzendstatus in één overzicht.","Your purchases, payments and shipping status in one overview.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/register-listing.tsx,Jouw registervermelding,Your register listing,ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,"Jouw kamers in het huis — bestellingen, de Circle en accountinstellingen.","Your rooms in the house — orders, the Circle and account settings.",ui,
+14-member,Member area,/{locale}/member/*,pages/member/dashboard.tsx,Jouw inschrijvingen,Your subscriptions,ui,
+15-auth,Auth full pages (reset / verify / confirm),/{locale}/reset-password|email/verify|confirm-password,pages/auth/reset-password.tsx,Wachtwoord opnieuw instellen,Reset password,ui,
+15-auth,Auth full pages (reset / verify / confirm),/{locale}/reset-password|email/verify|confirm-password,pages/auth/reset-password.tsx,Nieuwe code versturen,Send a new code,ui,
+15-auth,Auth full pages (reset / verify / confirm),/{locale}/reset-password|email/verify|confirm-password,pages/auth/verify-email.tsx,E-mail verifiëren,Verify email,ui,
+16-settings,Settings,/{locale}/settings/*,layouts/settings/layout.tsx,"Beheer jouw profielfoto, accountgegevens en beveiliging.","Manage your profile photo, account details, and security.",ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,"PNG, JPG of WEBP · max. 2 MB","PNG, JPG, or WEBP · max 2 MB",ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,Profielgegevens,Profile information,ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,Profielfoto,Profile photo,ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,Profielinstellingen,Profile settings,ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,Wijzigingen opslaan,Save changes,ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/security.tsx,Beveiligingsinstellingen,Security settings,ui,
+16-settings,Settings,/{locale}/settings/*,layouts/settings/layout.tsx,Instellingen,Settings,ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,Deze afbeelding verschijnt in de zijbalk en in het beheergebied.,This image appears in the sidebar and across the admin area.,ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,"Werk jouw naam, geslacht en e-mailadres bij.","Update your name, gender, and email address.",ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,gebruikersnaam,username,ui,
+16-settings,Settings,/{locale}/settings/*,pages/settings/profile.tsx,Jouw e-mailadres is niet geverifieerd.,Your email address is unverified.,ui,
+17-errors,Error pages,404 / 403,pages/errors/403.tsx,Verken het Journal →,Explore the Journal →,ui,also: pages/errors/404.tsx
+17-errors,Error pages,404 / 403,pages/errors/403.tsx,Geen toegang,No access,ui,
+17-errors,Error pages,404 / 403,pages/errors/404.tsx,Pagina niet gevonden,Page not found,ui,
+17-errors,Error pages,404 / 403,pages/errors/404.tsx,De gevraagde pagina bestaat niet of is verplaatst. Gebruik de links hieronder om verder te gaan.,The requested page does not exist or has been moved. Use the links below to continue.,ui,
+17-errors,Error pages,404 / 403,pages/errors/404.tsx,Deze pagina bestaat niet. Keer terug naar Maison Anversa.,This page does not exist. Return to Maison Anversa.,ui,
+17-errors,Error pages,404 / 403,pages/errors/403.tsx,Je hebt geen toegang tot deze pagina. Keer terug naar Maison Anversa.,You do not have access to this page. Return to Maison Anversa.,ui,
+17-errors,Error pages,404 / 403,pages/errors/403.tsx,Je mag deze pagina niet bekijken. Gebruik de links hieronder om verder te gaan.,You may not view this page. Use the links below to continue.,ui,

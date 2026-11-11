@@ -24,7 +24,7 @@ class ShippingNotification extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Uw Heritage Nº 001 is onderweg'),
+            subject: __('Jouw Heritage Nº 001 is onderweg'),
         );
     }
 

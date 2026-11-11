@@ -47,7 +47,7 @@ export function HeritageLetterForm({
                         : 'text-left'
                 }
             >
-                <p>{t('U ontvangt binnenkort een bevestiging.')}</p>
+                <p>{t('Je ontvangt binnenkort een bevestiging.')}</p>
             </SuccessPanel>
         );
     }
@@ -80,7 +80,7 @@ export function HeritageLetterForm({
             {showName && (
                 <>
                     <label className="sr-only" htmlFor={`nl-name-${source}`}>
-                        {t('Uw naam')}
+                        {t('Jouw naam')}
                     </label>
                     <input
                         id={`nl-name-${source}`}
@@ -89,7 +89,7 @@ export function HeritageLetterForm({
                         onChange={(event) =>
                             form.setData('name', event.target.value)
                         }
-                        placeholder={t('Uw naam')}
+                        placeholder={t('Jouw naam')}
                         className={inputClass}
                     />
                 </>
@@ -97,7 +97,7 @@ export function HeritageLetterForm({
 
             <div className="flex flex-col gap-0 sm:flex-row">
                 <label className="sr-only" htmlFor={`nl-email-${source}`}>
-                    {t('Uw e-mailadres')}
+                    {t('Jouw e-mailadres')}
                 </label>
                 <input
                     id={`nl-email-${source}`}
@@ -107,7 +107,7 @@ export function HeritageLetterForm({
                     onChange={(event) =>
                         form.setData('email', event.target.value)
                     }
-                    placeholder={t('Uw e-mailadres')}
+                    placeholder={t('Jouw e-mailadres')}
                     className={inputClass}
                 />
                 <button
@@ -128,7 +128,7 @@ export function HeritageLetterForm({
 
             <p className="mt-1 font-sans text-[10px] tracking-[0.08em] text-stone">
                 {t(
-                    'Door u in te schrijven gaat u akkoord met onze privacyverklaring.',
+                    'Door je in te schrijven ga je akkoord met onze privacyverklaring.',
                 )}{' '}
                 <MaisonLink
                     to="privacy"

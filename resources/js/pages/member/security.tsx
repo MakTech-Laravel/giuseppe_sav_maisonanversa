@@ -64,7 +64,7 @@ export default function MemberSecurity({
                 eyebrow={t('Account')}
                 title={t('Beveiliging')}
                 description={t(
-                    'Bescherm uw Maison Anversa-account met een sterk wachtwoord en optionele tweestapsverificatie.',
+                    'Bescherm jouw Maison Anversa-account met een sterk wachtwoord en optionele tweestapsverificatie.',
                 )}
             />
 
@@ -73,7 +73,7 @@ export default function MemberSecurity({
                     <MemberSectionTitle
                         title={t('Wachtwoord')}
                         description={t(
-                            'Gebruik een lang, uniek wachtwoord. U hebt uw huidige wachtwoord nodig om het te wijzigen.',
+                            'Gebruik een lang, uniek wachtwoord. Je hebt jouw huidige wachtwoord nodig om het te wijzigen.',
                         )}
                     />
                     <Form
@@ -180,7 +180,7 @@ export default function MemberSecurity({
                                 </h2>
                                 <p className="mt-1.5 max-w-xl text-[13px] leading-relaxed text-sand">
                                     {t(
-                                        'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op uw telefoon.',
+                                        'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op jouw telefoon.',
                                     )}
                                 </p>
                             </div>
@@ -197,7 +197,7 @@ export default function MemberSecurity({
                             <div className="max-w-xl space-y-5">
                                 <p className="text-[14px] leading-[1.7] text-sand">
                                     {t(
-                                        'U wordt bij het inloggen gevraagd om een beveiligingscode, die u uit een TOTP-ondersteunde app op uw telefoon haalt.',
+                                        'Je wordt bij het inloggen gevraagd om een beveiligingscode, die je uit een TOTP-ondersteunde app op jouw telefoon haalt.',
                                     )}
                                 </p>
 
@@ -224,7 +224,7 @@ export default function MemberSecurity({
                             <div className="max-w-xl space-y-5">
                                 <p className="text-[14px] leading-[1.7] text-sand">
                                     {t(
-                                        'Wanneer ingeschakeld, wordt u bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op uw telefoon.',
+                                        'Wanneer ingeschakeld, word je bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op jouw telefoon.',
                                     )}
                                 </p>
 

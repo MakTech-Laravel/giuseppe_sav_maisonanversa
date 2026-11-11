@@ -96,7 +96,7 @@ export default function SessionsIndex({
                 eyebrow={t('Community')}
                 title={t('Sessies')}
                 subtitle={t(
-                    'Vind een open sessie of maak uw eigen sessie aan. Maison Anversa brengt spelers samen; boeken en betalen regelt u zelf met de club.',
+                    'Vind een open sessie of maak jouw eigen sessie aan. Maison Anversa brengt spelers samen; boeken en betalen regel je zelf met de club.',
                 )}
             />
 
@@ -243,8 +243,8 @@ function EmptyState({ tab }: { tab: SessionTab }) {
 
     const copy: Record<SessionTab, string> = {
         open: 'Nog geen open sessies. Plan de eerste.',
-        mine: 'U neemt nog niet deel aan een sessie.',
-        past: 'U heeft nog geen afgelopen sessies.',
+        mine: 'Je neemt nog niet deel aan een sessie.',
+        past: 'Je hebt nog geen afgelopen sessies.',
     };
 
     return (

@@ -5,7 +5,7 @@
     'ctaLabel' => __('Bezoek het huis'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Uw bestelling :reference is bijgewerkt.', ['reference' => $order->reference()]) }}
+        {{ __('Jouw bestelling :reference is bijgewerkt.', ['reference' => $order->reference()]) }}
     </p>
 
     <p style="margin:0 0 12px;">

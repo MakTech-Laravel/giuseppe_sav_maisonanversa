@@ -572,7 +572,7 @@ test('the register has the final button, pick and pre-launch texts, with je in D
         ->not->toContain('← Terug naar het huis')
         ->toContain("archiveTooltip: 'La pièce de la Maison'")
         ->not->toContain("'Kies uw")
-        ->not->toContain('Kies uw')
+        ->not->toContain('Kies jouw')
         ->not->toContain('Betreed');
 
     expect($register)

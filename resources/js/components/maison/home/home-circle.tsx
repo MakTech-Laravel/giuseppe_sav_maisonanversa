@@ -25,12 +25,12 @@ const BENEFITS = [
     {
         icon: '⬡',
         title: 'Naamregistratie',
-        desc: 'Uw naam in het officiële Founding Circle register — permanent deel van het merkarchief.',
+        desc: 'Jouw naam in het officiële Founding Circle register — permanent deel van het merkarchief.',
     },
     {
         icon: '◎',
         title: 'Uniek Nummer',
-        desc: 'Uw editienummer (001–100) op racket, certificaat en paspoort. Voor altijd.',
+        desc: 'Jouw editienummer (001–100) op racket, certificaat en paspoort. Voor altijd.',
     },
     {
         icon: '★',

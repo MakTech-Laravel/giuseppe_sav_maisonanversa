@@ -23,7 +23,7 @@ class WaitlistConfirmation extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('U staat op de wachtlijst'),
+            subject: __('Je staat op de wachtlijst'),
         );
     }
 

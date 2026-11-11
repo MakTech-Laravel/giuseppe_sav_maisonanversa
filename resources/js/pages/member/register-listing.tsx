@@ -22,7 +22,7 @@ const OPTIONS = [
     {
         value: 'full',
         title: 'Volledige naam',
-        description: 'Uw voor- en achternaam worden publiek getoond.',
+        description: 'Jouw voor- en achternaam worden publiek getoond.',
         preview: 'full',
     },
     {
@@ -34,7 +34,7 @@ const OPTIONS = [
     {
         value: 'private',
         title: 'Privé',
-        description: 'Alleen uw nummer wordt getoond. Dit is de standaard.',
+        description: 'Alleen jouw nummer wordt getoond. Dit is de standaard.',
         preview: 'private',
     },
 ] as const;
@@ -48,12 +48,12 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
     if (listing === null) {
         return (
             <>
-                <Head title={t('Uw registervermelding')} />
-                <MemberPageHeader title={t('Uw registervermelding')} />
+                <Head title={t('Jouw registervermelding')} />
+                <MemberPageHeader title={t('Jouw registervermelding')} />
                 <MemberEmptyState
                     title={t('Nog geen editie toegewezen')}
                     description={t(
-                        'U bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan uw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
                     )}
                 />
             </>
@@ -62,14 +62,14 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
 
     return (
         <>
-            <Head title={t('Uw registervermelding')} />
+            <Head title={t('Jouw registervermelding')} />
             <MemberPageHeader
                 eyebrow={t('Founding Circle · lid nr. {{number}}', {
                     number: listing.number,
                 })}
-                title={t('Uw registervermelding')}
+                title={t('Jouw registervermelding')}
                 description={t(
-                    'Uw lidmaatschap staat in elk geval in het officiële archief. Kies hoe uw plaats verschijnt in het publieke Founding Circle-register.',
+                    'Jouw lidmaatschap staat in elk geval in het officiële archief. Kies hoe jouw plaats verschijnt in het publieke Founding Circle-register.',
                 )}
             />
 

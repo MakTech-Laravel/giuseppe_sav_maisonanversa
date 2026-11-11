@@ -69,11 +69,11 @@ enum InquiryType: string
     public function confirmationSubject(): string
     {
         return match ($this) {
-            self::Appointment => 'Wij hebben uw afspraakaanvraag ontvangen',
-            self::Consult => 'Wij hebben uw consultaanvraag ontvangen',
-            self::Feedback => 'Dank voor uw feedback',
-            self::Corner => 'Wij hebben uw aanvraag ontvangen',
-            self::Contact => 'Wij hebben uw bericht ontvangen',
+            self::Appointment => 'Wij hebben jouw afspraakaanvraag ontvangen',
+            self::Consult => 'Wij hebben jouw consultaanvraag ontvangen',
+            self::Feedback => 'Dank voor jouw feedback',
+            self::Corner => 'Wij hebben jouw aanvraag ontvangen',
+            self::Contact => 'Wij hebben jouw bericht ontvangen',
         };
     }
 }

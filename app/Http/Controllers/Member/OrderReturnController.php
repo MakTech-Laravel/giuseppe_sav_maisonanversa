@@ -72,7 +72,7 @@ class OrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Uw retouraanvraag is ontvangen.'),
+            'message' => __('Jouw retouraanvraag is ontvangen.'),
         ]);
 
         return redirect()->route('member.returns.show', [

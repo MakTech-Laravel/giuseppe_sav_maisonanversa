@@ -50,12 +50,12 @@ class CheckoutRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => __('Vul a.u.b. uw naam en e-mailadres in.'),
-            'email.required' => __('Vul a.u.b. uw naam en e-mailadres in.'),
-            'shipping_line1.required' => __('Vul a.u.b. uw verzendadres in.'),
-            'shipping_city.required' => __('Vul a.u.b. uw verzendadres in.'),
-            'shipping_postal_code.required' => __('Vul a.u.b. uw verzendadres in.'),
-            'shipping_country.required' => __('Vul a.u.b. uw verzendadres in.'),
+            'name.required' => __('Vul a.u.b. jouw naam en e-mailadres in.'),
+            'email.required' => __('Vul a.u.b. jouw naam en e-mailadres in.'),
+            'shipping_line1.required' => __('Vul a.u.b. jouw verzendadres in.'),
+            'shipping_city.required' => __('Vul a.u.b. jouw verzendadres in.'),
+            'shipping_postal_code.required' => __('Vul a.u.b. jouw verzendadres in.'),
+            'shipping_country.required' => __('Vul a.u.b. jouw verzendadres in.'),
             'edition_piece_id.required' => __('Kies a.u.b. een beschikbaar editienummer.'),
             'accept_terms.accepted' => __('Ik heb de Algemene voorwaarden en het Retourbeleid gelezen en ga ermee akkoord.'),
         ];

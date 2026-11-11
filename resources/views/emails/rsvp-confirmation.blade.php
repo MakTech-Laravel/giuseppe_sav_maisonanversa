@@ -1,11 +1,11 @@
 @component('emails.layouts.maison', [
-    'title' => __('Uw RSVP is bevestigd'),
+    'title' => __('Jouw RSVP is bevestigd'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
     'ctaLabel' => __('Bezoek het huis'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('U bent aangemeld voor :title.', ['title' => $event->translated('title')]) }}
+        {{ __('Je bent aangemeld voor :title.', ['title' => $event->translated('title')]) }}
     </p>
 
     @if ($event->starts_at)

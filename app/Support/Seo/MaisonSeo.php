@@ -87,7 +87,7 @@ final class MaisonSeo
         ],
         'privacy' => [
             'title' => 'Privacybeleid — Maison Anversa',
-            'description' => 'Privacybeleid van Maison Anversa — hoe wij uw gegevens verwerken en beschermen.',
+            'description' => 'Privacybeleid van Maison Anversa — hoe wij jouw gegevens verwerken en beschermen.',
         ],
         'terms' => [
             'title' => 'Algemene voorwaarden — Maison Anversa',
@@ -436,11 +436,11 @@ final class MaisonSeo
         return match ($routeName) {
             'maison.checkout.success' => [
                 'title' => __('Betaling bevestigd — Maison Anversa'),
-                'description' => __('Uw Founding Edition-reservering is ontvangen.'),
+                'description' => __('Jouw Founding Edition-reservering is ontvangen.'),
             ],
             'maison.checkout.cancel' => [
                 'title' => __('Betaling geannuleerd — Maison Anversa'),
-                'description' => __('Uw betaling is geannuleerd. Er is niets in rekening gebracht.'),
+                'description' => __('Jouw betaling is geannuleerd. Er is niets in rekening gebracht.'),
             ],
             'maison.verify' => [
                 'title' => __('Authenticiteit').' — Maison Anversa',
@@ -448,7 +448,7 @@ final class MaisonSeo
             ],
             'maison.heritage-letter.unsubscribe' => [
                 'title' => __('Uitgeschreven').' — Maison Anversa',
-                'description' => __('U ontvangt geen Heritage Letter meer. U kunt zich altijd opnieuw inschrijven.'),
+                'description' => __('Je ontvangt geen Heritage Letter meer. Je kunt zich altijd opnieuw inschrijven.'),
             ],
             default => [
                 'title' => 'Maison Anversa',

@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-11-11T09:53:09.146Z",
+  "total": 901,
+  "missing": 14,
+  "sections": [
+    {
+      "id": "00-shared",
+      "title": "Shared shell (nav, footer, modals, cookie)",
+      "count": 253
+    },
+    {
+      "id": "01-home-opening",
+      "title": "Home + Opening",
+      "count": 114
+    },
+    {
+      "id": "02-house",
+      "title": "Het Huis",
+      "count": 3
+    },
+    {
+      "id": "03-products",
+      "title": "Products",
+      "count": 15
+    },
+    {
+      "id": "04-story",
+      "title": "Ons Verhaal (UI chrome; body is CMS)",
+      "count": 0
+    },
+    {
+      "id": "05-circle",
+      "title": "Founding Circle",
+      "count": 26
+    },
+    {
+      "id": "06-dressing",
+      "title": "Kleedkamer",
+      "count": 20
+    },
+    {
+      "id": "07-journal",
+      "title": "Journal (UI chrome; articles are CMS)",
+      "count": 6
+    },
+    {
+      "id": "08-community",
+      "title": "Community hub + feed",
+      "count": 146
+    },
+    {
+      "id": "09-events-sessions-clubs",
+      "title": "Community events / sessions / clubs",
+      "count": 50
+    },
+    {
+      "id": "10-corner",
+      "title": "Club Corner",
+      "count": 56
+    },
+    {
+      "id": "11-contact",
+      "title": "Contact",
+      "count": 13
+    },
+    {
+      "id": "12-legal",
+      "title": "Legal wrappers (privacy, terms, shipping, care; body is CMS)",
+      "count": 10
+    },
+    {
+      "id": "13-commerce",
+      "title": "Returns, checkout, verify, guest returns, newsletter",
+      "count": 29
+    },
+    {
+      "id": "14-member",
+      "title": "Member area",
+      "count": 138
+    },
+    {
+      "id": "15-auth",
+      "title": "Auth full pages (reset / verify / confirm)",
+      "count": 3
+    },
+    {
+      "id": "16-settings",
+      "title": "Settings",
+      "count": 12
+    },
+    {
+      "id": "17-errors",
+      "title": "Error pages",
+      "count": 7
+    }
+  ]
+}

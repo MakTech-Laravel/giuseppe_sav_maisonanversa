@@ -12,7 +12,7 @@ export default function NewsletterUnsubscribed() {
                 eyebrow={t('Heritage Letter')}
                 title={t('Uitgeschreven')}
                 subtitle={t(
-                    'U ontvangt geen Heritage Letter meer. U kunt zich altijd opnieuw inschrijven.',
+                    'Je ontvangt geen Heritage Letter meer. Je kunt zich altijd opnieuw inschrijven.',
                 )}
             />
         </>
