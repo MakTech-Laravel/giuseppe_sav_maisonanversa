@@ -41,7 +41,7 @@ class FoundingCircleClaimController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Registratie ontvangen. We controleren uw serienummer.'),
+            'message' => __('Registratie ontvangen. We controleren jouw serienummer.'),
         ]);
 
         return back();

@@ -223,7 +223,7 @@ export function UserFormAside({
                 </li>
                 <li>
                     {isEdit
-                        ? t('U bewerkt: {{entity}}', { entity: entityLabel })
+                        ? t('Je bewerkt: {{entity}}', { entity: entityLabel })
                         : t('Type account: {{entity}}', {
                               entity: entityLabel,
                           })}

@@ -26,7 +26,7 @@ class LoginResponse implements LoginResponseContract
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('U bent succesvol ingelogd.'),
+            'message' => __('Je bent succesvol ingelogd.'),
         ]);
 
         /*

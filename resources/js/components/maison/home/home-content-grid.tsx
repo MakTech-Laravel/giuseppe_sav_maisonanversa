@@ -26,7 +26,7 @@ const CARDS = [
         to: 'corner' as MaisonPage,
         asset: 'heritage-001-detail-gravure' as ImageAssetName,
         eye: 'Club Corner',
-        title: 'Maison Anversa in uw padelclub.',
+        title: 'Maison Anversa in jouw padelclub.',
         desc: 'Een fysieke aanwezigheid in geselecteerde padelclubs — product, verhaal en community op één plek.',
         link: 'Ontdek Club Corner →',
     },

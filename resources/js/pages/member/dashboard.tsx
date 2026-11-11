@@ -45,7 +45,7 @@ export default function MemberDashboard({
                   {
                       href: `/${locale}/member/circle`,
                       label: t('Founding Circle'),
-                      hint: t('Uw lidmaatschapskaart'),
+                      hint: t('Jouw lidmaatschapskaart'),
                   },
               ]
             : []),
@@ -57,7 +57,7 @@ export default function MemberDashboard({
         {
             href: `/${locale}/member/letter`,
             label: t('Heritage Letter'),
-            hint: t('Uw inschrijvingen'),
+            hint: t('Jouw inschrijvingen'),
         },
         {
             href: `/${locale}/member/email-preferences`,
@@ -73,7 +73,7 @@ export default function MemberDashboard({
                 eyebrow={t('Founding Circle')}
                 title={t('Welkom, {{name}}', { name: member.name })}
                 description={t(
-                    'Uw kamers in het huis — bestellingen, de Circle en accountinstellingen.',
+                    'Jouw kamers in het huis — bestellingen, de Circle en accountinstellingen.',
                 )}
             />
 

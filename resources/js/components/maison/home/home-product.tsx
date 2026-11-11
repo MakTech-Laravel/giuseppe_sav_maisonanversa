@@ -50,7 +50,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                             <br />
                             {t('Het Originele.')}
                             <br />
-                            {t('Het Uwe.')}
+                            {t('Het jouwe.')}
                         </h2>
                         <p className="mb-5 text-[15px] leading-[1.8] text-choc3">
                             {t(

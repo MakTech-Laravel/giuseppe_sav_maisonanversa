@@ -42,7 +42,7 @@ class SessionChatDigestMail extends Mailable implements ShouldQueue
                 ...$this->maisonBrandData($this->locale, withHomeCta: false),
                 'title' => __('Nieuwe berichten'),
                 'intro' => trans_choice(
-                    'U heeft :count ongelezen chatbericht.|U heeft :count ongelezen chatberichten.',
+                    'Je hebt :count ongelezen chatbericht.|Je hebt :count ongelezen chatberichten.',
                     $this->unreadCount,
                     ['count' => $this->unreadCount],
                 ),

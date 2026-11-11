@@ -88,7 +88,7 @@ export function ContactDock() {
                 <div className="fixed right-4 bottom-20 z-91 w-77 max-w-[calc(100vw-32px)] rounded-2xl border border-gold/30 bg-[#241a14] px-4 pt-4.5 pb-3.5 shadow-[0_14px_44px_rgba(0,0,0,0.6)] ma-sm:right-6.5 ma-sm:bottom-25">
                     <div className="mb-3 flex items-center justify-between px-1">
                         <span className="font-serif text-base text-cream">
-                            {t('Hoe kunnen wij u helpen?')}
+                            {t('Hoe kunnen wij je helpen?')}
                         </span>
 
                         <button

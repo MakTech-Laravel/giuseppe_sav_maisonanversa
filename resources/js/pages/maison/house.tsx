@@ -28,7 +28,7 @@ export default function House() {
                     <GoldRule center className="mx-auto" />
                     <p className="mx-auto mt-5 max-w-160 text-[15px] leading-[1.85] text-sand">
                         {t(
-                            'Acht kamers, acht hoofdstukken. Stap binnen door op een ruimte te klikken — elke kamer brengt u naar een deel van het huis.',
+                            'Acht kamers, acht hoofdstukken. Stap binnen door op een ruimte te klikken — elke kamer brengt je naar een deel van het huis.',
                         )}
                     </p>
                 </Wrap>

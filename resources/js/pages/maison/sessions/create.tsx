@@ -110,7 +110,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                 eyebrow={t('Community')}
                 title={t('Sessie aanmaken')}
                 subtitle={t(
-                    'Plan uw volgende partij. Ontmoet leden. Speel samen.',
+                    'Plan jouw volgende partij. Ontmoet leden. Speel samen.',
                 )}
             />
 
@@ -252,7 +252,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                     index={7}
                                     title={t('Spelers')}
                                     description={t(
-                                        'U bent automatisch speler 1.',
+                                        'Je bent automatisch speler 1.',
                                     )}
                                 >
                                     <ChoiceGroup
@@ -299,7 +299,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                             </span>
                                             <span className="font-serif text-sm leading-snug text-stone">
                                                 {t(
-                                                    'Standaard speelt iedereen meteen mee. Schakel dit in als u elke aanvraag eerst wilt goedkeuren.',
+                                                    'Standaard speelt iedereen meteen mee. Schakel dit in als je elke aanvraag eerst wilt goedkeuren.',
                                                 )}
                                             </span>
                                         </span>
@@ -371,7 +371,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
 
                             <p className="border-t border-gold/15 px-6 py-4 text-center font-sans text-[10px] tracking-[0.08em] text-stone md:px-8">
                                 {t(
-                                    'Door een sessie aan te maken gaat u akkoord met onze communityrichtlijnen.',
+                                    'Door een sessie aan te maken ga je akkoord met onze communityrichtlijnen.',
                                 )}
                             </p>
                         </form>

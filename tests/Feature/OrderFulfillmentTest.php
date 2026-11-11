@@ -65,7 +65,7 @@ test('paying an order stores dutch timeline source and notifies the buyer', func
 
     $event = OrderStatusEvent::query()->where('order_id', $order->id)->first();
 
-    expect($event?->message)->toBe('Betaling ontvangen. Uw bestelling is aangemaakt.')
+    expect($event?->message)->toBe('Betaling ontvangen. Jouw bestelling is aangemaakt.')
         ->and(AppNotification::query()->where('type', NotificationType::Order)->where('title', 'Bestelling betaald')->exists())->toBeTrue()
         ->and(UserNotification::query()->where('user_id', $user->id)->exists())->toBeTrue();
 

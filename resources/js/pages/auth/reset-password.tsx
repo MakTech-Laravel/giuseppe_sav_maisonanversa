@@ -129,5 +129,5 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 ResetPassword.layout = {
     title: 'Wachtwoord opnieuw instellen',
     description:
-        'Voer de code uit uw e-mail in en stel uw nieuwe wachtwoord in.',
+        'Voer de code uit jouw e-mail in en stel jouw nieuwe wachtwoord in.',
 };

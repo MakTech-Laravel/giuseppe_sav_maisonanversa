@@ -33,7 +33,7 @@ class FoundingEditionCheckout
 
         if (! filled(config('cashier.secret'))) {
             throw ValidationException::withMessages([
-                'checkout' => __('Stripe is nog niet geconfigureerd. Voeg uw Stripe-sleutels toe om verder te gaan.'),
+                'checkout' => __('Stripe is nog niet geconfigureerd. Voeg jouw Stripe-sleutels toe om verder te gaan.'),
             ]);
         }
 

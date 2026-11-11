@@ -23,7 +23,7 @@ export function NewsletterModal({ onClose }: NewsletterModalProps) {
 
             <p className="mb-7 text-[15px] leading-[1.8] text-choc3">
                 {t(
-                    'Schrijf u in en ontvang als eerste toegang tot Heritage Nº 001 en alle toekomstige releases van Maison Anversa.',
+                    'Schrijf je in en ontvang als eerste toegang tot Heritage Nº 001 en alle toekomstige releases van Maison Anversa.',
                 )}
             </p>
 

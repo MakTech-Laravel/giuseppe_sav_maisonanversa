@@ -189,7 +189,7 @@ test('staff can update order status to shipped', function () {
     $this->actingAs($this->admin)
         ->patch(route('admin.orders.update', ['order' => $order->id]), [
             'status' => 'shipped',
-            'message' => 'Uw pakket is onderweg.',
+            'message' => 'Jouw pakket is onderweg.',
         ])
         ->assertRedirect();
 

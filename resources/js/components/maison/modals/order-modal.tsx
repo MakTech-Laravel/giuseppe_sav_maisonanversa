@@ -86,7 +86,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
             !shippingPostalCode.trim() ||
             !shippingCountry.trim()
         ) {
-            setError(t('Vul a.u.b. uw contact- en verzendgegevens in.'));
+            setError(t('Vul a.u.b. jouw contact- en verzendgegevens in.'));
 
             return;
         }
@@ -166,12 +166,12 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
 
     return (
         <MaisonModal
-            label={t(isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu')}
+            label={t(isLimitedEdition ? 'Reserveer Jouw Nummer' : 'Bestel nu')}
             onClose={onClose}
             panelClassName="max-w-[640px]"
         >
             <h2 className="mb-1.5 font-serif text-[32px] font-medium text-choc">
-                {t(isLimitedEdition ? 'Reserveer Uw Nummer' : 'Bestel nu')}
+                {t(isLimitedEdition ? 'Reserveer Jouw Nummer' : 'Bestel nu')}
             </h2>
             <span className="mb-4 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
                 {`${productName} · ${priceLabel}`}
@@ -449,7 +449,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
 
                     <p className={cn(modalNoteClassName, 'mt-3')}>
                         {t(
-                            'U wordt doorgestuurd naar onze beveiligde betaalpagina. Betaling via Stripe.',
+                            'Je wordt doorgestuurd naar onze beveiligde betaalpagina. Betaling via Stripe.',
                         )}
                     </p>
                     {deliveryLabel ? (

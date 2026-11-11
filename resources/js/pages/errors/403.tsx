@@ -15,7 +15,7 @@ export default function Error403() {
             <MaisonSeoHead
                 title={t('Geen toegang')}
                 description={t(
-                    'U heeft geen toegang tot deze pagina. Keer terug naar Maison Anversa.',
+                    'Je hebt geen toegang tot deze pagina. Keer terug naar Maison Anversa.',
                 )}
                 noIndex
             />
@@ -25,7 +25,7 @@ export default function Error403() {
                 eyebrow="403"
                 title={t('Geen toegang')}
                 subtitle={t(
-                    'U mag deze pagina niet bekijken. Gebruik de links hieronder om verder te gaan.',
+                    'Je mag deze pagina niet bekijken. Gebruik de links hieronder om verder te gaan.',
                 )}
             >
                 <div className="flex flex-col items-center gap-4">

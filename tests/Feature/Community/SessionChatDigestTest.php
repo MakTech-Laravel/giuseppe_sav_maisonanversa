@@ -63,7 +63,7 @@ test('the digest command notifies an inactive member with unread chat once', fun
     expect($row)->not->toBeNull()
         ->and($row->notification->type)->toBe(NotificationType::Community)
         ->and($row->notification->title)->toBe('Nieuwe berichten')
-        ->and($row->notification->message)->toBe('U heeft 1 ongelezen chatbericht.')
+        ->and($row->notification->message)->toBe('Je hebt 1 ongelezen chatbericht.')
         ->and($row->notification->data['digest'])->toBe('session_chat')
         ->and($this->host->fresh()->chat_digest_sent_at)->not->toBeNull();
 
@@ -91,7 +91,7 @@ test('the digest uses the singular chatbericht form for one unread', function ()
 
     $message = $this->host->userNotifications()->with('notification')->first()?->notification?->message;
 
-    expect($message)->toBe('U heeft 2 ongelezen chatberichten.');
+    expect($message)->toBe('Je hebt 2 ongelezen chatberichten.');
 });
 
 test('the digest command skips active members', function () {

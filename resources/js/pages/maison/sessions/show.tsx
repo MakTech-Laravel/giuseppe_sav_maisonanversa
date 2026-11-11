@@ -315,7 +315,7 @@ export default function SessionShow({
 
                             {session.is_full && !session.is_past && (
                                 <p className="border-t border-gold/15 bg-gold/6 px-7 py-5 text-center font-sans text-[11px] tracking-[0.08em] text-choc3">
-                                    {t('Uw groep is compleet. Tot op de baan!')}
+                                    {t('Jouw groep is compleet. Tot op de baan!')}
                                 </p>
                             )}
                         </div>

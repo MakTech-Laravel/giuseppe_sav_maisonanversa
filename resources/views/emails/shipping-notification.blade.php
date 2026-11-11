@@ -1,5 +1,5 @@
 @component('emails.layouts.maison', [
-    'title' => __('Uw editie is onderweg'),
+    'title' => __('Jouw editie is onderweg'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
     'ctaLabel' => __('Bezoek het huis'),

@@ -96,7 +96,7 @@ test('the feed composer renders user text safely without innerHTML', function ()
 
     expect($source)
         ->toContain('useIsMobile')
-        ->toContain('Deel uw ervaring...');
+        ->toContain('Deel jouw ervaring...');
 });
 
 test('community tabs are url based links', function () {

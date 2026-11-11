@@ -20,7 +20,7 @@ class RegisterResponse implements RegisterResponseContract
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Uw account is aangemaakt.'),
+            'message' => __('Jouw account is aangemaakt.'),
         ]);
 
         if ($request->header('X-Inertia') || ! $request->wantsJson()) {

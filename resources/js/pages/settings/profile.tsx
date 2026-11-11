@@ -64,7 +64,7 @@ export default function Profile({
                         <SettingsPanel
                             title={t('Profielgegevens')}
                             description={t(
-                                'Werk uw naam, geslacht en e-mailadres bij.',
+                                'Werk jouw naam, geslacht en e-mailadres bij.',
                             )}
                         >
                             <div className="grid gap-5 sm:grid-cols-2">
@@ -134,7 +134,7 @@ export default function Profile({
                                 user.email_verified_at === null && (
                                     <div className="mt-5 rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
                                         {t(
-                                            'Uw e-mailadres is niet geverifieerd.',
+                                            'Jouw e-mailadres is niet geverifieerd.',
                                         )}{' '}
                                         <Link
                                             href={send()}
@@ -149,7 +149,7 @@ export default function Profile({
                                             'verification-link-sent' && (
                                             <p className="mt-2 font-medium text-primary">
                                                 {t(
-                                                    'Er is een nieuwe verificatielink naar uw e-mailadres gestuurd.',
+                                                    'Er is een nieuwe verificatielink naar jouw e-mailadres gestuurd.',
                                                 )}
                                             </p>
                                         )}

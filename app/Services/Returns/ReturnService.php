@@ -126,7 +126,7 @@ class ReturnService
         $this->notifyBuyer(
             $return,
             'Retour aangevraagd',
-            'Uw retouraanvraag is ingediend.',
+            'Jouw retouraanvraag is ingediend.',
         );
 
         return $return;
@@ -210,7 +210,7 @@ class ReturnService
 
         $this->recordEvent($return, $from, ReturnStatus::Refunded, $actor, 'Volledige terugbetaling uitgevoerd.');
         SendReturnCustomerMail::dispatch($return->refresh(), 'r3');
-        $this->notifyBuyer($return, 'Retour terugbetaald', 'Uw retour is terugbetaald.');
+        $this->notifyBuyer($return, 'Retour terugbetaald', 'Jouw retour is terugbetaald.');
 
         return $return->refresh();
     }
@@ -267,7 +267,7 @@ class ReturnService
 
         $this->recordEvent($return, $from, ReturnStatus::PartiallyRefunded, $actor, $reason);
         SendReturnCustomerMail::dispatch($return->refresh(), 'r4');
-        $this->notifyBuyer($return, 'Retour terugbetaald', 'Uw retour is terugbetaald.');
+        $this->notifyBuyer($return, 'Retour terugbetaald', 'Jouw retour is terugbetaald.');
 
         return $return->refresh();
     }

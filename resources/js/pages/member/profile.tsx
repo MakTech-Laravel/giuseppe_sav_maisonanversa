@@ -59,7 +59,7 @@ export default function MemberProfile({
                 eyebrow={t('Account')}
                 title={t('Profiel & account')}
                 description={t(
-                    'Beheer hoe u in het huis verschijnt — foto, naam en hoe u inlogt.',
+                    'Beheer hoe je in het huis verschijnt — foto, naam en hoe je inlogt.',
                 )}
             />
 
@@ -75,7 +75,7 @@ export default function MemberProfile({
                             <MemberSectionTitle
                                 title={t('Identiteit')}
                                 description={t(
-                                    'Uw foto verschijnt in de lidheader en op community-oppervlakken.',
+                                    'Jouw foto verschijnt in de lidheader en op community-oppervlakken.',
                                 )}
                             />
                             <ProfileAvatarField
@@ -218,7 +218,7 @@ export default function MemberProfile({
                             {mustVerifyEmail &&
                                 user.email_verified_at === null && (
                                     <p className="mt-4 text-sm text-sand">
-                                        {t('Uw e-mail is niet geverifieerd.')}{' '}
+                                        {t('Jouw e-mail is niet geverifieerd.')}{' '}
                                         <Link
                                             href={send()}
                                             className="text-gold underline"
@@ -441,7 +441,7 @@ function DeleteMemberAccount({ locale }: { locale: string }) {
             <MemberSectionTitle
                 title={t('Account verwijderen')}
                 description={t(
-                    'Verwijder uw account en gegevens permanent van Maison Anversa. Dit kan niet ongedaan worden gemaakt.',
+                    'Verwijder jouw account en gegevens permanent van Maison Anversa. Dit kan niet ongedaan worden gemaakt.',
                 )}
             />
 

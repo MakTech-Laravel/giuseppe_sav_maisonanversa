@@ -24,13 +24,13 @@ import { Section, Wrap } from '@/components/maison/ui/section';
 import { cn } from '@/lib/utils';
 
 const PANEL_TITLES: Record<BureauPanelId, string> = {
-    bestel: 'Uw bestelling volgen',
+    bestel: 'Jouw bestelling volgen',
     care: 'Maison Care',
     afspraak: 'Boek een afspraak',
     concierge: 'Privé consult',
     atelier: 'Vind ons atelier',
     faq: 'Veelgestelde vragen',
-    feedback: 'Uw mening',
+    feedback: 'Jouw mening',
 };
 
 function BureauBubbleButton({
@@ -159,7 +159,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Eens Heritage Nº 001 levert, volgt u hier de status van uw editienummer. Tot die tijd zoeken wij uw reservering handmatig op — stuur ons uw naam of reserveringsnummer via WhatsApp of e-mail.',
+                            'Eens Heritage Nº 001 levert, volg je hier de status van jouw editienummer. Tot die tijd zoeken wij jouw reservering handmatig op — stuur ons jouw naam of reserveringsnummer via WhatsApp of e-mail.',
                         )}
                     </p>
                     <BureauNote>
@@ -172,7 +172,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Elke Heritage-racket wordt met de hand afgewerkt en verdient blijvende zorg. Wij adviseren over lederonderhoud, herstellingen en garantie. Bij twijfel stuurt u de racket terug naar ons atelier in Antwerpen voor inspectie.',
+                            'Elke Heritage-racket wordt met de hand afgewerkt en verdient blijvende zorg. Wij adviseren over lederonderhoud, herstellingen en garantie. Bij twijfel stuur je de racket terug naar ons atelier in Antwerpen voor inspectie.',
                         )}
                     </p>
                     <BureauNote>
@@ -185,7 +185,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Bezoek ons atelier in Antwerpen voor een privé-beleving: houd de racket vast, voel het leder, en ontdek uw nummer. Vraag een moment aan — wij bevestigen persoonlijk.',
+                            'Bezoek ons atelier in Antwerpen voor een privé-beleving: houd de racket vast, voel het leder, en ontdek jouw nummer. Vraag een moment aan — wij bevestigen persoonlijk.',
                         )}
                     </p>
                     <BureauForm
@@ -236,7 +236,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Sprekend met een Maison-specialist: een persoonlijk videogesprek over uw nummer, de afwerking, het leder en het monogram. Geen druk, geen haast — alleen advies op maat.',
+                            'Sprekend met een Maison-specialist: een persoonlijk videogesprek over jouw nummer, de afwerking, het leder en het monogram. Geen druk, geen haast — alleen advies op maat.',
                         )}
                     </p>
                     <BureauForm kind="consult" submitLabel="Consult aanvragen">
@@ -276,7 +276,7 @@ function BureauPanelBody({
                         </BureauFieldRow>
                         <BureauTextarea
                             name="message"
-                            placeholder="Waarover wilt u spreken? (optioneel)"
+                            placeholder="Waarover wil je spreken? (optioneel)"
                         />
                     </BureauForm>
                     <BureauNote>
@@ -290,7 +290,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Maison Anversa is gevestigd in het hart van Antwerpen. Bezoek op afspraak — wij verwelkomen u graag persoonlijk.',
+                            'Maison Anversa is gevestigd in het hart van Antwerpen. Bezoek op afspraak — wij verwelkomen je graag persoonlijk.',
                         )}
                     </p>
                     <p className="mt-1.5 font-serif text-lg text-gold">
@@ -311,7 +311,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Uw feedback vormt het huis mee. Vertel ons wat u vond — van de site tot de racket.',
+                            'Jouw feedback vormt het huis mee. Vertel ons wat je vond — van de site tot de racket.',
                         )}
                     </p>
                     <BureauForm kind="feedback" submitLabel="Verstuur feedback">
@@ -333,7 +333,7 @@ function BureauPanelBody({
                         <BureauSelect
                             name="ervaring"
                             options={[
-                                'Uw ervaring',
+                                'Jouw ervaring',
                                 'Uitstekend',
                                 'Goed',
                                 'Neutraal',
@@ -344,7 +344,7 @@ function BureauPanelBody({
                         <BureauTextarea
                             name="message"
                             rows={4}
-                            placeholder="Uw feedback..."
+                            placeholder="Jouw feedback..."
                         />
                     </BureauForm>
                 </>
