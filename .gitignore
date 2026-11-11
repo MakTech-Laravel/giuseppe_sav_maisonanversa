@@ -12,7 +12,7 @@
 /resources/js/wayfinder
 /vendor
 .DS_Store
-temp_auto_push.bat
+.env
 .env.backup
 .phpactor.json
 .phpunit.result.cache
@@ -25,7 +25,3 @@ yarn-error.log
 /.idea
 /.nova
 /.zed
-config.bat
-.env 
-.env.backup.gitignore
-branch_structure.json
