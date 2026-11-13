@@ -112,7 +112,7 @@ export function MatchCardShare({
                 alt={t('Wedstrijdkaart')}
                 loading="lazy"
                 className={cn(
-                    'mx-auto w-full border border-gold/15 bg-choc2 object-cover',
+                    'mx-auto w-full border border-gold/15 bg-choc2 object-contain',
                     format === 'story'
                         ? 'aspect-[9/16] max-w-[280px]'
                         : 'aspect-[4/5] max-w-[360px]',
