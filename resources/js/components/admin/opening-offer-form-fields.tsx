@@ -161,7 +161,7 @@ export function OpeningOfferFormAside() {
             <ul className="space-y-3 text-sm text-muted-foreground">
                 <li>
                     {t(
-                        'The numbers in the opening are this product's real edition numbers: available numbers show as available, all others as reserved.',
+                        "The numbers in the opening are this product's real edition numbers: available numbers show as available, all others as reserved.",
                     )}
                 </li>
                 <li>
