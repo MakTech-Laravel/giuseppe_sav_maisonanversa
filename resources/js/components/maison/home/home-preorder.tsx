@@ -11,9 +11,9 @@ import type { Edition } from '@/types/edition';
 
 const DEFAULT_INCLUDES = [
     'Heritage Nº 001 racket (individually numbered)',
-    'Heritage Certificate with founder's seal',
+    "Heritage Certificate with founder's seal",
     "Heritage Passport (24 pages)",
-    'Welcome Card & Founder's Letter',
+    "Welcome Card & Founder's Letter",
     'Founding Circle invitation',
     'Premium canvas stofdoek',
 ] as const;
