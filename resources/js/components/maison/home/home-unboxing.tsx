@@ -26,7 +26,7 @@ const STEPS = [
     {
         num: '04',
         title: 'Heritage Certificaat',
-        desc: 'Founder's seal. Signature. Your edition number.',
+        desc: "Founder's seal. Signature. Your edition number.",
     },
     {
         num: '05',
