@@ -212,7 +212,7 @@ test('the limit line reads as the client wrote it, in every language, and the ed
         ->not->toContain('Founding Edition')
         ->not->toMatch('/^\s*edition:/m')
         ->toContain("'Limited to {total} numbered rackets · {n} numbers available'")
-        ->toContain("'Beperkt tot {total} genummerde rackets · nog {n} nummers vrij'")
+        ->toContain("'Limited to {total} numbered rackets · {n} numbers available'")
         ->toContain("'Édition limitée à {total} raquettes numérotées · encore {n} numéros disponibles'")
         ->not->toContain('pieces')
         ->not->toContain('stuks');
@@ -541,9 +541,9 @@ test('the final greetings follow Antwerp time, and at night use the evening gree
     $data = openingSource('opening-data.ts');
 
     expect($data)
-        ->toContain("morning: 'Goedemorgen uit Antwerpen'")
-        ->toContain("afternoon: 'Goedemiddag uit Antwerpen'")
-        ->toContain("night: 'Goedenavond uit Antwerpen'")
+        ->toContain("morning: 'Good morning from Antwerp'")
+        ->toContain("afternoon: 'Good afternoon from Antwerp'")
+        ->toContain("night: 'Good evening from Antwerp'")
         ->toContain("night: 'Good evening from Antwerp'")
         ->toContain("morning: 'Bonjour d’Anvers'")
         ->toContain("afternoon: 'Bonjour d’Anvers'")

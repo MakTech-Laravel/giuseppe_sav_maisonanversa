@@ -30,10 +30,10 @@ enum SessionMatchFormat: string
     public function description(): string
     {
         return match ($this) {
-            self::BestOfThree => 'Wie eerst 2 sets wint. Tie-break bij 6-6.',
-            self::SuperTiebreak => 'Bij 1-1 in sets beslist een super tie-break tot 10.',
-            self::OneSet => 'Eén set tot 6 games. Tie-break bij 6-6.',
-            self::ShortSets => 'Beste van 3 sets tot 4 games. Tie-break bij 4-4.',
+            self::BestOfThree => 'First to win 2 sets. Tie-break at 6-6.',
+            self::SuperTiebreak => 'At one set all, a super tie-break to 10 decides.',
+            self::OneSet => 'One set to 6 games. Tie-break at 6-6.',
+            self::ShortSets => 'Best of 3 sets to 4 games. Tie-break at 4-4.',
         };
     }
 

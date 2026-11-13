@@ -21,8 +21,8 @@ enum ReturnStatus: string
             self::Requested => 'Aangevraagd',
             self::InTransit => 'Onderweg',
             self::Received => 'Ontvangen',
-            self::Refunded => 'Terugbetaald',
-            self::PartiallyRefunded => 'Gedeeltelijk terugbetaald',
+            self::Refunded => 'Refunded',
+            self::PartiallyRefunded => 'Partially refunded',
             self::Declined => 'Afgewezen',
             self::Cancelled => 'Geannuleerd',
         };

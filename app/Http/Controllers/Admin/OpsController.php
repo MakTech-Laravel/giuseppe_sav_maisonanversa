@@ -182,7 +182,7 @@ class OpsController extends Controller
             throw $exception;
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bestelstatus bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Order status bijgewerkt.')]);
 
         return back();
     }
@@ -198,7 +198,7 @@ class OpsController extends Controller
             'delivered_at' => $order->delivered_at ?? now(),
         ])->save();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Leveringsdatum bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Delivery date updated.')]);
 
         return back();
     }
@@ -259,7 +259,7 @@ class OpsController extends Controller
             'status' => 'published',
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Officieel bericht geplaatst.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Official post published.')]);
 
         return back();
     }
@@ -271,7 +271,7 @@ class OpsController extends Controller
             'hidden_at' => now(),
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht verborgen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Post hidden.')]);
 
         return back();
     }
@@ -358,7 +358,7 @@ class OpsController extends Controller
     ): RedirectResponse {
         $registrar->changeNumber($entry, (int) $request->validated('edition_number'));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Nummer bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Number updated.')]);
 
         return back();
     }
@@ -371,7 +371,7 @@ class OpsController extends Controller
     ): RedirectResponse {
         $registrar->setHidden($entry, $request->boolean('hidden', true));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Registervermelding bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Register listing updated.')]);
 
         return back();
     }
@@ -413,7 +413,7 @@ class OpsController extends Controller
         return Inertia::render('admin/circle/show', [
             'member' => [
                 ...$this->circleMemberPayload($member, $passport),
-                'benefits' => [__('Digitaal Heritage Passport'), __('Founding Circle-kaart')],
+                'benefits' => [__('Digital Heritage Passport'), __('Founding Circle card')],
             ],
         ]);
     }
@@ -481,7 +481,7 @@ class OpsController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Editieproduct bijgewerkt.'),
+            'message' => __('Edition product updated.'),
         ]);
 
         return back();

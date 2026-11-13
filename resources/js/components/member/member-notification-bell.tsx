@@ -74,7 +74,7 @@ export function MemberNotificationBell({ className }: { className?: string }) {
             <DropdownMenuTrigger asChild>
                 <button
                     type="button"
-                    aria-label={t('Meldingen')}
+                    aria-label={t('Notifications')}
                     className={cn(
                         'relative flex size-8 shrink-0 items-center justify-center border border-gold/25 bg-choc3 text-cream transition-colors hover:border-gold/40 hover:bg-choc2',
                         className,
@@ -97,7 +97,7 @@ export function MemberNotificationBell({ className }: { className?: string }) {
             >
                 <div className="flex items-center justify-between px-2 py-1.5">
                     <DropdownMenuLabel className="p-0 font-sans text-[10px] tracking-[0.18em] text-sand uppercase">
-                        {t('Meldingen')}
+                        {t('Notifications')}
                     </DropdownMenuLabel>
                     {unreadCount > 0 ? (
                         <button
@@ -105,14 +105,14 @@ export function MemberNotificationBell({ className }: { className?: string }) {
                             onClick={handleMarkAllRead}
                             className="font-sans text-[9px] tracking-[0.14em] text-gold uppercase hover:text-cream"
                         >
-                            {t('Alles gelezen')}
+                            {t('Mark all as read')}
                         </button>
                     ) : null}
                 </div>
                 <DropdownMenuSeparator className="bg-gold/20" />
                 {notifications.length === 0 ? (
                     <p className="px-2 py-4 text-center font-sans text-[11px] text-sand">
-                        {t('Geen meldingen.')}
+                        {t('No notifications.')}
                     </p>
                 ) : (
                     <div className="max-h-96 overflow-y-auto">
@@ -148,7 +148,7 @@ export function MemberNotificationBell({ className }: { className?: string }) {
                     asChild
                     className="justify-center rounded-none py-2 font-sans text-[10px] tracking-[0.18em] text-gold uppercase focus:bg-choc2 focus:text-cream"
                 >
-                    <Link href={indexHref}>{t('Alle meldingen')}</Link>
+                    <Link href={indexHref}>{t('All notifications')}</Link>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

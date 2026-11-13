@@ -5,7 +5,7 @@
     'ctaLabel' => __('Beheer jouw registervermelding'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Beste :name,', ['name' => $memberName]) }}
+        {{ __('Dear :name,', ['name' => $memberName]) }}
     </p>
 
     <p style="margin:0 0 16px;">

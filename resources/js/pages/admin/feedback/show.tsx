@@ -15,7 +15,7 @@ export default function FeedbackShow({ inquiry }: { inquiry: InquiryDetails }) {
             <Head title={inquiry.name} />
             <InquiryShow
                 title={inquiry.name}
-                description={t('Bekijk deze feedback.')}
+                description={t('View this feedback.')}
                 icon={MessageSquareQuote}
                 inquiry={inquiry}
                 routes={feedback as InquiryRouteHelpers}

@@ -56,7 +56,7 @@ export function ChatMessageList({
     return (
         <MessageScrollerProvider autoScroll defaultScrollPosition="end">
             <MessageScroller className={cn('min-h-0 flex-1', className)}>
-                <MessageScrollerViewport aria-label={t('Berichten')}>
+                <MessageScrollerViewport aria-label={t('Messages')}>
                     <MessageScrollerContent className="gap-5 px-5 py-6 md:px-7">
                         {rows.length === 0 ? (
                             <MessageScrollerItem className="my-auto">
@@ -176,10 +176,10 @@ function ChatEmptyState() {
         <div className="flex flex-col items-center gap-3 px-6 py-14 text-center">
             <MessageCircle className="size-6 text-gold2" aria-hidden="true" />
             <p className="font-serif text-lg text-cream">
-                {t('Nog geen berichten')}
+                {t('No messages yet')}
             </p>
             <p className="max-w-sm font-sans text-[12px] text-sand">
-                {t('Stuur het eerste bericht om het gesprek te starten.')}
+                {t('Send the first message to start the conversation.')}
             </p>
         </div>
     );

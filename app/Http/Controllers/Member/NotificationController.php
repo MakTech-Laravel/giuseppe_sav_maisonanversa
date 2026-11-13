@@ -63,7 +63,7 @@ class NotificationController extends Controller
         $row = $this->inbox->findFor($request->user(), $userNotification);
         $this->inbox->delete($request->user(), $row);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Melding verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Notification deleted.')]);
 
         $showUrl = route('member.notifications.show', ['locale' => $locale, 'userNotification' => $row->id]);
 

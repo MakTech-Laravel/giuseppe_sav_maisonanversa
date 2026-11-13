@@ -126,7 +126,7 @@ export function SeoMetaTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -134,10 +134,10 @@ export function SeoMetaTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk vertalingen per taal. Bron tekst wijzig je via SEO bewerken; DeepL vertaalt vanuit die bron.',
+                            'Edit translations per language. Change source text via SEO edit; DeepL translates from that source.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -147,7 +147,7 @@ export function SeoMetaTranslationsDialog({
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla de SEO-meta opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Some translations are still missing. Save the SEO meta again or use DeepL to generate them.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -172,7 +172,7 @@ export function SeoMetaTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-title`}>
-                            {t('Titel')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Title')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Textarea
                             id={`${activeLocale}-title`}
@@ -195,7 +195,7 @@ export function SeoMetaTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-description`}>
-                            {t('Beschrijving')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Description')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Textarea
                             id={`${activeLocale}-description`}
@@ -230,7 +230,7 @@ export function SeoMetaTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -245,14 +245,14 @@ export function SeoMetaTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

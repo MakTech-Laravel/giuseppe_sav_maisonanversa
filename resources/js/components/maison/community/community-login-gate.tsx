@@ -30,26 +30,26 @@ export function CommunityLoginGate() {
                 </div>
 
                 <h2 className="mb-3 font-serif text-4xl font-medium text-choc [&_em]:text-gold2 [&_em]:italic">
-                    {t('Welkom')}
+                    {t('Welcome')}
                     <br />
-                    {t('terug,')} <em>{t('lid')}</em>
+                    {t('back,')} <em>{t('member')}</em>
                 </h2>
 
                 <p className="mb-9 text-base leading-[1.8] text-choc3">
                     {t(
-                        'De Community is exclusief voor ingelogde leden. Log in om toegang te krijgen.',
+                        'The Community is exclusive to signed-in members. Sign in to get access.',
                     )}
                 </p>
                 <ul className="mb-9 space-y-2 text-left text-sm leading-[1.7] text-choc3">
                     <li>
-                        {t('Plan padelsessies met andere leden van het huis.')}
+                        {t('Plan padel sessions with other members of the house.')}
                     </li>
                     <li>
-                        {t('Ontdek exclusieve evenementen van Maison Anversa.')}
+                        {t('Discover exclusive Maison Anversa events.')}
                     </li>
                     <li>
                         {t(
-                            'Bekijk padel- en tennisclubs waar leden sessies plannen.',
+                            'Browse padel and tennis clubs where members plan sessions.',
                         )}
                     </li>
                 </ul>
@@ -60,16 +60,16 @@ export function CommunityLoginGate() {
                     type="button"
                     onClick={() => openAuth('login')}
                 >
-                    {t('Inloggen')}
+                    {t('Log in')}
                 </MaisonButton>
 
                 <div className="my-5 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
-                    {t('of')}
+                    {t('or')}
                 </div>
 
                 <p className="mb-4 text-sm text-choc3">
                     {t(
-                        'Nog geen lid? Koop Heritage Nº 001 en word automatisch Founding Member.',
+                        'Not a member yet? Buy Heritage Nº 001 and automatically become a Founding Member.',
                     )}
                 </p>
 
@@ -77,7 +77,7 @@ export function CommunityLoginGate() {
                     href={foundingProductUrl(locale)}
                     className="inline-block font-sans text-[10px] tracking-[0.2em] text-choc3 uppercase underline-offset-4 hover:text-choc hover:underline"
                 >
-                    {t('Bekijk Heritage Nº 001 →')}
+                    {t('View Heritage Nº 001 →')}
                 </MaisonLink>
             </Wrap>
         </Section>

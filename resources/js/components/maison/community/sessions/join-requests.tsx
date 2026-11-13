@@ -24,10 +24,10 @@ export function JoinRequests({ sessionId, requests }: JoinRequestsProps) {
     return (
         <div className="border-t border-gold/15 px-7 py-7">
             <h2 className="mb-1 font-sans text-[11px] font-medium tracking-[0.22em] text-choc uppercase">
-                {t('Aanvragen')}
+                {t('Requests')}
             </h2>
             <p className="mb-5 font-sans text-[11px] text-stone">
-                {t('Deze spelers wachten op jouw goedkeuring.')}
+                {t('These players are waiting for your approval.')}
             </p>
 
             <ul className="flex flex-col gap-3">
@@ -71,7 +71,7 @@ export function JoinRequests({ sessionId, requests }: JoinRequestsProps) {
                                         disabled={processing}
                                         className={smallSolidButton}
                                     >
-                                        {t('Goedkeuren')}
+                                        {t('Approve')}
                                     </button>
                                 )}
                             </Form>
@@ -90,7 +90,7 @@ export function JoinRequests({ sessionId, requests }: JoinRequestsProps) {
                                         disabled={processing}
                                         className={smallOutlineButton}
                                     >
-                                        {t('Weigeren')}
+                                        {t('Decline')}
                                     </button>
                                 )}
                             </Form>

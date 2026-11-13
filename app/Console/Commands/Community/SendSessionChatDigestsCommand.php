@@ -16,7 +16,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * Fixed-interval bulk chat digest. One common “Nieuwe berichten” notice per
+ * Fixed-interval bulk chat digest. One common “New messages” notice per
  * inactive member with unread — never per message, never while last_seen is fresh.
  */
 #[Signature('sessions:send-chat-digests')]
@@ -84,9 +84,9 @@ class SendSessionChatDigestsCommand extends Command
         $sessionId = $chat->sessionIdWithMostUnread($user);
         $ctaUrl = $this->chatUrl($user, $locale, $sessionId);
 
-        $title = __('Nieuwe berichten');
+        $title = __('New messages');
         $message = trans_choice(
-            'Je hebt :count ongelezen chatbericht.|Je hebt :count ongelezen chatberichten.',
+            '{1} You have :count unread chat message.|[2,*] You have :count unread chat messages.',
             $unread,
             ['count' => $unread],
         );
@@ -98,7 +98,7 @@ class SendSessionChatDigestsCommand extends Command
             $message,
             [
                 'link_url' => $ctaUrl,
-                'link_label' => __('Bekijk berichten'),
+                'link_label' => __('View messages'),
                 'unread_count' => $unread,
                 'digest' => 'session_chat',
             ],

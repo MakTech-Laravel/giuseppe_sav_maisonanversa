@@ -82,7 +82,7 @@ export default function ShowDressingItem({
     const { t } = useTranslation();
     const locale = wayfinderLocale();
     const statusLabel =
-        item.status === 'available' ? t('Beschikbaar') : t('Binnenkort');
+        item.status === 'available' ? t('Available') : t('Coming soon');
 
     return (
         <>
@@ -90,12 +90,12 @@ export default function ShowDressingItem({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={item.name}
-                    description={t('Bekijk dit item zoals op de site.')}
+                    description={t('View this item as it appears on the site.')}
                     icon={Shirt}
                 >
                     <Button variant="outline" asChild>
                         <Link href={dressingItems.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -105,7 +105,7 @@ export default function ShowDressingItem({
                                 dressingItem: Number(item.id),
                             })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -113,9 +113,9 @@ export default function ShowDressingItem({
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Werk dit item bij of ga terug naar de lijst.',
+                                'Update this item or return to the list.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -127,7 +127,7 @@ export default function ShowDressingItem({
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
-                                        {t('Bewerken')}
+                                        {t('Edit')}
                                     </Link>
                                 </Button>
                                 <DressingItemTranslationsDialog
@@ -143,12 +143,12 @@ export default function ShowDressingItem({
                                 >
                                     <Link href={dressingItems.index(locale)}>
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug')}
+                                        {t('Back')}
                                     </Link>
                                 </Button>
                                 <ConfirmDeleteDialog
                                     description={t(
-                                        'Dit item wordt permanent verwijderd.',
+                                        'This item will be permanently deleted.',
                                     )}
                                     onConfirm={() =>
                                         router.delete(
@@ -164,7 +164,7 @@ export default function ShowDressingItem({
                                         className="w-full"
                                     >
                                         <Trash2 className="h-4 w-4" />{' '}
-                                        {t('Verwijderen')}
+                                        {t('Remove')}
                                     </Button>
                                 </ConfirmDeleteDialog>
                             </div>
@@ -172,9 +172,9 @@ export default function ShowDressingItem({
                     }
                 >
                     <AdminPanel
-                        title={t('Inhoud')}
+                        title={t('Content')}
                         description={t(
-                            'Zoals bezoekers dit item in de huidige taal zien.',
+                            'As visitors see this item in the current language.',
                         )}
                     >
                         <div className="mb-5 flex flex-wrap gap-2">
@@ -182,8 +182,8 @@ export default function ShowDressingItem({
                             <Badge variant="secondary">{statusLabel}</Badge>
                             <Badge variant="secondary">
                                 {item.is_published
-                                    ? t('Gepubliceerd')
-                                    : t('Concept')}
+                                    ? t('Published')
+                                    : t('Draft')}
                             </Badge>
                         </div>
 
@@ -195,13 +195,13 @@ export default function ShowDressingItem({
                             />
                         ) : (
                             <div className="mb-5 flex aspect-4/3 w-full max-w-sm items-center justify-center rounded-lg bg-muted text-xs text-muted-foreground">
-                                {t('Geen afbeelding')}
+                                {t('No image')}
                             </div>
                         )}
 
                         <div className="grid gap-5">
                             <Field
-                                label={t('Beschrijving')}
+                                label={t('Description')}
                                 value={item.description || t('—')}
                                 pre
                             />
@@ -209,15 +209,15 @@ export default function ShowDressingItem({
                     </AdminPanel>
 
                     <AdminPanel
-                        title={t('Instellingen')}
+                        title={t('Settings')}
                         description={t(
-                            'Categorie, volgorde en publicatiestatus voor dit item.',
+                            'Category, order and publication status for this item.',
                         )}
                     >
                         <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
                             <Field label={t('Slug')} value={item.slug} mono />
                             <Field
-                                label={t('Volgorde')}
+                                label={t('Order')}
                                 value={String(item.sort_order)}
                                 mono
                             />
@@ -225,8 +225,8 @@ export default function ShowDressingItem({
                                 label={t('Status')}
                                 value={
                                     item.is_published
-                                        ? t('Gepubliceerd')
-                                        : t('Concept')
+                                        ? t('Published')
+                                        : t('Draft')
                                 }
                             />
                         </div>

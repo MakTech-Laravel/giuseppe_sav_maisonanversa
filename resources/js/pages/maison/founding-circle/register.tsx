@@ -71,31 +71,31 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
         <>
             <MaisonSeoHead
                 noIndex
-                title={t('Het officiële register')}
+                title={t('The Official Register')}
                 description={t(
-                    'Honderd plaatsen. Eén eerste hoofdstuk. Elk lid van de Founding Circle wordt ingeschreven in de volgorde waarin zij het huis vonden.',
+                    'One hundred places. One first chapter. Every member of the Founding Circle is inscribed in the order in which they found the house.',
                 )}
             />
 
             <section className="bg-cream px-6 pt-16 pb-20 text-choc md:px-10">
                 <div className="mx-auto max-w-6xl text-center">
                     <p className="font-sans text-[10px] tracking-[0.28em] text-gold2 uppercase">
-                        {t('De Founding Circle')}
+                        {t('The Founding Circle')}
                     </p>
                     <h1 className="mt-4 font-serif text-[clamp(40px,6vw,72px)] leading-none font-medium">
-                        {t('Het officiële register')}
+                        {t('The Official Register')}
                     </h1>
                     <span className="mx-auto mt-5 block h-px w-16 bg-gold" />
                     <p className="mx-auto mt-6 max-w-xl text-[15px] leading-[1.7] text-choc3">
                         {t(
-                            'Honderd plaatsen. Eén eerste hoofdstuk. Elk lid van de Founding Circle wordt ingeschreven in de volgorde waarin zij het huis vonden, en blijft deel van de geschiedenis zolang het huis bestaat.',
+                            'One hundred places. One first chapter. Every member of the Founding Circle is inscribed in the order in which they found the house, and remains part of its history for as long as the house exists.',
                         )}
                     </p>
 
                     <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-6">
                         <div>
                             <dt className="font-sans text-[9px] tracking-[0.18em] text-gold2 uppercase">
-                                {t('Ingeschreven')}
+                                {t('Inscribed')}
                             </dt>
                             <dd className="mt-2 font-serif text-4xl">
                                 {foundingRegister.inscribed_count}
@@ -103,7 +103,7 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                         </div>
                         <div>
                             <dt className="font-sans text-[9px] tracking-[0.18em] text-gold2 uppercase">
-                                {t('Plaatsen resterend')}
+                                {t('Places remaining')}
                             </dt>
                             <dd className="mt-2 font-serif text-4xl">
                                 {foundingRegister.remaining_count}
@@ -111,7 +111,7 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                         </div>
                         <div>
                             <dt className="font-sans text-[9px] tracking-[0.18em] text-gold2 uppercase">
-                                {t('Plaatsen in totaal')}
+                                {t('Places in total')}
                             </dt>
                             <dd className="mt-2 font-serif text-4xl">
                                 {foundingRegister.places_total}
@@ -122,10 +122,10 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                     <div className="mt-10 flex flex-col gap-2 sm:flex-row sm:justify-center">
                         {(
                             [
-                                ['all', t('Alle 100')],
-                                ['inscribed', t('Ingeschreven')],
-                                ['reserved', t('Gereserveerd')],
-                                ['available', t('Beschikbaar')],
+                                ['all', t('All 100')],
+                                ['inscribed', t('Inscribed')],
+                                ['reserved', t('Reserved')],
+                                ['available', t('Available')],
                             ] as const
                         ).map(([value, label]) => (
                             <button
@@ -145,9 +145,9 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                     </div>
 
                     <ul className="mt-4 hidden items-center justify-end gap-4 font-sans text-[10px] tracking-[0.12em] text-choc3 uppercase md:flex">
-                        <li>{t('Ingeschreven met naam')}</li>
-                        <li className="italic">{t('Privélid')}</li>
-                        <li>{t('Jouw vermelding')}</li>
+                        <li>{t('Inscribed with a name')}</li>
+                        <li className="italic">{t('Private member')}</li>
+                        <li>{t('Your listing')}</li>
                     </ul>
 
                     <div className="mt-6 hidden gap-8 text-left md:grid md:grid-cols-4">
@@ -183,18 +183,18 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                             onClick={() => setShowAll(true)}
                             className="mt-6 min-h-11 w-full border border-gold/40 font-sans text-[10px] tracking-[0.16em] text-choc uppercase md:hidden"
                         >
-                            {t('Toon alle 100 plaatsen')}
+                            {t('Show all 100 places')}
                         </button>
                     )}
 
                     <div className="mt-14 flex flex-col items-start gap-6 border border-gold/20 bg-cream2 p-8 text-left md:flex-row md:items-center md:justify-between">
                         <div>
                             <h2 className="font-serif text-3xl">
-                                {t('Jouw naam, jouw keuze.')}
+                                {t('Your name, your choice.')}
                             </h2>
                             <p className="mt-3 max-w-xl text-sm leading-relaxed text-choc3">
                                 {t(
-                                    'Elk lid staat in het officiële archief. Of jouw volledige naam, jouw voornaam en initiaal, of alleen jouw nummer publiek verschijnt, kies je zelf.',
+                                    'Every member is in the official archive. Whether your full name, your first name and initial, or only your number appears in public is your choice.',
                                 )}
                             </p>
                         </div>
@@ -203,7 +203,7 @@ export default function OfficialRegister({ places }: { places: Place[] }) {
                             onClick={manageListing}
                             className="min-h-11 shrink-0 bg-choc px-5 font-sans text-[10px] tracking-[0.16em] text-cream uppercase"
                         >
-                            {t('Beheer mijn vermelding')}
+                            {t('Manage my listing')}
                         </button>
                     </div>
                 </div>
@@ -252,7 +252,7 @@ function PlaceRow({
             </span>
             {place.you ? (
                 <span className="font-sans text-[9px] tracking-[0.14em] text-gold2 uppercase">
-                    {t('Je')}
+                    {t('YOU')}
                 </span>
             ) : (
                 place.year && (

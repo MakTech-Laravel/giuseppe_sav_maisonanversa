@@ -22,7 +22,7 @@ class NewsletterController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Welkom bij de Heritage Letter.'),
+            'message' => __('Welcome to the Heritage Letter.'),
         ]);
 
         return back();

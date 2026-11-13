@@ -47,8 +47,8 @@ enum InquiryType: string
     public function subject(): string
     {
         return match ($this) {
-            self::Appointment => 'Afspraak aanvraag',
-            self::Consult => 'Privé consult aanvraag',
+            self::Appointment => 'Appointment request',
+            self::Consult => 'Private consultation request',
             self::Feedback => 'Feedback',
             self::Corner => 'Club Corner partnership',
             self::Contact => 'Contact',
@@ -59,7 +59,7 @@ enum InquiryType: string
     {
         return match ($this) {
             self::Appointment => 'Afspraak',
-            self::Consult => 'Privé consult',
+            self::Consult => 'Private consultation',
             self::Feedback => 'Feedback',
             self::Corner => 'Club Corner',
             self::Contact => 'Contact',
@@ -69,9 +69,9 @@ enum InquiryType: string
     public function confirmationSubject(): string
     {
         return match ($this) {
-            self::Appointment => 'Wij hebben jouw afspraakaanvraag ontvangen',
-            self::Consult => 'Wij hebben jouw consultaanvraag ontvangen',
-            self::Feedback => 'Dank voor jouw feedback',
+            self::Appointment => 'We have received your appointment request',
+            self::Consult => 'We have received your consultation request',
+            self::Feedback => 'Thank you for your feedback',
             self::Corner => 'Wij hebben jouw aanvraag ontvangen',
             self::Contact => 'Wij hebben jouw bericht ontvangen',
         };

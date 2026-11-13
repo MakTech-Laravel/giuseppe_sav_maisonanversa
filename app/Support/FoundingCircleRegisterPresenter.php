@@ -118,7 +118,7 @@ class FoundingCircleRegisterPresenter
                 'email' => ($isReturning || ($entry !== null && ! $entry->isInscribed())) ? null : $entry?->user?->email,
                 'visibility' => ($isReturning || ($entry !== null && ! $entry->isInscribed())) ? null : $entry?->register_visibility->value,
                 'visibility_label' => $isReturning || ($entry !== null && ! $entry->isInscribed())
-                    ? __('Gereserveerd')
+                    ? __('Reserved')
                     : $entry?->register_visibility->label(),
                 'consent_at' => ($isReturning || ($entry !== null && ! $entry->isInscribed())) ? null : $entry?->register_consent_at?->toDateString(),
                 'hidden' => (bool) $entry?->register_hidden_by_admin,
@@ -166,7 +166,7 @@ class FoundingCircleRegisterPresenter
             'number' => $number,
             'full' => $number.'  '.PersonName::publicLabel($user, RegisterVisibility::Full),
             'initial' => $number.'  '.PersonName::publicLabel($user, RegisterVisibility::Initial),
-            'private' => $number.'  '.__('Privélid'),
+            'private' => $number.'  '.__('Private member'),
             'visibility' => $entry->register_visibility->value,
             'consent' => $entry->register_consent_at !== null,
             'inscribed' => $entry->isInscribed(),
@@ -199,7 +199,7 @@ class FoundingCircleRegisterPresenter
                 'number' => $number,
                 'sequence' => $sequence,
                 'state' => 'returning',
-                'label_key' => 'Gereserveerd',
+                'label_key' => 'Reserved',
                 'name' => null,
                 'year' => null,
                 'italic' => true,
@@ -228,7 +228,7 @@ class FoundingCircleRegisterPresenter
                 'number' => $number,
                 'sequence' => $sequence,
                 'state' => 'reserved',
-                'label_key' => 'Gereserveerd',
+                'label_key' => 'Reserved',
                 'name' => null,
                 'year' => null,
                 'italic' => true,

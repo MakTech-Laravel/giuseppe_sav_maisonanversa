@@ -63,14 +63,14 @@ export function ProductCatalogFilters({
     return (
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center">
             <label className="sr-only" htmlFor="product-search">
-                {t('Zoek producten')}
+                {t('Search products')}
             </label>
             <input
                 id="product-search"
                 type="text"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
-                placeholder={t('Zoek op naam of slug…')}
+                placeholder={t('Search by name or slug...')}
                 className={`${fieldClassName} sm:max-w-80`}
             />
 
@@ -81,10 +81,10 @@ export function ProductCatalogFilters({
                     <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="all">{t('Alle statussen')}</SelectItem>
-                    <SelectItem value="active">{t('Beschikbaar')}</SelectItem>
+                    <SelectItem value="all">{t('All statuses')}</SelectItem>
+                    <SelectItem value="active">{t('Available')}</SelectItem>
                     <SelectItem value="coming_soon">
-                        {t('Binnenkort')}
+                        {t('Coming soon')}
                     </SelectItem>
                 </SelectContent>
             </Select>

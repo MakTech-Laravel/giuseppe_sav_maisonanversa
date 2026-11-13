@@ -44,8 +44,8 @@ export function AdminUserProfile({ user, idLabel }: AdminUserProfileProps) {
                         <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
                             <Badge variant={verified ? 'default' : 'secondary'}>
                                 {verified
-                                    ? t('Geverifieerd')
-                                    : t('In afwachting')}
+                                    ? t('Verified')
+                                    : t('Pending')}
                             </Badge>
                         </div>
                     </div>
@@ -59,17 +59,17 @@ export function AdminUserProfile({ user, idLabel }: AdminUserProfileProps) {
                 />
                 <ProfileRow
                     icon={Mail}
-                    label={t('E-mail')}
+                    label={t('Email')}
                     value={user.email}
                 />
                 <ProfileRow
                     icon={ShieldCheck}
-                    label={t('Geverifieerd')}
-                    value={verified ? t('Ja') : t('In afwachting')}
+                    label={t('Verified')}
+                    value={verified ? t('Yes') : t('Pending')}
                 />
                 <ProfileRow
                     icon={Calendar}
-                    label={t('Lid sinds')}
+                    label={t('Member since')}
                     value={new Date(user.created_at).toLocaleDateString(
                         undefined,
                         { dateStyle: 'long' },

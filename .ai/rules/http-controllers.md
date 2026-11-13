@@ -5,5 +5,5 @@ paths:
 
 # Http Controllers
 
-## Toast copy uses Dutch source keys
-Flash toasts use Dutch source strings via __() (lang/en.json|fr.json). showFlashToast and validation/error toasts run translate() on the client. Notification toasts t() title/message/type_label/link_label. Never flash raw English like "Customer created successfully." or English __() keys like __('Profile updated.').
+## Toast copy uses English source keys
+Flash toasts use English source strings via __() (lang/nl.json|fr.json). showFlashToast and validation/error toasts run translate() on the client. Notification toasts t() title/message/type_label/link_label. Keys are the English copy (e.g. __('Profile updated.')). Never invent Dutch/French in code — only dictionary values.

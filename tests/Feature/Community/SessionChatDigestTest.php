@@ -62,7 +62,7 @@ test('the digest command notifies an inactive member with unread chat once', fun
 
     expect($row)->not->toBeNull()
         ->and($row->notification->type)->toBe(NotificationType::Community)
-        ->and($row->notification->title)->toBe('Nieuwe berichten')
+        ->and($row->notification->title)->toBe('New messages')
         ->and($row->notification->message)->toBe('Je hebt 1 ongelezen chatbericht.')
         ->and($row->notification->data['digest'])->toBe('session_chat')
         ->and($this->host->fresh()->chat_digest_sent_at)->not->toBeNull();

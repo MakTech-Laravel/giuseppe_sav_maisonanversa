@@ -139,7 +139,7 @@ export function JournalTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -147,10 +147,10 @@ export function JournalTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk vertalingen per taal. Bron tekst wijzig je via journal bewerken; DeepL vertaalt vanuit die bron.',
+                            'Edit translations per language. Change the source text via edit journal; DeepL translates from that source.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -160,7 +160,7 @@ export function JournalTranslationsDialog({
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla het artikel opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Some translations are still missing. Save the article again or use DeepL to generate them.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -187,7 +187,7 @@ export function JournalTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-title`}>
-                            {t('Titel')}
+                            {t('Title')}
                         </Label>
                         <Input
                             id={`${activeLocale}-title`}
@@ -259,7 +259,7 @@ export function JournalTranslationsDialog({
                     <div className="grid gap-4 md:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor={`${activeLocale}-category`}>
-                                {t('Categorie')}
+                                {t('Category')}
                             </Label>
                             <Input
                                 id={`${activeLocale}-category`}
@@ -282,7 +282,7 @@ export function JournalTranslationsDialog({
 
                         <div className="space-y-2">
                             <Label htmlFor={`${activeLocale}-date_label`}>
-                                {t('Datumlabel')}
+                                {t('Date label')}
                             </Label>
                             <Input
                                 id={`${activeLocale}-date_label`}
@@ -319,7 +319,7 @@ export function JournalTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -334,14 +334,14 @@ export function JournalTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

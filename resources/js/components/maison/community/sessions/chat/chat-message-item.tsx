@@ -102,7 +102,7 @@ export function ChatMessageItem({
                                 className="size-3 shrink-0"
                                 aria-hidden="true"
                             />
-                            <span>{t('Versturen mislukt')}</span>
+                            <span>{t('Send failed')}</span>
                         </span>
                         {onRetry ? (
                             <button
@@ -110,7 +110,7 @@ export function ChatMessageItem({
                                 onClick={() => onRetry(message)}
                                 className="text-gold underline-offset-2 hover:underline"
                             >
-                                {t('Opnieuw')}
+                                {t('Redo')}
                             </button>
                         ) : null}
                         {onDismissFailed ? (
@@ -119,7 +119,7 @@ export function ChatMessageItem({
                                 onClick={() => onDismissFailed(message)}
                                 className="text-sand underline-offset-2 hover:underline"
                             >
-                                {t('Verwijderen')}
+                                {t('Remove')}
                             </button>
                         ) : null}
                     </div>
@@ -131,12 +131,12 @@ export function ChatMessageItem({
                         {sending ? (
                             <Loader2
                                 className="size-3 shrink-0 animate-spin text-sand"
-                                aria-label={t('Versturen…')}
+                                aria-label={t('Sending…')}
                             />
                         ) : (
                             <Check
                                 className="size-3.5 shrink-0 text-gold"
-                                aria-label={t('Verstuurd')}
+                                aria-label={t('Sent')}
                             />
                         )}
                     </MessageFooter>
@@ -146,14 +146,14 @@ export function ChatMessageItem({
                             {formatSessionTime(message.sent_at, locale)}
                         </time>
                         {message.is_reported ? (
-                            <span className="text-sand">{t('Gemeld')}</span>
+                            <span className="text-sand">{t('Reported')}</span>
                         ) : onReport && !message.is_system ? (
                             <button
                                 type="button"
                                 onClick={() => onReport(message)}
                                 className="text-sand underline-offset-2 hover:underline"
                             >
-                                {t('Melden')}
+                                {t('Report')}
                             </button>
                         ) : null}
                         {onDelete && !message.is_system ? (
@@ -162,7 +162,7 @@ export function ChatMessageItem({
                                 onClick={() => onDelete(message)}
                                 className="text-sand underline-offset-2 hover:underline"
                             >
-                                {t('Verwijderen')}
+                                {t('Remove')}
                             </button>
                         ) : null}
                     </MessageFooter>
@@ -205,7 +205,7 @@ function ChatImageThumb({ attachment }: { attachment: ChatAttachment }) {
                 <span
                     className="flex aspect-square w-full flex-col items-center justify-center gap-1.5 px-2 text-center"
                     role="img"
-                    aria-label={t('Afbeelding niet beschikbaar')}
+                    aria-label={t('Image unavailable')}
                 >
                     <ImageOff className="size-5 text-sand" aria-hidden="true" />
                     <span className="line-clamp-2 font-sans text-[10px] text-sand">

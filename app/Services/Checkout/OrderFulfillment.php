@@ -104,7 +104,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Paid,
                 ],
                 [
-                    'message' => 'Betaling ontvangen. Jouw bestelling is aangemaakt.',
+                    'message' => 'Payment received. Your order has been created.',
                     'user_id' => null,
                 ],
             );
@@ -128,14 +128,14 @@ class OrderFulfillment
                 notify_user(
                     $fulfilled->user_id,
                     NotificationType::Order,
-                    'Bestelling betaald',
-                    'Jouw bestelling is betaald.',
+                    'Order paid',
+                    'Your order has been paid.',
                     [
                         'link_url' => route('member.orders.show', [
                             'locale' => $fulfilled->locale ?? config('app.locale'),
                             'order' => $fulfilled->id,
                         ]),
-                        'link_label' => 'Bekijk bestelling',
+                        'link_label' => 'View order',
                     ],
                 );
             }
@@ -251,7 +251,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Refunded,
                 ],
                 [
-                    'message' => 'Betaling terugbetaald.',
+                    'message' => 'Payment refunded.',
                     'user_id' => null,
                 ],
             );
@@ -306,7 +306,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Failed,
                 ],
                 [
-                    'message' => 'Betaling mislukt. De reservering is vrijgegeven.',
+                    'message' => 'Payment failed. The reservation has been released.',
                     'user_id' => null,
                 ],
             );
@@ -371,7 +371,7 @@ class OrderFulfillment
                     'status' => OrderStatus::Canceled,
                 ],
                 [
-                    'message' => 'Checkout geannuleerd. De reservering is vrijgegeven.',
+                    'message' => 'Checkout canceled. The reservation has been released.',
                     'user_id' => null,
                 ],
             );

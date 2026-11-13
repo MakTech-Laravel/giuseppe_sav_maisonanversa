@@ -64,7 +64,7 @@ export function CommunityEventFormFields({
     return (
         <>
             <div className="space-y-2">
-                <Label htmlFor="title">{t('Titel')}</Label>
+                <Label htmlFor="title">{t('Title')}</Label>
                 <Input
                     id="title"
                     value={data.title}
@@ -76,7 +76,7 @@ export function CommunityEventFormFields({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="description">{t('Beschrijving')}</Label>
+                <Label htmlFor="description">{t('Description')}</Label>
                 <textarea
                     id="description"
                     value={data.description}
@@ -94,7 +94,7 @@ export function CommunityEventFormFields({
 
             <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="starts_at">{t('Datum')}</Label>
+                    <Label htmlFor="starts_at">{t('Date')}</Label>
                     <Input
                         id="starts_at"
                         type="datetime-local"
@@ -112,7 +112,7 @@ export function CommunityEventFormFields({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="location">{t('Locatie')}</Label>
+                    <Label htmlFor="location">{t('Location')}</Label>
                     <Input
                         id="location"
                         value={data.location}
@@ -129,14 +129,14 @@ export function CommunityEventFormFields({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="capacity">{t('Capaciteit')}</Label>
+                <Label htmlFor="capacity">{t('Capacity')}</Label>
                 <Input
                     id="capacity"
                     type="number"
                     min={1}
                     max={500}
                     disabled={lockSharedFields}
-                    placeholder={t('Laat leeg voor onbeperkt')}
+                    placeholder={t('Leave empty for unlimited')}
                     value={data.capacity}
                     onChange={(event) =>
                         setData('capacity', event.target.value)
@@ -186,7 +186,7 @@ export function CommunityEventFormFields({
                     placeholder={t(
                         'Sleep een thumbnail hierheen of klik om te bladeren',
                     )}
-                    hint={t('PNG, JPG of WEBP')}
+                    hint={t('PNG, JPG or WEBP')}
                     error={errors.thumbnail}
                 />
             </div>

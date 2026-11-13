@@ -3,21 +3,21 @@
 declare(strict_types=1);
 
 $en = [
-    'Gastbestelling?' => 'Guest order?',
-    'Heb je zonder account besteld? Vul je bestelnummer en e-mail in. We sturen je een eenmalige link om een retour te starten.' => 'Ordered without an account? Enter your order number and email. We will send you a one-time link to start a return.',
-    'Bestelnummer' => 'Order number',
-    'E-mail bij de bestelling' => 'Email used for the order',
-    'Stuur retourlink' => 'Send return link',
-    'Maak een account om mee te doen' => 'Create an account to join',
+    'Guest order?' => 'Guest order?',
+    'Ordered without an account? Enter your order number and email. We will send you a one-time link to start a return.' => 'Ordered without an account? Enter your order number and email. We will send you a one-time link to start a return.',
+    'Order number' => 'Order number',
+    'Email used for the order' => 'Email used for the order',
+    'Send return link' => 'Send return link',
+    'Create an account to join' => 'Create an account to join',
 ];
 
 $fr = [
-    'Gastbestelling?' => 'Commande invité ?',
-    'Heb je zonder account besteld? Vul je bestelnummer en e-mail in. We sturen je een eenmalige link om een retour te starten.' => 'Commandé sans compte ? Indiquez votre numéro de commande et votre e-mail. Nous vous enverrons un lien unique pour démarrer un retour.',
-    'Bestelnummer' => 'Numéro de commande',
-    'E-mail bij de bestelling' => 'E-mail utilisé pour la commande',
-    'Stuur retourlink' => 'Envoyer le lien de retour',
-    'Maak een account om mee te doen' => 'Créez un compte pour participer',
+    'Guest order?' => 'Commande invité ?',
+    'Ordered without an account? Enter your order number and email. We will send you a one-time link to start a return.' => 'Commandé sans compte ? Indiquez votre numéro de commande et votre e-mail. Nous vous enverrons un lien unique pour démarrer un retour.',
+    'Order number' => 'Numéro de commande',
+    'Email used for the order' => 'E-mail utilisé pour la commande',
+    'Send return link' => 'Envoyer le lien de retour',
+    'Create an account to join' => 'Créez un compte pour participer',
 ];
 
 function mergeLocale(string $path, array $patch): void

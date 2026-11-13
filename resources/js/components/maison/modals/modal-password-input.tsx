@@ -29,7 +29,7 @@ export function ModalPasswordInput({
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute inset-y-0 right-0 flex items-center px-3.5 text-stone transition-colors hover:text-choc"
                 aria-label={
-                    showPassword ? t('Wachtwoord verbergen') : t('Wachtwoord tonen')
+                    showPassword ? t('Hide password') : t('Show password')
                 }
                 tabIndex={-1}
             >

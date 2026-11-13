@@ -37,7 +37,7 @@ export default function CheckoutSuccess({
         },
     );
     const numberLabel = editionNumber
-        ? t('Nr. {{number}}', {
+        ? t('Nº {{number}}', {
               number: String(editionNumber).padStart(3, '0'),
           })
         : null;
@@ -55,25 +55,25 @@ export default function CheckoutSuccess({
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={t('Betaling')}
+                eyebrow={t('Payment')}
                 title={
                     paid ? (
                         <>
-                            {t('Reservering')} <em>{t('bevestigd')}</em>
+                            {t('Reservation')} <em>{t('confirmed')}</em>
                         </>
                     ) : (
                         <>
-                            {t('Betaling')} <em>{t('in behandeling')}</em>
+                            {t('Payment')} <em>{t('pending')}</em>
                         </>
                     )
                 }
                 subtitle={
                     paid
                         ? t(
-                              'Dank je. Jouw bestelling is ontvangen. Je ontvangt een bevestiging per e-mail.',
+                              'Thank you. Your order has been received. You will receive a confirmation by email.',
                           )
                         : t(
-                              'Als jouw betaling zojuist is afgerond, kan de bevestiging even op zich laten wachten. Controleer jouw e-mail of neem contact op met het bureau.',
+                              'If your payment has just completed, confirmation may take a moment. Check your email or contact the house.',
                           )
                 }
             />
@@ -81,7 +81,7 @@ export default function CheckoutSuccess({
             <section className="mx-auto max-w-xl px-6 pb-24 text-center">
                 {orderReference && (
                     <p className="mb-3 font-sans text-[11px] tracking-[0.18em] text-stone uppercase">
-                        {t('Referentie')}: {orderReference}
+                        {t('Reference')}: {orderReference}
                     </p>
                 )}
                 {numberLabel && (
@@ -91,14 +91,14 @@ export default function CheckoutSuccess({
                 )}
                 <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                     <MaisonButton as={MaisonLink} to="home" variant="choc">
-                        {t('Terug naar huis')}
+                        {t('Back home')}
                     </MaisonButton>
                     {memberOrderHref && (
                         <a
                             href={memberOrderHref}
                             className="inline-flex min-h-11 items-center justify-center border border-choc px-6 font-sans text-[11px] tracking-[0.18em] text-choc uppercase no-underline transition-colors hover:bg-choc hover:text-cream"
                         >
-                            {t('Bekijk bestelling')}
+                            {t('View order')}
                         </a>
                     )}
                 </div>

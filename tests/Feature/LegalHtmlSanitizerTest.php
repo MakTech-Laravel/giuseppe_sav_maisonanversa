@@ -76,14 +76,14 @@ test('blank after sanitize is detected', function () {
 });
 
 test('legacy markdown is converted for the editor', function () {
-    $html = LegalHtml::forEditor("## Privacy\n\nEerste alinea.\n\n- Een\n- Twee");
+    $html = LegalHtml::forEditor("## Privacy\n\nFirst paragraph.\n\n- Een\n- Twee");
 
     expect($html)
         ->toContain('<h2>Privacy</h2>')
-        ->toContain('<p>Eerste alinea.</p>')
+        ->toContain('<p>First paragraph.</p>')
         ->toContain('<li>Een</li>');
 
-    expect(LegalHtml::sanitize("## Privacy\n\nEerste alinea."))
+    expect(LegalHtml::sanitize("## Privacy\n\nFirst paragraph."))
         ->toContain('<h2>Privacy</h2>')
-        ->toContain('<p>Eerste alinea.</p>');
+        ->toContain('<p>First paragraph.</p>');
 });

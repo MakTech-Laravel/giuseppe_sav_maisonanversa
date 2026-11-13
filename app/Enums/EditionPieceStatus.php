@@ -18,7 +18,7 @@ enum EditionPieceStatus: string
         return match ($this) {
             self::Archive => 'Gearchiveerd',
             self::Available => 'Beschikbaar',
-            self::Reserved => 'Gereserveerd',
+            self::Reserved => 'Reserved',
             self::Allocated => 'Toegewezen',
             self::Returning => 'Retour',
         };

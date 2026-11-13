@@ -86,7 +86,7 @@ function buildNavGroups(
 ): NavGroup[] {
     return [
         {
-            label: t('Overzicht'),
+            label: t('Overview'),
             items: [
                 {
                     title: t('Dashboard'),
@@ -95,12 +95,12 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Meldingen'),
+                    title: t('Notifications'),
                     href: adminNotifications.index(locale),
                     icon: Bell,
                 },
                 {
-                    title: t('Meldingen testen'),
+                    title: t('Test notifications'),
                     href: adminNotificationTest.index(locale),
                     icon: BellRing,
                     permissions: [PERMISSIONS.NOTIFICATIONS.TEST],
@@ -114,16 +114,16 @@ function buildNavGroups(
             ],
         },
         {
-            label: t('Mensen'),
+            label: t('People'),
             items: [
                 {
-                    title: t('Beheerder'),
+                    title: t('Admin'),
                     href: adminAdmins.index(locale),
                     icon: UserRoundCog,
                     permissions: [PERMISSIONS.USERS.INDEX],
                 },
                 {
-                    title: t('Klanten'),
+                    title: t('Customers'),
                     href: adminCustomers.index(locale),
                     icon: Users,
                     permissions: [PERMISSIONS.USERS.INDEX],
@@ -131,16 +131,16 @@ function buildNavGroups(
             ],
         },
         {
-            label: t('Handel'),
+            label: t('Commerce'),
             items: [
                 {
-                    title: t('Bestellingen'),
+                    title: t('Orders'),
                     href: adminOrders.index(locale),
                     icon: ShoppingBag,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Retours'),
+                    title: t('Returns'),
                     href: `/${locale}/admin/returns`,
                     icon: RotateCcw,
                     permissions: [PERMISSIONS.RETURNS.MANAGE],
@@ -153,7 +153,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Editievoorraad'),
+                    title: t('Edition inventory'),
                     href: adminHeritage.index(locale),
                     icon: Package,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
@@ -161,10 +161,10 @@ function buildNavGroups(
             ],
         },
         {
-            label: t('Gemeenschap'),
+            label: t('Community'),
             items: [
                 {
-                    title: t('Evenementen'),
+                    title: t('Events'),
                     href: adminEvents.index(locale),
                     icon: CalendarDays,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
@@ -182,7 +182,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.CLUBS.MANAGE],
                 },
                 {
-                    title: t('Sessies'),
+                    title: t('Sessions'),
                     href: adminSessions.index(locale),
                     icon: CalendarDays,
                     permissions: [PERMISSIONS.SESSIONS.MANAGE],
@@ -194,7 +194,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.SESSIONS.MANAGE],
                 },
                 {
-                    title: t('Gemeenschap'),
+                    title: t('Community'),
                     href: adminCommunity.index(locale),
                     icon: MessageCircle,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
@@ -202,7 +202,7 @@ function buildNavGroups(
             ],
         },
         {
-            label: t('Inhoud'),
+            label: t('Content'),
             items: [
                 {
                     title: t('FAQ'),
@@ -211,7 +211,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Afspraken'),
+                    title: t('Appointments'),
                     href: adminAppointments.index(locale),
                     icon: CalendarCheck,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
@@ -223,7 +223,7 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Kleedkamer'),
+                    title: t('Dressing Room'),
                     href: adminDressingItems.index(locale),
                     icon: Shirt,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
@@ -255,31 +255,31 @@ function buildNavGroups(
                     permissions: [PERMISSIONS.HERITAGE.VIEW],
                 },
                 {
-                    title: t('Opening-aanbod'),
+                    title: t('Opening offer'),
                     href: adminOpeningOffers.index(locale),
                     icon: DoorOpen,
                     permissions: [PERMISSIONS.HERITAGE.VIEW],
                 },
                 {
-                    title: t('Ons verhaal'),
+                    title: t('Our story'),
                     href: adminStoryPage.edit(locale),
                     icon: ScrollText,
                     permissions: [PERMISSIONS.HERITAGE.VIEW],
                 },
                 {
-                    title: t('Site-instellingen'),
+                    title: t('Site settings'),
                     href: adminSiteSettings.edit(locale),
                     icon: Globe,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
                 },
                 {
-                    title: t('Storefront-toegang'),
+                    title: t('Storefront access'),
                     href: adminStorefrontAccess.edit(locale),
                     icon: Store,
                     permissions: [PERMISSIONS.HERITAGE.VIEW],
                 },
                 {
-                    title: t("Juridische Pagina's"),
+                    title: t("Legal Pages"),
                     href: adminLegalPages.index(locale),
                     icon: FileText,
                     permissions: [PERMISSIONS.DASHBOARD.VIEW],
@@ -297,7 +297,7 @@ function buildNavGroups(
             items: [
                 {
                     // Parent `/settings` keeps this active on both profile and security.
-                    title: t('Profiel & Beveiliging'),
+                    title: t('Profile & Security'),
                     href: `/${locale}/settings`,
                     icon: Settings2,
                 },

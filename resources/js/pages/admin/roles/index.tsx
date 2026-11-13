@@ -67,13 +67,13 @@ export default function RolesIndex({
 
     return (
         <>
-            <Head title={t('Rollen')} />
+            <Head title={t('Roles')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Rollen')}
+                    title={t('Roles')}
                     description={t(
-                        'Definieer rollen en de rechten die ze verlenen.',
+                        'Define roles and the permissions they grant.',
                     )}
                     icon={Shield}
                 >
@@ -81,7 +81,7 @@ export default function RolesIndex({
                         <Button asChild>
                             <Link href={roles.create(wayfinderLocale()).url}>
                                 <Plus className="h-4 w-4" />{' '}
-                                {t('Rol toevoegen')}
+                                {t('Add role')}
                             </Link>
                         </Button>
                     )}
@@ -92,7 +92,7 @@ export default function RolesIndex({
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder={t('Zoek rollen…')}
+                        placeholder={t('Search roles…')}
                         className="pl-9"
                     />
                 </div>
@@ -101,15 +101,15 @@ export default function RolesIndex({
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>{t('Rol')}</TableHead>
+                                <TableHead>{t('Role')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    {t('Rechten')}
+                                    {t('Permissions')}
                                 </TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    {t('Gebruikers')}
+                                    {t('Users')}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -134,7 +134,7 @@ export default function RolesIndex({
                                                     </span>
                                                     {isSuper && (
                                                         <Badge variant="secondary">
-                                                            {t('Systeem')}
+                                                            {t('System')}
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -183,7 +183,7 @@ export default function RolesIndex({
                                                         !isSuper && (
                                                             <ConfirmDeleteDialog
                                                                 description={t(
-                                                                    'De rol “{{name}}” verwijderen? Gebruikers met deze rol verliezen de bijbehorende rechten.',
+                                                                    'Delete the “{{name}}” role? Users with this role will lose its permissions.',
                                                                     {
                                                                         name: role.name,
                                                                     },

@@ -53,10 +53,10 @@ export default function EditOpeningOffer({
 
     return (
         <>
-            <Head title={t('Aanbod bewerken')} />
+            <Head title={t('Edit offer')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Aanbod bewerken')}
+                    title={t('Edit offer')}
                     description={
                         products.find(
                             (product) => product.id === offer.product_id,
@@ -66,7 +66,7 @@ export default function EditOpeningOffer({
                 >
                     <Button variant="outline" asChild>
                         <Link href={openingOffers.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -86,11 +86,11 @@ export default function EditOpeningOffer({
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                         <Button variant="outline" asChild>
                             <Link href={openingOffers.index(locale)}>
-                                {t('Annuleren')}
+                                {t('Cancel')}
                             </Link>
                         </Button>
                     </div>
@@ -104,7 +104,7 @@ EditOpeningOffer.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: 'Opening-aanbod',
+            title: 'Opening offer',
             href: openingOffers.index(wayfinderLocale()),
         },
         { title: 'Bewerken', href: '#' },

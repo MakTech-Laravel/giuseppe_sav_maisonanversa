@@ -327,7 +327,7 @@ class EditionAllocator
                         'status' => OrderStatus::Canceled,
                     ],
                     [
-                        'message' => __('Reservering verlopen. De editie is opnieuw beschikbaar.'),
+                        'message' => __('Reservation expired. The edition is available again.'),
                         'user_id' => null,
                     ],
                 );
@@ -392,7 +392,7 @@ class EditionAllocator
                 'status' => OrderStatus::Canceled,
             ],
             [
-                'message' => __('Reservering verlopen. De editie is opnieuw beschikbaar.'),
+                'message' => __('Reservation expired. The edition is available again.'),
                 'user_id' => null,
             ],
         );

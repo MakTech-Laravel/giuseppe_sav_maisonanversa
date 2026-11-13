@@ -58,7 +58,7 @@ export function SessionScoreboard({
     return (
         <div className="border-t border-gold/15 px-7 py-7">
             <h2 className="mb-1 font-sans text-[11px] font-medium tracking-[0.22em] text-choc uppercase">
-                {t('Scorebord')}
+                {t('Scoreboard')}
             </h2>
             <p className="mb-5 font-sans text-[11px] text-stone">
                 <WindowNote scoreboard={scoreboard} />
@@ -69,9 +69,9 @@ export function SessionScoreboard({
             ) : (
                 <p className="border border-dashed border-gold/25 bg-gold/5 px-5 py-4 font-sans text-[11px] tracking-[0.08em] text-stone">
                     {scoreboard.can_record_match
-                        ? t('Nog geen officiële uitslag.')
+                        ? t('No official result yet.')
                         : t(
-                              'Voor {{sport}} zijn minstens {{count}} bevestigde spelers nodig om een uitslag te registreren.',
+                              '{{sport}} needs at least {{count}} confirmed players to record a result.',
                               {
                                   sport: t(scoreboard.sport_label),
                                   count: scoreboard.min_players,
@@ -84,8 +84,8 @@ export function SessionScoreboard({
                 <div className="mt-6 flex flex-col gap-3">
                     <h3 className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
                         {scoreboard.can_review
-                            ? t('Ingediende scores')
-                            : t('Jouw ingediende score')}
+                            ? t('Submitted scores')
+                            : t('Your submitted score')}
                     </h3>
 
                     {scoreboard.submissions.map((submission) => (
@@ -107,7 +107,7 @@ export function SessionScoreboard({
                                             }
                                             className={smallSolidButton}
                                         >
-                                            {t('Goedkeuren')}
+                                            {t('Approve')}
                                         </button>
                                         <button
                                             type="button"
@@ -123,7 +123,7 @@ export function SessionScoreboard({
                                             }
                                             className={smallOutlineButton}
                                         >
-                                            {t('Weigeren')}
+                                            {t('Decline')}
                                         </button>
                                     </span>
                                 )}
@@ -149,7 +149,7 @@ export function SessionScoreboard({
                             }
                             className={outlineButton}
                         >
-                            {t('Scorebord vergrendelen')}
+                            {t('Lock scoreboard')}
                         </button>
                     )}
 
@@ -165,7 +165,7 @@ export function SessionScoreboard({
                             }
                             className={outlineButton}
                         >
-                            {t('Scorebord ontgrendelen')}
+                            {t('Unlock scoreboard')}
                         </button>
                     )}
 
@@ -178,7 +178,7 @@ export function SessionScoreboard({
                             }
                             className={solidButton}
                         >
-                            {t('Sessie afsluiten')}
+                            {t('Close session')}
                         </button>
                     )}
                 </div>
@@ -188,10 +188,10 @@ export function SessionScoreboard({
                 <p className="mt-3 font-sans text-[10px] tracking-[0.08em] text-stone">
                     {scoreboard.can_record_match
                         ? t(
-                              'Afsluiten kan zodra er een goedgekeurde uitslag is, er geen scores meer wachten en het scorebord vergrendeld is.',
+                              'You can close the session once there is an approved result, no scores are waiting and the scoreboard is locked.',
                           )
                         : t(
-                              'Te weinig spelers voor een uitslag: vergrendel het scorebord om de sessie zonder uitslag af te sluiten.',
+                              'Too few players for a result: lock the scoreboard to close the session without a result.',
                           )}
                 </p>
             )}
@@ -204,17 +204,17 @@ function WindowNote({ scoreboard }: { scoreboard: SessionScoreboardData }) {
     const { locale } = usePage().props;
 
     if (scoreboard.is_finished) {
-        return <>{t('Sessie afgesloten. Dit is de officiële uitslag.')}</>;
+        return <>{t('Session closed. This is the official result.')}</>;
     }
 
     if (scoreboard.is_locked) {
-        return <>{t('Het scorebord is vergrendeld.')}</>;
+        return <>{t('The scoreboard is locked.')}</>;
     }
 
     if (scoreboard.window_open && scoreboard.window_closes_at) {
         return (
             <>
-                {t('Scores indienen kan tot {{date}} om {{time}}.', {
+                {t('Scores can be submitted until {{date}} at {{time}}.', {
                     date: formatSessionDateLong(
                         scoreboard.window_closes_at,
                         locale,
@@ -228,7 +228,7 @@ function WindowNote({ scoreboard }: { scoreboard: SessionScoreboardData }) {
         );
     }
 
-    return <>{t('De termijn om een score in te dienen is verstreken.')}</>;
+    return <>{t('The period for submitting a score has ended.')}</>;
 }
 
 function useSideLabel() {
@@ -236,7 +236,7 @@ function useSideLabel() {
 
     return (matchType: MatchType, side: Side): string => {
         if (matchType === 'singles') {
-            return side === 'a' ? t('Speler A') : t('Speler B');
+            return side === 'a' ? t('Player A') : t('Player B');
         }
 
         return side === 'a' ? t('Team A') : t('Team B');
@@ -274,12 +274,12 @@ function ResultCard({
                             : 'border border-gold/20 px-3 py-1.5 font-sans text-[9px] tracking-[0.16em] text-stone uppercase'
                     }
                 >
-                    {accent ? t('Officiële uitslag') : t(score.status_label)}
+                    {accent ? t('Official result') : t(score.status_label)}
                 </span>
                 <span className="font-sans text-[10px] tracking-[0.08em] text-stone">
                     {t(score.match_type_label)} · {t(score.format_label)}
                     {score.submitted_by &&
-                        ` · ${t('Ingediend door {{name}}', { name: score.submitted_by })}`}
+                        ` · ${t('Submitted by {{name}}', { name: score.submitted_by })}`}
                 </span>
             </div>
 
@@ -288,7 +288,7 @@ function ResultCard({
                     <thead>
                         <tr className="border-b border-gold/15">
                             <th className="py-2 pr-4 text-left font-sans text-[9px] font-normal tracking-[0.22em] text-stone uppercase">
-                                {t('Uitslag')}
+                                {t('Result')}
                             </th>
                             {score.sets.map((set, index) => (
                                 <th
@@ -320,7 +320,7 @@ function ResultCard({
                                                 )}
                                                 {isWinner && (
                                                     <span className="ml-2 text-gold2">
-                                                        {t('Winnaar')}
+                                                        {t('Winner')}
                                                     </span>
                                                 )}
                                             </span>
@@ -560,10 +560,10 @@ function ScoreForm({
             className="mt-7 flex flex-col gap-6 border border-gold/15 bg-cream px-5 py-5"
         >
             <h3 className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                {t('Score indienen')}
+                {t('Submit score')}
             </h3>
 
-            <FieldGroup label={t('Wedstrijd')}>
+            <FieldGroup label={t('Match')}>
                 {matchTypes.length > 1 ? (
                     <span className="flex flex-wrap gap-1.5">
                         {matchTypes.map((type) => {
@@ -587,8 +587,8 @@ function ScoreForm({
                                 >
                                     {t(type.label)} ·{' '}
                                     {type.players_per_side === 1
-                                        ? t('1 tegen 1')
-                                        : t('2 tegen 2')}
+                                        ? t('1 against 1')
+                                        : t('2 against 2')}
                                 </button>
                             );
                         })}
@@ -596,12 +596,12 @@ function ScoreForm({
                 ) : (
                     <span className="font-sans text-[11px] tracking-[0.08em] text-choc">
                         {t(scoreboard.sport_label)} · {t(matchType.label)} ·{' '}
-                        {perSide === 1 ? t('1 tegen 1') : t('2 tegen 2')}
+                        {perSide === 1 ? t('1 against 1') : t('2 against 2')}
                     </span>
                 )}
             </FieldGroup>
 
-            <FieldGroup label={t('Formaat')}>
+            <FieldGroup label={t('Format')}>
                 <span className="grid gap-2 sm:grid-cols-2">
                     {formats.map((option) => (
                         <button
@@ -641,7 +641,7 @@ function ScoreForm({
             </FieldGroup>
 
             <FieldGroup
-                label={t('Wie speelde er?')}
+                label={t('Who played?')}
                 hint={`${sideLabel(matchType.value, 'a')} ${sideCount('a')}/${perSide} · ${sideLabel(matchType.value, 'b')} ${sideCount('b')}/${perSide}`}
             >
                 <span className="flex flex-col gap-2">
@@ -663,7 +663,7 @@ function ScoreForm({
                                     {player.name}
                                     {side === null && (
                                         <span className="text-[9px] tracking-[0.16em] text-stone uppercase">
-                                            {t('Zit uit')}
+                                            {t('Sits out')}
                                         </span>
                                     )}
                                 </span>
@@ -704,8 +704,8 @@ function ScoreForm({
             <FieldGroup
                 label={
                     format.games_per_set === 4
-                        ? t('Sets (tot 4 games)')
-                        : t('Sets (tot 6 games)')
+                        ? t('Sets (to 4 games)')
+                        : t('Sets (to 6 games)')
                 }
             >
                 <span className="flex flex-col gap-3">
@@ -732,13 +732,13 @@ function ScoreForm({
                             {scoreLine(format, enteredSets)}
                         </span>
                         {' · '}
-                        {t('Winnaar: {{side}}', {
+                        {t('Winner: {{side}}', {
                             side: `${sideLabel(matchType.value, winner)}${sideNames(winner) ? ` (${sideNames(winner)})` : ''}`,
                         })}
                     </>
                 ) : (
                     <span className="text-stone">
-                        {t('De wedstrijd is nog niet beslist.')}
+                        {t('The match has not been decided yet.')}
                     </span>
                 )}
             </p>
@@ -761,7 +761,7 @@ function ScoreForm({
                 disabled={form.processing}
                 className={cn(solidButton, 'w-fit')}
             >
-                {t('Score indienen')}
+                {t('Submit score')}
             </button>
         </form>
     );
@@ -818,14 +818,14 @@ function SetRow({
     const liveError = touched ? setError(format, index, set) : null;
     const message = liveError ?? serverError ?? null;
     const showsTiebreak = !superTiebreak && isTiebreakSet(format, set);
-    const unit = superTiebreak ? t('Punten') : t('Games');
+    const unit = superTiebreak ? t('Points') : t('Games');
 
     return (
         <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center gap-2">
                 <span className="w-32 font-sans text-[10px] tracking-[0.08em] text-stone">
                     {superTiebreak
-                        ? t('Super tie-break (tot 10)')
+                        ? t('Super tie-break (to 10)')
                         : t('Set {{number}}', { number: index + 1 })}
                 </span>
                 <input
@@ -854,7 +854,7 @@ function SetRow({
             {showsTiebreak && (
                 <div className="flex flex-wrap items-center gap-2 sm:pl-34">
                     <span className="font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
-                        {t('Punten tie-break (optioneel)')}
+                        {t('Tie-break points (optional)')}
                     </span>
                     <input
                         type="number"

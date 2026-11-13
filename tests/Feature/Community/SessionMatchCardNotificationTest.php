@@ -89,7 +89,7 @@ test('the mail opens the session page and downloads through a signed link', func
     preg_match('/href="([^"]*card\/story\.png[^"]*)"/', $english, $match);
     $signedDownload = html_entity_decode($match[1] ?? '');
 
-    expect($dutch)->toContain('Deel jouw kaart')
+    expect($dutch)->toContain('Share your card')
         ->and($dutch)->toContain('Bedankt voor de sessie bij Padel Club Zuid.')
         ->and($english)->toContain('Share your card')
         ->and($english)->toContain('href="'.$sessionUrl.'"')

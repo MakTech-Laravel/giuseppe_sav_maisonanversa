@@ -34,9 +34,9 @@ export function LegalPageLinks({ slug, preview = false }: LegalPageLinksProps) {
     if (slug === 'privacy') {
         return (
             <p>
-                {t('Contacteer ons via')}{' '}
+                {t('Contact us via')}{' '}
                 <LegalChromeLink to="contact" preview={preview}>
-                    {t('onze contactpagina')}
+                    {t('our contact page')}
                 </LegalChromeLink>
                 .
             </p>
@@ -46,13 +46,13 @@ export function LegalPageLinks({ slug, preview = false }: LegalPageLinksProps) {
     if (slug === 'terms') {
         return (
             <p>
-                {t('Zie ook het')}{' '}
+                {t('See also the')}{' '}
                 <LegalChromeLink to="care" preview={preview}>
-                    {t('zorg- en garantiebeleid')}
+                    {t('care and warranty policy')}
                 </LegalChromeLink>{' '}
-                {t('en het')}{' '}
+                {t('and the')}{' '}
                 <LegalChromeLink to="shipping" preview={preview}>
-                    {t('verzend- en retourbeleid')}
+                    {t('shipping and return policy')}
                 </LegalChromeLink>
                 .
             </p>
@@ -62,9 +62,9 @@ export function LegalPageLinks({ slug, preview = false }: LegalPageLinksProps) {
     if (slug === 'care' || slug === 'shipping') {
         return (
             <p>
-                {t('Vragen? Bezoek de')}{' '}
+                {t('Questions? Visit the')}{' '}
                 <LegalChromeLink to="contact" preview={preview}>
-                    {t('contactpagina')}
+                    {t('contact page')}
                 </LegalChromeLink>
                 .
             </p>

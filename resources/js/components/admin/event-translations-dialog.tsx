@@ -132,7 +132,7 @@ export function EventTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -140,7 +140,7 @@ export function EventTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
                             'Bewerk vertalingen per taal. Bron tekst wijzig je via Evenement bewerken; DeepL vertaalt vanuit die bron.',
@@ -153,7 +153,7 @@ export function EventTranslationsDialog({
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla het evenement opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Some translations are still missing. Save the event again or use DeepL to generate them.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -178,7 +178,7 @@ export function EventTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-title`}>
-                            {t('Titel')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Title')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Input
                             id={`${activeLocale}-title`}
@@ -200,7 +200,7 @@ export function EventTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-description`}>
-                            {t('Beschrijving')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Description')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Textarea
                             id={`${activeLocale}-description`}
@@ -223,7 +223,7 @@ export function EventTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-location`}>
-                            {t('Locatie')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Location')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Input
                             id={`${activeLocale}-location`}
@@ -257,7 +257,7 @@ export function EventTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -272,14 +272,14 @@ export function EventTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

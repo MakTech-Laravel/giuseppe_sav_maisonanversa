@@ -27,9 +27,9 @@ const COLUMNS = [
     ['tagline', 'Ondertitel'],
     ['counter_line_one', 'Regel 1'],
     ['counter_line_two', 'Regel 2'],
-    ['primary_label', 'Primaire knop'],
-    ['secondary_label', 'Secundaire knop'],
-    ['tertiary_label', 'Tertiaire knop'],
+    ['primary_label', 'Primary button'],
+    ['secondary_label', 'Secondary button'],
+    ['tertiary_label', 'Tertiary button'],
 ] as const;
 
 const LOCALE_LABELS: Record<string, string> = {
@@ -117,7 +117,7 @@ export function HomeHeroTranslationsDialog({
             <DialogTrigger asChild>
                 <Button type="button" variant="outline" className="w-full">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -125,10 +125,10 @@ export function HomeHeroTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk de Nederlandse bron. DeepL vult Engels en Frans; corrigeer die in Vertalingen.',
+                            'Edit the Dutch source. DeepL fills English and French; correct those in Translations.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -138,7 +138,7 @@ export function HomeHeroTranslationsDialog({
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla de hero opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Some translations are still missing. Save the hero again or use DeepL to generate them.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -201,7 +201,7 @@ export function HomeHeroTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -216,14 +216,14 @@ export function HomeHeroTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

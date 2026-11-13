@@ -40,7 +40,7 @@ export function AdminNotificationBell() {
                     variant="ghost"
                     size="icon"
                     className="relative size-8"
-                    aria-label={t('Meldingen')}
+                    aria-label={t('Notifications')}
                     data-test="admin-notifications-bell"
                 >
                     <Bell className="size-4" />
@@ -57,7 +57,7 @@ export function AdminNotificationBell() {
             >
                 <div className="flex items-center justify-between border-b border-gold/25 px-3 py-2.5">
                     <p className="text-sm font-semibold text-white">
-                        {t('Meldingen')}
+                        {t('Notifications')}
                     </p>
                     {unreadCount > 0 ? (
                         <button
@@ -65,13 +65,13 @@ export function AdminNotificationBell() {
                             onClick={markAllRead}
                             className="text-xs text-sand transition-colors hover:text-white"
                         >
-                            {t('Alles gelezen')}
+                            {t('Mark all as read')}
                         </button>
                     ) : null}
                 </div>
                 {preview.length === 0 ? (
                     <p className="px-3 py-8 text-center text-sm text-white/70">
-                        {t('Geen meldingen.')}
+                        {t('No notifications.')}
                     </p>
                 ) : (
                     <ul className="max-h-96 divide-y divide-gold/15 overflow-y-auto">
@@ -121,7 +121,7 @@ export function AdminNotificationBell() {
                             href={adminNotifications.index(locale)}
                             onClick={() => setOpen(false)}
                         >
-                            {t('Alle meldingen')}
+                            {t('All notifications')}
                         </Link>
                     </Button>
                 </div>

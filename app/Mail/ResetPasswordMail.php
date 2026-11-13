@@ -25,7 +25,7 @@ class ResetPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Jouw herstelcode voor Maison Anversa'),
+            subject: __('Your Maison Anversa recovery code'),
         );
     }
 

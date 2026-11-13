@@ -29,10 +29,10 @@ export default function Verify({ piece }: { piece: Piece }) {
         <>
             <MaisonSeoHead />
             <PageHero
-                eyebrow={piece.productName ?? t('Authenticiteit')}
+                eyebrow={piece.productName ?? t('Authenticity')}
                 title={
                     <>
-                        {t('Nr. {{number}}', { number: piece.editionNumber })}
+                        {t('Nº {{number}}', { number: piece.editionNumber })}
                         {piece.editionTotal > 0 ? (
                             <em> / {piece.editionTotal}</em>
                         ) : null}
@@ -40,10 +40,10 @@ export default function Verify({ piece }: { piece: Piece }) {
                 }
                 subtitle={
                     isArchive
-                        ? t('Maison Anversa Archive — niet te koop')
+                        ? t('Maison Anversa Archive — not for sale')
                         : holder
-                          ? t('Geverifieerd Founding Edition-stuk')
-                          : t('Geverifieerd door Maison Anversa')
+                          ? t('Verified Founding Edition piece')
+                          : t('Verified by Maison Anversa')
                 }
             />
 
@@ -51,7 +51,7 @@ export default function Verify({ piece }: { piece: Piece }) {
                 {holder ? (
                     <div className="border border-gold/25 bg-cream/40 px-6 py-8">
                         <p className="font-sans text-[10px] tracking-[0.22em] text-gold uppercase">
-                            {t('Houder')}
+                            {t('Holder')}
                         </p>
                         <p className="mt-3 font-serif text-3xl text-choc">
                             {holder.name}
@@ -66,17 +66,17 @@ export default function Verify({ piece }: { piece: Piece }) {
                             {holder.isFoundingCircle && (
                                 <div className="flex items-baseline justify-between gap-4 border-t border-gold/15 pt-3">
                                     <dt className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase">
-                                        {t('Lidmaatschap')}
+                                        {t('Membership')}
                                     </dt>
                                     <dd className="font-sans text-sm text-choc">
                                         {holder.memberSince
                                             ? t(
-                                                  'Founding Circle · sinds {{since}}',
+                                                  'Founding Circle · Since {{since}}',
                                                   {
                                                       since: holder.memberSince,
                                                   },
                                               )
-                                            : t('Founding Circle-lid')}
+                                            : t('Founding Circle member')}
                                     </dd>
                                 </div>
                             )}
@@ -93,7 +93,7 @@ export default function Verify({ piece }: { piece: Piece }) {
                             {(piece.allocatedAt || holder.memberSince) && (
                                 <div className="flex items-baseline justify-between gap-4 border-t border-gold/15 pt-3">
                                     <dt className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase">
-                                        {t('Toegewezen')}
+                                        {t('Allocated')}
                                     </dt>
                                     <dd className="font-sans text-sm text-choc">
                                         {piece.allocatedAt ?? holder.memberSince}
@@ -114,22 +114,22 @@ export default function Verify({ piece }: { piece: Piece }) {
                         </dl>
 
                         <p className="mt-8 font-sans text-[11px] tracking-[0.14em] text-gold uppercase">
-                            {t('Authenticiteit gegarandeerd')}
+                            {t('Authenticity guaranteed')}
                         </p>
                     </div>
                 ) : (
                     <div className="space-y-4">
                         <p className="font-serif text-2xl text-choc">
                             {isArchive
-                                ? t('Maison Anversa Archive — niet te koop')
-                                : t('Geen houder geregistreerd')}
+                                ? t('Maison Anversa Archive — not for sale')
+                                : t('No holder registered')}
                         </p>
                         <p className="text-sm">
                             {t('Status')}: {t(piece.statusLabel)}
                         </p>
                         {piece.allocatedAt && (
                             <p className="text-sm">
-                                {t('Toegewezen')} {piece.allocatedAt}
+                                {t('Allocated')} {piece.allocatedAt}
                             </p>
                         )}
                     </div>

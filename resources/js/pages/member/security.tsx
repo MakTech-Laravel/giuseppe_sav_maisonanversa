@@ -59,21 +59,21 @@ export default function MemberSecurity({
 
     return (
         <>
-            <Head title={t('Beveiliging')} />
+            <Head title={t('Security')} />
             <MemberPageHeader
                 eyebrow={t('Account')}
-                title={t('Beveiliging')}
+                title={t('Security')}
                 description={t(
-                    'Bescherm jouw Maison Anversa-account met een sterk wachtwoord en optionele tweestapsverificatie.',
+                    'Keep your Maison Anversa account protected with a strong password and optional two-factor authentication.',
                 )}
             />
 
             <div className="space-y-6">
                 <MemberPanel>
                     <MemberSectionTitle
-                        title={t('Wachtwoord')}
+                        title={t('Password')}
                         description={t(
-                            'Gebruik een lang, uniek wachtwoord. Je hebt jouw huidige wachtwoord nodig om het te wijzigen.',
+                            'Use a long, unique password. You will need your current password to change it.',
                         )}
                     />
                     <Form
@@ -103,7 +103,7 @@ export default function MemberSecurity({
                                         htmlFor="current_password"
                                         className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                     >
-                                        {t('Huidig wachtwoord')}
+                                        {t('Current password')}
                                     </Label>
                                     <PasswordInput
                                         id="current_password"
@@ -123,7 +123,7 @@ export default function MemberSecurity({
                                             htmlFor="password"
                                             className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                         >
-                                            {t('Nieuw wachtwoord')}
+                                            {t('New password')}
                                         </Label>
                                         <PasswordInput
                                             id="password"
@@ -141,7 +141,7 @@ export default function MemberSecurity({
                                             htmlFor="password_confirmation"
                                             className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                         >
-                                            {t('Bevestig wachtwoord')}
+                                            {t('Confirm password')}
                                         </Label>
                                         <PasswordInput
                                             id="password_confirmation"
@@ -163,7 +163,7 @@ export default function MemberSecurity({
                                         disabled={processing}
                                         className="min-w-40 rounded-none"
                                     >
-                                        {t('Wachtwoord bijwerken')}
+                                        {t('Update password')}
                                     </Button>
                                 </div>
                             </>
@@ -176,11 +176,11 @@ export default function MemberSecurity({
                         <div className="mb-6 flex flex-wrap items-start justify-between gap-3 border-b border-gold/20 pb-4">
                             <div>
                                 <h2 className="font-serif text-[22px] text-cream">
-                                    {t('Tweestapsverificatie')}
+                                    {t('Two-factor authentication')}
                                 </h2>
                                 <p className="mt-1.5 max-w-xl text-[13px] leading-relaxed text-sand">
                                     {t(
-                                        'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op jouw telefoon.',
+                                        'Add a second step at login with a code from an authenticator app on your phone.',
                                     )}
                                 </p>
                             </div>
@@ -188,8 +188,8 @@ export default function MemberSecurity({
                                 tone={twoFactorEnabled ? 'success' : 'warn'}
                             >
                                 {twoFactorEnabled
-                                    ? t('Ingeschakeld')
-                                    : t('Niet ingeschakeld')}
+                                    ? t('Enabled')
+                                    : t('Not enabled')}
                             </MemberStatusPill>
                         </div>
 
@@ -197,7 +197,7 @@ export default function MemberSecurity({
                             <div className="max-w-xl space-y-5">
                                 <p className="text-[14px] leading-[1.7] text-sand">
                                     {t(
-                                        'Je wordt bij het inloggen gevraagd om een beveiligingscode, die je uit een TOTP-ondersteunde app op jouw telefoon haalt.',
+                                        'You will be prompted for a secure code during login, which you can retrieve from a TOTP-supported application on your phone.',
                                     )}
                                 </p>
 
@@ -209,7 +209,7 @@ export default function MemberSecurity({
                                             className="rounded-none"
                                             disabled={processing}
                                         >
-                                            {t('2FA uitschakelen')}
+                                            {t('Disable 2FA')}
                                         </Button>
                                     )}
                                 </Form>
@@ -224,7 +224,7 @@ export default function MemberSecurity({
                             <div className="max-w-xl space-y-5">
                                 <p className="text-[14px] leading-[1.7] text-sand">
                                     {t(
-                                        'Wanneer ingeschakeld, word je bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op jouw telefoon.',
+                                        'When enabled, you will be prompted for a secure code during login. This code comes from a TOTP-supported application on your phone.',
                                     )}
                                 </p>
 
@@ -235,7 +235,7 @@ export default function MemberSecurity({
                                         onClick={() => setShowSetupModal(true)}
                                     >
                                         <ShieldCheck />
-                                        {t('Setup voortzetten')}
+                                        {t('Continue setup')}
                                     </Button>
                                 ) : (
                                     <Form
@@ -250,7 +250,7 @@ export default function MemberSecurity({
                                                 className="rounded-none"
                                                 disabled={processing}
                                             >
-                                                {t('2FA inschakelen')}
+                                                {t('Enable 2FA')}
                                             </Button>
                                         )}
                                     </Form>

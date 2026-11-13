@@ -85,11 +85,11 @@ export default function SessionShow({
 
             <PageHero
                 eyebrow={`${t(session.sport_label)}${session.club ? ` · ${session.club.city}` : ''}`}
-                title={session.club?.name ?? t('Sessie')}
+                title={session.club?.name ?? t('Session')}
                 subtitle={
                     session.club
                         ? session.club.address
-                        : t('Deze club is niet langer beschikbaar.')
+                        : t('This club is no longer available.')
                 }
             />
 
@@ -140,7 +140,7 @@ export default function SessionShow({
                                 <Pill label={t(session.court_status_label)} />
                                 {session.club?.is_partner && <PartnerBadge />}
                                 {session.is_cancelled && (
-                                    <Pill label={t('Geannuleerd')} />
+                                    <Pill label={t('Canceled')} />
                                 )}
                                 {session.lifecycle_label &&
                                     (session.lifecycle === 'held' ||
@@ -153,29 +153,29 @@ export default function SessionShow({
                                 {session.is_locked &&
                                     session.lifecycle === 'held' && (
                                         <Pill
-                                            label={t('Scorebord vergrendeld')}
+                                            label={t('Scoreboard locked')}
                                         />
                                     )}
                                 {session.is_pending && (
                                     <Pill
-                                        label={t('Aanvraag in behandeling')}
+                                        label={t('Request pending')}
                                         accent
                                     />
                                 )}
                                 {isRejected && (
-                                    <Pill label={t('Aanvraag geweigerd')} />
+                                    <Pill label={t('Request declined')} />
                                 )}
                             </div>
 
                             <div className="px-7 py-7">
                                 <h2 className="mb-1 font-sans text-[11px] font-medium tracking-[0.22em] text-choc uppercase">
-                                    {t('Spelers')}
+                                    {t('Players')}
                                 </h2>
                                 <p className="mb-5 font-sans text-[11px] text-stone">
                                     {session.participants_count} /{' '}
                                     {session.capacity}
                                     {pendingCount > 0 &&
-                                        ` · ${t('{{count}} in afwachting', { count: pendingCount })}`}
+                                        ` · ${t('{{count}} pending', { count: pendingCount })}`}
                                 </p>
 
                                 <PlayerSlots
@@ -217,7 +217,7 @@ export default function SessionShow({
                                     <MatchCardShare
                                         card={matchCard}
                                         title={
-                                            session.club?.name ?? t('Sessie')
+                                            session.club?.name ?? t('Session')
                                         }
                                     />
                                 </div>
@@ -233,8 +233,8 @@ export default function SessionShow({
                                         className={solidButton}
                                     >
                                         {session.requests_required
-                                            ? t('Vraag om mee te spelen')
-                                            : t('Doe mee')}
+                                            ? t('Request to join')
+                                            : t('Join')}
                                     </button>
                                 )}
 
@@ -244,13 +244,13 @@ export default function SessionShow({
                                         onClick={handleLeave}
                                         className={outlineButton}
                                     >
-                                        {t('Aanvraag intrekken')}
+                                        {t('Withdraw request')}
                                     </button>
                                 )}
 
                                 {seatsAllRequested && (
                                     <span className="border border-gold/20 bg-gold/8 px-6 py-3.5 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
-                                        {t('Alle plaatsen aangevraagd')}
+                                        {t('All places requested')}
                                     </span>
                                 )}
 
@@ -265,7 +265,7 @@ export default function SessionShow({
                                         onClick={handleLeave}
                                         className={outlineButton}
                                     >
-                                        {t('Sessie verlaten')}
+                                        {t('Leave session')}
                                     </button>
                                 )}
 
@@ -275,7 +275,7 @@ export default function SessionShow({
                                     !session.is_pending &&
                                     !session.is_full && (
                                         <span className="border border-gold/20 bg-gold/8 px-6 py-3.5 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
-                                            {t('Inschrijving gesloten')}
+                                            {t('Registration closed')}
                                         </span>
                                     )}
 
@@ -291,13 +291,13 @@ export default function SessionShow({
                                     !session.is_joined &&
                                     !session.is_past && (
                                         <span className="border border-gold/20 bg-gold/8 px-6 py-3.5 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
-                                            {t('Sessie compleet')}
+                                            {t('Session full')}
                                         </span>
                                     )}
 
                                 {session.is_past && (
                                     <span className="border border-gold/20 bg-gold/8 px-6 py-3.5 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
-                                        {t('Sessie afgerond')}
+                                        {t('Session complete')}
                                     </span>
                                 )}
 
@@ -309,13 +309,13 @@ export default function SessionShow({
                                     href={sessionRoutes.index.url(locale)}
                                     className={outlineButton}
                                 >
-                                    {t('Terug naar sessies')}
+                                    {t('Back to sessions')}
                                 </Link>
                             </div>
 
                             {session.is_full && !session.is_past && (
                                 <p className="border-t border-gold/15 bg-gold/6 px-7 py-5 text-center font-sans text-[11px] tracking-[0.08em] text-choc3">
-                                    {t('Jouw groep is compleet. Tot op de baan!')}
+                                    {t('Your group is complete. See you on court!')}
                                 </p>
                             )}
                         </div>

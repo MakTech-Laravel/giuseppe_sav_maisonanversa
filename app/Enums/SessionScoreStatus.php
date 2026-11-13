@@ -15,7 +15,7 @@ enum SessionScoreStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'Wacht op goedkeuring',
+            self::Pending => 'Awaiting approval',
             self::Approved => 'Goedgekeurd',
             self::Rejected => 'Geweigerd',
             self::Superseded => 'Vervangen',

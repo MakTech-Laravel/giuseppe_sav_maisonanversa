@@ -17,11 +17,11 @@ export default function Journal({ articles }: { articles: JournalPaginator }) {
                 eyebrow="Maison Anversa"
                 title={
                     <>
-                        {t('Het')} <em>Journal</em>
+                        {t('The')} <em>Journal</em>
                     </>
                 }
                 subtitle={t(
-                    'Verhalen over sport, cultuur, design en het leven. Vanuit de wereld van Maison Anversa.',
+                    'Stories about sport, culture, design and life. From the world of Maison Anversa.',
                 )}
             />
 

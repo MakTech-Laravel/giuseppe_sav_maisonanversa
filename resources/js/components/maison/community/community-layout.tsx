@@ -20,7 +20,7 @@ export function CommunityLayout({ toast, posts }: CommunityLayoutProps) {
             <CommunityFeed
                 posts={posts}
                 onPostPublished={() =>
-                    toast.show(t('Post geplaatst in de Community.'))
+                    toast.show(t('Post published in the Community.'))
                 }
             />
         </div>

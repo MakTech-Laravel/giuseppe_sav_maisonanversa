@@ -13,8 +13,8 @@ enum SessionCourtStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Booked => 'Baan al geboekt',
-            self::NotBooked => 'Baan nog niet geboekt',
+            self::Booked => 'Court already booked',
+            self::NotBooked => 'Court not booked yet',
         };
     }
 

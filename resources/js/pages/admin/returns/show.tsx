@@ -86,9 +86,9 @@ export default function AdminReturnShow({
                             orderReturn.can_decline ||
                             orderReturn.can_cancel) && (
                             <AdminPanel
-                                title={t('Acties')}
+                                title={t('Actions')}
                                 description={t(
-                                    'Verwerk deze retouraanvraag.',
+                                    'Process this return request.',
                                 )}
                             >
                                 <div className="flex flex-col gap-3">
@@ -101,7 +101,7 @@ export default function AdminReturnShow({
                                                 type="submit"
                                                 className="w-full"
                                             >
-                                                {t('Markeer als ontvangen')}
+                                                {t('Mark as received')}
                                             </Button>
                                         </Form>
                                     ) : null}
@@ -109,10 +109,10 @@ export default function AdminReturnShow({
                                     {orderReturn.can_refund ? (
                                         <ConfirmDeleteDialog
                                             title={t(
-                                                'Terugbetaling bevestigen',
+                                                'Confirm refund',
                                             )}
                                             description={t(
-                                                '{{amount}} terugbetalen aan de klant?',
+                                                'Refund {{amount}} to the customer?',
                                                 {
                                                     amount: expectedAmount
                                                         ? `€${expectedAmount}`
@@ -120,7 +120,7 @@ export default function AdminReturnShow({
                                                 },
                                             )}
                                             confirmLabel={t(
-                                                'Volledig terugbetalen',
+                                                'Full refund',
                                             )}
                                             onConfirm={() =>
                                                 router.post(
@@ -132,7 +132,7 @@ export default function AdminReturnShow({
                                                 type="button"
                                                 className="w-full"
                                             >
-                                                {t('Volledig terugbetalen')}
+                                                {t('Full refund')}
                                             </Button>
                                         </ConfirmDeleteDialog>
                                     ) : null}
@@ -147,7 +147,7 @@ export default function AdminReturnShow({
                                                 variant="ghost"
                                                 className="w-full"
                                             >
-                                                {t('Annuleren')}
+                                                {t('Cancel')}
                                             </Button>
                                         </Form>
                                     ) : null}
@@ -156,11 +156,11 @@ export default function AdminReturnShow({
                         )}
 
                         {orderReturn.can_refund ? (
-                            <AdminPanel title={t('Gedeeltelijk terugbetalen')}>
+                            <AdminPanel title={t('Partial refund')}>
                                 <div className="space-y-3">
                                     <div className="space-y-1.5">
                                         <Label htmlFor="refund_amount">
-                                            {t('Gedeeltelijk bedrag')}
+                                            {t('Partial amount')}
                                         </Label>
                                         <Input
                                             id="refund_amount"
@@ -186,7 +186,7 @@ export default function AdminReturnShow({
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label htmlFor="partial_reason">
-                                            {t('Reden')}
+                                            {t('Reason')}
                                         </Label>
                                         <Textarea
                                             id="partial_reason"
@@ -202,9 +202,9 @@ export default function AdminReturnShow({
                                         />
                                     </div>
                                     <ConfirmDeleteDialog
-                                        title={t('Terugbetaling bevestigen')}
+                                        title={t('Confirm refund')}
                                         description={t(
-                                            '{{amount}} terugbetalen aan de klant?',
+                                            'Refund {{amount}} to the customer?',
                                             {
                                                 amount: partialAmount
                                                     ? `€${partialAmount}`
@@ -212,7 +212,7 @@ export default function AdminReturnShow({
                                             },
                                         )}
                                         confirmLabel={t(
-                                            'Gedeeltelijk terugbetalen',
+                                            'Partial refund',
                                         )}
                                         onConfirm={() => {
                                             if (
@@ -242,7 +242,7 @@ export default function AdminReturnShow({
                                                 !partialReason.trim()
                                             }
                                         >
-                                            {t('Gedeeltelijk terugbetalen')}
+                                            {t('Partial refund')}
                                         </Button>
                                     </ConfirmDeleteDialog>
                                 </div>
@@ -250,7 +250,7 @@ export default function AdminReturnShow({
                         ) : null}
 
                         {orderReturn.can_decline ? (
-                            <AdminPanel title={t('Afwijzen')}>
+                            <AdminPanel title={t('Decline')}>
                                 <Form
                                     action={`/${locale}/admin/returns/${orderReturn.id}/decline`}
                                     method="post"
@@ -258,7 +258,7 @@ export default function AdminReturnShow({
                                 >
                                     <div className="space-y-1.5">
                                         <Label htmlFor="decline_reason">
-                                            {t('Reden')}
+                                            {t('Reason')}
                                         </Label>
                                         <Textarea
                                             id="decline_reason"
@@ -272,7 +272,7 @@ export default function AdminReturnShow({
                                         variant="destructive"
                                         className="w-full"
                                     >
-                                        {t('Afwijzen')}
+                                        {t('Decline')}
                                     </Button>
                                 </Form>
                             </AdminPanel>
@@ -285,7 +285,7 @@ export default function AdminReturnShow({
                                     <dl className="space-y-2 text-sm">
                                         <div className="flex gap-3">
                                             <dt className="w-28 shrink-0 text-muted-foreground">
-                                                {t('Vervoerder')}
+                                                {t('Carrier')}
                                             </dt>
                                             <dd className="font-medium">
                                                 {orderReturn.carrier || '—'}
@@ -293,7 +293,7 @@ export default function AdminReturnShow({
                                         </div>
                                         <div className="flex gap-3">
                                             <dt className="w-28 shrink-0 text-muted-foreground">
-                                                {t('Trackingnummer')}
+                                                {t('Tracking number')}
                                             </dt>
                                             <dd className="font-medium break-all">
                                                 {orderReturn.tracking_number}
@@ -308,7 +308,7 @@ export default function AdminReturnShow({
                                             setEditingTracking(true)
                                         }
                                     >
-                                        {t('Tracking bewerken')}
+                                        {t('Edit tracking')}
                                     </Button>
                                 </div>
                             ) : (
@@ -319,7 +319,7 @@ export default function AdminReturnShow({
                                 >
                                     <div className="space-y-1.5">
                                         <Label htmlFor="carrier">
-                                            {t('Vervoerder')}
+                                            {t('Carrier')}
                                         </Label>
                                         <Input
                                             id="carrier"
@@ -332,7 +332,7 @@ export default function AdminReturnShow({
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label htmlFor="tracking_number">
-                                            {t('Trackingnummer')}
+                                            {t('Tracking number')}
                                         </Label>
                                         <Input
                                             id="tracking_number"
@@ -349,13 +349,13 @@ export default function AdminReturnShow({
                                         variant="outline"
                                         className="w-full"
                                     >
-                                        {t('Tracking opslaan')}
+                                        {t('Save tracking')}
                                     </Button>
                                 </Form>
                             )}
                         </AdminPanel>
 
-                        <AdminPanel title={t('Termijn verlengen')}>
+                        <AdminPanel title={t('Extend deadline')}>
                             <Form
                                 action={`/${locale}/admin/returns/${orderReturn.id}/extend`}
                                 method="post"
@@ -363,7 +363,7 @@ export default function AdminReturnShow({
                             >
                                 <div className="space-y-1.5">
                                     <Label htmlFor="return_deadline_at">
-                                        {t('Nieuwe deadline')}
+                                        {t('New deadline')}
                                     </Label>
                                     <AdminDatePicker
                                         id="return_deadline_at"
@@ -380,12 +380,12 @@ export default function AdminReturnShow({
                                     className="w-full"
                                     disabled={!deadline}
                                 >
-                                    {t('Opslaan')}
+                                    {t('Save')}
                                 </Button>
                             </Form>
                         </AdminPanel>
 
-                        <AdminPanel title={t('Notitie')}>
+                        <AdminPanel title={t('Note')}>
                             <Form
                                 action={`/${locale}/admin/returns/${orderReturn.id}/note`}
                                 method="post"
@@ -397,7 +397,7 @@ export default function AdminReturnShow({
                                     variant="outline"
                                     className="w-full"
                                 >
-                                    {t('Notitie toevoegen')}
+                                    {t('Add note')}
                                 </Button>
                             </Form>
                         </AdminPanel>
@@ -417,7 +417,7 @@ export default function AdminReturnShow({
                             </div>
                             <div className="flex gap-3">
                                 <dt className="w-28 shrink-0 text-muted-foreground">
-                                    {t('Reden')}
+                                    {t('Reason')}
                                 </dt>
                                 <dd className="font-medium">
                                     {orderReturn.reason
@@ -427,7 +427,7 @@ export default function AdminReturnShow({
                             </div>
                             <div className="flex gap-3">
                                 <dt className="w-28 shrink-0 text-muted-foreground">
-                                    {t('Vervoerder')}
+                                    {t('Carrier')}
                                 </dt>
                                 <dd className="font-medium">
                                     {orderReturn.carrier || '—'}
@@ -435,7 +435,7 @@ export default function AdminReturnShow({
                             </div>
                             <div className="flex gap-3">
                                 <dt className="w-28 shrink-0 text-muted-foreground">
-                                    {t('Trackingnummer')}
+                                    {t('Tracking number')}
                                 </dt>
                                 <dd className="font-medium break-all">
                                     {orderReturn.tracking_number || '—'}
@@ -443,7 +443,7 @@ export default function AdminReturnShow({
                             </div>
                             <div className="flex gap-3">
                                 <dt className="w-28 shrink-0 text-muted-foreground">
-                                    {t('Verwacht')}
+                                    {t('Expected')}
                                 </dt>
                                 <dd className="font-medium">
                                     {expectedAmount
@@ -454,7 +454,7 @@ export default function AdminReturnShow({
                             {orderReturn.refund_amount ? (
                                 <div className="flex gap-3">
                                     <dt className="w-28 shrink-0 text-muted-foreground">
-                                        {t('Terugbetaald')}
+                                        {t('Refunded')}
                                     </dt>
                                     <dd className="font-medium">
                                         €{orderReturn.refund_amount}
@@ -472,7 +472,7 @@ export default function AdminReturnShow({
                         {orderReturn.maison_pays_return_shipping ? (
                             <p className="mt-4 rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-800 dark:text-amber-200">
                                 {t(
-                                    'Beschadigd — retourzending op onze kosten',
+                                    'Damaged — return shipping at our expense',
                                 )}
                             </p>
                         ) : null}
@@ -488,13 +488,13 @@ export default function AdminReturnShow({
                                 href={`/${locale}/admin/orders/${orderReturn.order_id}`}
                                 className="text-sm font-medium underline underline-offset-4"
                             >
-                                {t('Bekijk bestelling')}
+                                {t('View order')}
                             </Link>
                         </div>
                     </AdminPanel>
 
                     {orderReturn.photos.length > 0 ? (
-                        <AdminPanel title={t("Foto's")}>
+                        <AdminPanel title={t("Photos")}>
                             <div className="flex flex-wrap gap-3">
                                 {orderReturn.photos.map((photo) => (
                                     <a
@@ -518,7 +518,7 @@ export default function AdminReturnShow({
                     <AdminPanel title={t('Log')}>
                         {orderReturn.events.length === 0 ? (
                             <p className="text-sm text-muted-foreground">
-                                {t('Nog geen gebeurtenissen.')}
+                                {t('No events yet.')}
                             </p>
                         ) : (
                             <ul className="space-y-4">

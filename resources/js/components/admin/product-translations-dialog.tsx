@@ -152,7 +152,7 @@ export function ProductTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -160,10 +160,10 @@ export function ProductTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk vertalingen per taal. Bron tekst wijzig je via product bewerken; DeepL vertaalt vanuit die bron.',
+                            'Edit translations per language. Change source copy via product edit; DeepL translates from that source.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -173,7 +173,7 @@ export function ProductTranslationsDialog({
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla het product opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Some translations are still missing. Save the product again or use DeepL to generate them.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -200,7 +200,7 @@ export function ProductTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-name`}>
-                            {t('Naam')}
+                            {t('Name')}
                         </Label>
                         <Input
                             id={`${activeLocale}-name`}
@@ -222,7 +222,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-eyebrow`}>
-                            {t('Productlabel')}
+                            {t('Product label')}
                         </Label>
                         <Input
                             id={`${activeLocale}-eyebrow`}
@@ -244,7 +244,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-hero_eyebrow`}>
-                            {t('Hero-eyebrow')}
+                            {t('Hero eyebrow')}
                         </Label>
                         <Input
                             id={`${activeLocale}-hero_eyebrow`}
@@ -266,7 +266,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-hero_subtitle`}>
-                            {t('Hero-ondertitel')}
+                            {t('Hero subtitle')}
                         </Label>
                         <Textarea
                             id={`${activeLocale}-hero_subtitle`}
@@ -289,7 +289,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-description`}>
-                            {t('Productbeschrijving')}
+                            {t('Product description')}
                         </Label>
                         <Textarea
                             id={`${activeLocale}-description`}
@@ -314,7 +314,7 @@ export function ProductTranslationsDialog({
                         <Label
                             htmlFor={`${activeLocale}-expected_delivery_label`}
                         >
-                            {t('Verwachte levering')}
+                            {t('Expected delivery')}
                         </Label>
                         <Input
                             id={`${activeLocale}-expected_delivery_label`}
@@ -339,7 +339,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-meta_title`}>
-                            {t('Meta-titel')}
+                            {t('Meta title')}
                         </Label>
                         <Input
                             id={`${activeLocale}-meta_title`}
@@ -361,7 +361,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-meta_description`}>
-                            {t('Meta-beschrijving')}
+                            {t('Meta description')}
                         </Label>
                         <Textarea
                             id={`${activeLocale}-meta_description`}
@@ -386,7 +386,7 @@ export function ProductTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-meta_keywords`}>
-                            {t('Meta-keywords')}
+                            {t('Meta keywords')}
                         </Label>
                         <Input
                             id={`${activeLocale}-meta_keywords`}
@@ -420,7 +420,7 @@ export function ProductTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: t(LOCALE_LABEL_KEYS[activeLocale]),
                                 })}
                             </Button>
@@ -435,14 +435,14 @@ export function ProductTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

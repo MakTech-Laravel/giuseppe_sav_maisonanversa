@@ -119,13 +119,13 @@ export default function JournalIndex({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={t('Journal')}
-                    description={t('Beheer redactionele journalartikelen.')}
+                    description={t('Manage editorial journal articles.')}
                     icon={BookOpen}
                 >
                     <Button asChild>
                         <Link href={journalRoutes.create(wayfinderLocale())}>
                             <Plus className="h-4 w-4" />{' '}
-                            {t('Artikel toevoegen')}
+                            {t('Add article')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -133,7 +133,7 @@ export default function JournalIndex({
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                     <div className="relative sm:col-span-2">
                         <Label htmlFor="journal-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -141,20 +141,20 @@ export default function JournalIndex({
                             className="pl-9"
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op titel, slug of auteur…')}
-                            aria-label={t('Zoeken')}
+                            placeholder={t('Search by title, slug, or author...')}
+                            aria-label={t('Search')}
                         />
                     </div>
                     <Select value={category} onValueChange={setCategory}>
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Categorie')}
+                            aria-label={t('Category')}
                         >
-                            <SelectValue placeholder={t('Alle categorieen')} />
+                            <SelectValue placeholder={t('All categories')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle categorieen')}
+                                {t('All categories')}
                             </SelectItem>
                             {categories.map((option) => (
                                 <SelectItem
@@ -169,19 +169,19 @@ export default function JournalIndex({
                     <Select value={publication} onValueChange={setPublication}>
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Publicatie')}
+                            aria-label={t('Publication')}
                         >
-                            <SelectValue placeholder={t('Alle publicaties')} />
+                            <SelectValue placeholder={t('All publications')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle publicaties')}
+                                {t('All publications')}
                             </SelectItem>
                             <SelectItem value="published">
-                                {t('Gepubliceerd')}
+                                {t('Published')}
                             </SelectItem>
                             <SelectItem value="draft">
-                                {t('Concept')}
+                                {t('Draft')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -191,14 +191,14 @@ export default function JournalIndex({
                     >
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Per pagina')}
+                            aria-label={t('Per page')}
                         >
-                            <SelectValue placeholder={t('Per pagina')} />
+                            <SelectValue placeholder={t('Per page')} />
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
                                 <SelectItem key={option} value={String(option)}>
-                                    {t('{{count}} per pagina', {
+                                    {t('{{count}} per page', {
                                         count: option,
                                     })}
                                 </SelectItem>
@@ -217,7 +217,7 @@ export default function JournalIndex({
                             className="w-full sm:col-span-2 lg:col-span-4 xl:col-span-5 xl:w-auto xl:justify-self-start"
                         >
                             <X className="h-4 w-4" />
-                            {t('Filters wissen')}
+                            {t('Clear filters')}
                         </Button>
                     ) : null}
                 </div>
@@ -227,14 +227,14 @@ export default function JournalIndex({
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead className="w-16" />
-                                <TableHead>{t('Titel')}</TableHead>
-                                <TableHead>{t('Categorie')}</TableHead>
+                                <TableHead>{t('Title')}</TableHead>
+                                <TableHead>{t('Category')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="hidden xl:table-cell">
-                                    {t('Auteur')}
+                                    {t('Author')}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -246,9 +246,9 @@ export default function JournalIndex({
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
                                         {hasActiveFilters
-                                            ? t('Geen artikelen gevonden.')
+                                            ? t('No articles found.')
                                             : t(
-                                                  'Nog geen artikelen toegevoegd.',
+                                                  'No articles added yet.',
                                               )}
                                     </TableCell>
                                 </TableRow>
@@ -286,8 +286,8 @@ export default function JournalIndex({
                                         <TableCell>
                                             <Badge variant="secondary">
                                                 {article.is_published
-                                                    ? t('Gepubliceerd')
-                                                    : t('Concept')}
+                                                    ? t('Published')
+                                                    : t('Draft')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="hidden xl:table-cell">
@@ -333,7 +333,7 @@ export default function JournalIndex({
                                                 </Button>
                                                 <ConfirmDeleteDialog
                                                     description={t(
-                                                        'Dit journalartikel wordt permanent verwijderd.',
+                                                        'This journal article will be permanently deleted.',
                                                     )}
                                                     onConfirm={() =>
                                                         router.delete(

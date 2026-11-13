@@ -24,7 +24,7 @@ export default function ClubEdit({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={club.name}
-                    description={t('Clubgegevens bijwerken.')}
+                    description={t('Update club details.')}
                     icon={Building2}
                 />
 
@@ -33,7 +33,7 @@ export default function ClubEdit({
                     club={club}
                     action={clubsRoutes.update({ locale, club: club.id }).url}
                     method="put"
-                    submitLabel={t('Opslaan')}
+                    submitLabel={t('Save')}
                 />
             </div>
         </>

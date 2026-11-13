@@ -39,13 +39,13 @@ export default function MaisonReturns({
     return (
         <>
             <MaisonSeoHead />
-            <Head title={t('Retourneren')} />
+            <Head title={t('Returns')} />
 
             <PageHero
-                eyebrow={t('Verzending & Retour')}
-                title={t('Retourneren binnen 14 dagen')}
+                eyebrow={t('Shipping & Returns')}
+                title={t('Return within 14 days')}
                 subtitle={t(
-                    'Je kunt een retour starten via Mijn account → Bestellingen. De wettelijke bedenktijd begint de dag na levering.',
+                    'You can start a return via My account → Orders. The legal cooling-off period starts the day after delivery.',
                 )}
             >
                 <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 sm:gap-8">
@@ -55,18 +55,18 @@ export default function MaisonReturns({
                             onClick={startReturn}
                             className="inline-flex min-h-11 cursor-pointer items-center justify-center border border-cream bg-cream px-6 font-sans text-[10px] tracking-[0.2em] text-choc uppercase"
                         >
-                            {t('Start een retour')}
+                            {t('Start a return')}
                         </button>
                         <Link
                             href={`/${locale}/shipping`}
                             className="inline-flex min-h-11 items-center justify-center border border-cream/40 px-6 font-sans text-[10px] tracking-[0.2em] text-cream uppercase no-underline"
                         >
-                            {t('Verzend- en retourbeleid')}
+                            {t('Shipping & returns policy')}
                         </Link>
                     </div>
                     <aside className="w-full max-w-sm border border-gold/25 bg-choc/40 px-5 py-4 text-center backdrop-blur-sm">
                         <p className="font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
-                            {t('Retouradres')}
+                            {t('Return address')}
                         </p>
                         <p className="mt-2 font-sans text-sm leading-relaxed whitespace-pre-line text-cream">
                             {returnAddress}
@@ -78,11 +78,11 @@ export default function MaisonReturns({
             <div className="bg-cream py-14">
                 <Wrap className="max-w-xl px-6 md:px-10">
                     <h2 className="font-serif text-2xl text-choc">
-                        {t('Gastbestelling?')}
+                        {t('Guest order?')}
                     </h2>
                     <p className="mt-3 font-serif text-base leading-relaxed text-stone">
                         {t(
-                            'Heb je zonder account besteld? Vul je bestelnummer en e-mail in. We sturen je een eenmalige link om een retour te starten.',
+                            'Ordered without an account? Enter your order number and email. We will send you a one-time link to start a return.',
                         )}
                     </p>
 
@@ -92,7 +92,7 @@ export default function MaisonReturns({
                     >
                         <label className="flex flex-col gap-1.5">
                             <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                                {t('Bestelnummer')}
+                                {t('Order number')}
                             </span>
                             <input
                                 type="text"
@@ -117,7 +117,7 @@ export default function MaisonReturns({
 
                         <label className="flex flex-col gap-1.5">
                             <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                                {t('E-mail bij de bestelling')}
+                                {t('Email used for the order')}
                             </span>
                             <input
                                 type="email"
@@ -144,7 +144,7 @@ export default function MaisonReturns({
                             disabled={guestForm.processing}
                             className="mt-2 inline-flex min-h-11 cursor-pointer items-center justify-center bg-choc px-6 font-sans text-[10px] tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2 disabled:opacity-50"
                         >
-                            {t('Stuur retourlink')}
+                            {t('Send return link')}
                         </button>
                     </form>
                 </Wrap>

@@ -34,7 +34,7 @@ class SiteSettingController extends Controller
     {
         SiteSetting::current()->update($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Site-instellingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Site settings saved.')]);
 
         return back();
     }

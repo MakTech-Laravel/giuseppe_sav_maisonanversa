@@ -45,8 +45,8 @@ class StoreOpeningOfferRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'product_id.unique' => __('Dit product staat al in de opening.'),
-            'product_id.exists' => __('Kies een gepubliceerd, actief product met genummerde oplage.'),
+            'product_id.unique' => __('This product is already in the opening.'),
+            'product_id.exists' => __('Choose a published, active product with a numbered edition.'),
         ];
     }
 

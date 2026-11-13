@@ -206,7 +206,7 @@ test('the home seo document uses the canonical locale url', function () {
         ->component('maison/home')
         ->where('seo.canonical', url('/nl'))
         ->where('seo.robots', null)
-        ->where('seo.title', 'Maison Anversa — Europees erfgoedhuis voor sport en lifestyle')
+        ->where('seo.title', 'Maison Anversa — European heritage house for sport and lifestyle')
     );
 });
 

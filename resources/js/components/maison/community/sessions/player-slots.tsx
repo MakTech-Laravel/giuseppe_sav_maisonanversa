@@ -63,7 +63,7 @@ export function PlayerSlots({
                                 {player.name}
                             </span>
                             <span className="font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
-                                {player.is_host ? t('Host') : t('Aangesloten')}
+                                {player.is_host ? t('Host') : t('Joined')}
                             </span>
                         </>
                     )}
@@ -72,7 +72,7 @@ export function PlayerSlots({
                         <button
                             type="button"
                             onClick={() => onRemove(player)}
-                            aria-label={t('Speler verwijderen')}
+                            aria-label={t('Remove player')}
                             className="absolute -top-1 -right-1 flex size-5 cursor-pointer items-center justify-center rounded-full border border-gold/30 bg-cream text-choc opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                         >
                             <X className="size-3" />
@@ -90,13 +90,13 @@ export function PlayerSlots({
                         <Monogram
                             size={size}
                             initials="…"
-                            title={t('In afwachting')}
+                            title={t('Pending')}
                             className="border-dotted bg-gold/10 text-gold2"
                         />
 
                         {withLabels && (
                             <span className="font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
-                                {t('In afwachting')}
+                                {t('Pending')}
                             </span>
                         )}
                     </div>
@@ -116,7 +116,7 @@ export function PlayerSlots({
 
                     {withLabels && (
                         <span className="font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
-                            {t('Vrij')}
+                            {t('Open')}
                         </span>
                     )}
                 </div>

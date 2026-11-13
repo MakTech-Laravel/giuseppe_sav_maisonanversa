@@ -32,7 +32,7 @@ class StorefrontAccessController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Storefront-toegang opgeslagen.'),
+            'message' => __('Storefront access saved.'),
         ]);
 
         return back();

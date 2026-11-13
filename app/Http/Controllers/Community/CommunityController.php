@@ -40,7 +40,7 @@ class CommunityController extends Controller
             'status' => 'published',
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Post geplaatst in de Community.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Post published in the Community.')]);
 
         return back();
     }
@@ -105,13 +105,13 @@ class CommunityController extends Controller
         notify_users(
             User::permission('community.moderate')->pluck('id'),
             NotificationType::Community,
-            __('Community-melding'),
+            __('Community report'),
             __('Een community-post is gemeld: :reason', ['reason' => $report->reason]),
             [
                 'report_id' => $report->id,
                 'community_post_id' => $report->community_post_id,
                 'link_url' => route('admin.community.index', ['locale' => config('maison.default_locale')]),
-                'link_label' => __('Moderatie openen'),
+                'link_label' => __('Open moderation'),
             ],
             $request->user(),
         );

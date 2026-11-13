@@ -51,7 +51,7 @@ class ImportStaticContentCommand extends Command
                 'gallery' => ['heritage-001-front'],
                 'eyebrow' => 'Maison Anversa · Coming Soon',
                 'hero_eyebrow' => 'Volgende release',
-                'hero_subtitle' => 'Volgende release · Aankondiging via de Heritage Letter',
+                'hero_subtitle' => 'Next release · Announced via the Heritage Letter',
                 'description' => '',
             ],
             'heritage-no-003' => [
@@ -68,7 +68,7 @@ class ImportStaticContentCommand extends Command
                 'gallery' => ['heritage-001-lifestyle-court'],
                 'eyebrow' => 'Maison Anversa · Coming Soon',
                 'hero_eyebrow' => 'In voorbereiding',
-                'hero_subtitle' => 'In voorbereiding · Geen datum bekend',
+                'hero_subtitle' => 'In preparation · No date known',
                 'description' => '',
             ],
         ];

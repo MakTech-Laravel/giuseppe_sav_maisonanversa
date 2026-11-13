@@ -64,7 +64,7 @@ function statusLabelKey(status: EditionOption['status']): string {
         case 'allocated':
             return 'Verkocht';
         case 'reserved':
-            return 'Gereserveerd';
+            return 'Reserved';
         default:
             return 'Beschikbaar';
     }
@@ -147,7 +147,7 @@ export function EditionPickerModal({
                     `${payload.meta.range.start_label} – ${payload.meta.range.end_label}`,
                 );
             } catch {
-                setError(t('Editienummers konden niet worden geladen.'));
+                setError(t('Edition numbers could not be loaded.'));
             } finally {
                 loadingRef.current = false;
                 setLoading(false);
@@ -220,7 +220,7 @@ export function EditionPickerModal({
         } catch {
             setError(
                 t(
-                    'Dit editienummer is niet meer beschikbaar. Kies een ander nummer.',
+                    'This edition number is no longer available. Please choose another.',
                 ),
             );
             setItems([]);
@@ -255,36 +255,36 @@ export function EditionPickerModal({
 
     return (
         <MaisonModal
-            label={t('Kies jouw editienummer')}
+            label={t('Choose your edition number')}
             onClose={onClose}
             panelClassName="max-w-[640px]"
         >
             <h2 className="mb-1.5 font-serif text-[32px] font-medium text-choc">
-                {t('Kies jouw editienummer')}
+                {t('Choose your edition number')}
             </h2>
             <span className="mb-1 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
                 {product.productName}
             </span>
             {rangeLabel && (
                 <p className="mb-3 font-sans text-[11px] tracking-[0.14em] text-stone uppercase">
-                    {t('Editierange')}: {rangeLabel}
+                    {t('Edition range')}: {rangeLabel}
                 </p>
             )}
             <p className={cn(modalNoteClassName, 'mb-3')}>
                 {t(
-                    'Beschikbare nummers kun je selecteren. Niet te koop, gereserveerd of verkocht zijn niet selecteerbaar.',
+                    'You can select available numbers. Not for sale, reserved, or sold cannot be selected.',
                 )}
             </p>
 
             <label className="sr-only" htmlFor="edition-search">
-                {t('Zoek op editienummer')}
+                {t('Search by edition number')}
             </label>
             <input
                 id="edition-search"
                 type="search"
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
-                placeholder={t('Zoek op editienummer')}
+                placeholder={t('Search by edition number')}
                 className={cn(modalInputClassName, 'mb-3')}
             />
 
@@ -294,9 +294,9 @@ export function EditionPickerModal({
                         {error ??
                             (search !== ''
                                 ? t(
-                                      'Geen editie gevonden voor deze zoekopdracht.',
+                                      'No edition found for this search.',
                                   )
-                                : t('Geen editienummers gevonden.'))}
+                                : t('No edition numbers found.'))}
                     </p>
                 ) : (
                     <ul className="divide-y divide-gold/15">
@@ -335,7 +335,7 @@ export function EditionPickerModal({
                                             {item.label}
                                         </span>
                                         <span className="font-sans text-[10px] tracking-[0.14em] text-stone uppercase">
-                                            {pending ? t('Laden…') : badge}
+                                            {pending ? t('Loading…') : badge}
                                         </span>
                                     </button>
                                 </li>
@@ -346,7 +346,7 @@ export function EditionPickerModal({
                 <div ref={sentinel} className="h-8" />
                 {loading && (
                     <p className="px-4 py-3 text-center font-sans text-[10px] tracking-[0.16em] text-stone uppercase">
-                        {t('Laden…')}
+                        {t('Loading…')}
                     </p>
                 )}
             </div>
@@ -364,7 +364,7 @@ export function EditionPickerModal({
                 className="mt-4"
                 onClick={onClose}
             >
-                {t('Annuleren')}
+                {t('Cancel')}
             </MaisonButton>
         </MaisonModal>
     );

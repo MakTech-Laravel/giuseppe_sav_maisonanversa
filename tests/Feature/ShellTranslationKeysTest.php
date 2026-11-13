@@ -4,8 +4,8 @@ use App\Enums\ProductSectionKey;
 use Illuminate\Support\Facades\File;
 
 /*
- * The dictionaries are keyed by their Dutch source string, so a typo in a `t()`
- * call is invisible at runtime: i18next falls back to the key and the Dutch text
+ * The dictionaries are keyed by their English source string, so a typo in a `t()`
+ * call is invisible at runtime: i18next falls back to the key and the English text
  * renders on a French page. These tests read the keys back out of the components
  * and fail if any of them is missing from a dictionary.
  */
@@ -18,11 +18,13 @@ use Illuminate\Support\Facades\File;
  * back to the key is the correct result rather than a missing translation.
  */
 const MAISON_UNTRANSLATED_BRAND_TERMS = [
+    'Atelier',
     'Club Corner',
     'Founding Circle',
     'Founding Edition',
     'Heritage Nº 001',
     'Journal',
+    'Maison Anversa',
 ];
 
 /**
@@ -96,12 +98,14 @@ function maisonTranslationKeys(): array
         }
     }
 
-    foreach (ProductSectionKey::cases() as $section) {
-        $keys['ProductSectionKey::'.$section->name] = [
-            $section->label(),
-            $section->description(),
-        ];
-    }
+    // Read English source keys from the enum source — calling label() would
+    // return the translated NL string under the site default locale.
+    $enumSource = File::get(app_path('Enums/ProductSectionKey.php'));
+    preg_match_all("/__\(\s*'((?:[^'\\\\]|\\\\.)*)'/", $enumSource, $enumKeys);
+    $keys['ProductSectionKey'] = array_values(array_unique(array_map(
+        'stripcslashes',
+        $enumKeys[1],
+    )));
 
     return $keys;
 }
@@ -135,7 +139,7 @@ test('every translation key the components use exists in the dictionary', functi
     }
 
     expect($missing)->toBe([], "Keys with no {$locale} translation:\n".implode("\n", $missing));
-})->with(['en', 'fr']);
+})->with(['nl', 'fr']);
 
 test('the brand allowlist only covers terms the dictionary really omits', function (string $locale) {
     $dictionary = json_decode(
@@ -150,7 +154,7 @@ test('the brand allowlist only covers terms the dictionary really omits', functi
     ));
 
     expect($translatedAfterAll)->toBe([]);
-})->with(['en', 'fr']);
+})->with(['nl', 'fr']);
 
 test('the passport Download PDF button translates in every locale', function (string $locale, string $expected) {
     $dictionary = json_decode(
@@ -165,7 +169,7 @@ test('the passport Download PDF button translates in every locale', function (st
         ->and($dictionary)->toHaveKey('Download PDF')
         ->and($dictionary['Download PDF'])->toBe($expected);
 })->with([
-    'en' => ['en', 'Download PDF'],
+    'nl' => ['nl', 'PDF downloaden'],
     'fr' => ['fr', 'Télécharger le PDF'],
 ]);
 

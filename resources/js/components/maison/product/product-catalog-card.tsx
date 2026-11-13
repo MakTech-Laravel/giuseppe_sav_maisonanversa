@@ -54,11 +54,11 @@ function ProductCover({ src, alt }: { src: string | null; alt: string }) {
 function statusLabel(t: (key: string) => string, status: string): string {
     switch (status) {
         case 'active':
-            return t('Beschikbaar');
+            return t('Available');
         case 'coming_soon':
-            return t('Binnenkort');
+            return t('Coming soon');
         default:
-            return t('Uitverkocht');
+            return t('Sold out');
     }
 }
 

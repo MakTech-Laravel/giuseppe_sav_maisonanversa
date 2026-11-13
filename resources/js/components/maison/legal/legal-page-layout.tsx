@@ -24,11 +24,11 @@ export function LegalPageLayout({
     return (
         <>
             <PageHero
-                eyebrow={t('Juridisch')}
+                eyebrow={t('Legal')}
                 title={<em>{t(title)}</em>}
                 subtitle={
                     <p className="font-sans text-[12px] tracking-[0.1em] text-sand uppercase">
-                        {t('Laatst bijgewerkt: juli 2026')}
+                        {t('Last updated: July 2026')}
                     </p>
                 }
             />
@@ -50,7 +50,7 @@ export function LegalPageLayout({
                             variant="choc"
                             className="mt-7.5"
                         >
-                            {t('← Terug naar home')}
+                            {t('← Back to home')}
                         </MaisonButton>
                     )}
                 </Wrap>

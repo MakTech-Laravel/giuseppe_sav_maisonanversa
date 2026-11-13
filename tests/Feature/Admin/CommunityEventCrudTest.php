@@ -268,7 +268,7 @@ test('admin can update event status', function () {
 test('event show exposes translation bundle and status for all locales', function () {
     $event = CommunityEvent::factory()->create([
         'title' => 'Vertaal Event',
-        'description' => 'Beschrijving',
+        'description' => 'Description',
         'location' => 'Antwerpen',
     ]);
 

@@ -68,27 +68,27 @@ class PassportPresenter
             'verificationToken' => $token,
             'pages' => [
                 [
-                    'title' => __('Omslag'),
+                    'title' => __('Cover'),
                     'body' => __('FOUNDING CIRCLE · :product · RACKET :racket', [
                         'product' => $name,
                         'racket' => $racketLabel,
                     ]),
                 ],
                 [
-                    'title' => __('Het Huis'),
+                    'title' => __('The House'),
                     'body' => __('Maison Anversa is geworteld in Antwerpen. Dit huis bewaart Europese sport- en lifestyle-erfgoed, stuk voor stuk genummerd.'),
                 ],
                 [
-                    'title' => __('Productidentiteit'),
-                    'body' => __(':product · Racket :racket · :owner · Geauthenticeerd · Yusuf Savran / Oprichter · Antwerpen', [
+                    'title' => __('Product identity'),
+                    'body' => __(':product · Racket :racket · :owner · Authenticated · Yusuf Savran / Founder · Antwerp', [
                         'product' => $name,
                         'racket' => $racketLabel,
                         'owner' => $order->name,
                     ]),
                 ],
                 [
-                    'title' => __('Zorg & verbinding'),
-                    'body' => __('Volg de verzorgingsinstructies van het huis. Unieke verificatie: :url', ['url' => $url]),
+                    'title' => __('Care & connection'),
+                    'body' => __('Follow the house care instructions. Unique verification: :url', ['url' => $url]),
                 ],
             ],
         ];
@@ -125,27 +125,27 @@ class PassportPresenter
             'verificationToken' => $token,
             'pages' => [
                 [
-                    'title' => __('Omslag'),
+                    'title' => __('Cover'),
                     'body' => __('FOUNDING CIRCLE · :product · RACKET :racket', [
                         'product' => $name,
                         'racket' => $racketLabel,
                     ]),
                 ],
                 [
-                    'title' => __('Het Huis'),
+                    'title' => __('The House'),
                     'body' => __('Maison Anversa is geworteld in Antwerpen. Dit huis bewaart Europese sport- en lifestyle-erfgoed, stuk voor stuk genummerd.'),
                 ],
                 [
-                    'title' => __('Productidentiteit'),
-                    'body' => __(':product · Racket :racket · :owner · Geauthenticeerd · Yusuf Savran / Oprichter · Antwerpen', [
+                    'title' => __('Product identity'),
+                    'body' => __(':product · Racket :racket · :owner · Authenticated · Yusuf Savran / Founder · Antwerp', [
                         'product' => $name,
                         'racket' => $racketLabel,
                         'owner' => $claim->user?->name ?? '',
                     ]),
                 ],
                 [
-                    'title' => __('Zorg & verbinding'),
-                    'body' => __('Volg de verzorgingsinstructies van het huis. Unieke verificatie: :url', ['url' => $url]),
+                    'title' => __('Care & connection'),
+                    'body' => __('Follow the house care instructions. Unique verification: :url', ['url' => $url]),
                 ],
             ],
         ];

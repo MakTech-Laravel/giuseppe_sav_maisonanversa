@@ -81,7 +81,7 @@ class CommunityEventController extends Controller
 
         $event = CommunityEvent::query()->create($data);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Evenement aangemaakt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Event created.')]);
 
         return redirect()->route('admin.events.show', [
             'locale' => $locale,
@@ -151,7 +151,7 @@ class CommunityEventController extends Controller
             ...(array_key_exists('thumbnail', $data) ? ['thumbnail' => $data['thumbnail']] : []),
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Evenement bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Event updated.')]);
 
         return redirect()->route('admin.events.show', [
             'locale' => $locale,
@@ -168,7 +168,7 @@ class CommunityEventController extends Controller
             'status' => $request->enum('status', CommunityEventStatus::class),
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Status bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Status updated.')]);
 
         return back();
     }
@@ -195,7 +195,7 @@ class CommunityEventController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.events.show', [
             'locale' => $locale,
@@ -225,7 +225,7 @@ class CommunityEventController extends Controller
             $event->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.events.show', [
             'locale' => $locale,
@@ -238,7 +238,7 @@ class CommunityEventController extends Controller
         $this->deleteThumbnail($event);
         $event->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Evenement verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Event deleted.')]);
 
         return redirect()->route('admin.events.index', ['locale' => $locale]);
     }

@@ -33,22 +33,22 @@ export function FeedCompose({ initials, onPublish }: FeedComposeProps) {
                     onChange={(event) => setText(event.target.value)}
                     placeholder={t(
                         isMobile
-                            ? 'Deel jouw ervaring...'
-                            : 'Deel jouw ervaring met Heritage Nº 001, een sessie, een gedachte...',
+                            ? 'Share your experience...'
+                            : 'Share your experience with Heritage Nº 001, a session, a thought...',
                     )}
                     className="h-20 flex-1 resize-none border border-gold/20 bg-cream px-4 py-3 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
                 />
             </div>
             <div className="flex items-center justify-between">
                 <span className="font-sans text-[9px] tracking-[0.15em] text-stone">
-                    {t('Alleen zichtbaar voor ingelogde leden')}
+                    {t('Visible only to signed-in members')}
                 </span>
                 <button
                     type="button"
                     onClick={handlePublish}
                     className="cursor-pointer bg-choc px-6 py-3 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2"
                 >
-                    {t('Publiceer')}
+                    {t('Publish')}
                 </button>
             </div>
         </div>

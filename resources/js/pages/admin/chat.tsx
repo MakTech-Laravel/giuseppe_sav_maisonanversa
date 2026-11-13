@@ -60,7 +60,7 @@ export default function AdminChatPage({
                     >
                         <div className="border-b border-gold/20 px-5 py-4">
                             <h2 className="font-sans text-[10px] font-medium tracking-[0.22em] text-gold uppercase">
-                                {t('Sessies')}
+                                {t('Sessions')}
                             </h2>
                         </div>
                         <ChatSessionList
@@ -92,7 +92,7 @@ export default function AdminChatPage({
                                             className="size-3.5"
                                             aria-hidden="true"
                                         />
-                                        {t('Terug naar chats')}
+                                        {t('Back to chats')}
                                     </Link>
                                 </div>
 
@@ -185,7 +185,7 @@ function AdminActiveSessionChat({
                         : message,
                 ),
             );
-            toast.error(t('Bericht kon niet worden verstuurd.'));
+            toast.error(t('Message could not be sent.'));
 
             return;
         }
@@ -199,7 +199,7 @@ function AdminActiveSessionChat({
                         : message,
                 ),
             );
-            toast.error(t('Bericht kon niet worden verstuurd.'));
+            toast.error(t('Message could not be sent.'));
         };
 
         const payload =
@@ -297,7 +297,7 @@ function AdminActiveSessionChat({
               { date: purgeLabel },
           )
         : t(
-              'Deze chat is gesloten. Er kunnen geen berichten meer worden verstuurd.',
+              'This chat is closed. No more messages can be sent.',
           );
 
     function handleDelete(message: ChatMessage) {
@@ -320,7 +320,7 @@ function AdminActiveSessionChat({
             onRetry={handleRetry}
             onDismissFailed={handleDismissFailed}
             onDelete={canModerate ? handleDelete : undefined}
-            title={session.club?.name ?? t('Sessie')}
+            title={session.club?.name ?? t('Session')}
             subtitle={`${formatSessionDateLong(session.starts_at, locale)} · ${formatSessionTime(session.starts_at, locale)}`}
             headerAside={<ChatMembersButton players={session.players} />}
             closedMessage={closedMessage}
@@ -336,7 +336,7 @@ function AdminChatEmptySelection() {
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-14 text-center">
             <MessageSquare className="size-7 text-gold2" aria-hidden="true" />
             <p className="font-serif text-xl text-cream">
-                {t('Selecteer een sessie')}
+                {t('Select a session')}
             </p>
             <p className="max-w-sm font-sans text-[12px] text-sand">
                 {t(

@@ -47,12 +47,12 @@ export function CommunityTabs() {
         },
         {
             id: 'sessions',
-            label: 'Sessies',
+            label: 'Sessions',
             href: sessionRoutes.index.url(locale),
         },
         {
             id: 'events',
-            label: 'Exclusieve Evenementen',
+            label: 'Exclusive Events',
             href: eventRoutes.index.url(locale),
         },
     ];

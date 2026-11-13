@@ -49,12 +49,12 @@ export default function MemberEmailPreferences({
 
     return (
         <>
-            <Head title={t('E-mailvoorkeuren')} />
+            <Head title={t('Email preferences')} />
             <MemberPageHeader
-                eyebrow={t('De Heritage Letter')}
-                title={t('E-mailvoorkeuren')}
+                eyebrow={t('The Heritage Letter')}
+                title={t('Email preferences')}
                 description={t(
-                    'De Heritage Letter is de nieuwsbrief van het huis. Kies of je die ontvangt, en of we ook product- en eventberichten sturen.',
+                    'The Heritage Letter is the house newsletter. Choose whether you receive it, and whether we also send product and event notes.',
                 )}
             />
 
@@ -64,8 +64,8 @@ export default function MemberEmailPreferences({
                         tone={form.data.heritageLetter ? 'success' : 'warn'}
                     >
                         {form.data.heritageLetter
-                            ? t('Je ontvangt de Heritage Letter.')
-                            : t('Je ontvangt de Heritage Letter nog niet.')}
+                            ? t('You receive the Heritage Letter.')
+                            : t('You are not receiving the Heritage Letter yet.')}
                     </MemberStatusPill>
                 </div>
 
@@ -88,19 +88,19 @@ export default function MemberEmailPreferences({
                             </span>
                             <span className="block text-[13px] leading-relaxed text-sand">
                                 {t(
-                                    'Als eerste verhalen, nieuws en exclusieve uitnodigingen ontvangen van Maison Anversa.',
+                                    'Be the first to receive stories, news and exclusive invitations from Maison Anversa.',
                                 )}
                             </span>
                         </span>
                     </label>
 
                     <div>
-                        <MemberSectionTitle title={t('Extra berichten')} />
+                        <MemberSectionTitle title={t('Extra messages')} />
                         <div className="space-y-5">
                             {(
                                 [
-                                    ['productUpdates', t('Productupdates')],
-                                    ['events', t('Sessies & events')],
+                                    ['productUpdates', t('Product updates')],
+                                    ['events', t('Sessions & events')],
                                 ] as const
                             ).map(([key, label]) => (
                                 <label
@@ -127,12 +127,12 @@ export default function MemberEmailPreferences({
                     </div>
 
                     <Button type="submit" disabled={form.processing}>
-                        {t('Opslaan')}
+                        {t('Save')}
                     </Button>
 
                     {form.recentlySuccessful && (
                         <p className="font-sans text-[11px] tracking-[0.12em] text-gold2 uppercase">
-                            {t('Voorkeuren opgeslagen.')}
+                            {t('Preferences saved.')}
                         </p>
                     )}
                 </form>
@@ -140,9 +140,9 @@ export default function MemberEmailPreferences({
 
             <MemberPanel className="mt-8 max-w-xl">
                 <MemberSectionTitle
-                    title={t('Sessie-e-mails')}
+                    title={t('Session emails')}
                     description={t(
-                        'In-app meldingen blijven altijd aan. Hier kies je alleen of je ze ook per e-mail ontvangt.',
+                        'In-app notifications always stay on. Here you only choose whether you also receive them by email.',
                     )}
                 />
 
@@ -161,23 +161,23 @@ export default function MemberEmailPreferences({
                         />
                         <span className="space-y-1">
                             <span className="block font-sans text-[12px] tracking-[0.14em] text-cream uppercase">
-                                {t('E-mails over mijn sessies')}
+                                {t('Emails about my sessions')}
                             </span>
                             <span className="block text-[13px] leading-relaxed text-sand">
                                 {t(
-                                    'Nieuwe spelers, bevestigingen, volzette en geannuleerde sessies, vrijgekomen plaatsen en de herinnering de dag voordien.',
+                                    'New players, confirmations, full and cancelled sessions, opened-up spots and the reminder the day before.',
                                 )}
                             </span>
                         </span>
                     </label>
 
                     <Button type="submit" disabled={sessionForm.processing}>
-                        {t('Opslaan')}
+                        {t('Save')}
                     </Button>
 
                     {sessionForm.recentlySuccessful && (
                         <p className="font-sans text-[11px] tracking-[0.12em] text-gold2 uppercase">
-                            {t('Voorkeuren opgeslagen.')}
+                            {t('Preferences saved.')}
                         </p>
                     )}
                 </form>

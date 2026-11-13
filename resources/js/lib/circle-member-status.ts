@@ -4,7 +4,7 @@
  */
 const CIRCLE_MEMBER_STATUS_LABELS: Record<string, string> = {
     Active: 'Actief',
-    Reserved: 'Gereserveerd',
+    Reserved: 'Reserved',
 };
 
 export function translateMemberStatus(

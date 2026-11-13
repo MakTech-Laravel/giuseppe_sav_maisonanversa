@@ -102,7 +102,7 @@ export default function JournalShow({
                 >
                     <Button variant="outline" asChild>
                         <Link href={journalRoutes.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -112,7 +112,7 @@ export default function JournalShow({
                                 article: Number(article.id),
                             })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -120,9 +120,9 @@ export default function JournalShow({
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Werk dit artikel bij, beheer vertalingen of open de publieke pagina.',
+                                'Update this article, manage translations, or open the public page.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -134,7 +134,7 @@ export default function JournalShow({
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />
-                                        {t('Bewerken')}
+                                        {t('Edit')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -145,7 +145,7 @@ export default function JournalShow({
                                     <Link href={article.public_url}>
                                         <Eye className="h-4 w-4" />
                                         {t(
-                                            'Bekijk dit artikel zoals op de site.',
+                                            'View this article as it appears on the site.',
                                         )}
                                     </Link>
                                 </Button>
@@ -157,7 +157,7 @@ export default function JournalShow({
                                 />
                                 <ConfirmDeleteDialog
                                     description={t(
-                                        'Dit journalartikel wordt permanent verwijderd.',
+                                        'This journal article will be permanently deleted.',
                                     )}
                                     onConfirm={() =>
                                         router.delete(
@@ -173,7 +173,7 @@ export default function JournalShow({
                                         className="w-full"
                                     >
                                         <Trash2 className="h-4 w-4" />
-                                        {t('Verwijderen')}
+                                        {t('Remove')}
                                     </Button>
                                 </ConfirmDeleteDialog>
                             </div>
@@ -181,9 +181,9 @@ export default function JournalShow({
                     }
                 >
                     <AdminPanel
-                        title={t('Inhoud')}
+                        title={t('Content')}
                         description={t(
-                            'Zoals bezoekers dit artikel in de huidige taal zien.',
+                            'As visitors see this article in the current language.',
                         )}
                     >
                         <div className="mb-5 flex flex-wrap gap-2">
@@ -194,8 +194,8 @@ export default function JournalShow({
                             ) : null}
                             <Badge variant="secondary">
                                 {article.is_published
-                                    ? t('Gepubliceerd')
-                                    : t('Concept')}
+                                    ? t('Published')
+                                    : t('Draft')}
                             </Badge>
                         </div>
 
@@ -207,7 +207,7 @@ export default function JournalShow({
                             />
                         ) : (
                             <div className="mb-5 flex aspect-4/3 w-full max-w-xl items-center justify-center rounded-lg bg-muted text-xs text-muted-foreground">
-                                {t('Geen afbeelding')}
+                                {t('No image')}
                             </div>
                         )}
 
@@ -226,9 +226,9 @@ export default function JournalShow({
                     </AdminPanel>
 
                     <AdminPanel
-                        title={t('Instellingen')}
+                        title={t('Settings')}
                         description={t(
-                            'Categorie, auteur, publicatie en fallback cover voor dit artikel.',
+                            'Category, author, publication, and fallback cover for this article.',
                         )}
                     >
                         <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -238,30 +238,30 @@ export default function JournalShow({
                                 mono
                             />
                             <Field
-                                label={t('Auteur')}
+                                label={t('Author')}
                                 value={article.author || t('—')}
                             />
                             <Field
-                                label={t('Datumlabel')}
+                                label={t('Date label')}
                                 value={article.date_label || t('—')}
                             />
                             <Field
                                 label={t('Cover asset')}
-                                value={article.cover_path || t('Geen')}
+                                value={article.cover_path || t('None')}
                             />
                             <Field
-                                label={t('Volgorde')}
+                                label={t('Order')}
                                 value={String(article.sort_order)}
                                 mono
                             />
                             <Field
-                                label={t('Publicatie')}
+                                label={t('Publication')}
                                 value={
                                     article.published_at
                                         ? new Date(
                                               article.published_at,
                                           ).toLocaleString()
-                                        : t('Concept')
+                                        : t('Draft')
                                 }
                             />
                         </div>

@@ -19,7 +19,7 @@ export function MaisonFloorplan() {
             viewBox="0 0 1100 1280"
             role="img"
             aria-label={t(
-                'Acht kamers, acht hoofdstukken. Stap binnen door op een ruimte te klikken — elke kamer brengt je naar een deel van het huis.',
+                'Eight rooms, eight chapters. Step inside by clicking on a space — each room takes you to a part of the house.',
             )}
         >
             {/* Roof */}

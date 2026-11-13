@@ -93,7 +93,7 @@ class FaqController extends Controller
     {
         $faq = Faq::query()->create($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ aangemaakt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ created.')]);
 
         return redirect()->route('admin.faqs.show', [
             'locale' => $locale,
@@ -139,7 +139,7 @@ class FaqController extends Controller
     {
         $faq->update($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ updated.')]);
 
         return redirect()->route('admin.faqs.show', [
             'locale' => $locale,
@@ -169,7 +169,7 @@ class FaqController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.faqs.show', [
             'locale' => $locale,
@@ -196,7 +196,7 @@ class FaqController extends Controller
             $faq->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.faqs.show', [
             'locale' => $locale,
@@ -208,7 +208,7 @@ class FaqController extends Controller
     {
         $faq->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQ deleted.')]);
 
         return redirect()->route('admin.faqs.index', ['locale' => $locale]);
     }

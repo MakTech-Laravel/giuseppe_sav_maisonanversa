@@ -1,13 +1,13 @@
 @component('emails.layouts.maison', [
-    'title' => __('E-mailadres verifiëren'),
+    'title' => __('Verify email address'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $ctaUrl,
     'ctaLabel' => $ctaLabel,
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Klik op de knop hieronder om jouw e-mailadres te bevestigen.') }}
+        {{ __('Please click the button below to verify your email address.') }}
     </p>
     <p style="margin:0;">
-        {{ __('Als je geen account hebt aangemaakt, hoef je niets te doen.') }}
+        {{ __('If you did not create an account, no further action is required.') }}
     </p>
 @endcomponent

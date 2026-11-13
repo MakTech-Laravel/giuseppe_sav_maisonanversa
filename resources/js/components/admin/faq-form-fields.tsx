@@ -62,14 +62,14 @@ export function FaqFormFields({
     return (
         <div className="grid w-full gap-6">
             <AdminPanel
-                title={t('Inhoud')}
+                title={t('Content')}
                 description={t(
-                    'Vraag en antwoord zoals bezoekers ze op de site zien.',
+                    'Question and answer as visitors see them on the site.',
                 )}
             >
                 <div className="grid gap-5">
                     <div className="grid min-w-0 gap-2">
-                        <Label htmlFor="question">{t('Vraag')}</Label>
+                        <Label htmlFor="question">{t('Question')}</Label>
                         <Textarea
                             id="question"
                             value={data.question}
@@ -82,7 +82,7 @@ export function FaqFormFields({
                         <InputError message={errors.question} />
                     </div>
                     <div className="grid min-w-0 gap-2">
-                        <Label htmlFor="answer">{t('Antwoord')}</Label>
+                        <Label htmlFor="answer">{t('Answer')}</Label>
                         <Textarea
                             id="answer"
                             value={data.answer}
@@ -97,9 +97,9 @@ export function FaqFormFields({
             </AdminPanel>
 
             <AdminPanel
-                title={t('Instellingen')}
+                title={t('Settings')}
                 description={t(
-                    'Context, volgorde en publicatiestatus voor deze FAQ.',
+                    'Context, order, and publication status for this FAQ.',
                 )}
             >
                 <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -131,7 +131,7 @@ export function FaqFormFields({
                     </div>
 
                     <div className="grid min-w-0 gap-2">
-                        <Label htmlFor="sort_order">{t('Volgorde')}</Label>
+                        <Label htmlFor="sort_order">{t('Order')}</Label>
                         <Input
                             id="sort_order"
                             type="number"
@@ -146,7 +146,7 @@ export function FaqFormFields({
                         />
                         <p className="text-xs text-muted-foreground">
                             {t(
-                                'Lager = eerder. Volgorde geldt per context (product of contact).',
+                                'Lower = earlier. Order applies per context (product or contact).',
                             )}
                         </p>
                         <InputError message={errors.sort_order} />
@@ -172,8 +172,8 @@ export function FaqFormFields({
                             />
                             <span>
                                 {data.is_published
-                                    ? t('Gepubliceerd')
-                                    : t('Concept')}
+                                    ? t('Published')
+                                    : t('Draft')}
                             </span>
                         </label>
                         <InputError message={errors.is_published} />
@@ -204,29 +204,29 @@ export function FaqFormAside({
                 <ul className="space-y-3 text-sm text-muted-foreground">
                     <li>
                         {t(
-                            'Product-FAQs verschijnen op de productpagina; contact-FAQs op de contactpagina.',
+                            'Product FAQs appear on the product page; contact FAQs on the contact page.',
                         )}
                     </li>
                     <li>
                         {t(
-                            'Volgorde start opnieuw per context — 0, 1, 2… voor product en opnieuw voor contact.',
+                            'Order restarts per context — 0, 1, 2… for product and again for contact.',
                         )}
                     </li>
                     <li>
                         {t(
-                            'Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan. Pas per taal aan via Vertalingen.',
+                            'Text on this form is the source. DeepL fills NL, EN, and FR after saving. Adjust per language via Translations.',
                         )}
                     </li>
                     <li>
                         {t(
-                            'Alleen gepubliceerde FAQs zijn zichtbaar op de website en in SEO.',
+                            'Only published FAQs are visible on the website and in SEO.',
                         )}
                     </li>
                 </ul>
             </AdminPanel>
 
             {isEdit && faq ? (
-                <AdminPanel title={t('Overzicht')}>
+                <AdminPanel title={t('Overview')}>
                     <dl className="space-y-3 text-sm">
                         <div className="flex justify-between gap-3">
                             <dt className="text-muted-foreground">{t('ID')}</dt>
@@ -242,7 +242,7 @@ export function FaqFormAside({
                         </div>
                         <div className="flex justify-between gap-3">
                             <dt className="text-muted-foreground">
-                                {t('Volgorde')}
+                                {t('Order')}
                             </dt>
                             <dd className="font-medium">{faq.sort_order}</dd>
                         </div>
@@ -252,8 +252,8 @@ export function FaqFormAside({
                             </dt>
                             <dd className="font-medium">
                                 {faq.is_published
-                                    ? t('Gepubliceerd')
-                                    : t('Concept')}
+                                    ? t('Published')
+                                    : t('Draft')}
                             </dd>
                         </div>
                     </dl>

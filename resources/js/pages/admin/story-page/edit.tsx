@@ -121,12 +121,12 @@ function StoryPageForm({
 
     return (
         <>
-            <Head title={t('Ons verhaal')} />
+            <Head title={t('Our story')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Ons verhaal')}
+                    title={t('Our story')}
                     description={t(
-                        'Tekst en foto per onderdeel. Een uitgeschakeld onderdeel verdwijnt van de pagina. Zonder nieuwe foto blijft het huidige beeld staan.',
+                        'Copy and a photograph for each section. Turning a section off removes it from the page. Without a new photograph, the current image stays.',
                     )}
                     icon={ScrollText}
                 />
@@ -134,7 +134,7 @@ function StoryPageForm({
                     <AdminResourceShell
                         className="xl:grid-cols-[minmax(0,1fr)_20rem]"
                         aside={
-                            <AdminPanel title={t('Opslaan')}>
+                            <AdminPanel title={t('Save')}>
                                 <div className="space-y-2">
                                     <Button
                                         type="submit"
@@ -146,7 +146,7 @@ function StoryPageForm({
                                         ) : (
                                             <Save className="size-4" />
                                         )}
-                                        {t('Verhaal opslaan')}
+                                        {t('Save story')}
                                     </Button>
                                     <StoryPageTranslationsDialog
                                         locales={locales}
@@ -177,7 +177,7 @@ function StoryPageForm({
                                                         form.setData(section.visible, checked === true)
                                                     }
                                                 />
-                                                <Label htmlFor={section.visible}>{t('Actief')}</Label>
+                                                <Label htmlFor={section.visible}>{t('Active')}</Label>
                                             </div>
                                             {STORY_IMAGES.filter((image) => image.section === section.key).map(
                                                 (image) => {
@@ -216,9 +216,9 @@ function StoryPageForm({
                                                                 existingFiles={existingFiles}
                                                                 onRemoveExisting={() => form.setData(removeKey, true)}
                                                                 placeholder={t(
-                                                                    'Sleep een afbeelding hierheen of klik om te bladeren',
+                                                                    'Drag & drop an image, or click to browse',
                                                                 )}
-                                                                hint={t('PNG, JPG of WEBP')}
+                                                                hint={t('PNG, JPG or WEBP')}
                                                                 error={form.errors[fileKey]}
                                                             />
                                                             {!existingFiles.length &&
@@ -232,7 +232,7 @@ function StoryPageForm({
                                                             ) : null}
                                                             <p className="text-xs text-muted-foreground">
                                                                 {t(
-                                                                    'Zonder nieuwe foto blijft het huidige beeld staan.',
+                                                                    'Without a new photograph, the current image stays.',
                                                                 )}
                                                             </p>
                                                         </div>
@@ -244,7 +244,7 @@ function StoryPageForm({
                                                     <Label htmlFor={field.key}>
                                                         {t(field.label)}
                                                         {field.translated === false
-                                                            ? ` (${t('niet vertaald')})`
+                                                            ? ` (${t('not translated')})`
                                                             : ''}
                                                     </Label>
                                                     {field.long ? (

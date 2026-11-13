@@ -72,7 +72,7 @@ class OrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Jouw retouraanvraag is ontvangen.'),
+            'message' => __('Your return request has been received.'),
         ]);
 
         return redirect()->route('member.returns.show', [
@@ -109,7 +109,7 @@ class OrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Trackingnummer toegevoegd.'),
+            'message' => __('Tracking number added.'),
         ]);
 
         return back();
@@ -123,7 +123,7 @@ class OrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Retour geannuleerd.'),
+            'message' => __('Return cancelled.'),
         ]);
 
         return redirect()->route('member.orders.show', [

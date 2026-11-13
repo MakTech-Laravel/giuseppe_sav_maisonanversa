@@ -45,27 +45,27 @@ export default function MemberReturnCreate({
 
     return (
         <>
-            <Head title={t('Retourneren')} />
+            <Head title={t('Returns')} />
             <div className="mb-6">
                 <Link
                     href={`/${locale}/member/orders/${order.id}`}
                     className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase no-underline hover:text-cream"
                 >
-                    ← {t('Terug naar bestelling')}
+                    ← {t('Back to order')}
                 </Link>
             </div>
 
             <MemberPageHeader
-                eyebrow={t('Retour')}
-                title={t('Wat wil je retourneren?')}
+                eyebrow={t('Return')}
+                title={t('What would you like to return?')}
                 description={order.reference}
             />
 
             <ol className="mb-6 flex flex-wrap gap-2">
                 {[
-                    t('Artikelen'),
-                    t('Reden'),
-                    t('Bevestigen'),
+                    t('Items'),
+                    t('Reason'),
+                    t('Confirm'),
                 ].map((label, index) => (
                     <li
                         key={label}
@@ -91,7 +91,7 @@ export default function MemberReturnCreate({
                     <>
                         <div className={cn(stepKey !== 'items' && 'hidden')}>
                             <MemberPanel>
-                                <MemberSectionTitle title={t('Artikelen')} />
+                                <MemberSectionTitle title={t('Items')} />
                                 <label className="flex items-start gap-3">
                                     <input
                                         type="checkbox"
@@ -105,7 +105,7 @@ export default function MemberReturnCreate({
                                         </span>
                                         <span className="mt-2 block font-serif text-sm text-sand italic">
                                             {t(
-                                                'Stuur alles mee wat erbij hoorde: doos, Heritage Passport, kaarten en accessoires.',
+                                                'Include everything that came with it: box, Heritage Passport, cards and accessories.',
                                             )}
                                         </span>
                                     </span>
@@ -116,7 +116,7 @@ export default function MemberReturnCreate({
                         <div className={cn(stepKey !== 'reason' && 'hidden')}>
                             <MemberPanel>
                                 <MemberSectionTitle
-                                    title={t('Reden (optioneel)')}
+                                    title={t('Reason (optional)')}
                                 />
                                 <select
                                     name="reason"
@@ -127,7 +127,7 @@ export default function MemberReturnCreate({
                                     className="w-full border border-gold/25 bg-choc px-3 py-3 font-sans text-sm text-cream"
                                 >
                                     <option value="">
-                                        {t('Reden (optioneel)')}
+                                        {t('Reason (optional)')}
                                     </option>
                                     {reasons.map((option) => (
                                         <option
@@ -141,14 +141,14 @@ export default function MemberReturnCreate({
                                 <textarea
                                     name="comment"
                                     rows={3}
-                                    placeholder={t('Optionele toelichting')}
+                                    placeholder={t('Optional comment')}
                                     className="mt-3 w-full border border-gold/25 bg-choc px-3 py-3 font-sans text-sm text-cream"
                                 />
                                 {damaged ? (
                                     <div className="mt-4 space-y-3">
                                         <p className="font-sans text-sm text-sand">
                                             {t(
-                                                'We nemen contact met je op over de retourzending op onze kosten.',
+                                                'We will contact you about return shipping at our expense.',
                                             )}
                                         </p>
                                         <input
@@ -170,19 +170,19 @@ export default function MemberReturnCreate({
 
                         <div className={cn(stepKey !== 'review' && 'hidden')}>
                             <MemberPanel>
-                                <MemberSectionTitle title={t('Samenvatting')} />
+                                <MemberSectionTitle title={t('Summary')} />
                                 <p className="text-cream">
-                                    {t('Verwacht terugbetalingsbedrag')}: €
+                                    {t('Expected refund amount')}: €
                                     {expectedRefund}
                                 </p>
                                 <p className="mt-2 text-sand">{returnAddress}</p>
                                 <p className="mt-3 font-sans text-sm text-sand">
                                     {damaged
                                         ? t(
-                                              'We nemen contact met je op over de retourzending op onze kosten.',
+                                              'We will contact you about return shipping at our expense.',
                                           )
                                         : t(
-                                              'De kosten van de retourzending zijn voor jou. We raden een verzekerde zending met tracking aan.',
+                                              'Return shipping costs are yours. We recommend insured shipping with tracking.',
                                           )}
                                 </p>
                                 <label className="mt-4 flex items-start gap-3 text-cream">
@@ -195,7 +195,7 @@ export default function MemberReturnCreate({
                                     />
                                     <span>
                                         {t(
-                                            'Ik bevestig dat ik deze artikelen wil retourneren.',
+                                            'I confirm that I want to return these items.',
                                         )}
                                     </span>
                                 </label>
@@ -214,7 +214,7 @@ export default function MemberReturnCreate({
                                     onClick={() => setStep(step - 1)}
                                     className="inline-flex min-h-11 items-center justify-center border border-gold/40 px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase"
                                 >
-                                    {t('Terug')}
+                                    {t('Back')}
                                 </button>
                             )}
                             {step < STEPS.length - 1 ? (
@@ -223,7 +223,7 @@ export default function MemberReturnCreate({
                                     onClick={() => setStep(step + 1)}
                                     className="inline-flex min-h-11 items-center justify-center border border-cream bg-cream px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase"
                                 >
-                                    {t('Doorgaan')}
+                                    {t('Continue')}
                                 </button>
                             ) : (
                                 <button
@@ -231,7 +231,7 @@ export default function MemberReturnCreate({
                                     disabled={processing}
                                     className="inline-flex min-h-11 items-center justify-center border border-cream bg-cream px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase disabled:cursor-not-allowed disabled:opacity-60"
                                 >
-                                    {t('Retour bevestigen')}
+                                    {t('Confirm return')}
                                 </button>
                             )}
                         </div>

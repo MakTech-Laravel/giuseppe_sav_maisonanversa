@@ -24,11 +24,11 @@ import { Section, Wrap } from '@/components/maison/ui/section';
 import { cn } from '@/lib/utils';
 
 const PANEL_TITLES: Record<BureauPanelId, string> = {
-    bestel: 'Jouw bestelling volgen',
+    bestel: 'Track your order',
     care: 'Maison Care',
-    afspraak: 'Boek een afspraak',
+    afspraak: 'Book an appointment',
     concierge: 'Privé consult',
-    atelier: 'Vind ons atelier',
+    atelier: 'Find our atelier',
     faq: 'Veelgestelde vragen',
     feedback: 'Jouw mening',
 };
@@ -159,11 +159,11 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Eens Heritage Nº 001 levert, volg je hier de status van jouw editienummer. Tot die tijd zoeken wij jouw reservering handmatig op — stuur ons jouw naam of reserveringsnummer via WhatsApp of e-mail.',
+                            'Once Heritage Nº 001 delivers, you can track the status of your edition number here. Until then, we will look up your reservation manually — send us your name or reservation number via WhatsApp or email.',
                         )}
                     </p>
                     <BureauNote>
-                        Binnenkort beschikbaar — definitief bij lancering
+                        Coming soon — final at launch
                     </BureauNote>
                 </>
             );
@@ -172,7 +172,7 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Elke Heritage-racket wordt met de hand afgewerkt en verdient blijvende zorg. Wij adviseren over lederonderhoud, herstellingen en garantie. Bij twijfel stuur je de racket terug naar ons atelier in Antwerpen voor inspectie.',
+                            'Each Heritage racket is hand-finished and deserves ongoing care. We advise on leather maintenance, repairs and warranty. When in doubt, send the racket back to our atelier in Antwerp for inspection.',
                         )}
                     </p>
                     <BureauNote>
@@ -185,12 +185,12 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Bezoek ons atelier in Antwerpen voor een privé-beleving: houd de racket vast, voel het leder, en ontdek jouw nummer. Vraag een moment aan — wij bevestigen persoonlijk.',
+                            'Visit our atelier in Antwerp for a private experience: hold the racket, feel the leather, and discover your number. Request a moment — we will confirm personally.',
                         )}
                     </p>
                     <BureauForm
                         kind="appointment"
-                        submitLabel="Aanvraag versturen"
+                        submitLabel="Send request"
                     >
                         <BureauFieldRow>
                             <BureauInput
@@ -216,7 +216,7 @@ function BureauPanelBody({
                             <BureauSelect
                                 name="moment"
                                 options={[
-                                    'Voorkeur moment',
+                                    'Preferred time',
                                     'Ochtend',
                                     'Middag',
                                     'Einde dag',
@@ -225,10 +225,10 @@ function BureauPanelBody({
                         </BureauFieldRow>
                         <BureauTextarea
                             name="message"
-                            placeholder="Korte toelichting (optioneel)"
+                            placeholder="Brief note (optional)"
                         />
                     </BureauForm>
-                    <BureauNote>Aanvraag wordt bevestigd via e-mail</BureauNote>
+                    <BureauNote>Request will be confirmed via email</BureauNote>
                 </>
             );
         case 'concierge':
@@ -236,10 +236,10 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Sprekend met een Maison-specialist: een persoonlijk videogesprek over jouw nummer, de afwerking, het leder en het monogram. Geen druk, geen haast — alleen advies op maat.',
+                            'Speaking with a Maison specialist: a personal video call about your number, the finish, the leather and the monogram. No pressure, no rush — just tailored advice.',
                         )}
                     </p>
-                    <BureauForm kind="consult" submitLabel="Consult aanvragen">
+                    <BureauForm kind="consult" submitLabel="Request consultation">
                         <BureauFieldRow>
                             <BureauInput
                                 name="name"
@@ -259,15 +259,15 @@ function BureauPanelBody({
                             <BureauSelect
                                 name="soort"
                                 options={[
-                                    'Videogesprek',
-                                    'Telefoongesprek',
-                                    'Atelierbezoek Antwerpen',
+                                    'Video call',
+                                    'Phone call',
+                                    'Atelier visit Antwerp',
                                 ]}
                             />
                             <BureauSelect
                                 name="moment"
                                 options={[
-                                    'Voorkeur moment',
+                                    'Preferred time',
                                     'Ochtend',
                                     'Middag',
                                     'Einde dag',
@@ -276,7 +276,7 @@ function BureauPanelBody({
                         </BureauFieldRow>
                         <BureauTextarea
                             name="message"
-                            placeholder="Waarover wil je spreken? (optioneel)"
+                            placeholder="What would you like to discuss? (optional)"
                         />
                     </BureauForm>
                     <BureauNote>
@@ -290,14 +290,14 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Maison Anversa is gevestigd in het hart van Antwerpen. Bezoek op afspraak — wij verwelkomen je graag persoonlijk.',
+                            'Maison Anversa is located in the heart of Antwerp. Visit by appointment — we welcome you personally.',
                         )}
                     </p>
                     <p className="mt-1.5 font-serif text-lg text-gold">
-                        {t('Centrum Antwerpen · België')}
+                        {t('Central Antwerp · Belgium')}
                     </p>
                     <iframe
-                        title={t('Maison Anversa — Antwerpen')}
+                        title={t('Maison Anversa — Antwerp')}
                         loading="lazy"
                         src={mapSrc}
                         className="mt-4 h-60 w-full rounded-md border border-gold/20 brightness-[0.85] grayscale-[0.3]"
@@ -311,10 +311,10 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Jouw feedback vormt het huis mee. Vertel ons wat je vond — van de site tot de racket.',
+                            'Your feedback shapes the house. Tell us what you thought — from the site to the racket.',
                         )}
                     </p>
-                    <BureauForm kind="feedback" submitLabel="Verstuur feedback">
+                    <BureauForm kind="feedback" submitLabel="Send feedback">
                         <BureauFieldRow>
                             <BureauInput
                                 name="name"
@@ -333,7 +333,7 @@ function BureauPanelBody({
                         <BureauSelect
                             name="ervaring"
                             options={[
-                                'Jouw ervaring',
+                                'Your experience',
                                 'Uitstekend',
                                 'Goed',
                                 'Neutraal',
@@ -344,7 +344,7 @@ function BureauPanelBody({
                         <BureauTextarea
                             name="message"
                             rows={4}
-                            placeholder="Jouw feedback..."
+                            placeholder="Your feedback..."
                         />
                     </BureauForm>
                 </>

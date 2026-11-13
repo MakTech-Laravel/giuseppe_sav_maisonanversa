@@ -48,11 +48,11 @@ test('translated legal html is used for other locales and falls back to dutch', 
 
 test('legacy markdown legal bodies are converted to html for visitors', function () {
     $page = LegalPage::query()->where('slug', 'privacy')->firstOrFail();
-    $page->update(['body' => "## Privacybeleid\n\nEerste alinea."]);
+    $page->update(['body' => "## Privacybeleid\n\nFirst paragraph."]);
 
     $this->get(localized('maison.privacy'))
         ->assertOk()
         ->assertInertia(fn ($inertia) => $inertia
             ->where('legalPage.body', fn (string $body): bool => str_contains($body, '<h2>Privacybeleid</h2>')
-                && str_contains($body, '<p>Eerste alinea.</p>')));
+                && str_contains($body, '<p>First paragraph.</p>')));
 });

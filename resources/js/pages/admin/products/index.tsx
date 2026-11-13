@@ -131,14 +131,14 @@ export default function ProductsIndex({
                 <AdminPageHeader
                     title={t('Product')}
                     description={t(
-                        'Beheer limited editions en eenvoudige voorraadproducten.',
+                        'Manage limited editions and simple stock products.',
                     )}
                     icon={Package}
                 >
                     <Button asChild>
                         <Link href={products.create(locale)}>
                             <Plus className="h-4 w-4" />{' '}
-                            {t('Product toevoegen')}
+                            {t('Add product')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -146,7 +146,7 @@ export default function ProductsIndex({
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                     <div className="relative sm:col-span-2 xl:col-span-2">
                         <Label htmlFor="catalog-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -154,8 +154,8 @@ export default function ProductsIndex({
                             className="pl-9"
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op naam of slug…')}
-                            aria-label={t('Zoeken')}
+                            placeholder={t('Search by name or slug...')}
+                            aria-label={t('Search')}
                         />
                     </div>
                     <Select value={type} onValueChange={setType}>
@@ -163,17 +163,17 @@ export default function ProductsIndex({
                             className="w-full"
                             aria-label={t('Type')}
                         >
-                            <SelectValue placeholder={t('Alle types')} />
+                            <SelectValue placeholder={t('All types')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle types')}
+                                {t('All types')}
                             </SelectItem>
                             <SelectItem value="limited_edition">
-                                {t('Gelimiteerde editie')}
+                                {t('Limited edition')}
                             </SelectItem>
                             <SelectItem value="simple">
-                                {t('Eenvoudige voorraad')}
+                                {t('Simple stock')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -182,17 +182,17 @@ export default function ProductsIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             <SelectItem value="published">
-                                {t('Gepubliceerd')}
+                                {t('Published')}
                             </SelectItem>
                             <SelectItem value="draft">
-                                {t('Concept')}
+                                {t('Draft')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -208,13 +208,13 @@ export default function ProductsIndex({
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle Founding Circle')}
+                                {t('All Founding Circle')}
                             </SelectItem>
                             <SelectItem value="yes">
-                                {t('Geeft toegang')}
+                                {t('Grants access')}
                             </SelectItem>
                             <SelectItem value="no">
-                                {t('Geen toegang')}
+                                {t('No access')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -224,14 +224,14 @@ export default function ProductsIndex({
                     >
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Per pagina')}
+                            aria-label={t('Per page')}
                         >
-                            <SelectValue placeholder={t('Per pagina')} />
+                            <SelectValue placeholder={t('Per page')} />
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
                                 <SelectItem key={option} value={String(option)}>
-                                    {t('{{count}} per pagina', {
+                                    {t('{{count}} per page', {
                                         count: option,
                                     })}
                                 </SelectItem>
@@ -246,7 +246,7 @@ export default function ProductsIndex({
                             className="w-full xl:col-span-6 xl:w-auto xl:justify-self-start"
                         >
                             <X className="h-4 w-4" />
-                            {t('Filters wissen')}
+                            {t('Clear filters')}
                         </Button>
                     ) : null}
                 </div>
@@ -255,9 +255,9 @@ export default function ProductsIndex({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Naam')}</TableHead>
+                                <TableHead>{t('Name')}</TableHead>
                                 <TableHead>{t('Type')}</TableHead>
-                                <TableHead>{t('Bedrag')}</TableHead>
+                                <TableHead>{t('Amount')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead>{t('Founding Circle')}</TableHead>
                                 <TableHead />
@@ -270,7 +270,7 @@ export default function ProductsIndex({
                                         colSpan={6}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen producten gevonden.')}
+                                        {t('No products found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -286,8 +286,8 @@ export default function ProductsIndex({
                                         </TableCell>
                                         <TableCell>
                                             {product.type === 'limited_edition'
-                                                ? t('Gelimiteerde editie')
-                                                : t('Eenvoudige voorraad')}
+                                                ? t('Limited edition')
+                                                : t('Simple stock')}
                                         </TableCell>
                                         <TableCell>
                                             € {product.amount}
@@ -295,14 +295,14 @@ export default function ProductsIndex({
                                         <TableCell>
                                             <Badge variant="secondary">
                                                 {product.is_published
-                                                    ? t('Gepubliceerd')
-                                                    : t('Concept')}
+                                                    ? t('Published')
+                                                    : t('Draft')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>
                                             {product.grants_founding_circle
-                                                ? t('Geeft toegang')
-                                                : t('Geen toegang')}
+                                                ? t('Grants access')
+                                                : t('No access')}
                                         </TableCell>
                                         <TableCell className="space-x-2 text-right">
                                             <Button
@@ -317,7 +317,7 @@ export default function ProductsIndex({
                                                     })}
                                                 >
                                                     <Eye className="h-4 w-4" />
-                                                    {t('Bekijken')}
+                                                    {t('View')}
                                                 </Link>
                                             </Button>
                                             <Button
@@ -332,12 +332,12 @@ export default function ProductsIndex({
                                                     })}
                                                 >
                                                     <Pencil className="h-4 w-4" />
-                                                    {t('Bewerken')}
+                                                    {t('Edit')}
                                                 </Link>
                                             </Button>
                                             <ConfirmDeleteDialog
                                                 description={t(
-                                                    'Dit product en ongebruikte editiedelen worden permanent verwijderd.',
+                                                    'This product and unused edition pieces will be permanently deleted.',
                                                 )}
                                                 onConfirm={() =>
                                                     router.delete(
@@ -353,7 +353,7 @@ export default function ProductsIndex({
                                                     size="sm"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                    {t('Verwijderen')}
+                                                    {t('Remove')}
                                                 </Button>
                                             </ConfirmDeleteDialog>
                                         </TableCell>

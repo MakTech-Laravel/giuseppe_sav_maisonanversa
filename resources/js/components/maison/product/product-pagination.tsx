@@ -22,7 +22,7 @@ export function ProductPagination({
 
     return (
         <nav
-            aria-label={t('Producten paginering')}
+            aria-label={t('Products pagination')}
             className="mt-16 flex flex-col items-center"
         >
             <GoldRule center className="mx-auto" />
@@ -30,7 +30,7 @@ export function ProductPagination({
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
                 <PageControl
                     href={products.prev_page_url}
-                    label={t('Vorige pagina')}
+                    label={t('Previous page')}
                 />
 
                 {pages.map((page) => {
@@ -51,7 +51,7 @@ export function ProductPagination({
 
                 <PageControl
                     href={products.next_page_url}
-                    label={t('Volgende pagina')}
+                    label={t('Next page')}
                 />
             </div>
         </nav>

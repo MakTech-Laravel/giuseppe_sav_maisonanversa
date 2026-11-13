@@ -69,7 +69,7 @@ final class CommunityFeed
                     'name' => $post->author->name,
                     'info' => $post->created_at?->diffForHumans() ?? '',
                     'editionNumber' => self::editionNumberFor($post->author),
-                    'badge' => $post->is_official ? __('Officieel') : __('Lid'),
+                    'badge' => $post->is_official ? __('Official') : __('Member'),
                     'badgeOfficial' => $post->is_official,
                     'content' => $content,
                     'excerpt' => CommunityPostPresenter::excerpt($content),

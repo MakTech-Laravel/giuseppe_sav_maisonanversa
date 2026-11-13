@@ -63,7 +63,7 @@ export default function Register({ passwordRules }: Props) {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="gender">{t('Geslacht')}</Label>
+                                <Label htmlFor="gender">{t('Gender')}</Label>
                                 <GenderSelect tabIndex={3} />
                                 <InputError message={errors.gender} />
                             </div>

@@ -38,18 +38,18 @@ export default function OpeningOffersIndex({
 
     return (
         <>
-            <Head title={t('Opening-aanbod')} />
+            <Head title={t('Opening offer')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Opening-aanbod')}
+                    title={t('Opening offer')}
                     description={t(
-                        'Kies welk product de opening aanbiedt voor reservering.',
+                        'Choose which product the opening offers for reservation.',
                     )}
                     icon={DoorOpen}
                 >
                     <Button asChild>
                         <Link href={openingOffers.create(locale)}>
-                            <Plus className="h-4 w-4" /> {t('Aanbod toevoegen')}
+                            <Plus className="h-4 w-4" /> {t('Add offer')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -60,10 +60,10 @@ export default function OpeningOffersIndex({
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead>{t('Product')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
-                                <TableHead>{t('Nummers')}</TableHead>
-                                <TableHead>{t('Volgorde')}</TableHead>
+                                <TableHead>{t('Numbers')}</TableHead>
+                                <TableHead>{t('Order')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -75,7 +75,7 @@ export default function OpeningOffersIndex({
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
                                         {t(
-                                            'Nog geen opening-aanbod. De opening toont dan geen nummers.',
+                                            'No opening offer yet. The opening then shows no numbers.',
                                         )}
                                     </TableCell>
                                 </TableRow>
@@ -99,21 +99,21 @@ export default function OpeningOffersIndex({
                                                 }
                                             >
                                                 {offer.is_active
-                                                    ? t('Actief')
-                                                    : t('Inactief')}
+                                                    ? t('Active')
+                                                    : t('Inactive')}
                                             </Badge>
                                             {offer.is_active &&
                                             !offer.offerable ? (
                                                 <p className="text-xs text-destructive">
                                                     {t(
-                                                        'Niet zichtbaar: het product is niet gepubliceerd of niet actief.',
+                                                        'Not visible: the product is not published or not active.',
                                                     )}
                                                 </p>
                                             ) : null}
                                         </TableCell>
                                         <TableCell>
                                             {t(
-                                                '{{available}} van {{total}} beschikbaar',
+                                                '{{available}} of {{total}} available',
                                                 {
                                                     available: offer.available,
                                                     total: offer.total,
@@ -138,12 +138,12 @@ export default function OpeningOffersIndex({
                                                     })}
                                                 >
                                                     <Pencil className="h-4 w-4" />
-                                                    {t('Bewerken')}
+                                                    {t('Edit')}
                                                 </Link>
                                             </Button>
                                             <ConfirmDeleteDialog
                                                 description={t(
-                                                    'Dit aanbod wordt verwijderd. Het product zelf blijft bestaan.',
+                                                    'This offer will be removed. The product itself stays.',
                                                 )}
                                                 onConfirm={() =>
                                                     router.delete(
@@ -162,7 +162,7 @@ export default function OpeningOffersIndex({
                                                     size="sm"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                    {t('Verwijderen')}
+                                                    {t('Remove')}
                                                 </Button>
                                             </ConfirmDeleteDialog>
                                         </TableCell>
@@ -181,7 +181,7 @@ OpeningOffersIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: 'Opening-aanbod',
+            title: 'Opening offer',
             href: openingOffers.index(wayfinderLocale()),
         },
     ],

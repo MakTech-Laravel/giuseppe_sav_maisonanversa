@@ -2,14 +2,14 @@ import type { FormStep } from '@/components/admin/form-stepper';
 
 /** Shared step rail for product create and edit screens. */
 export const PRODUCT_FORM_STEPS: FormStep[] = [
-    { id: 'basics', label: 'Basis', description: 'Naam, slug en herotekst' },
-    { id: 'pricing', label: 'Prijs', description: 'Prijs, editie en voorraad' },
-    { id: 'media', label: 'Beeld', description: 'Cover en galerij' },
-    { id: 'sections', label: 'Secties', description: 'Inhoud van de pagina' },
-    { id: 'faq', label: 'FAQ', description: 'Vragen bij dit product' },
+    { id: 'basics', label: 'Basics', description: 'Name, slug and hero copy' },
+    { id: 'pricing', label: 'Price', description: 'Price, edition and stock' },
+    { id: 'media', label: 'Media', description: 'Cover and gallery' },
+    { id: 'sections', label: 'Sections', description: 'Page content' },
+    { id: 'faq', label: 'FAQ', description: 'Questions for this product' },
     {
         id: 'publish',
-        label: 'Publiceren',
-        description: 'Controleer en publiceer',
+        label: 'Publish',
+        description: 'Review and publish',
     },
 ];

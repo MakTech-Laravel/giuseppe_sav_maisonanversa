@@ -20,12 +20,12 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
         return [
             {
-                title: t('Profiel'),
+                title: t('Profile'),
                 href: edit(locale),
                 icon: null,
             },
             {
-                title: t('Beveiliging'),
+                title: t('Security'),
                 href: editSecurity(locale),
                 icon: null,
             },
@@ -39,11 +39,11 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                     {t('Account')}
                 </p>
                 <h1 className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
-                    {t('Instellingen')}
+                    {t('Settings')}
                 </h1>
                 <p className="max-w-2xl text-sm text-muted-foreground">
                     {t(
-                        'Beheer jouw profielfoto, accountgegevens en beveiliging.',
+                        'Manage your profile photo, account details, and security.',
                     )}
                 </p>
             </header>
@@ -52,7 +52,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 <aside className="w-full shrink-0 lg:w-52">
                     <nav
                         className="flex gap-1 overflow-x-auto lg:flex-col lg:space-y-1 lg:overflow-visible"
-                        aria-label={t('Instellingen')}
+                        aria-label={t('Settings')}
                     >
                         {navItems.map((item, index) => (
                             <Button

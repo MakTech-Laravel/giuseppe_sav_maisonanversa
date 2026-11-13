@@ -36,7 +36,7 @@ export function MemberTopbar({
                             Maison Anversa
                         </p>
                         <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                            {t('Lid')}
+                            {t('Member')}
                         </p>
                     </div>
                 </Link>

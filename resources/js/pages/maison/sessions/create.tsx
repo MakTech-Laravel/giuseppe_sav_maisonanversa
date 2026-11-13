@@ -108,9 +108,9 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
 
             <PageHero
                 eyebrow={t('Community')}
-                title={t('Sessie aanmaken')}
+                title={t('Create a session')}
                 subtitle={t(
-                    'Plan jouw volgende partij. Ontmoet leden. Speel samen.',
+                    'Plan your next match. Meet members. Play together.',
                 )}
             />
 
@@ -127,7 +127,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                 <SessionStep
                                     index={1}
                                     title={t('Sport')}
-                                    description={t('Kies de sport')}
+                                    description={t('Choose the sport')}
                                 >
                                     <ChoiceGroup
                                         label={t('Sport')}
@@ -146,7 +146,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                 <SessionStep
                                     index={2}
                                     title={t('Club')}
-                                    description={t('Zoek een club of corner')}
+                                    description={t('Search a club or corner')}
                                 >
                                     <ClubSearchField
                                         sport={form.data.sport}
@@ -161,8 +161,8 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                             <div className={visibility(2)}>
                                 <SessionStep
                                     index={3}
-                                    title={t('Wanneer')}
-                                    description={t('Datum, tijd en duur')}
+                                    title={t('When')}
+                                    description={t('Date, time and duration')}
                                 >
                                     <SessionScheduleFields
                                         date={form.data.date}
@@ -192,11 +192,11 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                             <div className={visibility(3)}>
                                 <SessionStep
                                     index={4}
-                                    title={t('Baanstatus')}
-                                    description={t('Is de baan al geboekt?')}
+                                    title={t('Court status')}
+                                    description={t('Is the court already booked?')}
                                 >
                                     <ChoiceGroup
-                                        label={t('Baanstatus')}
+                                        label={t('Court status')}
                                         options={options.court_statuses}
                                         value={form.data.court_status}
                                         onChange={(value) =>
@@ -206,7 +206,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                     />
                                     <p className="mt-3 font-sans text-[11px] text-stone">
                                         {t(
-                                            'De host is verantwoordelijk voor het boeken van de baan.',
+                                            'The host is responsible for booking the court.',
                                         )}
                                     </p>
                                 </SessionStep>
@@ -215,11 +215,11 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                             <div className={visibility(4)}>
                                 <SessionStep
                                     index={5}
-                                    title={t('Niveau')}
-                                    description={t('Spelniveau')}
+                                    title={t('Level')}
+                                    description={t('Playing level')}
                                 >
                                     <ChoiceGroup
-                                        label={t('Niveau')}
+                                        label={t('Level')}
                                         options={options.levels}
                                         value={form.data.level}
                                         onChange={(value) =>
@@ -233,11 +233,11 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                             <div className={visibility(5)}>
                                 <SessionStep
                                     index={6}
-                                    title={t('Wie mag meespelen?')}
-                                    description={t('Wie mag deelnemen?')}
+                                    title={t('Who can join?')}
+                                    description={t('Who may take part?')}
                                 >
                                     <ChoiceGroup
-                                        label={t('Wie mag meespelen?')}
+                                        label={t('Who can join?')}
                                         options={options.genders}
                                         value={form.data.gender}
                                         onChange={(value) =>
@@ -250,13 +250,13 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                             <div className={visibility(6)}>
                                 <SessionStep
                                     index={7}
-                                    title={t('Spelers')}
+                                    title={t('Players')}
                                     description={t(
-                                        'Je bent automatisch speler 1.',
+                                        'You are automatically player 1.',
                                     )}
                                 >
                                     <ChoiceGroup
-                                        label={t('Aantal spelers')}
+                                        label={t('Number of players')}
                                         options={options.capacities.map(
                                             (capacity) => ({
                                                 value: capacity,
@@ -294,12 +294,12 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                         <span className="flex flex-col gap-1">
                                             <span className="font-sans text-[10px] tracking-[0.16em] text-choc uppercase">
                                                 {t(
-                                                    'Aanvragen goedkeuren',
+                                                    'Approve requests',
                                                 )}
                                             </span>
                                             <span className="font-serif text-sm leading-snug text-stone">
                                                 {t(
-                                                    'Standaard speelt iedereen meteen mee. Schakel dit in als je elke aanvraag eerst wilt goedkeuren.',
+                                                    'By default everyone joins immediately. Turn this on if you want to approve each request first.',
                                                 )}
                                             </span>
                                         </span>
@@ -307,7 +307,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
 
                                     <label className="mt-6 flex flex-col gap-1.5">
                                         <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                                            {t('Notitie (optioneel)')}
+                                            {t('Note (optional)')}
                                         </span>
                                         <input
                                             type="text"
@@ -319,7 +319,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                                 )
                                             }
                                             placeholder={t(
-                                                'Bijv. niveau, taal, bijzonderheden...',
+                                                'E.g. level, language, notes...',
                                             )}
                                             className={fieldClassName}
                                         />
@@ -335,7 +335,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                         onClick={() => setStep(step + 1)}
                                         className="w-full bg-choc px-8 py-4 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2 md:hidden"
                                     >
-                                        {t('Doorgaan')}
+                                        {t('Continue')}
                                     </button>
                                 )}
 
@@ -345,7 +345,7 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                         onClick={() => setStep(step - 1)}
                                         className="w-full border border-gold/30 px-8 py-4 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold md:hidden"
                                     >
-                                        {t('Terug')}
+                                        {t('Back')}
                                     </button>
                                 )}
 
@@ -358,20 +358,20 @@ export default function SessionCreate({ options, host }: SessionCreateProps) {
                                         'md:block md:w-auto',
                                     )}
                                 >
-                                    {t('Sessie publiceren')}
+                                    {t('Publish session')}
                                 </button>
 
                                 <Link
                                     href={sessionRoutes.index.url(locale)}
                                     className="hidden border border-gold/30 px-10 py-4 text-center font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10 md:block"
                                 >
-                                    {t('Annuleren')}
+                                    {t('Cancel')}
                                 </Link>
                             </div>
 
                             <p className="border-t border-gold/15 px-6 py-4 text-center font-sans text-[10px] tracking-[0.08em] text-stone md:px-8">
                                 {t(
-                                    'Door een sessie aan te maken ga je akkoord met onze communityrichtlijnen.',
+                                    'By creating a session you agree to our community guidelines.',
                                 )}
                             </p>
                         </form>

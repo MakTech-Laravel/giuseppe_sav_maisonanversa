@@ -41,7 +41,7 @@ class PasswordResetOtpController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Als dit e-mailadres bij ons bekend is, ontvang je binnen enkele minuten een code.'),
+            'message' => __('If this email address is known to us, you will receive a code within a few minutes.'),
         ]);
 
         return back()->with('password_reset_otp_sent', true);
@@ -55,7 +55,7 @@ class PasswordResetOtpController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Wachtwoord succesvol opnieuw ingesteld. Log nu in.'),
+            'message' => __('Password reset successfully. Please log in now.'),
         ]);
 
         return redirect()->route('maison.home', ['locale' => $locale]);

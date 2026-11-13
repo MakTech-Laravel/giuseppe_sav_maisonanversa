@@ -19,7 +19,7 @@ export function LanguageSwitcher({
         <div
             className={cn('flex items-center gap-1.5', className)}
             role="group"
-            aria-label={t('Taal')}
+            aria-label={t('Language')}
             {...props}
         >
             {availableLocales.map((option) => (

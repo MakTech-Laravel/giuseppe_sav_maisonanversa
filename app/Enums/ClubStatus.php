@@ -15,7 +15,7 @@ enum ClubStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'In afwachting',
+            self::Pending => 'Pending',
             self::Approved => 'Goedgekeurd',
             self::Rejected => 'Afgewezen',
             self::Merged => 'Samengevoegd',

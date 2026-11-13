@@ -62,7 +62,7 @@ export function RepeaterField<T>({
                 >
                     <div className="mb-3 flex items-center justify-between gap-2">
                         <span className="text-xs font-medium text-muted-foreground">
-                            {t('Rij {{number}}', { number: index + 1 })}
+                            {t('Row {{number}}', { number: index + 1 })}
                         </span>
                         <div className="flex items-center gap-1">
                             <Button
@@ -71,7 +71,7 @@ export function RepeaterField<T>({
                                 variant="ghost"
                                 className="size-8"
                                 disabled={index === 0}
-                                aria-label={t('Omhoog verplaatsen')}
+                                aria-label={t('Move up')}
                                 onClick={() => move(index, index - 1)}
                             >
                                 <ArrowUpIcon className="size-4" />
@@ -82,7 +82,7 @@ export function RepeaterField<T>({
                                 variant="ghost"
                                 className="size-8"
                                 disabled={index === rows.length - 1}
-                                aria-label={t('Omlaag verplaatsen')}
+                                aria-label={t('Move down')}
                                 onClick={() => move(index, index + 1)}
                             >
                                 <ArrowDownIcon className="size-4" />
@@ -92,7 +92,7 @@ export function RepeaterField<T>({
                                 size="icon"
                                 variant="ghost"
                                 className="size-8 text-destructive hover:text-destructive"
-                                aria-label={t('Rij verwijderen')}
+                                aria-label={t('Remove row')}
                                 onClick={() =>
                                     onChange(
                                         rows.filter((_, at) => at !== index),

@@ -32,10 +32,10 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
     const fallbackSpecs = [
         'Full Carbon Frame — 3K weave',
         'Premium 3K Carbon Surface',
-        'Echte Lederen Greep',
-        'Heritage Certificaat + Paspoort',
-        'Founding Circle uitnodiging',
-        'Premium verpakking',
+        'Genuine Leather Grip',
+        'Heritage Certificate + Passport',
+        'Founding Circle invitation',
+        'Premium packaging',
     ];
     const list = specs.length > 0 ? specs : fallbackSpecs;
 
@@ -46,15 +46,15 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                     <Reveal>
                         <Eyebrow tone="gold2">{t('Heritage Nº 001')}</Eyebrow>
                         <h2 className="mt-3 mb-4 font-serif text-[clamp(28px,3.5vw,46px)] leading-[1.15] font-medium tracking-[0.06em] uppercase">
-                            {t('Het Eerste.')}
+                            {t('The First.')}
                             <br />
-                            {t('Het Originele.')}
+                            {t('The Original.')}
                             <br />
-                            {t('Het jouwe.')}
+                            {t('Yours.')}
                         </h2>
                         <p className="mb-5 text-[15px] leading-[1.8] text-choc3">
                             {t(
-                                'The Founding Edition. Beperkt tot 100 stuks in Europa. Elk vergezeld van een Heritage Certificaat, Paspoort en een persoonlijke brief.',
+                                'The Founding Edition. Limited to 100 pieces in Europe. Each accompanied by a Heritage Certificate, Passport and a personal letter.',
                             )}
                         </p>
                         <ul className="mb-8 flex flex-col gap-2">
@@ -72,7 +72,7 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                             variant="choc"
                             href={foundingProductUrl(locale)}
                         >
-                            {t('Ontdek het Racket →')}
+                            {t('Discover the Racket →')}
                         </MaisonButton>
                     </Reveal>
 
@@ -118,15 +118,15 @@ export function HomeProduct({ product }: { product?: HomeProductData | null }) {
                                 100
                             </div>
                             <div className="font-sans text-[8px] font-light tracking-[0.28em] text-choc3 uppercase">
-                                {t('Stuks Alleen')}
+                                {t('Pieces Only')}
                                 <br />
-                                {t('Europa')}
+                                {t('Europe')}
                             </div>
                             <div className="mx-auto my-3.5 h-px w-7 bg-gold/30" />
                             <div className="font-sans text-[8px] leading-[2] font-light tracking-[0.2em] text-choc3 uppercase">
-                                {t('Elk stuk individueel')}
+                                {t('Each piece individually')}
                                 <br />
-                                {t('genummerd')}
+                                {t('numbered')}
                             </div>
                             <div className="mt-3.5 font-serif text-lg font-medium tracking-[0.1em] text-choc lining-nums">
                                 001 / 100

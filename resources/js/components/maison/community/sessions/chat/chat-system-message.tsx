@@ -29,7 +29,7 @@ export function ChatSystemMessage({
             )}
         >
             <span className="font-sans text-[10px] font-medium tracking-[0.2em] text-gold uppercase">
-                {t('Systeem')}
+                {t('System')}
             </span>
 
             {message.attachments.length > 0 && (

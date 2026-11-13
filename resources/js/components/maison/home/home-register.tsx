@@ -15,22 +15,22 @@ export function HomeRegister() {
             <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-2 md:gap-16 lg:gap-24">
                 <div>
                     <p className="font-sans text-[10px] tracking-[0.28em] text-sand uppercase">
-                        {t('Het Founding Circle-register')}
+                        {t('The Founding Circle Register')}
                     </p>
                     <h2 className="mt-5 max-w-xl font-serif text-[clamp(32px,4.2vw,52px)] leading-[1.08] font-normal text-cream">
-                        {t('Honderd plaatsen. Eén eerste hoofdstuk.')}
+                        {t('One hundred places. One first chapter.')}
                     </h2>
                     <GoldRule className="my-6 bg-sand/50" />
                     <p className="max-w-md text-[15px] leading-[1.75] text-sand">
                         {t(
-                            'Elk lid van de Founding Circle wordt ingeschreven in het officiële register van het Huis, in de volgorde waarin zij toetraden. Zodra alle honderd plaatsen zijn ingenomen, sluit het eerste hoofdstuk voorgoed.',
+                            'Every member of the Founding Circle is inscribed in the official register of the House, in the order they joined. Once all one hundred places are taken, the first chapter closes for good.',
                         )}
                     </p>
                     <Link
                         href={`/${locale}/founding-circle/register`}
                         className="mt-10 inline-flex min-h-11 items-center border border-cream/70 px-6 font-sans text-[10px] tracking-[0.18em] text-cream uppercase no-underline transition-colors hover:bg-cream hover:text-choc"
                     >
-                        {t('Bekijk het register')}
+                        {t('View the Register')}
                     </Link>
                 </div>
 
@@ -45,7 +45,7 @@ export function HomeRegister() {
                             </span>
                         </p>
                         <p className="mt-3 font-sans text-[10px] tracking-[0.22em] text-sand uppercase">
-                            {t('Plaatsen ingeschreven')}
+                            {t('Places inscribed')}
                         </p>
                     </div>
 

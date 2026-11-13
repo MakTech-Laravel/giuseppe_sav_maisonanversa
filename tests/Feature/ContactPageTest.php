@@ -100,7 +100,7 @@ test('a contact inquiry is persisted and queued to the bureau inbox', function (
         ->and($inquiry->user_id)->toBeNull()
         ->and($inquiry->name)->toBe('Yusuf Savran')
         ->and($inquiry->email)->toBe('yusuf@example.com')
-        ->and($inquiry->subject)->toBe('Afspraak aanvraag')
+        ->and($inquiry->subject)->toBe('Appointment request')
         ->and($inquiry->message)->toBe('Graag een atelierbezoek.')
         ->and($inquiry->locale)->toBe('nl')
         ->and($inquiry->device_token)->not->toBeNull()

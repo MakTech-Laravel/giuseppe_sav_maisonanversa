@@ -10,11 +10,11 @@ import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
 import type { Edition } from '@/types/edition';
 
 const DEFAULT_INCLUDES = [
-    'Heritage Nº 001 racket (individueel genummerd)',
-    'Heritage Certificaat met oprichterzegel',
-    "Heritage Paspoort (24 pagina's)",
-    'Welkomstkaart & Oprichtersbrief',
-    'Founding Circle uitnodiging',
+    'Heritage Nº 001 racket (individually numbered)',
+    'Heritage Certificate with founder's seal',
+    "Heritage Passport (24 pages)",
+    'Welcome Card & Founder's Letter',
+    'Founding Circle invitation',
     'Premium canvas stofdoek',
 ] as const;
 
@@ -97,23 +97,23 @@ export function HomePreorder({
             <Wrap>
                 <div className="grid items-center gap-10 ma-lg:grid-cols-2 ma-lg:gap-20">
                     <Reveal>
-                        <Eyebrow>{t('Pre-Order Nu Open')}</Eyebrow>
+                        <Eyebrow>{t('Pre-Order Now Open')}</Eyebrow>
                         <h2 className="mt-3 mb-4 font-serif text-[clamp(28px,3.5vw,44px)] leading-[1.1] font-medium">
-                            {t('Reserveer')}
+                            {t('Reserve')}
                             <br />
-                            {t('jouw')}{' '}
-                            <em className="text-gold italic">{t('nummer')}</em>
+                            {t('your')}{' '}
+                            <em className="text-gold italic">{t('number')}</em>
                         </h2>
                         <p className="mb-6 text-[15px] leading-[1.85] text-sand">
                             {t(
-                                'Heritage Nº 001 is beschikbaar via pre-order. Je betaalt volledig vooraf en ontvangt jouw unieke editienummer. De Founding Edition wordt in één beperkte productieronde van 100 stuks vervaardigd. Bestellingen worden geleverd na definitieve kwaliteitscontrole en goedkeuring van de productie.',
+                                'Heritage Nº 001 is available via pre-order. You pay in full upfront and receive your unique edition number. The Founding Edition is produced in a single limited production run of 100 pieces. Orders are delivered after final quality control and production approval.',
                             )}
                         </p>
 
                         <div className="mb-8 flex flex-col gap-2.5">
                             <div className="flex items-baseline justify-between">
                                 <span className="font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
-                                    {t('Voortgang Founding Edition')}
+                                    {t('Founding Edition Progress')}
                                 </span>
                                 <span className="font-serif text-[22px] text-gold lining-nums">
                                     {shown} / {edition.total}
@@ -125,7 +125,7 @@ export function HomePreorder({
                                 aria-valuenow={edition.reserved}
                                 aria-valuemin={0}
                                 aria-valuemax={edition.total}
-                                aria-label={t('Voortgang Founding Edition')}
+                                aria-label={t('Founding Edition Progress')}
                             >
                                 <div
                                     className="h-full bg-gold transition-[width] duration-[1600ms] ease-[cubic-bezier(0.2,0.7,0.2,1)]"
@@ -134,7 +134,7 @@ export function HomePreorder({
                             </div>
                             <p className="font-sans text-[9px] tracking-[0.16em] text-stone/80 uppercase">
                                 {t(
-                                    'Handmatig bijgewerkt · live-voortgang actief bij lancering',
+                                    'Manually updated · live progress active at launch',
                                 )}
                             </p>
                         </div>
@@ -151,7 +151,7 @@ export function HomePreorder({
                             {priceLabel}
                         </div>
                         <div className="mb-7 font-sans text-[9px] tracking-[0.2em] text-stone uppercase">
-                            {t('Volledig vooraf · Inclusief Heritage Ervaring')}
+                            {t('Full upfront · Including Heritage Experience')}
                         </div>
                         <ul className="mb-7 flex flex-col gap-2.5">
                             {items.map((item) => (
@@ -168,7 +168,7 @@ export function HomePreorder({
                             onClick={openCertificate}
                             className="mb-4 block font-sans text-[9px] tracking-[0.2em] text-gold uppercase underline-offset-4 hover:underline"
                         >
-                            {t('Bekijk certificaatvoorbeeld →')}
+                            {t('View certificate sample →')}
                         </button>
                         {edition.soldOut ? (
                             <MaisonButton
@@ -177,7 +177,7 @@ export function HomePreorder({
                                 onClick={openNewsletter}
                                 className="mb-3"
                             >
-                                {t('Schrijf in voor Heritage Letter')}
+                                {t('Sign up for the Heritage Letter')}
                             </MaisonButton>
                         ) : (
                             <>
@@ -188,12 +188,12 @@ export function HomePreorder({
                                     onClick={() => openPurchase()}
                                     className="mb-3"
                                 >
-                                    {t('Reserveer Jouw Nummer')}
+                                    {t('Reserve Your Number')}
                                 </MaisonButton>
                                 {purchasesPaused ? (
                                     <p className="mb-3 text-center font-sans text-[10px] tracking-[0.12em] text-cream/70">
                                         {t(
-                                            'Reserveren is tijdelijk gepauzeerd.',
+                                            'Reservations are temporarily paused.',
                                         )}
                                     </p>
                                 ) : null}
@@ -202,7 +202,7 @@ export function HomePreorder({
                                     block
                                     onClick={openNewsletter}
                                 >
-                                    {t('Schrijf in voor Heritage Letter')}
+                                    {t('Sign up for the Heritage Letter')}
                                 </MaisonButton>
                             </>
                         )}

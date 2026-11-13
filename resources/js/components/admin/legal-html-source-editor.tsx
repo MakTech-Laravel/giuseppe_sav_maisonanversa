@@ -38,7 +38,7 @@ export function LegalHtmlSourceEditor({
         <div className="space-y-3">
             <div className="flex items-center justify-between gap-3">
                 <p className="font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
-                    {t('{{count}} regels', { count: lines })}
+                    {t('{{count}} lines', { count: lines })}
                 </p>
                 <Button
                     type="button"
@@ -48,7 +48,7 @@ export function LegalHtmlSourceEditor({
                     onClick={() => onChange(prettyPrintLegalHtml(value))}
                 >
                     <Wand2 className="size-3.5" />
-                    {t('Opmaken')}
+                    {t('Format')}
                 </Button>
             </div>
             <Textarea

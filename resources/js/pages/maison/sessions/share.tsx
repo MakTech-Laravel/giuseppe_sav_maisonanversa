@@ -44,7 +44,7 @@ export default function SessionShare({
     const { t } = useTranslation();
     const { auth, locale } = usePage().props;
     const shellActions = useOptionalShellActions();
-    const title = session.club?.name ?? t('Sessie');
+    const title = session.club?.name ?? t('Session');
     const isUpcoming = !session.is_past && !session.is_cancelled;
     const pendingCount = isUpcoming ? (session.pending_count ?? 0) : 0;
     const openSlots = isUpcoming ? session.open_slots : 0;
@@ -62,14 +62,14 @@ export default function SessionShare({
 
     function freePlacesLabel(): string {
         if (session.is_full || openSlots <= 0) {
-            return t('Volzet');
+            return t('Full');
         }
 
         if (openSlots === 1) {
-            return t('1 plaats vrij');
+            return t('1 spot left');
         }
 
-        return t('{{count}} plaatsen vrij', { count: openSlots });
+        return t('{{count}} spots left', { count: openSlots });
     }
 
     useResumePendingSessionJoin([session]);
@@ -100,7 +100,7 @@ export default function SessionShare({
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={`${t('Sessie')} · ${session.sport_label}`}
+                eyebrow={`${t('Session')} · ${session.sport_label}`}
                 title={title}
                 subtitle={session.club?.address ?? undefined}
             />
@@ -141,7 +141,7 @@ export default function SessionShare({
 
                             <div className="px-7 py-7">
                                 <h2 className="mb-1 font-sans text-[11px] font-medium tracking-[0.22em] text-choc uppercase">
-                                    {t('Spelers')}
+                                    {t('Players')}
                                 </h2>
                                 <p className="mb-5 font-sans text-[11px] text-stone">
                                     {session.participants_count} /{' '}
@@ -160,11 +160,11 @@ export default function SessionShare({
                                         </>
                                     )}
                                     {pendingCount > 0 &&
-                                        ` · ${t('{{count}} in afwachting', { count: pendingCount })}`}
+                                        ` · ${t('{{count}} pending', { count: pendingCount })}`}
                                     {isUpcoming &&
                                         session.registration_closed &&
                                         !session.is_full &&
-                                        ` · ${t('Inschrijving gesloten')}`}
+                                        ` · ${t('Registration closed')}`}
                                 </p>
 
                                 <ul className="flex flex-wrap gap-6">
@@ -206,7 +206,7 @@ export default function SessionShare({
                                                     …
                                                 </span>
                                                 <span className="mt-2 font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
-                                                    {t('In afwachting')}
+                                                    {t('Pending')}
                                                 </span>
                                             </li>
                                         ),
@@ -223,7 +223,7 @@ export default function SessionShare({
                                                         type="button"
                                                         onClick={handleJoin}
                                                         aria-label={t(
-                                                            'Vraag om mee te spelen',
+                                                            'Request to join',
                                                         )}
                                                         className="flex size-14 cursor-pointer items-center justify-center rounded-full border border-dashed border-gold/50 bg-gold/5 font-serif text-xl text-gold2 transition-colors hover:border-gold hover:bg-gold/15"
                                                     >
@@ -235,7 +235,7 @@ export default function SessionShare({
                                                     </span>
                                                 )}
                                                 <span className="mt-2 font-sans text-[9px] tracking-[0.16em] text-stone uppercase">
-                                                    {t('Vrij')}
+                                                    {t('Open')}
                                                 </span>
                                             </li>
                                         ),
@@ -244,7 +244,7 @@ export default function SessionShare({
 
                                 {result && (
                                     <p className="mt-7 font-sans text-[10px] tracking-[0.22em] text-stone uppercase">
-                                        {t('Uitslag')}
+                                        {t('Result')}
                                         <span className="ml-3 font-serif text-xl tracking-normal text-choc normal-case">
                                             {result}
                                         </span>
@@ -253,7 +253,7 @@ export default function SessionShare({
 
                                 {session.is_cancelled && (
                                     <p className="mt-7 font-serif text-base text-choc3 italic">
-                                        {t('Deze sessie is geannuleerd.')}
+                                        {t('This session has been cancelled.')}
                                     </p>
                                 )}
                             </div>
@@ -267,7 +267,7 @@ export default function SessionShare({
                                             className="cursor-pointer border-none bg-choc px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2"
                                         >
                                             {t(
-                                                'Maak een account om mee te doen',
+                                                'Create an account to join',
                                             )}
                                         </button>
                                     )}
@@ -279,8 +279,8 @@ export default function SessionShare({
                                             className="cursor-pointer border-none bg-choc px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2"
                                         >
                                             {session.requests_required
-                                                ? t('Vraag om mee te spelen')
-                                                : t('Doe mee')}
+                                                ? t('Request to join')
+                                                : t('Join')}
                                         </button>
                                     )}
 
@@ -293,7 +293,7 @@ export default function SessionShare({
                                             href={memberUrl}
                                             className="cursor-pointer border border-gold/30 bg-transparent px-7 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10"
                                         >
-                                            {t('Bekijk sessie')}
+                                            {t('View session')}
                                         </Link>
                                     )}
                                 </div>

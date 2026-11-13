@@ -225,7 +225,7 @@ export default function ShowProduct({
                     <Button variant="outline" asChild>
                         <Link href={products.index(locale)}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar product')}
+                            {t('Back to product')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -235,7 +235,7 @@ export default function ShowProduct({
                                 product: product.id,
                             })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -243,9 +243,9 @@ export default function ShowProduct({
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Werk dit catalogusproduct bij of ga terug naar de lijst.',
+                                'Update this catalog product or return to the list.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -257,7 +257,7 @@ export default function ShowProduct({
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
-                                        {t('Bewerken')}
+                                        {t('Edit')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -267,7 +267,7 @@ export default function ShowProduct({
                                 >
                                     <Link href={products.index(locale)}>
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug naar product')}
+                                        {t('Back to product')}
                                     </Link>
                                 </Button>
                                 <ProductTranslationsDialog
@@ -281,7 +281,7 @@ export default function ShowProduct({
                     }
                 >
                     <AdminPanel
-                        title={t('Basisgegevens')}
+                        title={t('Basic details')}
                         description={t(
                             'Zoals bezoekers dit product in de huidige taal zien.',
                         )}
@@ -289,13 +289,13 @@ export default function ShowProduct({
                         <div className="mb-5 flex flex-wrap gap-2">
                             <Badge variant="secondary">
                                 {isLimited
-                                    ? t('Gelimiteerde editie')
-                                    : t('Eenvoudige voorraad')}
+                                    ? t('Limited edition')
+                                    : t('Simple stock')}
                             </Badge>
                             <Badge variant="secondary">
                                 {product.is_published
-                                    ? t('Gepubliceerd')
-                                    : t('Concept')}
+                                    ? t('Published')
+                                    : t('Draft')}
                             </Badge>
                             {product.grants_founding_circle ? (
                                 <Badge variant="secondary">
@@ -304,63 +304,63 @@ export default function ShowProduct({
                             ) : null}
                         </div>
                         <div className="grid items-start gap-5 md:grid-cols-2">
-                            <Field label={t('Naam')} value={display.name} />
+                            <Field label={t('Name')} value={display.name} />
                             <Field
                                 label={t('Slug')}
                                 value={product.slug}
                                 mono
                             />
                             <Field
-                                label={t('Bedrag')}
+                                label={t('Amount')}
                                 value={`€ ${product.amount} ${product.currency.toUpperCase()}`}
                             />
                             <Field
-                                label={t('Verwachte levering')}
+                                label={t('Expected delivery')}
                                 value={
-                                    display.expected_delivery_label || t('Geen')
+                                    display.expected_delivery_label || t('None')
                                 }
                             />
                             <Field
-                                label={t('Productlabel')}
-                                value={display.eyebrow || t('Geen')}
+                                label={t('Product label')}
+                                value={display.eyebrow || t('None')}
                             />
                             <Field
-                                label={t('Hero-eyebrow')}
-                                value={display.hero_eyebrow || t('Geen')}
+                                label={t('Hero eyebrow')}
+                                value={display.hero_eyebrow || t('None')}
                             />
                             <div className="md:col-span-2">
                                 <Field
-                                    label={t('Hero-ondertitel')}
-                                    value={display.hero_subtitle || t('Geen')}
+                                    label={t('Hero subtitle')}
+                                    value={display.hero_subtitle || t('None')}
                                 />
                             </div>
                             <div className="md:col-span-2">
                                 <Field
-                                    label={t('Productbeschrijving')}
-                                    value={display.description || t('Geen')}
+                                    label={t('Product description')}
+                                    value={display.description || t('None')}
                                 />
                             </div>
                             <div className="md:col-span-2">
                                 <Field
-                                    label={t('Meta-titel')}
-                                    value={display.meta_title || t('Geen')}
+                                    label={t('Meta title')}
+                                    value={display.meta_title || t('None')}
                                 />
                             </div>
                             <div className="md:col-span-2">
                                 <Field
-                                    label={t('Meta-beschrijving')}
+                                    label={t('Meta description')}
                                     value={
-                                        display.meta_description || t('Geen')
+                                        display.meta_description || t('None')
                                     }
                                 />
                             </div>
                             <Field
-                                label={t('Meta-keywords')}
-                                value={display.meta_keywords || t('Geen')}
+                                label={t('Meta keywords')}
+                                value={display.meta_keywords || t('None')}
                             />
                             <Field
                                 label={t('Stripe price ID')}
-                                value={product.stripe_price_id ?? t('Geen')}
+                                value={product.stripe_price_id ?? t('None')}
                                 mono
                             />
                         </div>
@@ -368,15 +368,15 @@ export default function ShowProduct({
 
                     <AdminPanel
                         title={
-                            isLimited ? t('Editie & voorraad') : t('Voorraad')
+                            isLimited ? t('Edition & stock') : t('Stock')
                         }
                         description={
                             isLimited
                                 ? t(
-                                      'Editiegrootte, nummerformaat en gearchiveerde nummers.',
+                                      'Edition size, number format and archived numbers.',
                                   )
                                 : t(
-                                      'Eenvoudige voorraad van dit catalogusproduct.',
+                                      'Simple stock for this catalog product.',
                                   )
                         }
                     >
@@ -384,18 +384,18 @@ export default function ShowProduct({
                             <div className="grid gap-5">
                                 <div className="grid gap-5 md:grid-cols-3">
                                     <Field
-                                        label={t('Editiegrootte')}
+                                        label={t('Edition size')}
                                         value={
                                             product.edition_total != null
                                                 ? String(product.edition_total)
-                                                : t('Geen')
+                                                : t('None')
                                         }
                                     />
                                     <Field
                                         label={t('Prefix')}
                                         value={
                                             product.edition_number_prefix ||
-                                            t('Geen')
+                                            t('None')
                                         }
                                         mono
                                     />
@@ -403,7 +403,7 @@ export default function ShowProduct({
                                         label={t('Postfix')}
                                         value={
                                             product.edition_number_postfix ||
-                                            t('Geen')
+                                            t('None')
                                         }
                                         mono
                                     />
@@ -411,7 +411,7 @@ export default function ShowProduct({
 
                                 {exampleLabel ? (
                                     <p className="text-xs text-muted-foreground">
-                                        {t('Voorbeeld')}:{' '}
+                                        {t('Preview')}:{' '}
                                         <span className="font-mono text-foreground">
                                             {exampleLabel}
                                         </span>
@@ -423,16 +423,16 @@ export default function ShowProduct({
                                         <div className="flex flex-wrap items-end justify-between gap-2">
                                             <div>
                                                 <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                                                    {t('Archiefnummers')}
+                                                    {t('Archive numbers')}
                                                 </p>
                                                 <p className="mt-1 text-xs text-muted-foreground">
                                                     {t(
-                                                        'Gemarkeerde nummers zijn niet verkoopbaar.',
+                                                        'Marked numbers are not for sale.',
                                                     )}
                                                 </p>
                                             </div>
                                             <p className="text-xs text-muted-foreground">
-                                                {t('{{count}} gearchiveerd', {
+                                                {t('{{count}} archived', {
                                                     count: product
                                                         .archive_edition_numbers
                                                         .length,
@@ -489,11 +489,11 @@ export default function ShowProduct({
                             </div>
                         ) : (
                             <Field
-                                label={t('Voorraad')}
+                                label={t('Stock')}
                                 value={
                                     product.stock_quantity != null
                                         ? String(product.stock_quantity)
-                                        : t('Geen')
+                                        : t('None')
                                 }
                             />
                         )}
@@ -503,16 +503,16 @@ export default function ShowProduct({
                         product.og_image ||
                         product.gallery_images.length > 0) && (
                         <AdminPanel
-                            title={t('Afbeeldingen')}
+                            title={t('Images')}
                             description={t(
-                                'Primaire coverfoto, OG-afbeelding en galerijbeelden.',
+                                'Primary cover photo, OG image and gallery images.',
                             )}
                         >
                             <div className="grid gap-8">
                                 {product.primary_image ? (
                                     <div className="grid gap-2">
                                         <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                                            {t('Primaire afbeelding')}
+                                            {t('Primary image')}
                                         </p>
                                         <div className="w-full max-w-sm overflow-hidden rounded-lg border bg-card">
                                             <div className="flex aspect-4/3 max-h-64 w-full items-center justify-center bg-muted">
@@ -535,13 +535,13 @@ export default function ShowProduct({
                                 {product.og_image ? (
                                     <div className="grid gap-2">
                                         <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                                            {t('OG-afbeelding')}
+                                            {t('OG image')}
                                         </p>
                                         <div className="w-full max-w-sm overflow-hidden rounded-lg border bg-card">
                                             <div className="flex aspect-4/3 max-h-64 w-full items-center justify-center bg-muted">
                                                 <img
                                                     src={product.og_image.url}
-                                                    alt={t('OG-afbeelding')}
+                                                    alt={t('OG image')}
                                                     className="max-h-full max-w-full object-contain"
                                                 />
                                             </div>
@@ -555,7 +555,7 @@ export default function ShowProduct({
                                 {product.gallery_images.length > 0 ? (
                                     <div className="grid gap-2">
                                         <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                                            {t('Galerij')}
+                                            {t('Gallery')}
                                         </p>
                                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                                             {product.gallery_images.map(
@@ -588,7 +588,7 @@ export default function ShowProduct({
                     )}
 
                     <AdminPanel
-                        title={t('Paginasecties')}
+                        title={t('Page sections')}
                         description={t(
                             'Overzicht van de secties op de publieke productpagina. Bewerk de inhoud via het tabblad Secties.',
                         )}
@@ -615,7 +615,7 @@ export default function ShowProduct({
                                                 {entry?.uses_items ? (
                                                     <p className="text-xs text-muted-foreground">
                                                         {t(
-                                                            '{{count}} onderdelen',
+                                                            '{{count}} items',
                                                             {
                                                                 count: section
                                                                     .items
@@ -659,8 +659,8 @@ export default function ShowProduct({
                                                     }
                                                 >
                                                     {section.is_visible
-                                                        ? t('Zichtbaar')
-                                                        : t('Verborgen')}
+                                                        ? t('Visible')
+                                                        : t('Hidden')}
                                                 </Badge>
                                             </div>
                                         </div>
@@ -675,9 +675,9 @@ export default function ShowProduct({
                     </AdminPanel>
 
                     <AdminPanel
-                        title={t('Veelgestelde vragen')}
+                        title={t('Frequently asked questions')}
                         description={t(
-                            'Vragen en antwoorden die alleen op dit product worden getoond.',
+                            'Questions and answers shown only on this product.',
                         )}
                     >
                         {product.faqs.length > 0 ? (
@@ -747,8 +747,8 @@ export default function ShowProduct({
                                                     className="shrink-0"
                                                 >
                                                     {faq.is_published
-                                                        ? t('Gepubliceerd')
-                                                        : t('Concept')}
+                                                        ? t('Published')
+                                                        : t('Draft')}
                                                 </Badge>
                                             </div>
                                         </div>
@@ -760,15 +760,15 @@ export default function ShowProduct({
                             </div>
                         ) : (
                             <p className="text-sm text-muted-foreground">
-                                {t('Nog geen vragen voor dit product.')}
+                                {t('No questions for this product yet.')}
                             </p>
                         )}
                     </AdminPanel>
 
                     <AdminPanel
-                        title={t('Publicatie')}
+                        title={t('Publication')}
                         description={t(
-                            'Publicatiestatus en Founding Circle-toegang.',
+                            'Publication status and Founding Circle access.',
                         )}
                     >
                         <div className="grid gap-5 sm:grid-cols-2">
@@ -776,16 +776,16 @@ export default function ShowProduct({
                                 label={t('Status')}
                                 value={
                                     product.is_published
-                                        ? t('Gepubliceerd')
-                                        : t('Concept')
+                                        ? t('Published')
+                                        : t('Draft')
                                 }
                             />
                             <Field
                                 label={t('Founding Circle')}
                                 value={
                                     product.grants_founding_circle
-                                        ? t('Geeft toegang')
-                                        : t('Geen toegang')
+                                        ? t('Grants access')
+                                        : t('No access')
                                 }
                             />
                         </div>

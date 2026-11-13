@@ -23,10 +23,10 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
         <>
             <Head title={user.name} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-                <AdminPageHeader title={t('Beheerdersprofiel')} icon={IdCard}>
+                <AdminPageHeader title={t('Administrator profile')} icon={IdCard}>
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     {can(PERMISSIONS.USERS.EDIT) && (
@@ -37,7 +37,7 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                                     user: user.id,
                                 })}
                             >
-                                <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                                <Pencil className="h-4 w-4" /> {t('Edit')}
                             </Link>
                         </Button>
                     )}
@@ -46,9 +46,9 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Beheer dit personeelsaccount vanuit het adminpaneel.',
+                                'Manage this staff account from the admin panel.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -61,7 +61,7 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                                             })}
                                         >
                                             <Pencil className="h-4 w-4" />{' '}
-                                            {t('Bewerken')}
+                                            {t('Edit')}
                                         </Link>
                                     </Button>
                                 )}
@@ -74,14 +74,14 @@ export default function ShowAdmin({ user }: { user: AdminUser }) {
                                         href={admins.index(wayfinderLocale())}
                                     >
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug naar beheerders')}
+                                        {t('Back to administrators')}
                                     </Link>
                                 </Button>
                             </div>
                         </AdminPanel>
                     }
                 >
-                    <AdminUserProfile user={user} idLabel={t('Beheerder-ID')} />
+                    <AdminUserProfile user={user} idLabel={t('Administrator ID')} />
                 </AdminResourceShell>
             </div>
         </>

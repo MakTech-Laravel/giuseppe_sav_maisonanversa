@@ -74,15 +74,15 @@ export function MatchCardShare({
         <div className={cn('flex flex-col gap-5', className)}>
             <div>
                 <h2 className="mb-1 font-sans text-[11px] font-medium tracking-[0.22em] text-choc uppercase">
-                    {t('Wedstrijdkaart')}
+                    {t('Match card')}
                 </h2>
                 <p className="font-serif text-base text-choc3 italic">
                     {card.has_result
                         ? t(
-                              'Met de officiële uitslag. Deel ze met je vrienden of bewaar ze als herinnering.',
+                              'With the official result. Share it with your friends or keep it as a memory.',
                           )
                         : t(
-                              'Deel de kaart nu al, of na de wedstrijd met de uitslag.',
+                              'Share the card now, or after the match with the result.',
                           )}
                 </p>
             </div>
@@ -109,7 +109,7 @@ export function MatchCardShare({
             <img
                 key={imageUrl}
                 src={imageUrl}
-                alt={t('Wedstrijdkaart')}
+                alt={t('Match card')}
                 loading="lazy"
                 className={cn(
                     'mx-auto w-full border border-gold/15 bg-choc2 object-contain',
@@ -126,7 +126,7 @@ export function MatchCardShare({
                     disabled={sharing}
                     className={cn(solidButton, 'col-span-2')}
                 >
-                    {t('Deel jouw kaart')}
+                    {t('Share your card')}
                 </button>
                 <a href={downloadUrl} className={outlineButton}>
                     {t('Download')}
@@ -136,7 +136,7 @@ export function MatchCardShare({
                     onClick={() => copy(card.share_url)}
                     className={outlineButton}
                 >
-                    {copiedText ? t('Link gekopieerd') : t('Kopieer link')}
+                    {copiedText ? t('Link copied') : t('Copy link')}
                 </button>
             </div>
         </div>
@@ -166,7 +166,7 @@ export function CopyShareLinkButton({
                 className,
             )}
         >
-            {copiedText ? t('Link gekopieerd') : t('Kopieer link')}
+            {copiedText ? t('Link copied') : t('Copy link')}
         </button>
     );
 }

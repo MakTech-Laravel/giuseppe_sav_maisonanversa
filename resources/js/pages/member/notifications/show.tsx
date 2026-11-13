@@ -18,7 +18,7 @@ export default function MemberNotificationShow({
     const locale = wayfinderLocale();
 
     const destroy = () => {
-        if (!window.confirm(t('Deze melding uit jouw inbox verwijderen?'))) {
+        if (!window.confirm(t('Remove this notification from your inbox?'))) {
             return;
         }
 
@@ -38,12 +38,12 @@ export default function MemberNotificationShow({
                     href={memberNotifications.index(locale)}
                     className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase no-underline hover:text-cream"
                 >
-                    ← {t('Terug naar meldingen')}
+                    ← {t('Back to notifications')}
                 </Link>
             </div>
 
             <MemberPageHeader
-                eyebrow={notification.type_label ?? t('Melding')}
+                eyebrow={notification.type_label ?? t('Notification')}
                 title={notification.title}
             />
 
@@ -51,7 +51,7 @@ export default function MemberNotificationShow({
                 <MemberStatusPill
                     tone={notification.read ? 'neutral' : 'success'}
                 >
-                    {notification.read ? t('Gelezen') : t('Ongelezen')}
+                    {notification.read ? t('Read') : t('Unread')}
                 </MemberStatusPill>
                 {notification.created_at ? (
                     <span className="font-sans text-[10px] tracking-[0.14em] text-sand uppercase">
@@ -73,7 +73,7 @@ export default function MemberNotificationShow({
                             href={notification.href}
                             className="inline-flex min-h-11 items-center bg-gold px-5 font-sans text-[10px] tracking-[0.2em] text-choc uppercase no-underline transition-colors hover:bg-gold2 hover:text-cream"
                         >
-                            {notification.link_label ?? t('Openen')}
+                            {notification.link_label ?? t('Open')}
                         </a>
                     ) : null}
                     <button
@@ -81,7 +81,7 @@ export default function MemberNotificationShow({
                         onClick={destroy}
                         className="inline-flex min-h-11 items-center font-sans text-[10px] tracking-[0.2em] text-sand uppercase transition-colors hover:text-cream"
                     >
-                        {t('Verwijderen')}
+                        {t('Remove')}
                     </button>
                 </div>
             </MemberPanel>

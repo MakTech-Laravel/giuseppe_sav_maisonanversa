@@ -44,7 +44,7 @@ export function ConfirmDeleteDialog({
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        {title ?? t('Weet je het absoluut zeker?')}
+                        {title ?? t('Are you absolutely sure?')}
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                         {description}
@@ -52,7 +52,7 @@ export function ConfirmDeleteDialog({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={processing}>
-                        {t('Annuleren')}
+                        {t('Cancel')}
                     </AlertDialogCancel>
                     <Button
                         variant="destructive"
@@ -66,7 +66,7 @@ export function ConfirmDeleteDialog({
                         {processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {confirmLabel ?? t('Verwijderen')}
+                        {confirmLabel ?? t('Remove')}
                     </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>

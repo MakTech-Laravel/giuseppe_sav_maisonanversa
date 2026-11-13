@@ -33,9 +33,9 @@ class NewsletterSubscribeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => __('Vul een geldig e-mailadres in.'),
-            'email.email' => __('Vul een geldig e-mailadres in.'),
-            'website.prohibited' => __('Vul een geldig e-mailadres in.'),
+            'email.required' => __('Please enter a valid email address.'),
+            'email.email' => __('Please enter a valid email address.'),
+            'website.prohibited' => __('Please enter a valid email address.'),
         ];
     }
 }

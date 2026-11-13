@@ -23,12 +23,12 @@ export default function House() {
                         className="mx-auto mb-1.5 w-[min(340px,72vw)] opacity-94 drop-shadow-[0_6px_30px_rgba(0,0,0,0.4)]"
                     />
                     <h1 className="mt-3.5 font-serif text-[clamp(36px,5vw,56px)] leading-[1.1] font-normal text-cream">
-                        {t('Het Huis')}
+                        {t('The House')}
                     </h1>
                     <GoldRule center className="mx-auto" />
                     <p className="mx-auto mt-5 max-w-160 text-[15px] leading-[1.85] text-sand">
                         {t(
-                            'Acht kamers, acht hoofdstukken. Stap binnen door op een ruimte te klikken — elke kamer brengt je naar een deel van het huis.',
+                            'Eight rooms, eight chapters. Step inside by clicking on a space — each room takes you to a part of the house.',
                         )}
                     </p>
                 </Wrap>
@@ -44,9 +44,9 @@ export default function House() {
 
                     <div className="mt-10 flex flex-wrap justify-center gap-x-7 gap-y-3.5">
                         <LegendItem>
-                            {t('Klik een kamer om binnen te treden')}
+                            {t('Click a room to enter')}
                         </LegendItem>
-                        <LegendItem>{t('8 kamers · 1 huis')}</LegendItem>
+                        <LegendItem>{t('8 rooms · 1 house')}</LegendItem>
                     </div>
                 </Wrap>
             </Section>

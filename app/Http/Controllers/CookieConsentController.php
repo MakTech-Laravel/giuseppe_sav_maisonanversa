@@ -25,7 +25,7 @@ class CookieConsentController extends Controller
 
         Cookie::queue('maison_consent', $payload, 60 * 24 * 365);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Cookievoorkeuren opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Cookie preferences saved.')]);
 
         return back();
     }

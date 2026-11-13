@@ -27,9 +27,9 @@ export default function Community({ posts }: CommunityPageProps) {
 
             <PageHero
                 eyebrow={t('Founding Circle')}
-                title={t('De Community')}
+                title={t('The Community')}
                 subtitle={t(
-                    'Een besloten ruimte voor leden van het huis. Deel jouw ervaringen, plan sessies en ontdek exclusieve evenementen.',
+                    'A private space for members of the house. Share your experiences, plan sessions and discover exclusive events.',
                 )}
             />
 

@@ -14,12 +14,12 @@ export default function ClubCreate({ options }: { options: ClubFormOptions }) {
 
     return (
         <>
-            <Head title={t('Club toevoegen')} />
+            <Head title={t('Add club')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Club toevoegen')}
+                    title={t('Add club')}
                     description={t(
-                        'Door de Maison aangemaakte clubs zijn direct beschikbaar voor leden.',
+                        'Clubs created by the Maison are immediately available to members.',
                     )}
                     icon={Building2}
                 />
@@ -28,7 +28,7 @@ export default function ClubCreate({ options }: { options: ClubFormOptions }) {
                     options={options}
                     action={clubsRoutes.store(locale).url}
                     method="post"
-                    submitLabel={t('Club toevoegen')}
+                    submitLabel={t('Add club')}
                 />
             </div>
         </>

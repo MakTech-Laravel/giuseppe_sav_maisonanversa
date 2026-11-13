@@ -14,11 +14,11 @@ export default function Contact() {
                 eyebrow="Bureau"
                 title={
                     <>
-                        {t('Hoe kunnen wij je')} <em>{t('helpen?')}</em>
+                        {t('How can we')} <em>{t('help?')}</em>
                     </>
                 }
                 subtitle={t(
-                    'Welkom bij Maison Anversa. Selecteer een van de onderstaande opties — wij antwoorden altijd persoonlijk, binnen 24 uur op werkdagen.',
+                    'Welcome to Maison Anversa. Select one of the options below — we always respond personally, within 24 hours on business days.',
                 )}
             />
 

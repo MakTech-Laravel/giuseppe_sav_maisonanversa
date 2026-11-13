@@ -69,10 +69,10 @@ export default function EditJournalArticle({ article }: ArticleEditProps) {
 
     return (
         <>
-            <Head title={t('Journalartikel bewerken')} />
+            <Head title={t('Edit journal article')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Journalartikel bewerken')}
+                    title={t('Edit journal article')}
                     description={article.title}
                     icon={BookOpen}
                 >
@@ -83,7 +83,7 @@ export default function EditJournalArticle({ article }: ArticleEditProps) {
                                 article: Number(article.id),
                             })}
                         >
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -98,7 +98,7 @@ export default function EditJournalArticle({ article }: ArticleEditProps) {
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {t('Opslaan')}
+                        {t('Save')}
                     </Button>
                 </form>
             </div>

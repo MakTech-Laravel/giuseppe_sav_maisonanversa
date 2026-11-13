@@ -111,15 +111,15 @@ export default function ClubShow({ club }: { club: ClubProfile }) {
                         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
                             <div>
                                 <h2 className="font-serif text-[28px] font-medium text-choc">
-                                    {t('Komende sessies')}
+                                    {t('Upcoming sessions')}
                                 </h2>
                                 <p className="mt-1 font-sans text-sm text-choc3">
                                     {club.upcoming_sessions_count === 0
                                         ? t(
-                                              'Nog geen open sessies op deze locatie.',
+                                              'No open sessions at this location yet.',
                                           )
                                         : t(
-                                              '{{count}} open sessie(s) op deze locatie.',
+                                              '{{count}} open session(s) at this location.',
                                               {
                                                   count: club.upcoming_sessions_count,
                                               },
@@ -131,14 +131,14 @@ export default function ClubShow({ club }: { club: ClubProfile }) {
                                 href={sessionRoutes.create.url(locale)}
                                 className="inline-flex items-center border border-gold/30 px-5 py-3 font-sans text-[10px] tracking-[0.18em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10"
                             >
-                                {t('Plan een sessie')}
+                                {t('Plan a session')}
                             </Link>
                         </div>
 
                         {club.upcoming_sessions.length === 0 ? (
                             <p className="border border-dashed border-gold/25 bg-cream2 px-6 py-14 text-center font-sans text-sm text-stone">
                                 {t(
-                                    'Nog geen open sessies op deze locatie. Plan de eerste.',
+                                    'No open sessions at this location yet. Plan the first one.',
                                 )}
                             </p>
                         ) : (

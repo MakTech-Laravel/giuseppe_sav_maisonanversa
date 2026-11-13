@@ -74,13 +74,13 @@ class DashboardController extends Controller implements HasMiddleware
                 'username' => $user->username,
                 'email' => $user->email,
                 'editionNumber' => $number,
-                'orderStatus' => $heritage ? $orders->statusLabel($heritage->status) : __('Geen editie'),
+                'orderStatus' => $heritage ? $orders->statusLabel($heritage->status) : __('No edition'),
                 'reservedAt' => $heritage?->created_at?->translatedFormat('j F Y') ?? '',
             ],
             'stats' => [
-                ['label' => __('Editie'), 'value' => $number === '—' ? '—' : 'No.'.$number, 'hint' => __('Founding Edition')],
-                ['label' => __('Bestelling'), 'value' => $heritage ? $orders->statusLabel($heritage->status) : __('Geen'), 'hint' => $heritage?->created_at?->toDateString() ?? ''],
-                ['label' => __('Circle'), 'value' => $user->isFoundingCircle() ? __('Lid') : __('Nog niet'), 'hint' => __('Founding Circle')],
+                ['label' => __('Edition'), 'value' => $number === '—' ? '—' : 'No.'.$number, 'hint' => __('Founding Edition')],
+                ['label' => __('Order'), 'value' => $heritage ? $orders->statusLabel($heritage->status) : __('None'), 'hint' => $heritage?->created_at?->toDateString() ?? ''],
+                ['label' => __('Circle'), 'value' => $user->isFoundingCircle() ? __('Member') : __('Not yet'), 'hint' => __('Founding Circle')],
             ],
             'recentOrders' => $user->orders()
                 ->latest()
@@ -110,8 +110,8 @@ class DashboardController extends Controller implements HasMiddleware
                 'status' => $order->status->label(),
                 'deliveryWindow' => $order->product?->translated('expected_delivery_label')
                     ?? $order->shipped_at?->toDateString()
-                    ?? __('In productie'),
-                'certificate' => __('Gekoppeld aan Nº :number', ['number' => $number]),
+                    ?? __('In production'),
+                'certificate' => __('Linked to Nº :number', ['number' => $number]),
                 'passport' => __('Vier pagina\'s · gekoppeld aan Nº :number', ['number' => $number]),
             ],
         ]);
@@ -220,7 +220,7 @@ class DashboardController extends Controller implements HasMiddleware
 
         $request->user()->update(['session_emails' => $validated['session_emails']]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Voorkeuren opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Preferences saved.')]);
 
         return back();
     }
@@ -237,7 +237,7 @@ class DashboardController extends Controller implements HasMiddleware
             $locale,
         );
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Voorkeuren opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Preferences saved.')]);
 
         return back();
     }
@@ -294,7 +294,7 @@ class DashboardController extends Controller implements HasMiddleware
             $subscription->rebindEmail($previousEmail, $user);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profiel bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
 
         return to_route('member.profile');
     }

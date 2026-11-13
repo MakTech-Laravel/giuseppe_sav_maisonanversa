@@ -39,12 +39,12 @@ export function BureauForm({
             {({ processing, recentlySuccessful, errors }) =>
                 recentlySuccessful ? (
                     <SuccessPanel
-                        title={t('Jouw bericht is ontvangen.')}
+                        title={t('Your message has been received.')}
                         icon="✓"
                         className="text-left [&_div]:text-sand [&_h3]:text-cream"
                     >
                         <p>
-                            {t('Wij bevestigen persoonlijk zo snel mogelijk.')}
+                            {t('We will confirm personally as soon as possible.')}
                         </p>
                     </SuccessPanel>
                 ) : (
@@ -76,7 +76,7 @@ export function BureauForm({
                             className="mt-1"
                             disabled={processing}
                         >
-                            {processing ? t('Bezig…') : t(submitLabel)}
+                            {processing ? t('Working...') : t(submitLabel)}
                         </MaisonButton>
                     </>
                 )

@@ -127,7 +127,7 @@ export function ClubTranslationsDialog({
             <DialogTrigger asChild>
                 <Button type="button" variant="outline" size="sm">
                     <Languages className="size-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                     {hasPendingTranslations && (
                         <TriangleAlert className="size-3.5 text-amber-500" />
                     )}
@@ -135,10 +135,10 @@ export function ClubTranslationsDialog({
             </DialogTrigger>
             <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
                 <DialogHeader>
-                    <DialogTitle>{t('Corner vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Corner translations')}</DialogTitle>
                     <DialogDescription>
                         {t(
-                            'Bewerk vertalingen per taal. Bron tekst wijzig je via Club bewerken; DeepL vertaalt vanuit die bron.',
+                            'Edit translations per language. Change source text via Edit Club; DeepL translates from that source.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -148,7 +148,7 @@ export function ClubTranslationsDialog({
                         <TriangleAlert />
                         <AlertDescription>
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla de Club opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Some translations are still missing. Save the Club again or use DeepL to generate them.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -172,7 +172,7 @@ export function ClubTranslationsDialog({
 
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-1.5">
-                        <Label>{t('Corner titel')}</Label>
+                        <Label>{t('Corner title')}</Label>
                         <Input
                             value={copy?.corner_title ?? ''}
                             onChange={(event) =>
@@ -191,7 +191,7 @@ export function ClubTranslationsDialog({
                         />
                     </div>
                     <div className="space-y-1.5">
-                        <Label>{t('Corner tekst')}</Label>
+                        <Label>{t('Corner text')}</Label>
                         <Textarea
                             rows={4}
                             value={copy?.corner_body ?? ''}
@@ -211,7 +211,7 @@ export function ClubTranslationsDialog({
                         />
                     </div>
                     <div className="space-y-1.5">
-                        <Label>{t('Corner locatie')}</Label>
+                        <Label>{t('Corner location')}</Label>
                         <Input
                             value={copy?.corner_location ?? ''}
                             onChange={(event) =>
@@ -244,7 +244,7 @@ export function ClubTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="size-4" />
                                 )}
-                                {t('DeepL voor deze taal')}
+                                {t('DeepL for this language')}
                             </Button>
                             <Button
                                 type="button"
@@ -258,11 +258,11 @@ export function ClubTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="size-4" />
                                 )}
-                                {t('DeepL alle talen')}
+                                {t('DeepL all languages')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                     </DialogFooter>
                 </form>

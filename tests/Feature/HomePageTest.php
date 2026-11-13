@@ -103,7 +103,7 @@ test('the home product section keeps the three-column founding edition layout', 
         ->toContain('asset="heritage-001-front"')
         ->toContain('aspect-3/4')
         ->toContain('001 / 100')
-        ->toContain('Stuks Alleen')
+        ->toContain('Pieces Only')
         ->not->toContain('hidden ma-lg:block');
 
     expect(Imagery::existingPaths())
@@ -141,7 +141,7 @@ test('the home story section keeps a three-column layout with values always visi
         ->toContain('ma-lg:grid-cols-[1fr_1.1fr_1fr]')
         ->toContain('ma-md:grid-cols-2')
         ->toContain('Ons Verhaal')
-        ->toContain('Europees Erfgoed')
+        ->toContain('European Heritage')
         ->toContain('+')
         ->toContain('Maison Anversa')
         ->toContain('European Heritage Sports and Lifestyle House')

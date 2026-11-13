@@ -12,7 +12,7 @@ use Illuminate\Support\Traits\Localizable;
  *
  * Players appear as initials plus their first name. When
  * `show_first_name_on_cards` is off, the first name is replaced with the
- * translated Private label (`__('Privé')`). Last names never leave this class.
+ * translated Private label (`__('Private')`). Last names never leave this class.
  *
  * @phpstan-type CardPlayer array{initials: string, first_name: string|null, edition: string|null}
  * @phpstan-type CardPayload array{
@@ -101,15 +101,15 @@ final class MatchCardPresenter
                 'locale' => $locale,
                 ...self::SIZES[$format],
                 'palette' => self::PALETTES[$format],
-                'eyebrow' => __('Sessie').' · '.$session->sport->label(),
-                'club' => (string) ($session->club?->name ?? __('Sessie')),
+                'eyebrow' => __('Session').' · '.$session->sport->label(),
+                'club' => (string) ($session->club?->name ?? __('Session')),
                 'date_line' => $this->dateLine($session, $locale),
                 'players' => $this->players($session),
                 'result' => $score !== null
-                    ? ['label' => __('Uitslag'), 'line' => $score->setsLine()]
+                    ? ['label' => __('Result'), 'line' => $score->setsLine()]
                     : null,
-                'closing' => __('Na de koffie, de baan.'),
-                'footer' => __('maisonanversa.com · Antwerpen'),
+                'closing' => __('After the coffee, the court.'),
+                'footer' => __('maisonanversa.com · Antwerp'),
             ];
         });
     }
@@ -155,7 +155,7 @@ final class MatchCardPresenter
             'initials' => PersonName::initials($user),
             'first_name' => $user->show_first_name_on_cards
                 ? ($given !== '' ? $given : null)
-                : __('Privé'),
+                : __('Private'),
             'edition' => $this->edition($user),
         ];
     }

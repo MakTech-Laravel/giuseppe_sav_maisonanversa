@@ -108,7 +108,7 @@ test('staff can create a journal article with a cover image', function () {
             'slug' => 'nieuw-artikel',
             'title' => 'Nieuw artikel',
             'excerpt' => 'Korte intro',
-            'body' => "Eerste alinea.\n\nTweede alinea.",
+            'body' => "First paragraph.\n\nSecond paragraph.",
             'cover_path' => 'antwerp-cityscape',
             'category' => 'Erfgoed',
             'author' => 'Maison Anversa',

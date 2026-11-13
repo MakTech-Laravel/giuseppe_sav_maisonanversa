@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 $patches = [
     'lang/en.json' => [
-        'Geannuleerd door beheerder.' => 'Cancelled by administrator.',
+        'Cancelled by administrator.' => 'Cancelled by administrator.',
     ],
     'lang/fr.json' => [
-        'Geannuleerd door beheerder.' => 'Annulé par l’administrateur.',
+        'Cancelled by administrator.' => 'Annulé par l’administrateur.',
     ],
 ];
 

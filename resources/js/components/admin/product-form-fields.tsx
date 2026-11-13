@@ -127,19 +127,19 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
 
     return (
         <AdminPanel
-            title={t('Basisgegevens')}
-            description={t('Naam, slug, type en herotekst van dit product.')}
+            title={t('Basic details')}
+            description={t('Name, slug, type and hero copy for this product.')}
         >
             <div className="grid items-start gap-5 md:grid-cols-2">
                 <div className="grid min-w-0 gap-2">
-                    <Label htmlFor="name">{t('Naam')}</Label>
+                    <Label htmlFor="name">{t('Name')}</Label>
                     <Input
                         id="name"
                         value={data.name}
                         onChange={(event) =>
                             setData('name', event.target.value)
                         }
-                        placeholder={t('bijv. Heritage Nº 002')}
+                        placeholder={t('e.g. Heritage Nº 002')}
                         autoFocus
                     />
                     <InputError message={errors.name} />
@@ -153,7 +153,7 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                             onChange={(event) =>
                                 setData('slug', event.target.value)
                             }
-                            placeholder={t('bijv. heritage-no-002')}
+                            placeholder={t('e.g. heritage-no-002')}
                             className="min-w-0 flex-1"
                         />
                         <Button
@@ -161,8 +161,8 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                             variant="outline"
                             size="icon"
                             className="shrink-0"
-                            aria-label={t('Genereer slug uit naam')}
-                            title={t('Genereer slug uit naam')}
+                            aria-label={t('Generate slug from name')}
+                            title={t('Generate slug from name')}
                             disabled={!data.name.trim()}
                             onClick={() => setData('slug', slugify(data.name))}
                         >
@@ -184,17 +184,17 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="simple">
-                                {t('Eenvoudige voorraad')}
+                                {t('Simple stock')}
                             </SelectItem>
                             <SelectItem value="limited_edition">
-                                {t('Gelimiteerde editie')}
+                                {t('Limited edition')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
                     <InputError message={errors.type} />
                 </div>
                 <div className="grid min-w-0 gap-2">
-                    <Label htmlFor="status">{t('Catalogusstatus')}</Label>
+                    <Label htmlFor="status">{t('Catalog status')}</Label>
                     <Select
                         value={data.status}
                         onValueChange={(value) =>
@@ -205,24 +205,24 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                         }
                     >
                         <SelectTrigger id="status" className="w-full">
-                            <SelectValue placeholder={t('Catalogusstatus')} />
+                            <SelectValue placeholder={t('Catalog status')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="active">
-                                {t('Beschikbaar')}
+                                {t('Available')}
                             </SelectItem>
                             <SelectItem value="coming_soon">
-                                {t('Binnenkort')}
+                                {t('Coming soon')}
                             </SelectItem>
                             <SelectItem value="archived">
-                                {t('Gearchiveerd')}
+                                {t('Archived')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
                     <InputError message={errors.status} />
                 </div>
                 <div className="grid min-w-0 gap-2">
-                    <Label htmlFor="sort_order">{t('Sorteervolgorde')}</Label>
+                    <Label htmlFor="sort_order">{t('Sort order')}</Label>
                     <Input
                         id="sort_order"
                         type="number"
@@ -235,7 +235,7 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                     <InputError message={errors.sort_order} />
                 </div>
                 <div className="grid min-w-0 gap-2">
-                    <Label htmlFor="eyebrow">{t('Productlabel')}</Label>
+                    <Label htmlFor="eyebrow">{t('Product label')}</Label>
                     <Input
                         id="eyebrow"
                         value={data.eyebrow}
@@ -243,13 +243,13 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                             setData('eyebrow', event.target.value)
                         }
                         placeholder={t(
-                            'bijv. Maison Anversa · Founding Edition',
+                            'e.g. Maison Anversa · Founding Edition',
                         )}
                     />
                     <InputError message={errors.eyebrow} />
                 </div>
                 <div className="grid min-w-0 gap-2 md:col-span-2">
-                    <Label htmlFor="hero_eyebrow">{t('Hero-eyebrow')}</Label>
+                    <Label htmlFor="hero_eyebrow">{t('Hero eyebrow')}</Label>
                     <Input
                         id="hero_eyebrow"
                         value={data.hero_eyebrow}
@@ -257,14 +257,14 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                             setData('hero_eyebrow', event.target.value)
                         }
                         placeholder={t(
-                            'bijv. Founding Edition · 100 Stuks in Europa',
+                            'e.g. Founding Edition · 100 pieces in Europe',
                         )}
                     />
                     <InputError message={errors.hero_eyebrow} />
                 </div>
                 <div className="grid min-w-0 gap-2 md:col-span-2">
                     <Label htmlFor="hero_subtitle">
-                        {t('Hero-ondertitel')}
+                        {t('Hero subtitle')}
                     </Label>
                     <Textarea
                         id="hero_subtitle"
@@ -278,7 +278,7 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
                 </div>
                 <div className="grid min-w-0 gap-2 md:col-span-2">
                     <Label htmlFor="description">
-                        {t('Productbeschrijving')}
+                        {t('Product description')}
                     </Label>
                     <Textarea
                         id="description"
@@ -293,7 +293,7 @@ export function ProductBasicsFields({ data, errors, setData }: SharedProps) {
             </div>
             <p className="mt-5 text-xs text-muted-foreground">
                 {t(
-                    'Tekst op dit formulier is de bron. DeepL vult NL, EN en FR na opslaan. Pas per taal aan via Vertalingen.',
+                    'Text on this form is the source. DeepL fills NL, EN, and FR after saving. Adjust per language via Translations.',
                 )}
             </p>
         </AdminPanel>
@@ -316,12 +316,12 @@ export function ProductSeoFields({
         <AdminPanel
             title={t('SEO')}
             description={t(
-                'Optionele zoek- en social metadata. Lege velden vallen op de winkel terug op naam, beschrijving en productfoto — ze worden niet automatisch ingevuld.',
+                'Optional search and social metadata. Empty fields fall back on the storefront to name, description and product photo — they are not filled in automatically.',
             )}
         >
             <div className="grid items-start gap-5 md:grid-cols-2">
                 <div className="grid min-w-0 gap-2 md:col-span-2">
-                    <Label htmlFor="meta_title">{t('Meta-titel')}</Label>
+                    <Label htmlFor="meta_title">{t('Meta title')}</Label>
                     <Input
                         id="meta_title"
                         value={data.meta_title}
@@ -329,14 +329,14 @@ export function ProductSeoFields({
                             setData('meta_title', event.target.value)
                         }
                         placeholder={t(
-                            'Leeg laten om de productnaam te gebruiken',
+                            'Leave empty to use the product name',
                         )}
                     />
                     <InputError message={errors.meta_title} />
                 </div>
                 <div className="grid min-w-0 gap-2 md:col-span-2">
                     <Label htmlFor="meta_description">
-                        {t('Meta-beschrijving')}
+                        {t('Meta description')}
                     </Label>
                     <Textarea
                         id="meta_description"
@@ -346,25 +346,25 @@ export function ProductSeoFields({
                         }
                         className="min-h-24 resize-y"
                         placeholder={t(
-                            'Leeg laten om de productbeschrijving te gebruiken',
+                            'Leave empty to use the product description',
                         )}
                     />
                     <InputError message={errors.meta_description} />
                 </div>
                 <div className="grid min-w-0 gap-2 md:col-span-2">
-                    <Label htmlFor="meta_keywords">{t('Meta-keywords')}</Label>
+                    <Label htmlFor="meta_keywords">{t('Meta keywords')}</Label>
                     <Input
                         id="meta_keywords"
                         value={data.meta_keywords}
                         onChange={(event) =>
                             setData('meta_keywords', event.target.value)
                         }
-                        placeholder={t('Komma-gescheiden, optioneel')}
+                        placeholder={t('Comma-separated, optional')}
                     />
                     <InputError message={errors.meta_keywords} />
                 </div>
                 <div className="grid min-w-0 gap-2 md:col-span-2">
-                    <Label>{t('OG-afbeelding')}</Label>
+                    <Label>{t('OG image')}</Label>
                     <FileUpload
                         accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
                         maxSize={5}
@@ -385,10 +385,10 @@ export function ProductSeoFields({
                             setData('remove_og_image', true)
                         }
                         placeholder={t(
-                            'Sleep een social-afbeelding hierheen of klik om te bladeren',
+                            'Drop a social image here or click to browse',
                         )}
                         hint={t(
-                            'PNG, JPG of WEBP. Leeg laten om de productfoto te gebruiken.',
+                            'PNG, JPG or WEBP. Leave empty to use the product photo.',
                         )}
                         error={errors.og_image}
                     />
@@ -443,12 +443,12 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
     return (
         <div className="grid w-full gap-6">
             <AdminPanel
-                title={t('Prijs & levering')}
-                description={t('Verkoopprijs en verwachte leveringsbelofte.')}
+                title={t('Price & delivery')}
+                description={t('Retail price and expected delivery promise.')}
             >
                 <div className="grid items-start gap-5 md:grid-cols-2">
                     <div className="grid min-w-0 gap-2">
-                        <Label htmlFor="amount">{t('Bedrag')}</Label>
+                        <Label htmlFor="amount">{t('Amount')}</Label>
                         <div className="relative">
                             <Input
                                 id="amount"
@@ -469,7 +469,7 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                     </div>
                     <div className="grid min-w-0 gap-2">
                         <Label htmlFor="expected_delivery_label">
-                            {t('Verwachte levering')}
+                            {t('Expected delivery')}
                         </Label>
                         <Input
                             id="expected_delivery_label"
@@ -481,7 +481,7 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                                 )
                             }
                             placeholder={t(
-                                'bijv. Q1 2027 — onder voorbehoud van productie',
+                                'e.g. Q1 2027 — subject to production',
                             )}
                         />
                         <InputError message={errors.expected_delivery_label} />
@@ -493,9 +493,9 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                     <div className="grid gap-3 sm:grid-cols-2">
                         <OptionCard
                             selected={data.grants_founding_circle}
-                            title={t('Geeft toegang')}
+                            title={t('Grants access')}
                             description={t(
-                                'Kopers krijgen toegang tot de Founding Circle.',
+                                'Buyers get access to the Founding Circle.',
                             )}
                             onSelect={() =>
                                 setData('grants_founding_circle', true)
@@ -503,9 +503,9 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                         />
                         <OptionCard
                             selected={!data.grants_founding_circle}
-                            title={t('Geen toegang')}
+                            title={t('No access')}
                             description={t(
-                                'Geen Founding Circle-rechten bij aankoop.',
+                                'No Founding Circle rights on purchase.',
                             )}
                             onSelect={() =>
                                 setData('grants_founding_circle', false)
@@ -516,13 +516,13 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
             </AdminPanel>
 
             <AdminPanel
-                title={isLimited ? t('Editie & voorraad') : t('Voorraad')}
+                title={isLimited ? t('Edition & stock') : t('Stock')}
                 description={
                     isLimited
                         ? t(
-                              'Stel de editiegrootte in en markeer welke nummers in het archief blijven.',
+                              'Set the edition size and mark which numbers stay in the archive.',
                           )
-                        : t('Beheer de eenvoudige voorraad van dit product.')
+                        : t('Manage the simple stock for this product.')
                 }
             >
                 {isLimited ? (
@@ -530,7 +530,7 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                         <div className="grid gap-5 md:grid-cols-3">
                             <div className="grid gap-2">
                                 <Label htmlFor="edition_total">
-                                    {t('Editiegrootte')}
+                                    {t('Edition size')}
                                 </Label>
                                 <Input
                                     id="edition_total"
@@ -560,7 +560,7 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                                             event.target.value,
                                         )
                                     }
-                                    placeholder={t('bijv. No. of MA-')}
+                                    placeholder={t('e.g. No. or MA-')}
                                 />
                                 <InputError
                                     message={errors.edition_number_prefix}
@@ -579,7 +579,7 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                                             event.target.value,
                                         )
                                     }
-                                    placeholder={t('bijv. -A of /100')}
+                                    placeholder={t('e.g. -A or /100')}
                                 />
                                 <InputError
                                     message={errors.edition_number_postfix}
@@ -589,7 +589,7 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
 
                         {editionTotal > 0 ? (
                             <p className="text-xs text-muted-foreground">
-                                {t('Voorbeeld')}:{' '}
+                                {t('Preview')}:{' '}
                                 <span className="font-mono text-foreground">
                                     {formatEditionLabel(1)}
                                 </span>
@@ -604,15 +604,15 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                             <div className="grid gap-3">
                                 <div className="flex flex-wrap items-end justify-between gap-2">
                                     <div>
-                                        <Label>{t('Archiefnummers')}</Label>
+                                        <Label>{t('Archive numbers')}</Label>
                                         <p className="mt-1 text-xs text-muted-foreground">
                                             {t(
-                                                'Selecteer de nummers die niet verkoopbaar zijn. Leeg = alles verkoopbaar.',
+                                                'Select the numbers that are not for sale. Empty = everything is sellable.',
                                             )}
                                         </p>
                                     </div>
                                     <p className="text-xs text-muted-foreground">
-                                        {t('{{count}} gearchiveerd', {
+                                        {t('{{count}} archived', {
                                             count: data.archive_edition_numbers
                                                 .length,
                                         })}
@@ -670,7 +670,7 @@ export function ProductPricingFields({ data, errors, setData }: SharedProps) {
                     </div>
                 ) : (
                     <div className="grid max-w-xs gap-2">
-                        <Label htmlFor="stock_quantity">{t('Voorraad')}</Label>
+                        <Label htmlFor="stock_quantity">{t('Stock')}</Label>
                         <Input
                             id="stock_quantity"
                             type="number"
@@ -713,14 +713,14 @@ export function ProductMediaFields({
 
     return (
         <AdminPanel
-            title={t('Afbeeldingen')}
+            title={t('Images')}
             description={t(
-                'Upload een primaire coverfoto en optionele galerijbeelden.',
+                'Upload a primary cover photo and optional gallery images.',
             )}
         >
             <div className="grid gap-8">
                 <div className="grid gap-2">
-                    <Label>{t('Primaire afbeelding')}</Label>
+                    <Label>{t('Primary image')}</Label>
                     <FileUpload
                         accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
                         maxSize={5}
@@ -741,9 +741,9 @@ export function ProductMediaFields({
                             setData('remove_primary_image', true)
                         }
                         placeholder={t(
-                            'Sleep een coverfoto hierheen of klik om te bladeren',
+                            'Drag & drop a cover image, or click to browse',
                         )}
-                        hint={t('PNG, JPG of WEBP')}
+                        hint={t('PNG, JPG or WEBP')}
                         error={errors.primary_image}
                         isUploading={isUploading}
                         uploadProgress={uploadProgress}
@@ -751,7 +751,7 @@ export function ProductMediaFields({
                     />
                 </div>
                 <div className="grid gap-2">
-                    <Label>{t('Galerij')}</Label>
+                    <Label>{t('Gallery')}</Label>
                     <FileUpload
                         multiple
                         accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
@@ -777,9 +777,9 @@ export function ProductMediaFields({
                             )
                         }
                         placeholder={t(
-                            'Sleep galerijbeelden hierheen of klik om te bladeren',
+                            'Drag & drop gallery images, or click to browse',
                         )}
-                        hint={t('PNG, JPG of WEBP · max. 12 beelden')}
+                        hint={t('PNG, JPG or WEBP · max. 12 images')}
                         error={errors.gallery_images}
                         isUploading={isUploading}
                         uploadProgress={uploadProgress}
@@ -838,9 +838,9 @@ export function ProductSectionFields({
 
     return (
         <AdminPanel
-            title={t('Paginasecties')}
+            title={t('Page sections')}
             description={t(
-                'Beheer elke sectie van de publieke productpagina: kopteksten, onderdelen, zichtbaarheid en volgorde.',
+                'Manage each section of the public product page: headings, items, visibility and order.',
             )}
         >
             <div className="grid gap-3">
@@ -884,9 +884,9 @@ export function ProductFaqFields({ data, setData }: SharedProps) {
 
     return (
         <AdminPanel
-            title={t('Veelgestelde vragen')}
+            title={t('Frequently asked questions')}
             description={t(
-                'Vragen en antwoorden die alleen op dit product worden getoond.',
+                'Questions and answers shown only on this product.',
             )}
         >
             <RepeaterField<ProductFaqFormData>
@@ -894,12 +894,12 @@ export function ProductFaqFields({ data, setData }: SharedProps) {
                 onChange={(faqs) => setData('faqs', faqs)}
                 makeRow={emptyFaq}
                 rowKey={(row) => row.uid}
-                addLabel="Vraag toevoegen"
-                emptyLabel="Nog geen vragen voor dit product."
+                addLabel="Add question"
+                emptyLabel="No questions for this product yet."
                 renderRow={(row, _index, update) => (
                     <div className="grid gap-3">
                         <div className="grid gap-1.5">
-                            <Label className="text-xs">{t('Vraag')}</Label>
+                            <Label className="text-xs">{t('Question')}</Label>
                             <Input
                                 value={row.question}
                                 onChange={(event) =>
@@ -908,7 +908,7 @@ export function ProductFaqFields({ data, setData }: SharedProps) {
                             />
                         </div>
                         <div className="grid gap-1.5">
-                            <Label className="text-xs">{t('Antwoord')}</Label>
+                            <Label className="text-xs">{t('Answer')}</Label>
                             <Textarea
                                 value={row.answer}
                                 onChange={(event) =>
@@ -924,7 +924,7 @@ export function ProductFaqFields({ data, setData }: SharedProps) {
                                     update({ is_published: checked === true })
                                 }
                             />
-                            {t('Gepubliceerd')}
+                            {t('Published')}
                         </label>
                     </div>
                 )}
@@ -941,14 +941,14 @@ export function ProductPublishFields({ data, errors, setData }: SharedProps) {
 
     return (
         <AdminPanel
-            title={t('Publicatie')}
-            description={t('Controleer de samenvatting en publiceer.')}
+            title={t('Publication')}
+            description={t('Review the summary and publish.')}
         >
             <div className="grid gap-5">
                 <dl className="grid gap-3 rounded-lg border bg-muted/20 p-4 text-sm sm:grid-cols-2">
                     <div>
                         <dt className="text-xs text-muted-foreground">
-                            {t('Naam')}
+                            {t('Name')}
                         </dt>
                         <dd className="font-medium">{data.name || '—'}</dd>
                     </div>
@@ -962,7 +962,7 @@ export function ProductPublishFields({ data, errors, setData }: SharedProps) {
                     </div>
                     <div>
                         <dt className="text-xs text-muted-foreground">
-                            {t('Bedrag')}
+                            {t('Amount')}
                         </dt>
                         <dd className="font-medium">
                             {data.amount || '—'} EUR
@@ -970,13 +970,13 @@ export function ProductPublishFields({ data, errors, setData }: SharedProps) {
                     </div>
                     <div>
                         <dt className="text-xs text-muted-foreground">
-                            {t('Zichtbare secties')}
+                            {t('Visible sections')}
                         </dt>
                         <dd className="font-medium">{visibleSections}</dd>
                     </div>
                     <div>
                         <dt className="text-xs text-muted-foreground">
-                            {t('Veelgestelde vragen')}
+                            {t('Frequently asked questions')}
                         </dt>
                         <dd className="font-medium">{data.faqs.length}</dd>
                     </div>
@@ -987,17 +987,17 @@ export function ProductPublishFields({ data, errors, setData }: SharedProps) {
                     <div className="grid gap-3 sm:grid-cols-2">
                         <OptionCard
                             selected={data.is_published}
-                            title={t('Gepubliceerd')}
+                            title={t('Published')}
                             description={t(
-                                'Zichtbaar op de publieke cataloguspagina’s.',
+                                'Visible on the public catalog pages.',
                             )}
                             onSelect={() => setData('is_published', true)}
                         />
                         <OptionCard
                             selected={!data.is_published}
-                            title={t('Concept')}
+                            title={t('Draft')}
                             description={t(
-                                'Alleen zichtbaar in het adminpaneel.',
+                                'Only visible in the admin panel.',
                             )}
                             onSelect={() => setData('is_published', false)}
                         />
@@ -1005,7 +1005,7 @@ export function ProductPublishFields({ data, errors, setData }: SharedProps) {
                 </div>
 
                 <div className="grid min-w-0 gap-2">
-                    <Label htmlFor="public_at">{t('Openbaar vanaf')}</Label>
+                    <Label htmlFor="public_at">{t('Public from')}</Label>
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                         <Input
                             id="public_at"
@@ -1032,12 +1032,12 @@ export function ProductPublishFields({ data, errors, setData }: SharedProps) {
                                 setData('public_at', local);
                             }}
                         >
-                            {t('48 uur vanaf nu')}
+                            {t('48 hours from now')}
                         </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
                         {t(
-                            'Early access tot de openbare datum. Alleen Founding Circle ziet dit product tot dan.',
+                            'Early access until the public date. Only Founding Circle sees this product until then.',
                         )}
                     </p>
                     <InputError message={errors.public_at} />

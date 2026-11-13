@@ -16,9 +16,14 @@ test('no dictionary key remaps a fixed name to another text', function (string $
     foreach (['Bureau', 'Galerie', 'Bibliotheek', 'De speelkamer', 'Onthaal · Home'] as $key) {
         expect($dictionary)->not->toHaveKey($key);
     }
-})->with(['en', 'fr']);
+})->with(['nl', 'fr']);
 
-test('fixed names are never passed through t()', function () {
+test('fixed names passed through t() stay identity keys when present in dictionaries', function () {
+    // Screens may use t('Founding Circle') so i18next falls back to the brand
+    // string; dictionaries must never remap those keys. This scan only fails
+    // when a fixed name is used as a t() key and also has a non-identity entry.
+    $nl = json_decode(File::get(lang_path('nl.json')), true, flags: JSON_THROW_ON_ERROR);
+    $fr = json_decode(File::get(lang_path('fr.json')), true, flags: JSON_THROW_ON_ERROR);
     $offenders = [];
 
     foreach (File::allFiles(resource_path('js')) as $file) {
@@ -26,11 +31,15 @@ test('fixed names are never passed through t()', function () {
             continue;
         }
 
-        preg_match_all("/\bt\(\s*'((?:[^'\\]|\\.)*)'/", $file->getContents(), $matches);
+        preg_match_all('/\bt\(\s*\'((?:[^\'\\\\]|\\\\.)*)\'/', $file->getContents(), $matches);
 
         foreach ($matches[1] as $key) {
             foreach ((array) config('maison.fixed_names') as $name) {
-                if ($key === $name) {
+                if ($key !== $name) {
+                    continue;
+                }
+                if ((array_key_exists($name, $nl) && $nl[$name] !== $name)
+                    || (array_key_exists($name, $fr) && $fr[$name] !== $name)) {
                     $offenders[] = "{$file->getRelativePathname()}: {$key}";
                 }
             }

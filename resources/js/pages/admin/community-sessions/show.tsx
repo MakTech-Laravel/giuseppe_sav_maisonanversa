@@ -40,7 +40,7 @@ export default function CommunitySessionShow({
     const locale = wayfinderLocale();
 
     function cancelSession() {
-        if (!window.confirm(t('Deze sessie annuleren?'))) {
+        if (!window.confirm(t('Cancel this session?'))) {
             return;
         }
 
@@ -80,7 +80,7 @@ export default function CommunitySessionShow({
             <Head title={`${session.host} · ${session.club_name ?? ''}`} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={session.club_name ?? t('Sessie')}
+                    title={session.club_name ?? t('Session')}
                     description={t('Gehost door {{host}}', {
                         host: session.host,
                     })}
@@ -92,7 +92,7 @@ export default function CommunitySessionShow({
                             variant="outline"
                             onClick={cancelSession}
                         >
-                            <Ban className="h-4 w-4" /> {t('Sessie annuleren')}
+                            <Ban className="h-4 w-4" /> {t('Cancel session')}
                         </Button>
                     )}
                 </AdminPageHeader>
@@ -110,19 +110,19 @@ export default function CommunitySessionShow({
                         </Badge>
                     </Detail>
                     <Detail label={t('Sport')}>{t(session.sport_label)}</Detail>
-                    <Detail label={t('Datum')}>
+                    <Detail label={t('Date')}>
                         {formatSessionDateTime(session.starts_at, locale)}
                     </Detail>
-                    <Detail label={t('Duur')}>
+                    <Detail label={t('Duration')}>
                         {session.duration_minutes} min
                     </Detail>
-                    <Detail label={t('Niveau')}>
+                    <Detail label={t('Level')}>
                         {t(session.level_label)}
                     </Detail>
-                    <Detail label={t('Wie mag meespelen?')}>
+                    <Detail label={t('Who can join?')}>
                         {t(session.gender_label)}
                     </Detail>
-                    <Detail label={t('Baanstatus')}>
+                    <Detail label={t('Court status')}>
                         {t(session.court_status_label)}
                     </Detail>
                     <Detail label={t('Club')}>
@@ -143,7 +143,7 @@ export default function CommunitySessionShow({
 
                     {session.notes && (
                         <div className="sm:col-span-3 lg:col-span-4">
-                            <Detail label={t('Notitie')}>
+                            <Detail label={t('Note')}>
                                 {session.notes}
                             </Detail>
                         </div>
@@ -152,7 +152,7 @@ export default function CommunitySessionShow({
 
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                     <div className="border-b px-5 py-4">
-                        <h2 className="font-medium">{t('Spelers')}</h2>
+                        <h2 className="font-medium">{t('Players')}</h2>
                         <p className="text-sm text-muted-foreground">
                             {session.participants_count} / {session.capacity}
                         </p>
@@ -161,15 +161,15 @@ export default function CommunitySessionShow({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Naam')}</TableHead>
+                                <TableHead>{t('Name')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    {t('E-mailadres')}
+                                    {t('Email address')}
                                 </TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    {t('Aangesloten')}
+                                    {t('Joined')}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -206,7 +206,7 @@ export default function CommunitySessionShow({
                                                 onClick={() =>
                                                     removePlayer(player)
                                                 }
-                                                title={t('Speler verwijderen')}
+                                                title={t('Remove player')}
                                             >
                                                 <UserX className="h-4 w-4" />
                                             </Button>

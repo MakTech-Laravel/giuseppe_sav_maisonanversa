@@ -62,7 +62,7 @@ export function PostEditDialog({ postId, content }: PostEditDialogProps) {
             <DialogTrigger asChild>
                 <Button variant="outline" size="sm" type="button">
                     <Pencil className="h-3.5 w-3.5" />
-                    {t('Bewerken')}
+                    {t('Edit')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -70,7 +70,7 @@ export function PostEditDialog({ postId, content }: PostEditDialogProps) {
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Bericht bewerken')}</DialogTitle>
+                    <DialogTitle>{t('Edit post')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
                             'Wijzig de brontekst van uw bericht. Vertalingen worden automatisch bijgewerkt.',
@@ -80,7 +80,7 @@ export function PostEditDialog({ postId, content }: PostEditDialogProps) {
 
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="post-content">{t('Inhoud')}</Label>
+                        <Label htmlFor="post-content">{t('Content')}</Label>
                         <Textarea
                             id="post-content"
                             value={form.data.content}
@@ -98,7 +98,7 @@ export function PostEditDialog({ postId, content }: PostEditDialogProps) {
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                     </DialogFooter>
                 </form>

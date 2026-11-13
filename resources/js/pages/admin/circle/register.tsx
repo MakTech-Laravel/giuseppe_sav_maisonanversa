@@ -100,7 +100,7 @@ export default function CircleRegister({
             return;
         }
 
-        if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
+        if (!window.confirm(t('Remove member from Founding Circle?'))) {
             return;
         }
 
@@ -115,24 +115,24 @@ export default function CircleRegister({
 
     return (
         <>
-            <Head title={t('Naamregister')} />
+            <Head title={t('Name register')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Naamregister')}
+                    title={t('Name register')}
                     description={t(
-                        'Alle honderd plaatsen van Heritage Nº 001. Wijs een klant toe, verberg een vermelding, of exporteer het register.',
+                        'All one hundred places of Heritage Nº 001. Assign a customer, hide a listing, or export the register.',
                     )}
                     icon={BookText}
                 >
                     <Button variant="outline" asChild>
                         <a href={`/${locale}/admin/circle/register/export`}>
-                            <Download className="h-4 w-4" /> {t('CSV exporteren')}
+                            <Download className="h-4 w-4" /> {t('Export CSV')}
                         </a>
                     </Button>
                     <Button variant="outline" asChild>
                         <Link href={circleRoutes.index({ locale })}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar Founding Circle')}
+                            {t('Back to Founding Circle')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -145,18 +145,18 @@ export default function CircleRegister({
                         <Input
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op nummer, naam of e-mail')}
+                            placeholder={t('Search by number, name, or email')}
                         />
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {(
                             [
-                                ['all', t('Alle 100')],
-                                ['inscribed', t('Ingeschreven')],
-                                ['reserved', t('Gereserveerd')],
-                                ['returning', t('Retour')],
-                                ['available', t('Beschikbaar')],
-                                ['archive', t('Niet te koop')],
+                                ['all', t('All 100')],
+                                ['inscribed', t('Inscribed')],
+                                ['reserved', t('Reserved')],
+                                ['returning', t('Return')],
+                                ['available', t('Available')],
+                                ['archive', t('Not for sale')],
                             ] as const
                         ).map(([value, label]) => (
                             <Button
@@ -179,17 +179,17 @@ export default function CircleRegister({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Nummer')}</TableHead>
-                                <TableHead>{t('Lid')}</TableHead>
+                                <TableHead>{t('Number')}</TableHead>
+                                <TableHead>{t('Member')}</TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    {t('Zichtbaarheid')}
+                                    {t('Visibility')}
                                 </TableHead>
                                 <TableHead className="hidden lg:table-cell">
-                                    {t('Toestemming')}
+                                    {t('Consent')}
                                 </TableHead>
-                                <TableHead>{t('Verborgen')}</TableHead>
+                                <TableHead>{t('Hidden')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -252,8 +252,8 @@ export default function CircleRegister({
                                                 }
                                             >
                                                 {entry.hidden
-                                                    ? t('Verborgen')
-                                                    : t('Zichtbaar')}
+                                                    ? t('Hidden')
+                                                    : t('Visible')}
                                             </Badge>
                                         ) : (
                                             '—'
@@ -274,7 +274,7 @@ export default function CircleRegister({
                                                             })
                                                         }
                                                     >
-                                                        {t('Toewijzen')}
+                                                        {t('Assign')}
                                                     </Button>
                                                 ) : (
                                                     <>
@@ -326,7 +326,7 @@ export default function CircleRegister({
                                                                     }
                                                                 >
                                                                     {t(
-                                                                        'Markeer als terugbetaald',
+                                                                        'Mark as refunded',
                                                                     )}
                                                                 </Button>
                                                             )}
@@ -343,7 +343,7 @@ export default function CircleRegister({
                                                                 })
                                                             }
                                                         >
-                                                            {t('Wijzig lid')}
+                                                            {t('Change member')}
                                                         </Button>
                                                         <Button
                                                             type="button"
@@ -355,7 +355,7 @@ export default function CircleRegister({
                                                                 )
                                                             }
                                                         >
-                                                            {t('Verwijderen')}
+                                                            {t('Remove')}
                                                         </Button>
                                                     </>
                                                 )}
@@ -369,8 +369,8 @@ export default function CircleRegister({
                                                         }
                                                     >
                                                         {entry.hidden
-                                                            ? t('Toon weer')
-                                                            : t('Verberg')}
+                                                            ? t('Show again')
+                                                            : t('Hide')}
                                                     </Button>
                                                 )}
                                             </div>
@@ -392,12 +392,12 @@ export default function CircleRegister({
                 }}
                 title={
                     picker?.replace
-                        ? t('Wijzig lid')
-                        : t('Lid toewijzen')
+                        ? t('Change member')
+                        : t('Assign member')
                 }
                 description={
                     picker
-                        ? t('Kies een klant voor editie № {{number}}.', {
+                        ? t('Choose a customer for edition № {{number}}.', {
                               number: picker.sequence,
                           })
                         : undefined
@@ -425,7 +425,7 @@ function stateLabel(state: AdminPlace['state']): string {
     }
 
     if (state === 'reserved' || state === 'returning') {
-        return 'Gereserveerd';
+        return 'Reserved';
     }
 
     return 'Ingeschreven';

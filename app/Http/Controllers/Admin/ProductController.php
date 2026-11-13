@@ -190,7 +190,7 @@ class ProductController extends Controller
             return $product;
         });
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Product aangemaakt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Product created.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -236,7 +236,7 @@ class ProductController extends Controller
             }
         });
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Product bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Product updated.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -253,7 +253,7 @@ class ProductController extends Controller
             'gallery' => $this->syncGallery($product->gallery ?? [], $request->validated(), $request),
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Afbeeldingen bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Images updated.')]);
 
         return back();
     }
@@ -265,7 +265,7 @@ class ProductController extends Controller
     ): RedirectResponse {
         DB::transaction(fn () => $this->syncSections($product, $request->validated('sections') ?? []));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Secties opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sections saved.')]);
 
         return back();
     }
@@ -277,7 +277,7 @@ class ProductController extends Controller
     ): RedirectResponse {
         DB::transaction(fn () => $this->syncFaqs($product, $request->validated('faqs') ?? []));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Veelgestelde vragen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('FAQs saved.')]);
 
         return back();
     }
@@ -473,7 +473,7 @@ class ProductController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -500,7 +500,7 @@ class ProductController extends Controller
             $product->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -533,7 +533,7 @@ class ProductController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -566,7 +566,7 @@ class ProductController extends Controller
             $faq->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -644,7 +644,7 @@ class ProductController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -694,7 +694,7 @@ class ProductController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.products.show', [
             'locale' => $locale,
@@ -706,7 +706,7 @@ class ProductController extends Controller
     {
         if ($product->orders()->exists()) {
             return back()->withErrors([
-                'product' => __('Dit product heeft bestellingen en kan niet worden verwijderd. Depubliceer het in plaats daarvan.'),
+                'product' => __('This product has orders and cannot be deleted. Unpublish it instead.'),
             ]);
         }
 
@@ -717,7 +717,7 @@ class ProductController extends Controller
         $product->editionPieces()->delete();
         $product->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Product verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Product deleted.')]);
 
         return redirect()->route('admin.products.index');
     }

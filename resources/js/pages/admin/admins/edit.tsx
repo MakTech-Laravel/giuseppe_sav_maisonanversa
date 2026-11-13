@@ -23,18 +23,18 @@ export default function EditAdmin({
 
     return (
         <>
-            <Head title={t('Beheerder bewerken')} />
+            <Head title={t('Edit administrator')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Beheerder bewerken')}
-                    description={t('Werk het account van {{name}} bij.', {
+                    title={t('Edit administrator')}
+                    description={t('Update {{name}}\'s account.', {
                         name: user.name,
                     })}
                     icon={Pencil}
                 >
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     <Button variant="secondary" asChild>
@@ -44,7 +44,7 @@ export default function EditAdmin({
                                 user: user.id,
                             })}
                         >
-                            {t('Bekijk profiel')}
+                            {t('View profile')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -57,7 +57,7 @@ export default function EditAdmin({
                                 <dl className="space-y-2 text-sm">
                                     <div className="flex justify-between gap-3">
                                         <dt className="text-muted-foreground">
-                                            {t('Beheerder-ID')}
+                                            {t('Administrator ID')}
                                         </dt>
                                         <dd className="font-medium">
                                             #{user.id}
@@ -65,7 +65,7 @@ export default function EditAdmin({
                                     </div>
                                     <div className="flex justify-between gap-3">
                                         <dt className="text-muted-foreground">
-                                            {t('E-mail')}
+                                            {t('Email')}
                                         </dt>
                                         <dd className="truncate font-medium">
                                             {user.email}
@@ -73,10 +73,10 @@ export default function EditAdmin({
                                     </div>
                                 </dl>
                             </AdminPanel>
-                            <AdminPanel title={t('Toegang')}>
+                            <AdminPanel title={t('Access')}>
                                 <p className="text-sm text-muted-foreground">
                                     {t(
-                                        'Beheerderaccounts krijgen volledige toegang tot het adminpaneel.',
+                                        'Administrator accounts get full access to the admin panel.',
                                     )}
                                 </p>
                             </AdminPanel>
@@ -90,7 +90,7 @@ export default function EditAdmin({
                         })}
                         isEdit
                         currentAvatar={user.avatar}
-                        submitLabel={t('Beheerder opslaan')}
+                        submitLabel={t('Save administrator')}
                         defaults={{
                             name: user.name,
                             email: user.email,

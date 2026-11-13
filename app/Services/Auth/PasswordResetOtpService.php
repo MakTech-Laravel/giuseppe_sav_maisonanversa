@@ -124,14 +124,14 @@ class PasswordResetOtpService
     private function failInvalidOtp(): never
     {
         throw ValidationException::withMessages([
-            'otp' => __('De code is ongeldig of verlopen.'),
+            'otp' => __('The code is invalid or has expired.'),
         ]);
     }
 
     private function failTooManyAttempts(): never
     {
         throw ValidationException::withMessages([
-            'otp' => __('Te veel pogingen. Vraag een nieuwe code aan.'),
+            'otp' => __('Too many attempts. Request a new code.'),
         ]);
     }
 }

@@ -99,9 +99,9 @@ function statusLabel(
         case 'opening':
             return t('Opening');
         case 'ongoing':
-            return t('Lopend');
+            return t('Ongoing');
         case 'closed':
-            return t('Gesloten');
+            return t('Closed');
     }
 }
 
@@ -141,7 +141,7 @@ export default function EventShow({
                     <Button variant="outline" asChild>
                         <Link href={eventsRoutes.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar evenementen')}
+                            {t('Back to events')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -151,7 +151,7 @@ export default function EventShow({
                                 event: Number(event.id),
                             })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -166,7 +166,7 @@ export default function EventShow({
                             />
                         ) : (
                             <div className="flex aspect-video items-center justify-center rounded-lg bg-muted text-xs text-muted-foreground">
-                                {t('Geen thumbnail')}
+                                {t('No thumbnail')}
                             </div>
                         )}
                         <div className="flex flex-col gap-2">
@@ -178,7 +178,7 @@ export default function EventShow({
                             />
                         </div>
                         <dl className="space-y-4">
-                            <Detail label={t('Referentie')} value={event.id} />
+                            <Detail label={t('Reference')} value={event.id} />
                             <div>
                                 <dt className="text-muted-foreground">
                                     {t('Status')}
@@ -194,7 +194,7 @@ export default function EventShow({
                                     >
                                         <SelectTrigger
                                             className="w-full"
-                                            aria-label={t('Status wijzigen')}
+                                            aria-label={t('Change status')}
                                         >
                                             <SelectValue>
                                                 {statusLabel(event.status, t)}
@@ -205,25 +205,25 @@ export default function EventShow({
                                                 {t('Opening')}
                                             </SelectItem>
                                             <SelectItem value="ongoing">
-                                                {t('Lopend')}
+                                                {t('Ongoing')}
                                             </SelectItem>
                                             <SelectItem value="closed">
-                                                {t('Gesloten')}
+                                                {t('Closed')}
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </dd>
                             </div>
                             <Detail
-                                label={t('Datum')}
+                                label={t('Date')}
                                 value={formatStartsAt(event.starts_at)}
                             />
                             <Detail
-                                label={t('Locatie')}
+                                label={t('Location')}
                                 value={event.location}
                             />
                             <Detail
-                                label={t('Aanwezigen')}
+                                label={t('Attendees')}
                                 value={
                                     event.capacity != null
                                         ? `${event.rsvp_count} / ${event.capacity}`
@@ -237,7 +237,7 @@ export default function EventShow({
                         <div className="flex items-center gap-2 border-b px-6 py-4">
                             <Users className="h-4 w-4 text-muted-foreground" />
                             <h2 className="text-sm font-semibold">
-                                {t('Boekingen')}
+                                {t('Bookings')}
                             </h2>
                             <span className="text-xs text-muted-foreground">
                                 ({event.bookings.length})
@@ -245,22 +245,22 @@ export default function EventShow({
                         </div>
                         {event.bookings.length === 0 ? (
                             <p className="px-6 py-10 text-sm text-muted-foreground">
-                                {t('Nog niemand heeft geboekt.')}
+                                {t('No one has booked yet.')}
                             </p>
                         ) : (
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                        <TableHead>{t('Naam')}</TableHead>
+                                        <TableHead>{t('Name')}</TableHead>
                                         <TableHead className="hidden sm:table-cell">
-                                            {t('E-mail')}
+                                            {t('Email')}
                                         </TableHead>
                                         <TableHead className="hidden md:table-cell">
-                                            {t('Geboekt op')}
+                                            {t('Booked at')}
                                         </TableHead>
                                         <TableHead className="w-12 text-right">
                                             <span className="sr-only">
-                                                {t('Acties')}
+                                                {t('Actions')}
                                             </span>
                                         </TableHead>
                                     </TableRow>

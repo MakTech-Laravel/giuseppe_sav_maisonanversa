@@ -49,7 +49,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
         <aside className="space-y-5">
             <div className="border border-gold/15 bg-cream2 p-6">
                 <span className="mb-4 block font-sans text-[9px] font-medium tracking-[0.25em] text-gold2 uppercase">
-                    {t('Jouw Profiel')}
+                    {t('Your Profile')}
                 </span>
 
                 <div className="flex items-center gap-3.5 border-b border-gold/10 pb-4">
@@ -63,7 +63,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                             {name}
                         </div>
                         <div className="font-sans text-[9px] tracking-[0.15em] text-gold uppercase">
-                            {t('Founding Member · Nr. {{num}}', {
+                            {t('Founding Member · Nº {{num}}', {
                                 num: sidebar.profile.editionNumber,
                             })}
                         </div>
@@ -74,7 +74,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                     {[
                         {
                             value: sidebar.profile.editionNumber,
-                            label: 'Nummer',
+                            label: 'Number',
                         },
                         {
                             value: String(sidebar.profile.postCount),
@@ -82,7 +82,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                         },
                         {
                             value: String(sidebar.profile.sessionCount),
-                            label: 'Sessies',
+                            label: 'Sessions',
                         },
                     ].map((stat) => (
                         <div key={stat.label}>
@@ -99,7 +99,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
 
             <div className="border border-gold/15 bg-cream2 p-6">
                 <span className="mb-4 block font-sans text-[9px] font-medium tracking-[0.25em] text-gold2 uppercase">
-                    {t('Recente Founding Members')}
+                    {t('Recent Founding Members')}
                 </span>
 
                 {sidebar.recentMembers.map((member) => (
@@ -136,7 +136,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                             {t('Founding Circle')}
                         </div>
                         <div className="font-sans text-[9px] tracking-widest text-stone">
-                            {t('Bekijk alle leden')}
+                            {t('View all members')}
                         </div>
                     </div>
                 </div>
@@ -144,19 +144,19 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
 
             <div className="border border-gold/15 bg-cream2 p-6">
                 <span className="mb-4 block font-sans text-[9px] font-medium tracking-[0.25em] text-gold2 uppercase">
-                    {t('Volgende Event')}
+                    {t('Next Event')}
                 </span>
 
                 <div className="mb-3 bg-choc2 p-4">
                     <div className="mb-1.5 font-sans text-[9px] tracking-[0.2em] text-gold uppercase">
                         {sidebar.nextEvent?.startsAt
                             ? t(sidebar.nextEvent.startsAt)
-                            : t('Nog geen event')}
+                            : t('No event yet')}
                     </div>
                     <div className="mb-1 font-serif text-base font-medium text-cream">
                         {sidebar.nextEvent
                             ? t(sidebar.nextEvent.title)
-                            : t('Wordt binnenkort bekendgemaakt')}
+                            : t('Will be announced soon')}
                     </div>
                     <div className="font-sans text-[9px] tracking-widest text-stone">
                         {sidebar.nextEvent
@@ -170,7 +170,7 @@ export function FeedSidebar({ onViewEvents }: FeedSidebarProps) {
                     onClick={onViewEvents}
                     className="w-full cursor-pointer bg-choc px-6 py-3 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2"
                 >
-                    {t('Bekijk alle events →')}
+                    {t('View all events →')}
                 </button>
             </div>
         </aside>

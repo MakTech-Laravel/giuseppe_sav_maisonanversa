@@ -64,7 +64,7 @@ class CommunityPostController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return back();
     }
@@ -93,7 +93,7 @@ class CommunityPostController extends Controller
             $communityPost->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return back();
     }

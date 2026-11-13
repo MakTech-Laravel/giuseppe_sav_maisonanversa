@@ -37,32 +37,32 @@ export default function MemberDashboard({
     const links = [
         {
             href: `/${locale}/member/orders`,
-            label: t('Bestellingen'),
-            hint: t('Betalingsgeschiedenis'),
+            label: t('Orders'),
+            hint: t('Payment history'),
         },
         ...(isFoundingCircle
             ? [
                   {
                       href: `/${locale}/member/circle`,
                       label: t('Founding Circle'),
-                      hint: t('Jouw lidmaatschapskaart'),
+                      hint: t('Your membership card'),
                   },
               ]
             : []),
         {
             href: `/${locale}/member/profile`,
-            label: t('Profiel'),
-            hint: t('Naam, foto, e-mail'),
+            label: t('Profile'),
+            hint: t('Name, photo, email'),
         },
         {
             href: `/${locale}/member/letter`,
             label: t('Heritage Letter'),
-            hint: t('Jouw inschrijvingen'),
+            hint: t('Your subscriptions'),
         },
         {
             href: `/${locale}/member/email-preferences`,
-            label: t('E-mailvoorkeuren'),
-            hint: t('Voorkeuren'),
+            label: t('Email preferences'),
+            hint: t('Preferences'),
         },
     ] as const;
 
@@ -71,9 +71,9 @@ export default function MemberDashboard({
             <Head title={t('Dashboard')} />
             <MemberPageHeader
                 eyebrow={t('Founding Circle')}
-                title={t('Welkom, {{name}}', { name: member.name })}
+                title={t('Welcome, {{name}}', { name: member.name })}
                 description={t(
-                    'Jouw kamers in het huis — bestellingen, de Circle en accountinstellingen.',
+                    'Your rooms in the house — orders, the Circle and account settings.',
                 )}
             />
 
@@ -97,13 +97,13 @@ export default function MemberDashboard({
                 <MemberPanel className="mb-10">
                     <div className="mb-4 flex items-center justify-between gap-3">
                         <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                            {t('Recente bestellingen')}
+                            {t('Recent orders')}
                         </p>
                         <Link
                             href={`/${locale}/member/orders`}
                             className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline hover:text-cream"
                         >
-                            {t('Alles bekijken')}
+                            {t('View all')}
                         </Link>
                     </div>
                     <ul className="divide-y divide-gold/10">
@@ -125,7 +125,7 @@ export default function MemberDashboard({
                                     href={`/${locale}/member/orders/${order.id}`}
                                     className="shrink-0 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline hover:text-cream"
                                 >
-                                    {t('Bekijken')}
+                                    {t('View')}
                                 </Link>
                             </li>
                         ))}

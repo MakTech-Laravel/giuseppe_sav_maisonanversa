@@ -235,7 +235,7 @@ function OpeningTopBar({
 
     return (
         <div className="op-top">
-            <div className="op-lang" role="group" aria-label={t('Taal')}>
+            <div className="op-lang" role="group" aria-label={t('Language')}>
                 {availableLocales.map((option) => (
                     <button
                         key={option}

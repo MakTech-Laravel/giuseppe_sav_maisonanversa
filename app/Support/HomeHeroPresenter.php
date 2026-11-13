@@ -43,7 +43,7 @@ class HomeHeroPresenter
         'products' => 'Producten',
         'story' => 'Verhaal',
         'circle' => 'Founding Circle',
-        'register' => 'Founding Circle registreren',
+        'register' => 'Register for Founding Circle',
         'dressing' => 'Kleedkamer',
         'journal' => 'Journal',
         'community' => 'Gemeenschap',

@@ -43,10 +43,10 @@ export default function MemberChatPage({
             <Head title={t('Chat')} />
 
             <MemberPageHeader
-                eyebrow={t('Gemeenschap')}
+                eyebrow={t('Community')}
                 title={t('Chat')}
                 description={t(
-                    'Berichten met de spelers van jouw sessies. Selecteer een sessie om te beginnen.',
+                    'Messages with the players of your sessions. Select a session to begin.',
                 )}
             />
 
@@ -59,7 +59,7 @@ export default function MemberChatPage({
                 >
                     <div className="border-b border-gold/20 px-5 py-4">
                         <h2 className="font-sans text-[10px] font-medium tracking-[0.22em] text-gold uppercase">
-                            {t('Sessies')}
+                            {t('Sessions')}
                         </h2>
                     </div>
                     <ChatSessionList
@@ -92,7 +92,7 @@ export default function MemberChatPage({
                                         className="size-3.5"
                                         aria-hidden="true"
                                     />
-                                    {t('Terug naar chats')}
+                                    {t('Back to chats')}
                                 </Link>
                             </div>
 
@@ -204,7 +204,7 @@ function ActiveSessionChat({
                         : message,
                 ),
             );
-            toast.error(t('Bericht kon niet worden verstuurd.'));
+            toast.error(t('Message could not be sent.'));
 
             return;
         }
@@ -218,7 +218,7 @@ function ActiveSessionChat({
                         : message,
                 ),
             );
-            toast.error(t('Bericht kon niet worden verstuurd.'));
+            toast.error(t('Message could not be sent.'));
         };
 
         const payload =
@@ -311,7 +311,7 @@ function ActiveSessionChat({
         );
     }
 
-    const clubName = session.club?.name ?? t('Sessie');
+    const clubName = session.club?.name ?? t('Session');
     const purgeLabel = messagesPurgeAt
         ? formatSessionDateLong(messagesPurgeAt, locale)
         : null;
@@ -319,16 +319,16 @@ function ActiveSessionChat({
     const closedMessage = session.is_cancelled
         ? purgeLabel
             ? t(
-                  'Deze sessie is geannuleerd. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).',
+                  'This session was cancelled. The chat is closed. Messages will be deleted on {{date}} (30 days after closing).',
                   { date: purgeLabel },
               )
-            : t('Deze sessie is geannuleerd. De chat is gesloten.')
+            : t('This session was cancelled. The chat is closed.')
         : purgeLabel
           ? t(
-                'Deze sessie is afgelopen. De chat is gesloten. Berichten worden op {{date}} verwijderd (30 dagen na afsluiting).',
+                'This session has ended. The chat is closed. Messages will be deleted on {{date}} (30 days after closing).',
                 { date: purgeLabel },
             )
-          : t('Deze sessie is afgelopen. De chat is gesloten.');
+          : t('This session has ended. The chat is closed.');
 
     function handleReport(message: ChatMessage) {
         router.post(
@@ -380,11 +380,11 @@ function ChatEmptySelection() {
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-14 text-center">
             <MessageCircle className="size-7 text-gold2" aria-hidden="true" />
             <p className="font-serif text-xl text-cream">
-                {t('Selecteer een sessie')}
+                {t('Select a session')}
             </p>
             <p className="max-w-sm font-sans text-[12px] text-sand">
                 {t(
-                    'Kies links een sessie om de chat te openen en berichten te versturen.',
+                    'Choose a session on the left to open the chat and send messages.',
                 )}
             </p>
         </div>

@@ -41,16 +41,16 @@ export default function CreateJournalArticle() {
 
     return (
         <>
-            <Head title={t('Journalartikel aanmaken')} />
+            <Head title={t('Create journal article')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Journalartikel aanmaken')}
-                    description={t('Schrijf een nieuw journalstuk.')}
+                    title={t('Create journal article')}
+                    description={t('Write a new journal piece.')}
                     icon={BookOpen}
                 >
                     <Button variant="outline" asChild>
                         <Link href={journalRoutes.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -64,7 +64,7 @@ export default function CreateJournalArticle() {
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {t('Opslaan')}
+                        {t('Save')}
                     </Button>
                 </form>
             </div>

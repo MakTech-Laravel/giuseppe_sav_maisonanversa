@@ -116,22 +116,22 @@ export default function DressingItemsIndex({
     };
 
     const statusLabel = (value: string) =>
-        value === 'available' ? t('Beschikbaar') : t('Binnenkort');
+        value === 'available' ? t('Available') : t('Coming soon');
 
     return (
         <>
-            <Head title={t('Kleedkamer')} />
+            <Head title={t('Dressing Room')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Kleedkamer')}
+                    title={t('Dressing Room')}
                     description={t(
-                        'Beheer de items van de publieke Kleedkamer-catalogus.',
+                        'Manage the items in the public Dressing Room catalog.',
                     )}
                     icon={Shirt}
                 >
                     <Button asChild>
                         <Link href={dressingItems.create(locale)}>
-                            <Plus className="h-4 w-4" /> {t('Item toevoegen')}
+                            <Plus className="h-4 w-4" /> {t('Add item')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -142,7 +142,7 @@ export default function DressingItemsIndex({
                             htmlFor="dressing-item-search"
                             className="sr-only"
                         >
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -150,8 +150,8 @@ export default function DressingItemsIndex({
                             className="pl-9"
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op naam of slug…')}
-                            aria-label={t('Zoeken')}
+                            placeholder={t('Search by name or slug...')}
+                            aria-label={t('Search')}
                         />
                     </div>
                     <Select value={status} onValueChange={setStatus}>
@@ -159,36 +159,36 @@ export default function DressingItemsIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             <SelectItem value="coming_soon">
-                                {t('Binnenkort')}
+                                {t('Coming soon')}
                             </SelectItem>
                             <SelectItem value="available">
-                                {t('Beschikbaar')}
+                                {t('Available')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
                     <Select value={publication} onValueChange={setPublication}>
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Publicatie')}
+                            aria-label={t('Publication')}
                         >
-                            <SelectValue placeholder={t('Alle publicaties')} />
+                            <SelectValue placeholder={t('All publications')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle publicaties')}
+                                {t('All publications')}
                             </SelectItem>
                             <SelectItem value="published">
-                                {t('Gepubliceerd')}
+                                {t('Published')}
                             </SelectItem>
                             <SelectItem value="draft">
-                                {t('Concept')}
+                                {t('Draft')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -198,14 +198,14 @@ export default function DressingItemsIndex({
                     >
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Per pagina')}
+                            aria-label={t('Per page')}
                         >
-                            <SelectValue placeholder={t('Per pagina')} />
+                            <SelectValue placeholder={t('Per page')} />
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
                                 <SelectItem key={option} value={String(option)}>
-                                    {t('{{count}} per pagina', {
+                                    {t('{{count}} per page', {
                                         count: option,
                                     })}
                                 </SelectItem>
@@ -220,7 +220,7 @@ export default function DressingItemsIndex({
                             className="w-full sm:col-span-2 lg:col-span-4 xl:col-span-5 xl:w-auto xl:justify-self-start"
                         >
                             <X className="h-4 w-4" />
-                            {t('Filters wissen')}
+                            {t('Clear filters')}
                         </Button>
                     ) : null}
                 </div>
@@ -230,13 +230,13 @@ export default function DressingItemsIndex({
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead className="w-16" />
-                                <TableHead>{t('Naam')}</TableHead>
-                                <TableHead>{t('Categorie')}</TableHead>
+                                <TableHead>{t('Name')}</TableHead>
+                                <TableHead>{t('Category')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
-                                <TableHead>{t('Publicatie')}</TableHead>
-                                <TableHead>{t('Volgorde')}</TableHead>
+                                <TableHead>{t('Publication')}</TableHead>
+                                <TableHead>{t('Order')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -248,8 +248,8 @@ export default function DressingItemsIndex({
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
                                         {hasActiveFilters
-                                            ? t('Geen items gevonden.')
-                                            : t('Nog geen items toegevoegd.')}
+                                            ? t('No items found.')
+                                            : t('No items added yet.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -278,8 +278,8 @@ export default function DressingItemsIndex({
                                         <TableCell>
                                             <Badge variant="secondary">
                                                 {item.is_published
-                                                    ? t('Gepubliceerd')
-                                                    : t('Concept')}
+                                                    ? t('Published')
+                                                    : t('Draft')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>{item.sort_order}</TableCell>
@@ -298,7 +298,7 @@ export default function DressingItemsIndex({
                                                     })}
                                                 >
                                                     <Eye className="h-4 w-4" />
-                                                    {t('Bekijken')}
+                                                    {t('View')}
                                                 </Link>
                                             </Button>
                                             <Button
@@ -315,12 +315,12 @@ export default function DressingItemsIndex({
                                                     })}
                                                 >
                                                     <Pencil className="h-4 w-4" />
-                                                    {t('Bewerken')}
+                                                    {t('Edit')}
                                                 </Link>
                                             </Button>
                                             <ConfirmDeleteDialog
                                                 description={t(
-                                                    'Dit item wordt permanent verwijderd.',
+                                                    'This item will be permanently deleted.',
                                                 )}
                                                 onConfirm={() =>
                                                     router.delete(
@@ -337,7 +337,7 @@ export default function DressingItemsIndex({
                                                     size="sm"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                    {t('Verwijderen')}
+                                                    {t('Remove')}
                                                 </Button>
                                             </ConfirmDeleteDialog>
                                         </TableCell>

@@ -76,18 +76,18 @@ export default function AdminsIndex({
 
     return (
         <>
-            <Head title={t('Beheerder')} />
+            <Head title={t('Admin')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Beheerder')}
-                    description={t('Beheer personeelsaccounts.')}
+                    title={t('Admin')}
+                    description={t('Manage staff accounts.')}
                     icon={UserRoundCog}
                 >
                     {can(PERMISSIONS.USERS.CREATE) && (
                         <Button asChild>
                             <Link href={admins.create(wayfinderLocale())}>
                                 <Plus className="h-4 w-4" />{' '}
-                                {t('Beheerder toevoegen')}
+                                {t('Add administrator')}
                             </Link>
                         </Button>
                     )}
@@ -113,12 +113,12 @@ export default function AdminsIndex({
                             className="grid gap-4 sm:grid-cols-2"
                         >
                             <StatCard
-                                label={t('Totaal beheerders')}
+                                label={t('Total administrators')}
                                 value={stats.total}
                                 icon={UsersRound}
                             />
                             <StatCard
-                                label={t('Geverifieerd')}
+                                label={t('Verified')}
                                 value={stats.verified}
                                 icon={UserCheck}
                             />
@@ -131,7 +131,7 @@ export default function AdminsIndex({
                     <Input
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder={t('Zoek beheerders…')}
+                        placeholder={t('Search administrators…')}
                         className="pl-9"
                     />
                 </div>
@@ -141,15 +141,15 @@ export default function AdminsIndex({
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                    <TableHead>{t('Beheerder')}</TableHead>
+                                    <TableHead>{t('Admin')}</TableHead>
                                     <TableHead className="hidden md:table-cell">
                                         {t('Status')}
                                     </TableHead>
                                     <TableHead className="hidden lg:table-cell">
-                                        {t('Lid sinds')}
+                                        {t('Member since')}
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        {t('Acties')}
+                                        {t('Actions')}
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -197,8 +197,8 @@ export default function AdminsIndex({
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell">
                                                 {user.email_verified_at
-                                                    ? t('Geverifieerd')
-                                                    : t('In afwachting')}
+                                                    ? t('Verified')
+                                                    : t('Pending')}
                                             </TableCell>
                                             <TableCell className="hidden lg:table-cell">
                                                 <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -261,7 +261,7 @@ export default function AdminsIndex({
                                                     {canDelete && (
                                                         <ConfirmDeleteDialog
                                                             description={t(
-                                                                '{{name}} permanent verwijderen?',
+                                                                'Permanently delete {{name}}?',
                                                                 {
                                                                     name: user.name,
                                                                 },
@@ -298,7 +298,7 @@ export default function AdminsIndex({
                         </Table>
                         {paginated.data.length === 0 && (
                             <div className="px-4 py-16 text-center text-sm text-muted-foreground">
-                                {t('Geen beheerders gevonden.')}
+                                {t('No administrators found.')}
                             </div>
                         )}
                     </div>

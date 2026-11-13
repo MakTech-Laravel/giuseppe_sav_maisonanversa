@@ -105,12 +105,12 @@ export default function NotificationsIndex({
 
     return (
         <>
-            <Head title={t('Meldingen')} />
+            <Head title={t('Notifications')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Meldingen')}
+                    title={t('Notifications')}
                     description={t(
-                        'Jouw persoonlijke meldingen en systeemberichten.',
+                        'Your personal notifications and system messages.',
                     )}
                     icon={Bell}
                 >
@@ -120,7 +120,7 @@ export default function NotificationsIndex({
                         disabled={unreadCount === 0}
                     >
                         <CheckCheck className="h-4 w-4" />
-                        {t('Alles gelezen')}
+                        {t('Mark all as read')}
                     </Button>
                 </AdminPageHeader>
 
@@ -157,7 +157,7 @@ export default function NotificationsIndex({
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">
-                                    {t('Alle types')}
+                                    {t('All types')}
                                 </SelectItem>
                                 {types.map((option) => (
                                     <SelectItem
@@ -176,7 +176,7 @@ export default function NotificationsIndex({
                                 onChange={(event) =>
                                     setSearch(event.target.value)
                                 }
-                                placeholder={t('Zoek meldingen…')}
+                                placeholder={t('Search notifications…')}
                                 className="pl-9"
                             />
                         </div>
@@ -245,7 +245,7 @@ export default function NotificationsIndex({
                                                 href={item.href}
                                                 title={
                                                     item.link_label ??
-                                                    t('Openen')
+                                                    t('Open')
                                                 }
                                             >
                                                 <ExternalLink className="h-4 w-4" />
@@ -256,7 +256,7 @@ export default function NotificationsIndex({
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            title={t('Markeer als gelezen')}
+                                            title={t('Mark as read')}
                                             onClick={() =>
                                                 router.post(
                                                     adminNotifications.read({
@@ -274,7 +274,7 @@ export default function NotificationsIndex({
                                     ) : null}
                                     <ConfirmDeleteDialog
                                         description={t(
-                                            'Deze melding uit jouw inbox verwijderen?',
+                                            'Remove this notification from your inbox?',
                                         )}
                                         onConfirm={() =>
                                             router.delete(
@@ -290,7 +290,7 @@ export default function NotificationsIndex({
                                             variant="ghost"
                                             size="icon"
                                             className="text-muted-foreground hover:text-destructive"
-                                            title={t('Verwijderen')}
+                                            title={t('Remove')}
                                         >
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
@@ -301,7 +301,7 @@ export default function NotificationsIndex({
                     </ul>
                     {paginated.data.length === 0 && (
                         <div className="px-4 py-16 text-center text-sm text-muted-foreground">
-                            {t('Geen meldingen gevonden.')}
+                            {t('No notifications found.')}
                         </div>
                     )}
                     <DataPagination meta={paginated} />

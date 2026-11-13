@@ -107,7 +107,7 @@ export default function ClubsIndex({ clubs, filters, cities }: ClubsIndexProps) 
                 eyebrow={t('Community')}
                 title={t('Clubs')}
                 subtitle={t(
-                    'Ontdek padel- en tennisclubs waar leden sessies plannen. Partnerclubs dragen het officiële Maison Anversa-partnerschap.',
+                    'Discover padel and tennis clubs where members plan sessions. Partner clubs carry the official Maison Anversa partnership.',
                 )}
             />
 
@@ -121,7 +121,7 @@ export default function ClubsIndex({ clubs, filters, cities }: ClubsIndexProps) 
                         </h2>
                         <p className="mt-1 font-sans text-sm text-choc3">
                             {t(
-                                'Zoek een club en bekijk komende sessies op die locatie.',
+                                'Search for a club and see upcoming sessions at that location.',
                             )}
                         </p>
                     </div>
@@ -138,8 +138,8 @@ export default function ClubsIndex({ clubs, filters, cities }: ClubsIndexProps) 
                                 onChange={(event) =>
                                     setSearch(event.target.value)
                                 }
-                                placeholder={t('Zoek op clubnaam...')}
-                                aria-label={t('Zoek op clubnaam...')}
+                                placeholder={t('Search by club name...')}
+                                aria-label={t('Search by club name...')}
                                 className="w-full border border-gold/20 bg-cream2 py-3 pr-4 pl-11 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
                             />
                         </div>
@@ -147,10 +147,10 @@ export default function ClubsIndex({ clubs, filters, cities }: ClubsIndexProps) 
                         <select
                             value={city}
                             onChange={(event) => setCity(event.target.value)}
-                            aria-label={t('Filter op stad...')}
+                            aria-label={t('Filter by city...')}
                             className="border border-gold/20 bg-cream2 px-4 py-3 font-sans text-sm text-choc outline-none focus:border-gold2"
                         >
-                            <option value="">{t('Alle steden')}</option>
+                            <option value="">{t('All cities')}</option>
                             {cities.map((option) => (
                                 <option key={option} value={option}>
                                     {option}
@@ -162,7 +162,7 @@ export default function ClubsIndex({ clubs, filters, cities }: ClubsIndexProps) 
                             <SportFilter
                                 active={filters.sport === null}
                                 onClick={() => applySport(null)}
-                                label={t('Alle sporten')}
+                                label={t('All sports')}
                             />
                             {SPORTS.map((sport) => (
                                 <SportFilter
@@ -179,7 +179,7 @@ export default function ClubsIndex({ clubs, filters, cities }: ClubsIndexProps) 
 
                     {cards.length === 0 ? (
                         <p className="border border-dashed border-gold/25 bg-cream2 px-6 py-14 text-center font-sans text-sm text-stone">
-                            {t('Geen clubs gevonden voor deze filters.')}
+                            {t('No clubs found for these filters.')}
                         </p>
                     ) : hasScrollProp ? (
                         <InfiniteScroll
@@ -196,8 +196,8 @@ export default function ClubsIndex({ clubs, filters, cities }: ClubsIndexProps) 
                                             className="cursor-pointer border border-gold/30 px-8 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10 disabled:opacity-50"
                                         >
                                             {loading
-                                                ? t('Laden...')
-                                                : t('Meer laden')}
+                                                ? t('Loading...')
+                                                : t('Load more')}
                                         </button>
                                     </div>
                                 ) : null

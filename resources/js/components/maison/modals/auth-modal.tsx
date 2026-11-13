@@ -67,42 +67,42 @@ export function AuthModal({
         switch (view) {
             case 'register':
                 return {
-                    title: t('Registreren'),
-                    subtitle: t('Maison Anversa · Lid worden'),
+                    title: t('Register'),
+                    subtitle: t('Maison Anversa · Become a member'),
                     description: t(
-                        'Maak jouw account aan en krijg toegang tot jouw persoonlijke dashboard, Heritage Letter en Founding Circle.',
+                        'Create your account and access your personal dashboard, Heritage Letter and Founding Circle.',
                     ),
                 };
             case 'forgot':
                 return {
-                    title: t('Wachtwoord vergeten'),
-                    subtitle: t('Herstel · Veilig en discreet'),
+                    title: t('Forgot password'),
+                    subtitle: t('Recovery · Secure and discreet'),
                     description: forgotSent
                         ? t(
-                              'Voer de code uit jouw e-mail in en kies een nieuw wachtwoord.',
+                              'Enter the code from your email and choose a new password.',
                           )
                         : t(
-                              'Vul jouw e-mailadres in en wij sturen je een eenmalige code om jouw wachtwoord opnieuw in te stellen.',
+                              'Enter your email address and we will send you a one-time code to reset your password.',
                           ),
                 };
             case 'two-factor':
                 return {
-                    title: t('Tweestapsverificatie'),
-                    subtitle: t('Beveiliging · Extra verificatie'),
+                    title: t('Two-factor authentication'),
+                    subtitle: t('Security · Extra verification'),
                     description: showRecoveryInput
                         ? t(
-                              'Voer een van jouw herstelcodes in om verder te gaan.',
+                              'Enter one of your recovery codes to continue.',
                           )
                         : t(
-                              'Voer de code in van jouw authenticator-app om verder te gaan.',
+                              'Enter the code from your authenticator app to continue.',
                           ),
                 };
             default:
                 return {
-                    title: t('Inloggen'),
-                    subtitle: t('Heritage Letter · Lid worden · Dashboard'),
+                    title: t('Log in'),
+                    subtitle: t('Heritage Letter · Become a member · Dashboard'),
                     description: t(
-                        'Log in met jouw gebruikersnaam of e-mailadres en wachtwoord om toegang te krijgen tot jouw Maison Anversa-account.',
+                        'Log in with your username or email address and password to access your Maison Anversa account.',
                     ),
                 };
         }
@@ -145,7 +145,7 @@ export function AuthModal({
                                     className="sr-only"
                                     htmlFor="auth-login"
                                 >
-                                    {t('Gebruikersnaam / E-mail')}
+                                    {t('Username / Email')}
                                 </label>
                                 <input
                                     id="auth-login"
@@ -155,7 +155,7 @@ export function AuthModal({
                                     autoFocus
                                     autoComplete="username"
                                     placeholder={t(
-                                        'Gebruikersnaam / E-mail',
+                                        'Username / Email',
                                     )}
                                     className={modalInputClassName}
                                 />
@@ -165,14 +165,14 @@ export function AuthModal({
                                     className="sr-only"
                                     htmlFor="auth-password"
                                 >
-                                    {t('Wachtwoord')}
+                                    {t('Password')}
                                 </label>
                                 <ModalPasswordInput
                                     id="auth-password"
                                     name="password"
                                     required
                                     autoComplete="current-password"
-                                    placeholder={t('Wachtwoord')}
+                                    placeholder={t('Password')}
                                 />
                                 <InputError message={errors.password} />
 
@@ -182,7 +182,7 @@ export function AuthModal({
                                         name="remember"
                                         className="size-4 accent-choc"
                                     />
-                                    {t('Onthoud mij')}
+                                    {t('Remember me')}
                                 </label>
 
                                 <MaisonButton
@@ -191,7 +191,7 @@ export function AuthModal({
                                     block
                                     disabled={processing}
                                 >
-                                    {t('Inloggen')}
+                                    {t('Log in')}
                                 </MaisonButton>
                             </>
                         )}
@@ -203,7 +203,7 @@ export function AuthModal({
                             className="font-sans tracking-[0.12em] uppercase transition-colors hover:text-choc"
                             onClick={() => switchView('forgot')}
                         >
-                            {t('Wachtwoord vergeten?')}
+                            {t('Forgot password?')}
                         </button>
                         {registrationEnabled && (
                             <button
@@ -211,7 +211,7 @@ export function AuthModal({
                                 className="font-sans tracking-[0.12em] uppercase transition-colors hover:text-choc"
                                 onClick={() => switchView('register')}
                             >
-                                {t('Nog geen account? Registreren')}
+                                {t('No account yet? Register')}
                             </button>
                         )}
                     </div>
@@ -237,7 +237,7 @@ export function AuthModal({
                                     required
                                     autoFocus
                                     autoComplete="name"
-                                    placeholder={t('Jouw naam')}
+                                    placeholder={t('Your name')}
                                     className={modalInputClassName}
                                 />
                                 <InputError message={errors.name} />
@@ -247,7 +247,7 @@ export function AuthModal({
                                     name="email"
                                     required
                                     autoComplete="email"
-                                    placeholder={t('Jouw e-mailadres')}
+                                    placeholder={t('Your email address')}
                                     className={modalInputClassName}
                                 />
                                 <InputError message={errors.email} />
@@ -256,7 +256,7 @@ export function AuthModal({
                                     name="password"
                                     required
                                     autoComplete="new-password"
-                                    placeholder={t('Wachtwoord')}
+                                    placeholder={t('Password')}
                                 />
                                 <InputError message={errors.password} />
 
@@ -264,14 +264,14 @@ export function AuthModal({
                                     name="password_confirmation"
                                     required
                                     autoComplete="new-password"
-                                    placeholder={t('Bevestig wachtwoord')}
+                                    placeholder={t('Confirm password')}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
                                 />
 
                                 <GenderSelect
-                                    aria-label={t('Geslacht')}
+                                    aria-label={t('Gender')}
                                     triggerClassName={cn(
                                         modalInputClassName,
                                         'h-auto rounded-none shadow-none data-[size=default]:h-auto [&_svg]:text-choc3',
@@ -285,7 +285,7 @@ export function AuthModal({
                                     block
                                     disabled={processing}
                                 >
-                                    {t('Registreren')}
+                                    {t('Register')}
                                 </MaisonButton>
                             </>
                         )}
@@ -297,7 +297,7 @@ export function AuthModal({
                             className="font-sans text-[13px] tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
                             onClick={() => switchView('login')}
                         >
-                            {t('Al een account? Inloggen')}
+                            {t('Already have an account? Log in')}
                         </button>
                     </div>
                 </>
@@ -323,7 +323,7 @@ export function AuthModal({
                                         required
                                         autoFocus
                                         autoComplete="email"
-                                        placeholder={t('Jouw e-mailadres')}
+                                        placeholder={t('Your email address')}
                                         className={modalInputClassName}
                                         value={forgotEmail}
                                         onChange={(event) =>
@@ -338,7 +338,7 @@ export function AuthModal({
                                         block
                                         disabled={processing}
                                     >
-                                        {t('Verstuur code')}
+                                        {t('Send code')}
                                     </MaisonButton>
                                 </>
                             )}
@@ -363,7 +363,7 @@ export function AuthModal({
                                             htmlFor="auth-reset-email"
                                             className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
                                         >
-                                            {t('E-mailadres')}
+                                            {t('Email address')}
                                         </label>
                                         <input
                                             id="auth-reset-email"
@@ -382,7 +382,7 @@ export function AuthModal({
                                             htmlFor="auth-reset-otp"
                                             className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
                                         >
-                                            {t('6-cijferige code')}
+                                            {t('6-digit code')}
                                         </label>
                                         <input
                                             id="auth-reset-otp"
@@ -407,14 +407,14 @@ export function AuthModal({
                                             htmlFor="auth-reset-password"
                                             className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
                                         >
-                                            {t('Nieuw wachtwoord instellen')}
+                                            {t('Set new password')}
                                         </label>
                                         <ModalPasswordInput
                                             id="auth-reset-password"
                                             name="password"
                                             required
                                             autoComplete="new-password"
-                                            placeholder={t('Nieuw wachtwoord')}
+                                            placeholder={t('New password')}
                                         />
                                         <InputError message={errors.password} />
                                     </div>
@@ -424,7 +424,7 @@ export function AuthModal({
                                             htmlFor="auth-reset-password-confirm"
                                             className="font-sans text-[10px] tracking-[0.18em] text-stone uppercase"
                                         >
-                                            {t('Bevestig nieuw wachtwoord')}
+                                            {t('Confirm new password')}
                                         </label>
                                         <ModalPasswordInput
                                             id="auth-reset-password-confirm"
@@ -432,7 +432,7 @@ export function AuthModal({
                                             required
                                             autoComplete="new-password"
                                             placeholder={t(
-                                                'Bevestig wachtwoord',
+                                                'Confirm password',
                                             )}
                                         />
                                         <InputError
@@ -448,7 +448,7 @@ export function AuthModal({
                                         block
                                         disabled={processing}
                                     >
-                                        {t('Wachtwoord opslaan')}
+                                        {t('Save password')}
                                     </MaisonButton>
 
                                     <button
@@ -458,7 +458,7 @@ export function AuthModal({
                                             setForgotSent(false);
                                         }}
                                     >
-                                        {t('Andere code aanvragen')}
+                                        {t('Request another code')}
                                     </button>
                                 </>
                             )}
@@ -471,7 +471,7 @@ export function AuthModal({
                             className="font-sans text-[13px] tracking-[0.12em] text-choc3 uppercase transition-colors hover:text-choc"
                             onClick={() => switchView('login')}
                         >
-                            {t('Terug naar inloggen')}
+                            {t('Back to log in')}
                         </button>
                     </div>
                 </>
@@ -498,7 +498,7 @@ export function AuthModal({
                                             type="text"
                                             required
                                             autoFocus
-                                            placeholder={t('Herstelcode')}
+                                            placeholder={t('Recovery code')}
                                             className={modalInputClassName}
                                         />
                                         <InputError
@@ -513,7 +513,7 @@ export function AuthModal({
                                             inputMode="numeric"
                                             required
                                             autoFocus
-                                            placeholder={t('Authenticatiecode')}
+                                            placeholder={t('Authentication code')}
                                             className={modalInputClassName}
                                         />
                                         <InputError message={errors.code} />
@@ -526,7 +526,7 @@ export function AuthModal({
                                     block
                                     disabled={processing}
                                 >
-                                    {t('Doorgaan')}
+                                    {t('Continue')}
                                 </MaisonButton>
 
                                 <button
@@ -540,8 +540,8 @@ export function AuthModal({
                                     }}
                                 >
                                     {showRecoveryInput
-                                        ? t('Inloggen met authenticatiecode')
-                                        : t('Inloggen met herstelcode')}
+                                        ? t('Log in with authentication code')
+                                        : t('Log in with recovery code')}
                                 </button>
                             </>
                         )}
@@ -551,7 +551,7 @@ export function AuthModal({
 
             <p className={modalNoteClassName}>
                 {t(
-                    'Jouw gegevens worden veilig behandeld. Alleen wat nodig is voor jouw Maison Anversa-account.',
+                    'Your data is handled securely. Only what is needed for your Maison Anversa account.',
                 )}
             </p>
         </MaisonModal>

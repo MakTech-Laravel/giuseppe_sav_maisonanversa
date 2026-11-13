@@ -50,24 +50,24 @@ export function CancelSessionDialog({
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <button type="button" className={triggerClassName}>
-                    {t('Sessie annuleren')}
+                    {t('Cancel session')}
                 </button>
             </DialogTrigger>
 
             <DialogContent className="border-gold/20 bg-cream sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="font-serif text-2xl font-medium text-choc">
-                        {t('Deze sessie annuleren?')}
+                        {t('Cancel this session?')}
                     </DialogTitle>
                     <DialogDescription className="font-sans text-[11px] tracking-[0.1em] text-stone uppercase">
-                        {t('Alle spelers krijgen een melding en een e-mail.')}
+                        {t('All players receive a notification and an email.')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <label className="flex flex-col gap-1.5">
                         <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                            {t('Bericht aan de spelers (optioneel)')}
+                            {t('Message to the players (optional)')}
                         </span>
                         <textarea
                             value={message}
@@ -87,14 +87,14 @@ export function CancelSessionDialog({
                             disabled={processing}
                             className="flex-1 cursor-pointer bg-choc px-6 py-4 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2 disabled:opacity-50"
                         >
-                            {t('Sessie annuleren')}
+                            {t('Cancel session')}
                         </button>
                         <button
                             type="button"
                             onClick={() => setOpen(false)}
                             className="flex-1 cursor-pointer border border-gold/30 bg-transparent px-6 py-4 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10"
                         >
-                            {t('Terug')}
+                            {t('Back')}
                         </button>
                     </div>
                 </form>

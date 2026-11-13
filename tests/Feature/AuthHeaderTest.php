@@ -45,10 +45,10 @@ test('auth menu keeps login for guests and the profile initial after login', fun
 
     expect($authMenu)
         ->toContain("openAuth('login')")
-        ->toContain("t('Inloggen')")
+        ->toContain("t('Log in')")
         ->toContain('rounded-full border border-gold/35')
         ->toContain('firstName.charAt(0).toUpperCase()')
-        ->toContain("t('Uitloggen')")
+        ->toContain("t('Log out')")
         ->toContain("menuPlacement?: 'down' | 'up'")
         ->toContain('bottom-[calc(100%+0.5rem)]');
 });

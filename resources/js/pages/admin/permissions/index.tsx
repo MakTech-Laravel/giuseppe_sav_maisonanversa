@@ -45,13 +45,13 @@ export default function PermissionsIndex({
 
     return (
         <>
-            <Head title={t('Rechten')} />
+            <Head title={t('Permissions')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Rechten')}
+                    title={t('Permissions')}
                     description={t(
-                        'Door ontwikkelaars gedefinieerde rechten, gegroepeerd per domein. Alleen-lezen.',
+                        'Developer-defined permissions, grouped by domain. Read-only.',
                     )}
                     icon={KeyRound}
                 >
@@ -90,17 +90,17 @@ export default function PermissionsIndex({
                         <Input
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder={t('Zoek rechten…')}
+                            placeholder={t('Search permissions…')}
                             className="pl-9"
                         />
                     </div>
                     <Badge variant="secondary" className="gap-1.5">
                         <Layers className="h-3.5 w-3.5" />
-                        {t('{{count}} groepen', { count: groups.length })}
+                        {t('{{count}} groups', { count: groups.length })}
                     </Badge>
                     <Badge variant="secondary" className="gap-1.5">
                         <KeyRound className="h-3.5 w-3.5" />
-                        {t('{{count}} rechten', { count: items.length })}
+                        {t('{{count}} permissions', { count: items.length })}
                     </Badge>
                 </div>
 
@@ -133,7 +133,7 @@ export default function PermissionsIndex({
                                             variant="secondary"
                                             className="shrink-0 gap-1 text-xs"
                                             title={t(
-                                                'Toegewezen aan {{count}} rol(len)',
+                                                'Assigned to {{count}} role(s)',
                                                 { count: perm.roles_count },
                                             )}
                                         >
@@ -149,7 +149,7 @@ export default function PermissionsIndex({
                         <div className="col-span-full rounded-xl border border-dashed py-16 text-center">
                             <KeyRound className="mx-auto h-10 w-10 text-muted-foreground/40" />
                             <p className="mt-3 text-sm text-muted-foreground">
-                                {t('Geen rechten gevonden voor "{{query}}".', {
+                                {t('No permissions match "{{query}}".', {
                                     query,
                                 })}
                             </p>

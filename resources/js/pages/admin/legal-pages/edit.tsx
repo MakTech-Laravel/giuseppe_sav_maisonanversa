@@ -46,16 +46,16 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
 
     return (
         <>
-            <Head title={t('Juridische pagina bewerken')} />
+            <Head title={t('Edit legal page')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Juridische pagina bewerken')}
+                    title={t('Edit legal page')}
                     description={legalPageTitle(page.slug, t)}
                     icon={FileText}
                 >
                     <Button variant="outline" asChild>
                         <Link href={legalPages.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     <Button variant="outline" asChild>
@@ -65,7 +65,7 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
                                 legalPage: Number(page.id),
                             })}
                         >
-                            <Eye className="h-4 w-4" /> {t('Voorbeeld')}
+                            <Eye className="h-4 w-4" /> {t('Preview')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -73,7 +73,7 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
                 <form onSubmit={submit} className="w-full space-y-6">
                     <AdminResourceShell
                         aside={
-                            <AdminPanel title={t('Publicatie')}>
+                            <AdminPanel title={t('Publication')}>
                                 <div className="grid gap-4">
                                     <div className="grid gap-2">
                                         <Label>{t('Slug')}</Label>
@@ -99,13 +99,13 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
                                         />
                                         <span>
                                             {form.data.is_published
-                                                ? t('Gepubliceerd')
-                                                : t('Concept')}
+                                                ? t('Published')
+                                                : t('Draft')}
                                         </span>
                                     </label>
                                     <p className="text-xs text-muted-foreground">
                                         {t(
-                                            'Tekst op dit formulier is de Nederlandse bron. DeepL vult EN en FR na opslaan. HTML-tags blijven ongewijzigd.',
+                                            'Copy on this form is the Dutch source. DeepL fills EN and FR after saving. HTML tags stay intact.',
                                         )}
                                     </p>
                                     <InputError
@@ -116,9 +116,9 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
                         }
                     >
                         <AdminPanel
-                            title={t('Inhoud')}
+                            title={t('Content')}
                             description={t(
-                                'Bewerk visueel of schakel naar HTML. Onveilige code wordt verwijderd.',
+                                'Edit visually or switch to HTML. Unsafe code is removed.',
                             )}
                         >
                             <LegalRichTextEditor
@@ -138,7 +138,7 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                         <Button variant="outline" asChild>
                             <Link
@@ -147,7 +147,7 @@ export default function EditLegalPage({ page }: LegalPageEditProps) {
                                     legalPage: Number(page.id),
                                 })}
                             >
-                                {t('Annuleren')}
+                                {t('Cancel')}
                             </Link>
                         </Button>
                     </div>
@@ -161,7 +161,7 @@ EditLegalPage.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: "Juridische Pagina's",
+            title: "Legal Pages",
             href: legalPages.index(wayfinderLocale()),
         },
         { title: 'Bewerken', href: '#' },

@@ -11,32 +11,32 @@ const STEPS = [
     {
         num: '01',
         title: 'Welkomstkaart',
-        desc: 'Het eerste dat je ziet. Persoonlijk, warm, handgetekend.',
+        desc: 'The first thing you see. Personal, warm, hand-drawn.',
     },
     {
         num: '02',
         title: 'Oprichtersbrief',
-        desc: 'Het verhaal van Maison Anversa. Geschreven door Yusuf.',
+        desc: 'The story of Maison Anversa. Written by Yusuf.',
     },
     {
         num: '03',
         title: 'Heritage Paspoort',
-        desc: "24 pagina's. Leder cover. Jouw plek in het verhaal.",
+        desc: "24 pages. Leather cover. Your place in the story.",
     },
     {
         num: '04',
         title: 'Heritage Certificaat',
-        desc: 'Oprichterzegel. Handtekening. Jouw editienummer.',
+        desc: 'Founder's seal. Signature. Your edition number.',
     },
     {
         num: '05',
         title: 'Founding Circle',
-        desc: 'Uitnodiging voor de eerste 100 van Maison Anversa.',
+        desc: 'Invitation to the first 100 of Maison Anversa.',
     },
     {
         num: '06',
         title: 'Heritage Nº 001',
-        desc: 'In premium canvas stofdoek. Als laatste. Zoals het hoort.',
+        desc: 'In a premium canvas dust cover. Last. As it should be.',
     },
 ] as const;
 
@@ -51,15 +51,15 @@ export function HomeUnboxing() {
                     <div>
                         <Eyebrow>{t('The Heritage Experience')}</Eyebrow>
                         <h2 className="mt-3 font-serif text-[clamp(26px,3vw,40px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
-                            {t('Meer dan')}
+                            {t('More than')}
                             <br />
-                            {t('een Racket.')}
+                            {t('a Racket.')}
                         </h2>
                     </div>
                     <div>
                         <p className="mb-5 text-[15px] leading-[1.85] text-sand">
                             {t(
-                                'Elk Heritage Nº 001 pakket is een volledige ervaring. Elk element is intentioneel gekozen. De volgorde is nooit toevallig.',
+                                'Each Heritage Nº 001 package is a complete experience. Every element is intentionally chosen. The order is never accidental.',
                             )}
                         </p>
                         <TextLink
@@ -67,7 +67,7 @@ export function HomeUnboxing() {
                             tone="light"
                             href={foundingProductUrl(locale)}
                         >
-                            {t('Ontdek de volledige ervaring →')}
+                            {t('Discover the full experience →')}
                         </TextLink>
                     </div>
                 </Reveal>

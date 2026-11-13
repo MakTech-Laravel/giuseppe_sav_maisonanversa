@@ -71,24 +71,24 @@ export function ClubSubmitDialog({
                     className="inline-flex cursor-pointer items-center gap-2 font-sans text-[10px] tracking-[0.16em] text-gold2 uppercase underline underline-offset-4 hover:text-choc"
                 >
                     <Plus className="size-3.5" aria-hidden="true" />
-                    {t('Club niet gevonden? Voeg er een toe')}
+                    {t('Club not listed? Add one')}
                 </button>
             </DialogTrigger>
 
             <DialogContent className="max-h-[85vh] overflow-y-auto border-gold/20 bg-cream sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="font-serif text-2xl font-medium text-choc">
-                        {t('Club of corner toevoegen')}
+                        {t('Add a club or corner')}
                     </DialogTitle>
                     <DialogDescription className="font-sans text-[11px] tracking-[0.1em] text-stone uppercase">
                         {t(
-                            'Wordt zichtbaar na goedkeuring door Maison Anversa.',
+                            'Visible once Maison Anversa approves it.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <Field label={t('Naam')} error={form.errors.name}>
+                    <Field label={t('Name')} error={form.errors.name}>
                         <input
                             type="text"
                             value={form.data.name}
@@ -100,7 +100,7 @@ export function ClubSubmitDialog({
                         />
                     </Field>
 
-                    <Field label={t('Sporten')} error={form.errors.sports}>
+                    <Field label={t('Sports')} error={form.errors.sports}>
                         <div className="flex gap-2">
                             {['padel', 'tennis'].map((sport) => {
                                 const active = form.data.sports.includes(sport);
@@ -149,7 +149,7 @@ export function ClubSubmitDialog({
                     </Field>
 
                     <Field
-                        label={t('Straat en nummer')}
+                        label={t('Street and number')}
                         error={form.errors.street}
                     >
                         <input
@@ -164,7 +164,7 @@ export function ClubSubmitDialog({
 
                     <div className="grid gap-4 sm:grid-cols-[8rem_1fr]">
                         <Field
-                            label={t('Postcode')}
+                            label={t('Postal code')}
                             error={form.errors.postal_code}
                         >
                             <input
@@ -180,7 +180,7 @@ export function ClubSubmitDialog({
                             />
                         </Field>
 
-                        <Field label={t('Stad')} error={form.errors.city}>
+                        <Field label={t('City')} error={form.errors.city}>
                             <input
                                 type="text"
                                 value={form.data.city}
@@ -210,7 +210,7 @@ export function ClubSubmitDialog({
                         disabled={form.processing}
                         className="w-full cursor-pointer bg-choc px-6 py-4 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2 disabled:opacity-50"
                     >
-                        {t('Club indienen')}
+                        {t('Submit club')}
                     </button>
                 </form>
             </DialogContent>

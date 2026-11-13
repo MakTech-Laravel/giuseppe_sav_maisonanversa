@@ -39,7 +39,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
     });
 
     function removeMember() {
-        if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
+        if (!window.confirm(t('Remove member from Founding Circle?'))) {
             return;
         }
 
@@ -61,7 +61,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
             <Head
                 title={
                     member.edition
-                        ? `${t('Editie')} № ${member.edition}`
+                        ? `${t('Edition')} № ${member.edition}`
                         : member.name
                 }
             />
@@ -69,20 +69,20 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                 <AdminPageHeader
                     title={member.name}
                     description={t(
-                        'Founding Circle-plaats en voordelen voor dit lid.',
+                        'Founding Circle place and benefits for this member.',
                     )}
                     icon={UsersRound}
                 >
                     <Button variant="outline" asChild>
                         <Link href={circleRoutes.index(locale)}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar Founding Circle')}
+                            {t('Back to Founding Circle')}
                         </Link>
                     </Button>
                     <Button variant="outline" asChild>
                         <Link href={customerHref}>
                             <IdCard className="h-4 w-4" />{' '}
-                            {t('Klantenprofiel')}
+                            {t('Customer profile')}
                         </Link>
                     </Button>
                     <Button
@@ -90,23 +90,23 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                         type="button"
                         onClick={removeMember}
                     >
-                        {t('Verwijderen')}
+                        {t('Remove')}
                     </Button>
                 </AdminPageHeader>
 
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Open het klantaccount of verwijder dit lid uit de Circle.',
+                                'Open the customer account or remove this member from the Circle.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
                                 <Button asChild className="w-full">
                                     <Link href={customerHref}>
                                         <IdCard className="h-4 w-4" />{' '}
-                                        {t('Klantenprofiel')}
+                                        {t('Customer profile')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -116,7 +116,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                                 >
                                     <Link href={circleRoutes.index(locale)}>
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug naar Founding Circle')}
+                                        {t('Back to Founding Circle')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -125,7 +125,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                                     className="w-full"
                                     onClick={removeMember}
                                 >
-                                    {t('Verwijderen')}
+                                    {t('Remove')}
                                 </Button>
                             </div>
                         </AdminPanel>
@@ -142,16 +142,16 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                                     </div>
                                     <div className="min-w-0">
                                         <p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-                                            {t('Editieplaats')}
+                                            {t('Edition place')}
                                         </p>
                                         <h2 className="mt-1 font-serif text-2xl leading-none">
                                             {member.edition
-                                                ? `${t('Editie')} № ${member.edition}`
-                                                : t('Nog geen editie toegewezen')}
+                                                ? `${t('Edition')} № ${member.edition}`
+                                                : t('No edition assigned yet')}
                                         </h2>
                                         <p className="mt-2 text-sm text-muted-foreground">
                                             {t(
-                                                'Eén vaste plaats in Heritage Nº 001 (1–100).',
+                                                'One fixed place in Heritage Nº 001 (1–100).',
                                             )}
                                         </p>
                                     </div>
@@ -163,15 +163,15 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                         </AdminPanel>
 
                         <AdminPanel
-                            title={t('Lid')}
+                            title={t('Member')}
                             description={t(
-                                'Accountgegevens. Klik door naar het volledige klantenprofiel.',
+                                'Account details. Click through to the full customer profile.',
                             )}
                         >
                             <dl className="grid gap-5 sm:grid-cols-2">
                                 <div className="space-y-1">
                                     <dt className="text-xs text-muted-foreground">
-                                        {t('Naam')}
+                                        {t('Name')}
                                     </dt>
                                     <dd>
                                         <Link
@@ -184,7 +184,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                                 </div>
                                 <div className="space-y-1">
                                     <dt className="text-xs text-muted-foreground">
-                                        {t('E-mail')}
+                                        {t('Email')}
                                     </dt>
                                     <dd>
                                         <Link
@@ -197,7 +197,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                                 </div>
                                 <div className="space-y-1">
                                     <dt className="text-xs text-muted-foreground">
-                                        {t('Ingeschreven op')}
+                                        {t('Joined')}
                                     </dt>
                                     <dd className="font-medium">
                                         {member.joined_at ?? '—'}
@@ -205,7 +205,7 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                                 </div>
                                 <div className="space-y-1">
                                     <dt className="text-xs text-muted-foreground">
-                                        {t('Klant-ID')}
+                                        {t('Customer ID')}
                                     </dt>
                                     <dd className="font-medium tabular-nums">
                                         {member.id}
@@ -215,9 +215,9 @@ export default function CircleShow({ member }: { member: CircleMemberDetail }) {
                         </AdminPanel>
 
                         <AdminPanel
-                            title={t('Voordelen')}
+                            title={t('Benefits')}
                             description={t(
-                                'Wat dit Founding Circle-lid ontvangt.',
+                                'What this Founding Circle member receives.',
                             )}
                         >
                             <ul className="grid gap-3 sm:grid-cols-2">

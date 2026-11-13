@@ -41,11 +41,11 @@ export type NavItem = { page: MaisonPage; label: string; hash?: string };
 
 /** The nine links in the header, in the prototype's order. */
 export const PRIMARY_NAV: readonly NavItem[] = [
-    { page: 'house', label: 'Het Huis' },
-    { page: 'products', label: 'Producten' },
-    { page: 'story', label: 'Ons Verhaal' },
+    { page: 'house', label: 'The House' },
+    { page: 'products', label: 'Products' },
+    { page: 'story', label: 'Our Story' },
     { page: 'circle', label: 'Founding Circle' },
-    { page: 'dressing', label: 'Kleedkamer' },
+    { page: 'dressing', label: 'Dressing Room' },
     { page: 'journal', label: 'Journal' },
     { page: 'community', label: 'Community' },
     { page: 'corner', label: 'Club Corner' },
@@ -68,17 +68,17 @@ export type FooterColumn = {
 
 export const FOOTER_COLUMNS: readonly FooterColumn[] = [
     {
-        heading: 'Verkennen',
+        heading: 'Explore',
         items: [
-            { page: 'products', label: 'Producten' },
-            { page: 'story', label: 'Ons Verhaal' },
+            { page: 'products', label: 'Products' },
+            { page: 'story', label: 'Our Story' },
             { page: 'circle', label: 'Founding Circle' },
             {
                 href: '/founding-circle/register',
-                label: 'Het register',
+                label: 'The register',
                 localePath: true,
             },
-            { page: 'dressing', label: 'Kleedkamer' },
+            { page: 'dressing', label: 'Dressing Room' },
             { page: 'journal', label: 'Journal' },
             { page: 'community', label: 'Community' },
             { page: 'corner', label: 'Club Corner' },
@@ -88,15 +88,15 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
         heading: 'Support',
         items: [
             { page: 'contact', label: 'Contact' },
-            { page: 'shipping', label: 'Verzending & Retour' },
-            { page: 'care', label: 'Zorg & Garantie' },
+            { page: 'shipping', label: 'Shipping & Returns' },
+            { page: 'care', label: 'Care & Warranty' },
             { page: 'contact', label: 'FAQ', hash: 'faq' },
-            { page: 'privacy', label: 'Privacybeleid' },
-            { page: 'terms', label: 'Algemene voorwaarden' },
+            { page: 'privacy', label: 'Privacy Policy' },
+            { page: 'terms', label: 'Terms & Conditions' },
         ],
     },
     {
-        heading: 'Volg Ons',
+        heading: 'Follow Us',
         items: [
             {
                 href: 'https://www.instagram.com/',
@@ -106,7 +106,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
             { href: '#heritage-letter', label: 'Heritage Letter' },
             {
                 href: 'mailto:press@maisonanversa.com',
-                label: 'Pers',
+                label: 'Press',
                 channel: 'press',
             },
         ],

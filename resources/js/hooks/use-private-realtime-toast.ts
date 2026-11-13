@@ -14,14 +14,14 @@ export function showRealtimeTestToast(
     t: Translate = (key) => key,
 ): void {
     const message = t(
-        payload.message?.trim() || 'Realtime melding ontvangen.',
+        payload.message?.trim() || 'Realtime notification received.',
     );
 
     toast.success(message, {
         id:
             payload.triggered_at?.trim() ||
             `realtime-test-${payload.user_id ?? 'anon'}-${message}`,
-        description: t('Privé realtime-kanaal'),
+        description: t('Private realtime channel'),
         duration: 6000,
     });
 }

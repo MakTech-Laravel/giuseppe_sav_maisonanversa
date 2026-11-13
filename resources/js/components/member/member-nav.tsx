@@ -75,7 +75,7 @@ function MemberNavList({ items, path, onNavigate }: MemberNavListProps) {
                     }}
                     className="block w-full px-3 py-2.5 text-left font-sans text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:bg-choc2 hover:text-cream"
                 >
-                    {t('Uitloggen')}
+                    {t('Log out')}
                 </button>
             </li>
         </ul>
@@ -98,7 +98,7 @@ export function MemberNav({
     const items: NavItem[] = [
         { label: t('Dashboard'), href: `/${locale}/member`, exact: true },
         {
-            label: t('Meldingen'),
+            label: t('Notifications'),
             href: `/${locale}/member/notifications`,
         },
         {
@@ -106,9 +106,9 @@ export function MemberNav({
             href: `/${locale}/member/chat`,
             badge: chatUnread,
         },
-        { label: t('Bestellingen'), href: `/${locale}/member/orders` },
+        { label: t('Orders'), href: `/${locale}/member/orders` },
         {
-            label: t('Lidpaspoort'),
+            label: t('Member passport'),
             href: `/${locale}/member/lidpaspoort`,
         },
         ...(isFoundingCircle
@@ -118,35 +118,35 @@ export function MemberNav({
                       href: `/${locale}/member/circle`,
                   },
                   {
-                      label: t('Mijn Heritage'),
+                      label: t('My Heritage'),
                       href: `/${locale}/member/heritage`,
                   },
                   {
-                      label: t('Digitaal Heritage Passport'),
+                      label: t('Digital Heritage Passport'),
                       href: `/${locale}/member/passport`,
                   },
                   {
-                      label: t('Registervermelding'),
+                      label: t('Register listing'),
                       href: `/${locale}/member/register-listing`,
                   },
               ]
             : []),
-        { label: t('Gemeenschap'), href: `/${locale}/community`, exact: true },
-        { label: t('Sessies'), href: `/${locale}/community/sessions` },
+        { label: t('Community'), href: `/${locale}/community`, exact: true },
+        { label: t('Sessions'), href: `/${locale}/community/sessions` },
         { label: t('Events'), href: `/${locale}/community/events` },
         {
             label: t('Heritage Letter'),
             href: `/${locale}/member/letter`,
         },
         {
-            label: t('E-mailvoorkeuren'),
+            label: t('Email preferences'),
             href: `/${locale}/member/email-preferences`,
         },
         {
-            label: t('Profiel & account'),
+            label: t('Profile & account'),
             href: `/${locale}/member/profile`,
         },
-        { label: t('Beveiliging'), href: `/${locale}/member/security` },
+        { label: t('Security'), href: `/${locale}/member/security` },
     ];
 
     return (
@@ -180,7 +180,7 @@ export function MemberNav({
                                 </SheetTitle>
                             </SheetHeader>
                             <nav
-                                aria-label={t('Lid')}
+                                aria-label={t('Member')}
                                 className="overflow-y-auto"
                             >
                                 <MemberNavList
@@ -196,7 +196,7 @@ export function MemberNav({
 
             {(placement === 'sidebar' || placement === 'all') && (
                 <nav
-                    aria-label={t('Lid')}
+                    aria-label={t('Member')}
                     className="hidden w-full shrink-0 md:sticky md:top-20 md:block md:w-56 md:self-start"
                 >
                     <div className="max-h-[calc(100vh-6rem)] overflow-y-auto border border-gold/25 bg-choc3">

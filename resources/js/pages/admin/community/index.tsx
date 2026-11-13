@@ -214,12 +214,12 @@ export default function CommunityIndex({
 
     return (
         <>
-            <Head title={t('Gemeenschap')} />
+            <Head title={t('Community')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Gemeenschap')}
+                    title={t('Community')}
                     description={t(
-                        'Moderatie van ledenconversaties en activiteit.',
+                        'Moderate member conversations and activity.',
                     )}
                     icon={MessageCircle}
                 />
@@ -229,7 +229,7 @@ export default function CommunityIndex({
                     className="space-y-3 rounded-xl border bg-card p-5 shadow-sm"
                 >
                     <p className="text-sm font-medium">
-                        {t('Officieel bericht')}
+                        {t('Official post')}
                     </p>
                     <textarea
                         value={form.data.content}
@@ -240,14 +240,14 @@ export default function CommunityIndex({
                         maxLength={2000}
                     />
                     <Button type="submit" disabled={form.processing}>
-                        {t('Publiceren')}
+                        {t('Publish')}
                     </Button>
                 </form>
 
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_11rem_11rem_auto] sm:items-center">
                     <div className="relative min-w-0">
                         <Label htmlFor="community-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -256,7 +256,7 @@ export default function CommunityIndex({
                             onChange={(event) => setSearch(event.target.value)}
                             placeholder={t('Zoek op auteur of inhoud…')}
                             className="w-full pl-9"
-                            aria-label={t('Zoeken')}
+                            aria-label={t('Search')}
                         />
                     </div>
                     <Select value={status} onValueChange={setStatus}>
@@ -264,17 +264,17 @@ export default function CommunityIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             <SelectItem value="published">
-                                {t('Gepubliceerd')}
+                                {t('Published')}
                             </SelectItem>
                             <SelectItem value="hidden">
-                                {t('Verborgen')}
+                                {t('Hidden')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -283,16 +283,16 @@ export default function CommunityIndex({
                             className="w-full"
                             aria-label={t('Type')}
                         >
-                            <SelectValue placeholder={t('Alle types')} />
+                            <SelectValue placeholder={t('All types')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle types')}
+                                {t('All types')}
                             </SelectItem>
                             <SelectItem value="official">
-                                {t('Officieel')}
+                                {t('Official')}
                             </SelectItem>
-                            <SelectItem value="member">{t('Lid')}</SelectItem>
+                            <SelectItem value="member">{t('Member')}</SelectItem>
                         </SelectContent>
                     </Select>
                     {hasActiveFilters ? (
@@ -304,7 +304,7 @@ export default function CommunityIndex({
                             onClick={clearFilters}
                         >
                             <X className="h-4 w-4" />
-                            {t('Wis filters')}
+                            {t('Clear filters')}
                         </Button>
                     ) : (
                         <span className="hidden sm:block" aria-hidden />
@@ -315,11 +315,11 @@ export default function CommunityIndex({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Auteur')}</TableHead>
-                                <TableHead>{t('Fragment')}</TableHead>
+                                <TableHead>{t('Author')}</TableHead>
+                                <TableHead>{t('Excerpt')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -330,7 +330,7 @@ export default function CommunityIndex({
                                         colSpan={4}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen berichten gevonden.')}
+                                        {t('No posts found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -343,7 +343,7 @@ export default function CommunityIndex({
                                                     className="ml-2"
                                                     variant="secondary"
                                                 >
-                                                    {t('Officieel')}
+                                                    {t('Official')}
                                                 </Badge>
                                             )}
                                         </TableCell>
@@ -388,7 +388,7 @@ export default function CommunityIndex({
                                                                 )
                                                             }
                                                         >
-                                                            {t('Verbergen')}
+                                                            {t('Hide')}
                                                         </Button>
                                                     )
                                                 )}
@@ -405,17 +405,17 @@ export default function CommunityIndex({
                 {items.length > 0 && (
                     <div className="space-y-3">
                         <h2 className="text-sm font-medium">
-                            {t('Meldingen')}
+                            {t('Notifications')}
                         </h2>
                         <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-muted/50 hover:bg-muted/50">
                                         <TableHead>{t('Melder')}</TableHead>
-                                        <TableHead>{t('Reden')}</TableHead>
+                                        <TableHead>{t('Reason')}</TableHead>
                                         <TableHead>{t('Status')}</TableHead>
                                         <TableHead className="text-right">
-                                            {t('Acties')}
+                                            {t('Actions')}
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -447,7 +447,7 @@ export default function CommunityIndex({
                                                                 )
                                                             }
                                                         >
-                                                            {t('Oplossen')}
+                                                            {t('Resolve')}
                                                         </Button>
                                                         <Button
                                                             variant="ghost"
@@ -460,7 +460,7 @@ export default function CommunityIndex({
                                                                 )
                                                             }
                                                         >
-                                                            {t('Afwijzen')}
+                                                            {t('Decline')}
                                                         </Button>
                                                     </>
                                                 )}

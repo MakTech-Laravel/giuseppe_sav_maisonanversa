@@ -20,8 +20,8 @@ enum RegisterVisibility: string
     {
         return match ($this) {
             self::Private => 'Privé',
-            self::Initial => 'Voornaam en initiaal',
-            self::Full => 'Volledige naam',
+            self::Initial => 'First name and initial',
+            self::Full => 'Full name',
         };
     }
 

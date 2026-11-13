@@ -53,7 +53,7 @@ export function JournalArticleFormFields({
         <>
             <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="title">{t('Titel')}</Label>
+                    <Label htmlFor="title">{t('Title')}</Label>
                     <Input
                         id="title"
                         value={data.title}
@@ -73,7 +73,7 @@ export function JournalArticleFormFields({
                     <Input
                         id="slug"
                         value={data.slug}
-                        placeholder={t('Automatisch op basis van naam')}
+                        placeholder={t('Automatic based on name')}
                         onChange={(event) =>
                             setData('slug', event.target.value)
                         }
@@ -114,7 +114,7 @@ export function JournalArticleFormFields({
 
             <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="category">{t('Categorie')}</Label>
+                    <Label htmlFor="category">{t('Category')}</Label>
                     <Input
                         id="category"
                         value={data.category}
@@ -130,7 +130,7 @@ export function JournalArticleFormFields({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="author">{t('Auteur')}</Label>
+                    <Label htmlFor="author">{t('Author')}</Label>
                     <Input
                         id="author"
                         value={data.author}
@@ -148,7 +148,7 @@ export function JournalArticleFormFields({
 
             <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="date_label">{t('Datumlabel')}</Label>
+                    <Label htmlFor="date_label">{t('Date label')}</Label>
                     <Input
                         id="date_label"
                         value={data.date_label}
@@ -164,7 +164,7 @@ export function JournalArticleFormFields({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="sort_order">{t('Volgorde')}</Label>
+                    <Label htmlFor="sort_order">{t('Order')}</Label>
                     <Input
                         id="sort_order"
                         type="number"
@@ -183,7 +183,7 @@ export function JournalArticleFormFields({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="published_at">{t('Publicatiedatum')}</Label>
+                <Label htmlFor="published_at">{t('Publication date')}</Label>
                 <Input
                     id="published_at"
                     type="datetime-local"
@@ -201,7 +201,7 @@ export function JournalArticleFormFields({
 
             <div className="space-y-2">
                 <Label htmlFor="cover_path">
-                    {t('Imagery asset-sleutel (optioneel)')}
+                    {t('Imagery asset key (optional)')}
                 </Label>
                 <Input
                     id="cover_path"
@@ -213,7 +213,7 @@ export function JournalArticleFormFields({
                 />
                 <p className="text-xs text-muted-foreground">
                     {t(
-                        'Fallback wanneer er geen cover-afbeelding is geüpload.',
+                        'Fallback for when no cover image has been uploaded.',
                     )}
                 </p>
                 {errors.cover_path ? (
@@ -224,7 +224,7 @@ export function JournalArticleFormFields({
             </div>
 
             <div className="space-y-2">
-                <Label>{t('Coverafbeelding')}</Label>
+                <Label>{t('Cover image')}</Label>
                 <FileUpload
                     accept="image/png,image/jpeg,image/webp"
                     maxSize={false}
@@ -236,9 +236,9 @@ export function JournalArticleFormFields({
                     existingFiles={existingFiles}
                     onRemoveExisting={() => setData('remove_image', true)}
                     placeholder={t(
-                        'Sleep een afbeelding hierheen of klik om te bladeren',
+                        'Drag & drop an image, or click to browse',
                     )}
-                    hint={t('PNG, JPG of WEBP')}
+                    hint={t('PNG, JPG or WEBP')}
                     error={errors.image}
                 />
             </div>

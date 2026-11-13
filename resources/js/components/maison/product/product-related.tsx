@@ -112,10 +112,10 @@ export function ProductRelated({
         cards.push({
             key: 'house',
             cover: 'atelier-workshop',
-            title: t('Het Huis'),
-            imageAlt: t('Het Huis'),
-            subtitle: t('Meer van ons'),
-            note: t('Ontdek het volledige verhaal van Maison Anversa'),
+            title: t('The House'),
+            imageAlt: t('The House'),
+            subtitle: t('More from us'),
+            note: t('Discover the full story of Maison Anversa'),
             to: 'house',
         });
     }

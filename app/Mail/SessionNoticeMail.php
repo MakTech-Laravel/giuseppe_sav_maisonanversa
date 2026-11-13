@@ -129,14 +129,14 @@ class SessionNoticeMail extends Mailable implements ShouldQueue
 
             $row = match ($detail) {
                 'club' => $club ? [__('Club'), $club->name] : null,
-                'address' => $club && filled($club->addressLine()) ? [__('Adres'), $club->addressLine()] : null,
-                'date' => [__('Datum'), $session->starts_at->translatedFormat('l j F Y')],
+                'address' => $club && filled($club->addressLine()) ? [__('Address'), $club->addressLine()] : null,
+                'date' => [__('Date'), $session->starts_at->translatedFormat('l j F Y')],
                 'time' => [
-                    __('Tijd'),
+                    __('Time'),
                     $session->starts_at->format('H:i').($session->ends_at ? ' – '.$session->ends_at->format('H:i') : ''),
                 ],
-                'level' => $session->level ? [__('Niveau'), __($session->level->label())] : null,
-                'free' => [__('Vrije plaatsen'), (string) $this->freePlaces],
+                'level' => $session->level ? [__('Level'), __($session->level->label())] : null,
+                'free' => [__('Free spots'), (string) $this->freePlaces],
                 default => null,
             };
 
@@ -171,21 +171,21 @@ class SessionNoticeMail extends Mailable implements ShouldQueue
             ->implode(' · ');
 
         $singles = $score->match_type === SessionMatchType::Singles;
-        $sideA = $singles ? __('Speler A') : __('Team A');
-        $sideB = $singles ? __('Speler B') : __('Team B');
+        $sideA = $singles ? __('Player A') : __('Team A');
+        $sideB = $singles ? __('Player B') : __('Team B');
 
         $winner = match ($score->winner()) {
             'a' => $sideA.' ('.$teamLine($score->team_a).')',
             'b' => $sideB.' ('.$teamLine($score->team_b).')',
-            default => __('Gelijkspel'),
+            default => __('Draw'),
         };
 
         return [
-            ['label' => __('Formaat'), 'value' => __($score->match_type->label()).' · '.__($score->format->label())],
+            ['label' => __('Format'), 'value' => __($score->match_type->label()).' · '.__($score->format->label())],
             ['label' => $sideA, 'value' => $teamLine($score->team_a)],
             ['label' => $sideB, 'value' => $teamLine($score->team_b)],
-            ['label' => __('Uitslag'), 'value' => $score->setsLine()],
-            ['label' => __('Winnaar'), 'value' => $winner],
+            ['label' => __('Result'), 'value' => $score->setsLine()],
+            ['label' => __('Winner'), 'value' => $winner],
         ];
     }
 }

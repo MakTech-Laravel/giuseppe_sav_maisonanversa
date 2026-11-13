@@ -70,22 +70,22 @@ export default function Dashboard({
         permission?: PermissionKey;
     }[] = [
         {
-            label: t('Klanten'),
-            description: t('Beheer ledenaccounts'),
+            label: t('Customers'),
+            description: t('Manage member accounts'),
             href: customers.index(wayfinderLocale()),
             icon: Users,
             permission: PERMISSIONS.USERS.INDEX,
         },
         {
-            label: t('Beheerder'),
-            description: t('Beheer personeelsaccounts'),
+            label: t('Admin'),
+            description: t('Manage staff accounts'),
             href: admins.index(wayfinderLocale()),
             icon: UserRoundCog,
             permission: PERMISSIONS.USERS.INDEX,
         },
         {
             label: t('Journal'),
-            description: t('Beheer redactionele journalartikelen.'),
+            description: t('Manage editorial journal articles.'),
             href: journalRoutes.index(wayfinderLocale()),
             icon: BookOpen,
             permission: PERMISSIONS.POSTS.VIEW,
@@ -106,9 +106,9 @@ export default function Dashboard({
             <Head title={t('Dashboard')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={`${t('Welkom')}${staffName ? `, ${staffName}` : ''}`}
+                    title={`${t('Welcome')}${staffName ? `, ${staffName}` : ''}`}
                     description={t(
-                        'Een overzicht van de Maison Anversa-operaties.',
+                        'An overview of Maison Anversa operations.',
                     )}
                     icon={LayoutGrid}
                 />
@@ -133,10 +133,10 @@ export default function Dashboard({
                     <div className="grid gap-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle>{t('Snelkoppelingen')}</CardTitle>
+                                <CardTitle>{t('Quick links')}</CardTitle>
                                 <CardDescription>
                                     {t(
-                                        'Ga naar veelgebruikte beheerderssecties.',
+                                        'Jump to frequently used admin sections.',
                                     )}
                                 </CardDescription>
                             </CardHeader>
@@ -207,21 +207,21 @@ export default function Dashboard({
 
                     <Card className="overflow-hidden">
                         <CardHeader>
-                            <CardTitle>{t('Recente klanten')}</CardTitle>
+                            <CardTitle>{t('Recent customers')}</CardTitle>
                             <CardDescription>
-                                {t('De nieuwste ledenaccounts.')}
+                                {t('The newest member accounts.')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>{t('Klant')}</TableHead>
+                                        <TableHead>{t('Customer')}</TableHead>
                                         <TableHead className="hidden md:table-cell">
-                                            {t('Gebruikersnaam')}
+                                            {t('Username')}
                                         </TableHead>
                                         <TableHead className="hidden sm:table-cell">
-                                            {t('Lid sinds')}
+                                            {t('Member since')}
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -256,7 +256,7 @@ export default function Dashboard({
                             </Table>
                             {recentCustomers.length === 0 && (
                                 <p className="p-8 text-center text-sm text-muted-foreground">
-                                    {t('Nog geen klanten.')}
+                                    {t('No customers yet.')}
                                 </p>
                             )}
                         </CardContent>

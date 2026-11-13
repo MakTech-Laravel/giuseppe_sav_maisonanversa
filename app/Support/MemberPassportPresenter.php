@@ -49,7 +49,7 @@ class MemberPassportPresenter
                 'status' => $user->isFoundingCircle() ? 'founding_circle' : 'member',
                 'status_label' => $user->isFoundingCircle()
                     ? __('Founding Circle')
-                    : __('Lid'),
+                    : __('Member'),
                 'edition_number' => $editionNumber,
             ],
             'badges' => $this->badges($user, $editionNumber !== null),
@@ -89,14 +89,14 @@ class MemberPassportPresenter
         if ($hasHeritageEdition) {
             $badges[] = [
                 'id' => 'heritage_holder',
-                'label' => __('Heritage-bezitter'),
+                'label' => __('Heritage owner'),
             ];
         }
 
         if (CommunitySession::query()->where('host_id', $user->id)->exists()) {
             $badges[] = [
                 'id' => 'session_host',
-                'label' => __('Sessie-organisator'),
+                'label' => __('Session host'),
             ];
         }
 
@@ -113,7 +113,7 @@ class MemberPassportPresenter
         if (EventRsvp::query()->where('user_id', $user->id)->exists()) {
             $badges[] = [
                 'id' => 'event_rsvp',
-                'label' => __('Exclusief evenement'),
+                'label' => __('Exclusive event'),
             ];
         }
 

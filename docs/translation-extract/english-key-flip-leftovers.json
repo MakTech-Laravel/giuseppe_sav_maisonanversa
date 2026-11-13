@@ -1,0 +1,570 @@
+{
+    "ambiguous": [
+        {
+            "row": {
+                "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+                "n": "33",
+                "en": "carries us",
+                "nl": "draagt ons",
+                "fr": "nous porte",
+                "note": "fragment — check word order"
+            },
+            "keys": [
+                "draagt",
+                "ons draagt"
+            ]
+        },
+        {
+            "row": {
+                "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+                "n": "34",
+                "en": "Certificate of Authenticity",
+                "nl": "Certificaat van echtheid",
+                "fr": "Certificat d’authenticité",
+                "note": null
+            },
+            "keys": [
+                "Certificaat van Echtheid",
+                "Echtheids-certificaat"
+            ]
+        },
+        {
+            "row": {
+                "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+                "n": "85",
+                "en": "Founding Edition — 100 numbered pieces",
+                "nl": "Founding Edition — 100 genummerde stuks",
+                "fr": "Founding Edition — 100 pièces numérotées",
+                "note": null
+            },
+            "keys": [
+                "Eerste Editie — Beperkt tot 100 Stuks",
+                "Founding Edition — 100 Genummerde Stuks"
+            ]
+        },
+        {
+            "row": {
+                "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+                "n": "128",
+                "en": "Message",
+                "nl": "Bericht",
+                "fr": "Message",
+                "note": null
+            },
+            "keys": [
+                "Boodchap",
+                "Boodschap"
+            ]
+        },
+        {
+            "row": {
+                "page": "Home + Opening — /{locale}/",
+                "n": "268",
+                "en": "carries us",
+                "nl": "draagt ons",
+                "fr": "nous porte",
+                "note": "fragment"
+            },
+            "keys": [
+                "draagt",
+                "ons draagt"
+            ]
+        },
+        {
+            "row": {
+                "page": "Community hub + feed — /{locale}/community",
+                "n": "476",
+                "en": "Joined",
+                "nl": "Ingeschreven",
+                "fr": "Inscrit",
+                "note": null
+            },
+            "keys": [
+                "Aangesloten",
+                "Ingeschreven op"
+            ]
+        },
+        {
+            "row": {
+                "page": "Community hub + feed — /{locale}/community",
+                "n": "488",
+                "en": "Members only",
+                "nl": "Alleen voor leden",
+                "fr": "Réservé aux membres",
+                "note": null
+            },
+            "keys": [
+                "Alleen leden",
+                "Leden only"
+            ]
+        },
+        {
+            "row": {
+                "page": "Community hub + feed — /{locale}/community",
+                "n": "509",
+                "en": "Post",
+                "nl": "Plaatsen",
+                "fr": "Publier",
+                "note": "button"
+            },
+            "keys": [
+                "Bericht",
+                "Post"
+            ]
+        },
+        {
+            "row": {
+                "page": "Community events / sessions / clubs",
+                "n": "594",
+                "en": "Exclusive Events",
+                "nl": "Exclusieve evenementen",
+                "fr": "Événements exclusifs",
+                "note": null
+            },
+            "keys": [
+                "Exclusieve Evenementen",
+                "Exclusieve Events"
+            ]
+        },
+        {
+            "row": {
+                "page": "Returns, checkout, verify, guest returns, newsletter",
+                "n": "717",
+                "en": "Founding Circle member",
+                "nl": "Lid van de Founding Circle",
+                "fr": "Membre du Founding Circle",
+                "note": null
+            },
+            "keys": [
+                "Founding Circle lid",
+                "Founding Circle-lid"
+            ]
+        },
+        {
+            "row": {
+                "page": "Member area — /{locale}/member/*",
+                "n": "815",
+                "en": "Past events",
+                "nl": "Voorbije evenementen",
+                "fr": "Événements passés",
+                "note": null
+            },
+            "keys": [
+                "Afgelopen evenementen",
+                "Afgelopen events"
+            ]
+        }
+    ],
+    "unmatched": [
+        {
+            "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+            "n": "110",
+            "en": "Journal",
+            "nl": "Journal",
+            "fr": "Journal",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "269",
+            "en": "Choose your number",
+            "nl": "Kies je nummer",
+            "fr": "Choisissez votre numéro",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "271",
+            "en": "Claim Nº {n}",
+            "nl": "Claim Nº {n}",
+            "fr": "Réserver le Nº {n}",
+            "note": "EN: write Nº; NL could also be ‘Kies Nº {n}’"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "280",
+            "en": "Enter the house",
+            "nl": "Betreed het huis",
+            "fr": "Entrer dans la maison",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "282",
+            "en": "Every lit window is a room. Choose one to step inside.",
+            "nl": "Elk verlicht raam is een kamer. Kies er een om binnen te stappen.",
+            "fr": "Chaque fenêtre éclairée est une pièce. Choisissez-en une pour entrer.",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "291",
+            "en": "Good afternoon from Antwerp",
+            "nl": "Goedemiddag uit Antwerpen",
+            "fr": "Bonjour depuis Anvers",
+            "note": "FR has no afternoon greeting: Bonjour (not ‘Bel/Bon après-midi’, which is a goodbye)"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "292",
+            "en": "Good evening from Antwerp",
+            "nl": "Goedenavond uit Antwerpen",
+            "fr": "Bonsoir depuis Anvers",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "293",
+            "en": "Good morning from Antwerp",
+            "nl": "Goedemorgen uit Antwerpen",
+            "fr": "Bonjour depuis Anvers",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "299",
+            "en": "In your club",
+            "nl": "In jouw club",
+            "fr": "Dans votre club",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "302",
+            "en": "Join the list",
+            "nl": "Schrijf je in",
+            "fr": "Rejoindre la liste",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "303",
+            "en": "Journal",
+            "nl": "Journal",
+            "fr": "Journal",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "305",
+            "en": "Limited to {total} numbered rackets · {n} numbers available",
+            "nl": "Beperkt tot {total} genummerde rackets · nog {n} nummers vrij",
+            "fr": "Limité à {total} raquettes numérotées · {n} numéros disponibles",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "316",
+            "en": "Nº {n} — yours, if you claim it.",
+            "nl": "Nº {n} — van jou, als je het claimt.",
+            "fr": "Nº {n} — le vôtre, si vous le réservez.",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "321",
+            "en": "Numbers {from}–{to} of {total}",
+            "nl": "Nummers {from}–{to} van {total}",
+            "fr": "Numéros {from}–{to} sur {total}",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "323",
+            "en": "Open the door again",
+            "nl": "Open de deur opnieuw",
+            "fr": "Rouvrir la porte",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "325",
+            "en": "Page {n}",
+            "nl": "Pagina {n}",
+            "fr": "Page {n}",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "333",
+            "en": "Reception",
+            "nl": "Ontvangst",
+            "fr": "Réception",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "334",
+            "en": "Register pages",
+            "nl": "Registerpagina’s",
+            "fr": "Pages du registre",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "337",
+            "en": "reserved",
+            "nl": "gereserveerd",
+            "fr": "réservé",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "343",
+            "en": "Skip",
+            "nl": "Overslaan",
+            "fr": "Passer",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "348",
+            "en": "The house’s own piece",
+            "nl": "Het eigen exemplaar van het huis",
+            "fr": "L’exemplaire de la Maison",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "351",
+            "en": "The rooms",
+            "nl": "De kamers",
+            "fr": "Les pièces",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "359",
+            "en": "Welcome to Maison Anversa",
+            "nl": "Welkom bij Maison Anversa",
+            "fr": "Bienvenue chez Maison Anversa",
+            "note": null
+        },
+        {
+            "page": "Products — /{locale}/products",
+            "n": "370",
+            "en": "The complete Maison Anversa collection — from Heritage Nº 001 to the house’s next chapters.",
+            "nl": "De volledige collectie van Maison Anversa — van Heritage Nº 001 tot de volgende hoofdstukken van het huis.",
+            "fr": "La collection complète de Maison Anversa — de Heritage Nº 001 aux prochains chapitres de la maison.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community hub + feed — /{locale}/community",
+            "n": "529",
+            "en": "Sending...",
+            "nl": "Bezig met versturen…",
+            "fr": "Envoi en cours…",
+            "note": null
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "580",
+            "en": "{{count}} open session(s) at this location.",
+            "nl": "{{count}} open sessie(s) op deze locatie.",
+            "fr": "{{count}} session(s) ouverte(s) à cet endroit.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "583",
+            "en": "Visible only to signed-in members. Joining is free unless stated otherwise.",
+            "nl": "Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.",
+            "fr": "Visible uniquement par les membres connectés. L’inscription est gratuite, sauf mention contraire.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "598",
+            "en": "No clubs found for these filters.",
+            "nl": "Geen clubs gevonden voor deze filters.",
+            "fr": "Aucun club trouvé pour ces filtres.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "605",
+            "en": "No open sessions at this location yet.",
+            "nl": "Nog geen open sessies op deze locatie.",
+            "fr": "Pas encore de session ouverte à cet endroit.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "606",
+            "en": "No open sessions at this location yet. Plan the first one.",
+            "nl": "Nog geen open sessies op deze locatie. Plan de eerste.",
+            "fr": "Pas encore de session ouverte à cet endroit. Planifiez la première.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "609",
+            "en": "Discover padel and tennis clubs where members plan sessions. Partner clubs carry the official Maison Anversa partnership.",
+            "nl": "Ontdek padel- en tennisclubs waar leden sessies plannen. Partnerclubs dragen het officiële Maison Anversa-partnerschap.",
+            "fr": "Découvrez les clubs de padel et de tennis où les membres planifient des sessions. Les clubs partenaires portent le partenariat officiel Maison Anversa.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "628",
+            "en": "Search for a club and see upcoming sessions at that location.",
+            "nl": "Zoek een club en bekijk komende sessies op die locatie.",
+            "fr": "Recherchez un club et découvrez les prochaines sessions à cet endroit.",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Community events / sessions / clubs",
+            "n": "629",
+            "en": "Search by club name...",
+            "nl": "Zoek op clubnaam…",
+            "fr": "Rechercher par nom de club…",
+            "note": "EN source was in Dutch — corrected EN given"
+        },
+        {
+            "page": "Legal wrappers — privacy / terms / shipping / care",
+            "n": "703",
+            "en": "Last updated: November 2026",
+            "nl": "Laatst bijgewerkt: november 2026",
+            "fr": "Dernière mise à jour : novembre 2026",
+            "note": "update the date when the new terms go live"
+        }
+    ],
+    "skipped_fixed": [
+        {
+            "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+            "n": "41",
+            "en": "Club Corner",
+            "nl": "Club Corner",
+            "fr": "Club Corner",
+            "note": "brand name"
+        },
+        {
+            "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+            "n": "83",
+            "en": "Founding Circle",
+            "nl": "Founding Circle",
+            "fr": "Founding Circle",
+            "note": "brand name"
+        },
+        {
+            "page": "Shared shell (nav, footer, modals, cookie) — all pages",
+            "n": "95",
+            "en": "Heritage Nº 001",
+            "nl": "Heritage Nº 001",
+            "fr": "Heritage Nº 001",
+            "note": "EN: write Nº 001"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "262",
+            "en": "Atelier",
+            "nl": "Atelier",
+            "fr": "Atelier",
+            "note": "room name — keep"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "265",
+            "en": "Bibliothèque",
+            "nl": "Bibliothèque",
+            "fr": "Bibliothèque",
+            "note": "room name — keep"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "267",
+            "en": "Bureau",
+            "nl": "Bureau",
+            "fr": "Bureau",
+            "note": "room name — keep"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "272",
+            "en": "Club Corner",
+            "nl": "Club Corner",
+            "fr": "Club Corner",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "285",
+            "en": "Founding Circle",
+            "nl": "Founding Circle",
+            "fr": "Founding Circle",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "286",
+            "en": "Founding Edition",
+            "nl": "Founding Edition",
+            "fr": "Founding Edition",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "289",
+            "en": "Galerie",
+            "nl": "Galerie",
+            "fr": "Galerie",
+            "note": "room name — keep"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "295",
+            "en": "Heritage Nº 001",
+            "nl": "Heritage Nº 001",
+            "fr": "Heritage Nº 001",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "304",
+            "en": "Le Cercle",
+            "nl": "Le Cercle",
+            "fr": "Le Cercle",
+            "note": "room name — keep"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "306",
+            "en": "Maison Anversa",
+            "nl": "Maison Anversa",
+            "fr": "Maison Anversa",
+            "note": null
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "309",
+            "en": "Maison Archive",
+            "nl": "Maison Archive",
+            "fr": "Maison Archive",
+            "note": "keep"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "341",
+            "en": "Salle Commune",
+            "nl": "Salle Commune",
+            "fr": "Salle Commune",
+            "note": "room name — keep"
+        },
+        {
+            "page": "Home + Opening — /{locale}/",
+            "n": "342",
+            "en": "Salon",
+            "nl": "Salon",
+            "fr": "Salon",
+            "note": "room name — keep"
+        },
+        {
+            "page": "Community hub + feed — /{locale}/community",
+            "n": "481",
+            "en": "Maison Anversa",
+            "nl": "Maison Anversa",
+            "fr": "Maison Anversa",
+            "note": null
+        }
+    ]
+}

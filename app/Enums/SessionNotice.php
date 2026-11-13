@@ -74,24 +74,24 @@ enum SessionNotice: string
     public function subject(): string
     {
         return match ($this) {
-            self::NewPlayer => __('Nieuwe speler voor jouw sessie'),
-            self::JoinConfirmed => __('Je speelt mee'),
-            self::SessionFull => __('Jouw sessie is volzet'),
-            self::SpotOpened => __('Een plaats is vrijgekomen'),
-            self::Reminder => __('Morgen op de baan'),
-            self::OpenSpotsReminder => __('Jouw sessie heeft nog vrije plaatsen'),
-            self::Cancelled, self::AdminCancelled => __('Sessie geannuleerd'),
-            self::Removed => __('Je bent uit een sessie verwijderd'),
-            self::JoinRequested => __('Nieuwe aanvraag voor jouw sessie'),
-            self::RequestRejected => __('Jouw aanvraag werd niet aanvaard'),
-            self::RequestWithdrawn => __('Aanvraag ingetrokken'),
-            self::ScoreSubmitted => __('Nieuwe score ingediend'),
-            self::ScoreApproved => __('Score goedgekeurd'),
-            self::ScoreRejected => __('Score niet aanvaard'),
-            self::SessionFinished => __('Sessie afgesloten: de uitslag'),
-            self::MatchCardReady => __('Jouw wedstrijdkaart is klaar'),
-            self::AdminCreated => __('Nieuwe sessie aangemaakt'),
-            self::AdminFull => __('Sessie volzet'),
+            self::NewPlayer => __('New player for your session'),
+            self::JoinConfirmed => __('You\'re in'),
+            self::SessionFull => __('Your session is full'),
+            self::SpotOpened => __('A spot has opened up'),
+            self::Reminder => __('Tomorrow on the court'),
+            self::OpenSpotsReminder => __('Your session still has free places'),
+            self::Cancelled, self::AdminCancelled => __('Session cancelled'),
+            self::Removed => __('You have been removed from a session'),
+            self::JoinRequested => __('New request for your session'),
+            self::RequestRejected => __('Your request was not accepted'),
+            self::RequestWithdrawn => __('Request withdrawn'),
+            self::ScoreSubmitted => __('New score submitted'),
+            self::ScoreApproved => __('Score approved'),
+            self::ScoreRejected => __('Score not accepted'),
+            self::SessionFinished => __('Session closed: the result'),
+            self::MatchCardReady => __('Your match card is ready'),
+            self::AdminCreated => __('New session created'),
+            self::AdminFull => __('Session full'),
         };
     }
 
@@ -104,24 +104,24 @@ enum SessionNotice: string
         $replace = ['name' => $name, 'free' => $freePlaces, 'club' => $club];
 
         return match ($this) {
-            self::NewPlayer => __(':name heeft zich aangemeld voor jouw sessie.', $replace),
-            self::JoinConfirmed => __('Je bent ingeschreven. Hieronder vind je alle details van de sessie.'),
-            self::SessionFull => __('Alle plaatsen zijn ingenomen. Hieronder vind je het volledige overzicht.'),
-            self::SpotOpened => __(':name heeft de sessie verlaten. Deel de sessie opnieuw om de plaats in te vullen.', $replace),
-            self::Reminder => __('Morgen staat je op de baan. Een korte herinnering:'),
-            self::OpenSpotsReminder => __('Jouw sessie heeft nog :free vrije plaatsen. Deel ze, of annuleer ze.', $replace),
-            self::Cancelled, self::AdminCancelled => __('De onderstaande sessie is geannuleerd door :name.', $replace),
-            self::Removed => __(':name heeft je verwijderd uit de onderstaande sessie.', $replace),
-            self::JoinRequested => __(':name wil meespelen in jouw sessie. Keur de aanvraag goed of weiger ze.', $replace),
-            self::RequestRejected => __('De organisator heeft jouw aanvraag voor de onderstaande sessie niet aanvaard.'),
-            self::RequestWithdrawn => __(':name heeft de aanvraag voor jouw sessie ingetrokken.', $replace),
-            self::ScoreSubmitted => __(':name heeft een score ingediend voor jouw sessie. Keur de score goed of weiger ze.', $replace),
-            self::ScoreApproved => __('De organisator heeft de score van de onderstaande sessie goedgekeurd.'),
-            self::ScoreRejected => __('De organisator heeft jouw ingediende score niet aanvaard.'),
-            self::SessionFinished => __('De sessie is afgesloten. Hieronder vind je de officiële uitslag.'),
-            self::MatchCardReady => __('Bedankt voor de sessie bij :club. Jouw wedstrijdkaart staat klaar: deel ze met jouw vrienden of bewaar ze als herinnering.', $replace),
-            self::AdminCreated => __(':name heeft een nieuwe sessie aangemaakt.', $replace),
-            self::AdminFull => __('Alle plaatsen van deze sessie zijn ingenomen.'),
+            self::NewPlayer => __(':name has joined your session.', $replace),
+            self::JoinConfirmed => __('You\'re registered. Below you\'ll find all the details of the session.'),
+            self::SessionFull => __('All spots are taken. Below you\'ll find the full overview.'),
+            self::SpotOpened => __(':name has left the session. Share the session again to fill the spot.', $replace),
+            self::Reminder => __('Tomorrow you are on the court. A short reminder:'),
+            self::OpenSpotsReminder => __('Your session still has :free free places. Share it, or cancel it.', $replace),
+            self::Cancelled, self::AdminCancelled => __('The session below has been cancelled by :name.', $replace),
+            self::Removed => __(':name has removed you from the session below.', $replace),
+            self::JoinRequested => __(':name would like to play in your session. Approve or decline the request.', $replace),
+            self::RequestRejected => __('The organiser did not accept your request for the session below.'),
+            self::RequestWithdrawn => __(':name has withdrawn the request for your session.', $replace),
+            self::ScoreSubmitted => __(':name has submitted a score for your session. Approve or decline the score.', $replace),
+            self::ScoreApproved => __('The organiser has approved the score of the session below.'),
+            self::ScoreRejected => __('The organiser did not accept the score you submitted.'),
+            self::SessionFinished => __('The session is closed. Below you will find the official result.'),
+            self::MatchCardReady => __('Thank you for the session at :club. Your match card is ready: share it with your friends or keep it as a memory.', $replace),
+            self::AdminCreated => __(':name has created a new session.', $replace),
+            self::AdminFull => __('All spots in this session are taken.'),
         };
     }
 
@@ -133,37 +133,37 @@ enum SessionNotice: string
         $replace = ['name' => $name, 'when' => $when, 'free' => $freePlaces, 'result' => $result, 'club' => $club];
 
         return match ($this) {
-            self::NewPlayer => __(':name speelt mee in jouw sessie van :when. Vrije plaatsen: :free.', $replace),
-            self::JoinConfirmed => __('Je bent ingeschreven voor de sessie van :when.', $replace),
-            self::SessionFull, self::AdminFull => __('De sessie van :when is volzet.', $replace),
-            self::SpotOpened => __(':name heeft de sessie van :when verlaten. Vrije plaatsen: :free.', $replace),
-            self::Reminder => __('Herinnering: jouw sessie begint op :when.', $replace),
-            self::OpenSpotsReminder => __('Jouw sessie van :when heeft nog :free vrije plaatsen. Deel ze, of annuleer ze.', $replace),
-            self::Cancelled, self::AdminCancelled => __('De sessie van :when is geannuleerd door :name.', $replace),
-            self::Removed => __(':name heeft je verwijderd uit de sessie van :when.', $replace),
-            self::JoinRequested => __(':name wil meespelen in jouw sessie van :when. Vrije plaatsen: :free.', $replace),
-            self::RequestRejected => __('Jouw aanvraag voor de sessie van :when werd niet aanvaard.', $replace),
-            self::RequestWithdrawn => __(':name heeft de aanvraag voor jouw sessie van :when ingetrokken.', $replace),
-            self::ScoreSubmitted => __(':name heeft een score ingediend voor de sessie van :when.', $replace),
-            self::ScoreApproved => __('De score van de sessie van :when is goedgekeurd: :result.', $replace),
-            self::ScoreRejected => __('Jouw score voor de sessie van :when werd niet aanvaard.', $replace),
-            self::SessionFinished => __('De sessie van :when is afgesloten. Uitslag: :result.', $replace),
-            self::MatchCardReady => __('Jouw wedstrijdkaart van :club is klaar.', $replace),
-            self::AdminCreated => __(':name heeft een nieuwe sessie aangemaakt voor :when.', $replace),
+            self::NewPlayer => __(':name is joining your session on :when. Free spots: :free.', $replace),
+            self::JoinConfirmed => __('You\'re registered for the session on :when.', $replace),
+            self::SessionFull, self::AdminFull => __('The session on :when is full.', $replace),
+            self::SpotOpened => __(':name has left the session on :when. Free spots: :free.', $replace),
+            self::Reminder => __('Reminder: your session starts on :when.', $replace),
+            self::OpenSpotsReminder => __('Your session on :when still has :free free places. Share it, or cancel it.', $replace),
+            self::Cancelled, self::AdminCancelled => __('The session on :when has been cancelled by :name.', $replace),
+            self::Removed => __(':name has removed you from the session on :when.', $replace),
+            self::JoinRequested => __(':name would like to play in your session on :when. Free places: :free.', $replace),
+            self::RequestRejected => __('Your request for the session on :when was not accepted.', $replace),
+            self::RequestWithdrawn => __(':name has withdrawn the request for your session on :when.', $replace),
+            self::ScoreSubmitted => __(':name has submitted a score for the session on :when.', $replace),
+            self::ScoreApproved => __('The score of the session on :when has been approved: :result.', $replace),
+            self::ScoreRejected => __('Your score for the session on :when was not accepted.', $replace),
+            self::SessionFinished => __('The session on :when is closed. Result: :result.', $replace),
+            self::MatchCardReady => __('Your match card from :club is ready.', $replace),
+            self::AdminCreated => __(':name has created a new session for :when.', $replace),
         };
     }
 
     public function ctaLabel(): string
     {
         return match ($this) {
-            self::SpotOpened => __('Deel de sessie opnieuw'),
-            self::OpenSpotsReminder => __('Deel de sessie'),
-            self::Cancelled, self::Removed, self::RequestRejected => __('Bekijk andere sessies'),
-            self::JoinRequested => __('Bekijk aanvraag'),
-            self::ScoreSubmitted => __('Bekijk score'),
-            self::ScoreApproved, self::SessionFinished => __('Bekijk uitslag'),
-            self::MatchCardReady => __('Deel jouw kaart'),
-            default => __('Bekijk sessie'),
+            self::SpotOpened => __('Share the session again'),
+            self::OpenSpotsReminder => __('Share the session'),
+            self::Cancelled, self::Removed, self::RequestRejected => __('View other sessions'),
+            self::JoinRequested => __('View request'),
+            self::ScoreSubmitted => __('View score'),
+            self::ScoreApproved, self::SessionFinished => __('View result'),
+            self::MatchCardReady => __('Share your card'),
+            default => __('View session'),
         };
     }
 
@@ -215,7 +215,7 @@ enum SessionNotice: string
     public function secondaryCtaLabel(): ?string
     {
         return match ($this) {
-            self::OpenSpotsReminder => __('Sessie annuleren'),
+            self::OpenSpotsReminder => __('Cancel session'),
             self::MatchCardReady => __('Download'),
             default => null,
         };
@@ -240,7 +240,7 @@ enum SessionNotice: string
         $replace = ['time' => $startsAt->format('H:i')];
 
         return $startsAt->isSameDay($now)
-            ? __('Jouw sessie is vandaag om :time.', $replace)
-            : __('Jouw sessie is morgen om :time.', $replace);
+            ? __('Your session is today at :time.', $replace)
+            : __('Your session is tomorrow at :time.', $replace);
     }
 }

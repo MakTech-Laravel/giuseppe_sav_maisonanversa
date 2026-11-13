@@ -131,7 +131,7 @@ export function PartnerClubTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -139,7 +139,7 @@ export function PartnerClubTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
                             'Bewerk vertalingen per taal. Bron tekst wijzig je via de club bewerken; DeepL vertaalt vanuit die bron.',
@@ -179,7 +179,7 @@ export function PartnerClubTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-city`}>
-                            {t('Stad')} ({LOCALE_LABELS[activeLocale]})
+                            {t('City')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Input
                             id={`${activeLocale}-city`}
@@ -201,7 +201,7 @@ export function PartnerClubTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-country`}>
-                            {t('Land')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Country')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Input
                             id={`${activeLocale}-country`}
@@ -235,7 +235,7 @@ export function PartnerClubTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -250,14 +250,14 @@ export function PartnerClubTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

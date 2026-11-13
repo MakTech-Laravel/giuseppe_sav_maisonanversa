@@ -24,7 +24,7 @@ class VerifyEmailMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('E-mailadres verifiëren'),
+            subject: __('Verify email address'),
         );
     }
 
@@ -35,7 +35,7 @@ class VerifyEmailMail extends Mailable
             with: [
                 ...$this->maisonBrandData(null, false),
                 'ctaUrl' => $this->verificationUrl,
-                'ctaLabel' => __('E-mailadres verifiëren'),
+                'ctaLabel' => __('Verify email address'),
             ],
         );
     }

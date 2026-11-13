@@ -44,12 +44,12 @@ export default function MemberReturnShow({
                     href={`/${locale}/member/orders/${orderReturn.order.id}`}
                     className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase no-underline hover:text-cream"
                 >
-                    ← {t('Terug naar bestelling')}
+                    ← {t('Back to order')}
                 </Link>
             </div>
 
             <MemberPageHeader
-                eyebrow={t('Retour')}
+                eyebrow={t('Return')}
                 title={orderReturn.number}
                 description={orderReturn.order.reference}
             />
@@ -65,18 +65,18 @@ export default function MemberReturnShow({
                     {isRefunded ? (
                         <>
                             <MemberSectionTitle
-                                title={t('Terugbetaling voltooid')}
+                                title={t('Refund completed')}
                             />
                             <p className="text-sand">
                                 {t(
-                                    'Jouw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op jouw rekening.',
+                                    'Your refund has been processed. The amount will appear on your account within a few business days.',
                                 )}
                             </p>
                             <dl className="mt-4 space-y-2 font-sans text-sm">
                                 {orderReturn.refund_amount ? (
                                     <div className="flex justify-between gap-4">
                                         <dt className="text-sand">
-                                            {t('Bedrag')}
+                                            {t('Amount')}
                                         </dt>
                                         <dd className="text-cream">
                                             €{orderReturn.refund_amount}
@@ -86,7 +86,7 @@ export default function MemberReturnShow({
                                 {orderReturn.resolved_at ? (
                                     <div className="flex justify-between gap-4">
                                         <dt className="text-sand">
-                                            {t('Datum')}
+                                            {t('Date')}
                                         </dt>
                                         <dd className="text-cream">
                                             {orderReturn.resolved_at}
@@ -96,7 +96,7 @@ export default function MemberReturnShow({
                                 {orderReturn.payment_method ? (
                                     <div className="flex justify-between gap-4">
                                         <dt className="text-sand">
-                                            {t('Betaalmethode')}
+                                            {t('Payment method')}
                                         </dt>
                                         <dd className="text-cream">
                                             {t(orderReturn.payment_method)}
@@ -107,16 +107,16 @@ export default function MemberReturnShow({
                         </>
                     ) : showShip ? (
                         <>
-                            <MemberSectionTitle title={t('Instructies')} />
+                            <MemberSectionTitle title={t('Instructions')} />
                             <p className="text-sand">
-                                {t('Stuur het artikel binnen 14 dagen naar:')}
+                                {t('Ship the item within 14 days to:')}
                             </p>
                             <p className="mt-2 whitespace-pre-line text-cream">
                                 {orderReturn.return_address}
                             </p>
                             {orderReturn.ship_by ? (
                                 <p className="mt-4 font-sans text-sm text-gold">
-                                    {t('Versturen tot')} {orderReturn.ship_by}
+                                    {t('Ship by')} {orderReturn.ship_by}
                                 </p>
                             ) : null}
                         </>
@@ -134,7 +134,7 @@ export default function MemberReturnShow({
                     <MemberSectionTitle
                         title={
                             orderReturn.can_add_tracking
-                                ? t('Trackingnummer toevoegen')
+                                ? t('Add tracking number')
                                 : t('Tracking')
                         }
                     />
@@ -147,14 +147,14 @@ export default function MemberReturnShow({
                             <input type="hidden" name="_method" value="patch" />
                             <input
                                 name="carrier"
-                                placeholder={t('Vervoerder')}
+                                placeholder={t('Carrier')}
                                 defaultValue={orderReturn.carrier ?? ''}
                                 required
                                 className="w-full border border-gold/25 bg-choc px-3 py-3 font-sans text-sm text-cream"
                             />
                             <input
                                 name="tracking_number"
-                                placeholder={t('Trackingnummer')}
+                                placeholder={t('Tracking number')}
                                 defaultValue={orderReturn.tracking_number ?? ''}
                                 required
                                 className="w-full border border-gold/25 bg-choc px-3 py-3 font-sans text-sm text-cream"
@@ -163,14 +163,14 @@ export default function MemberReturnShow({
                                 type="submit"
                                 className="inline-flex min-h-11 items-center justify-center border border-cream px-5 font-sans text-[10px] tracking-[0.2em] text-cream uppercase"
                             >
-                                {t('Trackingnummer toevoegen')}
+                                {t('Add tracking number')}
                             </button>
                         </Form>
                     ) : (
                         <p className="text-sand">
                             {[orderReturn.carrier, orderReturn.tracking_number]
                                 .filter(Boolean)
-                                .join(' · ') || t('Nog geen tracking')}
+                                .join(' · ') || t('No tracking yet')}
                         </p>
                     )}
 
@@ -184,7 +184,7 @@ export default function MemberReturnShow({
                                 )
                             }
                         >
-                            {t('Retour annuleren')}
+                            {t('Cancel return')}
                         </button>
                     ) : null}
                 </MemberPanel>

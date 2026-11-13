@@ -304,16 +304,16 @@ export default function RealtimeIndex() {
                                 className="gap-1"
                             >
                                 <ShieldCheck className="h-3 w-3" />
-                                {t('privé kanaal')}
+                                {t('private channel')}
                             </Badge>
                         </CardTitle>
                         <CardDescription>
                             {!enabled
                                 ? t(
-                                      'Echo is uitgeschakeld: VITE_REVERB_APP_KEY of VITE_REVERB_HOST ontbreekt in de build.',
+                                      'Echo is disabled: VITE_REVERB_APP_KEY or VITE_REVERB_HOST is missing from the build.',
                                   )
                                 : t(
-                                      'Na "Mislukt" stopt pusher-js met opnieuw proberen. Klik op Opnieuw verbinden zodra de Reverb-server weer draait.',
+                                      'After "Failed" pusher-js stops retrying. Click Reconnect once the Reverb server is back up.',
                                   )}
                         </CardDescription>
                     </CardHeader>
@@ -338,7 +338,7 @@ export default function RealtimeIndex() {
                                 }}
                             >
                                 <RefreshCw className="h-4 w-4" />
-                                {t('Opnieuw verbinden')}
+                                {t('Reconnect')}
                             </Button>
                             <Button
                                 size="sm"
@@ -353,7 +353,7 @@ export default function RealtimeIndex() {
                                 }
                             >
                                 <Send className="h-4 w-4" />
-                                {t('Publieke ping versturen')}
+                                {t('Send public ping')}
                             </Button>
                             <Button
                                 size="sm"
@@ -368,7 +368,7 @@ export default function RealtimeIndex() {
                                 }
                             >
                                 <ShieldCheck className="h-4 w-4" />
-                                {t('Privé test versturen')}
+                                {t('Send private test')}
                             </Button>
                             <Button
                                 size="sm"
@@ -383,7 +383,7 @@ export default function RealtimeIndex() {
                                 }}
                             >
                                 <Bell className="h-4 w-4" />
-                                {t('Toast testen')}
+                                {t('Test toast')}
                             </Button>
                             <Button
                                 size="sm"
@@ -398,7 +398,7 @@ export default function RealtimeIndex() {
                                 }
                             >
                                 <ServerCog className="h-4 w-4" />
-                                {t('Backend-configuratie')}
+                                {t('Backend config')}
                             </Button>
                             <Button
                                 size="sm"
@@ -410,7 +410,7 @@ export default function RealtimeIndex() {
                                 }}
                             >
                                 <Eraser className="h-4 w-4" />
-                                {t('Wissen')}
+                                {t('Clear')}
                             </Button>
                         </div>
 
@@ -453,14 +453,14 @@ export default function RealtimeIndex() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-base">
-                                {t('Ontvangen events')} ({events.length})
+                                {t('Received events')} ({events.length})
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="h-72 space-y-2 overflow-y-auto rounded-md bg-muted/40 p-2">
                                 {events.length === 0 ? (
                                     <p className="mt-10 text-center text-sm text-muted-foreground">
-                                        {t('Nog geen events.')}
+                                        {t('No events yet.')}
                                     </p>
                                 ) : (
                                     events.map((ev) => (
@@ -491,14 +491,14 @@ export default function RealtimeIndex() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-base">
-                                {t('Debuglog')} ({logs.length})
+                                {t('Debug log')} ({logs.length})
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="h-72 space-y-0.5 overflow-y-auto rounded-md bg-muted/40 p-2 font-mono text-xs">
                                 {logs.length === 0 ? (
                                     <p className="mt-10 text-center font-sans text-sm text-muted-foreground">
-                                        {t('Geen logregels.')}
+                                        {t('No log entries.')}
                                     </p>
                                 ) : (
                                     logs.map((log) => (
@@ -529,7 +529,7 @@ export default function RealtimeIndex() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-base">
-                                {t('Laatste API-antwoord')}
+                                {t('Last API response')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>

@@ -81,12 +81,12 @@ export default function ShowSeoMeta({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={row.title}
-                    description={t('Bekijk deze SEO-meta zoals op de site.')}
+                    description={t('View this SEO meta as it appears on the site.')}
                     icon={Globe}
                 >
                     <Button variant="outline" asChild>
                         <Link href={seoMetas.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -96,7 +96,7 @@ export default function ShowSeoMeta({
                                 seoMeta: Number(row.id),
                             })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -104,9 +104,9 @@ export default function ShowSeoMeta({
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Werk deze SEO-meta bij of ga terug naar de lijst.',
+                                'Update this SEO meta or return to the list.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -124,7 +124,7 @@ export default function ShowSeoMeta({
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
-                                        {t('Bewerken')}
+                                        {t('Edit')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -134,7 +134,7 @@ export default function ShowSeoMeta({
                                 >
                                     <Link href={seoMetas.index(locale)}>
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug')}
+                                        {t('Back')}
                                     </Link>
                                 </Button>
                             </div>
@@ -142,20 +142,20 @@ export default function ShowSeoMeta({
                     }
                 >
                     <AdminPanel
-                        title={t('Inhoud')}
+                        title={t('Content')}
                         description={t(
-                            'Zoals bezoekers deze pagina in de huidige taal zien.',
+                            'As visitors see this page in the current language.',
                         )}
                     >
                         <div className="grid gap-5">
                             <Field
-                                label={t('Pagina')}
+                                label={t('Page')}
                                 value={row.page_key}
                                 mono
                             />
-                            <Field label={t('Titel')} value={row.title} pre />
+                            <Field label={t('Title')} value={row.title} pre />
                             <Field
-                                label={t('Beschrijving')}
+                                label={t('Description')}
                                 value={row.description}
                                 pre
                             />

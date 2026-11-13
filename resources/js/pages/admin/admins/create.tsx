@@ -17,16 +17,16 @@ export default function CreateAdmin() {
 
     return (
         <>
-            <Head title={t('Beheerder aanmaken')} />
+            <Head title={t('Create administrator')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Beheerder aanmaken')}
-                    description={t('Voeg een personeelsaccount toe.')}
+                    title={t('Create administrator')}
+                    description={t('Add a staff administrator account.')}
                     icon={UserPlus}
                 >
                     <Button variant="outline" asChild>
                         <Link href={admins.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -34,11 +34,11 @@ export default function CreateAdmin() {
                 <AdminResourceShell
                     aside={
                         <>
-                            <UserFormAside entityLabel={t('Beheerder')} />
-                            <AdminPanel title={t('Toegang')}>
+                            <UserFormAside entityLabel={t('Admin')} />
+                            <AdminPanel title={t('Access')}>
                                 <p className="text-sm text-muted-foreground">
                                     {t(
-                                        'Beheerderaccounts krijgen volledige toegang tot het adminpaneel.',
+                                        'Administrator accounts get full access to the admin panel.',
                                     )}
                                 </p>
                             </AdminPanel>
@@ -47,7 +47,7 @@ export default function CreateAdmin() {
                 >
                     <UserForm
                         action={admins.store(wayfinderLocale())}
-                        submitLabel={t('Beheerder aanmaken')}
+                        submitLabel={t('Create administrator')}
                         onCancel={() =>
                             router.visit(admins.index(wayfinderLocale()))
                         }

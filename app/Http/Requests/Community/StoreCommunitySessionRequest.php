@@ -56,9 +56,9 @@ class StoreCommunitySessionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'club_id.required' => __('Kies een club of corner.'),
-            'club_id.exists' => __('Deze club is nog niet goedgekeurd.'),
-            'starts_at.after' => __('Kies een tijdstip in de toekomst.'),
+            'club_id.required' => __('Choose a club or corner.'),
+            'club_id.exists' => __('This club has not been approved yet.'),
+            'starts_at.after' => __('Choose a time in the future.'),
         ];
     }
 }

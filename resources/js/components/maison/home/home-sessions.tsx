@@ -10,13 +10,13 @@ import * as sessionRoutes from '@/routes/community/sessions';
 import type { SessionCard as SessionCardData } from '@/types/session';
 
 const INTRO_DESKTOP =
-    'Vind een open sessie bij een van onze partnerclubs, of plan er zelf een en nodig je vrienden uit. De baan boek je bij de club; wij brengen de spelers samen.';
+    'Find an open session at one of our partner clubs, or plan your own and invite your friends. You book the court with the club; we bring the players together.';
 
 const INTRO_MOBILE =
     'Vind een open sessie bij een van onze partnerclubs, of plan er zelf een en nodig je vrienden uit.';
 
 const EMPTY_BODY =
-    'Kies een club en een tijdstip, deel de link met je vrienden, en andere leden kunnen aansluiten.';
+    'Choose a club and a time, share the link with your friends, and other members can join.';
 
 const primaryClass =
     'inline-flex min-h-11 items-center justify-center border border-choc bg-choc px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:border-gold hover:bg-gold hover:text-choc w-full md:w-auto';
@@ -52,7 +52,7 @@ export function HomeSessions({
 
     const planButton: ReactNode = isAuthed ? (
         <Link href={createUrl} className={primaryClass}>
-            {t('+ Plan een sessie')}
+            {t('+ Plan a session')}
         </Link>
     ) : (
         <button
@@ -60,13 +60,13 @@ export function HomeSessions({
             onClick={() => visitAuthed(createUrl)}
             className={cn(primaryClass, 'cursor-pointer')}
         >
-            {t('+ Plan een sessie')}
+            {t('+ Plan a session')}
         </button>
     );
 
     const browseButton: ReactNode = isAuthed ? (
         <Link href={indexUrl} className={secondaryClass}>
-            {t('Bekijk alle sessies')}
+            {t('View all sessions')}
         </Link>
     ) : (
         <button
@@ -74,13 +74,13 @@ export function HomeSessions({
             onClick={() => visitAuthed(indexUrl)}
             className={cn(secondaryClass, 'cursor-pointer')}
         >
-            {t('Bekijk alle sessies')}
+            {t('View all sessions')}
         </button>
     );
 
     const weekCounter = (
         <p className="font-sans text-[10px] tracking-[0.22em] text-[#6E5646] uppercase">
-            {t('{{count}} open sessies deze week', {
+            {t('{{count}} open sessions this week', {
                 count: openSessionsThisWeek,
             })}
         </p>
@@ -91,7 +91,7 @@ export function HomeSessions({
             <div className="mx-auto flex max-w-320 flex-col gap-12 md:flex-row md:items-start md:gap-[90px]">
                 <Reveal className="w-full shrink-0 md:max-w-[440px]">
                     <p className="mb-4 font-sans text-[9px] font-medium tracking-[0.35em] text-[#7A5C2E] uppercase">
-                        {t('Community · Sessies')}
+                        {t('Community · Sessions')}
                     </p>
                     <div
                         aria-hidden="true"
@@ -99,7 +99,7 @@ export function HomeSessions({
                     />
 
                     <h2 className="mb-5 font-serif text-[clamp(32px,4vw,48px)] leading-[1.12] font-normal text-choc">
-                        {t('Na de koffie, de baan.')}
+                        {t('After the coffee, the court.')}
                     </h2>
                     <p className="mb-8 text-[15px] leading-[1.85] text-[#4A3A30] md:hidden">
                         {t(INTRO_MOBILE)}
@@ -139,10 +139,10 @@ export function HomeSessions({
                         <Reveal>
                             <div className="border border-dashed border-[#DDD0C2] bg-[#FBF8F4] px-8 py-12 text-center md:px-12 md:py-14">
                                 <p className="mb-3 font-sans text-[10px] tracking-[0.22em] text-[#6E5646] uppercase">
-                                    {t('Geen open sessies op dit moment')}
+                                    {t('No open sessions at the moment')}
                                 </p>
                                 <h3 className="mb-5 font-serif text-[clamp(28px,4vw,42px)] leading-[1.15] font-normal text-choc">
-                                    {t('Plan de eerste sessie van de week.')}
+                                    {t('Plan the first session of the week.')}
                                 </h3>
                                 <p className="mb-8 text-[15px] leading-[1.85] text-[#4A3A30]">
                                     {t(EMPTY_BODY)}

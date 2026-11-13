@@ -8,25 +8,25 @@ test('the admin sidebar includes administrator, roles, and permissions', functio
 
     foreach ([
         "t('Dashboard')",
-        "t('Klanten')",
-        "t('Bestellingen')",
-        "t('Gemeenschap')",
+        "t('Customers')",
+        "t('Orders')",
+        "t('Community')",
         "t('Heritage Letter')",
         "t('Journal')",
-        "t('Beheerder')",
-        "t('Rollen')",
-        "t('Rechten')",
-        "t('Profiel & Beveiliging')",
+        "t('Admin')",
+        "t('Roles')",
+        "t('Permissions')",
+        "t('Profile & Security')",
     ] as $needle) {
         expect($source)->toContain($needle);
     }
 
     expect($source)
-        ->not->toContain("t('Profiel')")
-        ->not->toContain("t('Beveiliging')")
+        ->not->toContain("t('Profile')")
+        ->not->toContain("t('Security')")
         ->not->toContain("t('Access Control')")
         ->not->toContain("t('Admins')")
-        ->not->toContain("t('Berichten')")
+        ->not->toContain("t('Messages')")
         ->not->toContain('File Upload Demo')
         ->not->toContain("href: '#'");
 });
@@ -38,21 +38,21 @@ test('sidebar nav items are gated on the same permission their route enforces', 
     // A mismatch here means a staff member either sees a link that 403s, or has
     // access to a page with no way to navigate to it.
     foreach ([
-        ["t('Bestellingen')", 'PERMISSIONS.ORDERS.MANAGE'],
+        ["t('Orders')", 'PERMISSIONS.ORDERS.MANAGE'],
         ["t('Product')", 'PERMISSIONS.HERITAGE.VIEW'],
-        ["t('Editievoorraad')", 'PERMISSIONS.HERITAGE.VIEW'],
+        ["t('Edition inventory')", 'PERMISSIONS.HERITAGE.VIEW'],
         ["t('Partner Clubs')", 'PERMISSIONS.HERITAGE.VIEW'],
         ["t('FAQ')", 'PERMISSIONS.HERITAGE.VIEW'],
-        ["t('Afspraken')", 'PERMISSIONS.HERITAGE.VIEW'],
+        ["t('Appointments')", 'PERMISSIONS.HERITAGE.VIEW'],
         ["t('Feedback')", 'PERMISSIONS.HERITAGE.VIEW'],
-        ["t('Kleedkamer')", 'PERMISSIONS.HERITAGE.VIEW'],
+        ["t('Dressing Room')", 'PERMISSIONS.HERITAGE.VIEW'],
         ["t('Home hero')", 'PERMISSIONS.HERITAGE.VIEW'],
-        ["t('Opening-aanbod')", 'PERMISSIONS.HERITAGE.VIEW'],
-        ["t('Site-instellingen')", 'PERMISSIONS.HERITAGE.VIEW'],
-        ["t('Storefront-toegang')", 'PERMISSIONS.HERITAGE.VIEW'],
+        ["t('Opening offer')", 'PERMISSIONS.HERITAGE.VIEW'],
+        ["t('Site settings')", 'PERMISSIONS.HERITAGE.VIEW'],
+        ["t('Storefront access')", 'PERMISSIONS.HERITAGE.VIEW'],
         ["t('SEO Meta')", 'PERMISSIONS.HERITAGE.VIEW'],
-        ["t('Rollen')", 'PERMISSIONS.ROLES.INDEX'],
-        ["t('Rechten')", 'PERMISSIONS.PERMISSIONS.INDEX'],
+        ["t('Roles')", 'PERMISSIONS.ROLES.INDEX'],
+        ["t('Permissions')", 'PERMISSIONS.PERMISSIONS.INDEX'],
     ] as [$title, $permission]) {
         $titlePosition = strpos($source, $title);
         expect($titlePosition)->not->toBeFalse();

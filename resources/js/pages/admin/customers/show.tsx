@@ -23,10 +23,10 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
         <>
             <Head title={customer.name} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-                <AdminPageHeader title={t('Klantenprofiel')} icon={IdCard}>
+                <AdminPageHeader title={t('Customer profile')} icon={IdCard}>
                     <Button variant="outline" asChild>
                         <Link href={customers.index(wayfinderLocale())}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     {can(PERMISSIONS.USERS.EDIT) && (
@@ -38,7 +38,7 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
                                 })}
                             >
                                 <Pencil className="h-4 w-4" />{' '}
-                                {t('Klant bewerken')}
+                                {t('Edit customer')}
                             </Link>
                         </Button>
                     )}
@@ -47,9 +47,9 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Beheer dit ledenaccount vanuit het adminpaneel.',
+                                'Manage this member account from the admin panel.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -62,7 +62,7 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
                                             })}
                                         >
                                             <Pencil className="h-4 w-4" />{' '}
-                                            {t('Klant bewerken')}
+                                            {t('Edit customer')}
                                         </Link>
                                     </Button>
                                 )}
@@ -77,14 +77,14 @@ export default function ShowCustomer({ customer }: { customer: AdminUser }) {
                                         )}
                                     >
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug naar klanten')}
+                                        {t('Back to customers')}
                                     </Link>
                                 </Button>
                             </div>
                         </AdminPanel>
                     }
                 >
-                    <AdminUserProfile user={customer} idLabel={t('Klant-ID')} />
+                    <AdminUserProfile user={customer} idLabel={t('Customer ID')} />
                 </AdminResourceShell>
             </div>
         </>

@@ -28,7 +28,7 @@ export function ChatClosedNotice({
             <Lock className="size-3.5 shrink-0" aria-hidden="true" />
             {message ??
                 t(
-                    'Deze chat is gesloten. Er kunnen geen berichten meer worden verstuurd.',
+                    'This chat is closed. No more messages can be sent.',
                 )}
         </div>
     );

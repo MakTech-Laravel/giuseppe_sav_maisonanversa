@@ -59,9 +59,9 @@ type HeroRecord = Omit<HeroForm, 'image' | 'remove_image'> & {
 };
 
 const SLOTS: Array<{ key: Slot; title: string }> = [
-    { key: 'primary', title: 'Primaire knop' },
-    { key: 'secondary', title: 'Secundaire knop' },
-    { key: 'tertiary', title: 'Tertiaire knop' },
+    { key: 'primary', title: 'Primary button' },
+    { key: 'secondary', title: 'Secondary button' },
+    { key: 'tertiary', title: 'Tertiary button' },
 ];
 
 export default function HomeHeroEdit({
@@ -138,7 +138,7 @@ export default function HomeHeroEdit({
                 <AdminPageHeader
                     title={t('Home hero')}
                     description={t(
-                        'Beeld, tekst en knoppen van de openingsfoto op de homepage.',
+                        'Photograph, copy, and buttons for the opening image on the homepage.',
                     )}
                     icon={ImageIcon}
                 />
@@ -147,7 +147,7 @@ export default function HomeHeroEdit({
                         className="xl:grid-cols-[minmax(0,1fr)_24rem]"
                         aside={
                             <>
-                                <AdminPanel title={t('Voorbeeld')}>
+                                <AdminPanel title={t('Preview')}>
                                     <HeroPreview
                                         data={form.data}
                                         imageUrl={previewImage}
@@ -155,11 +155,11 @@ export default function HomeHeroEdit({
                                     />
                                     <p className="mt-3 text-xs text-muted-foreground">
                                         {t(
-                                            'Het getal op de site komt uit de inventaris.',
+                                            'The number on the site comes from inventory.',
                                         )}
                                     </p>
                                 </AdminPanel>
-                                <AdminPanel title={t('Opslaan')}>
+                                <AdminPanel title={t('Save')}>
                                     <div className="space-y-2">
                                         <Button
                                             type="submit"
@@ -171,7 +171,7 @@ export default function HomeHeroEdit({
                                             ) : (
                                                 <Save className="size-4" />
                                             )}
-                                            {t('Home hero opslaan')}
+                                            {t('Save home hero')}
                                         </Button>
                                         <HomeHeroTranslationsDialog
                                             locales={locales}
@@ -184,9 +184,9 @@ export default function HomeHeroEdit({
                         }
                     >
                         <AdminPanel
-                            title={t('Fotografie')}
+                            title={t('Photography')}
                             description={t(
-                                'Wanneer er geen foto is geüpload, blijft de huidige mansion-foto staan.',
+                                'When no photograph is uploaded, the current mansion photograph stays in place.',
                             )}
                         >
                             <FileUpload
@@ -212,23 +212,23 @@ export default function HomeHeroEdit({
                                     form.setData('remove_image', true)
                                 }
                                 placeholder={t(
-                                    'Sleep een afbeelding hierheen of klik om te bladeren',
+                                    'Drag & drop an image, or click to browse',
                                 )}
-                                hint={t('PNG, JPG of WEBP')}
+                                hint={t('PNG, JPG or WEBP')}
                                 error={form.errors.image}
                             />
                         </AdminPanel>
 
                         <AdminPanel
-                            title={t('Tekst')}
+                            title={t('Text')}
                             description={t(
-                                'Bewerk de Nederlandse bron. DeepL vult Engels en Frans; corrigeer die in Vertalingen.',
+                                'Edit the Dutch source. DeepL fills English and French; correct those in Translations.',
                             )}
                         >
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <Field
                                     id="eyebrow"
-                                    label={t('Wenkbrauw')}
+                                    label={t('Eyebrow')}
                                     value={form.data.eyebrow}
                                     error={form.errors.eyebrow}
                                     className="sm:col-span-2"
@@ -238,7 +238,7 @@ export default function HomeHeroEdit({
                                 />
                                 <Field
                                     id="title"
-                                    label={t('Titel')}
+                                    label={t('Title')}
                                     value={form.data.title}
                                     error={form.errors.title}
                                     onChange={(value) =>
@@ -247,7 +247,7 @@ export default function HomeHeroEdit({
                                 />
                                 <Field
                                     id="title_accent"
-                                    label={t('Titelregel 2')}
+                                    label={t('Title line 2')}
                                     value={form.data.title_accent}
                                     error={form.errors.title_accent}
                                     onChange={(value) =>
@@ -256,7 +256,7 @@ export default function HomeHeroEdit({
                                 />
                                 <Field
                                     id="tagline"
-                                    label={t('Ondertitel')}
+                                    label={t('Tagline')}
                                     value={form.data.tagline}
                                     error={form.errors.tagline}
                                     className="sm:col-span-2"
@@ -268,9 +268,9 @@ export default function HomeHeroEdit({
                         </AdminPanel>
 
                         <AdminPanel
-                            title={t('Knoppen')}
+                            title={t('Buttons')}
                             description={t(
-                                'Elke knop heeft een label en een vaste bestemming. Verborgen of lege knoppen verschijnen niet.',
+                                'Each button has a label and a fixed destination. Hidden or empty buttons do not appear.',
                             )}
                         >
                             <div className="space-y-6">
@@ -290,9 +290,9 @@ export default function HomeHeroEdit({
                         </AdminPanel>
 
                         <AdminPanel
-                            title={t('Teller')}
+                            title={t('Counter')}
                             description={t(
-                                'Het getal komt uit de inventaris. Alleen het bijschrift is bewerkbaar.',
+                                'The number comes from inventory. Only the caption is editable.',
                             )}
                         >
                             <div className="space-y-4">
@@ -308,13 +308,13 @@ export default function HomeHeroEdit({
                                         }
                                     />
                                     <Label htmlFor="show_counter">
-                                        {t('Toon de live voorraad')}
+                                        {t('Show the live stock')}
                                     </Label>
                                 </div>
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <Field
                                         id="counter_line_one"
-                                        label={t('Regel 1')}
+                                        label={t('Line 1')}
                                         value={form.data.counter_line_one}
                                         error={form.errors.counter_line_one}
                                         onChange={(value) =>
@@ -326,7 +326,7 @@ export default function HomeHeroEdit({
                                     />
                                     <Field
                                         id="counter_line_two"
-                                        label={t('Regel 2')}
+                                        label={t('Line 2')}
                                         value={form.data.counter_line_two}
                                         error={form.errors.counter_line_two}
                                         onChange={(value) =>
@@ -402,13 +402,13 @@ function ButtonSlotFields({
             <div className="grid gap-4 lg:grid-cols-2">
                 <Field
                     id={`${slot}_label`}
-                    label={t('Knoptekst')}
+                    label={t('Button label')}
                     value={label}
                     error={errors[`${slot}_label`]}
                     onChange={(value) => onChange(slot, 'label', value)}
                 />
                 <div className="space-y-2">
-                    <Label htmlFor={`${slot}_action`}>{t('Bestemming')}</Label>
+                    <Label htmlFor={`${slot}_action`}>{t('Destination')}</Label>
                     <Select
                         value={action}
                         onValueChange={(value) => onChange(slot, 'action', value)}
@@ -428,7 +428,7 @@ function ButtonSlotFields({
                 </div>
                 {action === 'maison_page' ? (
                     <div className="space-y-2 lg:col-span-2">
-                        <Label htmlFor={`${slot}_target`}>{t('Pagina')}</Label>
+                        <Label htmlFor={`${slot}_target`}>{t('Page')}</Label>
                         <Select
                             value={target || undefined}
                             onValueChange={(value) =>
@@ -436,7 +436,7 @@ function ButtonSlotFields({
                             }
                         >
                             <SelectTrigger id={`${slot}_target`} className="w-full">
-                                <SelectValue placeholder={t('Kies een Maison-pagina.')} />
+                                <SelectValue placeholder={t('Choose a Maison page.')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {pages.map((option) => (
@@ -452,7 +452,7 @@ function ButtonSlotFields({
                 {action === 'external' ? (
                     <Field
                         id={`${slot}_target`}
-                        label={t('HTTPS-adres')}
+                        label={t('HTTPS address')}
                         value={target}
                         error={errors[`${slot}_target`]}
                         className="lg:col-span-2"

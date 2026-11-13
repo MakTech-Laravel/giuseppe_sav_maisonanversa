@@ -70,9 +70,9 @@ export function UserForm({
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <AdminPanel
-                title={t('Profielfoto')}
+                title={t('Profile photo')}
                 description={t(
-                    'Optioneel. Wordt getoond in community en ledengebied.',
+                    'Optional. Shown in the community and member area.',
                 )}
             >
                 <FileUpload
@@ -86,21 +86,21 @@ export function UserForm({
                     existingFiles={existingAvatar}
                     onRemoveExisting={() => form.setData('remove_avatar', true)}
                     placeholder={t(
-                        'Sleep een avatar hierheen of klik om te bladeren',
+                        'Drag & drop an avatar, or click to browse',
                     )}
-                    hint={t('PNG, JPG of WEBP')}
+                    hint={t('PNG, JPG or WEBP')}
                     error={form.errors.avatar}
                     classNames={{ wrapper: 'max-w-md' }}
                 />
             </AdminPanel>
 
             <AdminPanel
-                title={t('Accountgegevens')}
-                description={t('Naam, e-mail en wachtwoord voor dit account.')}
+                title={t('Account details')}
+                description={t('Name, email and password for this account.')}
             >
                 <div className="grid gap-5 sm:grid-cols-2">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">{t('Volledige naam')}</Label>
+                        <Label htmlFor="name">{t('Full name')}</Label>
                         <Input
                             id="name"
                             value={form.data.name}
@@ -116,7 +116,7 @@ export function UserForm({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="email">{t('E-mailadres')}</Label>
+                        <Label htmlFor="email">{t('Email address')}</Label>
                         <Input
                             id="email"
                             type="email"
@@ -134,10 +134,10 @@ export function UserForm({
 
                     <div className="grid gap-2 sm:col-span-2 sm:max-w-md">
                         <Label htmlFor="password">
-                            {t('Wachtwoord')}
+                            {t('Password')}
                             {isEdit && (
                                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                                    {t('(laat leeg om huidige te behouden)')}
+                                    {t('(leave blank to keep current)')}
                                 </span>
                             )}
                         </Label>
@@ -169,8 +169,8 @@ export function UserForm({
                     )}
                     {submitLabel ??
                         (isEdit
-                            ? t('Wijzigingen opslaan')
-                            : t('Gebruiker aanmaken'))}
+                            ? t('Save changes')
+                            : t('Create user'))}
                 </Button>
                 {onCancel && (
                     <Button
@@ -179,13 +179,13 @@ export function UserForm({
                         onClick={onCancel}
                         disabled={form.processing}
                     >
-                        {t('Annuleren')}
+                        {t('Cancel')}
                     </Button>
                 )}
                 {form.validating && (
                     <Badge variant="secondary" className="gap-1.5">
                         <Loader2 className="h-3 w-3 animate-spin" />{' '}
-                        {t('Valideren…')}
+                        {t('Validating…')}
                     </Badge>
                 )}
             </div>
@@ -210,21 +210,21 @@ export function UserFormAside({
                 <li>
                     {isEdit
                         ? t(
-                              'Laat het wachtwoord leeg om het huidige wachtwoord te behouden.',
+                              'Leave the password blank to keep the current password.',
                           )
                         : t(
-                              'Het nieuwe account kan direct inloggen met het opgegeven wachtwoord.',
+                              'The new account can sign in immediately with the password you set.',
                           )}
                 </li>
                 <li>
                     {t(
-                        'Een avatar is optioneel en wordt getoond in community en ledengebied.',
+                        'An avatar is optional and is shown in the community and member area.',
                     )}
                 </li>
                 <li>
                     {isEdit
-                        ? t('Je bewerkt: {{entity}}', { entity: entityLabel })
-                        : t('Type account: {{entity}}', {
+                        ? t('You are editing: {{entity}}', { entity: entityLabel })
+                        : t('Account type: {{entity}}', {
                               entity: entityLabel,
                           })}
                 </li>

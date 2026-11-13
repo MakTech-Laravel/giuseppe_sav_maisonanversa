@@ -41,7 +41,7 @@ class CheckoutController extends Controller
     ): SymfonyResponse {
         if (! StorefrontGates::purchasesEnabled()) {
             throw ValidationException::withMessages([
-                'checkout' => __('Reserveren is tijdelijk gepauzeerd. Probeer het binnenkort opnieuw.'),
+                'checkout' => __('Reservations are temporarily paused. Please try again soon.'),
             ]);
         }
 
@@ -61,7 +61,7 @@ class CheckoutController extends Controller
 
         if ($product === null || ($inventory->snapshot($product)['available'] === 0 && ! $heldByBuyer)) {
             throw ValidationException::withMessages([
-                'checkout' => __(':product is uitverkocht.', [
+                'checkout' => __(':product is sold out.', [
                     'product' => $product?->translated('name') ?? __('Heritage Nº 001'),
                 ]),
             ]);
@@ -119,13 +119,13 @@ class CheckoutController extends Controller
             });
         } catch (EditionSoldOutException) {
             throw ValidationException::withMessages([
-                'checkout' => __(':product is uitverkocht.', [
+                'checkout' => __(':product is sold out.', [
                     'product' => $product->translated('name'),
                 ]),
             ]);
         } catch (EditionUnavailableException) {
             throw ValidationException::withMessages([
-                'edition_piece_id' => __('Dit editienummer is niet meer beschikbaar. Kies een ander nummer.'),
+                'edition_piece_id' => __('This edition number is no longer available. Please choose another.'),
             ]);
         }
 

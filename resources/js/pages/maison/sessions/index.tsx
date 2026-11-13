@@ -79,9 +79,9 @@ export default function SessionsIndex({
     }
 
     const tabs: TabDefinition<SessionTab>[] = [
-        { id: 'open', label: 'Open sessies', count: counts.open },
-        { id: 'mine', label: 'Mijn sessies', count: counts.mine },
-        { id: 'past', label: 'Afgelopen sessies', count: counts.past },
+        { id: 'open', label: 'Open sessions', count: counts.open },
+        { id: 'mine', label: 'My sessions', count: counts.mine },
+        { id: 'past', label: 'Past sessions', count: counts.past },
     ];
 
     const cards = (sessions?.data ?? []).map((session) => (
@@ -94,9 +94,9 @@ export default function SessionsIndex({
 
             <PageHero
                 eyebrow={t('Community')}
-                title={t('Sessies')}
+                title={t('Sessions')}
                 subtitle={t(
-                    'Vind een open sessie of maak jouw eigen sessie aan. Maison Anversa brengt spelers samen; boeken en betalen regel je zelf met de club.',
+                    'Find an open session or create your own. Maison Anversa brings players together; booking and payment stay between you and the club.',
                 )}
             />
 
@@ -107,11 +107,11 @@ export default function SessionsIndex({
                     <div className="flex flex-wrap items-end justify-between gap-4 py-10">
                         <div>
                             <h2 className="font-serif text-[28px] font-medium text-choc">
-                                {t('Sessies')}
+                                {t('Sessions')}
                             </h2>
                             <p className="mt-1 font-sans text-sm text-choc3">
                                 {t(
-                                    'Vind een open sessie of maak er zelf een aan.',
+                                    'Find an open session or create your own.',
                                 )}
                             </p>
                         </div>
@@ -121,14 +121,14 @@ export default function SessionsIndex({
                             className="inline-flex items-center gap-2 bg-choc px-6 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-gold2"
                         >
                             <Plus className="size-3.5" aria-hidden="true" />
-                            {t('Plan een sessie')}
+                            {t('Plan a session')}
                         </Link>
                     </div>
 
                     <SessionTabs
                         tabs={tabs}
                         activeTab={tab}
-                        ariaLabel={t('Sessies')}
+                        ariaLabel={t('Sessions')}
                         hrefFor={(next) =>
                             sessionRoutes.index.url(locale, {
                                 query: { tab: next },
@@ -149,8 +149,8 @@ export default function SessionsIndex({
                                     onChange={(event) =>
                                         setCity(event.target.value)
                                     }
-                                    placeholder={t('Filter op stad...')}
-                                    aria-label={t('Filter op stad...')}
+                                    placeholder={t('Filter by city...')}
+                                    aria-label={t('Filter by city...')}
                                     className="w-full border border-gold/20 bg-cream2 py-3 pr-4 pl-11 font-serif text-base text-choc transition-colors outline-none focus:border-gold2"
                                 />
                             </div>
@@ -159,7 +159,7 @@ export default function SessionsIndex({
                                 <SportFilter
                                     active={filters.sport === null}
                                     onClick={() => applySport(null)}
-                                    label={t('Alle sporten')}
+                                    label={t('All sports')}
                                 />
                                 {SPORTS.map((sport) => (
                                     <SportFilter
@@ -194,8 +194,8 @@ export default function SessionsIndex({
                                             className="cursor-pointer border border-gold/30 px-8 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10 disabled:opacity-50"
                                         >
                                             {loading
-                                                ? t('Laden...')
-                                                : t('Meer laden')}
+                                                ? t('Loading...')
+                                                : t('Load more')}
                                         </button>
                                     </div>
                                 ) : null
@@ -242,9 +242,9 @@ function EmptyState({ tab }: { tab: SessionTab }) {
     const { t } = useTranslation();
 
     const copy: Record<SessionTab, string> = {
-        open: 'Nog geen open sessies. Plan de eerste.',
-        mine: 'Je neemt nog niet deel aan een sessie.',
-        past: 'Je hebt nog geen afgelopen sessies.',
+        open: 'No open sessions yet. Plan the first one.',
+        mine: 'You have not joined a session yet.',
+        past: 'You have no past sessions yet.',
     };
 
     return (

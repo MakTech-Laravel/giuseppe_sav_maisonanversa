@@ -129,7 +129,7 @@ export function PermissionSelector({
                     <Input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder={t('Filter rechten…')}
+                        placeholder={t('Filter permissions…')}
                         className="pl-9"
                         disabled={disabled}
                     />
@@ -137,7 +137,7 @@ export function PermissionSelector({
                 <div className="flex items-center gap-2">
                     <Badge variant="secondary" className="gap-1.5">
                         <ShieldCheck className="h-3.5 w-3.5" />
-                        {t('{{selected}} / {{total}} geselecteerd', {
+                        {t('{{selected}} / {{total}} selected', {
                             selected: selected.length,
                             total: permissions.length,
                         })}
@@ -151,7 +151,7 @@ export function PermissionSelector({
                             disabled || selected.length === permissions.length
                         }
                     >
-                        {t('Alles selecteren')}
+                        {t('Select all')}
                     </Button>
                     <Button
                         type="button"
@@ -160,7 +160,7 @@ export function PermissionSelector({
                         onClick={() => setAll(false)}
                         disabled={disabled || selected.length === 0}
                     >
-                        {t('Wissen')}
+                        {t('Clear')}
                     </Button>
                 </div>
             </div>
@@ -217,7 +217,7 @@ export function PermissionSelector({
 
                                 {/* Group-level tri-state checkbox */}
                                 <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-muted-foreground select-none">
-                                    {t('Groep selecteren')}
+                                    {t('Select group')}
                                     <TriStateCheckbox
                                         state={state}
                                         disabled={disabled}
@@ -276,7 +276,7 @@ export function PermissionSelector({
 
                 {groups.length === 0 && (
                     <div className="rounded-lg border border-dashed py-10 text-center text-sm text-muted-foreground">
-                        {t('Geen rechten gevonden voor "{{query}}".', {
+                        {t('No permissions match "{{query}}".', {
                             query,
                         })}
                     </div>

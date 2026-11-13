@@ -15,15 +15,15 @@ export function NewsletterModal({ onClose }: NewsletterModalProps) {
     return (
         <MaisonModal label="De Heritage Letter" onClose={onClose}>
             <h2 className="mb-1.5 font-serif text-[32px] font-medium text-choc">
-                {t('De Heritage Letter')}
+                {t('The Heritage Letter')}
             </h2>
             <span className="mb-6 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
-                {t('Vroege toegang · Exclusieve updates · Gratis')}
+                {t('Early access · Exclusive updates · Free')}
             </span>
 
             <p className="mb-7 text-[15px] leading-[1.8] text-choc3">
                 {t(
-                    'Schrijf je in en ontvang als eerste toegang tot Heritage Nº 001 en alle toekomstige releases van Maison Anversa.',
+                    'Sign up and be the first to access Heritage Nº 001 and all future releases from Maison Anversa.',
                 )}
             </p>
 
@@ -37,7 +37,7 @@ export function NewsletterModal({ onClose }: NewsletterModalProps) {
 
             <p className={modalNoteClassName}>
                 {t(
-                    'Geen spam. Alleen wat er echt toe doet. Uitschrijven kan altijd.',
+                    'No spam. Only what truly matters. Unsubscribe anytime.',
                 )}
             </p>
         </MaisonModal>

@@ -16,11 +16,11 @@ enum ReturnReason: string
     public function label(): string
     {
         return match ($this) {
-            self::NotExpected => 'Niet wat ik verwachtte',
-            self::WrongItem => 'Verkeerd besteld',
-            self::Damaged => 'Beschadigd of defect aangekomen',
+            self::NotExpected => 'Not what I expected',
+            self::WrongItem => 'Ordered wrong item',
+            self::Damaged => 'Arrived damaged or defective',
             self::Other => 'Andere',
-            self::PreferNotToSay => 'Zeg ik liever niet',
+            self::PreferNotToSay => 'Prefer not to say',
         };
     }
 

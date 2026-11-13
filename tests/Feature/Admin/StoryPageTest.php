@@ -41,7 +41,7 @@ test('heritage staff can open the story page editor', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/story-page/edit')
-            ->where('page.hero_title', 'Alles begint bij')
+            ->where('page.hero_title', 'Everything begins with')
             ->where('page.hero_visible', true)
             ->where('page.name_title', 'Anversa')
             ->has('locales', 3)
@@ -68,9 +68,9 @@ test('the seeded story renders every section', function () {
                 'locale' => 'nl',
                 'product' => Product::FOUNDING_SLUG,
             ]))
-            ->where('story.quote.line', 'Padel is ons begin. Niet ons einde.')
+            ->where('story.quote.line', 'Padel is our beginning. Not our end.')
             ->where('story.founder.signature', 'Yusuf')
-            ->where('story.closing.place', 'Antwerpen, België · Est. 2026')
+            ->where('story.closing.place', 'Antwerp, Belgium · Est. 2026')
         );
 });
 
@@ -130,9 +130,9 @@ test('the english editor reads english copy and saving it keeps the dutch source
         ->get(route('admin.story-page.edit', ['locale' => 'en']))
         ->assertOk()
         ->assertInertia(fn (Assert $inertia) => $inertia
-            ->where('page.hero_title', 'Alles begint bij')
+            ->where('page.hero_title', 'Everything begins with')
             ->where('translations.en.hero_title', 'Everything starts with')
-            ->where('translations.nl.hero_title', 'Alles begint bij')
+            ->where('translations.nl.hero_title', 'Everything begins with')
         );
 
     $this->actingAs($this->admin)
@@ -144,7 +144,7 @@ test('the english editor reads english copy and saving it keeps the dutch source
 
     $fresh = StoryPage::current()->fresh();
 
-    expect($fresh->hero_title)->toBe('Alles begint bij')
+    expect($fresh->hero_title)->toBe('Everything begins with')
         ->and($fresh->hero_eyebrow)->toBe('Ons verhaal')
         ->and($fresh->translated('hero_title', 'en'))->toBe('Everything begins with')
         ->and($fresh->translated('hero_eyebrow', 'en'))->toBe('Our story')

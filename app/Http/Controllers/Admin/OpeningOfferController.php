@@ -60,7 +60,7 @@ class OpeningOfferController extends Controller
     {
         OpeningOffer::query()->create($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Openingsaanbod aangemaakt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Opening offer created.')]);
 
         return redirect()->route('admin.opening-offers.index', ['locale' => $locale]);
     }
@@ -82,7 +82,7 @@ class OpeningOfferController extends Controller
     {
         $openingOffer->update($request->validated());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Openingsaanbod bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Opening offer updated.')]);
 
         return redirect()->route('admin.opening-offers.index', ['locale' => $locale]);
     }
@@ -91,7 +91,7 @@ class OpeningOfferController extends Controller
     {
         $openingOffer->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Openingsaanbod verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Opening offer removed.')]);
 
         return redirect()->route('admin.opening-offers.index', ['locale' => $locale]);
     }

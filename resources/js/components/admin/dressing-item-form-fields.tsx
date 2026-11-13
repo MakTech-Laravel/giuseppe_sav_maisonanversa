@@ -59,7 +59,7 @@ export function DressingItemFormFields({
         <>
             <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="name">{t('Naam')}</Label>
+                    <Label htmlFor="name">{t('Name')}</Label>
                     <Input
                         id="name"
                         value={data.name}
@@ -79,7 +79,7 @@ export function DressingItemFormFields({
                     <Input
                         id="slug"
                         value={data.slug}
-                        placeholder={t('Automatisch op basis van naam')}
+                        placeholder={t('Automatic based on name')}
                         onChange={(event) =>
                             setData('slug', event.target.value)
                         }
@@ -93,7 +93,7 @@ export function DressingItemFormFields({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="category">{t('Categorie')}</Label>
+                <Label htmlFor="category">{t('Category')}</Label>
                 <Input
                     id="category"
                     value={data.category}
@@ -109,7 +109,7 @@ export function DressingItemFormFields({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="description">{t('Beschrijving')}</Label>
+                <Label htmlFor="description">{t('Description')}</Label>
                 <textarea
                     id="description"
                     value={data.description}
@@ -142,10 +142,10 @@ export function DressingItemFormFields({
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="coming_soon">
-                                {t('Binnenkort')}
+                                {t('Coming soon')}
                             </SelectItem>
                             <SelectItem value="available">
-                                {t('Beschikbaar')}
+                                {t('Available')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -157,7 +157,7 @@ export function DressingItemFormFields({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="sort_order">{t('Volgorde')}</Label>
+                    <Label htmlFor="sort_order">{t('Order')}</Label>
                     <Input
                         id="sort_order"
                         type="number"
@@ -177,7 +177,7 @@ export function DressingItemFormFields({
 
             <div className="space-y-2">
                 <Label htmlFor="image_key">
-                    {t('Imagery asset-sleutel (optioneel)')}
+                    {t('Imagery asset key (optional)')}
                 </Label>
                 <Input
                     id="image_key"
@@ -189,7 +189,7 @@ export function DressingItemFormFields({
                 />
                 <p className="text-xs text-muted-foreground">
                     {t(
-                        'Fallback wanneer er geen cover-afbeelding is geüpload.',
+                        'Fallback for when no cover image has been uploaded.',
                     )}
                 </p>
                 {errors.image_key && (
@@ -200,7 +200,7 @@ export function DressingItemFormFields({
             </div>
 
             <div className="space-y-2">
-                <Label>{t('Coverafbeelding')}</Label>
+                <Label>{t('Cover image')}</Label>
                 <FileUpload
                     accept="image/png,image/jpeg,image/webp"
                     maxSize={false}
@@ -212,9 +212,9 @@ export function DressingItemFormFields({
                     existingFiles={existingFiles}
                     onRemoveExisting={() => setData('remove_image', true)}
                     placeholder={t(
-                        'Sleep een afbeelding hierheen of klik om te bladeren',
+                        'Drag & drop an image, or click to browse',
                     )}
-                    hint={t('PNG, JPG of WEBP')}
+                    hint={t('PNG, JPG or WEBP')}
                     error={errors.image}
                 />
             </div>
@@ -228,7 +228,7 @@ export function DressingItemFormFields({
                     }
                 />
                 <Label htmlFor="is_published" className="font-normal">
-                    {t('Gepubliceerd')}
+                    {t('Published')}
                 </Label>
             </div>
         </>

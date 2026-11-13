@@ -35,7 +35,7 @@ class RegisterListingController extends Controller
             $request->boolean('consent'),
         );
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Wijzigingen verschijnen meteen in het register.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Changes appear in the register immediately.')]);
 
         return back();
     }

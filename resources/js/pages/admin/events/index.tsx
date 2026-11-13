@@ -71,9 +71,9 @@ function statusLabel(
         case 'opening':
             return t('Opening');
         case 'ongoing':
-            return t('Lopend');
+            return t('Ongoing');
         case 'closed':
-            return t('Gesloten');
+            return t('Closed');
     }
 }
 
@@ -128,7 +128,7 @@ export default function EventsIndex({
     };
 
     function destroyEvent(eventId: string) {
-        if (!window.confirm(t('Evenement verwijderen?'))) {
+        if (!window.confirm(t('Delete event?'))) {
             return;
         }
 
@@ -156,19 +156,19 @@ export default function EventsIndex({
 
     return (
         <>
-            <Head title={t('Evenementen')} />
+            <Head title={t('Events')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Evenementen')}
+                    title={t('Events')}
                     description={t(
-                        'Bekijk geplande Maison-evenementen en aanwezigheid.',
+                        'View planned Maison events and attendance.',
                     )}
                     icon={CalendarDays}
                 >
                     <Button asChild>
                         <Link href={eventsRoutes.create(wayfinderLocale())}>
                             <Plus className="h-4 w-4" />{' '}
-                            {t('Evenement toevoegen')}
+                            {t('Add event')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -176,16 +176,16 @@ export default function EventsIndex({
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_11rem_auto] sm:items-center">
                     <div className="relative min-w-0">
                         <Label htmlFor="events-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             id="events-search"
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op titel, locatie…')}
+                            placeholder={t('Search by title, location…')}
                             className="w-full pl-9"
-                            aria-label={t('Zoeken')}
+                            aria-label={t('Search')}
                         />
                     </div>
                     <Select value={status} onValueChange={setStatus}>
@@ -193,20 +193,20 @@ export default function EventsIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             <SelectItem value="opening">
                                 {t('Opening')}
                             </SelectItem>
                             <SelectItem value="ongoing">
-                                {t('Lopend')}
+                                {t('Ongoing')}
                             </SelectItem>
                             <SelectItem value="closed">
-                                {t('Gesloten')}
+                                {t('Closed')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -219,7 +219,7 @@ export default function EventsIndex({
                             onClick={clearFilters}
                         >
                             <X className="h-4 w-4" />
-                            {t('Wis filters')}
+                            {t('Clear filters')}
                         </Button>
                     ) : (
                         <span className="hidden sm:block" aria-hidden />
@@ -231,19 +231,19 @@ export default function EventsIndex({
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead className="w-14" />
-                                <TableHead>{t('Evenement')}</TableHead>
+                                <TableHead>{t('Event')}</TableHead>
                                 <TableHead className="w-44 min-w-40">
                                     {t('Status')}
                                 </TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    {t('Datum')}
+                                    {t('Date')}
                                 </TableHead>
                                 <TableHead className="hidden lg:table-cell">
-                                    {t('Locatie')}
+                                    {t('Location')}
                                 </TableHead>
-                                <TableHead>{t('Aanwezigen')}</TableHead>
+                                <TableHead>{t('Attendees')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -254,7 +254,7 @@ export default function EventsIndex({
                                         colSpan={7}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen evenementen gevonden.')}
+                                        {t('No events found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -289,7 +289,7 @@ export default function EventsIndex({
                                                 <SelectTrigger
                                                     className="h-8 w-full max-w-[11rem]"
                                                     aria-label={t(
-                                                        'Status wijzigen',
+                                                        'Change status',
                                                     )}
                                                 >
                                                     <SelectValue>
@@ -304,10 +304,10 @@ export default function EventsIndex({
                                                         {t('Opening')}
                                                     </SelectItem>
                                                     <SelectItem value="ongoing">
-                                                        {t('Lopend')}
+                                                        {t('Ongoing')}
                                                     </SelectItem>
                                                     <SelectItem value="closed">
-                                                        {t('Gesloten')}
+                                                        {t('Closed')}
                                                     </SelectItem>
                                                 </SelectContent>
                                             </Select>
@@ -336,7 +336,7 @@ export default function EventsIndex({
                                                         event: Number(event.id),
                                                     })}
                                                     title={t(
-                                                        'Boekingen bekijken',
+                                                        'View bookings',
                                                     )}
                                                 >
                                                     <Eye className="h-4 w-4" />
@@ -352,7 +352,7 @@ export default function EventsIndex({
                                                         locale: wayfinderLocale(),
                                                         event: Number(event.id),
                                                     })}
-                                                    title={t('Bewerken')}
+                                                    title={t('Edit')}
                                                 >
                                                     <Pencil className="h-4 w-4" />
                                                 </Link>
@@ -364,7 +364,7 @@ export default function EventsIndex({
                                                 onClick={() =>
                                                     destroyEvent(event.id)
                                                 }
-                                                title={t('Verwijderen')}
+                                                title={t('Remove')}
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>

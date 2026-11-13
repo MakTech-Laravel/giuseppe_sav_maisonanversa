@@ -30,12 +30,12 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
 
     return (
         <>
-            <Head title={t('Bestellingen')} />
+            <Head title={t('Orders')} />
             <MemberPageHeader
                 eyebrow={t('Account')}
-                title={t('Bestellingen & betalingen')}
+                title={t('Orders & payments')}
                 description={t(
-                    'Jouw aankopen, betalingen en verzendstatus in één overzicht.',
+                    'Your purchases, payments and shipping status in one overview.',
                 )}
             />
 
@@ -84,7 +84,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                     href={orderDetailHref(locale, order.id)}
                                     className="inline-flex min-h-9 items-center border border-gold/40 px-3 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline transition-colors hover:bg-gold hover:text-choc"
                                 >
-                                    {t('Bekijken')}
+                                    {t('View')}
                                 </Link>
                             </div>
                         </div>
@@ -95,22 +95,22 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                     <thead>
                         <tr className="border-b border-gold/20 font-sans text-[9px] tracking-[0.2em] text-gold uppercase">
                             <th className="px-6 py-4 font-medium">
-                                {t('Referentie')}
+                                {t('Reference')}
                             </th>
                             <th className="px-6 py-4 font-medium">
-                                {t('Artikel')}
+                                {t('Item')}
                             </th>
                             <th className="px-6 py-4 font-medium">
-                                {t('Datum')}
+                                {t('Date')}
                             </th>
                             <th className="px-6 py-4 font-medium">
-                                {t('Bedrag')}
+                                {t('Amount')}
                             </th>
                             <th className="px-6 py-4 font-medium">
                                 {t('Status')}
                             </th>
                             <th className="px-6 py-4 text-right font-medium">
-                                {t('Actie')}
+                                {t('Action')}
                             </th>
                         </tr>
                     </thead>
@@ -158,7 +158,7 @@ export default function MemberOrders({ orders }: { orders: Order[] }) {
                                         href={orderDetailHref(locale, order.id)}
                                         className="inline-flex min-h-9 items-center border border-gold/40 px-3 font-sans text-[10px] tracking-[0.16em] text-gold uppercase no-underline transition-colors hover:bg-gold hover:text-choc"
                                     >
-                                        {t('Bekijken')}
+                                        {t('View')}
                                     </Link>
                                 </td>
                             </tr>

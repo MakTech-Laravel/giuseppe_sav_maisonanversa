@@ -11,15 +11,15 @@ export function HomeNewsletter() {
             className="grid items-center gap-10 border-t border-gold/15 bg-choc px-8 py-18 text-cream md:grid-cols-2 md:gap-15 md:px-20"
         >
             <div>
-                <Eyebrow>{t('De Heritage Letter')}</Eyebrow>
+                <Eyebrow>{t('The Heritage Letter')}</Eyebrow>
                 <h2 className="mt-3 mb-2.5 font-serif text-[clamp(24px,2.8vw,36px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
-                    {t('Word lid van')}
+                    {t('Join the')}
                     <br />
-                    {t('de Heritage Letter')}
+                    {t('Heritage Letter')}
                 </h2>
                 <p className="text-[14px] leading-[1.8] text-sand">
                     {t(
-                        'Als eerste verhalen, nieuws en exclusieve uitnodigingen ontvangen van Maison Anversa.',
+                        'Be the first to receive stories, news and exclusive invitations from Maison Anversa.',
                     )}
                 </p>
             </div>

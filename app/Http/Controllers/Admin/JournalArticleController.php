@@ -194,7 +194,7 @@ class JournalArticleController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.journal.show', [
             'locale' => $locale,
@@ -224,7 +224,7 @@ class JournalArticleController extends Controller
             $article->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.journal.show', [
             'locale' => $locale,

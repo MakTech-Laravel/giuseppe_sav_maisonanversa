@@ -15,14 +15,14 @@ export default function CheckoutCancel() {
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={t('Betaling')}
+                eyebrow={t('Payment')}
                 title={
                     <>
-                        {t('Betaling')} <em>{t('geannuleerd')}</em>
+                        {t('Payment')} <em>{t('cancelled')}</em>
                     </>
                 }
                 subtitle={t(
-                    'Geen zorgen — er is niets in rekening gebracht. Je kunt jouw reservering opnieuw starten wanneer je klaar bent.',
+                    'No worries — nothing was charged. You can restart your reservation when you are ready.',
                 )}
             />
 
@@ -32,7 +32,7 @@ export default function CheckoutCancel() {
                     href={foundingProductUrl(locale)}
                     variant="choc"
                 >
-                    {t('Terug naar het product')}
+                    {t('Back to the product')}
                 </MaisonButton>
             </section>
         </>

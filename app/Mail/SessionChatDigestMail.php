@@ -30,7 +30,7 @@ class SessionChatDigestMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Nieuwe berichten'),
+            subject: __('New messages'),
         );
     }
 
@@ -40,14 +40,14 @@ class SessionChatDigestMail extends Mailable implements ShouldQueue
             html: 'emails.session-chat-digest',
             with: [
                 ...$this->maisonBrandData($this->locale, withHomeCta: false),
-                'title' => __('Nieuwe berichten'),
+                'title' => __('New messages'),
                 'intro' => trans_choice(
-                    'Je hebt :count ongelezen chatbericht.|Je hebt :count ongelezen chatberichten.',
+                    '{1} You have :count unread chat message.|[2,*] You have :count unread chat messages.',
                     $this->unreadCount,
                     ['count' => $this->unreadCount],
                 ),
                 'ctaUrl' => $this->ctaUrl,
-                'ctaLabel' => __('Bekijk berichten'),
+                'ctaLabel' => __('View messages'),
             ],
         );
     }

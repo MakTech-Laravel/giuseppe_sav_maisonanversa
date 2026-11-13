@@ -33,7 +33,7 @@ class FoundingEditionCheckout
 
         if (! filled(config('cashier.secret'))) {
             throw ValidationException::withMessages([
-                'checkout' => __('Stripe is nog niet geconfigureerd. Voeg jouw Stripe-sleutels toe om verder te gaan.'),
+                'checkout' => __('Stripe is not configured yet. Add your Stripe keys to continue.'),
             ]);
         }
 
@@ -42,7 +42,7 @@ class FoundingEditionCheckout
 
         if ($product === null) {
             throw ValidationException::withMessages([
-                'checkout' => __('Dit product is nog niet beschikbaar voor checkout.'),
+                'checkout' => __('This product is not available for checkout yet.'),
             ]);
         }
 
@@ -50,7 +50,7 @@ class FoundingEditionCheckout
 
         if (blank($product->stripe_price_id)) {
             throw ValidationException::withMessages([
-                'checkout' => __('Kan geen Stripe-prijs aanmaken voor dit product. Probeer het binnenkort opnieuw.'),
+                'checkout' => __('Unable to create a Stripe price for this product. Try again shortly.'),
             ]);
         }
 

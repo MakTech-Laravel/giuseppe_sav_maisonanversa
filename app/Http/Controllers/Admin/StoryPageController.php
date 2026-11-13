@@ -64,7 +64,7 @@ class StoryPageController extends Controller
 
         $this->applyImages($request, $page->fresh() ?? $page);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Verhaal opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Story saved.')]);
 
         return back();
     }
@@ -108,7 +108,7 @@ class StoryPageController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return back();
     }
@@ -133,7 +133,7 @@ class StoryPageController extends Controller
             $page->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return back();
     }

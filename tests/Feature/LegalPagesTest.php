@@ -41,11 +41,11 @@ test('the legal editor defaults to tiptap with an html toggle and preview', func
     expect($editor)
         ->toContain('immediatelyRender: false')
         ->toContain("t('HTML')")
-        ->toContain("t('Voorbeeld')")
+        ->toContain("t('Preview')")
         ->toContain('sanitizeLegalHtml')
         ->toContain('handlePaste')
         ->toContain('LegalHtmlSourceEditor')
-        ->toContain("t('Opmaak wissen')")
+        ->toContain("t('Clear formatting')")
         ->toContain('TextStyleKit')
         ->toContain('setColor')
         ->toContain('setBackgroundColor')
@@ -56,7 +56,7 @@ test('the legal editor defaults to tiptap with an html toggle and preview', func
         ->toContain('headingOptions')
         ->not->toContain("from '@/components/ui/select'")
         ->and($source)
-        ->toContain("t('Opmaken')")
+        ->toContain("t('Format')")
         ->toContain('prettyPrintLegalHtml')
         ->and($edit)
         ->toContain('LegalRichTextEditor')
@@ -87,7 +87,7 @@ test('the legal pages admin index shows translated titles instead of slugs', fun
     $titles = file_get_contents(resource_path('js/components/admin/legal-page-titles.ts'));
 
     expect($index)
-        ->toContain("t('Titel')")
+        ->toContain("t('Title')")
         ->toContain('legalPageTitle(page.slug, t)')
         ->not->toContain('{page.slug}');
 

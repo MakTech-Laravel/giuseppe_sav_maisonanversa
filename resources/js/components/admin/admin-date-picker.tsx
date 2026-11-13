@@ -93,7 +93,7 @@ export function AdminDatePicker({
                             <span className="truncate">
                                 {selected
                                     ? formatDisplayDate(value, locale)
-                                    : (placeholder ?? t('Kies een datum'))}
+                                    : (placeholder ?? t('Choose a date'))}
                             </span>
                         </span>
                         <ChevronDown

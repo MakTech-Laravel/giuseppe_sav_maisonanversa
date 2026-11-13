@@ -55,7 +55,7 @@ class InquiryController extends Controller
             'seen_at' => $request->validated('seen') ? now() : null,
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Status bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Status updated.')]);
 
         return back();
     }
@@ -68,7 +68,7 @@ class InquiryController extends Controller
 
         $inquiry->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Aanvraag verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Request deleted.')]);
 
         return redirect()->route("admin.{$inbox}.index", ['locale' => $locale]);
     }
