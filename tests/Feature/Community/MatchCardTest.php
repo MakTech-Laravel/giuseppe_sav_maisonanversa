@@ -84,28 +84,36 @@ test('the card prints initials and first names, organiser first, never last name
         ->and($payload['height'])->toBe(1920);
 });
 
-test('members who hide their first name show initials only', function () {
+test('members who hide their first name show the Private label', function () {
     $this->player->update(['show_first_name_on_cards' => false]);
 
     $nl = app(MatchCardPresenter::class)->payload($this->session->fresh(), 'nl', 'story');
     $en = app(MatchCardPresenter::class)->payload($this->session->fresh(), 'en', 'story');
+    $fr = app(MatchCardPresenter::class)->payload($this->session->fresh(), 'fr', 'story');
 
-    expect($nl['players'][1])->toBe(['initials' => 'JP', 'first_name' => null, 'edition' => null])
-        ->and($en['players'][1]['first_name'])->toBeNull()
-        ->and($en['players'][1]['initials'])->toBe('JP');
+    expect($nl['players'][1])->toBe(['initials' => 'JP', 'first_name' => 'Privé', 'edition' => null])
+        ->and($en['players'][1]['first_name'])->toBe('Private')
+        ->and($fr['players'][1]['first_name'])->toBe('Privé')
+        ->and($en['players'][1]['initials'])->toBe('JP')
+        ->and(json_encode($nl))->not->toContain('Jan')
+        ->and(json_encode($en))->not->toContain('Peeters');
 });
 
-test('the share page hides the first name when privacy is off', function (string $locale) {
+test('the share page shows the Private label when privacy is off', function (string $locale, string $label) {
     $this->player->update(['show_first_name_on_cards' => false]);
 
     $this->get(shareUrlFor($this->session, ['locale' => $locale]))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('players.1.first_name', null)
+            ->where('players.1.first_name', $label)
             ->where('players.1.initials', 'JP')
             ->where('players.0.first_name', 'Sofia')
         );
-})->with(['nl', 'en', 'fr']);
+})->with([
+    'nl' => ['nl', 'Privé'],
+    'en' => ['en', 'Private'],
+    'fr' => ['fr', 'Privé'],
+]);
 
 test('for_chat_only seats are excluded from the match card roster', function () {
     $staff = User::factory()->create(['first_name' => 'Admin', 'last_name' => 'Staff']);
