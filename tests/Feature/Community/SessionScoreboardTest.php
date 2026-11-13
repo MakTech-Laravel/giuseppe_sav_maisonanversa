@@ -430,10 +430,10 @@ function heldTennisSession(User ...$players): CommunitySession
 
 test('padel results are always doubles with two players per team', function () {
     submitScore($this->alice, $this->session, scorePayload([$this->alice], [$this->bob]))
-        ->assertSessionHasErrors(['match_type' => 'Padel wordt altijd met twee tegen twee gespeeld.']);
+        ->assertSessionHasErrors(['match_type' => 'Padel is always played two against two.']);
 
     submitScore($this->alice, $this->session, [...scorePayload([$this->alice], [$this->bob]), 'match_type' => 'doubles'])
-        ->assertSessionHasErrors(['team_a' => 'Kies twee spelers per team.', 'team_b']);
+        ->assertSessionHasErrors(['team_a' => 'Choose two players per team.', 'team_b']);
 
     expect($this->session->scores()->count())->toBe(0);
 });
@@ -489,16 +489,16 @@ test('a tennis singles match with a tie-break and a super tie-break is stored wi
 
 test('impossible set scores and undecided matches are rejected per set', function () {
     submitScore($this->alice, $this->session, doublesPayload([[6, 5], [6, 3]]))
-        ->assertSessionHasErrors(['sets.0' => 'Geen geldige setscore.']);
+        ->assertSessionHasErrors(['sets.0' => 'Not a valid set score.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4, 7, 5], [6, 3]]))
-        ->assertSessionHasErrors(['sets.0' => 'Tie-breakpunten horen alleen bij een set die op een tie-break eindigde.']);
+        ->assertSessionHasErrors(['sets.0' => 'Tie-break points only belong to a set decided by a tie-break.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4], [3, 6]]))
-        ->assertSessionHasErrors(['sets' => 'De wedstrijd is nog niet beslist.']);
+        ->assertSessionHasErrors(['sets' => 'The match has not been decided yet.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4], [6, 3], [6, 2]]))
-        ->assertSessionHasErrors(['sets' => 'Na de beslissende set kan geen set meer volgen.']);
+        ->assertSessionHasErrors(['sets' => 'No set can follow the deciding set.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4], [3, 6], [10, 9]], 'super_tiebreak'))
         ->assertSessionHasErrors(['sets.2']);

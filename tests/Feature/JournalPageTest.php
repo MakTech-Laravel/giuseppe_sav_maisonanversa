@@ -52,7 +52,7 @@ test('a journal article page renders the localised body', function () {
         ->assertInertia(fn ($page) => $page
             ->component('maison/journal/show')
             ->where('article.slug', 'waarom-antwerpen-luxewereld')
-            ->where('article.title', 'Waarom Antwerpen de meest ondervertegenwoordigde stad in de luxewereld is')
+            ->where('article.title', 'Why Antwerp is the most underrepresented city in the luxury world')
             ->where('article.image_url', null)
             ->has('article.body', 3)
             ->has('related', 3)

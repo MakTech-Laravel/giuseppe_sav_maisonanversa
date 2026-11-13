@@ -18,7 +18,7 @@ enum SessionParticipantStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'Aanvraag in behandeling',
+            self::Pending => 'Request pending',
             self::Confirmed => 'Bevestigd',
             self::Rejected => 'Aanvraag geweigerd',
         };

@@ -46,7 +46,7 @@ test('a club corner inquiry is persisted and queued to the bureau inbox', functi
         'email' => 'marie@example.com',
         'location' => 'Antwerpen, België',
         'courts' => '4-6 courts',
-        'format' => 'Formaat A — Heritage Corner',
+        'format' => 'Format A — Heritage Corner',
         'message' => 'Wij zoeken een premium partnership.',
     ])->assertRedirect();
 
@@ -63,7 +63,7 @@ test('a club corner inquiry is persisted and queued to the bureau inbox', functi
             'club_name' => 'Padel Antwerpen',
             'location' => 'Antwerpen, België',
             'courts' => '4-6 courts',
-            'format' => 'Formaat A — Heritage Corner',
+            'format' => 'Format A — Heritage Corner',
         ]);
 
     Mail::assertQueued(InquiryReceived::class, function (InquiryReceived $mail) use ($inquiry) {

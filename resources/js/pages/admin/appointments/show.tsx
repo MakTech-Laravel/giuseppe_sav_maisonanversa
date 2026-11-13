@@ -19,7 +19,7 @@ export default function AppointmentsShow({
             <Head title={inquiry.name} />
             <InquiryShow
                 title={inquiry.name}
-                description={t('Bekijk deze afspraakaanvraag.')}
+                description={t('View this appointment request.')}
                 icon={CalendarCheck}
                 inquiry={inquiry}
                 routes={appointments as InquiryRouteHelpers}

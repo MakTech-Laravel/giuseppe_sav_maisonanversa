@@ -31,11 +31,11 @@ export function ChatSessionList({
                 )}
             >
                 <p className="font-serif text-lg text-cream">
-                    {t('Nog geen chats')}
+                    {t('No chats yet')}
                 </p>
                 <p className="max-w-xs font-sans text-[12px] text-sand">
                     {t(
-                        'Zodra je een sessie host of goedgekeurd bent, verschijnt die hier.',
+                        'Once you host a session or are approved, it will appear here.',
                     )}
                 </p>
             </div>
@@ -45,11 +45,11 @@ export function ChatSessionList({
     return (
         <ul
             className={cn('flex flex-1 flex-col overflow-y-auto', className)}
-            aria-label={t('Sessies')}
+            aria-label={t('Sessions')}
         >
             {sessions.map((session) => {
                 const active = activeSessionId === session.id;
-                const clubName = session.club?.name ?? t('Sessie');
+                const clubName = session.club?.name ?? t('Session');
                 const unread = unreadCounts[session.id] ?? 0;
 
                 return (
@@ -74,7 +74,7 @@ export function ChatSessionList({
                                     </span>
                                 ) : null}
                                 {session.is_cancelled && (
-                                    <StatusPill label={t('Geannuleerd')} />
+                                    <StatusPill label={t('Canceled')} />
                                 )}
                                 {!session.is_cancelled &&
                                     session.lifecycle === 'finished' && (

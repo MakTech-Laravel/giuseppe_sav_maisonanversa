@@ -94,8 +94,8 @@ const FIELD_LABELS: Record<SourceableField, string> = {
     phone: 'Telefoon',
     status: 'Status',
     corner_pipeline_status: 'Pipeline status',
-    corner_title: 'Corner titel',
-    corner_body: 'Corner tekst',
+    corner_title: 'Corner title',
+    corner_body: 'Corner text',
     corner_location: 'Corner locatie',
     sort_order: 'Volgorde',
 };
@@ -187,14 +187,14 @@ export default function ClubShow({
                     {club.status === 'pending' && (
                         <>
                             <Button type="button" onClick={approve}>
-                                <Check className="h-4 w-4" /> {t('Goedkeuren')}
+                                <Check className="h-4 w-4" /> {t('Approve')}
                             </Button>
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={reject}
                             >
-                                <X className="h-4 w-4" /> {t('Afwijzen')}
+                                <X className="h-4 w-4" /> {t('Decline')}
                             </Button>
                         </>
                     )}
@@ -214,7 +214,7 @@ export default function ClubShow({
                         <Link
                             href={clubsRoutes.edit({ locale, club: club.id })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -250,11 +250,11 @@ export default function ClubShow({
                                         variant="outline"
                                         className="ml-2"
                                     >
-                                        {t('Corner pagina')}
+                                        {t('Corner page')}
                                     </Badge>
                                 )}
                             </Detail>
-                            <Detail label={t('Sporten')}>
+                            <Detail label={t('Sports')}>
                                 {club.sports
                                     .map((sport) =>
                                         t(
@@ -265,10 +265,10 @@ export default function ClubShow({
                                     )
                                     .join(', ')}
                             </Detail>
-                            <Detail label={t('Sessiezoekopdracht')}>
+                            <Detail label={t('Session search')}>
                                 {club.is_session_venue
-                                    ? t('Zichtbaar')
-                                    : t('Verborgen')}
+                                    ? t('Visible')
+                                    : t('Hidden')}
                             </Detail>
                             {club.corner_pipeline_label && (
                                 <Detail label={t('Pipeline status')}>
@@ -277,10 +277,10 @@ export default function ClubShow({
                             )}
                             {club.has_corner && (
                                 <>
-                                    <Detail label={t('Corner titel')}>
+                                    <Detail label={t('Corner title')}>
                                         {club.corner_title ?? club.name}
                                     </Detail>
-                                    <Detail label={t('Corner locatie')}>
+                                    <Detail label={t('Corner location')}>
                                         {club.corner_location ?? '—'}
                                     </Detail>
                                 </>
@@ -299,22 +299,22 @@ export default function ClubShow({
                                     '—'
                                 )}
                             </Detail>
-                            <Detail label={t('Telefoon')}>
+                            <Detail label={t('Phone')}>
                                 {club.phone ?? '—'}
                             </Detail>
-                            <Detail label={t('Ingediend door')}>
+                            <Detail label={t('Submitted by')}>
                                 {club.submitted_by
                                     ? `${club.submitted_by.name} (${club.submitted_by.email})`
                                     : t('Maison Anversa')}
                             </Detail>
-                            <Detail label={t('Goedgekeurd door')}>
+                            <Detail label={t('Approved by')}>
                                 {club.approved_by?.name ?? '—'}
                             </Detail>
                         </dl>
 
                         {club.merged_into && (
                             <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-                                {t('Samengevoegd met')}{' '}
+                                {t('Merged with')}{' '}
                                 <Link
                                     href={clubsRoutes.show({
                                         locale,
@@ -330,7 +330,7 @@ export default function ClubShow({
                         {club.duplicates.length > 0 && (
                             <div className="space-y-1 text-sm">
                                 <p className="font-medium">
-                                    {t('Samengevoegde duplicaten')}
+                                    {t('Merged duplicates')}
                                 </p>
                                 <ul className="text-muted-foreground">
                                     {club.duplicates.map((duplicate) => (
@@ -352,16 +352,16 @@ export default function ClubShow({
                         />
                     ) : (
                         <div className="flex h-56 items-center justify-center rounded-xl border bg-muted text-sm text-muted-foreground">
-                            {t('Geen afbeelding')}
+                            {t('No image')}
                         </div>
                     )}
                 </div>
 
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                     <div className="border-b px-5 py-4">
-                        <h2 className="font-medium">{t('Sessies')}</h2>
+                        <h2 className="font-medium">{t('Sessions')}</h2>
                         <p className="text-sm text-muted-foreground">
-                            {t('{{count}} sessies bij deze club.', {
+                            {t('{{count}} sessions at this club.', {
                                 count: club.sessions_count,
                             })}
                         </p>
@@ -372,10 +372,10 @@ export default function ClubShow({
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead>{t('Host')}</TableHead>
                                 <TableHead>{t('Sport')}</TableHead>
-                                <TableHead>{t('Datum')}</TableHead>
-                                <TableHead>{t('Spelers')}</TableHead>
+                                <TableHead>{t('Date')}</TableHead>
+                                <TableHead>{t('Players')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -386,7 +386,7 @@ export default function ClubShow({
                                         colSpan={5}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen sessies gevonden.')}
+                                        {t('No sessions found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -419,7 +419,7 @@ export default function ClubShow({
                                                             Number(session.id),
                                                     })}
                                                 >
-                                                    {t('Bekijken')}
+                                                    {t('View')}
                                                 </Link>
                                             </Button>
                                         </TableCell>
@@ -529,16 +529,16 @@ function MergeDialog({
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" disabled={candidates.length === 0}>
-                    <Merge className="h-4 w-4" /> {t('Samenvoegen')}
+                    <Merge className="h-4 w-4" /> {t('Merge')}
                 </Button>
             </DialogTrigger>
 
             <DialogContent className="flex max-h-[90vh] w-[min(100%-2rem,72rem)] flex-col gap-4 overflow-hidden sm:max-w-6xl">
                 <DialogHeader>
-                    <DialogTitle>{t('Clubs samenvoegen')}</DialogTitle>
+                    <DialogTitle>{t('Merge clubs')}</DialogTitle>
                     <DialogDescription>
                         {t(
-                            'Alle sessies van “{{name}}” verhuizen naar de behouden club. “{{name}}” wordt permanent verwijderd.',
+                            'All sessions from “{{name}}” move to the kept club. “{{name}}” is permanently deleted.',
                             { name: club.name },
                         )}
                     </DialogDescription>
@@ -546,14 +546,14 @@ function MergeDialog({
 
                 <div className="min-h-0 space-y-5 overflow-y-auto pr-1">
                     <div className="space-y-2">
-                        <Label>{t('Behoud deze club')}</Label>
+                        <Label>{t('Keep this club')}</Label>
                         <Select value={targetId} onValueChange={setTargetId}>
                             <SelectTrigger
                                 className="w-full"
-                                aria-label={t('Behoud deze club')}
+                                aria-label={t('Keep this club')}
                             >
                                 <SelectValue
-                                    placeholder={t('Behoud deze club')}
+                                    placeholder={t('Keep this club')}
                                 />
                             </SelectTrigger>
                             <SelectContent>
@@ -577,7 +577,7 @@ function MergeDialog({
                                     <TableHeader>
                                         <TableRow className="bg-muted/50 hover:bg-muted/50">
                                             <TableHead>
-                                                {t('Veld')}
+                                                {t('Field')}
                                             </TableHead>
                                             <TableHead>
                                                 {club.name}
@@ -656,7 +656,7 @@ function MergeDialog({
                                         ))}
                                         <TableRow>
                                             <TableCell className="font-medium">
-                                                {t('Afbeelding')}
+                                                {t('Image')}
                                             </TableCell>
                                             <TableCell>
                                                 {club.image_url ? (
@@ -730,7 +730,7 @@ function MergeDialog({
                                                                 )
                                                             }
                                                         />
-                                                        {t('Geen')}
+                                                        {t('None')}
                                                     </label>
                                                 </div>
                                             </TableCell>
@@ -741,7 +741,7 @@ function MergeDialog({
 
                             <div className="space-y-3">
                                 <p className="text-sm font-medium">
-                                    {t('Functies')}
+                                    {t('Features')}
                                 </p>
                                 <div className="grid gap-3 sm:grid-cols-2">
                                     <FeatureToggle
@@ -752,7 +752,7 @@ function MergeDialog({
                                     />
                                     <FeatureToggle
                                         id="merge-is-session-venue"
-                                        label={t('Sessiezoekopdracht')}
+                                        label={t('Session search')}
                                         checked={isSessionVenue}
                                         onCheckedChange={setIsSessionVenue}
                                     />
@@ -764,13 +764,13 @@ function MergeDialog({
                                     />
                                     <FeatureToggle
                                         id="merge-corner-published"
-                                        label={t('Corner gepubliceerd')}
+                                        label={t('Corner published')}
                                         checked={cornerPublished}
                                         onCheckedChange={setCornerPublished}
                                     />
                                     <FeatureToggle
                                         id="merge-show-on-corner-page"
-                                        label={t('Corner pagina')}
+                                        label={t('Corner page')}
                                         checked={showOnCornerPage}
                                         onCheckedChange={setShowOnCornerPage}
                                     />
@@ -779,7 +779,7 @@ function MergeDialog({
 
                             <div className="space-y-3">
                                 <p className="text-sm font-medium">
-                                    {t('Sporten')}
+                                    {t('Sports')}
                                 </p>
                                 <div className="flex flex-wrap gap-4">
                                     {availableSports.map((sport) => (
@@ -818,7 +818,7 @@ function MergeDialog({
                         !survivor || sports.length === 0 || processing
                     }
                 >
-                    {t('Samenvoegen bevestigen')}
+                    {t('Confirm merge')}
                 </Button>
             </DialogContent>
         </Dialog>

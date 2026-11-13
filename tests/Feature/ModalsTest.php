@@ -31,7 +31,7 @@ test('the scroll lock utility counts holders so nested locks do not unlock early
 
 test('the order modal requires an edition selection for limited editions before payment', function () {
     expect(modalSource('order-modal.tsx'))
-        ->toContain('Kies a.u.b. een beschikbaar editienummer.')
+        ->toContain('Please choose an available edition number.')
         ->toContain('product_id')
         ->not->toContain('Array.from({ length: 100 }');
 });

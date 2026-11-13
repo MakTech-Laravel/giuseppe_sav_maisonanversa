@@ -101,7 +101,7 @@ class ClubController extends Controller
             TranslateModelJob::dispatchSync(Club::class, $club->id);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club aangemaakt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club created.')]);
 
         return redirect()->route('admin.clubs.show', [
             'locale' => $locale,
@@ -230,7 +230,7 @@ class ClubController extends Controller
             TranslateModelJob::dispatchSync(Club::class, $club->id);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club updated.')]);
 
         return redirect()->route('admin.clubs.show', [
             'locale' => $locale,
@@ -260,7 +260,7 @@ class ClubController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.clubs.show', [
             'locale' => $locale,
@@ -290,7 +290,7 @@ class ClubController extends Controller
             TranslateModelJob::dispatchSync(Club::class, $club->id);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.clubs.show', [
             'locale' => $locale,
@@ -306,7 +306,7 @@ class ClubController extends Controller
             'approved_at' => now(),
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club goedgekeurd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club approved.')]);
 
         return back();
     }
@@ -319,7 +319,7 @@ class ClubController extends Controller
             'approved_at' => null,
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club afgewezen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club rejected.')]);
 
         return back();
     }
@@ -330,7 +330,7 @@ class ClubController extends Controller
 
         $merger->merge($club, $survivor, $request->mergePayload());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Clubs samengevoegd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Clubs merged.')]);
 
         return redirect()->route('admin.clubs.show', [
             'locale' => $locale,
@@ -343,7 +343,7 @@ class ClubController extends Controller
         $this->deleteImage($club);
         $club->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club deleted.')]);
 
         return redirect()->route('admin.clubs.index', ['locale' => $locale]);
     }

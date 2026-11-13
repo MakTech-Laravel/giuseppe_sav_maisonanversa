@@ -210,7 +210,7 @@ final class Journal
     public static function staticCatalog(): array
     {
         $heritage = ['nl' => 'Erfgoed', 'en' => 'Heritage', 'fr' => 'Patrimoine'];
-        $sport = ['nl' => 'Sport & Cultuur', 'en' => 'Sport & Culture', 'fr' => 'Sport & Culture'];
+        $sport = ['nl' => 'Sport & Culture', 'en' => 'Sport & Culture', 'fr' => 'Sport & Culture'];
         $design = ['nl' => 'Design', 'en' => 'Design', 'fr' => 'Design'];
         $craft = ['nl' => 'Vakmanschap', 'en' => 'Craft', 'fr' => 'Savoir-faire'];
         $circle = ['nl' => 'Founding Circle', 'en' => 'Founding Circle', 'fr' => 'Founding Circle'];
@@ -224,12 +224,12 @@ final class Journal
                 'asset' => 'antwerp-cityscape',
                 'category' => $heritage,
                 'title' => [
-                    'nl' => 'Waarom Antwerpen de meest ondervertegenwoordigde stad in de luxewereld is',
+                    'nl' => 'Why Antwerp is the most underrepresented city in the luxury world',
                     'en' => 'Why Antwerp is the most underrepresented city in the luxury world',
                     'fr' => 'Pourquoi Anvers est la ville la plus sous-représentée du luxe',
                 ],
                 'excerpt' => [
-                    'nl' => 'Een stad met eeuwen van diamantambacht, Vlaamse Meesters en culturele ambitie — en toch geen enkel wereldmerk dat het draagt.',
+                    'nl' => 'A city with centuries of diamond craftsmanship, Flemish Masters and cultural ambition — yet no global brand that carries it.',
                     'en' => 'A city with centuries of diamond craft, Flemish Masters and cultural ambition — and yet no world brand that carries it.',
                     'fr' => 'Une ville de diamantaires, de maîtres flamands et d’ambition culturelle — et pourtant aucune maison mondiale qui la porte.',
                 ],
@@ -247,7 +247,7 @@ final class Journal
                         'fr' => 'Ce vide n’est pas un hasard. Anvers ne se vend pas. C’est une ville d’ateliers derrière les façades, de familles qui transmettent un métier sans communiqué. C’est pourquoi Maison Anversa appartient ici.',
                     ],
                     [
-                        'nl' => 'Wij bouwen geen sportmerk dat toevallig in België is gevestigd. Wij bouwen een Europees erfgoedhuis dat Antwerpen draagt — in het leder, in de numerotering, in de manier waarop we spreken. De stad die ons draagt, verdient een huis dat haar naam waardig is.',
+                        'nl' => 'Wij bouwen geen sportmerk dat toevallig in België is gevestigd. Wij bouwen een Europees erfgoedhuis dat Antwerpen draagt — in het leder, in de numerotering, in de manier waarop we spreken. The city that draagt, verdient een huis dat haar naam waardig is.',
                         'en' => 'We are not building a sports brand that happens to be based in Belgium. We are building a European heritage house that carries Antwerp — in the leather, in the numbering, in the way we speak. The city that carries us deserves a house worthy of its name.',
                         'fr' => 'Nous ne construisons pas une marque de sport qui se trouve être belge. Nous construisons une maison européenne qui porte Anvers — dans le cuir, dans la numérotation, dans la voix.',
                     ],
@@ -258,12 +258,12 @@ final class Journal
                 'asset' => 'heritage-001-lifestyle-court',
                 'category' => $sport,
                 'title' => [
-                    'nl' => 'Waarom padel het meest sociale sport ter wereld is — en wat dat betekent voor gemeenschap',
+                    'nl' => 'Why padel is the most social sport in the world — and what that means for community',
                     'en' => 'Why padel is the most social sport in the world — and what that means for community',
                     'fr' => 'Pourquoi le padel est le sport le plus social du monde — et ce que cela signifie pour une communauté',
                 ],
                 'excerpt' => [
-                    'nl' => 'Padel is geen tennis. Het is een ritueel. Een manier van samenkomen die andere sporten niet kennen.',
+                    'nl' => 'Padel is not tennis. It is a ritual. A way of coming together that other sports do not know.',
                     'en' => 'Padel is not tennis. It is a ritual. A way of gathering that other sports do not know.',
                     'fr' => 'Le padel n’est pas du tennis. C’est un rituel. Une façon de se retrouver que les autres sports ignorent.',
                 ],
@@ -292,7 +292,7 @@ final class Journal
                 'asset' => 'atelier-workshop',
                 'category' => $design,
                 'title' => [
-                    'nl' => 'Quiet Luxury — wat het is, waarom het groeit, en waarom het perfect is voor sport',
+                    'nl' => 'Quiet Luxury — what it is, why it grows, and why it is perfect for sport',
                     'en' => 'Quiet Luxury — what it is, why it grows, and why it is perfect for sport',
                     'fr' => 'Quiet Luxury — ce que c’est, pourquoi cela grandit, et pourquoi c’est parfait pour le sport',
                 ],
@@ -326,12 +326,12 @@ final class Journal
                 'asset' => 'heritage-001-detail-gravure',
                 'category' => $craft,
                 'title' => [
-                    'nl' => '3K Carbon — waarom wij kozen voor de meest veeleisende weave in de industrie',
+                    'nl' => '3K Carbon — why we chose the most demanding weave in the industry',
                     'en' => '3K Carbon — why we chose the most demanding weave in the industry',
                     'fr' => 'Carbone 3K — pourquoi nous avons choisi l’armure la plus exigeante de l’industrie',
                 ],
                 'excerpt' => [
-                    'nl' => 'Niet elke carbon is gelijk. De keuze voor 3K carbon bij Heritage Nº 001 was een bewuste — en dure — beslissing.',
+                    'nl' => 'Not all carbon is equal. The choice for 3K carbon in Heritage Nº 001 was a deliberate — and expensive — decision.',
                     'en' => 'Not all carbon is equal. The choice of 3K carbon for Heritage Nº 001 was a deliberate — and expensive — decision.',
                     'fr' => 'Tous les carbones ne se valent pas. Le 3K de Heritage Nº 001 fut une décision délibérée — et coûteuse.',
                 ],
@@ -360,12 +360,12 @@ final class Journal
                 'asset' => 'heritage-001-front',
                 'category' => $circle,
                 'title' => [
-                    'nl' => 'Wat het betekent om nummer 001 te zijn — over de Founding Circle en de eerste 100',
+                    'nl' => 'What it means to be number 001 — about the Founding Circle and the first 100',
                     'en' => 'What it means to be number 001 — about the Founding Circle and the first 100',
                     'fr' => 'Ce que signifie être le numéro 001 — le Founding Circle et les cent premiers',
                 ],
                 'excerpt' => [
-                    'nl' => 'Er is iets bijzonders aan de mensen die ergens in geloven voor de rest het weet. De Founding Circle is voor hen.',
+                    'nl' => 'There is something special about people who believe in something before the rest knows. The Founding Circle is for them.',
                     'en' => 'There is something particular about the people who believe in something before the rest know. The Founding Circle is for them.',
                     'fr' => 'Il y a quelque chose de singulier chez ceux qui croient avant les autres. Le Founding Circle est pour eux.',
                 ],
@@ -394,12 +394,12 @@ final class Journal
                 'asset' => 'hero-mansion',
                 'category' => $materials,
                 'title' => [
-                    'nl' => 'De terugkeer van leder in sport — hoe een traditioneel materiaal de toekomst definieert',
+                    'nl' => 'The return of leather in sport — how a traditional material defines the future',
                     'en' => 'The return of leather in sport — how a traditional material defines the future',
                     'fr' => 'Le retour du cuir dans le sport — comment une matière ancienne définit l’avenir',
                 ],
                 'excerpt' => [
-                    'nl' => 'Synthetische grepen domineren de markt. Wij kozen voor echt leder. Niet voor nostalgie — maar voor kwaliteit.',
+                    'nl' => 'Synthetic grips dominate the market. We chose genuine leather. Not for nostalgia — but for quality.',
                     'en' => 'Synthetic grips dominate the market. We chose real leather. Not for nostalgia — but for quality.',
                     'fr' => 'Les grips synthétiques dominent le marché. Nous avons choisi le vrai cuir. Pas par nostalgie — par exigence.',
                 ],
@@ -480,12 +480,12 @@ final class Journal
                         'fr' => 'Le Dressing prolonge la maison au-delà de la raquette. Six pièces, petite série, la palette de la maison.',
                     ],
                     [
-                        'nl' => 'Technische stoffen uit Italiaanse mills, gesneden om te presteren en om ernaast te bestaan. Dat is de belofte: op de baan geen concessie, ernaast geen schreeuw. Founding Circle leden zien de collectie veertigacht uur eerder.',
+                        'nl' => 'Technical fabrics uit Italiaanse mills, gesneden om te presteren en om ernaast te bestaan. Dat is de belofte: op de baan geen concessie, ernaast geen schreeuw. Founding Circle leden zien de collectie veertigacht uur eerder.',
                         'en' => 'Technical cloth from Italian mills, cut to perform and to exist beside the court. That is the promise: no concession on court, no shout off it. Founding Circle members see the collection forty-eight hours earlier.',
                         'fr' => 'Des tissus techniques italiens, coupés pour jouer et pour exister ensuite. Les membres du Founding Circle voient la collection quarante-huit heures plus tôt.',
                     ],
                     [
-                        'nl' => 'De collectie wordt op dit moment ontworpen. Zij verschijnt met de levering van Heritage Nº 001. Tot die tijd fluistert de Kleedkamer alleen in het Journal — en in de kamers van het huis.',
+                        'nl' => 'The collection is being op dit moment ontworpen. Zij verschijnt met de levering van Heritage Nº 001. Tot die tijd fluistert de Kleedkamer alleen in het Journal — en in de kamers van het huis.',
                         'en' => 'The collection is being designed now. It appears with the delivery of Heritage Nº 001. Until then the Dressing Room whispers only in the Journal — and in the rooms of the house.',
                         'fr' => 'La collection s’écrit maintenant. Elle paraîtra avec Heritage Nº 001. En attendant, le Dressing ne murmure que dans le Journal.',
                     ],

@@ -28,7 +28,7 @@ class CreateNewUser implements CreatesNewUsers
     {
         if (! StorefrontGates::registrationEnabled()) {
             throw ValidationException::withMessages([
-                'email' => __('Registratie is tijdelijk gepauzeerd. Probeer het binnenkort opnieuw.'),
+                'email' => __('Registration is temporarily paused. Please try again soon.'),
             ]);
         }
 

@@ -35,7 +35,7 @@ export default function Profile({
 
     return (
         <>
-            <Head title={t('Profielinstellingen')} />
+            <Head title={t('Profile settings')} />
 
             <Form
                 {...ProfileController.update.form(wayfinderLocale())}
@@ -48,9 +48,9 @@ export default function Profile({
                 {({ processing, errors }) => (
                     <>
                         <SettingsPanel
-                            title={t('Profielfoto')}
+                            title={t('Profile photo')}
                             description={t(
-                                'Deze afbeelding verschijnt in de zijbalk en in het beheergebied.',
+                                'This image appears in the sidebar and across the admin area.',
                             )}
                         >
                             <ProfileAvatarField
@@ -62,14 +62,14 @@ export default function Profile({
                         </SettingsPanel>
 
                         <SettingsPanel
-                            title={t('Profielgegevens')}
+                            title={t('Profile information')}
                             description={t(
-                                'Werk jouw naam, geslacht en e-mailadres bij.',
+                                'Update your name, gender, and email address.',
                             )}
                         >
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="grid gap-2 sm:col-span-2">
-                                    <Label htmlFor="name">{t('Naam')}</Label>
+                                    <Label htmlFor="name">{t('Name')}</Label>
                                     <Input
                                         id="name"
                                         className="w-full"
@@ -77,14 +77,14 @@ export default function Profile({
                                         name="name"
                                         required
                                         autoComplete="name"
-                                        placeholder={t('Volledige naam')}
+                                        placeholder={t('Full name')}
                                     />
                                     <InputError message={errors.name} />
                                 </div>
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="username">
-                                        {t('Gebruikersnaam')}
+                                        {t('Username')}
                                     </Label>
                                     <Input
                                         id="username"
@@ -93,13 +93,13 @@ export default function Profile({
                                         readOnly
                                         disabled
                                         autoComplete="username"
-                                        placeholder={t('gebruikersnaam')}
+                                        placeholder={t('username')}
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="gender">
-                                        {t('Geslacht')}
+                                        {t('Gender')}
                                     </Label>
                                     <GenderSelect
                                         defaultValue={
@@ -114,7 +114,7 @@ export default function Profile({
 
                                 <div className="grid gap-2 sm:col-span-2">
                                     <Label htmlFor="email">
-                                        {t('E-mailadres')}
+                                        {t('Email address')}
                                     </Label>
                                     <Input
                                         id="email"
@@ -124,7 +124,7 @@ export default function Profile({
                                         name="email"
                                         required
                                         autoComplete="email"
-                                        placeholder={t('E-mailadres')}
+                                        placeholder={t('Email address')}
                                     />
                                     <InputError message={errors.email} />
                                 </div>
@@ -134,7 +134,7 @@ export default function Profile({
                                 user.email_verified_at === null && (
                                     <div className="mt-5 rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
                                         {t(
-                                            'Jouw e-mailadres is niet geverifieerd.',
+                                            'Your email address is unverified.',
                                         )}{' '}
                                         <Link
                                             href={send()}
@@ -142,14 +142,14 @@ export default function Profile({
                                             className="font-medium text-primary underline underline-offset-4"
                                         >
                                             {t(
-                                                'Verificatie-e-mail opnieuw versturen',
+                                                'Resend verification email',
                                             )}
                                         </Link>
                                         {status ===
                                             'verification-link-sent' && (
                                             <p className="mt-2 font-medium text-primary">
                                                 {t(
-                                                    'Er is een nieuwe verificatielink naar jouw e-mailadres gestuurd.',
+                                                    'A new verification link has been sent to your email address.',
                                                 )}
                                             </p>
                                         )}
@@ -162,7 +162,7 @@ export default function Profile({
                                     data-test="update-profile-button"
                                     className="min-w-28"
                                 >
-                                    {t('Wijzigingen opslaan')}
+                                    {t('Save changes')}
                                 </Button>
                             </div>
                         </SettingsPanel>
@@ -248,7 +248,7 @@ function ProfileAvatarField({
                         type="button"
                         onClick={() => inputRef.current?.click()}
                     >
-                        {displayUrl ? t('Foto wijzigen') : t('Foto uploaden')}
+                        {displayUrl ? t('Change photo') : t('Upload photo')}
                     </Button>
                     {displayUrl && (
                         <Button
@@ -263,12 +263,12 @@ function ProfileAvatarField({
                                 }
                             }}
                         >
-                            {t('Verwijderen')}
+                            {t('Remove')}
                         </Button>
                     )}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                    {t('PNG, JPG of WEBP · max. 2 MB')}
+                    {t('PNG, JPG, or WEBP · max 2 MB')}
                 </p>
                 <InputError message={error} />
             </div>
@@ -295,7 +295,7 @@ function ProfileAvatarField({
 Profile.layout = {
     breadcrumbs: [
         {
-            title: 'Profielinstellingen',
+            title: 'Profile settings',
             href: edit(wayfinderLocale()),
         },
     ],

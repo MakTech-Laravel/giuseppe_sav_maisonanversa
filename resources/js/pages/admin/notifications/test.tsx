@@ -193,7 +193,7 @@ export default function NotificationTest({
             ...initialForm(),
             type: 'success',
             title: `Snelle test ${clock()}`,
-            message: t('Als je deze toast ziet, werkt realtime.'),
+            message: t('If you see this toast, realtime works.'),
         });
 
     const previewToast = () =>
@@ -220,19 +220,19 @@ export default function NotificationTest({
 
     return (
         <>
-            <Head title={t('Meldingen testen')} />
+            <Head title={t('Test notifications')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Meldingen testen')}
+                    title={t('Test notifications')}
                     description={t(
-                        'Verstuur een echte melding en controleer database, Reverb, toast en bel in één keer.',
+                        'Send a real notification and check the database, Reverb, toast and bell in one go.',
                     )}
                     icon={BellRing}
                 >
                     <Button asChild variant="outline">
                         <Link href={adminNotifications.index(locale)}>
                             <Inbox className="h-4 w-4" />
-                            {t('Meldingen')}
+                            {t('Notifications')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -264,7 +264,7 @@ export default function NotificationTest({
                         </CardTitle>
                         <CardDescription>
                             {t(
-                                'Direct: de broadcast gebeurt in het verzoek zelf. Queue: een queue worker (php artisan queue:work) moet draaien.',
+                                'Direct: the broadcast happens within the request itself. Queue: a queue worker (php artisan queue:work) must be running.',
                             )}
                         </CardDescription>
                     </CardHeader>
@@ -275,7 +275,7 @@ export default function NotificationTest({
                             onClick={quickSelfTest}
                         >
                             <Zap className="h-4 w-4" />
-                            {t('Snelle test naar mij')}
+                            {t('Quick test to me')}
                         </Button>
                         <Button
                             size="sm"
@@ -283,7 +283,7 @@ export default function NotificationTest({
                             onClick={previewToast}
                         >
                             <Eye className="h-4 w-4" />
-                            {t('Voorbeeld-toast')}
+                            {t('Preview toast')}
                         </Button>
                         <Button
                             size="sm"
@@ -292,7 +292,7 @@ export default function NotificationTest({
                             onClick={reconnect}
                         >
                             <RefreshCw className="h-4 w-4" />
-                            {t('Opnieuw verbinden')}
+                            {t('Reconnect')}
                         </Button>
                         <span className="font-mono text-xs text-muted-foreground">
                             broadcast: {broadcastConnection} · queue:{' '}
@@ -301,7 +301,7 @@ export default function NotificationTest({
                         {!connected ? (
                             <span className="text-xs text-amber-600 dark:text-amber-400">
                                 {t(
-                                    'Niet verbonden: de melding wordt opgeslagen, maar er komt geen live toast.',
+                                    'Not connected: the notification is stored, but no live toast will appear.',
                                 )}
                             </span>
                         ) : null}
@@ -312,14 +312,14 @@ export default function NotificationTest({
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-base">
-                                {t('Testmelding opstellen')}
+                                {t('Compose test notification')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form className="space-y-4" onSubmit={onSubmit}>
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <div className="space-y-1.5">
-                                        <Label>{t('Ontvanger')}</Label>
+                                        <Label>{t('Recipient')}</Label>
                                         <Select
                                             value={form.target}
                                             onValueChange={(value) =>
@@ -334,19 +334,19 @@ export default function NotificationTest({
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="self">
-                                                    {t('Mijzelf')}
+                                                    {t('Myself')}
                                                 </SelectItem>
                                                 <SelectItem value="admins">
-                                                    {t('Alle beheerders')}
+                                                    {t('All administrators')}
                                                 </SelectItem>
                                                 <SelectItem value="user">
-                                                    {t('Gebruiker (e-mail)')}
+                                                    {t('User (email)')}
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label>{t('Modus')}</Label>
+                                        <Label>{t('Mode')}</Label>
                                         <Select
                                             value={form.mode}
                                             onValueChange={(value) =>
@@ -358,7 +358,7 @@ export default function NotificationTest({
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="sync">
-                                                    {t('Direct (zonder queue)')}
+                                                    {t('Direct (no queue)')}
                                                 </SelectItem>
                                                 <SelectItem value="queue">
                                                     {t('Via queue')}
@@ -370,7 +370,7 @@ export default function NotificationTest({
 
                                 {form.target === 'user' ? (
                                     <Field
-                                        label={t('E-mailadres')}
+                                        label={t('Email address')}
                                         error={errors.email}
                                     >
                                         <Input
@@ -413,7 +413,7 @@ export default function NotificationTest({
                                     </Select>
                                 </Field>
 
-                                <Field label={t('Titel')} error={errors.title}>
+                                <Field label={t('Title')} error={errors.title}>
                                     <Input
                                         value={form.title}
                                         maxLength={120}
@@ -424,7 +424,7 @@ export default function NotificationTest({
                                 </Field>
 
                                 <Field
-                                    label={t('Bericht')}
+                                    label={t('Post')}
                                     error={errors.message}
                                 >
                                     <Textarea
@@ -442,7 +442,7 @@ export default function NotificationTest({
 
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <Field
-                                        label={t('Link (optioneel)')}
+                                        label={t('Link (optional)')}
                                         error={errors.link_url}
                                     >
                                         <Input
@@ -457,7 +457,7 @@ export default function NotificationTest({
                                         />
                                     </Field>
                                     <Field
-                                        label={t('Linktekst')}
+                                        label={t('Link label')}
                                         error={errors.link_label}
                                     >
                                         <Input
@@ -476,7 +476,7 @@ export default function NotificationTest({
                                 <div className="flex flex-wrap gap-2">
                                     <Button type="submit" disabled={busy}>
                                         <Send className="h-4 w-4" />
-                                        {t('Melding versturen')}
+                                        {t('Send notification')}
                                     </Button>
                                     <Button
                                         type="button"
@@ -486,7 +486,7 @@ export default function NotificationTest({
                                             setErrors({});
                                         }}
                                     >
-                                        {t('Herstellen')}
+                                        {t('Reset')}
                                     </Button>
                                 </div>
                             </form>
@@ -496,7 +496,7 @@ export default function NotificationTest({
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="text-base">
-                                {t('Ontvangen realtime meldingen')} (
+                                {t('Received realtime notifications')} (
                                 {received.length})
                             </CardTitle>
                             <Button
@@ -508,7 +508,7 @@ export default function NotificationTest({
                                 }}
                             >
                                 <Eraser className="h-4 w-4" />
-                                {t('Wissen')}
+                                {t('Clear')}
                             </Button>
                         </CardHeader>
                         <CardContent>
@@ -516,7 +516,7 @@ export default function NotificationTest({
                                 {received.length === 0 ? (
                                     <p className="mt-16 text-center text-sm text-muted-foreground">
                                         {t(
-                                            'Nog niets ontvangen. Verstuur een melding naar uzelf.',
+                                            'Nothing received yet. Send a notification to yourself.',
                                         )}
                                     </p>
                                 ) : (
@@ -566,7 +566,7 @@ export default function NotificationTest({
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-base">
-                                {t('Laatste API-antwoord')}
+                                {t('Last API response')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -610,7 +610,7 @@ NotificationTest.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: 'Meldingen testen',
+            title: 'Test notifications',
             href: notificationTest.index(wayfinderLocale()),
         },
     ],

@@ -27,12 +27,12 @@ export default function LegalPagesIndex({ pages }: { pages: LegalPageRow[] }) {
 
     return (
         <>
-            <Head title={t("Juridische Pagina's")} />
+            <Head title={t("Legal Pages")} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t("Juridische Pagina's")}
+                    title={t("Legal Pages")}
                     description={t(
-                        'Beheer privacy-, voorwaarden-, verzending- en care-pagina’s.',
+                        'Manage privacy, terms, shipping and care pages.',
                     )}
                     icon={FileText}
                 />
@@ -40,10 +40,10 @@ export default function LegalPagesIndex({ pages }: { pages: LegalPageRow[] }) {
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Titel')}</TableHead>
+                                <TableHead>{t('Title')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -55,8 +55,8 @@ export default function LegalPagesIndex({ pages }: { pages: LegalPageRow[] }) {
                                     </TableCell>
                                     <TableCell>
                                         {page.is_published
-                                            ? t('Gepubliceerd')
-                                            : t('Concept')}
+                                            ? t('Published')
+                                            : t('Draft')}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <Button
@@ -69,7 +69,7 @@ export default function LegalPagesIndex({ pages }: { pages: LegalPageRow[] }) {
                                                     locale,
                                                     legalPage: Number(page.id),
                                                 })}
-                                                title={t('Voorbeeld')}
+                                                title={t('Preview')}
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
@@ -84,7 +84,7 @@ export default function LegalPagesIndex({ pages }: { pages: LegalPageRow[] }) {
                                                     locale,
                                                     legalPage: Number(page.id),
                                                 })}
-                                                title={t('Bewerken')}
+                                                title={t('Edit')}
                                             >
                                                 <Pencil className="h-4 w-4" />
                                             </Link>
@@ -101,5 +101,5 @@ export default function LegalPagesIndex({ pages }: { pages: LegalPageRow[] }) {
 }
 
 LegalPagesIndex.layout = {
-    title: "Juridische Pagina's",
+    title: "Legal Pages",
 };

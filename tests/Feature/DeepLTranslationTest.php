@@ -226,8 +226,8 @@ test('deepl keeps the brand spelling in any capitalization', function () {
 
     $translator = app(DeepLTranslator::class);
 
-    expect($translator->translate('Welkom bij Maison Anversa.', 'en'))
-        ->toBe('EN Welkom bij Maison Anversa.')
+    expect($translator->translate('Welcome to Maison Anversa.', 'en'))
+        ->toBe('EN Welcome to Maison Anversa.')
         ->and($translator->translate('MAISON ANVERSA-account en Anversa', 'en'))
         ->toBe('EN MAISON ANVERSA-account en Anversa');
 });

@@ -144,7 +144,7 @@ test('staff can create a limited edition product and provision pieces', function
         ])
         ->assertRedirect()
         ->assertInertiaFlash('toast.type', 'success')
-        ->assertInertiaFlash('toast.message', __('Product aangemaakt.'));
+        ->assertInertiaFlash('toast.message', __('Product created.'));
 
     $product = Product::query()->where('slug', 'atelier-visit')->first();
 
@@ -373,7 +373,7 @@ test('staff can save product sections independently from the edit form', functio
                 [
                     'key' => 'specs',
                     'eyebrow' => '',
-                    'heading' => 'Specificaties',
+                    'heading' => 'Specifications',
                     'subheading' => '',
                     'intro' => '',
                     'image_key' => '',
@@ -406,7 +406,7 @@ test('staff can save product sections independently from the edit form', functio
     $craft = $product->sections->firstWhere('key', 'craft');
 
     expect($specs)->not->toBeNull()
-        ->and($specs->heading)->toBe('Specificaties')
+        ->and($specs->heading)->toBe('Specifications')
         ->and($specs->items)->toHaveCount(1)
         ->and($specs->items->first()->title)->toBe('Gewicht')
         ->and($craft)->not->toBeNull()

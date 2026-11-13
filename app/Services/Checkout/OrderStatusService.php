@@ -32,7 +32,7 @@ class OrderStatusService
 
         if ($message === '') {
             throw ValidationException::withMessages([
-                'message' => __('Voeg a.u.b. een bericht toe voor de koper.'),
+                'message' => __('Please add a message for the buyer.'),
             ]);
         }
 
@@ -40,7 +40,7 @@ class OrderStatusService
             $refunded = $this->fulfillment->refund($order)['order'];
             $event = $this->recordEvent($refunded, $status, $message, $admin);
             SendOrderStatusUpdatedBuyerMail::dispatch($refunded, $event);
-            $this->notifyBuyer($refunded, 'Bestelling terugbetaald', 'Jouw bestelling is terugbetaald.');
+            $this->notifyBuyer($refunded, 'Order refunded', 'Your order has been refunded.');
 
             return $refunded->load('statusEvents');
         }
@@ -97,11 +97,11 @@ class OrderStatusService
         SendOrderStatusUpdatedBuyerMail::dispatch($orderResult, $event);
 
         if ($status === OrderStatus::Shipped) {
-            $this->notifyBuyer($orderResult, 'Bestelling verzonden', 'Jouw bestelling is verzonden.');
+            $this->notifyBuyer($orderResult, 'Order shipped', 'Your order has been shipped.');
         }
 
         if ($status === OrderStatus::Delivered) {
-            $this->notifyBuyer($orderResult, 'Bestelling geleverd', 'Jouw bestelling is geleverd.');
+            $this->notifyBuyer($orderResult, 'Order delivered', 'Your order has been delivered.');
         }
 
         return $orderResult->load('statusEvents');
@@ -123,7 +123,7 @@ class OrderStatusService
                     'locale' => $order->locale ?? config('app.locale'),
                     'order' => $order->id,
                 ]),
-                'link_label' => 'Bekijk bestelling',
+                'link_label' => 'View order',
             ],
         );
     }
@@ -162,7 +162,7 @@ class OrderStatusService
 
         if (! in_array($from, $allowed, true)) {
             throw ValidationException::withMessages([
-                'status' => __('Deze statuswijziging is niet toegestaan.'),
+                'status' => __('This status change is not allowed.'),
             ]);
         }
     }

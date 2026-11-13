@@ -18,82 +18,82 @@ const PACKAGE_ITEMS = [
     {
         num: '01',
         title: 'Heritage Display',
-        desc: 'Een elegant display materiaal om Heritage Nº 001 te presenteren. Ontworpen in de Maison Anversa stijl — crème, chocolade, goud.',
+        desc: 'An elegant display unit to present Heritage Nº 001. Designed in the Maison Anversa style — cream, chocolate, gold.',
     },
     {
         num: '02',
         title: 'Demo Racket',
-        desc: 'Eén Heritage Nº 001 demo racket voor leden om aan te raken en te voelen. Het verschil zit in de eerste aanraking.',
+        desc: 'One Heritage Nº 001 demo racket for members to touch and feel. The difference is in the first touch.',
     },
     {
         num: '03',
         title: 'Heritage Paspoorten',
-        desc: 'Een set Heritage Paspoorten voor geïnteresseerde leden — het verhaal van Maison Anversa in boekvorm.',
+        desc: 'A set of Heritage Passports for interested members — the story of Maison Anversa in book form.',
     },
     {
         num: '04',
-        title: 'Branded Materialen',
-        desc: 'Kaarten, hangtags en branded elementen die de Club Corner ruimte markeren als Maison Anversa territory.',
+        title: 'Branded Materials',
+        desc: 'Cards, hangtags and branded elements that mark the Club Corner space as Maison Anversa territory.',
     },
     {
         num: '05',
-        title: 'Founding Circle Toegang',
-        desc: 'Club Corner partners kunnen hun leden toegang geven tot de Heritage Letter en exclusieve Maison Anversa updates.',
+        title: 'Founding Circle Access',
+        desc: 'Club Corner partners can give their members access to the Heritage Letter and exclusive Maison Anversa updates.',
     },
     {
         num: '06',
-        title: 'Partner Ondersteuning',
-        desc: 'Directe lijn met Maison Anversa. Persoonlijke ondersteuning voor vragen, nabestellingen en club events.',
+        title: 'Partner Support',
+        desc: 'Direct line to Maison Anversa. Personal support for questions, reorders and club events.',
     },
 ] as const;
 
 const FORMAT_A_INCLUDES = [
     '1 Heritage Display unit',
     '1 Demo racket Heritage Nº 001',
-    '10 Heritage Paspoorten',
-    'Branded kaarten en materialen',
-    'Toegang tot Heritage Letter voor leden',
-    'Kwartaalse update van Maison Anversa',
+    '10 Heritage Passports',
+    'Branded cards and materials',
+    'Access to Heritage Letter for members',
+    'Quarterly update from Maison Anversa',
 ] as const;
 
 const FORMAT_B_INCLUDES = [
-    'Alles van Formaat A',
-    'Exclusieve Club Corner vermelding op maisonanversa.com',
-    'Maandelijkse update en behind the scenes content',
-    'Uitnodiging voor Maison Anversa events',
-    'Prioritaire toegang tot toekomstige collecties',
-    'Co-branded evenement mogelijkheid',
+    'Everything from Format A',
+    'Exclusive Club Corner mention on maisonanversa.com',
+    'Monthly update and behind the scenes content',
+    'Invitation to Maison Anversa events',
+    'Priority access to future collections',
+    'Co-branded event opportunity',
 ] as const;
 
 const CRITERIA = [
-    'Een premium omgeving die aanvoelt als een privéclub — niet een sporthal',
-    'Een gemeenschap van leden die kwaliteit waarderen en investeren in ervaring',
-    'Een locatie in een Europese stad met een actieve padel cultuur',
-    'Bereidheid om de Maison Anversa identiteit correct en consistent te vertegenwoordigen',
-    'Een clubmanagement dat gelooft in langdurige partnerships boven kortetermijnwinst',
-    'Minimaal 4 courts en een actieve ledenlijst van 200+ leden',
+    'A premium environment that feels like a private club — not a sports hall',
+    'A community of members who appreciate quality and invest in experience',
+    'A location in a European city with an active padel culture',
+    'Willingness to represent the Maison Anversa identity correctly and consistently',
+    'A club management that believes in long-term partnerships over short-term profit',
+    'Minimum 4 courts and an active member list of 200+ members',
 ] as const;
 
 const PROCESS_STEPS = [
     {
         num: '01',
         title: 'Aanvraag',
-        desc: 'Vul het formulier in met de details van jouw club.',
+        desc: 'Fill in the form with your club details.',
     },
     {
         num: '02',
-        title: 'Kennismaking',
-        desc: 'Een persoonlijk gesprek met Yusuf Savran over het concept en de mogelijkheden.',
+        title: 'Introduction',
+        desc: 'A personal conversation with Yusuf Savran about the concept and the possibilities.',
     },
     {
         num: '03',
         title: 'Voorstel',
-        desc: 'Een gepersonaliseerd Club Corner voorstel op maat van jouw club.',
+        desc: 'A personalized Club Corner proposal tailored to your club.',
     },
     {
         num: '04',
         title: 'Lancering',
-        desc: 'Jouw Club Corner gaat live — met volledige ondersteuning van Maison Anversa.',
+        desc: 'Your Club Corner goes live — with full support from Maison Anversa.',
     },
 ] as const;
 
@@ -138,7 +138,7 @@ export default function Corner({
                     </>
                 }
                 subtitle={t(
-                    'Breng Maison Anversa naar jouw padelclub. Een curated ervaring voor clubs die begrijpen dat padel meer is dan een sport.',
+                    'Bring Maison Anversa to your padel club. A curated experience for clubs that understand padel is more than a sport.',
                 )}
             />
 
@@ -147,26 +147,26 @@ export default function Corner({
                     <div className="grid items-center gap-16 md:grid-cols-2 md:gap-20">
                         <Reveal>
                             <Eyebrow tone="gold2">
-                                {t('Wat is Club Corner?')}
+                                {t('What is Club Corner?')}
                             </Eyebrow>
                             <GoldRule />
                             <h2 className="mb-6 font-serif text-[clamp(28px,3.5vw,48px)] leading-[1.1] font-medium [&_em]:text-gold2 [&_em]:italic">
-                                {t('Een')} <em>{t('thuis')}</em>{' '}
-                                {t('voor Maison Anversa in jouw club')}
+                                {t('A')} <em>{t('home')}</em>{' '}
+                                {t('for Maison Anversa in your club')}
                             </h2>
                             <p className="mb-5 text-base leading-[1.9] text-choc3">
                                 {t(
-                                    'Club Corner is het fysieke distributieprogramma van Maison Anversa. Geselecteerde padelclubs in Europa kunnen een exclusieve Maison Anversa hoek inrichten — een curated ruimte waar leden Heritage producten kunnen ontdekken, aanraken en bestellen.',
+                                    'Club Corner is the physical distribution program of Maison Anversa. Selected padel clubs in Europe can set up an exclusive Maison Anversa corner — a curated space where members can discover, touch and order Heritage products.',
                                 )}
                             </p>
                             <p className="mb-5 text-base leading-[1.9] text-choc3">
                                 {t(
-                                    'Het is geen klassiek verkooppunt. Het is een ervaringsruimte. Jouw leden worden deel van het Maison Anversa verhaal.',
+                                    'It is not a classic retail point. It is an experience space. Your members become part of the Maison Anversa story.',
                                 )}
                             </p>
                             <p className="text-base leading-[1.9] text-choc3">
                                 {t(
-                                    'Wij selecteren partners zorgvuldig. Niet elke club past bij Maison Anversa — en niet elke club zou dat willen. Club Corner is voor clubs die dezelfde waarden delen: kwaliteit boven kwantiteit, gemeenschap boven commercie.',
+                                    'We select partners carefully. Not every club fits Maison Anversa — and not every club would want to. Club Corner is for clubs that share the same values: quality over quantity, community over commerce.',
                                 )}
                             </p>
                         </Reveal>
@@ -180,7 +180,7 @@ export default function Corner({
                                 {t('Club')} {t('Corner')}
                             </div>
                             <div className="relative z-1 font-sans text-[8px] font-light tracking-[0.3em] text-gold uppercase">
-                                {t('Maison Anversa · Partner Programma')}
+                                {t('Maison Anversa · Partner Program')}
                             </div>
                             <div className="absolute top-6 right-6 text-right font-serif text-[10px] tracking-[0.2em] text-gold/25 uppercase">
                                 {t('European Heritage House')}
@@ -201,14 +201,14 @@ export default function Corner({
 
             <Section tone="choc2">
                 <Wrap>
-                    <Eyebrow>{t('Het Club Corner Pakket')}</Eyebrow>
+                    <Eyebrow>{t('The Club Corner Package')}</Eyebrow>
                     <GoldRule />
                     <h2 className="mb-3 font-serif text-[clamp(28px,3.5vw,44px)] leading-[1.1] font-medium [&_em]:text-gold [&_em]:italic">
-                        {t('Wat jouw club')} <em>{t('ontvangt')}</em>
+                        {t('What your club')} <em>{t('receives')}</em>
                     </h2>
                     <p className="mb-14 max-w-140 text-base leading-[1.85] text-sand">
                         {t(
-                            'Elke Club Corner partner ontvangt een volledig pakket om de Maison Anversa ervaring correct in te richten. Alles is ontworpen voor consistentie — zodat elk Club Corner in Europa dezelfde premium ervaring biedt.',
+                            'Each Club Corner partner receives a complete package to set up the Maison Anversa experience properly. Everything is designed for consistency — so every Club Corner in Europe offers the same premium experience.',
                         )}
                     </p>
 
@@ -237,15 +237,15 @@ export default function Corner({
                 <Wrap>
                     <Reveal className="mx-auto mb-16 max-w-160 text-center">
                         <Eyebrow tone="gold2">
-                            {t('Club Corner Formaten')}
+                            {t('Club Corner Formats')}
                         </Eyebrow>
                         <GoldRule center className="mx-auto" />
                         <h2 className="mb-4 font-serif text-[clamp(28px,3.5vw,44px)] leading-[1.1] font-medium [&_em]:text-gold2 [&_em]:italic">
-                            {t('Kies jouw')} <em>{t('formaat')}</em>
+                            {t('Choose your')} <em>{t('format')}</em>
                         </h2>
                         <p className="text-base leading-[1.85] text-choc3">
                             {t(
-                                'Maison Anversa biedt twee Club Corner formaten — afhankelijk van de grootte van jouw club en jouw ambitie als partner.',
+                                'Maison Anversa offers two Club Corner formats — depending on the size of your club and your ambition as a partner.',
                             )}
                         </p>
                     </Reveal>
@@ -253,14 +253,14 @@ export default function Corner({
                     <div className="mb-16 grid gap-0.5 bg-sand md:grid-cols-2">
                         <Reveal className="bg-cream px-10 py-12">
                             <span className="mb-4 block font-sans text-[9px] font-medium tracking-[0.3em] text-gold2 uppercase">
-                                {t('Formaat A')}
+                                {t('Format A')}
                             </span>
                             <h3 className="mb-4 font-serif text-[28px] leading-[1.2] font-medium text-choc">
                                 {t('Heritage Corner')}
                             </h3>
                             <p className="mb-6 text-[15px] leading-[1.85] text-choc3">
                                 {t(
-                                    'Het instapformaat voor clubs die kennis willen maken met Maison Anversa. Compact, elegant, impactvol.',
+                                    'The entry format for clubs wanting to get to know Maison Anversa. Compact, elegant, impactful.',
                                 )}
                             </p>
                             <ul className="flex flex-col gap-2.5">
@@ -277,14 +277,14 @@ export default function Corner({
 
                         <Reveal className="bg-cream px-10 py-12">
                             <span className="mb-4 block font-sans text-[9px] font-medium tracking-[0.3em] text-gold2 uppercase">
-                                {t('Formaat B')}
+                                {t('Format B')}
                             </span>
                             <h3 className="mb-4 font-serif text-[28px] leading-[1.2] font-medium text-choc">
                                 {t('Founding Club Corner')}
                             </h3>
                             <p className="mb-6 text-[15px] leading-[1.85] text-choc3">
                                 {t(
-                                    'Het premium partnerschap voor clubs die een centrale rol willen spelen in het Maison Anversa netwerk.',
+                                    'The premium partnership for clubs wanting to play a central role in the Maison Anversa network.',
                                 )}
                             </p>
                             <ul className="flex flex-col gap-2.5">
@@ -302,7 +302,7 @@ export default function Corner({
 
                     <div className="text-center">
                         <MaisonButton variant="choc" onClick={scrollToForm}>
-                            {t('Vraag een Partnership Gesprek Aan →')}
+                            {t('Request a Partnership Conversation →')}
                         </MaisonButton>
                     </div>
                 </Wrap>
@@ -313,22 +313,22 @@ export default function Corner({
                     <div className="grid gap-16 md:grid-cols-2 md:gap-20">
                         <Reveal>
                             <Eyebrow tone="gold2">
-                                {t('Wie komen in aanmerking?')}
+                                {t('Who is eligible?')}
                             </Eyebrow>
                             <GoldRule />
                             <h2 className="mb-6 font-serif text-[clamp(26px,3vw,40px)] leading-[1.1] font-medium [&_em]:text-gold2 [&_em]:italic">
-                                {t('Niet elke club.')}
+                                {t('Not every club.')}
                                 <br />
-                                {t('De')} <em>{t('juiste')}</em> {t('club.')}
+                                {t('The')} <em>{t('right')}</em> {t('club.')}
                             </h2>
                             <p className="mb-5 text-base leading-[1.85] text-choc3">
                                 {t(
-                                    'Maison Anversa selecteert Club Corner partners op basis van gedeelde waarden — niet op basis van grootte of omzet. Wij zoeken clubs die begrijpen dat padel een cultuur is, geen sport.',
+                                    'Maison Anversa selects Club Corner partners based on shared values — not on size or revenue. We look for clubs that understand that padel is a culture, not a sport.',
                                 )}
                             </p>
                             <p className="text-base leading-[1.85] text-choc3">
                                 {t(
-                                    'Als je deze criteria herkent in jouw club, nodigen wij je uit om contact op te nemen.',
+                                    'If you recognize these criteria in your club, we invite you to get in touch.',
                                 )}
                             </p>
                         </Reveal>
@@ -351,11 +351,11 @@ export default function Corner({
                 <Wrap>
                     <blockquote className="mx-auto mb-5 max-w-180 font-serif text-[clamp(20px,2.5vw,32px)] leading-normal text-cream italic">
                         {t(
-                            '"Club Corner is geen verkoopkanaal. Het is een uitnodiging om deel te worden van iets dat nog maar net begonnen is."',
+                            '"Club Corner is not a sales channel. It is an invitation to become part of something that has only just begun."',
                         )}
                     </blockquote>
                     <cite className="font-sans text-[10px] tracking-[0.25em] text-gold uppercase not-italic">
-                        {t('— Yusuf Savran, Oprichter Maison Anversa')}
+                        {t('— Yusuf Savran, Founder Maison Anversa')}
                     </cite>
                 </Wrap>
             </Section>
@@ -364,15 +364,15 @@ export default function Corner({
                 <Wrap>
                     <div className="mb-12 grid items-end gap-10 md:grid-cols-[1fr_2fr] md:gap-15">
                         <Reveal>
-                            <Eyebrow>{t('Het Netwerk')}</Eyebrow>
+                            <Eyebrow>{t('The Network')}</Eyebrow>
                             <h2 className="font-serif text-[clamp(26px,3vw,40px)] leading-[1.1] font-medium text-cream [&_em]:text-gold [&_em]:italic">
-                                {t('Onze Club')} <em>{t('Corners')}</em>
+                                {t('Our Club')} <em>{t('Corners')}</em>
                             </h2>
                         </Reveal>
                         <Reveal>
                             <p className="text-base leading-[1.85] text-sand">
                                 {t(
-                                    'Maison Anversa Club Corners komen eraan in geselecteerde steden doorheen Europa. Ben jij de eerste in jouw stad?',
+                                    'Maison Anversa Club Corners are coming to selected cities across Europe. Are you the first in your city?',
                                 )}
                             </p>
                         </Reveal>
@@ -411,15 +411,15 @@ export default function Corner({
                         <div className="grid gap-16 md:grid-cols-2 md:gap-20">
                             <div>
                                 <Eyebrow tone="gold2">
-                                    {t('Partnership Aanvraag')}
+                                    {t('Partnership Request')}
                                 </Eyebrow>
                                 <GoldRule />
                                 <h2 className="mb-5 font-serif text-4xl font-medium [&_em]:text-gold2 [&_em]:italic">
-                                    {t('Laten we')} <em>{t('praten')}</em>
+                                    {t('Let\'s')} <em>{t('talk')}</em>
                                 </h2>
                                 <p className="mb-8 text-base leading-[1.85] text-choc3">
                                     {t(
-                                        'Stuur ons een bericht en wij nemen binnen 48 uur persoonlijk contact op. Geen automatische responses — een echt gesprek over wat een partnership voor jouw club kan betekenen.',
+                                        'Send us a message and we will contact you personally within 48 hours. No automated responses — a real conversation about what a partnership could mean for your club.',
                                     )}
                                 </p>
 
@@ -484,11 +484,11 @@ function CornerPartnershipForm({
     if (form.recentlySuccessful) {
         return (
             <SuccessPanel
-                title={t('Aanvraag ontvangen.')}
+                title={t('Request received.')}
                 icon="✓"
                 className="rounded border border-gold/15 bg-cream2 px-8 py-10 text-left"
             >
-                <p>{t('Wij nemen binnen 48 uur persoonlijk contact op.')}</p>
+                <p>{t('We will personally contact you within 48 hours.')}</p>
             </SuccessPanel>
         );
     }
@@ -512,7 +512,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-club-name"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('Naam club')}
+                    {t('Club name')}
                 </label>
                 <input
                     id="corner-club-name"
@@ -523,7 +523,7 @@ function CornerPartnershipForm({
                     onChange={(event) =>
                         form.setData('club_name', event.target.value)
                     }
-                    placeholder={t('Naam van jouw padelclub')}
+                    placeholder={t('Name of your padel club')}
                     className={fieldClassName}
                 />
                 {form.errors.club_name && (
@@ -538,7 +538,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-contact"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('Contactpersoon')}
+                    {t('Contact person')}
                 </label>
                 <input
                     id="corner-contact"
@@ -549,7 +549,7 @@ function CornerPartnershipForm({
                     onChange={(event) =>
                         form.setData('name', event.target.value)
                     }
-                    placeholder={t('Jouw naam en functie')}
+                    placeholder={t('Your name and role')}
                     className={fieldClassName}
                 />
                 {form.errors.name && (
@@ -564,7 +564,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-email"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('E-mailadres')}
+                    {t('Email address')}
                 </label>
                 <input
                     id="corner-email"
@@ -575,7 +575,7 @@ function CornerPartnershipForm({
                     onChange={(event) =>
                         form.setData('email', event.target.value)
                     }
-                    placeholder={t('jouw@emailadres.be')}
+                    placeholder={t('your@emailaddress.be')}
                     className={fieldClassName}
                 />
                 {form.errors.email && (
@@ -590,7 +590,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-location"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('Stad & Land')}
+                    {t('City & Country')}
                 </label>
                 <input
                     id="corner-location"
@@ -601,7 +601,7 @@ function CornerPartnershipForm({
                     onChange={(event) =>
                         form.setData('location', event.target.value)
                     }
-                    placeholder={t('Antwerpen, België')}
+                    placeholder={t('Antwerp, Belgium')}
                     className={fieldClassName}
                 />
                 {form.errors.location && (
@@ -616,7 +616,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-courts"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('Aantal courts')}
+                    {t('Number of courts')}
                 </label>
                 <select
                     id="corner-courts"
@@ -641,7 +641,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-format"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('Gewenst formaat')}
+                    {t('Desired format')}
                 </label>
                 <select
                     id="corner-format"
@@ -666,7 +666,7 @@ function CornerPartnershipForm({
                     htmlFor="corner-about"
                     className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase"
                 >
-                    {t('Vertel ons over jouw club')}
+                    {t('Tell us about your club')}
                 </label>
                 <textarea
                     id="corner-about"
@@ -677,7 +677,7 @@ function CornerPartnershipForm({
                         form.setData('message', event.target.value)
                     }
                     placeholder={t(
-                        'Beschrijf kort de sfeer en identiteit van jouw club...',
+                        'Briefly describe the atmosphere and identity of your club...',
                     )}
                     className={`${fieldClassName} min-h-25 resize-y`}
                 />
@@ -695,8 +695,8 @@ function CornerPartnershipForm({
                 disabled={form.processing}
             >
                 {form.processing
-                    ? t('Bezig…')
-                    : t('Verstuur Partnership Aanvraag')}
+                    ? t('Working...')
+                    : t('Send Partnership Request')}
             </MaisonButton>
         </form>
     );

@@ -19,9 +19,9 @@ import type {
 import { emptySectionItem } from '@/types/admin-product';
 
 const ITEM_FIELD_LABELS: Record<string, string> = {
-    number_label: 'Nummer',
+    number_label: 'Number',
     icon: 'Icoon',
-    title: 'Titel',
+    title: 'Title',
     body: 'Tekst',
 };
 
@@ -44,18 +44,18 @@ function ItemFields({
 
     const iconLabels = useMemo(
         () => ({
-            search: t('Zoek iconen'),
+            search: t('Search icons'),
             recent: t('Recent'),
-            clearRecents: t('Wis recent'),
-            selected: t('Geselecteerd'),
-            preview: t('Voorbeeld'),
-            cancel: t('Annuleren'),
-            confirm: t('Bevestigen'),
-            copyKey: t('Kopieer sleutel'),
-            copied: t('Gekopieerd'),
-            invalidValue: t('Ongeldig icoon'),
-            empty: t('Geen iconen gevonden'),
-            loading: t('Iconen laden…'),
+            clearRecents: t('Clear recent'),
+            selected: t('Selected'),
+            preview: t('Preview'),
+            cancel: t('Cancel'),
+            confirm: t('Confirm'),
+            copyKey: t('Copy key'),
+            copied: t('Copied'),
+            invalidValue: t('Invalid icon'),
+            empty: t('No icons found'),
+            loading: t('Loading icons…'),
         }),
         [t],
     );
@@ -79,13 +79,13 @@ function ItemFields({
                                             : undefined
                                     }
                                     onChange={(icon) => update({ icon })}
-                                    label={t('Zoek iconen')}
-                                    description={t('Kies een Lucide-icoon')}
-                                    dialogTitle={t('Icoon kiezen')}
+                                    label={t('Search icons')}
+                                    description={t('Choose a Lucide icon')}
+                                    dialogTitle={t('Choose icon')}
                                     dialogDescription={t(
-                                        'Blader, filter en bevestig een Lucide-icoon.',
+                                        'Browse, filter, and confirm a Lucide icon.',
                                     )}
-                                    placeholder={t('Selecteer een icoon')}
+                                    placeholder={t('Select an icon')}
                                     labels={iconLabels}
                                     confirmSelection
                                     showCopyKey={false}
@@ -112,7 +112,7 @@ function ItemFields({
 
             {fields.includes('body') ? (
                 <div className="grid gap-1.5">
-                    <Label className="text-xs">{t('Tekst')}</Label>
+                    <Label className="text-xs">{t('Text')}</Label>
                     <Textarea
                         value={row.body}
                         onChange={(event) =>
@@ -157,7 +157,7 @@ export function ProductSectionEditor({
                   path: storedExistingImage!,
                   url: storedExistingImage!,
                   mime_type: 'image/jpeg',
-                  name: t('Sectieafbeelding'),
+                  name: t('Section image'),
               },
           ]
         : [];
@@ -187,7 +187,7 @@ export function ProductSectionEditor({
                         </span>
                         <span className="block truncate text-xs text-muted-foreground">
                             {entry.uses_items
-                                ? t('{{count}} onderdelen', {
+                                ? t('{{count}} items', {
                                       count: section.items.length,
                                   })
                                 : t(entry.description)}
@@ -209,7 +209,7 @@ export function ProductSectionEditor({
                         ) : (
                             <EyeOffIcon className="size-4" />
                         )}
-                        {section.is_visible ? t('Zichtbaar') : t('Verborgen')}
+                        {section.is_visible ? t('Visible') : t('Hidden')}
                     </Button>
                     <Button
                         type="button"
@@ -217,7 +217,7 @@ export function ProductSectionEditor({
                         variant="ghost"
                         className="size-8"
                         disabled={!canMoveUp}
-                        aria-label={t('Omhoog verplaatsen')}
+                        aria-label={t('Move up')}
                         onClick={() => onMove(-1)}
                     >
                         ↑
@@ -228,7 +228,7 @@ export function ProductSectionEditor({
                         variant="ghost"
                         className="size-8"
                         disabled={!canMoveDown}
-                        aria-label={t('Omlaag verplaatsen')}
+                        aria-label={t('Move down')}
                         onClick={() => onMove(1)}
                     >
                         ↓
@@ -258,7 +258,7 @@ export function ProductSectionEditor({
                                 />
                             </div>
                             <div className="grid gap-1.5">
-                                <Label className="text-xs">{t('Titel')}</Label>
+                                <Label className="text-xs">{t('Title')}</Label>
                                 <Input
                                     value={section.heading}
                                     onChange={(event) =>
@@ -270,7 +270,7 @@ export function ProductSectionEditor({
                             </div>
                             <div className="grid gap-1.5">
                                 <Label className="text-xs">
-                                    {t('Tweede titelregel')}
+                                    {t('Second title line')}
                                 </Label>
                                 <Input
                                     value={section.subheading}
@@ -284,7 +284,7 @@ export function ProductSectionEditor({
                             {entry.uses_image ? (
                                 <div className="grid gap-1.5">
                                     <Label className="text-xs">
-                                        {t('Coverafbeelding')}
+                                        {t('Cover image')}
                                     </Label>
                                     <FileUpload
                                         accept="image/png,image/jpeg,image/webp"
@@ -310,15 +310,15 @@ export function ProductSectionEditor({
                                             })
                                         }
                                         placeholder={t(
-                                            'Sleep een afbeelding hierheen of klik om te bladeren',
+                                            'Drag & drop an image, or click to browse',
                                         )}
-                                        hint={t('PNG, JPG of WEBP')}
+                                        hint={t('PNG, JPG or WEBP')}
                                     />
                                 </div>
                             ) : null}
                             <div className="grid gap-1.5 md:col-span-2">
                                 <Label className="text-xs">
-                                    {t('Introductietekst')}
+                                    {t('Intro text')}
                                 </Label>
                                 <Textarea
                                     value={section.intro}
@@ -329,7 +329,7 @@ export function ProductSectionEditor({
                                     className="min-h-20 resize-y"
                                 />
                                 <p className="text-[11px] text-muted-foreground">
-                                    {t('{{count}}/120 tekens', {
+                                    {t('{{count}}/120 characters', {
                                         count: section.intro.length,
                                     })}
                                 </p>
@@ -355,8 +355,8 @@ export function ProductSectionEditor({
                             }
                         >
                             {section.include_house_card
-                                ? t('"Het Huis"-kaart wordt getoond')
-                                : t('"Het Huis"-kaart verbergen')}
+                                ? t('"The House" card is shown')
+                                : t('Hide "The House" card')}
                         </Button>
                     ) : null}
 
@@ -366,8 +366,8 @@ export function ProductSectionEditor({
                             onChange={(items) => onChange({ items })}
                             makeRow={emptySectionItem}
                             rowKey={(row) => row.uid}
-                            addLabel="Onderdeel toevoegen"
-                            emptyLabel="Nog geen onderdelen."
+                            addLabel="Add item"
+                            emptyLabel="No items yet."
                             renderRow={(row, _index, update) => (
                                 <ItemFields
                                     fields={entry.item_fields}

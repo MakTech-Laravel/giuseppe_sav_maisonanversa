@@ -33,7 +33,7 @@ export default function GuestReturnShow({
         <>
             <Head title={orderReturn.number} />
             <PageHero
-                eyebrow={t('Retour')}
+                eyebrow={t('Return')}
                 title={orderReturn.number}
                 subtitle={orderReturn.order.reference}
             />
@@ -51,18 +51,18 @@ export default function GuestReturnShow({
                         {isRefunded ? (
                             <>
                                 <p className="mt-6 font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
-                                    {t('Terugbetaling voltooid')}
+                                    {t('Refund completed')}
                                 </p>
                                 <p className="mt-3 text-[#5C4A3D]">
                                     {t(
-                                        'Jouw terugbetaling is verwerkt. Het bedrag verschijnt binnen enkele werkdagen op jouw rekening.',
+                                        'Your refund has been processed. The amount will appear on your account within a few business days.',
                                     )}
                                 </p>
                                 <dl className="mt-4 space-y-2 font-sans text-sm">
                                     {orderReturn.refund_amount ? (
                                         <div className="flex justify-between gap-4">
                                             <dt className="text-[#8A7363]">
-                                                {t('Bedrag')}
+                                                {t('Amount')}
                                             </dt>
                                             <dd>
                                                 €{orderReturn.refund_amount}
@@ -72,7 +72,7 @@ export default function GuestReturnShow({
                                     {orderReturn.resolved_at ? (
                                         <div className="flex justify-between gap-4">
                                             <dt className="text-[#8A7363]">
-                                                {t('Datum')}
+                                                {t('Date')}
                                             </dt>
                                             <dd>{orderReturn.resolved_at}</dd>
                                         </div>
@@ -80,7 +80,7 @@ export default function GuestReturnShow({
                                     {orderReturn.payment_method ? (
                                         <div className="flex justify-between gap-4">
                                             <dt className="text-[#8A7363]">
-                                                {t('Betaalmethode')}
+                                                {t('Payment method')}
                                             </dt>
                                             <dd>
                                                 {t(orderReturn.payment_method)}
@@ -92,11 +92,11 @@ export default function GuestReturnShow({
                         ) : showShip ? (
                             <>
                                 <p className="mt-6 font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
-                                    {t('Instructies')}
+                                    {t('Instructions')}
                                 </p>
                                 <p className="mt-3 text-[#5C4A3D]">
                                     {t(
-                                        'Stuur het artikel binnen 14 dagen naar:',
+                                        'Ship the item within 14 days to:',
                                     )}
                                 </p>
                                 <p className="mt-2 whitespace-pre-line text-choc">
@@ -104,7 +104,7 @@ export default function GuestReturnShow({
                                 </p>
                                 {orderReturn.ship_by ? (
                                     <p className="mt-4 font-sans text-sm text-[#8A6A3B]">
-                                        {t('Versturen tot')}{' '}
+                                        {t('Ship by')}{' '}
                                         {orderReturn.ship_by}
                                     </p>
                                 ) : null}
@@ -114,7 +114,7 @@ export default function GuestReturnShow({
 
                     <div className="border border-choc/15 bg-white px-6 py-6">
                         <p className="font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
-                            {t('Trackingnummer toevoegen')}
+                            {t('Add tracking number')}
                         </p>
                         {orderReturn.can_add_tracking ? (
                             <Form
@@ -129,14 +129,14 @@ export default function GuestReturnShow({
                                 />
                                 <input
                                     name="carrier"
-                                    placeholder={t('Vervoerder')}
+                                    placeholder={t('Carrier')}
                                     defaultValue={orderReturn.carrier ?? ''}
                                     required
                                     className="w-full border border-choc/20 bg-cream px-3 py-3 font-sans text-sm"
                                 />
                                 <input
                                     name="tracking_number"
-                                    placeholder={t('Trackingnummer')}
+                                    placeholder={t('Tracking number')}
                                     defaultValue={
                                         orderReturn.tracking_number ?? ''
                                     }
@@ -147,7 +147,7 @@ export default function GuestReturnShow({
                                     type="submit"
                                     className="inline-flex min-h-11 items-center justify-center border border-choc px-5 font-sans text-[10px] tracking-[0.2em] text-choc uppercase"
                                 >
-                                    {t('Trackingnummer toevoegen')}
+                                    {t('Add tracking number')}
                                 </button>
                             </Form>
                         ) : (
@@ -157,7 +157,7 @@ export default function GuestReturnShow({
                                     orderReturn.tracking_number,
                                 ]
                                     .filter(Boolean)
-                                    .join(' · ') || t('Nog geen tracking')}
+                                    .join(' · ') || t('No tracking yet')}
                             </p>
                         )}
                     </div>

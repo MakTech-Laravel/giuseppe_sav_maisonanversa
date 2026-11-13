@@ -54,7 +54,7 @@ export function EventCard({ event, variant }: EventCardProps) {
                     </span>
                 )}
                 <span className="absolute top-3.5 left-4 border border-gold/30 bg-choc/80 px-2.5 py-1 font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                    {t('Alleen leden')}
+                    {t('Members only')}
                 </span>
             </div>
 
@@ -89,10 +89,10 @@ export function EventCard({ event, variant }: EventCardProps) {
                     </div>
                     <div className="font-sans text-[10px] tracking-[0.1em] text-stone">
                         {event.rsvp_count === 0
-                            ? t('Nog niemand heeft geboekt.')
+                            ? t('No one has booked yet.')
                             : event.rsvp_count === 1
-                              ? t('1 lid gaat')
-                              : t('{{count}} leden gaan', {
+                              ? t('1 member going')
+                              : t('{{count}} members going', {
                                     count: event.rsvp_count,
                                 })}
                     </div>
@@ -122,7 +122,7 @@ function EventAction({
     if (event.is_past) {
         return (
             <span className="block w-full border border-gold/15 bg-gold/5 px-3 py-3 text-center font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
-                {t('Evenement afgelopen')}
+                {t('Event finished')}
             </span>
         );
     }
@@ -134,7 +134,7 @@ function EventAction({
                 onClick={onCancel}
                 className="w-full cursor-pointer border border-gold/25 bg-gold/25 px-3 py-3 font-sans text-[10px] font-medium tracking-[0.2em] text-gold uppercase transition-colors hover:bg-gold/35"
             >
-                {t('Aanmelding annuleren')}
+                {t('Cancel attendance')}
             </button>
         );
     }
@@ -146,7 +146,7 @@ function EventAction({
             onClick={onJoin}
             className="w-full cursor-pointer border border-gold/25 bg-gold/10 px-3 py-3 font-sans text-[10px] font-medium tracking-[0.2em] text-gold uppercase transition-colors hover:bg-gold/20 disabled:cursor-default disabled:opacity-50"
         >
-            {event.is_full ? t('Volgeboekt') : t('Bevestig deelname →')}
+            {event.is_full ? t('Fully booked') : t('Confirm attendance →')}
         </button>
     );
 }

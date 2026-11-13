@@ -14,27 +14,27 @@ export default function CreateCustomer() {
 
     return (
         <>
-            <Head title={t('Klant aanmaken')} />
+            <Head title={t('Create customer')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Klant aanmaken')}
-                    description={t('Voeg een nieuw ledenaccount toe.')}
+                    title={t('Create customer')}
+                    description={t('Add a new member account.')}
                     icon={UserPlus}
                 >
                     <Button variant="outline" asChild>
                         <Link href={customers.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar klanten')}
+                            {t('Back to customers')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
 
                 <AdminResourceShell
-                    aside={<UserFormAside entityLabel={t('Klant')} />}
+                    aside={<UserFormAside entityLabel={t('Customer')} />}
                 >
                     <UserForm
                         action={customers.store(wayfinderLocale())}
-                        submitLabel={t('Klant aanmaken')}
+                        submitLabel={t('Create customer')}
                         onCancel={() =>
                             router.visit(customers.index(wayfinderLocale()))
                         }

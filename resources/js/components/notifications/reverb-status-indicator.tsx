@@ -14,10 +14,10 @@ export function ReverbStatusIndicator() {
     const connected = status === 'connected';
     const connecting = status === 'connecting';
     const label = connected
-        ? t('Verbonden')
+        ? t('Connected')
         : connecting
-          ? t('Verbinden…')
-          : t('Verbroken');
+          ? t('Connecting…')
+          : t('Disconnected');
 
     return (
         <Tooltip>

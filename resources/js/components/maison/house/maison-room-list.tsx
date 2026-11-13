@@ -20,7 +20,7 @@ type Floor = {
 
 const FLOORS: readonly Floor[] = [
     {
-        label: 'Rez-de-chaussée',
+        label: 'Ground floor',
         rooms: [
             { to: 'home', num: '01', numeral: 'I' },
             { num: '02', numeral: 'IV' },
@@ -28,21 +28,21 @@ const FLOORS: readonly Floor[] = [
         ],
     },
     {
-        label: 'Premier étage',
+        label: 'First floor',
         rooms: [
             { to: 'story', num: '04', numeral: 'VII' },
             { to: 'community', num: '05', numeral: 'V' },
         ],
     },
     {
-        label: 'Deuxième étage',
+        label: 'Second floor',
         rooms: [
             { to: 'circle', num: '06', numeral: 'III' },
             { to: 'journal', num: '07', numeral: 'VI' },
         ],
     },
     {
-        label: 'Grenier',
+        label: 'Attic',
         rooms: [
             { to: 'corner', num: '08', numeral: 'VIII' },
         ],

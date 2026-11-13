@@ -37,7 +37,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
     const [monogram, setMonogram] = useState('');
 
     const owner = useMemo(
-        () => name.trim() || t('Naam van de houder'),
+        () => name.trim() || t('Name of the holder'),
         [name, t],
     );
     const edition = useMemo(() => formatEditionNumber(number), [number]);
@@ -48,7 +48,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
 
     return (
         <MaisonModal
-            label="Certificaat van Echtheid"
+            label="Certificate of Authenticity"
             onClose={onClose}
             panelClassName="max-w-[560px] p-0"
         >
@@ -59,10 +59,10 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                 />
 
                 <span className="font-sans text-[9px] tracking-[0.3em] text-gold uppercase">
-                    {t('Maison Anversa · Antwerpen · MMXXVI')}
+                    {t('Maison Anversa · Antwerp · MMXXVI')}
                 </span>
                 <h2 className="mt-2 font-serif text-[30px] font-medium text-choc ma-sm:text-[25px]">
-                    {t('Certificaat van Echtheid')}
+                    {t('Certificate of Authenticity')}
                 </h2>
                 <div
                     aria-hidden="true"
@@ -71,7 +71,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
 
                 <p className="mx-auto max-w-[380px] font-sans text-xs leading-[1.7] text-choc3">
                     {t(
-                        'Hiermee wordt verklaard dat het hieronder beschreven werk',
+                        'This certifies that the work described below',
                     )}
                 </p>
                 <p className="my-3.5 font-serif text-lg text-choc italic">
@@ -79,14 +79,14 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                 </p>
                 <p className="mx-auto max-w-[380px] font-sans text-xs leading-[1.7] text-choc3">
                     {t(
-                        'een origineel, met de hand afgewerkt erfgoedstuk is, individueel genummerd',
+                        'is an original, hand-finished heritage piece, individually numbered',
                     )}
                 </p>
 
                 <div className="my-4.5 flex justify-center gap-8 ma-sm:gap-12">
                     <div className="flex flex-col gap-1">
                         <span className="font-sans text-[8px] tracking-[0.25em] text-choc3 uppercase">
-                            {t('Editienummer')}
+                            {t('Edition number')}
                         </span>
                         <span className="font-serif text-[26px] text-gold">
                             {edition}
@@ -94,7 +94,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                     </div>
                     <div className="flex flex-col gap-1">
                         <span className="font-sans text-[8px] tracking-[0.25em] text-choc3 uppercase">
-                            {t('Van')}
+                            {t('From')}
                         </span>
                         <span className="font-serif text-[26px] text-gold">
                             100
@@ -102,13 +102,13 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                     </div>
                 </div>
 
-                <p className="font-sans text-xs text-choc3">{t('Houder')}</p>
+                <p className="font-sans text-xs text-choc3">{t('Holder')}</p>
                 <p className="inline-block min-w-[200px] border-b border-gold/35 px-6 pb-1 font-serif text-xl text-choc">
                     {owner}
                 </p>
 
                 <p className="mt-1.5 font-sans text-xs text-choc3">
-                    {t('Gegraveerd in het leder')}
+                    {t('Engraved in the leather')}
                 </p>
                 <p className="inline-block min-w-[120px] border-b border-gold/30 px-6 pb-1 font-serif text-2xl tracking-[0.15em] text-choc uppercase">
                     {engraved}
@@ -120,7 +120,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                             {t('Yusuf Savran')}
                         </span>
                         <span className="mt-1 block font-sans text-[9px] tracking-[0.18em] text-choc3 uppercase">
-                            {t('Oprichter · Antwerpen')}
+                            {t('Founder · Antwerp')}
                         </span>
                     </div>
 
@@ -157,7 +157,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                 </div>
 
                 <p className="mt-4.5 font-sans text-[9px] tracking-[0.16em] text-choc3 uppercase opacity-80">
-                    {t('Voorbeeld — definitief certificaat bij levering')}
+                    {t('Sample — final certificate upon delivery')}
                 </p>
             </div>
 
@@ -166,7 +166,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                     type="text"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    placeholder={t('Jouw naam')}
+                    placeholder={t('Your name')}
                     className={cnInput()}
                 />
                 <input
@@ -174,7 +174,7 @@ export function CertificateModal({ onClose }: CertificateModalProps) {
                     inputMode="numeric"
                     value={number}
                     onChange={(event) => setNumber(event.target.value)}
-                    placeholder={t('Editienummer (bijv. 7)')}
+                    placeholder={t('Edition number (e.g. 7)')}
                     className={cnInput()}
                 />
                 <input

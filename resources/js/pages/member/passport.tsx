@@ -27,12 +27,12 @@ export default function MemberPassport({
     if (passport === null) {
         return (
             <>
-                <Head title={t('Digitaal Heritage Passport')} />
-                <MemberPageHeader title={t('Digitaal Heritage Passport')} />
+                <Head title={t('Digital Heritage Passport')} />
+                <MemberPageHeader title={t('Digital Heritage Passport')} />
                 <MemberEmptyState
-                    title={t('Nog geen editie toegewezen')}
+                    title={t('No edition assigned yet')}
                     description={t(
-                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'You are a Founding Circle member, but no Heritage edition is linked to your account yet. Contact the team for more information.',
                     )}
                 />
             </>
@@ -41,12 +41,12 @@ export default function MemberPassport({
 
     return (
         <>
-            <Head title={t('Digitaal Heritage Passport')} />
+            <Head title={t('Digital Heritage Passport')} />
             <MemberPageHeader
                 eyebrow={t('Founding Circle')}
-                title={t('Digitaal Heritage Passport')}
+                title={t('Digital Heritage Passport')}
                 description={t(
-                    "Vier pagina's van het fysieke passport — een leesbare kopie tot de editie verzonden wordt.",
+                    "Four pages of the physical passport — a reading copy until the edition ships.",
                 )}
             />
 
@@ -76,7 +76,7 @@ export default function MemberPassport({
                 {passport.pages.map((page, index) => (
                     <MemberPanel key={page.title} className="min-h-48 bg-choc">
                         <p className="font-sans text-[9px] tracking-[0.25em] text-gold uppercase">
-                            {t('Pagina {{number}}', {
+                            {t('Page {{number}}', {
                                 number: String(index + 1).padStart(2, '0'),
                             })}
                         </p>

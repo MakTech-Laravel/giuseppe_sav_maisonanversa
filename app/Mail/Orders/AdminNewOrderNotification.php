@@ -23,7 +23,7 @@ class AdminNewOrderNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Nieuwe bestelling — :reference', [
+            subject: __('New order — :reference', [
                 'reference' => $this->order->reference(),
             ]),
         );

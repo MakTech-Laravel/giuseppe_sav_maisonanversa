@@ -71,7 +71,7 @@ export default function JournalShow({
                             to="journal"
                             className="mt-12 inline-flex min-h-11 items-center font-sans text-[9px] tracking-[0.22em] text-gold uppercase transition-colors hover:text-gold2"
                         >
-                            {t('← Terug naar het Journal')}
+                            {t('← Back to the Journal')}
                         </MaisonLink>
                     </article>
                 </Wrap>
@@ -81,7 +81,7 @@ export default function JournalShow({
                 <Section tone="cream2">
                     <Wrap>
                         <Reveal className="mb-12 text-center">
-                            <Eyebrow>{t('Gerelateerde verhalen')}</Eyebrow>
+                            <Eyebrow>{t('Related stories')}</Eyebrow>
                             <GoldRule center className="mx-auto" />
                         </Reveal>
 

@@ -90,7 +90,7 @@ class GuestOrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Jouw retouraanvraag is ontvangen.'),
+            'message' => __('Your return request has been received.'),
         ]);
 
         return redirect()->to($guestLinks->showUrl($return, $locale));
@@ -164,7 +164,7 @@ class GuestOrderReturnController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Trackingnummer toegevoegd.'),
+            'message' => __('Tracking number added.'),
         ]);
 
         return redirect()->to($guestLinks->showUrl($orderReturn->fresh(), $locale));

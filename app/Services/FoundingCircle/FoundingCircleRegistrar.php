@@ -161,7 +161,7 @@ class FoundingCircleRegistrar
 
         if ($product === null) {
             throw ValidationException::withMessages([
-                'edition_number' => __('Er is geen Founding Edition-product beschikbaar.'),
+                'edition_number' => __('No Founding Edition product is available.'),
             ]);
         }
 
@@ -207,7 +207,7 @@ class FoundingCircleRegistrar
 
         if ($product === null || $entry->user === null) {
             throw ValidationException::withMessages([
-                'edition_number' => __('Er is geen Founding Edition-product beschikbaar.'),
+                'edition_number' => __('No Founding Edition product is available.'),
             ]);
         }
 
@@ -245,7 +245,7 @@ class FoundingCircleRegistrar
 
         if ($entry === null) {
             throw ValidationException::withMessages([
-                'visibility' => __('Er is nog geen Heritage-editie aan jouw account gekoppeld.'),
+                'visibility' => __('No Heritage edition is linked to your account yet.'),
             ]);
         }
 
@@ -257,7 +257,7 @@ class FoundingCircleRegistrar
 
         if ($visibility->isPublic() && ! $consent) {
             throw ValidationException::withMessages([
-                'consent' => __('Vink de toestemming aan om jouw naam in het publieke register te tonen.'),
+                'consent' => __('Tick consent to show your name in the public register.'),
             ]);
         }
 

@@ -38,16 +38,16 @@ export default function CreateOpeningOffer({
 
     return (
         <>
-            <Head title={t('Aanbod aanmaken')} />
+            <Head title={t('Create offer')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Aanbod aanmaken')}
-                    description={t('Voeg een product toe aan de opening.')}
+                    title={t('Create offer')}
+                    description={t('Add a product to the opening.')}
                     icon={DoorOpen}
                 >
                     <Button variant="outline" asChild>
                         <Link href={openingOffers.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -67,11 +67,11 @@ export default function CreateOpeningOffer({
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                         <Button variant="outline" asChild>
                             <Link href={openingOffers.index(locale)}>
-                                {t('Annuleren')}
+                                {t('Cancel')}
                             </Link>
                         </Button>
                     </div>
@@ -85,7 +85,7 @@ CreateOpeningOffer.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: 'Opening-aanbod',
+            title: 'Opening offer',
             href: openingOffers.index(wayfinderLocale()),
         },
         { title: 'Aanmaken', href: openingOffers.create(wayfinderLocale()) },

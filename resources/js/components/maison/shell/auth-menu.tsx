@@ -58,7 +58,7 @@ export function AuthMenu({
                     className,
                 )}
             >
-                {t('Inloggen')}
+                {t('Log in')}
             </button>
         );
     }
@@ -117,7 +117,7 @@ export function AuthMenu({
                         className="block px-4 py-2.5 font-sans text-[10px] tracking-[0.18em] text-cream uppercase transition-colors hover:bg-gold/10 hover:text-gold"
                         onClick={() => setOpen(false)}
                     >
-                        {t('Profiel')}
+                        {t('Profile')}
                     </Link>
                     <Link
                         role="menuitem"
@@ -125,7 +125,7 @@ export function AuthMenu({
                         className="block px-4 py-2.5 font-sans text-[10px] tracking-[0.18em] text-cream uppercase transition-colors hover:bg-gold/10 hover:text-gold"
                         onClick={() => setOpen(false)}
                     >
-                        {t('Beveiliging')}
+                        {t('Security')}
                     </Link>
                     <button
                         type="button"
@@ -137,7 +137,7 @@ export function AuthMenu({
                             router.post(logout.url());
                         }}
                     >
-                        {t('Uitloggen')}
+                        {t('Log out')}
                     </button>
                 </div>
             )}

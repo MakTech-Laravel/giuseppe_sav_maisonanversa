@@ -21,7 +21,7 @@ function dictionary(string $locale): array
 
 test('every translated locale is valid json and non-empty', function (string $locale) {
     expect(dictionary($locale))->not->toBeEmpty();
-})->with(['en', 'fr']);
+})->with(['nl', 'fr']);
 
 /**
  * @return array<int, string>
@@ -44,23 +44,22 @@ function canonicalDictionaryKeys(array $dictionary): array
 }
 
 test('the translated locales cover the same canonical keys', function () {
-    $en = canonicalDictionaryKeys(dictionary('en'));
+    $nl = canonicalDictionaryKeys(dictionary('nl'));
     $fr = canonicalDictionaryKeys(dictionary('fr'));
 
-    $onlyEn = array_values(array_diff($en, $fr));
-    $onlyFr = array_values(array_diff($fr, $en));
+    $onlyNl = array_values(array_diff($nl, $fr));
+    $onlyFr = array_values(array_diff($fr, $nl));
 
     expect($onlyFr)->toBeEmpty()
-        ->and($onlyEn)->toBeEmpty();
+        ->and($onlyNl)->toBeEmpty();
 });
 
-test('truncated orphan keys remain out of sync between translated locales', function () {
-    $enOrphans = array_diff(array_keys(dictionary('en')), canonicalDictionaryKeys(dictionary('en')));
+test('truncated orphan keys exist in both translated locales', function () {
+    $nlOrphans = array_diff(array_keys(dictionary('nl')), canonicalDictionaryKeys(dictionary('nl')));
     $frOrphans = array_diff(array_keys(dictionary('fr')), canonicalDictionaryKeys(dictionary('fr')));
 
-    expect($enOrphans)->not->toBeEmpty()
-        ->and($frOrphans)->not->toBeEmpty()
-        ->and(array_values($enOrphans))->not->toBe(array_values($frOrphans));
+    expect($nlOrphans)->not->toBeEmpty()
+        ->and($frOrphans)->not->toBeEmpty();
 });
 
 test('no translation is left empty', function (string $locale) {
@@ -70,78 +69,70 @@ test('no translation is left empty', function (string $locale) {
     ));
 
     expect($blank)->toBeEmpty();
-})->with(['en', 'fr']);
+})->with(['nl', 'fr']);
 
-test('dutch is the source language and needs no dictionary file', function () {
-    expect(lang_path('nl.json'))->not->toBeFile();
+test('english is the source language and needs no dictionary file', function () {
+    expect(lang_path('en.json'))->not->toBeFile();
 });
 
 test('laravel resolves the translated copy for a known key', function () {
-    App::setLocale('en');
-    expect(__('Het Huis'))->toBe('The House');
-    expect(__('Catalogus'))->toBe('Product');
+    App::setLocale('nl');
+    expect(__('The House'))->toBe('Het Huis');
     expect(__('Product'))->toBe('Product');
-    expect(__('Producten'))->toBe('Products');
-    expect(__('Open evenementen'))->toBe('Open events');
-    expect(__('Alleen leden'))->toBe('Members only');
-    expect(__('Maison Anversa Partner Club'))->toBe('Maison Anversa Partner Club');
-    expect(__('Georganiseerd door {{name}}'))->toBe('Organised by {{name}}');
-    expect(__('Deel'))->toBe('Share');
-    expect(__('Nog niet'))->toBe('Not yet');
+    expect(__('Products'))->toBe('Producten');
+    expect(__('Open events'))->toBe('Open evenementen');
+    expect(__('Members only'))->toBe('Alleen voor leden');
+    expect(__('Maison Anversa Partner Club'))->toBe('Partnerclub van Maison Anversa');
+    expect(__('Organised by {{name}}'))->toBe('Georganiseerd door {{name}}');
+    expect(__('Share'))->toBe('Delen');
+    expect(__('Not yet'))->toBe('Nog niet');
     expect(__('Community'))->toBe('Community');
     expect(__('Contact'))->toBe('Contact');
     expect(__('Padel'))->toBe('Padel');
     expect(__('Tennis'))->toBe('Tennis');
 
     App::setLocale('fr');
-    expect(__('Het Huis'))->toBe('La Maison');
-    expect(__('Catalogus'))->toBe('Produit');
+    expect(__('The House'))->toBe('La Maison');
     expect(__('Product'))->toBe('Produit');
-    expect(__('Producten'))->toBe('Produits');
-    expect(__('Open evenementen'))->toBe('Événements ouverts');
-    expect(__('Alleen leden'))->toBe('Membres uniquement');
-    expect(__('Maison Anversa Partner Club'))->toBe('Maison Anversa Partner Club');
-    expect(__('Georganiseerd door Maison Anversa.'))->toBe('Organisés par Maison Anversa.');
-    expect(__('Georganiseerd door {{name}}'))->toBe('Organisé par {{name}}');
-    expect(__('Deel'))->toBe('Partager');
-    expect(__('Nog niet'))->toBe('Pas encore');
+    expect(__('Products'))->toBe('Produits');
+    expect(__('Open events'))->toBe('Événements ouverts');
+    expect(__('Members only'))->toBe('Réservé aux membres');
+    expect(__('Maison Anversa Partner Club'))->toBe('Club partenaire Maison Anversa');
+    expect(__('Hosted by Maison Anversa.'))->toBe('Organisé par Maison Anversa.');
+    expect(__('Organised by {{name}}'))->toBe('Organisé par {{name}}');
+    expect(__('Share'))->toBe('Partager');
+    expect(__('Not yet'))->toBe('Pas encore');
     expect(__('Community'))->toBe('Communauté');
-    expect(__('Contact'))->toBe('Contactez-nous');
+    expect(__('Contact'))->toBe('Contact');
     expect(__('Padel'))->toBe('Le padel');
     expect(__('Tennis'))->toBe('Le tennis');
 });
 
-test('an untranslated key falls back to its dutch source text', function (string $locale) {
+test('an untranslated key falls back to its english source text', function (string $locale) {
     App::setLocale($locale);
 
-    // The key is the Dutch copy, so a miss still renders meaningful text.
-    expect(__('Een sleutel die niet bestaat'))->toBe('Een sleutel die niet bestaat');
+    // The key is the English copy, so a miss still renders meaningful text.
+    expect(__('A key that does not exist'))->toBe('A key that does not exist');
 })->with(['nl', 'en', 'fr']);
 
-const FULL_STORY_NAME_KEY = 'Anversa is de Italiaanse naam voor Antwerpen. We kozen hem voor een stad die altijd over haar grenzen heen keek, en voor een huis met wortels in Antwerpen en een blik op Europa.';
+const TRUNCATED_ANVERS_ORPHAN_KEY = '"Anvers" is the French name for Antwerp. "Anversa" is our European variation — elegant in French, Italian and En';
 
-const TRUNCATED_ANVERS_ORPHAN_KEY = '"Anvers" is de Franse naam voor Antwerpen. "Anversa" is onze Europese variatie — elegant in het Frans, Italiaans en Enge';
-
-test('the story name section keeps the full dutch source', function () {
-    expect(StoryPage::defaults()['name_body'])->toBe(FULL_STORY_NAME_KEY);
+test('the story name section keeps the authored cms source on defaults', function () {
+    expect(StoryPage::defaults()['name_body'])->toBe(
+        'Anversa is the Italian name for Antwerp. We chose it for a city that has always looked beyond its borders, and for a house with roots in Antwerp and its eyes on Europe.'
+    );
 });
 
-test('the full story name key resolves in translated locales', function (string $locale) {
+test('a truncated key that is absent from the dictionary falls back to english on translated locales', function (string $locale) {
     App::setLocale($locale);
 
-    expect(__(FULL_STORY_NAME_KEY))->not->toBe(FULL_STORY_NAME_KEY);
-})->with(['en', 'fr']);
-
-test('a truncated key that is absent from the dictionary falls back to dutch on translated locales', function (string $locale) {
-    App::setLocale($locale);
-
-    $partialKey = 'Anversa is de Italiaanse naam voor Antwerpen. We kozen hem voor een stad die altijd over haar grenzen heen keek.';
+    $partialKey = 'Anversa is the Italian name for Antwerp. We chose it for a city that always looked beyond its borders.';
 
     expect(__($partialKey))->toBe($partialKey);
-})->with(['en', 'fr']);
+})->with(['nl', 'fr']);
 
-test('a known truncated orphan resolves from the dictionary instead of falling back to dutch', function (string $locale) {
+test('a known truncated orphan resolves from the dictionary instead of falling back to english', function (string $locale) {
     App::setLocale($locale);
 
     expect(__(TRUNCATED_ANVERS_ORPHAN_KEY))->not->toBe(TRUNCATED_ANVERS_ORPHAN_KEY);
-})->with(['en', 'fr']);
+})->with(['nl', 'fr']);

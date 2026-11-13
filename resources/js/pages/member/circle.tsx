@@ -22,13 +22,13 @@ export default function MemberCircle({ card }: { card: Card | null }) {
             <>
                 <Head title={t('Founding Circle')} />
                 <MemberPageHeader
-                    eyebrow={t('Lidmaatschap')}
-                    title={t('Founding Circle-kaart')}
+                    eyebrow={t('Membership')}
+                    title={t('Founding Circle card')}
                 />
                 <MemberEmptyState
-                    title={t('Nog geen editie toegewezen')}
+                    title={t('No edition assigned yet')}
                     description={t(
-                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'You are a Founding Circle member, but no Heritage edition is linked to your account yet. Contact the team for more information.',
                     )}
                 />
             </>
@@ -39,10 +39,10 @@ export default function MemberCircle({ card }: { card: Card | null }) {
         <>
             <Head title={t('Founding Circle')} />
             <MemberPageHeader
-                eyebrow={t('Lidmaatschap')}
-                title={t('Founding Circle-kaart')}
+                eyebrow={t('Membership')}
+                title={t('Founding Circle card')}
                 description={t(
-                    'Jouw digitale kaart — het nummer dat niet opnieuw wordt uitgegeven.',
+                    'Your digital card — the number that will not be reissued.',
                 )}
             />
 
@@ -60,7 +60,7 @@ export default function MemberCircle({ card }: { card: Card | null }) {
                     {card.name}
                 </p>
                 <p className="mt-2 font-sans text-[10px] tracking-[0.2em] text-sand uppercase">
-                    {t('Founding Circle · sinds {{since}}', {
+                    {t('Founding Circle · Since {{since}}', {
                         since: card.since,
                     })}
                 </p>
@@ -69,7 +69,7 @@ export default function MemberCircle({ card }: { card: Card | null }) {
                     className="mx-auto mt-8 block h-px w-12 bg-gold"
                 />
                 <p className="mt-6 font-sans text-[10px] tracking-[0.18em] text-sand uppercase">
-                    {t('Permanent lidmaatschap')}
+                    {t('Permanent membership')}
                 </p>
             </MemberPanel>
         </>

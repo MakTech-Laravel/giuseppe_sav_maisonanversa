@@ -23,16 +23,16 @@ export default function NotificationShow({
         <>
             <Head title={notification.title} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-                <AdminPageHeader title={t('Melding')} icon={Bell}>
+                <AdminPageHeader title={t('Notification')} icon={Bell}>
                     <Button asChild variant="outline">
                         <Link href={adminNotifications.index(locale)}>
                             <ArrowLeft className="h-4 w-4" />
-                            {t('Alle meldingen')}
+                            {t('All notifications')}
                         </Link>
                     </Button>
                     <ConfirmDeleteDialog
                         description={t(
-                            'Deze melding uit jouw inbox verwijderen?',
+                            'Remove this notification from your inbox?',
                         )}
                         onConfirm={() =>
                             router.delete(
@@ -45,7 +45,7 @@ export default function NotificationShow({
                     >
                         <Button variant="outline" className="text-destructive">
                             <Trash2 className="h-4 w-4" />
-                            {t('Verwijderen')}
+                            {t('Remove')}
                         </Button>
                     </ConfirmDeleteDialog>
                 </AdminPageHeader>
@@ -74,8 +74,8 @@ export default function NotificationShow({
                                     }
                                 >
                                     {notification.read
-                                        ? t('Gelezen')
-                                        : t('Ongelezen')}
+                                        ? t('Read')
+                                        : t('Unread')}
                                 </Badge>
                                 {notification.created_at ? (
                                     <span>
@@ -94,7 +94,7 @@ export default function NotificationShow({
                         <Button asChild className="mt-6">
                             <a href={notification.href}>
                                 <ExternalLink className="h-4 w-4" />
-                                {notification.link_label ?? t('Openen')}
+                                {notification.link_label ?? t('Open')}
                             </a>
                         </Button>
                     ) : null}

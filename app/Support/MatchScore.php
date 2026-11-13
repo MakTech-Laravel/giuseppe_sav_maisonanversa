@@ -31,7 +31,7 @@ class MatchScore
         if ($format->isSuperTiebreak($index)) {
             return self::isRaceWon(max($a, $b), min($a, $b), self::SUPER_TIEBREAK_POINTS)
                 ? null
-                : __('Geen geldige super tie-break (tot 10, met 2 punten verschil).');
+                : __('Not a valid super tie-break (to 10, won by 2 points).');
         }
 
         $games = $format->gamesPerSet();
@@ -46,7 +46,7 @@ class MatchScore
         );
 
         if (! $isValidSet) {
-            return __('Geen geldige setscore.');
+            return __('Not a valid set score.');
         }
 
         if ($tiebreakA === null && $tiebreakB === null) {
@@ -54,11 +54,11 @@ class MatchScore
         }
 
         if (! $isTiebreakSet) {
-            return __('Tie-breakpunten horen alleen bij een set die op een tie-break eindigde.');
+            return __('Tie-break points only belong to a set decided by a tie-break.');
         }
 
         if ($tiebreakA === null || $tiebreakB === null) {
-            return __('Geen geldige tie-break.');
+            return __('Not a valid tie-break.');
         }
 
         [$setWinnerPoints, $setLoserPoints] = $a > $b
@@ -67,7 +67,7 @@ class MatchScore
 
         return self::isRaceWon($setWinnerPoints, $setLoserPoints, self::TIEBREAK_POINTS)
             ? null
-            : __('Geen geldige tie-break.');
+            : __('Not a valid tie-break.');
     }
 
     /**
@@ -79,18 +79,18 @@ class MatchScore
     public static function matchError(SessionMatchFormat $format, array $sets): ?string
     {
         if ($sets === []) {
-            return __('Vul minstens één set in.');
+            return __('Enter at least one set.');
         }
 
         if (count($sets) > $format->maxSets()) {
-            return __('Na de beslissende set kan geen set meer volgen.');
+            return __('No set can follow the deciding set.');
         }
 
         $won = ['a' => 0, 'b' => 0];
 
         foreach (array_values($sets) as $set) {
             if (max($won) >= $format->setsToWin()) {
-                return __('Na de beslissende set kan geen set meer volgen.');
+                return __('No set can follow the deciding set.');
             }
 
             $side = self::setWinner($set);
@@ -102,7 +102,7 @@ class MatchScore
 
         return max($won) >= $format->setsToWin()
             ? null
-            : __('De wedstrijd is nog niet beslist.');
+            : __('The match has not been decided yet.');
     }
 
     /**

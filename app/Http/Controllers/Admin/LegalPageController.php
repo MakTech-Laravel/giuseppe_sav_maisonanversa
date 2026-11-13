@@ -115,7 +115,7 @@ class LegalPageController extends Controller
             );
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return redirect()->route('admin.legal-pages.show', [
             'locale' => $locale,
@@ -142,7 +142,7 @@ class LegalPageController extends Controller
             $legalPage->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return redirect()->route('admin.legal-pages.show', [
             'locale' => $locale,

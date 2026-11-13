@@ -109,7 +109,7 @@ class ProductEditionController extends Controller
 
         if (! StorefrontGates::purchasesEnabled()) {
             throw ValidationException::withMessages([
-                'checkout' => __('Reserveren is tijdelijk gepauzeerd. Probeer het binnenkort opnieuw.'),
+                'checkout' => __('Reservations are temporarily paused. Please try again soon.'),
             ]);
         }
 
@@ -119,7 +119,7 @@ class ProductEditionController extends Controller
             $piece = $allocator->holdForUser($user, $product, $editionPiece->id);
         } catch (EditionUnavailableException) {
             throw ValidationException::withMessages([
-                'edition_piece_id' => __('Dit editienummer is niet meer beschikbaar. Kies een ander nummer.'),
+                'edition_piece_id' => __('This edition number is no longer available. Please choose another.'),
             ]);
         }
 

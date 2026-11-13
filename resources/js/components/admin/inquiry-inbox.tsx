@@ -139,7 +139,7 @@ export function InquiryInbox({
             >
                 <div className="relative sm:col-span-2">
                     <Label htmlFor="inquiry-search" className="sr-only">
-                        {t('Zoeken')}
+                        {t('Search')}
                     </Label>
                     <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -147,20 +147,20 @@ export function InquiryInbox({
                         className="pl-9"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder={t('Zoek op e-mail of naam…')}
-                        aria-label={t('Zoeken')}
+                        placeholder={t('Search by email or name...')}
+                        aria-label={t('Search')}
                     />
                 </div>
                 <Select value={status} onValueChange={setStatus}>
                     <SelectTrigger className="w-full" aria-label={t('Status')}>
-                        <SelectValue placeholder={t('Alle statussen')} />
+                        <SelectValue placeholder={t('All statuses')} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">
-                            {t('Alle statussen')}
+                            {t('All statuses')}
                         </SelectItem>
-                        <SelectItem value="unseen">{t('Ongelezen')}</SelectItem>
-                        <SelectItem value="seen">{t('Gezien')}</SelectItem>
+                        <SelectItem value="unseen">{t('Unread')}</SelectItem>
+                        <SelectItem value="seen">{t('Seen')}</SelectItem>
                     </SelectContent>
                 </Select>
                 {showKind ? (
@@ -169,11 +169,11 @@ export function InquiryInbox({
                             className="w-full"
                             aria-label={t('Type')}
                         >
-                            <SelectValue placeholder={t('Alle types')} />
+                            <SelectValue placeholder={t('All types')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle types')}
+                                {t('All types')}
                             </SelectItem>
                             {kinds.map((option) => (
                                 <SelectItem
@@ -192,14 +192,14 @@ export function InquiryInbox({
                 >
                     <SelectTrigger
                         className="w-full"
-                        aria-label={t('Per pagina')}
+                        aria-label={t('Per page')}
                     >
-                        <SelectValue placeholder={t('Per pagina')} />
+                        <SelectValue placeholder={t('Per page')} />
                     </SelectTrigger>
                     <SelectContent>
                         {perPageOptions.map((option) => (
                             <SelectItem key={option} value={String(option)}>
-                                {t('{{count}} per pagina', {
+                                {t('{{count}} per page', {
                                     count: option,
                                 })}
                             </SelectItem>
@@ -218,7 +218,7 @@ export function InquiryInbox({
                         className="w-full sm:col-span-2 xl:w-auto xl:justify-self-start"
                     >
                         <X className="h-4 w-4" />
-                        {t('Filters wissen')}
+                        {t('Clear filters')}
                     </Button>
                 ) : null}
             </div>
@@ -227,17 +227,17 @@ export function InquiryInbox({
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted/50 hover:bg-muted/50">
-                            <TableHead>{t('Naam')}</TableHead>
-                            <TableHead>{t('E-mail')}</TableHead>
+                            <TableHead>{t('Name')}</TableHead>
+                            <TableHead>{t('Email')}</TableHead>
                             {showKind ? (
                                 <TableHead>{t('Type')}</TableHead>
                             ) : null}
-                            <TableHead>{t('Bericht')}</TableHead>
+                            <TableHead>{t('Post')}</TableHead>
                             <TableHead>{t('Status')}</TableHead>
-                            <TableHead>{t('Prioriteit Support')}</TableHead>
-                            <TableHead>{t('Datum')}</TableHead>
+                            <TableHead>{t('Priority Support')}</TableHead>
+                            <TableHead>{t('Date')}</TableHead>
                             <TableHead className="text-right">
-                                {t('Acties')}
+                                {t('Actions')}
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -277,8 +277,8 @@ export function InquiryInbox({
                                             }
                                         >
                                             {inquiry.seen
-                                                ? t('Gezien')
-                                                : t('Ongelezen')}
+                                                ? t('Seen')
+                                                : t('Unread')}
                                         </Badge>
                                     </TableCell>
                                     <TableCell>
@@ -319,7 +319,7 @@ export function InquiryInbox({
                                                 }
                                             >
                                                 <Eye className="h-4 w-4" />
-                                                {t('Bekijken')}
+                                                {t('View')}
                                             </Link>
                                         </Button>
                                         <Button
@@ -333,12 +333,12 @@ export function InquiryInbox({
                                                 <Eye className="h-4 w-4" />
                                             )}
                                             {inquiry.seen
-                                                ? t('Ongelezen')
-                                                : t('Gezien')}
+                                                ? t('Unread')
+                                                : t('Seen')}
                                         </Button>
                                         <ConfirmDeleteDialog
                                             description={t(
-                                                'Deze aanvraag wordt permanent verwijderd.',
+                                                'This request will be permanently deleted.',
                                             )}
                                             onConfirm={() =>
                                                 router.delete(
@@ -356,7 +356,7 @@ export function InquiryInbox({
                                                 size="sm"
                                             >
                                                 <Trash2 className="h-4 w-4" />
-                                                {t('Verwijderen')}
+                                                {t('Remove')}
                                             </Button>
                                         </ConfirmDeleteDialog>
                                     </TableCell>

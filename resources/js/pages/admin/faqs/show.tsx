@@ -91,12 +91,12 @@ export default function ShowFaq({
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
                     title={faq.question}
-                    description={t('Bekijk deze FAQ zoals op de site.')}
+                    description={t('View this FAQ as it appears on the site.')}
                     icon={CircleHelp}
                 >
                     <Button variant="outline" asChild>
                         <Link href={faqs.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -106,7 +106,7 @@ export default function ShowFaq({
                                 faq: Number(faq.id),
                             })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -114,9 +114,9 @@ export default function ShowFaq({
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Werk deze FAQ bij of ga terug naar de lijst.',
+                                'Update this FAQ or return to the list.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -134,7 +134,7 @@ export default function ShowFaq({
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
-                                        {t('Bewerken')}
+                                        {t('Edit')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -144,12 +144,12 @@ export default function ShowFaq({
                                 >
                                     <Link href={faqs.index(locale)}>
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug')}
+                                        {t('Back')}
                                     </Link>
                                 </Button>
                                 <ConfirmDeleteDialog
                                     description={t(
-                                        'Deze FAQ wordt permanent verwijderd.',
+                                        'This FAQ will be permanently deleted.',
                                     )}
                                     onConfirm={() =>
                                         router.delete(
@@ -165,7 +165,7 @@ export default function ShowFaq({
                                         className="w-full"
                                     >
                                         <Trash2 className="h-4 w-4" />{' '}
-                                        {t('Verwijderen')}
+                                        {t('Remove')}
                                     </Button>
                                 </ConfirmDeleteDialog>
                             </div>
@@ -173,27 +173,27 @@ export default function ShowFaq({
                     }
                 >
                     <AdminPanel
-                        title={t('Inhoud')}
+                        title={t('Content')}
                         description={t(
-                            'Zoals bezoekers deze FAQ in de huidige taal zien.',
+                            'As visitors see this FAQ in the current language.',
                         )}
                     >
                         <div className="mb-5 flex flex-wrap gap-2">
                             <Badge variant="secondary">{contextLabel}</Badge>
                             <Badge variant="secondary">
                                 {faq.is_published
-                                    ? t('Gepubliceerd')
-                                    : t('Concept')}
+                                    ? t('Published')
+                                    : t('Draft')}
                             </Badge>
                         </div>
                         <div className="grid gap-5">
                             <Field
-                                label={t('Vraag')}
+                                label={t('Question')}
                                 value={faq.question}
                                 pre
                             />
                             <Field
-                                label={t('Antwoord')}
+                                label={t('Answer')}
                                 value={faq.answer}
                                 pre
                             />
@@ -201,15 +201,15 @@ export default function ShowFaq({
                     </AdminPanel>
 
                     <AdminPanel
-                        title={t('Instellingen')}
+                        title={t('Settings')}
                         description={t(
-                            'Context, volgorde en publicatiestatus voor deze FAQ.',
+                            'Context, order, and publication status for this FAQ.',
                         )}
                     >
                         <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
                             <Field label={t('Context')} value={contextLabel} />
                             <Field
-                                label={t('Volgorde')}
+                                label={t('Order')}
                                 value={String(faq.sort_order)}
                                 mono
                             />
@@ -217,8 +217,8 @@ export default function ShowFaq({
                                 label={t('Status')}
                                 value={
                                     faq.is_published
-                                        ? t('Gepubliceerd')
-                                        : t('Concept')
+                                        ? t('Published')
+                                        : t('Draft')
                                 }
                             />
                         </div>

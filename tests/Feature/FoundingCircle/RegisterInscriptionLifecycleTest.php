@@ -61,7 +61,7 @@ test('payment creates a reserved register place without a public name', function
         ->firstWhere('sequence', 12);
 
     expect($place['state'])->toBe('reserved')
-        ->and($place['label_key'])->toBe('Gereserveerd')
+        ->and($place['label_key'])->toBe('Reserved')
         ->and($place['name'])->toBeNull();
 });
 

@@ -59,7 +59,7 @@ export function setError(
     if (isSuperTiebreak(format, index)) {
         return isRaceWon(winner, loser, SUPER_TIEBREAK_POINTS)
             ? null
-            : 'Geen geldige super tie-break (tot 10, met 2 punten verschil).';
+            : 'Not a valid super tie-break (to 10, won by 2 points).';
     }
 
     const games = format.games_per_set;
@@ -71,7 +71,7 @@ export function setError(
             tiebreakSet);
 
     if (!validSet) {
-        return 'Geen geldige setscore.';
+        return 'Not a valid set score.';
     }
 
     const tiebreakA = set.tiebreak_a ?? null;
@@ -82,11 +82,11 @@ export function setError(
     }
 
     if (!tiebreakSet) {
-        return 'Tie-breakpunten horen alleen bij een set die op een tie-break eindigde.';
+        return 'Tie-break points only belong to a set decided by a tie-break.';
     }
 
     if (tiebreakA === null || tiebreakB === null) {
-        return 'Geen geldige tie-break.';
+        return 'Not a valid tie-break.';
     }
 
     const [setWinnerPoints, setLoserPoints] =
@@ -94,7 +94,7 @@ export function setError(
 
     return isRaceWon(setWinnerPoints, setLoserPoints, TIEBREAK_POINTS)
         ? null
-        : 'Geen geldige tie-break.';
+        : 'Not a valid tie-break.';
 }
 
 export function setsWon(sets: ScoreSet[]): Record<Side, number> {

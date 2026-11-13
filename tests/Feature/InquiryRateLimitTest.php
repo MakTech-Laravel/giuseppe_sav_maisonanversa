@@ -103,7 +103,7 @@ test('club corner inquiries do not count toward the contact form cap', function 
         'email' => 'marie@example.com',
         'location' => 'Antwerpen, België',
         'courts' => '4-6 courts',
-        'format' => 'Formaat A — Heritage Corner',
+        'format' => 'Format A — Heritage Corner',
         'message' => 'Wij zoeken een premium partnership.',
     ])->assertRedirect();
 

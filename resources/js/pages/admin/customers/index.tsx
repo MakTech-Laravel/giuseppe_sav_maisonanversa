@@ -72,18 +72,18 @@ export default function CustomersIndex({
 
     return (
         <>
-            <Head title={t('Klanten')} />
+            <Head title={t('Customers')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Klanten')}
-                    description={t('Beheer ledenaccounts.')}
+                    title={t('Customers')}
+                    description={t('Manage member accounts.')}
                     icon={Users}
                 >
                     {can(PERMISSIONS.USERS.CREATE) && (
                         <Button asChild>
                             <Link href={customers.create(wayfinderLocale())}>
                                 <Plus className="h-4 w-4" />{' '}
-                                {t('Klant toevoegen')}
+                                {t('Add customer')}
                             </Link>
                         </Button>
                     )}
@@ -109,12 +109,12 @@ export default function CustomersIndex({
                             className="grid gap-4 sm:grid-cols-2"
                         >
                             <StatCard
-                                label={t('Totaal klanten')}
+                                label={t('Total customers')}
                                 value={stats.total}
                                 icon={UsersRound}
                             />
                             <StatCard
-                                label={t('Geverifieerd')}
+                                label={t('Verified')}
                                 value={stats.verified}
                                 icon={UserCheck}
                             />
@@ -127,7 +127,7 @@ export default function CustomersIndex({
                     <Input
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder={t('Zoek klanten…')}
+                        placeholder={t('Search customers…')}
                         className="pl-9"
                     />
                 </div>
@@ -137,15 +137,15 @@ export default function CustomersIndex({
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                    <TableHead>{t('Klant')}</TableHead>
+                                    <TableHead>{t('Customer')}</TableHead>
                                     <TableHead className="hidden md:table-cell">
                                         {t('Status')}
                                     </TableHead>
                                     <TableHead className="hidden lg:table-cell">
-                                        {t('Lid sinds')}
+                                        {t('Member since')}
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        {t('Acties')}
+                                        {t('Actions')}
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -185,8 +185,8 @@ export default function CustomersIndex({
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell">
                                                 {customer.email_verified_at
-                                                    ? t('Geverifieerd')
-                                                    : t('In afwachting')}
+                                                    ? t('Verified')
+                                                    : t('Pending')}
                                             </TableCell>
                                             <TableCell className="hidden lg:table-cell">
                                                 <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -250,7 +250,7 @@ export default function CustomersIndex({
                                                     ) && (
                                                         <ConfirmDeleteDialog
                                                             description={t(
-                                                                '{{name}} en alle bijbehorende gegevens permanent verwijderen?',
+                                                                'Permanently delete {{name}} and all associated data?',
                                                                 {
                                                                     name: customer.name,
                                                                 },
@@ -287,7 +287,7 @@ export default function CustomersIndex({
                         </Table>
                         {paginated.data.length === 0 && (
                             <div className="px-4 py-16 text-center text-sm text-muted-foreground">
-                                {t('Geen klanten gevonden.')}
+                                {t('No customers found.')}
                             </div>
                         )}
                     </div>

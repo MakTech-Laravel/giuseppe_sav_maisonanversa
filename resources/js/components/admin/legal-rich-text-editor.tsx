@@ -280,7 +280,7 @@ function ColorPopover({
                         onChange={(event) => onChange(event.target.value)}
                         className="h-7 w-10 cursor-pointer rounded-sm border border-gold/30 bg-transparent p-0"
                     />
-                    {t('Aangepaste kleur')}
+                    {t('Custom color')}
                 </label>
                 <Button
                     type="button"
@@ -289,7 +289,7 @@ function ColorPopover({
                     className="mt-2 w-full"
                     onClick={onClear}
                 >
-                    {t('Kleur wissen')}
+                    {t('Clear color')}
                 </Button>
             </PopoverContent>
         </Popover>
@@ -337,7 +337,7 @@ export function LegalRichTextEditor({
                 table: { resizable: false },
             }),
             Placeholder.configure({
-                placeholder: t('Schrijf de juridische tekst…'),
+                placeholder: t('Write the legal copy…'),
             }),
         ],
         content: value,
@@ -401,7 +401,7 @@ export function LegalRichTextEditor({
 
         if (isBlankLegalHtml(sanitized)) {
             setHtmlError(
-                t('De HTML is leeg of ongeldig na beveiligingscontrole.'),
+                t('The HTML is empty or invalid after the security check.'),
             );
 
             return;
@@ -421,7 +421,7 @@ export function LegalRichTextEditor({
         const previous = editor.getAttributes('link').href as
             | string
             | undefined;
-        const next = window.prompt(t('Link-URL'), previous ?? 'https://');
+        const next = window.prompt(t('Link URL'), previous ?? 'https://');
 
         if (next === null) {
             return;
@@ -468,7 +468,7 @@ export function LegalRichTextEditor({
     }
 
     const headingOptions = [
-        { value: 'p', label: t('Paragraaf') },
+        { value: 'p', label: t('Paragraph') },
         ...HEADING_LEVELS.map((level) => ({
             value: String(level),
             label: t(`Kop ${level}`),
@@ -476,7 +476,7 @@ export function LegalRichTextEditor({
     ];
 
     const fontFamilyOptions = [
-        { value: '__default', label: t('Standaard') },
+        { value: '__default', label: t('Default') },
         ...FONT_FAMILIES.map((family) => ({
             value: family.value,
             label: family.name,
@@ -484,12 +484,12 @@ export function LegalRichTextEditor({
     ];
 
     const fontSizeOptions = [
-        { value: '__default', label: t('Standaard') },
+        { value: '__default', label: t('Default') },
         ...FONT_SIZES.map((size) => ({ value: size, label: size })),
     ];
 
     const lineHeightOptions = [
-        { value: '__default', label: t('Standaard') },
+        { value: '__default', label: t('Default') },
         ...LINE_HEIGHTS.map((height) => ({ value: height, label: height })),
     ];
 
@@ -519,10 +519,10 @@ export function LegalRichTextEditor({
                             size="sm"
                             pressed={preview}
                             onPressedChange={setPreview}
-                            aria-label={t('Voorbeeld')}
+                            aria-label={t('Preview')}
                         >
                             <Eye className="size-3.5" />
-                            {t('Voorbeeld')}
+                            {t('Preview')}
                         </Toggle>
                     </div>
                 </div>
@@ -559,7 +559,7 @@ export function LegalRichTextEditor({
                             <>
                                 <div className="flex flex-wrap items-center gap-0.5 border-b bg-muted/30 p-1.5">
                                     <ToolbarButton
-                                        label={t('Ongedaan maken')}
+                                        label={t('Undo')}
                                         onClick={() =>
                                             editor.chain().focus().undo().run()
                                         }
@@ -567,7 +567,7 @@ export function LegalRichTextEditor({
                                         <Undo2 />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Opnieuw')}
+                                        label={t('Redo')}
                                         onClick={() =>
                                             editor.chain().focus().redo().run()
                                         }
@@ -576,7 +576,7 @@ export function LegalRichTextEditor({
                                     </ToolbarButton>
                                     <ToolbarDivider />
                                     <ToolbarChoicePopover
-                                        label={t('Kop')}
+                                        label={t('Heading')}
                                         icon={<Heading className="size-4" />}
                                         value={
                                             headingValue
@@ -588,7 +588,7 @@ export function LegalRichTextEditor({
                                         onSelect={applyHeading}
                                     />
                                     <ToolbarChoicePopover
-                                        label={t('Lettertype')}
+                                        label={t('Font')}
                                         icon={<Type className="size-4" />}
                                         value={
                                             (textStyle.fontFamily as
@@ -616,7 +616,7 @@ export function LegalRichTextEditor({
                                         }}
                                     />
                                     <ToolbarChoicePopover
-                                        label={t('Tekstgrootte')}
+                                        label={t('Font size')}
                                         icon={
                                             <ALargeSmall className="size-4" />
                                         }
@@ -646,7 +646,7 @@ export function LegalRichTextEditor({
                                         }}
                                     />
                                     <ToolbarChoicePopover
-                                        label={t('Regelafstand')}
+                                        label={t('Line height')}
                                         icon={
                                             <AlignVerticalSpaceAround className="size-4" />
                                         }
@@ -677,7 +677,7 @@ export function LegalRichTextEditor({
                                     />
                                     <ToolbarDivider />
                                     <ColorPopover
-                                        label={t('Tekstkleur')}
+                                        label={t('Text color')}
                                         value={
                                             textStyle.color as
                                                 | string
@@ -702,7 +702,7 @@ export function LegalRichTextEditor({
                                         <Palette />
                                     </ColorPopover>
                                     <ColorPopover
-                                        label={t('Achtergrondkleur')}
+                                        label={t('Background color')}
                                         value={
                                             textStyle.backgroundColor as
                                                 | string
@@ -728,7 +728,7 @@ export function LegalRichTextEditor({
                                     </ColorPopover>
                                     <ToolbarDivider />
                                     <ToolbarButton
-                                        label={t('Vet')}
+                                        label={t('Bold')}
                                         pressed={editor.isActive('bold')}
                                         onClick={() =>
                                             editor
@@ -741,7 +741,7 @@ export function LegalRichTextEditor({
                                         <Bold />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Cursief')}
+                                        label={t('Italic')}
                                         pressed={editor.isActive('italic')}
                                         onClick={() =>
                                             editor
@@ -754,7 +754,7 @@ export function LegalRichTextEditor({
                                         <Italic />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Onderstrepen')}
+                                        label={t('Underline')}
                                         pressed={editor.isActive('underline')}
                                         onClick={() =>
                                             editor
@@ -767,7 +767,7 @@ export function LegalRichTextEditor({
                                         <UnderlineIcon />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Doorhalen')}
+                                        label={t('Strikethrough')}
                                         pressed={editor.isActive('strike')}
                                         onClick={() =>
                                             editor
@@ -780,7 +780,7 @@ export function LegalRichTextEditor({
                                         <Strikethrough />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Onderschrift')}
+                                        label={t('Subscript')}
                                         pressed={editor.isActive('subscript')}
                                         onClick={() =>
                                             editor
@@ -793,7 +793,7 @@ export function LegalRichTextEditor({
                                         <SubscriptIcon />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Bovenschrift')}
+                                        label={t('Superscript')}
                                         pressed={editor.isActive('superscript')}
                                         onClick={() =>
                                             editor
@@ -806,7 +806,7 @@ export function LegalRichTextEditor({
                                         <SuperscriptIcon />
                                     </ToolbarButton>
                                     <ColorPopover
-                                        label={t('Markeren')}
+                                        label={t('Highlight')}
                                         value={highlightColor}
                                         swatches={FILL_COLORS}
                                         onChange={(color) =>
@@ -828,7 +828,7 @@ export function LegalRichTextEditor({
                                     </ColorPopover>
                                     <ToolbarDivider />
                                     <ToolbarButton
-                                        label={t('Lijst')}
+                                        label={t('List')}
                                         pressed={editor.isActive('bulletList')}
                                         onClick={() =>
                                             editor
@@ -841,7 +841,7 @@ export function LegalRichTextEditor({
                                         <List />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Genummerde lijst')}
+                                        label={t('Numbered list')}
                                         pressed={editor.isActive('orderedList')}
                                         onClick={() =>
                                             editor
@@ -854,7 +854,7 @@ export function LegalRichTextEditor({
                                         <ListOrdered />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Citaat')}
+                                        label={t('Quote')}
                                         pressed={editor.isActive('blockquote')}
                                         onClick={() =>
                                             editor
@@ -867,7 +867,7 @@ export function LegalRichTextEditor({
                                         <Quote />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Uitklapbaar')}
+                                        label={t('Expandable section')}
                                         pressed={editor.isActive(
                                             'legalDetails',
                                         )}
@@ -884,7 +884,7 @@ export function LegalRichTextEditor({
                                                                 {
                                                                     type: 'text',
                                                                     text: t(
-                                                                        'Titel',
+                                                                        'Title',
                                                                     ),
                                                                 },
                                                             ],
@@ -898,7 +898,7 @@ export function LegalRichTextEditor({
                                         <ChevronsDownUp />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Scheidingslijn')}
+                                        label={t('Divider')}
                                         onClick={() =>
                                             editor
                                                 .chain()
@@ -917,7 +917,7 @@ export function LegalRichTextEditor({
                                         <LinkIcon />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Tabel')}
+                                        label={t('Table')}
                                         onClick={() =>
                                             editor
                                                 .chain()
@@ -935,7 +935,7 @@ export function LegalRichTextEditor({
                                     {editor.isActive('table') ? (
                                         <>
                                             <ToolbarButton
-                                                label={t('Rij toevoegen')}
+                                                label={t('Add row')}
                                                 onClick={() =>
                                                     editor
                                                         .chain()
@@ -947,7 +947,7 @@ export function LegalRichTextEditor({
                                                 <Rows3 />
                                             </ToolbarButton>
                                             <ToolbarButton
-                                                label={t('Kolom toevoegen')}
+                                                label={t('Add column')}
                                                 onClick={() =>
                                                     editor
                                                         .chain()
@@ -959,7 +959,7 @@ export function LegalRichTextEditor({
                                                 <Columns3 />
                                             </ToolbarButton>
                                             <ToolbarButton
-                                                label={t('Tabel verwijderen')}
+                                                label={t('Delete table')}
                                                 onClick={() =>
                                                     editor
                                                         .chain()
@@ -974,7 +974,7 @@ export function LegalRichTextEditor({
                                     ) : null}
                                     <ToolbarDivider />
                                     <ToolbarButton
-                                        label={t('Links uitlijnen')}
+                                        label={t('Align left')}
                                         pressed={editor.isActive({
                                             textAlign: 'left',
                                         })}
@@ -989,7 +989,7 @@ export function LegalRichTextEditor({
                                         <AlignLeft />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Centreren')}
+                                        label={t('Center')}
                                         pressed={editor.isActive({
                                             textAlign: 'center',
                                         })}
@@ -1004,7 +1004,7 @@ export function LegalRichTextEditor({
                                         <AlignCenter />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Rechts uitlijnen')}
+                                        label={t('Align right')}
                                         pressed={editor.isActive({
                                             textAlign: 'right',
                                         })}
@@ -1019,7 +1019,7 @@ export function LegalRichTextEditor({
                                         <AlignRight />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Uitvullen')}
+                                        label={t('Justify')}
                                         pressed={editor.isActive({
                                             textAlign: 'justify',
                                         })}
@@ -1034,7 +1034,7 @@ export function LegalRichTextEditor({
                                         <AlignJustify />
                                     </ToolbarButton>
                                     <ToolbarButton
-                                        label={t('Opmaak wissen')}
+                                        label={t('Clear formatting')}
                                         onClick={() =>
                                             editor
                                                 .chain()

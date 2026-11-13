@@ -8,11 +8,11 @@ export type ConnectionStatus =
     | 'failed';
 
 export const CONNECTION_STATUS_LABELS: Record<ConnectionStatus, string> = {
-    disabled: 'Uitgeschakeld',
+    disabled: 'Disabled',
     idle: 'Inactief',
     connecting: 'Verbinden…',
     connected: 'Verbonden',
-    unavailable: 'Niet beschikbaar',
+    unavailable: 'Unavailable',
     disconnected: 'Verbroken',
     failed: 'Mislukt',
 };

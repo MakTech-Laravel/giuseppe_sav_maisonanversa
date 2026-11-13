@@ -111,7 +111,7 @@ class MergeClubRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'target_id.not_in' => __('Een club kan niet met zichzelf worden samengevoegd.'),
+            'target_id.not_in' => __('A club cannot be merged into itself.'),
         ];
     }
 }

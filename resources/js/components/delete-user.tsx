@@ -25,21 +25,21 @@ export default function DeleteUser() {
         <section className="rounded-lg border border-destructive/35 bg-destructive/10 p-5 sm:p-6">
             <header className="mb-4 space-y-1">
                 <h2 className="text-base font-medium tracking-tight text-foreground">
-                    {t('Account verwijderen')}
+                    {t('Delete account')}
                 </h2>
                 <p className="text-sm text-muted-foreground">
                     {t(
-                        'Verwijder jouw account en al zijn gegevens permanent. Dit kan niet ongedaan worden gemaakt.',
+                        'Permanently delete your account and all of its resources. This cannot be undone.',
                     )}
                 </p>
             </header>
 
             <div className="rounded-md border border-destructive/30 bg-background/40 px-4 py-3 text-sm">
                 <p className="font-medium text-destructive">
-                    {t('Waarschuwing')}
+                    {t('Warning')}
                 </p>
                 <p className="mt-0.5 text-muted-foreground">
-                    {t('Ga voorzichtig te werk — deze actie is permanent.')}
+                    {t('Please proceed with caution — this action is permanent.')}
                 </p>
             </div>
 
@@ -50,18 +50,18 @@ export default function DeleteUser() {
                             variant="destructive"
                             data-test="delete-user-button"
                         >
-                            {t('Account verwijderen')}
+                            {t('Delete account')}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogTitle>
                             {t(
-                                'Weet je zeker dat je jouw account wilt verwijderen?',
+                                'Are you sure you want to delete your account?',
                             )}
                         </DialogTitle>
                         <DialogDescription>
                             {t(
-                                'Zodra jouw account is verwijderd, worden al zijn gegevens permanent gewist. Voer jouw wachtwoord in om te bevestigen dat je jouw account definitief wilt verwijderen.',
+                                'Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
                             )}
                         </DialogDescription>
 
@@ -83,14 +83,14 @@ export default function DeleteUser() {
                                             htmlFor="password"
                                             className="sr-only"
                                         >
-                                            {t('Wachtwoord')}
+                                            {t('Password')}
                                         </Label>
 
                                         <PasswordInput
                                             id="password"
                                             name="password"
                                             ref={passwordInput}
-                                            placeholder={t('Wachtwoord')}
+                                            placeholder={t('Password')}
                                             autoComplete="current-password"
                                         />
 
@@ -105,7 +105,7 @@ export default function DeleteUser() {
                                                     resetAndClearErrors()
                                                 }
                                             >
-                                                {t('Annuleren')}
+                                                {t('Cancel')}
                                             </Button>
                                         </DialogClose>
 
@@ -118,7 +118,7 @@ export default function DeleteUser() {
                                                 type="submit"
                                                 data-test="confirm-delete-user-button"
                                             >
-                                                {t('Account verwijderen')}
+                                                {t('Delete account')}
                                             </button>
                                         </Button>
                                     </DialogFooter>

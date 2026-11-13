@@ -64,8 +64,8 @@ export function ProductDetail({
                                 className="size-1.5 shrink-0 rounded-full bg-gold"
                             />
                             <p className="font-sans text-[9px] tracking-[0.2em] text-stone uppercase">
-                                {edition.available} {t('Nummers nog')}{' '}
-                                {t('beschikbaar')}
+                                {edition.available} {t('Numbers still')}{' '}
+                                {t('available')}
                                 {deliveryLabel ? <> · {deliveryLabel}</> : null}
                             </p>
                         </div>
@@ -96,16 +96,16 @@ export function ProductDetail({
                         {isFoundingProduct && canReserve ? (
                             <div className="mb-6 border border-gold/30 p-4">
                                 <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                                    {t('Jouw plaats in het register')}
+                                    {t('Your place in the Register')}
                                 </p>
                                 <p className="mt-2 text-sm leading-relaxed text-choc3">
                                     {t(
-                                        'Elke eigenaar van Heritage Nº 001 wordt ingeschreven. Je kiest zelf jouw nummer bij het afrekenen.',
+                                        'Every owner of Heritage Nº 001 is inscribed. You choose your own number at checkout.',
                                     )}
                                 </p>
                                 <p className="mt-3 font-serif text-lg text-choc">
                                     {t(
-                                        '{{count}} van {{total}} plaatsen resterend',
+                                        '{{count}} of {{total}} places remaining',
                                         {
                                             count: foundingRegister.remaining_count,
                                             total: foundingRegister.places_total,
@@ -116,7 +116,7 @@ export function ProductDetail({
                                     href={`/${locale}/founding-circle/register`}
                                     className="mt-3 inline-flex font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                 >
-                                    {t('Bekijk het register')}
+                                    {t('View the Register')}
                                 </Link>
                             </div>
                         ) : null}
@@ -130,12 +130,12 @@ export function ProductDetail({
                                     onClick={() => openPurchase(checkout)}
                                     className="mb-3"
                                 >
-                                    {`${t('Reserveer Jouw Nummer —')} ${priceLabel}`}
+                                    {`${t('Reserve Your Number —')} ${priceLabel}`}
                                 </MaisonButton>
                                 {purchasesPaused ? (
                                     <p className="mb-3 text-center font-sans text-[10px] tracking-[0.12em] text-choc3">
                                         {t(
-                                            'Reserveren is tijdelijk gepauzeerd.',
+                                            'Reservations are temporarily paused.',
                                         )}
                                     </p>
                                 ) : null}
@@ -147,7 +147,7 @@ export function ProductDetail({
                                 onClick={openNewsletter}
                                 className="mb-3"
                             >
-                                {t('Schrijf in voor Heritage Letter')}
+                                {t('Sign up for the Heritage Letter')}
                             </MaisonButton>
                         )}
                         {canReserve && (
@@ -156,7 +156,7 @@ export function ProductDetail({
                                 block
                                 onClick={openNewsletter}
                             >
-                                {t('Schrijf in voor Heritage Letter')}
+                                {t('Sign up for the Heritage Letter')}
                             </MaisonButton>
                         )}
 

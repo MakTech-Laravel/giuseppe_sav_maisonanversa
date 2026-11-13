@@ -20,30 +20,30 @@ enum ProductSectionKey: string
     public function label(): string
     {
         return match ($this) {
-            self::Specs => __('Specificaties'),
-            self::Includes => __('Inbegrepen'),
-            self::Guarantees => __('Garanties'),
-            self::Unboxing => __('Wat in de doos zit'),
-            self::Craft => __('Vakmanschap'),
-            self::Trust => __('Vertrouwensbadges'),
-            self::Service => __('Service & veiligheid'),
-            self::Faq => __('Veelgestelde vragen'),
-            self::Related => __('Volgende hoofdstukken'),
+            self::Specs => __('Specifications'),
+            self::Includes => __('Bundled'),
+            self::Guarantees => __('Guarantees'),
+            self::Unboxing => __('What is in the box'),
+            self::Craft => __('Craftsmanship'),
+            self::Trust => __('Trust badges'),
+            self::Service => __('Service & security'),
+            self::Faq => __('Frequently asked questions'),
+            self::Related => __('Next chapters'),
         };
     }
 
     public function description(): string
     {
         return match ($this) {
-            self::Specs => __('Specificatietabel naast de productgalerij.'),
-            self::Includes => __('Lijst met inbegrepen onderdelen, ook getoond op de homepagina.'),
-            self::Guarantees => __('Garantieblok onder de bestelknoppen.'),
-            self::Unboxing => __('Genummerd raster met de volledige uitpakervaring.'),
-            self::Craft => __('Materialenblok met afbeelding en toelichting.'),
-            self::Trust => __('Compacte strook met vertrouwensbadges.'),
-            self::Service => __('Kaarten met verzending, retour en reserveringsbeleid.'),
-            self::Faq => __('Veelgestelde vragen voor dit product.'),
-            self::Related => __('Verwante producten onderaan de pagina.'),
+            self::Specs => __('Specification table beside the product gallery.'),
+            self::Includes => __('List of included items, also shown on the homepage.'),
+            self::Guarantees => __('Guarantee block below the order buttons.'),
+            self::Unboxing => __('Numbered grid with the full unboxing experience.'),
+            self::Craft => __('Materials block with image and description.'),
+            self::Trust => __('Compact strip with trust badges.'),
+            self::Service => __('Cards with shipping, returns and reservation policy.'),
+            self::Faq => __('Frequently asked questions for this product.'),
+            self::Related => __('Related products at the bottom of the page.'),
         };
     }
 

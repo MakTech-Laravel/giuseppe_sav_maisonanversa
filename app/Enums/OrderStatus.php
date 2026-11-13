@@ -21,12 +21,12 @@ enum OrderStatus: string
         return match ($this) {
             self::Incomplete => 'Onvoltooid',
             self::Paid => 'Betaald',
-            self::Processing => 'In behandeling',
+            self::Processing => 'Processing',
             self::Canceled => 'Geannuleerd',
             self::Failed => 'Mislukt',
             self::Shipped => 'Verzonden',
             self::Delivered => 'Afgeleverd',
-            self::Refunded => 'Terugbetaald',
+            self::Refunded => 'Refunded',
         };
     }
 

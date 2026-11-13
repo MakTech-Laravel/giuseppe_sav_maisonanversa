@@ -18,7 +18,7 @@ export function SessionBreadcrumb({ crumbs }: { crumbs: Crumb[] }) {
     return (
         <div className="border-b border-gold/15 bg-cream">
             <Wrap className="px-6 py-4 md:px-10 lg:px-20">
-                <nav aria-label={t('Kruimelpad')}>
+                <nav aria-label={t('Breadcrumb')}>
                     <ol className="flex flex-wrap items-center gap-2 font-sans text-[10px] tracking-[0.18em] text-stone uppercase">
                         {crumbs.map((crumb, index) => (
                             <Fragment key={crumb.label}>

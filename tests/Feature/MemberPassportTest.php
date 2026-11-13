@@ -94,7 +94,7 @@ test('the member events page has no create call to action', function () {
     $source = file_get_contents(resource_path('js/pages/maison/events/index.tsx'));
 
     expect($source)
-        ->not->toContain('Evenement aanmaken')
+        ->not->toContain('Create event')
         ->not->toContain('events.create')
         ->toContain('Mijn aanmeldingen');
 });

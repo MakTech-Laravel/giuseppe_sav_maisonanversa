@@ -49,9 +49,9 @@ test('the dressing page keeps the philosophy values and six collection pieces vi
     $source = file_get_contents(resource_path('js/pages/maison/dressing.tsx'));
 
     expect($source)
-        ->toContain('Technische stoffen')
-        ->toContain('Beperkte productie')
-        ->toContain('Tijdloze palet')
+        ->toContain('Technical fabrics')
+        ->toContain('Limited production')
+        ->toContain('Timeless palette')
         ->toContain('ma-lg:grid-cols-6')
         ->toContain('min-h-120')
         ->not->toContain('ma-lg:grid-cols-[1fr_1.1fr_1fr]');
@@ -69,7 +69,7 @@ test('the dressing founding-circle heading translates ziet into English', functi
 
     expect($english['die het'])->toBe('to')
         ->and($english['ziet'])->toBe('see it')
-        ->and($english['Wees de eerste'])->toBe('Be the first');
+        ->and($english['Be the first'])->toBe('Be the first');
 });
 
 test('the circle benefits grid matches the prototype hairline layout', function () {
@@ -124,7 +124,7 @@ test('the story page composes the client editorial sections', function () {
     $this->get('/nl/story')
         ->assertOk()
         ->assertInertia(fn ($inertia) => $inertia
-            ->where('story.hero.title', 'Alles begint bij')
+            ->where('story.hero.title', 'Everything begins with')
             ->where('story.founder.name', 'Yusuf Savran')
             ->where('story.closing.line', 'Every legacy begins with a first chapter.')
         );

@@ -69,13 +69,13 @@ export function SessionScheduleFields({
             <div className="grid gap-3 sm:grid-cols-3">
                 <label className="flex flex-col gap-1.5">
                     <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                        {t('Datum')}
+                        {t('Date')}
                     </span>
                     <Popover open={dateOpen} onOpenChange={setDateOpen}>
                         <PopoverTrigger asChild>
                             <button
                                 type="button"
-                                aria-label={t('Datum')}
+                                aria-label={t('Date')}
                                 className={fieldClassName}
                             >
                                 <span className="inline-flex min-w-0 items-center gap-2">
@@ -89,7 +89,7 @@ export function SessionScheduleFields({
                                                   `${date}T12:00:00`,
                                                   locale,
                                               )
-                                            : t('Kies een datum')}
+                                            : t('Choose a date')}
                                     </span>
                                 </span>
                                 <ChevronDown
@@ -118,13 +118,13 @@ export function SessionScheduleFields({
 
                 <label className="flex flex-col gap-1.5">
                     <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                        {t('Tijdstip')}
+                        {t('Time')}
                     </span>
                     <Popover open={timeOpen} onOpenChange={setTimeOpen}>
                         <PopoverTrigger asChild>
                             <button
                                 type="button"
-                                aria-label={t('Tijdstip')}
+                                aria-label={t('Time')}
                                 className={fieldClassName}
                             >
                                 <span className="inline-flex items-center gap-2">
@@ -132,7 +132,7 @@ export function SessionScheduleFields({
                                         className="size-4 shrink-0 text-stone"
                                         aria-hidden="true"
                                     />
-                                    {time || t('Kies een tijdstip')}
+                                    {time || t('Choose a time')}
                                 </span>
                                 <ChevronDown
                                     className="size-4 shrink-0 text-stone"
@@ -143,7 +143,7 @@ export function SessionScheduleFields({
                         <PopoverContent className="w-56 p-3">
                             <div className="grid grid-cols-2 gap-3">
                                 <TimeColumn
-                                    label={t('Uur')}
+                                    label={t('Hour')}
                                     values={HOURS}
                                     selected={hour}
                                     onSelect={(nextHour) =>
@@ -151,7 +151,7 @@ export function SessionScheduleFields({
                                     }
                                 />
                                 <TimeColumn
-                                    label={t('Minuten')}
+                                    label={t('Minutes')}
                                     values={MINUTES}
                                     selected={minute}
                                     onSelect={(nextMinute) => {
@@ -166,7 +166,7 @@ export function SessionScheduleFields({
 
                 <label className="flex flex-col gap-1.5">
                     <span className="font-sans text-[9px] tracking-[0.22em] text-stone uppercase">
-                        {t('Duur')}
+                        {t('Duration')}
                     </span>
                     <Select
                         value={String(durationMinutes)}
@@ -175,7 +175,7 @@ export function SessionScheduleFields({
                         }
                     >
                         <SelectTrigger
-                            aria-label={t('Duur')}
+                            aria-label={t('Duration')}
                             className={cn(
                                 fieldClassName,
                                 'h-auto rounded-none shadow-none focus-visible:ring-0 data-[size=default]:h-auto',

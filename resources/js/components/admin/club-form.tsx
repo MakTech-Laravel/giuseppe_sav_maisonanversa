@@ -85,15 +85,15 @@ export function ClubForm({
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <AdminPanel
-                title={t('Locatie')}
+                title={t('Location')}
                 description={t(
-                    'Basisgegevens, adres en zichtbaarheid in de community.',
+                    'Basic details, address, and visibility in the community.',
                 )}
             >
                 <div className="space-y-5">
                     <div className="grid gap-5 md:grid-cols-2">
                         <Field
-                            label={t('Naam')}
+                            label={t('Name')}
                             error={form.errors.name}
                             required
                         >
@@ -130,7 +130,7 @@ export function ClubForm({
                         </Field>
                     </div>
 
-                    <Field label={t('Sporten')} error={form.errors.sports}>
+                    <Field label={t('Sports')} error={form.errors.sports}>
                         <div className="flex flex-wrap gap-x-6 gap-y-3">
                             {options.sports.map((sport) => (
                                 <label
@@ -152,7 +152,7 @@ export function ClubForm({
                     </Field>
 
                     <Field
-                        label={t('Straat en nummer')}
+                        label={t('Street and number')}
                         error={form.errors.street}
                     >
                         <Input
@@ -165,7 +165,7 @@ export function ClubForm({
 
                     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-[8rem_minmax(0,1fr)_5.5rem]">
                         <Field
-                            label={t('Postcode')}
+                            label={t('Postal code')}
                             error={form.errors.postal_code}
                         >
                             <Input
@@ -179,7 +179,7 @@ export function ClubForm({
                             />
                         </Field>
                         <Field
-                            label={t('Stad')}
+                            label={t('City')}
                             error={form.errors.city}
                             required
                         >
@@ -191,7 +191,7 @@ export function ClubForm({
                                 required
                             />
                         </Field>
-                        <Field label={t('Land')} error={form.errors.country}>
+                        <Field label={t('Country')} error={form.errors.country}>
                             <Input
                                 value={form.data.country}
                                 maxLength={2}
@@ -220,7 +220,7 @@ export function ClubForm({
                             />
                         </Field>
                         <Field
-                            label={t('Telefoon')}
+                            label={t('Phone')}
                             error={form.errors.phone}
                         >
                             <Input
@@ -234,7 +234,7 @@ export function ClubForm({
 
                     <div className="grid gap-5 md:grid-cols-2">
                         <Field
-                            label={t('Breedtegraad')}
+                            label={t('Latitude')}
                             error={form.errors.lat}
                         >
                             <Input
@@ -245,7 +245,7 @@ export function ClubForm({
                             />
                         </Field>
                         <Field
-                            label={t('Lengtegraad')}
+                            label={t('Longitude')}
                             error={form.errors.lng}
                         >
                             <Input
@@ -257,7 +257,7 @@ export function ClubForm({
                         </Field>
                     </div>
 
-                    <Field label={t('Afbeelding')} error={form.errors.image}>
+                    <Field label={t('Image')} error={form.errors.image}>
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                             {preview && (
                                 <img
@@ -299,7 +299,7 @@ export function ClubForm({
                                                 }
                                             }}
                                         />
-                                        {t('Afbeelding verwijderen')}
+                                        {t('Remove image')}
                                     </label>
                                 )}
                             </div>
@@ -316,15 +316,15 @@ export function ClubForm({
                                 )
                             }
                         />
-                        {t('Zichtbaar in sessiezoekopdracht')}
+                        {t('Visible in session search')}
                     </label>
                 </div>
             </AdminPanel>
 
             <AdminPanel
-                title={t('Partnerclub')}
+                title={t('Partner club')}
                 description={t(
-                    'Partnerclubs krijgen extra zichtbaarheid in het Maison-netwerk.',
+                    'Partner clubs get extra visibility in the Maison network.',
                 )}
             >
                 <label className="flex items-center gap-2.5 text-sm">
@@ -334,14 +334,14 @@ export function ClubForm({
                             form.setData('is_partner', checked === true)
                         }
                     />
-                    {t('Partnerclub')}
+                    {t('Partner club')}
                 </label>
             </AdminPanel>
 
             <AdminPanel
-                title={t('Club Corner pagina')}
+                title={t('Club Corner page')}
                 description={t(
-                    'Of deze club verschijnt op de publieke Club Corner-pagina.',
+                    'Whether this club appears on the public Club Corner page.',
                 )}
             >
                 <div className="space-y-5">
@@ -355,7 +355,7 @@ export function ClubForm({
                                 )
                             }
                         />
-                        {t('Tonen op Club Corner pagina')}
+                        {t('Show on Club Corner page')}
                     </label>
                     <div className="grid gap-5 md:grid-cols-2">
                         <Field
@@ -375,11 +375,11 @@ export function ClubForm({
                                 }
                             >
                                 <SelectTrigger className="w-full">
-                                    <SelectValue placeholder={t('Geen')} />
+                                    <SelectValue placeholder={t('None')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="__none">
-                                        {t('Geen')}
+                                        {t('None')}
                                     </SelectItem>
                                     {options.pipelineStatuses.map((option) => (
                                         <SelectItem
@@ -393,7 +393,7 @@ export function ClubForm({
                             </Select>
                         </Field>
                         <Field
-                            label={t('Volgorde')}
+                            label={t('Order')}
                             error={form.errors.sort_order}
                         >
                             <Input
@@ -413,9 +413,9 @@ export function ClubForm({
             </AdminPanel>
 
             <AdminPanel
-                title={t('Club Corner kaart')}
+                title={t('Club Corner map')}
                 description={t(
-                    'Inhoud voor de Club Corner-kaart op de publieke pagina.',
+                    'Content for the Club Corner card on the public page.',
                 )}
             >
                 <div className="space-y-5">
@@ -430,7 +430,7 @@ export function ClubForm({
                                     )
                                 }
                             />
-                            {t('Heeft Club Corner')}
+                            {t('Has Club Corner')}
                         </label>
                         <label className="flex items-center gap-2.5 text-sm">
                             <Checkbox
@@ -442,11 +442,11 @@ export function ClubForm({
                                     )
                                 }
                             />
-                            {t('Club Corner gepubliceerd')}
+                            {t('Club Corner published')}
                         </label>
                     </div>
                     <Field
-                        label={t('Corner titel')}
+                        label={t('Corner title')}
                         error={form.errors.corner_title}
                     >
                         <Input
@@ -460,7 +460,7 @@ export function ClubForm({
                         />
                     </Field>
                     <Field
-                        label={t('Corner tekst')}
+                        label={t('Corner text')}
                         error={form.errors.corner_body}
                     >
                         <Textarea
@@ -472,7 +472,7 @@ export function ClubForm({
                         />
                     </Field>
                     <Field
-                        label={t('Corner locatie')}
+                        label={t('Corner location')}
                         error={form.errors.corner_location}
                     >
                         <Input

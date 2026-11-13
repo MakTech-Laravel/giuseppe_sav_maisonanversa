@@ -62,7 +62,7 @@ class StoreSessionScoreRequest extends FormRequest
                 );
 
                 if ($overlap !== []) {
-                    $validator->errors()->add('team_b', __('Een speler kan maar in één team staan.'));
+                    $validator->errors()->add('team_b', __('A player can only be in one team.'));
                 }
             },
             function (Validator $validator): void {
@@ -90,20 +90,20 @@ class StoreSessionScoreRequest extends FormRequest
     {
         $perSide = $this->matchType()?->playersPerSide() ?? 2;
         $sideMessage = $perSide === 1
-            ? __('Kies één speler per kant.')
-            : __('Kies twee spelers per team.');
+            ? __('Choose one player per side.')
+            : __('Choose two players per team.');
 
         return [
             'match_type.in' => $this->communitySession()->sport === SessionSport::Padel
-                ? __('Padel wordt altijd met twee tegen twee gespeeld.')
-                : __('Kies enkel of dubbel.'),
+                ? __('Padel is always played two against two.')
+                : __('Choose singles or doubles.'),
             'team_a.required' => $sideMessage,
             'team_b.required' => $sideMessage,
             'team_a.size' => $sideMessage,
             'team_b.size' => $sideMessage,
-            'team_a.*.in' => __('Alleen bevestigde spelers kunnen in een team staan.'),
-            'team_b.*.in' => __('Alleen bevestigde spelers kunnen in een team staan.'),
-            'sets.required' => __('Vul minstens één set in.'),
+            'team_a.*.in' => __('Only confirmed players can be in a team.'),
+            'team_b.*.in' => __('Only confirmed players can be in a team.'),
+            'sets.required' => __('Enter at least one set.'),
         ];
     }
 

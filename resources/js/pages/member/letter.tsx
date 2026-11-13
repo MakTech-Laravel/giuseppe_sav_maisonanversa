@@ -29,9 +29,9 @@ const SOURCE_LABELS: Record<string, string> = {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-    pending: 'In behandeling',
+    pending: 'Processing',
     subscribed: 'Actief',
-    unsubscribed: 'Uitgeschreven',
+    unsubscribed: 'Unsubscribed',
 };
 
 export default function MemberLetter({
@@ -44,31 +44,31 @@ export default function MemberLetter({
 
     const topics = [
         ['heritageLetter', t('Heritage Letter')],
-        ['productUpdates', t('Productupdates')],
-        ['events', t('Sessies & events')],
+        ['productUpdates', t('Product updates')],
+        ['events', t('Sessions & events')],
     ] as const;
 
     return (
         <>
             <Head title={t('Heritage Letter')} />
             <MemberPageHeader
-                eyebrow={t('De Heritage Letter')}
+                eyebrow={t('The Heritage Letter')}
                 title={t('Heritage Letter')}
                 description={t(
-                    'Alle inschrijvingen die aan dit account gekoppeld zijn.',
+                    'All subscriptions linked to this account.',
                 )}
             />
 
             {subscriptions.length === 0 ? (
                 <MemberPanel className="max-w-xl">
                     <p className="text-[15px] leading-relaxed text-sand">
-                        {t('Je staat nog niet op de Heritage Letter.')}
+                        {t('You are not on the Heritage Letter yet.')}
                     </p>
                     <Link
                         href={`/${locale}/member/email-preferences`}
                         className="mt-5 inline-block font-sans text-[11px] tracking-[0.14em] text-gold uppercase"
                     >
-                        {t('Beheer e-mailvoorkeuren')}
+                        {t('Manage email preferences')}
                     </Link>
                 </MemberPanel>
             ) : (
@@ -128,7 +128,7 @@ export default function MemberLetter({
                             href={`/${locale}/member/email-preferences`}
                             className="font-sans text-[11px] tracking-[0.14em] text-gold uppercase"
                         >
-                            {t('Beheer e-mailvoorkeuren')}
+                            {t('Manage email preferences')}
                         </Link>
                     </p>
                 </div>

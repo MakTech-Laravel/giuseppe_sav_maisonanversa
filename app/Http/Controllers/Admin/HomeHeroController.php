@@ -57,7 +57,7 @@ class HomeHeroController extends Controller
 
         $hero->update($data);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Home hero opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Home hero saved.')]);
 
         return back();
     }
@@ -101,7 +101,7 @@ class HomeHeroController extends Controller
             }
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen opgeslagen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations saved.')]);
 
         return back();
     }
@@ -126,7 +126,7 @@ class HomeHeroController extends Controller
             $hero->dispatchDeepLTranslation();
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Vertalingen worden bijgewerkt.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Translations are being updated.')]);
 
         return back();
     }

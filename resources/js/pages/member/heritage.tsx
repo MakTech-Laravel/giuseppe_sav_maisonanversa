@@ -26,15 +26,15 @@ export default function MemberHeritage({
     if (heritage === null) {
         return (
             <>
-                <Head title={t('Mijn Heritage')} />
+                <Head title={t('My Heritage')} />
                 <MemberPageHeader
                     eyebrow={t('Heritage')}
-                    title={t('Mijn Heritage')}
+                    title={t('My Heritage')}
                 />
                 <MemberEmptyState
-                    title={t('Nog geen editie toegewezen')}
+                    title={t('No edition assigned yet')}
                     description={t(
-                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'You are a Founding Circle member, but no Heritage edition is linked to your account yet. Contact the team for more information.',
                     )}
                 />
             </>
@@ -43,14 +43,14 @@ export default function MemberHeritage({
 
     return (
         <>
-            <Head title={t('Mijn Heritage')} />
+            <Head title={t('My Heritage')} />
             <MemberPageHeader
                 eyebrow={heritage.productName ?? t('Heritage')}
-                title={t('Editie Nº {{number}}', {
+                title={t('Edition Nº {{number}}', {
                     number: heritage.editionNumber,
                 })}
                 description={t(
-                    'Jouw Founding Edition-stuk — status, leveringsvenster en de artefacten die ermee meegaan.',
+                    'Your Founding Edition piece — status, delivery window, and the artefacts that travel with it.',
                 )}
             />
 
@@ -63,18 +63,18 @@ export default function MemberHeritage({
                         {t(heritage.status)}
                     </p>
                     <p className="mt-3 text-[14px] text-sand">
-                        {t('Leveringsvenster · {{window}}', {
+                        {t('Delivery window · {{window}}', {
                             window: heritage.deliveryWindow,
                         })}
                     </p>
                 </MemberPanel>
                 <MemberPanel>
                     <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                        {t('Artefacten')}
+                        {t('Artefacts')}
                     </p>
                     <ul className="mt-4 space-y-3 text-[15px] text-sand">
                         <li>
-                            {t('Certificaat · {{value}}', {
+                            {t('Certificate · {{value}}', {
                                 value: heritage.certificate,
                             })}
                         </li>

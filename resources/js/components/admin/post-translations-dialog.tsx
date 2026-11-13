@@ -118,7 +118,7 @@ export function PostTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" size="sm" type="button">
                     <Languages className="h-3.5 w-3.5" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -126,10 +126,10 @@ export function PostTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk vertalingen per taal. Bron tekst wijzig je via Bericht bewerken; DeepL vertaalt vanuit die bron.',
+                            'Bewerk vertalingen per taal. Bron tekst wijzig je via Edit post; DeepL vertaalt vanuit die bron.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -164,7 +164,7 @@ export function PostTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-content`}>
-                            {t('Inhoud')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Content')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Textarea
                             id={`${activeLocale}-content`}
@@ -200,7 +200,7 @@ export function PostTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -215,14 +215,14 @@ export function PostTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

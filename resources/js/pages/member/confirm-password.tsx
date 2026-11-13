@@ -19,20 +19,20 @@ export default function MemberConfirmPassword() {
 
     return (
         <>
-            <Head title={t('Wachtwoord bevestigen')} />
+            <Head title={t('Confirm password')} />
             <MemberPageHeader
-                eyebrow={t('Beveiliging')}
-                title={t('Bevestig jouw wachtwoord')}
+                eyebrow={t('Security')}
+                title={t('Confirm your password')}
                 description={t(
-                    'Dit is een beveiligd gedeelte van jouw account. Bevestig jouw wachtwoord om verder te gaan.',
+                    'This is a secure area of your account. Confirm your password to continue.',
                 )}
             />
 
             <MemberPanel className="max-w-md">
                 <MemberSectionTitle
-                    title={t('Wachtwoordcontrole')}
+                    title={t('Password check')}
                     description={t(
-                        'Vereist voordat je beveiligingsinstellingen bekijkt of wijzigt.',
+                        'Required before viewing or changing security settings.',
                     )}
                 />
                 <Form {...store.form()} resetOnSuccess={['password']}>
@@ -43,12 +43,12 @@ export default function MemberConfirmPassword() {
                                     htmlFor="password"
                                     className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase"
                                 >
-                                    {t('Wachtwoord')}
+                                    {t('Password')}
                                 </Label>
                                 <PasswordInput
                                     id="password"
                                     name="password"
-                                    placeholder={t('Jouw huidige wachtwoord')}
+                                    placeholder={t('Your current password')}
                                     autoComplete="current-password"
                                     autoFocus
                                     className={memberFieldClassName}
@@ -63,13 +63,13 @@ export default function MemberConfirmPassword() {
                                     data-test="confirm-password-button"
                                 >
                                     {processing && <Spinner />}
-                                    {t('Wachtwoord bevestigen')}
+                                    {t('Confirm password')}
                                 </Button>
                                 <Link
                                     href={`/${locale}/member`}
                                     className="font-sans text-[11px] tracking-[0.14em] text-sand uppercase no-underline hover:text-gold"
                                 >
-                                    {t('Annuleren')}
+                                    {t('Cancel')}
                                 </Link>
                             </div>
                         </div>

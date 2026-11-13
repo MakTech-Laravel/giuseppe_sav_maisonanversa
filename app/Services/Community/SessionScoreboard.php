@@ -36,8 +36,8 @@ class SessionScoreboard
         $score = DB::transaction(function () use ($session, $submitter, $data, $isHost): CommunitySessionScore {
             $locked = $this->lockSession($session);
 
-            abort_if(! $locked->isHeld() || $locked->isScoreboardLocked(), 422, __('Het scorebord is gesloten.'));
-            abort_if(! $isHost && ! $locked->isScoreWindowOpen(), 422, __('De termijn om een score in te dienen is verstreken.'));
+            abort_if(! $locked->isHeld() || $locked->isScoreboardLocked(), 422, __('The scoreboard is closed.'));
+            abort_if(! $isHost && ! $locked->isScoreWindowOpen(), 422, __('The period for submitting a score has ended.'));
 
             $locked->scores()
                 ->where('submitted_by', $submitter->id)
@@ -113,7 +113,7 @@ class SessionScoreboard
         DB::transaction(function () use ($session): void {
             $locked = $this->lockSession($session);
 
-            abort_if(! $locked->isHeld(), 422, __('Deze sessie is al afgesloten.'));
+            abort_if(! $locked->isHeld(), 422, __('This session is already closed.'));
 
             if (! $locked->isScoreboardLocked()) {
                 $locked->update(['scoreboard_locked_at' => now()]);
@@ -126,7 +126,7 @@ class SessionScoreboard
         DB::transaction(function () use ($session): void {
             $locked = $this->lockSession($session);
 
-            abort_if(! $locked->isHeld(), 422, __('Deze sessie is al afgesloten.'));
+            abort_if(! $locked->isHeld(), 422, __('This session is already closed.'));
 
             $locked->update(['scoreboard_locked_at' => null]);
         });
@@ -143,17 +143,17 @@ class SessionScoreboard
         DB::transaction(function () use ($session): void {
             $locked = $this->lockSession($session);
 
-            abort_if(! $locked->isHeld(), 422, __('Deze sessie is al afgesloten.'));
-            abort_if(! $locked->isScoreboardLocked(), 422, __('Vergrendel eerst het scorebord.'));
+            abort_if(! $locked->isHeld(), 422, __('This session is already closed.'));
+            abort_if(! $locked->isScoreboardLocked(), 422, __('Lock the scoreboard first.'));
             abort_if(
                 self::canRecordMatch($locked) && ! $locked->officialScore()->exists(),
                 422,
-                __('Keur eerst een score goed.'),
+                __('Approve a score first.'),
             );
             abort_if(
                 $locked->scores()->where('status', SessionScoreStatus::Pending->value)->exists(),
                 422,
-                __('Behandel eerst alle ingediende scores.'),
+                __('Review all submitted scores first.'),
             );
 
             $locked->update(['finished_at' => now()]);
@@ -301,8 +301,8 @@ class SessionScoreboard
     {
         $fresh = $session->scores()->whereKey($score->id)->lockForUpdate()->firstOrFail();
 
-        abort_if(! $session->isHeld(), 422, __('Deze sessie is al afgesloten.'));
-        abort_if($fresh->status !== SessionScoreStatus::Pending, 422, __('Deze score is al behandeld.'));
+        abort_if(! $session->isHeld(), 422, __('This session is already closed.'));
+        abort_if($fresh->status !== SessionScoreStatus::Pending, 422, __('This score has already been reviewed.'));
 
         return $fresh;
     }

@@ -70,7 +70,7 @@ class ReturnController extends Controller
     public function refundFull(Request $request, string $locale, OrderReturn $orderReturn, ReturnService $returns): RedirectResponse
     {
         $returns->refundFull($orderReturn, $request->user());
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Volledige terugbetaling uitgevoerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Full refund completed.')]);
 
         return back();
     }
@@ -153,8 +153,8 @@ class ReturnController extends Controller
 
     public function cancel(Request $request, string $locale, OrderReturn $orderReturn, ReturnService $returns): RedirectResponse
     {
-        $returns->cancel($orderReturn, $request->user(), 'Geannuleerd door beheerder.');
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Retour geannuleerd.')]);
+        $returns->cancel($orderReturn, $request->user(), 'Cancelled by administrator.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Return cancelled.')]);
 
         return back();
     }

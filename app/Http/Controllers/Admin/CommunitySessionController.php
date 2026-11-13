@@ -101,7 +101,7 @@ class CommunitySessionController extends Controller
             $this->notifier->cancelled($communitySession, $request->user());
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie geannuleerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Session cancelled.')]);
 
         return back();
     }
@@ -115,7 +115,7 @@ class CommunitySessionController extends Controller
         abort_if(
             $communitySession->isHostedBy($user),
             422,
-            __('De host kan niet uit de eigen sessie worden verwijderd.'),
+            __('The host cannot be removed from their own session.'),
         );
 
         $wasFull = $communitySession->participants()->count() >= $communitySession->capacity;
@@ -129,7 +129,7 @@ class CommunitySessionController extends Controller
             $this->notifier->removed($communitySession, $user, $request->user(), $wasFull);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Speler verwijderd uit de sessie.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Player removed from the session.')]);
 
         return back();
     }
@@ -138,7 +138,7 @@ class CommunitySessionController extends Controller
     {
         $communitySession->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Session deleted.')]);
 
         return redirect()->route('admin.community-sessions.index', ['locale' => $locale]);
     }

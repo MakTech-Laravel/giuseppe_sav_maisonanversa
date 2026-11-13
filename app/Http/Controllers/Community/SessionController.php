@@ -119,7 +119,7 @@ class SessionController extends Controller
 
         $this->notifier->created($session, $request->user());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie gepubliceerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Session published.')]);
 
         return redirect()->route('community.sessions.show', [
             'locale' => $locale,
@@ -201,7 +201,7 @@ class SessionController extends Controller
             $this->notifier->cancelled($communitySession, $request->user());
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie geannuleerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Session cancelled.')]);
 
         return redirect()->route('community.sessions.index', ['locale' => $locale]);
     }
@@ -227,20 +227,20 @@ class SessionController extends Controller
                 abort_if(
                     $existing->status === SessionParticipantStatus::Rejected,
                     422,
-                    __('De organisator heeft jouw aanvraag voor deze sessie niet aanvaard.'),
+                    __('The organiser did not accept your request for this session.'),
                 );
 
                 return 'noop';
             }
 
-            abort_if($locked->isCancelled(), 422, __('Deze sessie is geannuleerd.'));
-            abort_if($locked->isPast(), 422, __('Deze sessie is al voorbij.'));
-            abort_if($locked->isRegistrationClosed(), 422, __('De inschrijvingen voor deze sessie zijn gesloten.'));
+            abort_if($locked->isCancelled(), 422, __('This session has been cancelled.'));
+            abort_if($locked->isPast(), 422, __('This session is already over.'));
+            abort_if($locked->isRegistrationClosed(), 422, __('Registration for this session is closed.'));
             abort_if($locked->isFull(), 422, __('Deze sessie is vol.'));
             abort_if(
                 $locked->reservedSeats() >= $locked->capacity,
                 422,
-                __('Alle vrije plaatsen zijn al aangevraagd. Probeer het later opnieuw.'),
+                __('All free places have already been requested. Please try again later.'),
             );
 
             $requiresRequest = $locked->requiresJoinRequests();
@@ -268,10 +268,10 @@ class SessionController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => match ($outcome) {
-                'pending' => __('Jouw aanvraag is verstuurd naar de organisator.'),
-                'confirmed' => __('Je speelt mee.'),
+                'pending' => __('Your request has been sent to the organiser.'),
+                'confirmed' => __('You\'re in.'),
                 default => $communitySession->requiresJoinRequests()
-                    ? __('Je hebt deze sessie al aangevraagd.')
+                    ? __('You have already requested this session.')
                     : __('Je speelt al mee in deze sessie.'),
             },
         ]);
@@ -313,7 +313,7 @@ class SessionController extends Controller
             $this->notifier->approved($communitySession, $user, $request->user());
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Aanvraag goedgekeurd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Request approved.')]);
 
         return back();
     }
@@ -350,7 +350,7 @@ class SessionController extends Controller
             $this->notifier->rejected($communitySession, $user, $request->user());
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Aanvraag geweigerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Request declined.')]);
 
         return back();
     }
@@ -386,7 +386,7 @@ class SessionController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => $wasPending ? __('Jouw aanvraag is ingetrokken.') : __('Je hebt de sessie verlaten.'),
+            'message' => $wasPending ? __('Your request has been withdrawn.') : __('You have left the session.'),
         ]);
 
         return back();
@@ -403,7 +403,7 @@ class SessionController extends Controller
         abort_if(
             $communitySession->isHostedBy($user),
             422,
-            __('De host kan niet uit de eigen sessie worden verwijderd.'),
+            __('The host cannot be removed from their own session.'),
         );
 
         $wasFull = $communitySession->participants()->count() >= $communitySession->capacity;
@@ -418,7 +418,7 @@ class SessionController extends Controller
             $this->notifier->removed($communitySession, $user, $request->user(), $wasFull);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Speler verwijderd uit de sessie.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Player removed from the session.')]);
 
         return back();
     }

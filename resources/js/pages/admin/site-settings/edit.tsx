@@ -51,19 +51,19 @@ export default function SiteSettingsEdit({
 
     return (
         <>
-            <Head title={t('Site-instellingen')} />
+            <Head title={t('Site settings')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Site-instellingen')}
+                    title={t('Site settings')}
                     description={t(
-                        'Telefoon, e-mail, Instagram en de atelierkaart voor de hele site.',
+                        'Phone, email, Instagram, and the atelier map used across the site.',
                     )}
                     icon={Globe}
                 />
                 <form onSubmit={submit} className="w-full space-y-6">
                     <AdminResourceShell
                         aside={
-                            <AdminPanel title={t('Opslaan')}>
+                            <AdminPanel title={t('Save')}>
                                 <Button
                                     type="submit"
                                     disabled={form.processing}
@@ -74,22 +74,22 @@ export default function SiteSettingsEdit({
                                     ) : (
                                         <Settings2 className="size-4" />
                                     )}
-                                    {t('Instellingen opslaan')}
+                                    {t('Save settings')}
                                 </Button>
                             </AdminPanel>
                         }
                     >
                         <AdminPanel
-                            title={t('Contactgegevens')}
+                            title={t('Contact details')}
                             description={t(
-                                'Telefoon, WhatsApp en e-mailadressen die bezoekers zien.',
+                                'Phone, WhatsApp, and email addresses visitors see.',
                             )}
                         >
                             <div className="grid gap-5">
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <div className="grid gap-2">
                                         <Label htmlFor="phone">
-                                            {t('Telefoon')}
+                                            {t('Phone')}
                                         </Label>
                                         <Input
                                             id="phone"
@@ -128,7 +128,7 @@ export default function SiteSettingsEdit({
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <div className="grid gap-2">
                                         <Label htmlFor="email_hello">
-                                            {t('E-mail algemeen')}
+                                            {t('Main email')}
                                         </Label>
                                         <Input
                                             id="email_hello"
@@ -147,7 +147,7 @@ export default function SiteSettingsEdit({
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="email_press">
-                                            {t('E-mail pers')}
+                                            {t('Press email')}
                                         </Label>
                                         <Input
                                             id="email_press"
@@ -168,7 +168,7 @@ export default function SiteSettingsEdit({
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="instagram_url">
-                                        {t('Instagram-URL')}
+                                        {t('Instagram URL')}
                                     </Label>
                                     <Input
                                         id="instagram_url"
@@ -190,13 +190,13 @@ export default function SiteSettingsEdit({
                         <AdminPanel
                             title={t('Atelier')}
                             description={t(
-                                'Pin voor de kaart op de contactpagina.',
+                                'Map pin on the contact page.',
                             )}
                         >
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="boutique_lat">
-                                        {t('Breedtegraad')}
+                                        {t('Latitude')}
                                     </Label>
                                     <Input
                                         id="boutique_lat"
@@ -214,7 +214,7 @@ export default function SiteSettingsEdit({
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="boutique_lng">
-                                        {t('Lengtegraad')}
+                                        {t('Longitude')}
                                     </Label>
                                     <Input
                                         id="boutique_lng"
@@ -234,14 +234,14 @@ export default function SiteSettingsEdit({
                         </AdminPanel>
 
                         <AdminPanel
-                            title={t('Retouradres')}
+                            title={t('Return address')}
                             description={t(
-                                'Adres waar klanten hun retour naartoe sturen. Leeg laten om de standaard uit de configuratie te gebruiken.',
+                                'Address where customers ship returns. Leave empty to use the config default.',
                             )}
                         >
                             <div className="grid gap-2">
                                 <Label htmlFor="return_address">
-                                    {t('Retouradres')}
+                                    {t('Return address')}
                                 </Label>
                                 <Textarea
                                     id="return_address"

@@ -61,13 +61,13 @@ export function SessionCard({ session }: SessionCardProps) {
                     href={showUrl}
                     className="flex flex-wrap items-center gap-2 font-serif text-[20px] font-medium text-choc hover:text-gold2 md:text-[22px]"
                 >
-                    {session.club?.name ?? t('Onbekende club')}
+                    {session.club?.name ?? t('Unknown club')}
                 </Link>
 
                 {session.club?.is_partner && <PartnerBadge className="mt-2" />}
 
                 <p className="mt-2 font-sans text-[11px] tracking-[0.08em] text-stone">
-                    {t('Georganiseerd door {{name}}', {
+                    {t('Organised by {{name}}', {
                         name: session.host.name || session.host.initials,
                     })}
                 </p>
@@ -101,14 +101,14 @@ export function SessionCard({ session }: SessionCardProps) {
 
                 <span className="font-sans text-[10px] tracking-[0.16em] text-stone uppercase">
                     {session.is_full || session.open_slots <= 0
-                        ? t('Volzet')
+                        ? t('Full')
                         : session.open_slots === 1
-                          ? t('1 plaats vrij')
-                          : t('{{count}} plaatsen vrij', {
+                          ? t('1 spot left')
+                          : t('{{count}} spots left', {
                                 count: session.open_slots,
                             })}
                     {pendingCount > 0 &&
-                        ` · ${t('{{count}} in afwachting', { count: pendingCount })}`}
+                        ` · ${t('{{count}} pending', { count: pendingCount })}`}
                 </span>
 
                 <div className="flex flex-wrap items-center gap-3 md:justify-end">
@@ -116,7 +116,7 @@ export function SessionCard({ session }: SessionCardProps) {
                     {session.share_url && (
                         <ShareSessionButton
                             url={session.share_url}
-                            title={session.club?.name ?? t('Sessie')}
+                            title={session.club?.name ?? t('Session')}
                         />
                     )}
                     <SessionAction
@@ -147,17 +147,17 @@ function SessionAction({
     const { t } = useTranslation();
 
     if (session.is_cancelled) {
-        return <StatusPill label={t('Sessie geannuleerd')} />;
+        return <StatusPill label={t('Session cancelled')} />;
     }
 
     if (session.is_past) {
-        return <StatusPill label={t('Sessie afgerond')} />;
+        return <StatusPill label={t('Session complete')} />;
     }
 
     if (session.is_host) {
         return (
             <Link href={showUrl} className={cn(outlineButton)}>
-                {t('Sessie beheren')}
+                {t('Manage session')}
             </Link>
         );
     }
@@ -169,7 +169,7 @@ function SessionAction({
                 onClick={onLeave}
                 className={cn(outlineButton)}
             >
-                {t('Sessie verlaten')}
+                {t('Leave session')}
             </button>
         );
     }
@@ -177,14 +177,14 @@ function SessionAction({
     if (session.is_pending) {
         return (
             <div className="flex flex-wrap items-center gap-3 md:justify-end">
-                <StatusPill label={t('Aanvraag in behandeling')} />
+                <StatusPill label={t('Request pending')} />
                 {session.can_withdraw && (
                     <button
                         type="button"
                         onClick={onLeave}
                         className={cn(outlineButton)}
                     >
-                        {t('Aanvraag intrekken')}
+                        {t('Withdraw request')}
                     </button>
                 )}
             </div>
@@ -192,24 +192,24 @@ function SessionAction({
     }
 
     if (session.viewer_status === 'rejected') {
-        return <StatusPill label={t('Aanvraag geweigerd')} />;
+        return <StatusPill label={t('Request declined')} />;
     }
 
     if (session.is_full) {
-        return <StatusPill label={t('Sessie compleet')} />;
+        return <StatusPill label={t('Session full')} />;
     }
 
     if (session.registration_closed) {
-        return <StatusPill label={t('Inschrijving gesloten')} />;
+        return <StatusPill label={t('Registration closed')} />;
     }
 
     if (!session.can_join) {
-        return <StatusPill label={t('Alle plaatsen aangevraagd')} />;
+        return <StatusPill label={t('All places requested')} />;
     }
 
     return (
         <button type="button" onClick={onJoin} className={cn(solidButton)}>
-            {t('Doe mee')}
+            {t('Join')}
         </button>
     );
 }

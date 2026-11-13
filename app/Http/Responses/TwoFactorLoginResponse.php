@@ -26,7 +26,7 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Je bent succesvol ingelogd.'),
+            'message' => __('You have been signed in successfully.'),
         ]);
 
         if ($request->header('X-Inertia') || ! $request->wantsJson()) {

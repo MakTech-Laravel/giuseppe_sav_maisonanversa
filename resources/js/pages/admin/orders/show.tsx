@@ -127,18 +127,18 @@ export default function ShowOrder({ order }: { order: Order }) {
                     <Button variant="outline" asChild>
                         <Link href={orders.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar bestellingen')}
+                            {t('Back to orders')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
 
                 <div className="rounded-xl border bg-card p-6 shadow-sm">
                     <h2 className="mb-3 text-sm font-semibold">
-                        {t('Status bijwerken')}
+                        {t('Update status')}
                     </h2>
                     <div className="mb-3 space-y-2">
                         <Label htmlFor="order-message">
-                            {t('Bericht voor de koper')}
+                            {t('Message for the buyer')}
                         </Label>
                         <Textarea
                             id="order-message"
@@ -148,7 +148,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                             }
                             rows={3}
                             placeholder={t(
-                                'Korte update die de koper per e-mail en in het dashboard ziet…',
+                                'Short update the buyer will see by email and in the dashboard…',
                             )}
                         />
                         <InputError message={form.errors.message} />
@@ -161,7 +161,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                                 disabled={form.processing}
                                 onClick={() => submitStatus('processing')}
                             >
-                                {t('Markeer als in verwerking')}
+                                {t('Mark as processing')}
                             </Button>
                         )}
                         {canShip && (
@@ -170,7 +170,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                                 disabled={form.processing}
                                 onClick={() => submitStatus('shipped')}
                             >
-                                {t('Markeer als verzonden')}
+                                {t('Mark as shipped')}
                             </Button>
                         )}
                         {canDeliver && (
@@ -180,7 +180,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                                 disabled={form.processing}
                                 onClick={() => submitStatus('delivered')}
                             >
-                                {t('Markeer als geleverd')}
+                                {t('Mark as delivered')}
                             </Button>
                         )}
                         {canCancel && (
@@ -190,17 +190,17 @@ export default function ShowOrder({ order }: { order: Order }) {
                                 disabled={form.processing}
                                 onClick={() => submitStatus('canceled')}
                             >
-                                {t('Markeer als geannuleerd')}
+                                {t('Mark as canceled')}
                             </Button>
                         )}
                         {canRefund && (
                             <ConfirmDeleteDialog
-                                title={t('Terugbetaling bevestigen')}
+                                title={t('Confirm refund')}
                                 description={t(
-                                    '{{amount}} terugbetalen aan de klant?',
+                                    'Refund {{amount}} to the customer?',
                                     { amount: order.amount },
                                 )}
-                                confirmLabel={t('Markeer als terugbetaald')}
+                                confirmLabel={t('Mark as refunded')}
                                 processing={form.processing}
                                 onConfirm={() => submitStatus('refunded')}
                             >
@@ -209,7 +209,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                                     variant="destructive"
                                     disabled={form.processing}
                                 >
-                                    {t('Markeer als terugbetaald')}
+                                    {t('Mark as refunded')}
                                 </Button>
                             </ConfirmDeleteDialog>
                         )}
@@ -218,11 +218,11 @@ export default function ShowOrder({ order }: { order: Order }) {
 
                 <div className="rounded-xl border bg-card p-6 shadow-sm">
                     <h2 className="mb-3 text-sm font-semibold">
-                        {t('Leveringsdatum')}
+                        {t('Delivery date')}
                     </h2>
                     <p className="mb-3 text-sm text-muted-foreground">
                         {t(
-                            'Gebruikt voor de 14-dagen bedenktijd en de Founding Circle-inschrijving. Geen automatische carrierfeed — handmatig zetten of corrigeren.',
+                            'Used for the 14-day withdrawal window and Founding Circle inscription. No automatic carrier feed — set or correct manually.',
                         )}
                     </p>
                     <form
@@ -240,7 +240,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                     >
                         <div className="space-y-2">
                             <Label htmlFor="delivered-on">
-                                {t('Geleverd op')}
+                                {t('Delivered on')}
                             </Label>
                             <AdminDatePicker
                                 id="delivered-on"
@@ -258,7 +258,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                             variant="secondary"
                             disabled={deliveryForm.processing}
                         >
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                     </form>
                 </div>
@@ -267,7 +267,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                     <div className="space-y-6 lg:col-span-2">
                         <div className="rounded-xl border bg-card p-6 shadow-sm">
                             <h2 className="mb-4 text-sm font-semibold">
-                                {t('Bestelregels')}
+                                {t('Order items')}
                             </h2>
                             <div className="divide-y">
                                 {order.items.map((item) => (
@@ -288,7 +288,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                         {order.timeline && order.timeline.length > 0 && (
                             <div className="rounded-xl border bg-card p-6 shadow-sm">
                                 <h2 className="mb-4 text-sm font-semibold">
-                                    {t('Tijdlijn')}
+                                    {t('Timeline')}
                                 </h2>
                                 <ol className="space-y-3">
                                     {order.timeline.map((item) => (
@@ -316,7 +316,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                         {order.events && order.events.length > 0 && (
                             <div className="rounded-xl border bg-card p-6 shadow-sm">
                                 <h2 className="mb-4 text-sm font-semibold">
-                                    {t('Berichten')}
+                                    {t('Messages')}
                                 </h2>
                                 <ul className="space-y-4">
                                     {order.events.map((event) => (
@@ -354,12 +354,12 @@ export default function ShowOrder({ order }: { order: Order }) {
                         {order.payment && (
                             <div className="rounded-xl border bg-card p-6 shadow-sm">
                                 <h2 className="mb-4 text-sm font-semibold">
-                                    {t('Betaling')}
+                                    {t('Payment')}
                                 </h2>
                                 <dl className="space-y-2 text-sm">
                                     <div>
                                         <dt className="text-muted-foreground">
-                                            {t('Betalingsstatus')}
+                                            {t('Payment status')}
                                         </dt>
                                         <dd>
                                             <Badge variant="secondary">
@@ -369,7 +369,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                                     </div>
                                     <div>
                                         <dt className="text-muted-foreground">
-                                            {t('Bedrag')}
+                                            {t('Amount')}
                                         </dt>
                                         <dd>{order.payment.amount}</dd>
                                     </div>
@@ -385,7 +385,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                                         .stripe_checkout_session_id && (
                                         <div>
                                             <dt className="text-muted-foreground">
-                                                {t('Stripe sessie')}
+                                                {t('Stripe session')}
                                             </dt>
                                             <dd className="font-mono text-xs break-all">
                                                 {
@@ -414,12 +414,12 @@ export default function ShowOrder({ order }: { order: Order }) {
                         {order.billing && (
                             <div className="rounded-xl border bg-card p-6 shadow-sm">
                                 <h2 className="mb-4 text-sm font-semibold">
-                                    {t('Koper')}
+                                    {t('Buyer')}
                                 </h2>
                                 <dl className="space-y-2 text-sm">
                                     <div>
                                         <dt className="text-muted-foreground">
-                                            {t('Naam')}
+                                            {t('Name')}
                                         </dt>
                                         <dd>
                                             {order.user_id ? (
@@ -439,13 +439,13 @@ export default function ShowOrder({ order }: { order: Order }) {
                                     </div>
                                     <div>
                                         <dt className="text-muted-foreground">
-                                            {t('E-mail')}
+                                            {t('Email')}
                                         </dt>
                                         <dd>{order.billing.email}</dd>
                                     </div>
                                     <div>
                                         <dt className="text-muted-foreground">
-                                            {t('Telefoon')}
+                                            {t('Phone')}
                                         </dt>
                                         <dd>
                                             {order.billing.phone ??
@@ -459,7 +459,7 @@ export default function ShowOrder({ order }: { order: Order }) {
                         {order.shipping && (
                             <div className="rounded-xl border bg-card p-6 shadow-sm">
                                 <h2 className="mb-4 text-sm font-semibold">
-                                    {t('Verzendadres')}
+                                    {t('Shipping address')}
                                 </h2>
                                 <p className="text-sm">
                                     {order.shipping.line1}

@@ -59,24 +59,24 @@ export function RoleForm({
             {locked && (
                 <Alert>
                     <ShieldAlert className="h-4 w-4" />
-                    <AlertTitle>{t('Superbeheerderrol')}</AlertTitle>
+                    <AlertTitle>{t('Super Admin role')}</AlertTitle>
                     <AlertDescription>
                         {t(
-                            'Deze rol ontvangt impliciet alle rechten via Gate::before en kan niet worden hernoemd of bewerkt.',
+                            'This role implicitly receives every permission via Gate::before, so it cannot be renamed or edited.',
                         )}
                     </AlertDescription>
                 </Alert>
             )}
 
             <div className="grid gap-2 sm:max-w-md">
-                <Label htmlFor="name">{t('Rolnaam')}</Label>
+                <Label htmlFor="name">{t('Role name')}</Label>
                 <Input
                     id="name"
                     value={form.data.name}
                     onChange={(e) => form.setData('name', e.target.value)}
                     onBlur={() => form.validate('name')}
                     aria-invalid={form.invalid('name')}
-                    placeholder={t('bijv. content-manager')}
+                    placeholder={t('e.g. content-manager')}
                     disabled={locked}
                 />
                 <InputError message={form.errors.name} />
@@ -85,17 +85,17 @@ export function RoleForm({
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
                     <div>
-                        <Label>{t('Rechten')}</Label>
+                        <Label>{t('Permissions')}</Label>
                         <p className="text-xs text-muted-foreground">
                             {t(
-                                'Schakel individuele rechten of hele groepen in één keer in.',
+                                'Toggle individual permissions or whole groups at once.',
                             )}
                         </p>
                     </div>
                     {form.validating && (
                         <Badge variant="secondary" className="gap-1.5">
                             <Loader2 className="h-3 w-3 animate-spin" />{' '}
-                            {t('Valideren…')}
+                            {t('Validating…')}
                         </Badge>
                     )}
                 </div>
@@ -116,7 +116,7 @@ export function RoleForm({
                     ) : (
                         <Save className="h-4 w-4" />
                     )}
-                    {isEdit ? t('Wijzigingen opslaan') : t('Rol aanmaken')}
+                    {isEdit ? t('Save changes') : t('Create role')}
                 </Button>
                 {onCancel && (
                     <Button
@@ -125,7 +125,7 @@ export function RoleForm({
                         onClick={onCancel}
                         disabled={form.processing}
                     >
-                        {t('Annuleren')}
+                        {t('Cancel')}
                     </Button>
                 )}
             </div>

@@ -9,15 +9,15 @@ export function HomeManifesto() {
             <Wrap>
                 <p className="mx-auto max-w-190 font-serif text-[clamp(17px,2vw,22px)] leading-[2.1] text-cream">
                     {t(
-                        'Wij bouwen geen sportmerk. Wij bouwen geen lifestylemerk.',
+                        'We are not building a sports brand. We are not building a lifestyle brand.',
                     )}
                     <br />
                     {t(
-                        'Wij bouwen een thuis voor mensen die dezelfde waarden delen.',
+                        'We are building a home for people who share the same values.',
                     )}
                     <br />
                     <strong className="font-normal text-gold italic">
-                        {t('Wij bouwen Maison Anversa.')}
+                        {t('We are building Maison Anversa.')}
                     </strong>
                 </p>
             </Wrap>

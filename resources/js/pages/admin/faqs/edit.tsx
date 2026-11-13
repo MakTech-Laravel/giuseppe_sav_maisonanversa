@@ -54,10 +54,10 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
 
     return (
         <>
-            <Head title={t('FAQ bewerken')} />
+            <Head title={t('Edit FAQ')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('FAQ bewerken')}
+                    title={t('Edit FAQ')}
                     description={faq.question}
                     icon={CircleHelp}
                 >
@@ -68,7 +68,7 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
                                 faq: Number(faq.id),
                             })}
                         >
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -100,7 +100,7 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                         <Button variant="outline" asChild>
                             <Link
@@ -109,7 +109,7 @@ export default function EditFaq({ faq, contexts }: FaqEditProps) {
                                     faq: Number(faq.id),
                                 })}
                             >
-                                {t('Annuleren')}
+                                {t('Cancel')}
                             </Link>
                         </Button>
                     </div>

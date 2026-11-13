@@ -16,18 +16,18 @@ import { foundingProductUrl, maisonUrl } from '@/lib/maison-navigation';
 const VALUES = [
     {
         icon: '◇',
-        title: 'Technische stoffen',
-        desc: 'Premium Italiaanse mills en technische weefsels die presteren op de baan en eruitzien als burgerkleding ernaast.',
+        title: 'Technical fabrics',
+        desc: 'Premium Italian mills and technical fabrics that perform on the court and look like casual wear off it.',
     },
     {
         icon: '◆',
-        title: 'Beperkte productie',
-        desc: 'Kleinere oplages. Elk seizoen een select aantal stukken. Niet meer, niet minder.',
+        title: 'Limited production',
+        desc: 'Smaller runs. A select number of pieces each season. No more, no less.',
     },
     {
         icon: '◈',
-        title: 'Tijdloze palet',
-        desc: 'Chocoladebruin, antiek goud, vintage crème en zwart. Dezelfde taal als het racket.',
+        title: 'Timeless palette',
+        desc: 'Chocolate brown, antique gold, vintage cream and black. The same language as the racket.',
     },
 ] as const;
 
@@ -45,36 +45,36 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
     const { openNewsletter } = useShellActions();
     const { locale } = useLocale();
     const statusLabel = (status: DressingItem['status']) =>
-        status === 'available' ? t('Beschikbaar') : t('Binnenkort');
+        status === 'available' ? t('Available') : t('Coming soon');
 
     return (
         <>
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={t('Kamer III · Maison Anversa')}
+                eyebrow={t('Room III · Maison Anversa')}
                 title={
                     <>
-                        {t('De')} <em>{t('Kleedkamer')}</em>
+                        {t('The')} <em>{t('Dressing Room')}</em>
                     </>
                 }
                 subtitle={t(
-                    "Activewear en accessoires voor de padelspeler die waarde hecht aan stille luxe. Elk stuk is ontworpen met dezelfde filosofie als Heritage Nº 001 — materialen eerst, logo's nooit.",
+                    "Activewear and accessories for the padel player who values quiet luxury. Each piece is designed with the same philosophy as Heritage Nº 001 — materials first, logos never.",
                 )}
             />
 
             <Section tone="dark">
                 <Wrap className="max-w-160 text-center">
-                    <Eyebrow>{t('Binnenkort')}</Eyebrow>
+                    <Eyebrow>{t('Coming soon')}</Eyebrow>
                     <GoldRule center className="mx-auto" />
                     <h2 className="mb-5 font-serif text-[clamp(28px,4vw,42px)] leading-[1.15] font-medium [&_em]:text-gold [&_em]:italic">
-                        {t('De collectie wordt')}
+                        {t('The collection is being')}
                         <br />
-                        {t('op dit moment')} <em>{t('ontworpen')}</em>
+                        {t('currently')} <em>{t('designed')}</em>
                     </h2>
                     <p className="mb-8 text-base leading-[1.85] text-sand">
                         {t(
-                            'Onze activewear verschijnt in een beperkte eerste editie, gelijktijdig met de levering van Heritage Nº 001 in Q1 2027. Leden van de Founding Circle krijgen als eerste toegang.',
+                            'Our activewear launches in a limited first edition, alongside the delivery of Heritage Nº 001 in Q1 2027. Founding Circle members get first access.',
                         )}
                     </p>
                     <MaisonButton
@@ -82,7 +82,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                         block
                         onClick={openNewsletter}
                     >
-                        {t('Schrijf in voor Heritage Letter')}
+                        {t('Sign up for the Heritage Letter')}
                     </MaisonButton>
                 </Wrap>
             </Section>
@@ -96,16 +96,16 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
             <Section tone="cream">
                 <Wrap>
                     <Reveal className="max-w-160 py-4 ma-md:py-8">
-                        <Eyebrow tone="gold2">{t('De Filosofie')}</Eyebrow>
+                        <Eyebrow tone="gold2">{t('The Philosophy')}</Eyebrow>
                         <GoldRule />
                         <h2 className="mt-3 mb-5 font-serif text-[clamp(26px,3vw,38px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
-                            {t('Kleding die')}
+                            {t('Clothing that')}
                             <br />
-                            {t('fluistert.')}
+                            {t('whispers.')}
                         </h2>
                         <p className="text-[15px] leading-[1.85] text-stone">
                             {t(
-                                "Geen opvallende logo's. Geen neon. Geen trends die volgende seizoenen verdwijnen. De Kleedkamer is voor de speler die er verzorgd wil uitzien op en naast de baan — zonder ooit te schreeuwen.",
+                                "No loud logos. No neon. No trends that disappear next season. The Dressing Room is for the player who wants to look refined on and off the court — without ever shouting.",
                             )}
                         </p>
                     </Reveal>
@@ -114,7 +114,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                         <PlaceholderImage
                             asset="room-dressing"
                             ratio={null}
-                            alt={t('Kleedkamer')}
+                            alt={t('Dressing Room')}
                             captioned={false}
                             overlay="linear-gradient(145deg, rgba(53,39,34,0.82) 0%, rgba(41,28,24,0.92) 100%)"
                             className="absolute inset-0 h-full w-full"
@@ -185,11 +185,11 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
             <Section tone="dark">
                 <Wrap>
                     <Reveal className="mb-12 text-center">
-                        <Eyebrow>{t('De Eerste Collectie')}</Eyebrow>
+                        <Eyebrow>{t('The First Collection')}</Eyebrow>
                         <GoldRule center className="mx-auto" />
                         <h2 className="font-serif text-[clamp(28px,3.5vw,42px)] font-medium [&_em]:text-gold [&_em]:italic">
-                            {t('Voor')} <em>{t('op weg')}</em>{' '}
-                            {t('naar de baan')}
+                            {t('For')} <em>{t('on the way')}</em>{' '}
+                            {t('to the court')}
                         </h2>
                     </Reveal>
 
@@ -231,13 +231,13 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                     <Eyebrow tone="gold2">Founding Circle</Eyebrow>
                     <GoldRule center className="mx-auto" />
                     <h2 className="mb-5 font-serif text-[clamp(28px,3.5vw,42px)] font-medium [&_em]:text-gold2 [&_em]:italic">
-                        {t('Wees de eerste')}
+                        {t('Be the first')}
                         <br />
-                        {t('die het')} <em>{t('ziet')}</em>
+                        {t('to')} <em>{t('see it')}</em>
                     </h2>
                     <p className="mb-7 text-[15px] leading-[1.85] text-stone">
                         {t(
-                            'Founding Circle leden krijgen 48 uur exclusieve toegang tot de Kleedkamer collectie vóór de openbare release.',
+                            'Founding Circle members get 48 hours exclusive access to the Dressing Room collection before the public release.',
                         )}
                     </p>
                     <MaisonButton
@@ -245,7 +245,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                         variant="choc"
                         href={foundingProductUrl(locale)}
                     >
-                        {t('Ontdek Heritage Nº 001 →')}
+                        {t('Discover Heritage Nº 001 →')}
                     </MaisonButton>
                 </Wrap>
             </Section>

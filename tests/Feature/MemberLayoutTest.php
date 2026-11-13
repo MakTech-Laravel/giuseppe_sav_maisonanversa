@@ -52,7 +52,7 @@ test('the admin shell exposes a language switcher', function () {
         ->and($sidebar)
         ->toContain('useTranslation')
         ->toContain("t('Dashboard')")
-        ->toContain("t('Klanten')");
+        ->toContain("t('Customers')");
 });
 
 test('the admin user menu uses the chocolate shell palette', function () {

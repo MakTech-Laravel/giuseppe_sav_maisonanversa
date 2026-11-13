@@ -87,10 +87,10 @@ test('refunding an order notifies the buyer with an order inbox row', function (
         $admin,
     );
 
-    expect(AppNotification::query()->where('type', NotificationType::Order)->where('title', 'Bestelling terugbetaald')->exists())->toBeTrue()
+    expect(AppNotification::query()->where('type', NotificationType::Order)->where('title', 'Order refunded')->exists())->toBeTrue()
         ->and(UserNotification::query()->where('user_id', $user->id)->exists())->toBeTrue();
 
     app()->setLocale('en');
 
-    expect(__('Bestelling terugbetaald'))->toBe('Order refunded');
+    expect(__('Order refunded'))->toBe('Order refunded');
 });

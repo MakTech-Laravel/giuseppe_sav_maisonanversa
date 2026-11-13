@@ -17,7 +17,7 @@ enum NotificationType: string
         return match ($this) {
             self::Info => 'Informatie',
             self::Success => 'Succes',
-            self::Warning => 'Waarschuwing',
+            self::Warning => 'Warning',
             self::Alert => 'Melding',
             self::Order => 'Bestelling',
             self::Community => 'Gemeenschap',

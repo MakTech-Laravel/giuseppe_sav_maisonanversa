@@ -18,18 +18,18 @@ export default function CreateRole({
 
     return (
         <>
-            <Head title={t('Rol aanmaken')} />
+            <Head title={t('Create role')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Rol aanmaken')}
-                    description={t('Geef de rol een naam en ken rechten toe.')}
+                    title={t('Create role')}
+                    description={t('Name the role and grant it permissions.')}
                     icon={ShieldPlus}
                 >
                     <Button variant="outline" asChild>
                         <Link href={roles.index(wayfinderLocale()).url}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar rollen')}
+                            {t('Back to roles')}
                         </Link>
                     </Button>
                 </AdminPageHeader>

@@ -28,7 +28,7 @@ class StoreFoundingCircleClaimRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'serial.required' => __('Voer het racketserienummer in.'),
+            'serial.required' => __('Enter the racket serial number.'),
         ];
     }
 }

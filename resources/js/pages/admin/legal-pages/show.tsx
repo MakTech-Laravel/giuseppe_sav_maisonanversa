@@ -67,13 +67,13 @@ export default function ShowLegalPage({
                 <AdminPageHeader
                     title={title}
                     description={t(
-                        'Bekijk deze juridische pagina zoals bezoekers die zien.',
+                        'Preview this legal page the way visitors see it.',
                     )}
                     icon={FileText}
                 >
                     <Button variant="outline" asChild>
                         <Link href={legalPages.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                     <Button asChild>
@@ -83,7 +83,7 @@ export default function ShowLegalPage({
                                 legalPage: Number(page.id),
                             })}
                         >
-                            <Pencil className="h-4 w-4" /> {t('Bewerken')}
+                            <Pencil className="h-4 w-4" /> {t('Edit')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -91,9 +91,9 @@ export default function ShowLegalPage({
                 <AdminResourceShell
                     aside={
                         <AdminPanel
-                            title={t('Acties')}
+                            title={t('Actions')}
                             description={t(
-                                'Pas vertalingen aan of bewerk de Nederlandse bron.',
+                                'Adjust translations or edit the Dutch source.',
                             )}
                         >
                             <div className="flex flex-col gap-2">
@@ -111,7 +111,7 @@ export default function ShowLegalPage({
                                         })}
                                     >
                                         <Pencil className="h-4 w-4" />{' '}
-                                        {t('Bewerken')}
+                                        {t('Edit')}
                                     </Link>
                                 </Button>
                                 <Button
@@ -121,7 +121,7 @@ export default function ShowLegalPage({
                                 >
                                     <Link href={legalPages.index(locale)}>
                                         <ArrowLeft className="h-4 w-4" />{' '}
-                                        {t('Terug')}
+                                        {t('Back')}
                                     </Link>
                                 </Button>
                             </div>
@@ -129,16 +129,16 @@ export default function ShowLegalPage({
                     }
                 >
                     <AdminPanel
-                        title={t('Voorbeeld')}
+                        title={t('Preview')}
                         description={t(
-                            'Schakel tussen talen om de publieke pagina te controleren.',
+                            'Switch languages to check the public page.',
                         )}
                     >
                         <div className="mb-5 flex flex-wrap items-center gap-2">
                             <Badge variant="secondary">
                                 {page.is_published
-                                    ? t('Gepubliceerd')
-                                    : t('Concept')}
+                                    ? t('Published')
+                                    : t('Draft')}
                             </Badge>
                             {locales.map((code) => (
                                 <Button
@@ -176,7 +176,7 @@ ShowLegalPage.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: "Juridische Pagina's",
+            title: "Legal Pages",
             href: legalPages.index(wayfinderLocale()),
         },
         { title: 'Voorbeeld', href: '#' },

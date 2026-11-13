@@ -227,7 +227,7 @@ trait PreparesProductPayload
                 if ((int) $number > $editionTotal) {
                     $validator->errors()->add(
                         "archive_edition_numbers.{$index}",
-                        __('Archiefnummers moeten binnen de editiegrootte vallen.'),
+                        __('Archive numbers must fall within the edition size.'),
                     );
                 }
             }

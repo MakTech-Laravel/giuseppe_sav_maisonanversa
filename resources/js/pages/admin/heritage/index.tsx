@@ -94,7 +94,7 @@ function translateInventoryStatus(
     const statusMap: Record<string, string> = {
         archive: 'Archief',
         available: 'Beschikbaar',
-        reserved: 'Gereserveerd',
+        reserved: 'Reserved',
         allocated: 'Toegewezen',
     };
 
@@ -183,12 +183,12 @@ export default function HeritageIndex({
 
     return (
         <>
-            <Head title={t('Editievoorraad')} />
+            <Head title={t('Edition inventory')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Editievoorraad')}
+                    title={t('Edition inventory')}
                     description={t(
-                        'Nummering en voorraad per limited-edition product.',
+                        'Numbering and inventory per limited-edition product.',
                     )}
                     icon={Package}
                 />
@@ -232,15 +232,15 @@ export default function HeritageIndex({
                         emphasize
                     />
                     <StatCard
-                        label={t('Totaal')}
+                        label={t('Total')}
                         value={String(inventory.total)}
                     />
                     <StatCard
-                        label={t('Gereserveerd')}
+                        label={t('Reserved')}
                         value={String(inventory.reserved)}
                     />
                     <StatCard
-                        label={t('Beschikbaar')}
+                        label={t('Available')}
                         value={String(inventory.available)}
                     />
                 </div>
@@ -255,15 +255,15 @@ export default function HeritageIndex({
                                     setSearch(event.target.value)
                                 }
                                 placeholder={t(
-                                    'Zoek op SKU, nummer of notities…',
+                                    'Search by SKU, number or notes…',
                                 )}
                                 className="pl-9"
-                                aria-label={t('Zoeken')}
+                                aria-label={t('Search')}
                             />
                         </div>
                         <div className="grid gap-1.5">
                             <Label htmlFor="number-from" className="sr-only">
-                                {t('Nummer van')}
+                                {t('Number from')}
                             </Label>
                             <Input
                                 id="number-from"
@@ -274,12 +274,12 @@ export default function HeritageIndex({
                                 onChange={(event) =>
                                     setNumberFrom(event.target.value)
                                 }
-                                placeholder={t('Van #')}
+                                placeholder={t('From #')}
                             />
                         </div>
                         <div className="grid gap-1.5">
                             <Label htmlFor="number-to" className="sr-only">
-                                {t('Nummer tot')}
+                                {t('Number to')}
                             </Label>
                             <Input
                                 id="number-to"
@@ -290,7 +290,7 @@ export default function HeritageIndex({
                                 onChange={(event) =>
                                     setNumberTo(event.target.value)
                                 }
-                                placeholder={t('Tot #')}
+                                placeholder={t('To #')}
                             />
                         </div>
                         <Select value={status} onValueChange={setStatus}>
@@ -299,12 +299,12 @@ export default function HeritageIndex({
                                 aria-label={t('Status')}
                             >
                                 <SelectValue
-                                    placeholder={t('Alle statussen')}
+                                    placeholder={t('All statuses')}
                                 />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">
-                                    {t('Alle statussen')}
+                                    {t('All statuses')}
                                 </SelectItem>
                                 {STATUS_OPTIONS.map((value) => (
                                     <SelectItem key={value} value={value}>
@@ -319,9 +319,9 @@ export default function HeritageIndex({
                         >
                             <SelectTrigger
                                 className="w-full"
-                                aria-label={t('Per pagina')}
+                                aria-label={t('Per page')}
                             >
-                                <SelectValue placeholder={t('Per pagina')} />
+                                <SelectValue placeholder={t('Per page')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {perPageOptions.map((option) => (
@@ -329,7 +329,7 @@ export default function HeritageIndex({
                                         key={option}
                                         value={String(option)}
                                     >
-                                        {t('{{count}} per pagina', {
+                                        {t('{{count}} per page', {
                                             count: option,
                                         })}
                                     </SelectItem>
@@ -344,7 +344,7 @@ export default function HeritageIndex({
                                 className="w-full lg:w-auto"
                             >
                                 <X className="h-4 w-4" />
-                                {t('Filters wissen')}
+                                {t('Clear filters')}
                             </Button>
                         )}
                     </div>
@@ -364,13 +364,13 @@ export default function HeritageIndex({
                                     {t('Status')}
                                 </TableHead>
                                 <TableHead className="hidden h-11 px-4 lg:table-cell">
-                                    {t('Koper')}
+                                    {t('Buyer')}
                                 </TableHead>
                                 <TableHead className="hidden h-11 px-4 md:table-cell">
-                                    {t('Bestelling')}
+                                    {t('Order')}
                                 </TableHead>
                                 <TableHead className="hidden h-11 px-4 md:table-cell">
-                                    {t('Notities')}
+                                    {t('Notes')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -381,7 +381,7 @@ export default function HeritageIndex({
                                         colSpan={6}
                                         className="px-4 py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen editienummers gevonden.')}
+                                        {t('No edition numbers found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -495,7 +495,7 @@ function HeritageProductForm({ product }: { product: HeritageProduct }) {
         >
             <div className="grid items-start gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
-                    <Label htmlFor="name">{t('Naam')}</Label>
+                    <Label htmlFor="name">{t('Name')}</Label>
                     <Input
                         id="name"
                         value={form.data.name}
@@ -506,7 +506,7 @@ function HeritageProductForm({ product }: { product: HeritageProduct }) {
                     <InputError message={form.errors.name} />
                 </div>
                 <div className="grid gap-2">
-                    <Label htmlFor="amount">{t('Bedrag')}</Label>
+                    <Label htmlFor="amount">{t('Amount')}</Label>
                     <div className="relative">
                         <Input
                             id="amount"
@@ -530,11 +530,11 @@ function HeritageProductForm({ product }: { product: HeritageProduct }) {
             <div className="border-t pt-5">
                 <div className="mb-4">
                     <h3 className="text-sm font-semibold tracking-tight">
-                        {t('SKU-opbouw')}
+                        {t('SKU format')}
                     </h3>
                     <p className="mt-1 text-xs text-muted-foreground">
                         {t(
-                            'SKU’s worden opgebouwd als prefix + editienummer + postfix. Sla op om de tabel bij te werken.',
+                            'SKUs are built as prefix + edition number + postfix. Save to refresh the table.',
                         )}
                     </p>
                 </div>
@@ -552,7 +552,7 @@ function HeritageProductForm({ product }: { product: HeritageProduct }) {
                                     event.target.value,
                                 )
                             }
-                            placeholder={t('bijv. No. of MA-')}
+                            placeholder={t('e.g. No. or MA-')}
                         />
                         <InputError
                             message={form.errors.edition_number_prefix}
@@ -571,14 +571,14 @@ function HeritageProductForm({ product }: { product: HeritageProduct }) {
                                     event.target.value,
                                 )
                             }
-                            placeholder={t('bijv. -A of /100')}
+                            placeholder={t('e.g. -A or /100')}
                         />
                         <InputError
                             message={form.errors.edition_number_postfix}
                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label>{t('Voorbeeld')}</Label>
+                        <Label>{t('Preview')}</Label>
                         <div className="flex h-9 items-center rounded-md border bg-muted/30 px-3 font-mono text-sm">
                             {previewSku}
                         </div>
@@ -595,7 +595,7 @@ function HeritageProductForm({ product }: { product: HeritageProduct }) {
                     {form.processing && (
                         <Loader2 className="h-4 w-4 animate-spin" />
                     )}
-                    {t('Wijzigingen opslaan')}
+                    {t('Save changes')}
                 </Button>
             </div>
         </form>
@@ -634,7 +634,7 @@ HeritageIndex.layout = {
     breadcrumbs: [
         { title: 'Dashboard', href: dashboard(wayfinderLocale()) },
         {
-            title: 'Editievoorraad',
+            title: 'Edition inventory',
             href: heritageRoutes.index(wayfinderLocale()),
         },
     ],

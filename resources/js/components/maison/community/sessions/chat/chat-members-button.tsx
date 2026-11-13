@@ -32,10 +32,10 @@ export function ChatMembersButton({
                         'inline-flex h-8 shrink-0 items-center gap-2 border border-gold/30 bg-transparent px-3 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:border-gold hover:bg-gold/10 hover:text-gold',
                         className,
                     )}
-                    aria-label={t('Leden')}
+                    aria-label={t('Members')}
                 >
                     <Users className="size-3.5" aria-hidden="true" />
-                    {t('Leden')}
+                    {t('Members')}
                     <span className="tracking-normal text-sand normal-case tabular-nums">
                         ({players.length})
                     </span>
@@ -47,12 +47,12 @@ export function ChatMembersButton({
             >
                 <div className="border-b border-gold/25 px-3 py-2.5">
                     <p className="font-sans text-[10px] font-medium tracking-[0.2em] text-gold uppercase">
-                        {t('Leden')}
+                        {t('Members')}
                     </p>
                 </div>
                 {players.length === 0 ? (
                     <p className="px-3 py-6 text-center font-sans text-[12px] text-sand">
-                        {t('Nog geen spelers')}
+                        {t('No players yet')}
                     </p>
                 ) : (
                     <ul className="max-h-72 overflow-y-auto py-1">

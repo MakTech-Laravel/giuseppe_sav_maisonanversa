@@ -133,13 +133,13 @@ export default function FaqsIndex({
                 <AdminPageHeader
                     title={t('FAQ')}
                     description={t(
-                        'Beheer veelgestelde vragen voor product en contact.',
+                        'Manage frequently asked questions for product and contact.',
                     )}
                     icon={CircleHelp}
                 >
                     <Button asChild>
                         <Link href={faqs.create(locale)}>
-                            <Plus className="h-4 w-4" /> {t('FAQ toevoegen')}
+                            <Plus className="h-4 w-4" /> {t('Add FAQ')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -147,7 +147,7 @@ export default function FaqsIndex({
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                     <div className="relative sm:col-span-2">
                         <Label htmlFor="faq-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -155,8 +155,8 @@ export default function FaqsIndex({
                             className="pl-9"
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op vraag of antwoord…')}
-                            aria-label={t('Zoeken')}
+                            placeholder={t('Search by question or answer…')}
+                            aria-label={t('Search')}
                         />
                     </div>
                     <Select value={context} onValueChange={setContext}>
@@ -164,11 +164,11 @@ export default function FaqsIndex({
                             className="w-full"
                             aria-label={t('Context')}
                         >
-                            <SelectValue placeholder={t('Alle contexten')} />
+                            <SelectValue placeholder={t('All contexts')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle contexten')}
+                                {t('All contexts')}
                             </SelectItem>
                             {contexts.map((option) => (
                                 <SelectItem
@@ -185,17 +185,17 @@ export default function FaqsIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             <SelectItem value="published">
-                                {t('Gepubliceerd')}
+                                {t('Published')}
                             </SelectItem>
                             <SelectItem value="draft">
-                                {t('Concept')}
+                                {t('Draft')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -205,14 +205,14 @@ export default function FaqsIndex({
                     >
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Per pagina')}
+                            aria-label={t('Per page')}
                         >
-                            <SelectValue placeholder={t('Per pagina')} />
+                            <SelectValue placeholder={t('Per page')} />
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
                                 <SelectItem key={option} value={String(option)}>
-                                    {t('{{count}} per pagina', {
+                                    {t('{{count}} per page', {
                                         count: option,
                                     })}
                                 </SelectItem>
@@ -227,7 +227,7 @@ export default function FaqsIndex({
                             className="w-full sm:col-span-2 lg:col-span-4 xl:col-span-5 xl:w-auto xl:justify-self-start"
                         >
                             <X className="h-4 w-4" />
-                            {t('Filters wissen')}
+                            {t('Clear filters')}
                         </Button>
                     ) : null}
                 </div>
@@ -236,12 +236,12 @@ export default function FaqsIndex({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Vraag')}</TableHead>
+                                <TableHead>{t('Question')}</TableHead>
                                 <TableHead>{t('Context')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
-                                <TableHead>{t('Volgorde')}</TableHead>
+                                <TableHead>{t('Order')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -252,7 +252,7 @@ export default function FaqsIndex({
                                         colSpan={5}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen FAQs gevonden.')}
+                                        {t('No FAQs found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -272,8 +272,8 @@ export default function FaqsIndex({
                                         <TableCell>
                                             <Badge variant="secondary">
                                                 {faq.is_published
-                                                    ? t('Gepubliceerd')
-                                                    : t('Concept')}
+                                                    ? t('Published')
+                                                    : t('Draft')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>{faq.sort_order}</TableCell>
@@ -290,7 +290,7 @@ export default function FaqsIndex({
                                                     })}
                                                 >
                                                     <Eye className="h-4 w-4" />
-                                                    {t('Bekijken')}
+                                                    {t('View')}
                                                 </Link>
                                             </Button>
                                             <Button
@@ -305,12 +305,12 @@ export default function FaqsIndex({
                                                     })}
                                                 >
                                                     <Pencil className="h-4 w-4" />
-                                                    {t('Bewerken')}
+                                                    {t('Edit')}
                                                 </Link>
                                             </Button>
                                             <ConfirmDeleteDialog
                                                 description={t(
-                                                    'Deze FAQ wordt permanent verwijderd.',
+                                                    'This FAQ will be permanently deleted.',
                                                 )}
                                                 onConfirm={() =>
                                                     router.delete(
@@ -326,7 +326,7 @@ export default function FaqsIndex({
                                                     size="sm"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                    {t('Verwijderen')}
+                                                    {t('Remove')}
                                                 </Button>
                                             </ConfirmDeleteDialog>
                                         </TableCell>

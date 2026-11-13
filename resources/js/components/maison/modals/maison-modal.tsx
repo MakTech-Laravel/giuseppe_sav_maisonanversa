@@ -188,7 +188,7 @@ export function MaisonModal({
                         className="absolute top-5 right-5 font-sans text-lg text-stone transition-colors hover:text-choc"
                     >
                         <span aria-hidden="true">✕</span>
-                        <span className="sr-only">{t('Sluiten')}</span>
+                        <span className="sr-only">{t('Close')}</span>
                     </button>
 
                     {children}

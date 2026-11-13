@@ -32,7 +32,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
     const locale = wayfinderLocale();
 
     function removeMember(memberId: string) {
-        if (!window.confirm(t('Lid verwijderen uit Founding Circle?'))) {
+        if (!window.confirm(t('Remove member from Founding Circle?'))) {
             return;
         }
 
@@ -51,13 +51,13 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                 <AdminPageHeader
                     title={t('Founding Circle')}
                     description={t(
-                        'Bekijk Founding Edition-leden. Wijs plaatsen toe via het Naamregister — elke rij is al een editienummer.',
+                        'View Founding Edition members. Assign places from the Name register — each row already is an edition number.',
                     )}
                     icon={UsersRound}
                 >
                     <Button asChild>
                         <Link href={circleRoutes.register(locale)}>
-                            <BookText className="h-4 w-4" /> {t('Naamregister')}
+                            <BookText className="h-4 w-4" /> {t('Name register')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -66,14 +66,14 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Editie')}</TableHead>
-                                <TableHead>{t('Lid')}</TableHead>
+                                <TableHead>{t('Edition')}</TableHead>
+                                <TableHead>{t('Member')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    {t('Ingeschreven op')}
+                                    {t('Joined')}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -85,7 +85,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
                                         {t(
-                                            'Nog geen leden. Open het Naamregister om een klant op een plaats te zetten.',
+                                            'No members yet. Open the Name register to place a customer on a number.',
                                         )}
                                     </TableCell>
                                 </TableRow>
@@ -137,7 +137,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                                                             member.id,
                                                         ),
                                                     })}
-                                                    title={t('Lid bekijken')}
+                                                    title={t('View member')}
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Link>
@@ -150,7 +150,7 @@ export default function CircleIndex({ members }: { members: CircleMember[] }) {
                                                     removeMember(member.id)
                                                 }
                                             >
-                                                {t('Verwijderen')}
+                                                {t('Remove')}
                                             </Button>
                                         </TableCell>
                                     </TableRow>

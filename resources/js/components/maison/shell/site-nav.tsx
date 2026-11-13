@@ -143,7 +143,7 @@ export function SiteNav() {
                                         onClick={() => setOpenedOn(null)}
                                         className="flex min-h-11 items-center justify-between gap-3 py-2 font-sans text-[10px] tracking-[0.16em] text-cream/80 uppercase hover:text-gold"
                                     >
-                                        <span>{t('Het register')}</span>
+                                        <span>{t('The register')}</span>
                                         <span className="text-gold">
                                             {foundingRegister.inscribed_count}/
                                             {foundingRegister.places_total}
@@ -151,7 +151,7 @@ export function SiteNav() {
                                     </a>
                                     {foundingRegister.latest_entry && (
                                         <p className="font-sans text-[10px] tracking-[0.08em] text-sand">
-                                            {t('Laatste inschrijving')}{' '}
+                                            {t('Latest inscription')}{' '}
                                             {
                                                 foundingRegister.latest_entry
                                                     .number

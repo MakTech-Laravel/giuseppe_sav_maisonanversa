@@ -28,13 +28,13 @@ export default function FeedbackIndex({
             <Head title={t('Feedback')} />
             <InquiryInbox
                 title={t('Feedback')}
-                description={t('Feedback van bezoekers, nieuwste eerst.')}
+                description={t('Visitor feedback, newest first.')}
                 icon={MessageSquareQuote}
                 inquiries={inquiries}
                 filters={filters}
                 perPageOptions={perPageOptions}
                 routes={feedback as InquiryRouteHelpers}
-                emptyLabel={t('Geen aanvragen gevonden.')}
+                emptyLabel={t('No requests found.')}
             />
         </>
     );

@@ -34,7 +34,7 @@ class RealtimeController extends Controller
 
         $event = new RealtimePrivateTestEvent(
             user: $user,
-            message: 'Privé-kanaal test ontvangen.',
+            message: 'Private channel test received.',
             triggeredAt: now()->toIso8601String(),
         );
 

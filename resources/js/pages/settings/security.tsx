@@ -56,16 +56,16 @@ export default function Security({
 
     return (
         <>
-            <Head title={t('Beveiligingsinstellingen')} />
+            <Head title={t('Security settings')} />
 
-            <h1 className="sr-only">{t('Beveiligingsinstellingen')}</h1>
+            <h1 className="sr-only">{t('Security settings')}</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title={t('Wachtwoord bijwerken')}
+                    title={t('Update password')}
                     description={t(
-                        'Gebruik een lang, uniek wachtwoord. Je hebt jouw huidige wachtwoord nodig om het te wijzigen.',
+                        'Use a long, unique password. You will need your current password to change it.',
                     )}
                 />
 
@@ -95,7 +95,7 @@ export default function Security({
                         <>
                             <div className="grid gap-2">
                                 <Label htmlFor="current_password">
-                                    {t('Huidig wachtwoord')}
+                                    {t('Current password')}
                                 </Label>
 
                                 <PasswordInput
@@ -104,7 +104,7 @@ export default function Security({
                                     name="current_password"
                                     className="mt-1 block w-full"
                                     autoComplete="current-password"
-                                    placeholder={t('Huidig wachtwoord')}
+                                    placeholder={t('Current password')}
                                 />
 
                                 <InputError message={errors.current_password} />
@@ -112,7 +112,7 @@ export default function Security({
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password">
-                                    {t('Nieuw wachtwoord')}
+                                    {t('New password')}
                                 </Label>
 
                                 <PasswordInput
@@ -121,7 +121,7 @@ export default function Security({
                                     name="password"
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
-                                    placeholder={t('Nieuw wachtwoord')}
+                                    placeholder={t('New password')}
                                     passwordrules={passwordRules}
                                 />
 
@@ -130,7 +130,7 @@ export default function Security({
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    {t('Bevestig wachtwoord')}
+                                    {t('Confirm password')}
                                 </Label>
 
                                 <PasswordInput
@@ -138,7 +138,7 @@ export default function Security({
                                     name="password_confirmation"
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
-                                    placeholder={t('Bevestig wachtwoord')}
+                                    placeholder={t('Confirm password')}
                                     passwordrules={passwordRules}
                                 />
 
@@ -152,7 +152,7 @@ export default function Security({
                                     disabled={processing}
                                     data-test="update-password-button"
                                 >
-                                    {t('Wachtwoord bijwerken')}
+                                    {t('Update password')}
                                 </Button>
                             </div>
                         </>
@@ -164,16 +164,16 @@ export default function Security({
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title={t('Tweestapsverificatie')}
+                        title={t('Two-factor authentication')}
                         description={t(
-                            'Voeg een extra stap toe bij het inloggen met een code uit een authenticator-app op jouw telefoon.',
+                            'Add a second step at login with a code from an authenticator app on your phone.',
                         )}
                     />
                     {twoFactorEnabled ? (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
                                 {t(
-                                    'Je wordt bij het inloggen gevraagd om een beveiligingscode, die je uit een TOTP-ondersteunde app op jouw telefoon haalt.',
+                                    'You will be prompted for a secure code during login, which you can retrieve from a TOTP-supported application on your phone.',
                                 )}
                             </p>
 
@@ -185,7 +185,7 @@ export default function Security({
                                             type="submit"
                                             disabled={processing}
                                         >
-                                            {t('2FA uitschakelen')}
+                                            {t('Disable 2FA')}
                                         </Button>
                                     )}
                                 </Form>
@@ -201,7 +201,7 @@ export default function Security({
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
                                 {t(
-                                    'Wanneer ingeschakeld, word je bij het inloggen gevraagd om een beveiligingscode. Deze code komt uit een TOTP-ondersteunde app op jouw telefoon.',
+                                    'When enabled, you will be prompted for a secure code during login. This code comes from a TOTP-supported application on your phone.',
                                 )}
                             </p>
 
@@ -211,7 +211,7 @@ export default function Security({
                                         onClick={() => setShowSetupModal(true)}
                                     >
                                         <ShieldCheck />
-                                        {t('Setup voortzetten')}
+                                        {t('Continue setup')}
                                     </Button>
                                 ) : (
                                     <Form
@@ -225,7 +225,7 @@ export default function Security({
                                                 type="submit"
                                                 disabled={processing}
                                             >
-                                                {t('2FA inschakelen')}
+                                                {t('Enable 2FA')}
                                             </Button>
                                         )}
                                     </Form>
@@ -254,7 +254,7 @@ export default function Security({
 Security.layout = {
     breadcrumbs: [
         {
-            title: 'Beveiligingsinstellingen',
+            title: 'Security settings',
             href: edit(wayfinderLocale()),
         },
     ],

@@ -15,18 +15,18 @@ export function CirclePortal() {
         return (
             <div className="my-12 border border-gold/25 bg-cream2 p-8 text-center">
                 <p className="font-serif text-2xl text-choc">
-                    {t('Jouw Founding Circle-kaart')}
+                    {t('Your Founding Circle card')}
                 </p>
                 <p className="mt-3 text-sm text-choc3">
                     {t(
-                        'Open jouw digitale kaart en Heritage Passport in jouw account.',
+                        'Open your digital card and Heritage Passport in your account.',
                     )}
                 </p>
                 <Link
                     href={`/${locale}/member/circle`}
                     className="mt-6 inline-flex border border-gold bg-gold px-6 py-3 font-sans text-[10px] tracking-[0.2em] text-choc uppercase no-underline"
                 >
-                    {t('Naar mijn kaart')}
+                    {t('To my card')}
                 </Link>
             </div>
         );
@@ -35,18 +35,18 @@ export function CirclePortal() {
     return (
         <div className="my-12 border border-gold/25 bg-cream2 p-8 text-center">
             <p className="font-serif text-2xl text-choc">
-                {t('Het officiële register')}
+                {t('The Official Register')}
             </p>
             <p className="mt-3 text-sm text-choc3">
                 {t(
-                    'Honderd plaatsen. Bekijk wie het huis vanaf het begin steunt, of kies Heritage Nº 001 om jouw nummer te reserveren.',
+                    'One hundred places. See who has supported the house from the beginning, or choose Heritage Nº 001 to reserve your number.',
                 )}
             </p>
             <Link
                 href={`/${locale}/founding-circle/register`}
                 className="mt-6 inline-flex border border-gold bg-gold px-6 py-3 font-sans text-[10px] tracking-[0.2em] text-choc uppercase no-underline"
             >
-                {t('Bekijk het register')}
+                {t('View the Register')}
             </Link>
         </div>
     );

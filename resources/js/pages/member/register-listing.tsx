@@ -21,20 +21,20 @@ type Listing = {
 const OPTIONS = [
     {
         value: 'full',
-        title: 'Volledige naam',
-        description: 'Jouw voor- en achternaam worden publiek getoond.',
+        title: 'Full name',
+        description: 'Your first and last name are shown publicly.',
         preview: 'full',
     },
     {
         value: 'initial',
-        title: 'Voornaam en initiaal',
-        description: 'Een discrete publieke vermelding.',
+        title: 'First name and initial',
+        description: 'A discreet public listing.',
         preview: 'initial',
     },
     {
         value: 'private',
         title: 'Privé',
-        description: 'Alleen jouw nummer wordt getoond. Dit is de standaard.',
+        description: 'Only your number is shown. This is the default.',
         preview: 'private',
     },
 ] as const;
@@ -48,12 +48,12 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
     if (listing === null) {
         return (
             <>
-                <Head title={t('Jouw registervermelding')} />
-                <MemberPageHeader title={t('Jouw registervermelding')} />
+                <Head title={t('Your register listing')} />
+                <MemberPageHeader title={t('Your register listing')} />
                 <MemberEmptyState
-                    title={t('Nog geen editie toegewezen')}
+                    title={t('No edition assigned yet')}
                     description={t(
-                        'Je bent lid van de Founding Circle, maar er is nog geen Heritage-editie aan jouw account gekoppeld. Neem contact op met het team voor meer informatie.',
+                        'You are a Founding Circle member, but no Heritage edition is linked to your account yet. Contact the team for more information.',
                     )}
                 />
             </>
@@ -62,14 +62,14 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
 
     return (
         <>
-            <Head title={t('Jouw registervermelding')} />
+            <Head title={t('Your register listing')} />
             <MemberPageHeader
-                eyebrow={t('Founding Circle · lid nr. {{number}}', {
+                eyebrow={t('Founding Circle · member no. {{number}}', {
                     number: listing.number,
                 })}
-                title={t('Jouw registervermelding')}
+                title={t('Your register listing')}
                 description={t(
-                    'Jouw lidmaatschap staat in elk geval in het officiële archief. Kies hoe jouw plaats verschijnt in het publieke Founding Circle-register.',
+                    'Your membership is in the official archive either way. Choose how your place appears in the public Founding Circle register.',
                 )}
             />
 
@@ -159,7 +159,7 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
                                 />
                                 <span>
                                     {t(
-                                        'Ik ga ermee akkoord dat de naam hierboven wordt gepubliceerd in het publieke register op maisonanversa.com. Ik kan dit op elk moment wijzigen of intrekken.',
+                                        'I agree that the name above will be published in the public register on maisonanversa.com. I can change or withdraw this at any time.',
                                     )}
                                 </span>
                             </label>
@@ -174,10 +174,10 @@ export default function RegisterListing({ listing }: { listing: Listing | null }
                                 disabled={processing || (needsConsent && !consent)}
                                 className="min-h-11 bg-gold px-5 font-sans text-[11px] tracking-[0.16em] text-choc uppercase disabled:opacity-50"
                             >
-                                {t('Vermelding opslaan')}
+                                {t('Save listing')}
                             </button>
                             <p className="text-sm text-sand">
-                                {t('Wijzigingen verschijnen meteen in het register.')}
+                                {t('Changes appear in the register immediately.')}
                             </p>
                         </div>
                     </>

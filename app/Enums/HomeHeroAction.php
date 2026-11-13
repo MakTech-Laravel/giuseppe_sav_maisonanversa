@@ -20,13 +20,13 @@ enum HomeHeroAction: string
         return match ($this) {
             self::FoundingProduct => 'Heritage Nº 001',
             self::FoundingCircle => 'Founding Circle',
-            self::RegisterFoundingCircle => 'Founding Circle registreren',
+            self::RegisterFoundingCircle => 'Register for Founding Circle',
             self::Community => 'Gemeenschap',
             self::ClubCorner => 'Club Corner',
             self::Journal => 'Journal',
             self::MaisonPage => 'Maison-pagina',
             self::Newsletter => 'Heritage Letter',
-            self::External => 'Externe link',
+            self::External => 'External link',
             self::Hidden => 'Verborgen',
         };
     }

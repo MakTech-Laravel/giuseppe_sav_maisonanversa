@@ -46,10 +46,10 @@ export default function EditSeoMeta({ row }: SeoMetaEditProps) {
 
     return (
         <>
-            <Head title={t('SEO-meta bewerken')} />
+            <Head title={t('Edit SEO meta')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('SEO-meta bewerken')}
+                    title={t('Edit SEO meta')}
                     description={row.page_key}
                     icon={Globe}
                 >
@@ -60,7 +60,7 @@ export default function EditSeoMeta({ row }: SeoMetaEditProps) {
                                 seoMeta: Number(row.id),
                             })}
                         >
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -68,17 +68,17 @@ export default function EditSeoMeta({ row }: SeoMetaEditProps) {
                 <form onSubmit={submit} className="w-full space-y-6">
                     <AdminResourceShell
                         aside={
-                            <AdminPanel title={t('Pagina')}>
+                            <AdminPanel title={t('Page')}>
                                 <div className="grid gap-4">
                                     <div className="grid gap-2">
-                                        <Label>{t('Pagina')}</Label>
+                                        <Label>{t('Page')}</Label>
                                         <p className="rounded-md border bg-muted/40 px-3 py-2 font-mono text-sm">
                                             {row.page_key}
                                         </p>
                                     </div>
                                     <p className="text-xs text-muted-foreground">
                                         {t(
-                                            'Tekst op dit formulier is de Nederlandse bron. DeepL vult EN en FR na opslaan.',
+                                            'Copy on this form is the Dutch source. DeepL fills EN and FR after saving.',
                                         )}
                                     </p>
                                 </div>
@@ -86,14 +86,14 @@ export default function EditSeoMeta({ row }: SeoMetaEditProps) {
                         }
                     >
                         <AdminPanel
-                            title={t('Inhoud')}
+                            title={t('Content')}
                             description={t(
-                                'Bewerk de SEO-titel en beschrijving voor deze pagina.',
+                                'Edit the SEO title and description for this page.',
                             )}
                         >
                             <div className="grid gap-5">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="title">{t('Titel')}</Label>
+                                    <Label htmlFor="title">{t('Title')}</Label>
                                     <Input
                                         id="title"
                                         value={form.data.title}
@@ -108,7 +108,7 @@ export default function EditSeoMeta({ row }: SeoMetaEditProps) {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="description">
-                                        {t('Beschrijving')}
+                                        {t('Description')}
                                     </Label>
                                     <Textarea
                                         id="description"
@@ -134,7 +134,7 @@ export default function EditSeoMeta({ row }: SeoMetaEditProps) {
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                         <Button variant="outline" asChild>
                             <Link
@@ -143,7 +143,7 @@ export default function EditSeoMeta({ row }: SeoMetaEditProps) {
                                     seoMeta: Number(row.id),
                                 })}
                             >
-                                {t('Annuleren')}
+                                {t('Cancel')}
                             </Link>
                         </Button>
                     </div>

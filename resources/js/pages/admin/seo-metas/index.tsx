@@ -34,7 +34,7 @@ export default function SeoMetasIndex({ rows }: { rows: SeoMetaRow[] }) {
                 <AdminPageHeader
                     title={t('SEO Meta')}
                     description={t(
-                        'Beheer SEO-titels en beschrijvingen per pagina.',
+                        'Manage SEO titles and descriptions per page.',
                     )}
                     icon={Globe}
                 />
@@ -42,11 +42,11 @@ export default function SeoMetasIndex({ rows }: { rows: SeoMetaRow[] }) {
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Pagina')}</TableHead>
-                                <TableHead>{t('Titel')}</TableHead>
-                                <TableHead>{t('Beschrijving')}</TableHead>
+                                <TableHead>{t('Page')}</TableHead>
+                                <TableHead>{t('Title')}</TableHead>
+                                <TableHead>{t('Description')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -60,7 +60,7 @@ export default function SeoMetasIndex({ rows }: { rows: SeoMetaRow[] }) {
                                                 variant="secondary"
                                                 className="mt-1 block w-fit"
                                             >
-                                                {t('Vertalingen ontbreken')}
+                                                {t('Translations missing')}
                                             </Badge>
                                         ) : null}
                                     </TableCell>
@@ -81,7 +81,7 @@ export default function SeoMetasIndex({ rows }: { rows: SeoMetaRow[] }) {
                                                     locale,
                                                     seoMeta: Number(row.id),
                                                 })}
-                                                title={t('Voorbeeld')}
+                                                title={t('Preview')}
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
@@ -96,7 +96,7 @@ export default function SeoMetasIndex({ rows }: { rows: SeoMetaRow[] }) {
                                                     locale,
                                                     seoMeta: Number(row.id),
                                                 })}
-                                                title={t('Bewerken')}
+                                                title={t('Edit')}
                                             >
                                                 <Pencil className="h-4 w-4" />
                                             </Link>

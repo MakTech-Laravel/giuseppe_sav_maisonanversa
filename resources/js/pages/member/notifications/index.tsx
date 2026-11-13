@@ -62,12 +62,12 @@ export default function MemberNotificationsIndex({
 
     return (
         <>
-            <Head title={t('Meldingen')} />
+            <Head title={t('Notifications')} />
             <MemberPageHeader
                 eyebrow={t('Account')}
-                title={t('Meldingen')}
+                title={t('Notifications')}
                 description={t(
-                    'Jouw persoonlijke meldingen en systeemberichten.',
+                    'Your personal notifications and system messages.',
                 )}
             />
 
@@ -111,15 +111,15 @@ export default function MemberNotificationsIndex({
                     disabled={unreadCount === 0}
                     className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:text-cream disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                    {t('Alles gelezen')}
+                    {t('Mark all as read')}
                 </button>
             </div>
 
             {rows.data.length === 0 ? (
                 <MemberEmptyState
-                    title={t('Geen meldingen gevonden.')}
+                    title={t('No notifications found.')}
                     description={t(
-                        'Nieuwe meldingen verschijnen hier zodra ze binnenkomen.',
+                        'New notifications appear here as soon as they arrive.',
                     )}
                 />
             ) : (
@@ -150,7 +150,7 @@ export default function MemberNotificationsIndex({
                                         </span>
                                         {!item.read ? (
                                             <span
-                                                aria-label={t('Ongelezen')}
+                                                aria-label={t('Unread')}
                                                 className="size-2 shrink-0 rounded-full bg-gold"
                                             />
                                         ) : null}
@@ -175,7 +175,7 @@ export default function MemberNotificationsIndex({
 
             {rows.last_page > 1 ? (
                 <nav
-                    aria-label={t('Paginering')}
+                    aria-label={t('Pagination')}
                     className="mt-6 flex items-center justify-between gap-3"
                 >
                     {rows.prev_page_url ? (
@@ -184,7 +184,7 @@ export default function MemberNotificationsIndex({
                             preserveScroll
                             className={pagerClassName}
                         >
-                            ← {t('Vorige')}
+                            ← {t('Previous')}
                         </Link>
                     ) : (
                         <span />
@@ -198,7 +198,7 @@ export default function MemberNotificationsIndex({
                             preserveScroll
                             className={pagerClassName}
                         >
-                            {t('Volgende')} →
+                            {t('Next')} →
                         </Link>
                     ) : (
                         <span />

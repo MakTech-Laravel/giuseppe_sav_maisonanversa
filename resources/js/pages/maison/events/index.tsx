@@ -24,9 +24,9 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
     const hasScrollProp = page.scrollProps?.events != null;
 
     const tabs: TabDefinition<SessionTab>[] = [
-        { id: 'open', label: 'Open evenementen', count: counts.open },
+        { id: 'open', label: 'Open events', count: counts.open },
         { id: 'mine', label: 'Mijn aanmeldingen', count: counts.mine },
-        { id: 'past', label: 'Afgelopen evenementen', count: counts.past },
+        { id: 'past', label: 'Past events', count: counts.past },
     ];
 
     const cards = (events?.data ?? []).map((event, index) => (
@@ -43,9 +43,9 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
 
             <PageHero
                 eyebrow={t('Community')}
-                title={t('Exclusieve Evenementen')}
+                title={t('Exclusive Events')}
                 subtitle={t(
-                    'Alleen zichtbaar voor ingelogde leden. Aanmelden is gratis tenzij anders vermeld.',
+                    'Visible only to signed-in members. Joining is free unless stated otherwise.',
                 )}
             />
 
@@ -55,17 +55,17 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
                 <Wrap className="px-6 md:px-10 lg:px-20">
                     <div className="py-10">
                         <h2 className="font-serif text-[28px] font-medium text-choc">
-                            {t('Exclusieve Evenementen')}
+                            {t('Exclusive Events')}
                         </h2>
                         <p className="mt-1 font-sans text-sm text-choc3">
-                            {t('Georganiseerd door Maison Anversa.')}
+                            {t('Hosted by Maison Anversa.')}
                         </p>
                     </div>
 
                     <SessionTabs
                         tabs={tabs}
                         activeTab={tab}
-                        ariaLabel={t('Exclusieve Evenementen')}
+                        ariaLabel={t('Exclusive Events')}
                         hrefFor={(next) =>
                             eventRoutes.index.url(locale, {
                                 query: { tab: next },
@@ -90,8 +90,8 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
                                             className="cursor-pointer border border-gold/30 px-8 py-3.5 font-sans text-[10px] font-medium tracking-[0.2em] text-choc uppercase transition-colors hover:border-gold hover:bg-gold/10 disabled:opacity-50"
                                         >
                                             {loading
-                                                ? t('Laden...')
-                                                : t('Meer laden')}
+                                                ? t('Loading...')
+                                                : t('Load more')}
                                         </button>
                                     </div>
                                 ) : null
@@ -114,9 +114,9 @@ function EmptyState({ tab }: { tab: SessionTab }) {
     const { t } = useTranslation();
 
     const copy: Record<SessionTab, string> = {
-        open: 'Nog geen evenementen gepland.',
-        mine: 'Je bent nog niet aangemeld voor een evenement.',
-        past: 'Je hebt nog geen afgelopen evenementen.',
+        open: 'No events scheduled yet.',
+        mine: 'You have not signed up for an event yet.',
+        past: 'You have no past events yet.',
     };
 
     return (

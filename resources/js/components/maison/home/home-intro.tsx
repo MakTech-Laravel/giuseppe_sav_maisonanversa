@@ -11,16 +11,16 @@ export function HomeIntro() {
         <Section tone="cream" className="py-20 text-center">
             <Wrap>
                 <Eyebrow tone="gold2" className="text-center">
-                    {t('Waarom wij bestaan')}
+                    {t('Why we exist')}
                 </Eyebrow>
                 <GoldRule center className="mx-auto" />
                 <Reveal>
                     <p className="mx-auto max-w-205 font-serif text-[clamp(24px,3vw,42px)] leading-[1.5] text-choc">
-                        {t('De wereld heeft geen extra producten nodig.')}
+                        {t('The world does not need more products.')}
                         <br />
-                        {t('Zij heeft meer')}{' '}
-                        <em className="text-gold2 italic">{t('betekenis')}</em>{' '}
-                        {t('nodig.')}
+                        {t('It needs more')}{' '}
+                        <em className="text-gold2 italic">{t('meaning')}</em>{' '}
+                        {t('.')}
                     </p>
                 </Reveal>
             </Wrap>

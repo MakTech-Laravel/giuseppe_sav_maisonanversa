@@ -197,14 +197,14 @@ export function registerFlashToasts(i18n?: I18n): void {
         const status = response?.status;
         const message =
             typeof status === 'number'
-                ? translate('Verzoek mislukt ({{status}})', { status })
-                : translate('Verzoek mislukt');
+                ? translate('Request failed ({{status}})', { status })
+                : translate('Request failed');
 
         toast.error(message);
     });
 
     router.on('networkError', () => {
-        toast.error(translate('Netwerkfout. Probeer het opnieuw.'));
+        toast.error(translate('Network error. Please try again.'));
     });
 }
 

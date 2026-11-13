@@ -42,12 +42,12 @@ export default function MemberLidpaspoort({
 
     return (
         <>
-            <Head title={t('Lidpaspoort')} />
+            <Head title={t('Member passport')} />
             <MemberPageHeader
-                eyebrow={t('Lidmaatschap')}
-                title={t('Lidpaspoort')}
+                eyebrow={t('Membership')}
+                title={t('Member passport')}
                 description={t(
-                    'Jouw digitale paspoort in het huis — lidmaatschap, badges, sessies en evenementen. Dit is los van het fysieke Heritage Passport.',
+                    'Your digital passport in the house — membership, badges, sessions and events. This is separate from the physical Heritage Passport.',
                 )}
             />
 
@@ -55,7 +55,7 @@ export default function MemberLidpaspoort({
                 <div className="space-y-6">
                     <MemberPanel>
                         <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                            {t('Lidmaatschap')}
+                            {t('Membership')}
                         </p>
                         <p className="mt-3 font-serif text-[28px] text-cream">
                             {passport.membership.status_label}
@@ -76,7 +76,7 @@ export default function MemberLidpaspoort({
                         {passport.badges.length === 0 ? (
                             <p className="mt-4 font-sans text-sm text-sand">
                                 {t(
-                                    'Nog geen badges. Plan een sessie of meld je aan voor een evenement.',
+                                    'No badges yet. Plan a session or RSVP to an event.',
                                 )}
                             </p>
                         ) : (
@@ -95,19 +95,19 @@ export default function MemberLidpaspoort({
 
                     <MemberPanel>
                         <p className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                            {t('Activiteit')}
+                            {t('Activity')}
                         </p>
                         <dl className="mt-4 grid gap-3 font-sans text-sm text-sand">
                             <div className="flex justify-between gap-4">
-                                <dt>{t('Georganiseerde sessies')}</dt>
+                                <dt>{t('Hosted sessions')}</dt>
                                 <dd>{passport.sessions.hosted_count}</dd>
                             </div>
                             <div className="flex justify-between gap-4">
-                                <dt>{t('Deelgenomen sessies')}</dt>
+                                <dt>{t('Sessions joined')}</dt>
                                 <dd>{passport.sessions.joined_count}</dd>
                             </div>
                             <div className="flex justify-between gap-4">
-                                <dt>{t('Afgelopen evenementen')}</dt>
+                                <dt>{t('Past events')}</dt>
                                 <dd>{passport.events.past_count}</dd>
                             </div>
                         </dl>
@@ -118,21 +118,21 @@ export default function MemberLidpaspoort({
                     <section>
                         <div className="mb-4 flex items-end justify-between gap-4">
                             <h2 className="font-serif text-[24px] text-cream">
-                                {t('Komende sessies')}
+                                {t('Upcoming sessions')}
                             </h2>
                             <Link
                                 href={`/${locale}/community/sessions`}
                                 className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase hover:text-gold2"
                             >
-                                {t('Alle sessies')}
+                                {t('All sessions')}
                             </Link>
                         </div>
 
                         {passport.sessions.upcoming.length === 0 ? (
                             <MemberEmptyState
-                                title={t('Geen komende sessies')}
+                                title={t('No upcoming sessions')}
                                 description={t(
-                                    'Plan een sessie of sluit je aan bij een open sessie in de Community.',
+                                    'Plan a session or join an open session in the Community.',
                                 )}
                             />
                         ) : (
@@ -150,21 +150,21 @@ export default function MemberLidpaspoort({
                     <section>
                         <div className="mb-4 flex items-end justify-between gap-4">
                             <h2 className="font-serif text-[24px] text-cream">
-                                {t('Komende evenementen')}
+                                {t('Upcoming events')}
                             </h2>
                             <Link
                                 href={`/${locale}/community/events`}
                                 className="font-sans text-[10px] tracking-[0.16em] text-gold uppercase hover:text-gold2"
                             >
-                                {t('Alle evenementen')}
+                                {t('All events')}
                             </Link>
                         </div>
 
                         {passport.events.upcoming.length === 0 ? (
                             <MemberEmptyState
-                                title={t('Geen komende evenementen')}
+                                title={t('No upcoming events')}
                                 description={t(
-                                    'Bekijk de exclusieve evenementen van Maison Anversa in de Community.',
+                                    'Browse Maison Anversa exclusive events in the Community.',
                                 )}
                             />
                         ) : (

@@ -11,33 +11,33 @@ import { usePurchasesPaused } from '@/hooks/use-purchases-paused';
 const BENEFITS = [
     {
         num: '01',
-        title: 'Vroege Toegang',
-        desc: 'Als eerste toegang tot alle toekomstige releases en collecties van Maison Anversa — minimaal 48 uur voor het grote publiek.',
+        title: 'Early Access',
+        desc: 'First access to all future releases and collections of Maison Anversa — at least 48 hours before the general public.',
     },
     {
         num: '02',
-        title: 'Exclusieve Evenementen',
-        desc: 'Persoonlijke uitnodigingen voor Maison Anversa events: productpresentaties, padel sessies, clubavonden en pop-up evenementen in Europa.',
+        title: 'Exclusive Events',
+        desc: 'Personal invitations to Maison Anversa events: product presentations, padel sessions, club nights and pop-up events across Europe.',
     },
     {
         num: '03',
         title: 'Behind the Scenes',
-        desc: 'Persoonlijke updates van de oprichter over het merk: productontwikkeling, nieuwe collecties, reizen voor leveranciers, beslissingen achter de schermen.',
+        desc: 'Personal updates from the founder about the brand: product development, new collections, supplier trips, behind-the-scenes decisions.',
     },
     {
         num: '04',
-        title: 'Naamregistratie',
-        desc: 'Jouw naam wordt opgenomen in het officiële Founding Circle register — een document dat bij het merk bewaard wordt voor altijd.',
+        title: 'Name Registration',
+        desc: 'Your name will be included in the official Founding Circle register — a document kept with the brand forever.',
     },
     {
         num: '05',
-        title: 'Uniek Editienummer',
-        desc: 'Jouw editienummer (001–100) staat op het racket, het certificaat en het paspoort. Van je. Voor altijd.',
+        title: 'Unique Edition Number',
+        desc: 'Your edition number (001–100) is on the racket, certificate and passport. Yours. Forever.',
     },
     {
         num: '06',
-        title: 'Prioriteit Support',
-        desc: 'Alle vragen en verzoeken van Founding Members worden altijd als eerste behandeld. Reactietijd binnen 12 uur.',
+        title: 'Priority Support',
+        desc: 'All questions and requests from Founding Members are always handled first. Response time within 12 hours.',
     },
 ] as const;
 
@@ -51,14 +51,14 @@ export default function Circle() {
             <MaisonSeoHead />
 
             <PageHero
-                eyebrow={t('De eerste 100')}
+                eyebrow={t('The first 100')}
                 title={
                     <>
-                        {t('De')} <em>Founding Circle</em>
+                        {t('The')} <em>Founding Circle</em>
                     </>
                 }
                 subtitle={t(
-                    'Niet de eerste 100 klanten. De eerste 100 mensen die geloofden.',
+                    'Not the first 100 customers. The first 100 people who believed.',
                 )}
             />
 
@@ -66,11 +66,11 @@ export default function Circle() {
                 <Wrap>
                     <Reveal className="mx-auto mb-16 max-w-160 text-center">
                         <h2 className="mb-5 font-serif text-[clamp(30px,4vw,52px)] leading-[1.1] font-medium [&_em]:text-gold2 [&_em]:italic">
-                            {t('Jij was er bij het')} <em>{t('begin')}</em>
+                            {t('You were there at the')} <em>{t('beginning')}</em>
                         </h2>
                         <p className="text-base leading-[1.85] text-choc3">
                             {t(
-                                'De Founding Circle is de permanente gemeenschap van iedereen die Heritage Nº 001 koopt. Jouw lidmaatschap is levenslang. Jouw nummer is van jou — voor altijd. Dit is geen loyaliteitsprogramma. Dit is een erkenning.',
+                                'The Founding Circle is the permanent community of everyone who buys Heritage Nº 001. Your membership is lifelong. Your number is yours — forever. This is not a loyalty program. This is a recognition.',
                             )}
                         </p>
                     </Reveal>
@@ -114,11 +114,11 @@ export default function Circle() {
                             onClick={() => openPurchase()}
                             className="max-w-full px-4 text-center whitespace-normal"
                         >
-                            {t('Word Founding Member — Bekijk Heritage Nº 001')}
+                            {t('Become a Founding Member — View Heritage Nº 001')}
                         </MaisonButton>
                         {purchasesPaused ? (
                             <p className="mt-3 font-sans text-[10px] tracking-[0.12em] text-choc3">
-                                {t('Reserveren is tijdelijk gepauzeerd.')}
+                                {t('Reservations are temporarily paused.')}
                             </p>
                         ) : null}
                     </div>

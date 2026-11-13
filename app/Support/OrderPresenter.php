@@ -122,22 +122,22 @@ class OrderPresenter
         $stages = [
             [
                 'key' => OrderStatus::Paid,
-                'label' => __('Betaald'),
+                'label' => __('Paid'),
                 'at' => $order->created_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
             [
                 'key' => OrderStatus::Processing,
-                'label' => __('In verwerking'),
+                'label' => __('Processing'),
                 'at' => $order->processing_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
             [
                 'key' => OrderStatus::Shipped,
-                'label' => __('Verzonden'),
+                'label' => __('Shipped'),
                 'at' => $order->shipped_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
             [
                 'key' => OrderStatus::Delivered,
-                'label' => __('Geleverd'),
+                'label' => __('Delivered'),
                 'at' => $order->delivered_at?->timezone(config('app.timezone'))->format('Y-m-d H:i') ?? '',
             ],
         ];
@@ -167,26 +167,26 @@ class OrderPresenter
     public function statusLabel(OrderStatus $status): string
     {
         return match ($status) {
-            OrderStatus::Incomplete => __('In behandeling'),
-            OrderStatus::Paid => __('Betaald'),
-            OrderStatus::Processing => __('In verwerking'),
-            OrderStatus::Canceled => __('Geannuleerd'),
-            OrderStatus::Failed => __('Mislukt'),
-            OrderStatus::Shipped => __('Verzonden'),
-            OrderStatus::Delivered => __('Geleverd'),
-            OrderStatus::Refunded => __('Terugbetaald'),
+            OrderStatus::Incomplete => __('Processing'),
+            OrderStatus::Paid => __('Paid'),
+            OrderStatus::Processing => __('Processing'),
+            OrderStatus::Canceled => __('Canceled'),
+            OrderStatus::Failed => __('Failed'),
+            OrderStatus::Shipped => __('Shipped'),
+            OrderStatus::Delivered => __('Delivered'),
+            OrderStatus::Refunded => __('Refunded'),
         };
     }
 
     public function paymentStatusLabel(PaymentStatus $status): string
     {
         return match ($status) {
-            PaymentStatus::Pending => __('Betaling in behandeling'),
-            PaymentStatus::Paid => __('Betaald'),
-            PaymentStatus::Failed => __('Betaling mislukt'),
-            PaymentStatus::Canceled => __('Betaling geannuleerd'),
-            PaymentStatus::PartiallyRefunded => __('Gedeeltelijk terugbetaald'),
-            PaymentStatus::Refunded => __('Terugbetaald'),
+            PaymentStatus::Pending => __('Payment pending'),
+            PaymentStatus::Paid => __('Paid'),
+            PaymentStatus::Failed => __('Payment failed'),
+            PaymentStatus::Canceled => __('Payment canceled'),
+            PaymentStatus::PartiallyRefunded => __('Partially refunded'),
+            PaymentStatus::Refunded => __('Refunded'),
         };
     }
 
@@ -201,7 +201,7 @@ class OrderPresenter
             : $order->latestPayment()->first();
 
         if ($payment?->status === PaymentStatus::PartiallyRefunded) {
-            return __('Gedeeltelijk terugbetaald');
+            return __('Partially refunded');
         }
 
         return $this->statusLabel($order->status);

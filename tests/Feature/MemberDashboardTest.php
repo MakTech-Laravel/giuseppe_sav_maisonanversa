@@ -267,15 +267,15 @@ test('the member nav includes the client feedback sections', function () {
 
     foreach ([
         "t('Dashboard')",
-        "t('Bestellingen')",
+        "t('Orders')",
         "t('Founding Circle')",
-        "t('Lidpaspoort')",
-        "t('Gemeenschap')",
+        "t('Member passport')",
+        "t('Community')",
         "t('Heritage Letter')",
-        "t('E-mailvoorkeuren')",
-        "t('Profiel & account')",
-        "t('Beveiliging')",
-        "t('Uitloggen')",
+        "t('Email preferences')",
+        "t('Profile & account')",
+        "t('Security')",
+        "t('Log out')",
     ] as $label) {
         expect($source)->toContain($label);
     }
@@ -289,11 +289,11 @@ test('the member nav shows Heritage Passport and Circle links only for Founding 
     $source = file_get_contents(resource_path('js/components/member/member-nav.tsx'));
 
     expect($source)
-        ->toContain("t('Mijn Heritage')")
-        ->toContain("t('Digitaal Heritage Passport')")
+        ->toContain("t('My Heritage')")
+        ->toContain("t('Digital Heritage Passport')")
         ->toContain("t('Founding Circle')")
-        ->toContain("t('Registervermelding')")
-        ->not->toContain("t('Racketregistratie')")
+        ->toContain("t('Register listing')")
+        ->not->toContain("t('Racket registration')")
         ->toContain('isFoundingCircle');
 });
 

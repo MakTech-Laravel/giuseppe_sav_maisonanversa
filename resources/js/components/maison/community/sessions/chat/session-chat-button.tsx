@@ -27,7 +27,7 @@ export function SessionChatButton({
         return null;
     }
 
-    const label = t('Open de sessiechat');
+    const label = t('Open the session chat');
     const href = isAdmin
         ? adminChat.show({
               locale,

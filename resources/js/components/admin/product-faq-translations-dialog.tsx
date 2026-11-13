@@ -139,7 +139,7 @@ export function ProductFaqTranslationsDialog({
                     className={triggerClassName}
                 >
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -147,10 +147,10 @@ export function ProductFaqTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('FAQ-vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('FAQ translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk vertalingen per taal voor deze product-FAQ. DeepL vertaalt vanuit de brontekst.',
+                            'Edit translations per language for this product FAQ. DeepL translates from the source text.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -159,7 +159,7 @@ export function ProductFaqTranslationsDialog({
                     <Alert className="border-primary/35 bg-muted text-foreground">
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
-                            {t('Sommige FAQ-vertalingen ontbreken nog.')}
+                            {t('Some FAQ translations are still missing.')}
                         </AlertDescription>
                     </Alert>
                 ) : null}
@@ -185,7 +185,7 @@ export function ProductFaqTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-product-faq-question`}>
-                            {t('Vraag')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Question')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Textarea
                             id={`${activeLocale}-product-faq-question`}
@@ -208,7 +208,7 @@ export function ProductFaqTranslationsDialog({
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor={`${activeLocale}-product-faq-answer`}>
-                            {t('Antwoord')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Answer')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <Textarea
                             id={`${activeLocale}-product-faq-answer`}
@@ -243,7 +243,7 @@ export function ProductFaqTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -258,14 +258,14 @@ export function ProductFaqTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

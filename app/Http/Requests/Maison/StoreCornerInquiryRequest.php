@@ -38,13 +38,13 @@ class StoreCornerInquiryRequest extends FormRequest
         return [
             'club_name.required' => __('Vul de naam van jouw club in.'),
             'name.required' => __('Vul de contactpersoon in.'),
-            'email.required' => __('Vul een geldig e-mailadres in.'),
-            'email.email' => __('Vul een geldig e-mailadres in.'),
+            'email.required' => __('Please enter a valid email address.'),
+            'email.email' => __('Please enter a valid email address.'),
             'location.required' => __('Vul stad en land in.'),
             'courts.required' => __('Selecteer het aantal courts.'),
             'format.required' => __('Selecteer een formaat.'),
-            'message.required' => __('Vertel ons over jouw club.'),
-            'website.prohibited' => __('Vul een geldig e-mailadres in.'),
+            'message.required' => __('Tell us about your club.'),
+            'website.prohibited' => __('Please enter a valid email address.'),
         ];
     }
 }

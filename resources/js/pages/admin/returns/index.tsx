@@ -70,11 +70,11 @@ export default function AdminReturnsIndex({
 
     return (
         <>
-            <Head title={t('Retours')} />
+            <Head title={t('Returns')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Retours')}
-                    description={t('Retouraanvragen van klanten')}
+                    title={t('Returns')}
+                    description={t('Customer return requests')}
                     icon={Package}
                 />
 
@@ -82,7 +82,7 @@ export default function AdminReturnsIndex({
                     <Input
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder={t('Zoeken')}
+                        placeholder={t('Search')}
                         className="w-full sm:max-w-xs"
                         onKeyDown={(event) => {
                             if (event.key === 'Enter') {
@@ -95,7 +95,7 @@ export default function AdminReturnsIndex({
                             <SelectValue placeholder={t('Status')} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">{t('Alle')}</SelectItem>
+                            <SelectItem value="all">{t('All')}</SelectItem>
                             {statuses.map((option) => (
                                 <SelectItem
                                     key={option.value}
@@ -116,25 +116,25 @@ export default function AdminReturnsIndex({
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead className="w-[11%]">
-                                    {t('Nummer')}
+                                    {t('Number')}
                                 </TableHead>
                                 <TableHead className="w-[12%]">
-                                    {t('Bestelling')}
+                                    {t('Order')}
                                 </TableHead>
                                 <TableHead className="w-[14%]">
-                                    {t('Klant')}
+                                    {t('Customer')}
                                 </TableHead>
                                 <TableHead className="w-[22%]">
-                                    {t('Artikelen')}
+                                    {t('Items')}
                                 </TableHead>
                                 <TableHead className="w-[16%]">
                                     {t('Status')}
                                 </TableHead>
                                 <TableHead className="w-[13%]">
-                                    {t('Aangevraagd')}
+                                    {t('Requested')}
                                 </TableHead>
                                 <TableHead className="w-[12%]">
-                                    {t('Terugbetaling vóór')}
+                                    {t('Refund by')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -145,7 +145,7 @@ export default function AdminReturnsIndex({
                                         colSpan={7}
                                         className="px-4 py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen retours gevonden.')}
+                                        {t('No returns found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -166,14 +166,14 @@ export default function AdminReturnsIndex({
                                                                 <Truck
                                                                     className="size-3.5 shrink-0"
                                                                     aria-label={t(
-                                                                        'Onze verzending',
+                                                                        'Our shipping',
                                                                     )}
                                                                 />
                                                             </span>
                                                         </TooltipTrigger>
                                                         <TooltipContent>
                                                             {t(
-                                                                'Onze verzending',
+                                                                'Our shipping',
                                                             )}
                                                         </TooltipContent>
                                                     </Tooltip>

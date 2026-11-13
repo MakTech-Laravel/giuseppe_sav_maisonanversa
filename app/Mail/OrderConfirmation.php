@@ -23,7 +23,7 @@ class OrderConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Bestelling bevestigd — :product', [
+            subject: __('Order confirmed — :product', [
                 'product' => $this->translatedProductName(),
             ]),
         );

@@ -46,7 +46,7 @@ export function SessionDraftPreview({
     return (
         <aside className="sticky top-[calc(var(--topbar-h)+var(--nav-h)+4.5rem)] hidden border border-gold/15 bg-cream2 p-6 lg:block">
             <p className="font-sans text-[10px] tracking-[0.22em] text-stone uppercase">
-                {t('Voorbeeld')}
+                {t('Preview')}
             </p>
 
             <div className="mt-4 mb-2 flex flex-wrap items-center gap-2 font-sans text-[10px] tracking-[0.2em] text-stone uppercase">
@@ -62,7 +62,7 @@ export function SessionDraftPreview({
             </div>
 
             <h3 className="font-serif text-[22px] font-medium text-choc">
-                {club?.name ?? t('Kies een club of corner.')}
+                {club?.name ?? t('Choose a club or corner.')}
             </h3>
 
             {club?.is_partner && <PartnerBadge className="mt-2" />}

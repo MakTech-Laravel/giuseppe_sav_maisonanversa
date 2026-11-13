@@ -49,7 +49,7 @@ export function OpeningOfferFormFields({
             <AdminPanel
                 title={t('Product')}
                 description={t(
-                    'Het product dat bezoekers in de opening kunnen reserveren.',
+                    'The product visitors can reserve in the opening.',
                 )}
             >
                 <div className="grid gap-2">
@@ -65,7 +65,7 @@ export function OpeningOfferFormFields({
                         }
                     >
                         <SelectTrigger id="product_id" className="w-full">
-                            <SelectValue placeholder={t('Kies een product')} />
+                            <SelectValue placeholder={t('Choose a product')} />
                         </SelectTrigger>
                         <SelectContent>
                             {products.map((product) => (
@@ -83,7 +83,7 @@ export function OpeningOfferFormFields({
                     </Select>
                     <p className="text-xs text-muted-foreground">
                         {t(
-                            'Alleen gepubliceerde, actieve producten met een genummerde oplage.',
+                            'Only published, active products with a numbered edition.',
                         )}
                     </p>
                     <InputError message={errors.product_id} />
@@ -91,9 +91,9 @@ export function OpeningOfferFormFields({
             </AdminPanel>
 
             <AdminPanel
-                title={t('Instellingen')}
+                title={t('Settings')}
                 description={t(
-                    'Of het product nu in de opening staat, en in welke volgorde.',
+                    'Whether the product is in the opening now, and in which order.',
                 )}
             >
                 <div className="grid items-start gap-5 sm:grid-cols-2">
@@ -114,20 +114,20 @@ export function OpeningOfferFormFields({
                             />
                             <span>
                                 {data.is_active
-                                    ? t('Actief in de opening')
-                                    : t('Inactief')}
+                                    ? t('Active in the opening')
+                                    : t('Inactive')}
                             </span>
                         </label>
                         <p className="text-xs text-muted-foreground">
                             {t(
-                                'Slechts één aanbod is tegelijk actief: activeren zet de andere uit.',
+                                'Only one offer is active at a time: activating one turns the others off.',
                             )}
                         </p>
                         <InputError message={errors.is_active} />
                     </div>
 
                     <div className="grid min-w-0 gap-2">
-                        <Label htmlFor="sort_order">{t('Volgorde')}</Label>
+                        <Label htmlFor="sort_order">{t('Order')}</Label>
                         <Input
                             id="sort_order"
                             type="number"
@@ -142,7 +142,7 @@ export function OpeningOfferFormFields({
                         />
                         <p className="text-xs text-muted-foreground">
                             {t(
-                                'Lager = eerder. Bij meerdere actieve aanbiedingen wint de laagste.',
+                                'Lower = earlier. With several active offers, the lowest wins.',
                             )}
                         </p>
                         <InputError message={errors.sort_order} />
@@ -161,22 +161,22 @@ export function OpeningOfferFormAside() {
             <ul className="space-y-3 text-sm text-muted-foreground">
                 <li>
                     {t(
-                        'De nummers in de opening zijn de echte editienummers van dit product: beschikbare nummers staan als beschikbaar, alle andere als gereserveerd.',
+                        'The numbers in the opening are this product's real edition numbers: available numbers show as available, all others as reserved.',
                     )}
                 </li>
                 <li>
                     {t(
-                        'De koopprocedure blijft hetzelfde: inloggen, een nummer kiezen en afrekenen.',
+                        'The purchase procedure stays the same: log in, choose a number and check out.',
                     )}
                 </li>
                 <li>
                     {t(
-                        'Alleen Heritage Nº 001 geeft lidmaatschap van de Founding Circle.',
+                        'Only Heritage Nº 001 grants Founding Circle membership.',
                     )}
                 </li>
                 <li>
                     {t(
-                        'Is er geen actief aanbod, of is het product niet meer zichtbaar, dan toont de opening geen nummers.',
+                        'With no active offer, or when the product is no longer visible, the opening shows no numbers.',
                     )}
                 </li>
             </ul>

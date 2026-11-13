@@ -27,7 +27,7 @@ type Tab = 'overview' | 'trace' | 'component';
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatTime(ts: number) {
-    return new Intl.DateTimeFormat('en', {
+    return new Intl.DateTimeFormat('and', {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',

@@ -129,7 +129,7 @@ export function AdminCustomerPickerSheet({
                 setPage(payload.meta.current_page);
                 setLastPage(payload.meta.last_page);
             } catch {
-                setError(t('Klanten konden niet worden geladen.'));
+                setError(t('Customers could not be loaded.'));
             } finally {
                 loadingRef.current = false;
                 setLoading(false);
@@ -190,12 +190,12 @@ export function AdminCustomerPickerSheet({
             >
                 <SheetHeader className="border-b px-5 py-4 pr-12">
                     <SheetTitle>
-                        {title ?? t('Klant selecteren')}
+                        {title ?? t('Select customer')}
                     </SheetTitle>
                     <SheetDescription>
                         {description ??
                             t(
-                                'Zoek op naam of e-mail en kies een klantaccount.',
+                                'Search by name or email and choose a customer account.',
                             )}
                     </SheetDescription>
                 </SheetHeader>
@@ -208,7 +208,7 @@ export function AdminCustomerPickerSheet({
                             onChange={(event) =>
                                 setSearchInput(event.target.value)
                             }
-                            placeholder={t('Zoek op naam of e-mail')}
+                            placeholder={t('Search by name or email')}
                             className="pl-9"
                             autoFocus
                         />
@@ -221,7 +221,7 @@ export function AdminCustomerPickerSheet({
                 >
                     {items.length === 0 && !loading ? (
                         <p className="px-3 py-8 text-center text-sm text-muted-foreground">
-                            {error ?? t('Geen klanten gevonden.')}
+                            {error ?? t('No customers found.')}
                         </p>
                     ) : (
                         <ul className="space-y-1">
@@ -267,7 +267,7 @@ export function AdminCustomerPickerSheet({
                     {loading && (
                         <div className="flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
                             <Loader2 className="size-4 animate-spin" />
-                            {t('Laden…')}
+                            {t('Loading…')}
                         </div>
                     )}
 
@@ -285,7 +285,7 @@ export function AdminCustomerPickerSheet({
                         className="w-full"
                         onClick={() => onOpenChange(false)}
                     >
-                        {t('Annuleren')}
+                        {t('Cancel')}
                     </Button>
                 </div>
             </SheetContent>

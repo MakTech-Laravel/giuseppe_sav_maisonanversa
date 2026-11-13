@@ -40,16 +40,16 @@ export default function CreateFaq({
 
     return (
         <>
-            <Head title={t('FAQ aanmaken')} />
+            <Head title={t('Create FAQ')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('FAQ aanmaken')}
-                    description={t('Voeg een nieuwe veelgestelde vraag toe.')}
+                    title={t('Create FAQ')}
+                    description={t('Add a new frequently asked question.')}
                     icon={CircleHelp}
                 >
                     <Button variant="outline" asChild>
                         <Link href={faqs.index(locale)}>
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -69,11 +69,11 @@ export default function CreateFaq({
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Opslaan')}
+                            {t('Save')}
                         </Button>
                         <Button variant="outline" asChild>
                             <Link href={faqs.index(locale)}>
-                                {t('Annuleren')}
+                                {t('Cancel')}
                             </Link>
                         </Button>
                     </div>

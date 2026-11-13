@@ -32,7 +32,7 @@ class OrderStatusUpdated extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Bestelupdate — :reference', [
+            subject: __('Order update — :reference', [
                 'reference' => $this->order->reference(),
             ]),
         );

@@ -10,9 +10,9 @@ export default function NewsletterUnsubscribed() {
             <MaisonSeoHead />
             <PageHero
                 eyebrow={t('Heritage Letter')}
-                title={t('Uitgeschreven')}
+                title={t('Unsubscribed')}
                 subtitle={t(
-                    'Je ontvangt geen Heritage Letter meer. Je kunt zich altijd opnieuw inschrijven.',
+                    'You will no longer receive the Heritage Letter. You can subscribe again at any time.',
                 )}
             />
         </>

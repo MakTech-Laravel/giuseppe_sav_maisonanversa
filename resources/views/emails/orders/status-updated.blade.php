@@ -1,11 +1,11 @@
 @component('emails.layouts.maison', [
-    'title' => __('Bestelupdate'),
+    'title' => __('Order update'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
-    'ctaLabel' => __('Bezoek het huis'),
+    'ctaLabel' => __('Visit the house'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Jouw bestelling :reference is bijgewerkt.', ['reference' => $order->reference()]) }}
+        {{ __('Your order :reference has been updated.', ['reference' => $order->reference()]) }}
     </p>
 
     <p style="margin:0 0 12px;">
@@ -21,8 +21,8 @@
 
     @if ($order->edition_number !== null && (int) ($order->product?->edition_total ?? 0) > 0)
         <p style="margin:0 0 16px;">
-            <strong style="color:#291C18;">{{ __('Editienummer') }}:</strong>
-            {{ __('Nr. :number', ['number' => str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)]) }}
+            <strong style="color:#291C18;">{{ __('Edition number') }}:</strong>
+            {{ __('Nº :number', ['number' => str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)]) }}
             / {{ (int) $order->product->edition_total }}
         </p>
     @endif
@@ -30,7 +30,7 @@
     @if (! empty($returnsUrl))
         <p style="margin:0;">
             {{ __('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.') }}
-            <a href="{{ $returnsUrl }}" style="color:#8A6A3B;">{{ __('Start een retour') }}</a>
+            <a href="{{ $returnsUrl }}" style="color:#8A6A3B;">{{ __('Start a return') }}</a>
         </p>
     @endif
 @endcomponent

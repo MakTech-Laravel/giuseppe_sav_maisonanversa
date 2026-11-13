@@ -21,7 +21,7 @@ export function DataPagination({ meta }: DataPaginationProps) {
     return (
         <div className="flex w-full flex-col items-center justify-between gap-4 border-t bg-muted/20 px-4 py-3 sm:flex-row">
             <p className="text-xs text-muted-foreground">
-                {t('{{from}}–{{to}} van {{total}} resultaten', {
+                {t('Showing {{from}}–{{to}} of {{total}} results', {
                     from: meta.from ?? 0,
                     to: meta.to ?? 0,
                     total: meta.total,
@@ -31,7 +31,7 @@ export function DataPagination({ meta }: DataPaginationProps) {
             <nav className="flex items-center gap-1">
                 <PageLink
                     href={meta.prev_page_url}
-                    aria-label={t('Vorige pagina')}
+                    aria-label={t('Previous page')}
                     icon
                 >
                     <ChevronLeft className="h-4 w-4" />
@@ -60,7 +60,7 @@ export function DataPagination({ meta }: DataPaginationProps) {
 
                 <PageLink
                     href={meta.next_page_url}
-                    aria-label={t('Volgende pagina')}
+                    aria-label={t('Next page')}
                     icon
                 >
                     <ChevronRight className="h-4 w-4" />

@@ -13,9 +13,9 @@ export default function Error403() {
     return (
         <>
             <MaisonSeoHead
-                title={t('Geen toegang')}
+                title={t('No access')}
                 description={t(
-                    'Je hebt geen toegang tot deze pagina. Keer terug naar Maison Anversa.',
+                    'You do not have access to this page. Return to Maison Anversa.',
                 )}
                 noIndex
             />
@@ -23,24 +23,24 @@ export default function Error403() {
             <PageHero
                 className="flex min-h-[calc(100vh-var(--topbar-h)-var(--nav-h))] flex-col justify-center pb-24"
                 eyebrow="403"
-                title={t('Geen toegang')}
+                title={t('No access')}
                 subtitle={t(
-                    'Je mag deze pagina niet bekijken. Gebruik de links hieronder om verder te gaan.',
+                    'You may not view this page. Use the links below to continue.',
                 )}
             >
                 <div className="flex flex-col items-center gap-4">
                     <MaisonButton as={MaisonLink} to="home" variant="hero">
-                        {t('Terug naar huis')}
+                        {t('Back home')}
                     </MaisonButton>
                     <MaisonButton
                         as={MaisonLink}
                         href={foundingProductUrl(locale)}
                         variant="ghost"
                     >
-                        {t('Ontdek Heritage Nº 001 →')}
+                        {t('Discover Heritage Nº 001 →')}
                     </MaisonButton>
                     <MaisonButton as={MaisonLink} to="journal" variant="ghost">
-                        {t('Verken het Journal →')}
+                        {t('Explore the Journal →')}
                     </MaisonButton>
                     <MaisonButton as={MaisonLink} to="contact" variant="ghost">
                         {t('Contact')}

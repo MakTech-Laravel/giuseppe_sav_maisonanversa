@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <title>{{ __('Heritage Paspoort') }} · Nº {{ $passport['editionNumber'] }}</title>
+    <title>{{ __('Heritage Passport') }} · Nº {{ $passport['editionNumber'] }}</title>
     <style>
         @page { margin: 28mm 22mm; }
         body {
@@ -66,13 +66,13 @@
 <body>
     <header class="masthead">
         <p class="eyebrow">{{ __('Founding Circle') }} · {{ $passport['productName'] ?? '' }} · {{ __('Racket :label', ['label' => $passport['racketLabel'] ?? $passport['editionNumber']]) }}</p>
-        <h1>{{ __('Heritage Paspoort') }}</h1>
+        <h1>{{ __('Heritage Passport') }}</h1>
         <p class="member">{{ $memberName }}</p>
     </header>
 
     @foreach ($passport['pages'] as $index => $page)
         <section class="page">
-            <p class="page-label">{{ __('Pagina') }} {{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</p>
+            <p class="page-label">{{ __('Page') }} {{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</p>
             <h2>{{ $page['title'] }}</h2>
             <p>{{ $page['body'] }}</p>
             @if ($index === 3 && ! empty($passport['verificationUrl']))

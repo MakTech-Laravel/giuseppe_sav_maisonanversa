@@ -38,7 +38,7 @@ test('staff can update the founding product name and amount', function () {
         ])
         ->assertRedirect()
         ->assertInertiaFlash('toast.type', 'success')
-        ->assertInertiaFlash('toast.message', __('Editieproduct bijgewerkt.'));
+        ->assertInertiaFlash('toast.message', __('Edition product updated.'));
 
     $product->refresh();
 

@@ -68,11 +68,11 @@ export function CommunityCourts({
                 <div className="absolute bottom-4 left-5 flex flex-wrap gap-4">
                     <div className="flex items-center gap-1.5 font-sans text-[9px] tracking-[0.12em] text-gold/50 uppercase">
                         <span className="size-2 rounded-full bg-gold" />
-                        {t('Club Corner actief')}
+                        {t('Club Corner active')}
                     </div>
                     <div className="flex items-center gap-1.5 font-sans text-[9px] tracking-[0.12em] text-gold/50 uppercase">
                         <span className="size-2 rounded-full bg-stone" />
-                        {t('Binnenkort')}
+                        {t('Coming soon')}
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@ export function CommunityCourts({
 
                 {courts.length === 0 ? (
                     <p className="font-sans text-sm text-stone">
-                        {t('Nog geen Club Corners gepubliceerd.')}
+                        {t('No Club Corners published yet.')}
                     </p>
                 ) : (
                     <div className="grid gap-3 md:grid-cols-2">
@@ -112,8 +112,8 @@ export function CommunityCourts({
                                         )}
                                     >
                                         {court.coming
-                                            ? t('Binnenkort')
-                                            : t('Actief')}
+                                            ? t('Coming soon')
+                                            : t('Active')}
                                     </div>
                                 </div>
 

@@ -169,12 +169,12 @@ test('full racket return flow marks returning then available after refund', func
         ->and($return->fresh()->stripe_refund_id)->toBe('re_full_1')
         ->and(FoundingCircleRegisterEntry::query()->where('user_id', $user->id)->exists())->toBeFalse()
         ->and(EditionPiece::query()->find($order->edition_piece_id)?->status)->toBe(EditionPieceStatus::Available)
-        ->and(AppNotification::query()->where('type', NotificationType::Order)->where('title', 'Retour terugbetaald')->exists())->toBeTrue()
+        ->and(AppNotification::query()->where('type', NotificationType::Order)->where('title', 'Return refunded')->exists())->toBeTrue()
         ->and(UserNotification::query()->where('user_id', $user->id)->exists())->toBeTrue();
 
     app()->setLocale('en');
 
-    expect(__('Retour terugbetaald'))->toBe('Return refunded');
+    expect(__('Return refunded'))->toBe('Return refunded');
 });
 
 test('partial refund stores amount and keeps the founding number', function () {
@@ -361,7 +361,7 @@ test('shipping and delivered status mails include the returns CTA', function () 
 
     expect($statusHtml)
         ->toContain(__('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.'))
-        ->and($statusHtml)->toContain('Start een retour');
+        ->and($statusHtml)->toContain('Start a return');
 });
 
 test('guest signed return link creates a return without an account', function () {
@@ -488,5 +488,5 @@ test('admin cancel stores the dutch source note for translation', function () {
         ->assertRedirect();
 
     expect($return->fresh()->status)->toBe(ReturnStatus::Cancelled)
-        ->and($return->events()->latest('id')->value('note'))->toBe('Geannuleerd door beheerder.');
+        ->and($return->events()->latest('id')->value('note'))->toBe('Cancelled by administrator.');
 });

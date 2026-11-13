@@ -59,18 +59,18 @@ export default function MemberOrderShow({
 
     return (
         <>
-            <Head title={`${t('Bestelling')} ${order.reference ?? order.id}`} />
+            <Head title={`${t('Order')} ${order.reference ?? order.id}`} />
             <div className="mb-6">
                 <Link
                     href={`/${locale}/member/orders`}
                     className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase no-underline hover:text-cream"
                 >
-                    ← {t('Terug naar bestellingen')}
+                    ← {t('Back to orders')}
                 </Link>
             </div>
 
             <MemberPageHeader
-                eyebrow={t('Besteldetail')}
+                eyebrow={t('Order detail')}
                 title={order.label}
                 description={order.summary}
             />
@@ -97,7 +97,7 @@ export default function MemberOrderShow({
 
             {returns ? (
                 <MemberPanel className="mb-6">
-                    <MemberSectionTitle title={t('Retour')} />
+                    <MemberSectionTitle title={t('Return')} />
                     {returns.can_cancel ? (
                         <button
                             type="button"
@@ -108,14 +108,14 @@ export default function MemberOrderShow({
                                 )
                             }
                         >
-                            {t('Bestelling annuleren')}
+                            {t('Cancel order')}
                         </button>
                     ) : null}
                     {returns.can_return ? (
                         <div className="space-y-3">
                             {returns.request_deadline ? (
                                 <p className="font-sans text-sm text-sand">
-                                    {t('Retourneren kan tot {{date}}', {
+                                    {t('Returns accepted until {{date}}', {
                                         date: returns.request_deadline,
                                     })}
                                 </p>
@@ -124,7 +124,7 @@ export default function MemberOrderShow({
                                 href={`/${locale}/member/orders/${order.id}/returns/create`}
                                 className="inline-flex min-h-11 items-center justify-center border border-cream px-5 font-sans text-[10px] tracking-[0.2em] text-cream uppercase no-underline"
                             >
-                                {t('Retourneren')}
+                                {t('Returns')}
                             </Link>
                         </div>
                     ) : null}
@@ -138,7 +138,7 @@ export default function MemberOrderShow({
                                 href={`/${locale}/member/returns/${returns.open_return.id}`}
                                 className="inline-flex min-h-11 items-center justify-center border border-cream px-5 font-sans text-[10px] tracking-[0.2em] text-cream uppercase no-underline"
                             >
-                                {t('Trackingnummer toevoegen')}
+                                {t('Add tracking number')}
                             </Link>
                         </div>
                     ) : null}
@@ -146,7 +146,7 @@ export default function MemberOrderShow({
                         <div className="space-y-2">
                             <p className="text-sand">
                                 {t(
-                                    'De retourtermijn voor deze bestelling is voorbij.',
+                                    'The return window for this order has ended.',
                                 )}
                             </p>
                             <Link
@@ -154,7 +154,7 @@ export default function MemberOrderShow({
                                 className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase"
                             >
                                 {t(
-                                    'Een probleem met je product? Neem contact op',
+                                    'Issue with your product? Contact us',
                                 )}
                             </Link>
                         </div>
@@ -164,7 +164,7 @@ export default function MemberOrderShow({
 
             <div className="grid gap-6 lg:grid-cols-5">
                 <MemberPanel className="lg:col-span-3">
-                    <MemberSectionTitle title={t('Regels')} />
+                    <MemberSectionTitle title={t('Line items')} />
                     <ul className="space-y-4">
                         {order.items.map((item) => (
                             <li
@@ -176,7 +176,7 @@ export default function MemberOrderShow({
                                         {item.name}
                                     </p>
                                     <p className="mt-1 font-sans text-[11px] text-stone uppercase">
-                                        {t('Aantal')} {item.qty}
+                                        {t('Qty')} {item.qty}
                                     </p>
                                 </div>
                                 <p className="font-serif text-[20px] text-cream">
@@ -187,7 +187,7 @@ export default function MemberOrderShow({
                     </ul>
                     <div className="mt-6 flex items-center justify-between border-t border-gold/20 pt-4">
                         <p className="font-sans text-[10px] tracking-[0.18em] text-gold uppercase">
-                            {t('Totaal')}
+                            {t('Total')}
                         </p>
                         <p className="font-serif text-[28px] text-cream">
                             {order.amount}
@@ -197,11 +197,11 @@ export default function MemberOrderShow({
 
                 <div className="space-y-6 lg:col-span-2">
                     <MemberPanel>
-                        <MemberSectionTitle title={t('Betaling')} />
+                        <MemberSectionTitle title={t('Payment')} />
                         <dl className="space-y-3 text-[14px]">
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    {t('Methode')}
+                                    {t('Method')}
                                 </dt>
                                 <dd className="mt-1 text-cream">
                                     {order.method}
@@ -209,7 +209,7 @@ export default function MemberOrderShow({
                             </div>
                             <div>
                                 <dt className="font-sans text-[9px] tracking-[0.18em] text-gold uppercase">
-                                    {t('Bedrag')}
+                                    {t('Amount')}
                                 </dt>
                                 <dd className="mt-1 font-serif text-[22px] text-cream">
                                     {order.amount}
@@ -220,7 +220,7 @@ export default function MemberOrderShow({
 
                     {order.shipping && (
                         <MemberPanel>
-                            <MemberSectionTitle title={t('Verzendadres')} />
+                            <MemberSectionTitle title={t('Shipping address')} />
                             <p className="text-[14px] text-sand">
                                 {order.shipping.line1}
                                 {order.shipping.line2
@@ -238,7 +238,7 @@ export default function MemberOrderShow({
             </div>
 
             <MemberPanel className="mt-6">
-                <MemberSectionTitle title={t('Tijdlijn')} />
+                <MemberSectionTitle title={t('Timeline')} />
                 <ol className="space-y-4">
                     {order.timeline.map((step) => (
                         <li key={step.label} className="flex items-start gap-4">

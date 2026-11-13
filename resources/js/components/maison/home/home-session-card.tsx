@@ -13,7 +13,7 @@ import type { SessionCard as SessionCardData } from '@/types/session';
 
 /**
  * Homepage session row from the Phase 1 briefing: date block, club/time,
- * initials + open slots, and Doe mee / Je speelt mee.
+ * initials + open slots, and Doe mee / You're in.
  */
 export function HomeSessionCard({ session }: { session: SessionCardData }) {
     const { t } = useTranslation();
@@ -44,19 +44,19 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
 
     function freePlacesLabel(): string {
         if (session.is_full || session.open_slots <= 0) {
-            return t('Volzet');
+            return t('Full');
         }
 
         if (session.open_slots === 1) {
-            return t('1 plaats vrij');
+            return t('1 spot left');
         }
 
-        return t('{{count}} plaatsen vrij', { count: session.open_slots });
+        return t('{{count}} spots left', { count: session.open_slots });
     }
 
     function waitingLabel(): string {
         return pendingCount > 0
-            ? ` · ${t('{{count}} in afwachting', { count: pendingCount })}`
+            ? ` · ${t('{{count}} pending', { count: pendingCount })}`
             : '';
     }
 
@@ -88,7 +88,7 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
 
                 <div className="min-w-0 flex-1">
                     <h3 className="truncate font-serif text-[20px] leading-tight font-medium text-choc md:text-[22px]">
-                        {session.club?.name ?? t('Onbekende club')}
+                        {session.club?.name ?? t('Unknown club')}
                     </h3>
                     <p className="mt-1 font-sans text-[12px] tracking-[0.12em] text-[#4A3A30]">
                         {formatSessionTime(session.starts_at, locale)}
@@ -113,7 +113,7 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
                                 key={`pending-${index}`}
                                 size="md"
                                 initials="…"
-                                title={t('In afwachting')}
+                                title={t('Pending')}
                                 className="border-dotted border-[#8D705A] bg-[#8D705A]/10 text-[#8D705A]"
                             />
                         ),
@@ -137,25 +137,25 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
 
                 {playing ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-choc bg-choc px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase">
-                        {t('Je speelt mee ✓')}
+                        {t('You\'re in ✓')}
                     </span>
                 ) : session.is_pending ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-[#DDD0C2] px-6 font-sans text-[10px] tracking-[0.2em] text-[#6E5646] uppercase">
-                        {t('Aanvraag in behandeling')}
+                        {t('Request pending')}
                     </span>
                 ) : session.viewer_status === 'rejected' ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-[#DDD0C2] px-6 font-sans text-[10px] tracking-[0.2em] text-[#6E5646] uppercase">
-                        {t('Aanvraag geweigerd')}
+                        {t('Request declined')}
                     </span>
                 ) : session.is_full ||
                   session.registration_closed ||
                   !session.can_join ? (
                     <span className="inline-flex min-h-11 items-center justify-center border border-[#DDD0C2] px-6 font-sans text-[10px] tracking-[0.2em] text-[#6E5646] uppercase">
                         {session.is_full
-                            ? t('Volzet')
+                            ? t('Full')
                             : session.registration_closed
-                              ? t('Inschrijving gesloten')
-                              : t('Alle plaatsen aangevraagd')}
+                              ? t('Registration closed')
+                              : t('All places requested')}
                     </span>
                 ) : (
                     <button
@@ -163,7 +163,7 @@ export function HomeSessionCard({ session }: { session: SessionCardData }) {
                         onClick={handleJoin}
                         className="inline-flex min-h-11 cursor-pointer items-center justify-center border border-choc bg-choc px-6 font-sans text-[10px] font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:border-gold hover:bg-gold hover:text-choc"
                     >
-                        {t('Doe mee')}
+                        {t('Join')}
                     </button>
                 )}
             </div>

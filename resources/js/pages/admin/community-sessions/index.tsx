@@ -116,12 +116,12 @@ export default function CommunitySessionsIndex({
 
     return (
         <>
-            <Head title={t('Sessies')} />
+            <Head title={t('Sessions')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Sessies')}
+                    title={t('Sessions')}
                     description={t(
-                        'Alle door leden geplande sessies, inclusief beëindigde en geannuleerde.',
+                        'All sessions planned by members, including ended and cancelled ones.',
                     )}
                     icon={Users}
                 />
@@ -129,7 +129,7 @@ export default function CommunitySessionsIndex({
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_9rem_9rem_12rem_auto] sm:items-center">
                     <div className="relative min-w-0">
                         <Label htmlFor="sessions-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -138,7 +138,7 @@ export default function CommunitySessionsIndex({
                             onChange={(event) => setSearch(event.target.value)}
                             placeholder={t('Zoek op host of club…')}
                             className="w-full pl-9"
-                            aria-label={t('Zoeken')}
+                            aria-label={t('Search')}
                         />
                     </div>
 
@@ -147,11 +147,11 @@ export default function CommunitySessionsIndex({
                             className="w-full"
                             aria-label={t('Sport')}
                         >
-                            <SelectValue placeholder={t('Alle sporten')} />
+                            <SelectValue placeholder={t('All sports')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle sporten')}
+                                {t('All sports')}
                             </SelectItem>
                             {sportOptions.map((option) => (
                                 <SelectItem
@@ -169,20 +169,20 @@ export default function CommunitySessionsIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             <SelectItem value="active">
-                                {t('Actief')}
+                                {t('Active')}
                             </SelectItem>
                             <SelectItem value="ended">
-                                {t('Beëindigd')}
+                                {t('Ended')}
                             </SelectItem>
                             <SelectItem value="cancelled">
-                                {t('Geannuleerd')}
+                                {t('Canceled')}
                             </SelectItem>
                         </SelectContent>
                     </Select>
@@ -192,11 +192,11 @@ export default function CommunitySessionsIndex({
                             className="w-full"
                             aria-label={t('Club')}
                         >
-                            <SelectValue placeholder={t('Alle clubs')} />
+                            <SelectValue placeholder={t('All clubs')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle clubs')}
+                                {t('All clubs')}
                             </SelectItem>
                             {clubOptions.map((option) => (
                                 <SelectItem
@@ -218,7 +218,7 @@ export default function CommunitySessionsIndex({
                             onClick={clearFilters}
                         >
                             <X className="h-4 w-4" />
-                            {t('Wis filters')}
+                            {t('Clear filters')}
                         </Button>
                     ) : (
                         <span className="hidden sm:block" aria-hidden />
@@ -235,12 +235,12 @@ export default function CommunitySessionsIndex({
                                     {t('Sport')}
                                 </TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    {t('Datum')}
+                                    {t('Date')}
                                 </TableHead>
-                                <TableHead>{t('Spelers')}</TableHead>
+                                <TableHead>{t('Players')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -251,7 +251,7 @@ export default function CommunitySessionsIndex({
                                         colSpan={7}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen sessies gevonden.')}
+                                        {t('No sessions found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -309,7 +309,7 @@ export default function CommunitySessionsIndex({
                                                         communitySession:
                                                             Number(session.id),
                                                     })}
-                                                    title={t('Bekijken')}
+                                                    title={t('View')}
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Link>
@@ -321,7 +321,7 @@ export default function CommunitySessionsIndex({
                                                 onClick={() =>
                                                     destroySession(session.id)
                                                 }
-                                                title={t('Verwijderen')}
+                                                title={t('Remove')}
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>

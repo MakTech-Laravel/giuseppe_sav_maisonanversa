@@ -29,8 +29,8 @@ class SessionScoreController extends Controller
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => $isHost
-                ? __('De uitslag is opgeslagen.')
-                : __('Jouw score is ingediend en wacht op goedkeuring van de organisator.'),
+                ? __('The result has been saved.')
+                : __('Your score has been submitted and is awaiting the organiser’s approval.'),
         ]);
 
         return back();
@@ -46,7 +46,7 @@ class SessionScoreController extends Controller
 
         $this->scoreboard->approve($communitySession, $score, $request->user());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Score goedgekeurd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Score approved.')]);
 
         return back();
     }
@@ -61,7 +61,7 @@ class SessionScoreController extends Controller
 
         $this->scoreboard->reject($communitySession, $score, $request->user());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Score geweigerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Score declined.')]);
 
         return back();
     }
@@ -72,7 +72,7 @@ class SessionScoreController extends Controller
 
         $this->scoreboard->lock($communitySession);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Scorebord vergrendeld.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Scoreboard locked.')]);
 
         return back();
     }
@@ -83,7 +83,7 @@ class SessionScoreController extends Controller
 
         $this->scoreboard->unlock($communitySession);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Scorebord ontgrendeld.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Scoreboard unlocked.')]);
 
         return back();
     }
@@ -94,7 +94,7 @@ class SessionScoreController extends Controller
 
         $this->scoreboard->finish($communitySession, $request->user());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Sessie afgesloten.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Session closed.')]);
 
         return back();
     }

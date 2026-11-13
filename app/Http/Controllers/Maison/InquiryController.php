@@ -47,7 +47,7 @@ class InquiryController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Jouw bericht is ontvangen.'),
+            'message' => __('Your message has been received.'),
         ]);
 
         return back();
@@ -82,7 +82,7 @@ class InquiryController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Aanvraag ontvangen.'),
+            'message' => __('Request received.'),
         ]);
 
         return back();

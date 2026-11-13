@@ -1,25 +1,25 @@
 <?php
 
-test('http and network flash toast strings have en and fr dictionary keys', function () {
+test('http and network flash toast strings have nl and fr dictionary keys', function () {
     $keys = [
-        'Verzoek mislukt',
-        'Verzoek mislukt ({{status}})',
-        'Netwerkfout. Probeer het opnieuw.',
+        'Request failed',
+        'Request failed ({{status}})',
+        'Network error. Please try again.',
     ];
 
-    $en = json_decode(File::get(lang_path('en.json')), true, flags: JSON_THROW_ON_ERROR);
+    $nl = json_decode(File::get(lang_path('nl.json')), true, flags: JSON_THROW_ON_ERROR);
     $fr = json_decode(File::get(lang_path('fr.json')), true, flags: JSON_THROW_ON_ERROR);
 
     foreach ($keys as $key) {
-        expect($en)->toHaveKey($key)
+        expect($nl)->toHaveKey($key)
             ->and($fr)->toHaveKey($key)
-            ->and($en[$key])->not->toBe($key)
+            ->and($nl[$key])->not->toBe($key)
             ->and($fr[$key])->not->toBe($key);
     }
 
     expect(File::get(resource_path('js/hooks/use-flash-toast.ts')))
-        ->toContain("translate('Verzoek mislukt ({{status}})'")
-        ->toContain("translate('Netwerkfout. Probeer het opnieuw.')")
+        ->toContain("translate('Request failed ({{status}})'")
+        ->toContain("translate('Network error. Please try again.')")
         ->toContain('translate(data.message)')
         ->toContain('pendingVisitLocale')
         ->toContain('resolveToastLocale')
@@ -30,61 +30,58 @@ test('http and network flash toast strings have en and fr dictionary keys', func
         ->not->toContain('await loadDictionary(next)');
 });
 
-test('admin and settings flash toast strings use dutch keys with en and fr entries', function () {
+test('admin and settings flash toast strings use english keys with nl and fr entries', function () {
     $keys = [
-        'Beheerder aangemaakt.',
-        'Beheerder bijgewerkt.',
-        'Beheerder verwijderd.',
-        'De super-adminrol kan niet worden verwijderd.',
-        'Het laatste superbeheerderaccount kan niet worden verwijderd.',
-        'Klant aangemaakt.',
-        'Klant bijgewerkt.',
-        'Klant verwijderd.',
-        'Privé realtime-kanaal',
-        'Privé-kanaal test ontvangen.',
-        'Profiel bijgewerkt.',
-        'Realtime melding ontvangen.',
-        'Rol aangemaakt.',
-        'Rol bijgewerkt.',
-        'Rol verwijderd.',
-        'Wachtwoord bijgewerkt.',
+        'Administrator created.',
+        'Administrator updated.',
+        'Administrator deleted.',
+        'The super-admin role cannot be deleted.',
+        'The last super administrator account cannot be deleted.',
+        'Customer created.',
+        'Customer updated.',
+        'Customer deleted.',
+        'Private realtime channel',
+        'Private channel test received.',
+        'Profile updated.',
+        'Realtime notification received.',
+        'Role created.',
+        'Role updated.',
+        'Role deleted.',
+        'Password updated.',
     ];
 
-    $en = json_decode(File::get(lang_path('en.json')), true, flags: JSON_THROW_ON_ERROR);
+    $nl = json_decode(File::get(lang_path('nl.json')), true, flags: JSON_THROW_ON_ERROR);
     $fr = json_decode(File::get(lang_path('fr.json')), true, flags: JSON_THROW_ON_ERROR);
 
     foreach ($keys as $key) {
-        expect($en)->toHaveKey($key)
+        expect($nl)->toHaveKey($key)
             ->and($fr)->toHaveKey($key)
-            ->and($en[$key])->not->toBe($key)
+            ->and($nl[$key])->not->toBe($key)
             ->and($fr[$key])->not->toBe($key);
     }
 
     expect(File::get(app_path('Http/Controllers/Admin/CustomerController.php')))
-        ->toContain("__('Klant aangemaakt.')")
+        ->toContain("__('Customer created.')")
         ->not->toContain('Customer created successfully.');
 
     expect(File::get(app_path('Http/Controllers/Admin/RoleController.php')))
-        ->toContain("__('Rol aangemaakt.')")
+        ->toContain("__('Role created.')")
         ->not->toContain('Role created successfully.');
 
     expect(File::get(app_path('Http/Controllers/Admin/UserController.php')))
-        ->toContain("__('Beheerder aangemaakt.')")
+        ->toContain("__('Administrator created.')")
         ->not->toContain('Administrator created successfully.');
 
     expect(File::get(app_path('Http/Controllers/Settings/ProfileController.php')))
-        ->toContain("__('Profiel bijgewerkt.')")
-        ->not->toContain("__('Profile updated.')");
+        ->toContain("__('Profile updated.')");
 
     expect(File::get(app_path('Http/Controllers/Settings/SecurityController.php')))
-        ->toContain("__('Wachtwoord bijgewerkt.')")
-        ->not->toContain("__('Password updated.')");
+        ->toContain("__('Password updated.')");
 
     expect(File::get(resource_path('js/components/notifications/notification-toast.tsx')))
         ->toContain('t(payload.title)')
         ->toContain('t(payload.message)');
 
     expect(File::get(resource_path('js/hooks/use-private-realtime-toast.ts')))
-        ->toContain("t('Privé realtime-kanaal')")
-        ->not->toContain('Private realtime channel');
+        ->toContain("t('Private realtime channel')");
 });

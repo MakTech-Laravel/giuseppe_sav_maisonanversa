@@ -70,7 +70,7 @@ test('the realtime event targets the private user channel with the inbox payload
         'user_id' => $user->id,
         'app_notification_id' => AppNotification::factory()->create([
             'type' => NotificationType::Order,
-            'title' => 'Bestelling betaald',
+            'title' => 'Order paid',
             'message' => 'Order #12',
             'data' => ['link_url' => 'https://maison.test/orders/12', 'link_label' => 'Bekijk'],
         ])->id,
@@ -83,7 +83,7 @@ test('the realtime event targets the private user channel with the inbox payload
         ->and($event->broadcastWith())->toMatchArray([
             'id' => $row->id,
             'type' => 'order',
-            'title' => 'Bestelling betaald',
+            'title' => 'Order paid',
             'message' => 'Order #12',
             'href' => 'https://maison.test/orders/12',
             'link_label' => 'Bekijk',

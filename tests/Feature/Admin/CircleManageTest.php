@@ -90,7 +90,7 @@ test('circle member detail shows translated benefits in every locale', function 
             ->where('member.benefits', [$passport, $card])
         );
 })->with([
-    'nl' => ['nl', 'Digitaal Heritage Passport', 'Founding Circle-kaart'],
+    'nl' => ['nl', 'Digital Heritage Passport', 'Founding Circle-kaart'],
     'en' => ['en', 'Digital Heritage Passport', 'Founding Circle card'],
     'fr' => ['fr', 'Heritage Passport numérique', 'Carte Founding Circle'],
 ]);

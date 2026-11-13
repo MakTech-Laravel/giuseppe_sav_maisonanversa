@@ -36,10 +36,10 @@ export default function GuestReturnCreate({
 
     return (
         <>
-            <Head title={t('Retourneren')} />
+            <Head title={t('Returns')} />
             <PageHero
-                eyebrow={t('Retour')}
-                title={t('Wat wil je retourneren?')}
+                eyebrow={t('Return')}
+                title={t('What would you like to return?')}
                 subtitle={order.reference}
             />
 
@@ -54,21 +54,21 @@ export default function GuestReturnCreate({
                         <>
                             <div className="border border-choc/15 bg-white px-6 py-6">
                                 <p className="font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
-                                    {t('Artikelen')}
+                                    {t('Items')}
                                 </p>
                                 <p className="mt-3 font-serif text-lg text-choc">
                                     {order.label}
                                 </p>
                                 <p className="mt-2 font-serif text-sm text-[#8A7363] italic">
                                     {t(
-                                        'Stuur alles mee wat erbij hoorde: doos, Heritage Passport, kaarten en accessoires.',
+                                        'Include everything that came with it: box, Heritage Passport, cards and accessories.',
                                     )}
                                 </p>
                             </div>
 
                             <div className="border border-choc/15 bg-white px-6 py-6">
                                 <p className="font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
-                                    {t('Reden (optioneel)')}
+                                    {t('Reason (optional)')}
                                 </p>
                                 <select
                                     name="reason"
@@ -79,7 +79,7 @@ export default function GuestReturnCreate({
                                     className="mt-3 w-full border border-choc/20 bg-cream px-3 py-3 font-sans text-sm text-choc"
                                 >
                                     <option value="">
-                                        {t('Reden (optioneel)')}
+                                        {t('Reason (optional)')}
                                     </option>
                                     {reasons.map((option) => (
                                         <option
@@ -93,14 +93,14 @@ export default function GuestReturnCreate({
                                 <textarea
                                     name="comment"
                                     rows={3}
-                                    placeholder={t('Optionele toelichting')}
+                                    placeholder={t('Optional comment')}
                                     className="mt-3 w-full border border-choc/20 bg-cream px-3 py-3 font-sans text-sm text-choc"
                                 />
                                 {damaged ? (
                                     <div className="mt-4 space-y-3">
                                         <p className="font-sans text-sm text-[#5C4A3D]">
                                             {t(
-                                                'We nemen contact met je op over de retourzending op onze kosten.',
+                                                'We will contact you about return shipping at our expense.',
                                             )}
                                         </p>
                                         <input
@@ -121,10 +121,10 @@ export default function GuestReturnCreate({
 
                             <div className="border border-choc/15 bg-white px-6 py-6">
                                 <p className="font-sans text-[10px] tracking-[0.2em] text-[#8A7363] uppercase">
-                                    {t('Samenvatting')}
+                                    {t('Summary')}
                                 </p>
                                 <p className="mt-3 text-choc">
-                                    {t('Verwacht terugbetalingsbedrag')}: €
+                                    {t('Expected refund amount')}: €
                                     {expectedRefund}
                                 </p>
                                 <p className="mt-2 whitespace-pre-line text-[#5C4A3D]">
@@ -133,10 +133,10 @@ export default function GuestReturnCreate({
                                 <p className="mt-3 font-sans text-sm text-[#5C4A3D]">
                                     {damaged
                                         ? t(
-                                              'We nemen contact met je op over de retourzending op onze kosten.',
+                                              'We will contact you about return shipping at our expense.',
                                           )
                                         : t(
-                                              'De kosten van de retourzending zijn voor jou. We raden een verzekerde zending met tracking aan.',
+                                              'Return shipping costs are yours. We recommend insured shipping with tracking.',
                                           )}
                                 </p>
                                 <label className="mt-4 flex items-start gap-3 text-choc">
@@ -149,7 +149,7 @@ export default function GuestReturnCreate({
                                     />
                                     <span>
                                         {t(
-                                            'Ik bevestig dat ik deze artikelen wil retourneren.',
+                                            'I confirm that I want to return these items.',
                                         )}
                                     </span>
                                 </label>
@@ -165,7 +165,7 @@ export default function GuestReturnCreate({
                                 disabled={processing}
                                 className="inline-flex min-h-11 items-center justify-center border border-choc bg-choc px-6 font-sans text-[10px] tracking-[0.2em] text-cream uppercase disabled:opacity-60"
                             >
-                                {t('Retour bevestigen')}
+                                {t('Confirm return')}
                             </button>
 
                             <p className="font-sans text-xs text-[#8A7363]">
@@ -173,7 +173,7 @@ export default function GuestReturnCreate({
                                     href={`/${locale}/shipping`}
                                     className="underline"
                                 >
-                                    {t('Verzend- en retourbeleid')}
+                                    {t('Shipping & returns policy')}
                                 </a>
                             </p>
                         </>

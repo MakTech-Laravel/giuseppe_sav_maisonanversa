@@ -261,7 +261,7 @@ export function ProductSectionTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -270,11 +270,11 @@ export function ProductSectionTranslationsDialog({
             >
                 <DialogHeader>
                     <DialogTitle>
-                        {t('Sectievertellingen')}: {sectionLabel}
+                        {t('Section translations')}: {sectionLabel}
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk vertalingen per taal voor productsecties en onderdelen. DeepL vertaalt vanuit de brontekst.',
+                            'Edit translations per language for product sections and items. DeepL translates from the source text.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -283,7 +283,7 @@ export function ProductSectionTranslationsDialog({
                     <Alert className="border-primary/35 bg-muted text-foreground">
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
-                            {t('Sommige sectievertellingen ontbreken nog.')}
+                            {t('Some section translations are still missing.')}
                         </AlertDescription>
                     </Alert>
                 ) : null}
@@ -322,7 +322,7 @@ export function ProductSectionTranslationsDialog({
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>{t('Titel')}</Label>
+                                <Label>{t('Title')}</Label>
                                 <Input
                                     value={activeSection.heading ?? ''}
                                     onChange={(event) =>
@@ -334,7 +334,7 @@ export function ProductSectionTranslationsDialog({
                                 />
                             </div>
                             <div className="space-y-2 sm:col-span-2">
-                                <Label>{t('Tweede titelregel')}</Label>
+                                <Label>{t('Second title line')}</Label>
                                 <Input
                                     value={activeSection.subheading ?? ''}
                                     onChange={(event) =>
@@ -346,7 +346,7 @@ export function ProductSectionTranslationsDialog({
                                 />
                             </div>
                             <div className="space-y-2 sm:col-span-2">
-                                <Label>{t('Introductietekst')}</Label>
+                                <Label>{t('Intro text')}</Label>
                                 <Textarea
                                     value={activeSection.intro ?? ''}
                                     maxLength={120}
@@ -359,7 +359,7 @@ export function ProductSectionTranslationsDialog({
                                     className="min-h-20 resize-y"
                                 />
                                 <p className="text-[11px] text-muted-foreground">
-                                    {t('{{count}}/120 tekens', {
+                                    {t('{{count}}/120 characters', {
                                         count: (activeSection.intro ?? '')
                                             .length,
                                     })}
@@ -374,12 +374,12 @@ export function ProductSectionTranslationsDialog({
                             className="space-y-3 rounded-lg border border-border bg-muted/20 p-4"
                         >
                             <p className="text-xs font-medium text-muted-foreground">
-                                {t('Rij {{number}}', {
+                                {t('Row {{number}}', {
                                     number: index + 1,
                                 })}
                             </p>
                             <div className="space-y-2">
-                                <Label>{t('Titel')}</Label>
+                                <Label>{t('Title')}</Label>
                                 <Input
                                     value={item.title ?? ''}
                                     onChange={(event) =>
@@ -392,7 +392,7 @@ export function ProductSectionTranslationsDialog({
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>{t('Tekst')}</Label>
+                                <Label>{t('Text')}</Label>
                                 <Textarea
                                     value={item.body ?? ''}
                                     onChange={(event) =>
@@ -410,7 +410,7 @@ export function ProductSectionTranslationsDialog({
 
                     {!usesHeading && itemEntries.length === 0 ? (
                         <p className="text-sm text-muted-foreground">
-                            {t('Nog geen onderdelen.')}
+                            {t('No items yet.')}
                         </p>
                     ) : null}
 
@@ -427,7 +427,7 @@ export function ProductSectionTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Opnieuw vertalen ({{locale}})', {
+                                {t('Retranslate ({{locale}})', {
                                     locale: LOCALE_LABELS[activeLocale],
                                 })}
                             </Button>
@@ -442,14 +442,14 @@ export function ProductSectionTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

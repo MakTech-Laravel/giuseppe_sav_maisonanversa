@@ -17,9 +17,9 @@ import type { InquiryDetails, InquiryRouteHelpers } from '@/types/inquiry';
 
 const META_LABELS: Record<string, string> = {
     datum: 'Datum',
-    moment: 'Voorkeur moment',
+    moment: 'Preferred time',
     soort: 'Soort',
-    ervaring: 'Jouw ervaring',
+    ervaring: 'Your experience',
     club_name: 'Club',
     location: 'Locatie',
     courts: 'Courts',
@@ -104,7 +104,7 @@ export function InquiryShow({
             >
                 <Button variant="outline" asChild>
                     <Link href={routes.index(locale).url}>
-                        <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                        <ArrowLeft className="h-4 w-4" /> {t('Back')}
                     </Link>
                 </Button>
             </AdminPageHeader>
@@ -112,9 +112,9 @@ export function InquiryShow({
             <AdminResourceShell
                 aside={
                     <AdminPanel
-                        title={t('Acties')}
+                        title={t('Actions')}
                         description={t(
-                            'Markeer deze aanvraag of ga terug naar de lijst.',
+                            'Mark this request or return to the list.',
                         )}
                     >
                         <div className="flex flex-col gap-2">
@@ -128,7 +128,7 @@ export function InquiryShow({
                                 ) : (
                                     <Eye className="h-4 w-4" />
                                 )}
-                                {inquiry.seen ? t('Ongelezen') : t('Gezien')}
+                                {inquiry.seen ? t('Unread') : t('Seen')}
                             </Button>
                             <Button
                                 variant="outline"
@@ -137,12 +137,12 @@ export function InquiryShow({
                             >
                                 <Link href={routes.index(locale).url}>
                                     <ArrowLeft className="h-4 w-4" />{' '}
-                                    {t('Terug')}
+                                    {t('Back')}
                                 </Link>
                             </Button>
                             <ConfirmDeleteDialog
                                 description={t(
-                                    'Deze aanvraag wordt permanent verwijderd.',
+                                    'This request will be permanently deleted.',
                                 )}
                                 onConfirm={() =>
                                     router.delete(
@@ -158,7 +158,7 @@ export function InquiryShow({
                                     className="w-full"
                                 >
                                     <Trash2 className="h-4 w-4" />{' '}
-                                    {t('Verwijderen')}
+                                    {t('Remove')}
                                 </Button>
                             </ConfirmDeleteDialog>
                         </div>
@@ -166,15 +166,15 @@ export function InquiryShow({
                 }
             >
                 <AdminPanel
-                    title={t('Aanvraag')}
-                    description={t('Inzending zoals ontvangen.')}
+                    title={t('Request')}
+                    description={t('Submission as received.')}
                 >
                     <div className="mb-5 flex flex-wrap gap-2">
                         <Badge variant="secondary">
                             {t(inquiry.type_label)}
                         </Badge>
                         <Badge variant={inquiry.seen ? 'secondary' : 'default'}>
-                            {inquiry.seen ? t('Gezien') : t('Ongelezen')}
+                            {inquiry.seen ? t('Seen') : t('Unread')}
                         </Badge>
                         {inquiry.priority ? (
                             <InquirySlaBadge
@@ -186,10 +186,10 @@ export function InquiryShow({
                         ) : null}
                     </div>
                     <div className="grid gap-5 sm:grid-cols-2">
-                        <Field label={t('Naam')} value={inquiry.name} />
-                        <Field label={t('E-mail')} value={inquiry.email} />
+                        <Field label={t('Name')} value={inquiry.name} />
+                        <Field label={t('Email')} value={inquiry.email} />
                         <Field
-                            label={t('Telefoon')}
+                            label={t('Phone')}
                             value={inquiry.phone || '—'}
                         />
                         <Field
@@ -198,7 +198,7 @@ export function InquiryShow({
                             mono
                         />
                         <Field
-                            label={t('Datum')}
+                            label={t('Date')}
                             value={
                                 inquiry.created_at
                                     ? new Date(
@@ -212,14 +212,14 @@ export function InquiryShow({
                     {inquiry.subject ? (
                         <div className="mt-5">
                             <Field
-                                label={t('Onderwerp')}
+                                label={t('Subject')}
                                 value={inquiry.subject}
                             />
                         </div>
                     ) : null}
                     <div className="mt-5">
                         <Field
-                            label={t('Bericht')}
+                            label={t('Post')}
                             value={inquiry.message || '—'}
                             pre
                         />

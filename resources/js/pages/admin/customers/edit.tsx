@@ -18,11 +18,11 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
 
     return (
         <>
-            <Head title={t('Klant bewerken')} />
+            <Head title={t('Edit customer')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Klant bewerken')}
-                    description={t('Werk het account van {{name}} bij.', {
+                    title={t('Edit customer')}
+                    description={t('Update {{name}}\'s account.', {
                         name: customer.name,
                     })}
                     icon={Pencil}
@@ -30,7 +30,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                     <Button variant="outline" asChild>
                         <Link href={customers.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar klanten')}
+                            {t('Back to customers')}
                         </Link>
                     </Button>
                     <Button variant="secondary" asChild>
@@ -40,7 +40,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                                 user: customer.id,
                             })}
                         >
-                            {t('Bekijk profiel')}
+                            {t('View profile')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -53,7 +53,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                                 <dl className="space-y-2 text-sm">
                                     <div className="flex justify-between gap-3">
                                         <dt className="text-muted-foreground">
-                                            {t('Klant-ID')}
+                                            {t('Customer ID')}
                                         </dt>
                                         <dd className="font-medium">
                                             #{customer.id}
@@ -61,7 +61,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                                     </div>
                                     <div className="flex justify-between gap-3">
                                         <dt className="text-muted-foreground">
-                                            {t('E-mail')}
+                                            {t('Email')}
                                         </dt>
                                         <dd className="truncate font-medium">
                                             {customer.email}
@@ -79,7 +79,7 @@ export default function EditCustomer({ customer }: { customer: AdminUser }) {
                         })}
                         isEdit
                         currentAvatar={customer.avatar}
-                        submitLabel={t('Klant opslaan')}
+                        submitLabel={t('Save customer')}
                         defaults={{
                             name: customer.name,
                             email: customer.email,

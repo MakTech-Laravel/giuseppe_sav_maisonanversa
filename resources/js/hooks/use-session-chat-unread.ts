@@ -54,7 +54,7 @@ export function useSessionChatUnread(userId?: number | null): void {
                 Number(watchingId) === Number(payload.session_id);
 
             if (!watchingThisChat) {
-                toast(t('Nieuw bericht'), {
+                toast(t('New message'), {
                     id: `session-chat-${payload.session_id}`,
                     icon: createElement(MessageCircle, {
                         className: 'size-4 text-gold',

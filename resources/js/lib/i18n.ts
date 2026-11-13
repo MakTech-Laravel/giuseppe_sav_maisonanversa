@@ -5,7 +5,7 @@ import { LOCALES, SOURCE_LOCALE } from '@/types/locale';
 import type { Locale } from '@/types/locale';
 
 /**
- * Translation keys are the Dutch source copy itself, matching Laravel's JSON
+ * Translation keys are the English source copy itself, matching Laravel's JSON
  * translation convention in `lang/*.json`.
  */
 export type Dictionary = Record<string, string>;
@@ -13,15 +13,15 @@ export type Dictionary = Record<string, string>;
 const NAMESPACE = 'translation';
 
 /**
- * Dutch needs no dictionary: a lookup miss returns the key, which is already
- * the Dutch copy. The other locales are code-split so a visitor only downloads
+ * English needs no dictionary: a lookup miss returns the key, which is already
+ * the English copy. The other locales are code-split so a visitor only downloads
  * the one they are reading.
  */
 const loaders: Record<
     Exclude<Locale, typeof SOURCE_LOCALE>,
     () => Promise<{ default: Dictionary }>
 > = {
-    en: () => import('@lang/en.json'),
+    nl: () => import('@lang/nl.json'),
     fr: () => import('@lang/fr.json'),
 };
 
@@ -58,14 +58,14 @@ export function createI18n(locale: Locale, dictionary: Dictionary): I18n {
         resources: { [locale]: { [NAMESPACE]: dictionary } },
 
         /*
-         * Keys are whole Dutch sentences, so the defaults would misread them:
+         * Keys are whole English sentences, so the defaults would misread them:
          * `.` would be treated as a path into a nested object and `:` as a
          * namespace prefix.
          */
         keySeparator: false,
         nsSeparator: false,
 
-        // A miss must return the key, because the key is the Dutch source copy.
+        // A miss must return the key, because the key is the English source copy.
         fallbackLng: false,
         returnEmptyString: false,
 
@@ -74,7 +74,7 @@ export function createI18n(locale: Locale, dictionary: Dictionary): I18n {
 
         saveMissing: import.meta.env.DEV,
         missingKeyHandler: (lngs, _ns, key) => {
-            // Dutch has no dictionary by design: every key misses, correctly.
+            // English has no dictionary by design: every key misses, correctly.
             const missing = lngs.filter((lng) => lng !== SOURCE_LOCALE);
 
             if (missing.length > 0) {

@@ -60,7 +60,7 @@ class NotificationController extends Controller
     {
         $this->inbox->markAllRead($request->user());
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Alle meldingen zijn gelezen.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('All notifications have been marked as read.')]);
 
         return back();
     }
@@ -70,7 +70,7 @@ class NotificationController extends Controller
         $row = $this->inbox->findFor($request->user(), $userNotification);
         $this->inbox->delete($request->user(), $row);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Melding verwijderd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Notification deleted.')]);
 
         $showUrl = route('admin.notifications.show', ['locale' => $locale, 'userNotification' => $row->id]);
 

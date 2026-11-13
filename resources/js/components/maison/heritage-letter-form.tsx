@@ -39,7 +39,7 @@ export function HeritageLetterForm({
     if (form.recentlySuccessful && !onSuccess) {
         return (
             <SuccessPanel
-                title={t('Welkom bij de Heritage Letter.')}
+                title={t('Welcome to the Heritage Letter.')}
                 icon="✓"
                 className={
                     variant === 'dark'
@@ -47,7 +47,7 @@ export function HeritageLetterForm({
                         : 'text-left'
                 }
             >
-                <p>{t('Je ontvangt binnenkort een bevestiging.')}</p>
+                <p>{t('You will receive a confirmation shortly.')}</p>
             </SuccessPanel>
         );
     }
@@ -80,7 +80,7 @@ export function HeritageLetterForm({
             {showName && (
                 <>
                     <label className="sr-only" htmlFor={`nl-name-${source}`}>
-                        {t('Jouw naam')}
+                        {t('Your name')}
                     </label>
                     <input
                         id={`nl-name-${source}`}
@@ -89,7 +89,7 @@ export function HeritageLetterForm({
                         onChange={(event) =>
                             form.setData('name', event.target.value)
                         }
-                        placeholder={t('Jouw naam')}
+                        placeholder={t('Your name')}
                         className={inputClass}
                     />
                 </>
@@ -97,7 +97,7 @@ export function HeritageLetterForm({
 
             <div className="flex flex-col gap-0 sm:flex-row">
                 <label className="sr-only" htmlFor={`nl-email-${source}`}>
-                    {t('Jouw e-mailadres')}
+                    {t('Your email address')}
                 </label>
                 <input
                     id={`nl-email-${source}`}
@@ -107,7 +107,7 @@ export function HeritageLetterForm({
                     onChange={(event) =>
                         form.setData('email', event.target.value)
                     }
-                    placeholder={t('Jouw e-mailadres')}
+                    placeholder={t('Your email address')}
                     className={inputClass}
                 />
                 <button
@@ -116,7 +116,7 @@ export function HeritageLetterForm({
                     data-magnetic
                     className="shrink-0 border border-gold bg-gold px-6 py-3.5 font-sans text-[10px] font-medium tracking-[0.25em] text-choc uppercase transition-colors hover:bg-gold2 disabled:opacity-60"
                 >
-                    {form.processing ? t('Bezig…') : t('Word Lid')}
+                    {form.processing ? t('Working...') : t('Join')}
                 </button>
             </div>
 
@@ -128,13 +128,13 @@ export function HeritageLetterForm({
 
             <p className="mt-1 font-sans text-[10px] tracking-[0.08em] text-stone">
                 {t(
-                    'Door je in te schrijven ga je akkoord met onze privacyverklaring.',
+                    'By signing up you agree to our privacy policy.',
                 )}{' '}
                 <MaisonLink
                     to="privacy"
                     className="underline underline-offset-2 hover:text-gold"
                 >
-                    {t('Privacybeleid')}
+                    {t('Privacy Policy')}
                 </MaisonLink>
             </p>
         </form>

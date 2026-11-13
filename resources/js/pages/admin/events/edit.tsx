@@ -79,10 +79,10 @@ export default function EditEvent({ event }: EventEditProps) {
 
     return (
         <>
-            <Head title={t('Evenement bewerken')} />
+            <Head title={t('Edit event')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Evenement bewerken')}
+                    title={t('Edit event')}
                     description={event.title}
                     icon={CalendarDays}
                 >
@@ -93,7 +93,7 @@ export default function EditEvent({ event }: EventEditProps) {
                                 event: Number(event.id),
                             })}
                         >
-                            <ArrowLeft className="h-4 w-4" /> {t('Terug')}
+                            <ArrowLeft className="h-4 w-4" /> {t('Back')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -112,7 +112,7 @@ export default function EditEvent({ event }: EventEditProps) {
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {t('Opslaan')}
+                        {t('Save')}
                     </Button>
                 </form>
             </div>

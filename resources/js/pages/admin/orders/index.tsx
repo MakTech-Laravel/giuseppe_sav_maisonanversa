@@ -135,19 +135,19 @@ export default function OrdersIndex({
 
     return (
         <>
-            <Head title={t('Bestellingen')} />
+            <Head title={t('Orders')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Bestellingen')}
+                    title={t('Orders')}
                     description={t(
-                        'Bekijk reserveringen, aanbetalingen en aankopen.',
+                        'Review reservations, deposits, and purchases.',
                     )}
                     icon={ShoppingBag}
                 />
 
                 <div className="flex flex-wrap items-end justify-start gap-3">
                     <div className="w-full max-w-xs space-y-1.5 sm:w-64">
-                        <Label htmlFor="orders-search">{t('Zoeken')}</Label>
+                        <Label htmlFor="orders-search">{t('Search')}</Label>
                         <div className="relative">
                             <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
@@ -157,7 +157,7 @@ export default function OrdersIndex({
                                     setSearch(event.target.value)
                                 }
                                 placeholder={t(
-                                    'Zoek op klant, e-mail, product of ID…',
+                                    'Search by customer, email, product or ID…',
                                 )}
                                 className="pl-9"
                             />
@@ -166,17 +166,17 @@ export default function OrdersIndex({
 
                     <div className="w-full max-w-[11rem] space-y-1.5 sm:w-44">
                         <Label htmlFor="orders-status">
-                            {t('Bestelstatus')}
+                            {t('Order status')}
                         </Label>
                         <Select value={status} onValueChange={setStatus}>
                             <SelectTrigger id="orders-status">
                                 <SelectValue
-                                    placeholder={t('Alle statussen')}
+                                    placeholder={t('All statuses')}
                                 />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">
-                                    {t('Alle statussen')}
+                                    {t('All statuses')}
                                 </SelectItem>
                                 {statusOptions.map((option) => (
                                     <SelectItem
@@ -192,7 +192,7 @@ export default function OrdersIndex({
 
                     <div className="w-full max-w-[11rem] space-y-1.5 sm:w-44">
                         <Label htmlFor="orders-payment-status">
-                            {t('Betalingsstatus')}
+                            {t('Payment status')}
                         </Label>
                         <Select
                             value={paymentStatus}
@@ -200,12 +200,12 @@ export default function OrdersIndex({
                         >
                             <SelectTrigger id="orders-payment-status">
                                 <SelectValue
-                                    placeholder={t('Alle betalingsstatussen')}
+                                    placeholder={t('All payment statuses')}
                                 />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">
-                                    {t('Alle betalingsstatussen')}
+                                    {t('All payment statuses')}
                                 </SelectItem>
                                 {paymentStatusOptions.map((option) => (
                                     <SelectItem
@@ -221,7 +221,7 @@ export default function OrdersIndex({
 
                     <div className="w-full max-w-[7rem] space-y-1.5 sm:w-28">
                         <Label htmlFor="orders-per-page">
-                            {t('Per pagina')}
+                            {t('Per page')}
                         </Label>
                         <Select
                             value={String(perPage)}
@@ -250,7 +250,7 @@ export default function OrdersIndex({
                             onClick={clearFilters}
                         >
                             <X className="h-4 w-4" />
-                            {t('Filters wissen')}
+                            {t('Clear filters')}
                         </Button>
                     )}
                 </div>
@@ -261,21 +261,21 @@ export default function OrdersIndex({
                             <TableHeader>
                                 <TableRow className="bg-muted/50 hover:bg-muted/50">
                                     <TableHead className="w-14">
-                                        {t('Nr.')}
+                                        {t('No.')}
                                     </TableHead>
-                                    <TableHead>{t('Referentie')}</TableHead>
+                                    <TableHead>{t('Reference')}</TableHead>
                                     <TableHead>{t('Product')}</TableHead>
-                                    <TableHead>{t('Klant')}</TableHead>
+                                    <TableHead>{t('Customer')}</TableHead>
                                     <TableHead className="hidden md:table-cell">
-                                        {t('Datum')}
+                                        {t('Date')}
                                     </TableHead>
-                                    <TableHead>{t('Bedrag')}</TableHead>
-                                    <TableHead>{t('Bestelstatus')}</TableHead>
+                                    <TableHead>{t('Amount')}</TableHead>
+                                    <TableHead>{t('Order status')}</TableHead>
                                     <TableHead>
-                                        {t('Betalingsstatus')}
+                                        {t('Payment status')}
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        {t('Acties')}
+                                        {t('Actions')}
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -286,7 +286,7 @@ export default function OrdersIndex({
                                             colSpan={9}
                                             className="px-4 py-10 text-center text-sm text-muted-foreground"
                                         >
-                                            {t('Geen bestellingen gevonden.')}
+                                            {t('No orders found.')}
                                         </TableCell>
                                     </TableRow>
                                 ) : (
@@ -376,7 +376,7 @@ export default function OrdersIndex({
                                                             },
                                                         )}
                                                         title={t(
-                                                            'Bestelling bekijken',
+                                                            'View order',
                                                         )}
                                                     >
                                                         <Eye className="h-4 w-4" />

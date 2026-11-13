@@ -12,42 +12,42 @@ export function HomeAntwerp() {
         <Section tone="dark">
             <Wrap className="grid items-center gap-10 ma-lg:grid-cols-[1.1fr_1fr] ma-lg:gap-16">
                 <Reveal>
-                    <Eyebrow>{t('Geworteld in Antwerpen')}</Eyebrow>
+                    <Eyebrow>{t('Rooted in Antwerp')}</Eyebrow>
                     <GoldRule />
                     <h2 className="mb-6 font-serif text-[clamp(32px,4vw,52px)] leading-[1.1] font-normal tracking-[0.04em] uppercase">
-                        {t('Een stad van')}
+                        {t('A city of')}
                         <br />
-                        {t('meesters.')}
+                        {t('masters.')}
                         <br />
-                        {t('Een huis van')}
+                        {t('A house of')}
                         <br />
-                        {t('erfgoed.')}
+                        {t('heritage.')}
                     </h2>
                     <p className="mb-4 text-[15px] leading-[1.85] text-sand">
                         {t(
-                            'Antwerpen is geen toevallige keuze. Eeuwenlang een stad van ambachtslieden, handelaren en kunstenaars — van diamantslijpers tot meester-timmerlieden. Een plaats waar geduld, precisie en schoonheid hand in hand gaan.',
+                            'Antwerp is no accidental choice. For centuries a city of craftsmen, merchants and artists — from diamond cutters to master carpenters. A place where patience, precision and beauty go hand in hand.',
                         )}
                     </p>
                     <p className="mb-7 text-[15px] leading-[1.85] text-sand">
                         {t(
-                            'Maison Anversa draagt die geest in zich. Elk racket wordt ontworpen met dezelfde eerbied voor materiaal en detail die deze stad eeuwenlang definieerde. Antwerpen is niet onze achtergrond — het is onze overtuiging.',
+                            'Maison Anversa carries that spirit. Each racket is designed with the same reverence for material and detail that defined this city for centuries. Antwerp is not our background — it is our conviction.',
                         )}
                     </p>
                     <div className="flex flex-wrap gap-12">
                         <Figure
                             value="2026"
-                            line1={t('Oprichting')}
-                            line2={t('in Antwerpen')}
+                            line1={t('Founding')}
+                            line2={t('in Antwerp')}
                         />
                         <Figure
                             value="100"
-                            line1={t('Stuks')}
+                            line1={t('Pieces')}
                             line2="Founding Edition"
                         />
                         <Figure
                             value="1"
-                            line1={t('Stad die')}
-                            line2={t('ons draagt')}
+                            line1={t('City that')}
+                            line2={t('carries us')}
                         />
                     </div>
                 </Reveal>

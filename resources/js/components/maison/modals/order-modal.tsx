@@ -45,7 +45,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
     const selectedEditionLabel =
         product?.editionLabel ??
         (product?.editionNumber != null
-            ? t('Nr. {{number}}', {
+            ? t('Nº {{number}}', {
                   number: String(product.editionNumber).padStart(3, '0'),
               })
             : null);
@@ -68,8 +68,8 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
     const steps = useMemo(
         () =>
             [
-                { n: 1 as Step, label: t('Gegevens') },
-                { n: 2 as Step, label: t('Betaling') },
+                { n: 1 as Step, label: t('Details') },
+                { n: 2 as Step, label: t('Payment') },
             ] as const,
         [t],
     );
@@ -86,7 +86,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
             !shippingPostalCode.trim() ||
             !shippingCountry.trim()
         ) {
-            setError(t('Vul a.u.b. jouw contact- en verzendgegevens in.'));
+            setError(t('Please enter your contact and shipping details.'));
 
             return;
         }
@@ -100,7 +100,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
         }
 
         if (isLimitedEdition && !product?.editionPieceId) {
-            setError(t('Kies a.u.b. een beschikbaar editienummer.'));
+            setError(t('Please choose an available edition number.'));
 
             return;
         }
@@ -108,7 +108,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
         if (!acceptTerms) {
             setError(
                 t(
-                    'Ik heb de Algemene voorwaarden en het Retourbeleid gelezen en ga ermee akkoord.',
+                    'I have read the Terms & Conditions and the Return Policy and agree to them.',
                 ),
             );
 
@@ -152,7 +152,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         typeof message === 'string'
                             ? message
                             : t(
-                                  'Betaling kon niet worden gestart. Probeer opnieuw.',
+                                  'Payment could not be started. Please try again.',
                               ),
                     );
                     setProcessing(false);
@@ -210,7 +210,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         required
                         value={name}
                         onChange={(event) => setName(event.target.value)}
-                        placeholder={t('Volledige naam')}
+                        placeholder={t('Full name')}
                         className={modalInputClassName}
                     />
                     <input
@@ -219,7 +219,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         required
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
-                        placeholder={t('E-mailadres')}
+                        placeholder={t('Email address')}
                         className={modalInputClassName}
                     />
                     <input
@@ -227,12 +227,12 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         type="tel"
                         value={phone}
                         onChange={(event) => setPhone(event.target.value)}
-                        placeholder={t('Telefoonnummer (optioneel)')}
+                        placeholder={t('Phone number (optional)')}
                         className={modalInputClassName}
                     />
 
                     <p className="mt-1 font-sans text-[10px] tracking-[0.16em] text-choc3 uppercase">
-                        {t('Verzendadres')}
+                        {t('Shipping address')}
                     </p>
                     <input
                         type="text"
@@ -241,7 +241,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         onChange={(event) =>
                             setShippingLine1(event.target.value)
                         }
-                        placeholder={t('Straat en huisnummer')}
+                        placeholder={t('Street and number')}
                         className={modalInputClassName}
                     />
                     <input
@@ -250,7 +250,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         onChange={(event) =>
                             setShippingLine2(event.target.value)
                         }
-                        placeholder={t('Adresregel 2 (optioneel)')}
+                        placeholder={t('Address line 2 (optional)')}
                         className={modalInputClassName}
                     />
                     <div className="grid grid-cols-2 gap-3">
@@ -261,7 +261,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             onChange={(event) =>
                                 setShippingPostalCode(event.target.value)
                             }
-                            placeholder={t('Postcode')}
+                            placeholder={t('Postal code')}
                             className={modalInputClassName}
                         />
                         <input
@@ -271,7 +271,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             onChange={(event) =>
                                 setShippingCity(event.target.value)
                             }
-                            placeholder={t('Stad')}
+                            placeholder={t('City')}
                             className={modalInputClassName}
                         />
                     </div>
@@ -282,10 +282,10 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             setShippingCountry(event.target.value)
                         }
                         className={cn(modalInputClassName, 'cursor-pointer')}
-                        aria-label={t('Land')}
+                        aria-label={t('Country')}
                     >
                         <option value="" disabled>
-                            {t('Land')}
+                            {t('Country')}
                         </option>
                         {[
                             ['BE', 'Belgium'],
@@ -321,7 +321,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                     )}
 
                     <MaisonButton type="submit" variant="filled" block>
-                        {t('Volgende — Betaling')}
+                        {t('Next — Payment')}
                     </MaisonButton>
                 </form>
             ) : (
@@ -349,7 +349,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             )}
                         >
                             {t(
-                                'De Founding Edition wordt in één beperkte productieronde vervaardigd. Levertermijnen zijn indicatief.',
+                                'The Founding Edition is produced in a single limited production run. Delivery times are indicative.',
                             )}
                         </p>
                     )}
@@ -364,7 +364,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             className="mt-1"
                         />
                         <span className="text-[13px] leading-[1.5] text-choc3">
-                            {t('Cadeauverpakking toevoegen')}
+                            {t('Add gift wrapping')}
                         </span>
                     </label>
 
@@ -374,7 +374,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                                 htmlFor="ord-gift"
                                 className="mb-2 block font-sans text-[10px] tracking-[0.18em] text-choc3 uppercase"
                             >
-                                {t('Cadeauboodschap (optioneel)')}
+                                {t('Gift message (optional)')}
                             </label>
                             <textarea
                                 id="ord-gift"
@@ -401,21 +401,21 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             className="mt-1"
                         />
                         <span className="text-[13px] leading-[1.5] text-choc3">
-                            {t('Ik heb de')}{' '}
+                            {t('I have read the')}{' '}
                             <MaisonLink
                                 to="terms"
                                 className="underline underline-offset-2 hover:text-gold"
                             >
-                                {t('Algemene voorwaarden')}
+                                {t('Terms & Conditions')}
                             </MaisonLink>{' '}
-                            {t('en het')}{' '}
+                            {t('and the')}{' '}
                             <a
                                 href={returnsPage.url(locale)}
                                 className="underline underline-offset-2 hover:text-gold"
                             >
-                                {t('Retourbeleid')}
+                                {t('Return Policy')}
                             </a>{' '}
-                            {t('gelezen en ga ermee akkoord.')}
+                            {t('and agree to them.')}
                         </span>
                     </label>
 
@@ -432,7 +432,7 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             onClick={() => setStep(1)}
                             disabled={processing}
                         >
-                            {t('← Terug')}
+                            {t('← Back')}
                         </MaisonButton>
                         <MaisonButton
                             type="button"
@@ -442,14 +442,14 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                             onClick={onPay}
                         >
                             {processing
-                                ? t('Bezig…')
-                                : `${t('Ga naar betaling —')} ${priceLabel}`}
+                                ? t('Working...')
+                                : `${t('Go to payment —')} ${priceLabel}`}
                         </MaisonButton>
                     </div>
 
                     <p className={cn(modalNoteClassName, 'mt-3')}>
                         {t(
-                            'Je wordt doorgestuurd naar onze beveiligde betaalpagina. Betaling via Stripe.',
+                            'You will be redirected to our secure payment page. Payment via Stripe.',
                         )}
                     </p>
                     {deliveryLabel ? (
@@ -459,9 +459,9 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                     ) : null}
                     <p className={cn(modalNoteClassName, 'mt-2')}>
                         {shippingEuIncluded
-                            ? t('Verzending inbegrepen in de EU (indicatie).')
+                            ? t('Shipping included in the EU (indicative).')
                             : t(
-                                  'Verzending later in rekening gebracht — indicatie {{min}}–{{max}} €.',
+                                  'Shipping charged later — estimate {{min}}–{{max}} €.',
                                   {
                                       min: shippingEstimateMin,
                                       max: shippingEstimateMax,
@@ -472,13 +472,13 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
             )}
 
             <p className={modalNoteClassName}>
-                {t('Beveiligde betaling via Stripe · SSL-versleuteld ·')}{' '}
+                {t('Secure payment via Stripe · SSL encrypted ·')}{' '}
                 <MaisonLink
                     to="terms"
                     className="underline underline-offset-2 hover:text-gold"
                     onClick={onClose}
                 >
-                    {t('Voorwaarden')}
+                    {t('Terms')}
                 </MaisonLink>
             </p>
         </MaisonModal>
@@ -530,32 +530,32 @@ function OrderSummary({
     return (
         <div className="mb-4 overflow-hidden rounded border border-gold/22 bg-black/3 p-4.5">
             <SummaryRow label={t('Product')} value={productName} />
-            <SummaryRow label={t('Houder')} value={name.trim()} />
+            <SummaryRow label={t('Holder')} value={name.trim()} />
             {isLimitedEdition && editionLabel && (
-                <SummaryRow label={t('Editienummer')} value={editionLabel} />
+                <SummaryRow label={t('Edition number')} value={editionLabel} />
             )}
-            <SummaryRow label={t('E-mail')} value={email.trim()} />
+            <SummaryRow label={t('Email')} value={email.trim()} />
             {trimmedPhone && (
-                <SummaryRow label={t('Telefoon')} value={trimmedPhone} />
+                <SummaryRow label={t('Phone')} value={trimmedPhone} />
             )}
-            <SummaryRow label={t('Verzendadres')} value={shippingValue} />
+            <SummaryRow label={t('Shipping address')} value={shippingValue} />
             {giftWrap && (
                 <>
                     <SummaryRow
-                        label={t('Cadeauverpakking')}
-                        value={t('Ja · geen prijs op pakbon')}
+                        label={t('Gift packaging')}
+                        value={t('Yes · no price on packing slip')}
                     />
                     {trimmedMessage && (
                         <SummaryRow
-                            label={t('Boodschap')}
+                            label={t('Message')}
                             value={trimmedMessage}
                         />
                     )}
                 </>
             )}
-            <SummaryRow label={t('Totaal')} value={priceLabel} total />
+            <SummaryRow label={t('Total')} value={priceLabel} total />
             <p className="-mt-1 text-right font-sans text-[10px] text-choc3">
-                {t('incl. 21% btw')}
+                {t('incl. 21% VAT')}
             </p>
         </div>
     );

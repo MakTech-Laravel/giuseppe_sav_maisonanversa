@@ -41,7 +41,7 @@ class FoundingCircleClaimController extends Controller
                 'status' => $status,
             ],
             'statusOptions' => [
-                ['value' => 'all', 'label' => __('Alle')],
+                ['value' => 'all', 'label' => __('All')],
                 ...FoundingCircleClaimStatus::options(),
             ],
         ]);
@@ -57,7 +57,7 @@ class FoundingCircleClaimController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Registratie goedgekeurd. Founding Circle-status geactiveerd.'),
+            'message' => __('Registration approved. Founding Circle status activated.'),
         ]);
 
         return back();
@@ -73,7 +73,7 @@ class FoundingCircleClaimController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Registratie afgewezen.'),
+            'message' => __('Registration rejected.'),
         ]);
 
         return back();

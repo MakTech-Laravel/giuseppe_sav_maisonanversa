@@ -34,7 +34,7 @@ test('authenticated staff can visit the admin dashboard', function () {
             ->component('dashboard')
             ->has('stats', 6)
             ->where('stats.0.key', 'Klanten')
-            ->where('stats.0.hintKey', 'Lid-accounts')
+            ->where('stats.0.hintKey', 'Member accounts')
             ->where('stats.1.key', 'Beheerders')
             ->where('stats.2.key', 'Journal')
             ->where('stats.3.key', 'Openstaande bestellingen')

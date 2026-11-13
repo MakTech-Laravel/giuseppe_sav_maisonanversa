@@ -9,33 +9,33 @@ import { Section, Wrap } from '@/components/maison/ui/section';
 const BENEFITS = [
     {
         icon: '→',
-        title: 'Vroege Toegang',
-        desc: 'Als eerste toegang tot alle toekomstige releases — minimaal 48u voor het grote publiek.',
+        title: 'Early Access',
+        desc: 'First access to all future releases — at least 48h before the general public.',
     },
     {
         icon: '◈',
-        title: 'Exclusieve Evenementen',
-        desc: 'Persoonlijke uitnodigingen voor Maison Anversa events en productpresentaties.',
+        title: 'Exclusive Events',
+        desc: 'Personal invitations to Maison Anversa events and product presentations.',
     },
     {
         icon: '✦',
         title: 'Behind the Scenes',
-        desc: 'Persoonlijke updates van de oprichter over het merk en de producten.',
+        desc: 'Personal updates from the founder about the brand and products.',
     },
     {
         icon: '⬡',
-        title: 'Naamregistratie',
-        desc: 'Jouw naam in het officiële Founding Circle register — permanent deel van het merkarchief.',
+        title: 'Name Registration',
+        desc: 'Your name in the official Founding Circle register — a permanent part of the brand archive.',
     },
     {
         icon: '◎',
-        title: 'Uniek Nummer',
-        desc: 'Jouw editienummer (001–100) op racket, certificaat en paspoort. Voor altijd.',
+        title: 'Unique Number',
+        desc: 'Your edition number (001–100) on racket, certificate and passport. Forever.',
     },
     {
         icon: '★',
-        title: 'Prioriteit Support',
-        desc: 'Alle vragen behandeld als eerste. Reactie binnen 12 uur.',
+        title: 'Priority Support',
+        desc: 'All questions handled first. Response within 12 hours.',
     },
 ] as const;
 
@@ -47,16 +47,16 @@ export function HomeCircle() {
             <Wrap>
                 <Reveal className="mx-auto mb-16 max-w-160 text-center">
                     <Eyebrow tone="gold2" className="text-center">
-                        {t('De eerste 100')}
+                        {t('The first 100')}
                     </Eyebrow>
                     <GoldRule center className="mx-auto" />
                     <h2 className="mb-5 font-serif text-[clamp(30px,4vw,52px)] leading-[1.1] font-medium">
-                        {t('De')}{' '}
+                        {t('The')}{' '}
                         <em className="text-gold2 italic">Founding Circle</em>
                     </h2>
                     <p className="text-base leading-[1.85] text-choc3">
                         {t(
-                            'Niet de eerste 100 klanten. De eerste 100 mensen die geloofden voordat iedereen het wist.',
+                            'Not the first 100 customers. The first 100 people who believed before everyone knew.',
                         )}
                     </p>
                 </Reveal>
@@ -85,7 +85,7 @@ export function HomeCircle() {
 
                 <div className="text-center">
                     <MaisonButton as={MaisonLink} variant="choc" to="circle">
-                        {t('Meer over de Founding Circle →')}
+                        {t('More about the Founding Circle →')}
                     </MaisonButton>
                 </div>
             </Wrap>

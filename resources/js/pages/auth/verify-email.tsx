@@ -11,12 +11,12 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
     return (
         <>
-            <Head title={t('E-mail verifiëren')} />
+            <Head title={t('Verify email')} />
 
             {status === 'verification-link-sent' && (
                 <div className="mb-6 border border-gold/30 bg-cream2 px-4 py-3 text-center font-sans text-[13px] leading-[1.6] text-choc3">
                     {t(
-                        'Er is een nieuwe verificatielink naar jouw e-mailadres gestuurd.',
+                        'A new verification link has been sent to your email address.',
                     )}
                 </div>
             )}
@@ -32,15 +32,15 @@ export default function VerifyEmail({ status }: { status?: string }) {
                         >
                             {processing && <Spinner />}
                             {processing
-                                ? t('Bezig…')
-                                : t('Verificatie-e-mail opnieuw versturen')}
+                                ? t('Working...')
+                                : t('Resend verification email')}
                         </MaisonButton>
 
                         <TextLink
                             href={logout()}
                             className="mx-auto block font-sans text-[10px] tracking-[0.2em] text-stone uppercase no-underline hover:text-gold"
                         >
-                            {t('Uitloggen')}
+                            {t('Log out')}
                         </TextLink>
                     </>
                 )}
@@ -50,7 +50,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
 }
 
 VerifyEmail.layout = {
-    title: 'E-mail verifiëren',
+    title: 'Verify email',
     description:
-        'Bevestig jouw e-mailadres via de link die we zojuist hebben gestuurd.',
+        'Confirm your email address using the link we just sent you.',
 };

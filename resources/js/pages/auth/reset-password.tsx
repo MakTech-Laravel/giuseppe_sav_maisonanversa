@@ -18,7 +18,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 
     return (
         <>
-            <Head title={t('Wachtwoord opnieuw instellen')} />
+            <Head title={t('Reset password')} />
 
             <Form
                 {...update.form()}
@@ -28,7 +28,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
                 {({ processing, errors }) => (
                     <div className="grid gap-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="email">{t('E-mailadres')}</Label>
+                            <Label htmlFor="email">{t('Email address')}</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -45,7 +45,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="otp">{t('6-cijferige code')}</Label>
+                            <Label htmlFor="otp">{t('6-digit code')}</Label>
                             <Input
                                 id="otp"
                                 type="text"
@@ -63,14 +63,14 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 
                         <div className="grid gap-2">
                             <Label htmlFor="password">
-                                {t('Nieuw wachtwoord instellen')}
+                                {t('Set new password')}
                             </Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder={t('Nieuw wachtwoord')}
+                                placeholder={t('New password')}
                                 passwordrules={passwordRules}
                                 required
                             />
@@ -79,14 +79,14 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">
-                                {t('Bevestig nieuw wachtwoord')}
+                                {t('Confirm new password')}
                             </Label>
                             <PasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder={t('Bevestig wachtwoord')}
+                                placeholder={t('Confirm password')}
                                 passwordrules={passwordRules}
                                 required
                             />
@@ -102,7 +102,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            {t('Wachtwoord opslaan')}
+                            {t('Save password')}
                         </Button>
                     </div>
                 )}
@@ -117,7 +117,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
                             disabled={processing || email === ''}
                             className="font-sans text-[10px] tracking-[0.2em] text-stone uppercase hover:text-gold disabled:opacity-50"
                         >
-                            {t('Nieuwe code versturen')}
+                            {t('Send a new code')}
                         </button>
                     </>
                 )}
@@ -127,7 +127,7 @@ export default function ResetPassword({ email, passwordRules }: Props) {
 }
 
 ResetPassword.layout = {
-    title: 'Wachtwoord opnieuw instellen',
+    title: 'Reset password',
     description:
-        'Voer de code uit jouw e-mail in en stel jouw nieuwe wachtwoord in.',
+        'Enter the code from your email and set your new password.',
 };

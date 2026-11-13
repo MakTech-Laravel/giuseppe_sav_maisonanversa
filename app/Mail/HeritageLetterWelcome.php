@@ -23,7 +23,7 @@ class HeritageLetterWelcome extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Welkom bij de Heritage Letter.'),
+            subject: __('Welcome to the Heritage Letter.'),
         );
     }
 

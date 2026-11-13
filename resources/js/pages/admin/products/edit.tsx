@@ -223,17 +223,17 @@ export default function EditProduct({
 
     return (
         <>
-            <Head title={t('Product bewerken')} />
+            <Head title={t('Edit product')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Product bewerken')}
-                    description={t('Elke tab wordt afzonderlijk opgeslagen.')}
+                    title={t('Edit product')}
+                    description={t('Each tab is saved separately.')}
                     icon={Pencil}
                 >
                     <Button variant="outline" asChild>
                         <Link href={products.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar product')}
+                            {t('Back to product')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -253,14 +253,14 @@ export default function EditProduct({
                             {...shared}
                             existingOgImage={product.og_image}
                         />
-                        {saveButton('Wijzigingen opslaan')}
+                        {saveButton('Save changes')}
                     </form>
                 ) : null}
 
                 {step.id === 'pricing' ? (
                     <form onSubmit={saveDetails} className="space-y-6">
                         <ProductPricingFields {...shared} />
-                        {saveButton('Wijzigingen opslaan')}
+                        {saveButton('Save changes')}
                     </form>
                 ) : null}
 
@@ -274,7 +274,7 @@ export default function EditProduct({
                             uploadProgress={form.progress?.percentage ?? null}
                             onCancelUpload={() => form.cancel()}
                         />
-                        {saveButton('Afbeeldingen opslaan')}
+                        {saveButton('Save images')}
                     </form>
                 ) : null}
 
@@ -285,21 +285,21 @@ export default function EditProduct({
                             catalogue={sectionCatalogue}
                             storedSections={product.sections}
                         />
-                        {saveButton('Secties opslaan')}
+                        {saveButton('Save sections')}
                     </form>
                 ) : null}
 
                 {step.id === 'faq' ? (
                     <form onSubmit={saveFaqs} className="space-y-6">
                         <ProductFaqFields {...shared} />
-                        {saveButton('Vragen opslaan')}
+                        {saveButton('Save questions')}
                     </form>
                 ) : null}
 
                 {step.id === 'publish' ? (
                     <form onSubmit={saveDetails} className="space-y-6">
                         <ProductPublishFields {...shared} />
-                        {saveButton('Publicatie opslaan')}
+                        {saveButton('Save publication')}
                     </form>
                 ) : null}
             </div>

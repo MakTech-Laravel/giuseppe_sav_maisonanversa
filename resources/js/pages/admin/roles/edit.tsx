@@ -19,13 +19,13 @@ export default function EditRole({ role, permissions }: EditRoleProps) {
 
     return (
         <>
-            <Head title={t('Rol bewerken')} />
+            <Head title={t('Edit role')} />
 
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Rol bewerken')}
+                    title={t('Edit role')}
                     description={t(
-                        'Werk de rol {{name}} en de bijbehorende rechten bij.',
+                        'Update the {{name}} role and its permissions.',
                         { name: role.name },
                     )}
                     icon={ShieldCheck}
@@ -33,7 +33,7 @@ export default function EditRole({ role, permissions }: EditRoleProps) {
                     <Button variant="outline" asChild>
                         <Link href={roles.index(wayfinderLocale()).url}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar rollen')}
+                            {t('Back to roles')}
                         </Link>
                     </Button>
                 </AdminPageHeader>

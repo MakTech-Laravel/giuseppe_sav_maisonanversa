@@ -34,17 +34,17 @@ export default function CreateDressingItem() {
 
     return (
         <>
-            <Head title={t('Dressing item aanmaken')} />
+            <Head title={t('Create dressing item')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Dressing item aanmaken')}
-                    description={t('Voeg een item toe aan de Kleedkamer.')}
+                    title={t('Create dressing item')}
+                    description={t('Add an item to the Dressing Room.')}
                     icon={Shirt}
                 >
                     <Button variant="outline" asChild>
                         <Link href={dressingItems.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar Kleedkamer')}
+                            {t('Back to Dressing Room')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -58,7 +58,7 @@ export default function CreateDressingItem() {
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {t('Item aanmaken')}
+                        {t('Create item')}
                     </Button>
                 </form>
             </div>

@@ -8,25 +8,25 @@
     </p>
 
     <p style="margin:0 0 12px;">
-        <strong style="color:#291C18;">{{ __('Naam') }}:</strong>
+        <strong style="color:#291C18;">{{ __('Name') }}:</strong>
         {{ $inquiry->name }}
     </p>
 
     <p style="margin:0 0 12px;">
-        <strong style="color:#291C18;">{{ __('E-mail') }}:</strong>
+        <strong style="color:#291C18;">{{ __('Email') }}:</strong>
         {{ $inquiry->email }}
     </p>
 
     @if (filled($inquiry->phone))
         <p style="margin:0 0 12px;">
-            <strong style="color:#291C18;">{{ __('Telefoon') }}:</strong>
+            <strong style="color:#291C18;">{{ __('Phone') }}:</strong>
             {{ $inquiry->phone }}
         </p>
     @endif
 
     @if (filled($inquiry->subject))
         <p style="margin:0 0 12px;">
-            <strong style="color:#291C18;">{{ __('Onderwerp') }}:</strong>
+            <strong style="color:#291C18;">{{ __('Subject') }}:</strong>
             {{ $inquiry->subject }}
         </p>
     @endif

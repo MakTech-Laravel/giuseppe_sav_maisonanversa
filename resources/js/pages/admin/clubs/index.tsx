@@ -144,7 +144,7 @@ export default function ClubsIndex({
     function destroyClub(club: AdminClubRow) {
         if (
             !window.confirm(
-                t('“{{name}}” definitief verwijderen?', { name: club.name }),
+                t('Permanently delete “{{name}}”?', { name: club.name }),
             )
         ) {
             return;
@@ -160,13 +160,13 @@ export default function ClubsIndex({
                 <AdminPageHeader
                     title={t('Clubs')}
                     description={t(
-                        'Beheer de clubs en corners waar leden sessies plannen.',
+                        'Manage the clubs and corners where members plan sessions.',
                     )}
                     icon={Building2}
                 >
                     <Button asChild>
                         <Link href={clubsRoutes.create(locale)}>
-                            <Plus className="h-4 w-4" /> {t('Club toevoegen')}
+                            <Plus className="h-4 w-4" /> {t('Add club')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -178,7 +178,7 @@ export default function ClubsIndex({
                         className="w-full cursor-pointer rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-left text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200"
                     >
                         {t(
-                            '{{count}} door leden ingediende clubs wachten op goedkeuring.',
+                            '{{count}} member-submitted clubs awaiting approval.',
                             { count: pendingCount },
                         )}
                     </button>
@@ -215,16 +215,16 @@ export default function ClubsIndex({
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_11rem_11rem_auto] sm:items-center">
                     <div className="relative min-w-0">
                         <Label htmlFor="clubs-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             id="clubs-search"
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op naam, stad, postcode…')}
+                            placeholder={t('Search by name, city, postal code…')}
                             className="w-full pl-9"
-                            aria-label={t('Zoeken')}
+                            aria-label={t('Search')}
                         />
                     </div>
 
@@ -233,11 +233,11 @@ export default function ClubsIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             {statusOptions.map((option) => (
                                 <SelectItem
@@ -253,13 +253,13 @@ export default function ClubsIndex({
                     <Select value={city} onValueChange={setCity}>
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Stad')}
+                            aria-label={t('City')}
                         >
-                            <SelectValue placeholder={t('Alle steden')} />
+                            <SelectValue placeholder={t('All cities')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle steden')}
+                                {t('All cities')}
                             </SelectItem>
                             {cities.map((option) => (
                                 <SelectItem key={option} value={option}>
@@ -278,7 +278,7 @@ export default function ClubsIndex({
                             onClick={clearFilters}
                         >
                             <X className="h-4 w-4" />
-                            {t('Wis filters')}
+                            {t('Clear filters')}
                         </Button>
                     ) : (
                         <span className="hidden sm:block" aria-hidden />
@@ -291,17 +291,17 @@ export default function ClubsIndex({
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
                                 <TableHead>{t('Club')}</TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    {t('Adres')}
+                                    {t('Address')}
                                 </TableHead>
                                 <TableHead className="hidden lg:table-cell">
-                                    {t('Sporten')}
+                                    {t('Sports')}
                                 </TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    {t('Sessies')}
+                                    {t('Sessions')}
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    {t('Acties')}
+                                    {t('Actions')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -312,7 +312,7 @@ export default function ClubsIndex({
                                         colSpan={6}
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
-                                        {t('Geen clubs gevonden.')}
+                                        {t('No clubs found.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -380,7 +380,7 @@ export default function ClubsIndex({
                                                         onClick={() =>
                                                             approve(club.id)
                                                         }
-                                                        title={t('Goedkeuren')}
+                                                        title={t('Approve')}
                                                     >
                                                         <Check className="h-4 w-4" />
                                                     </Button>
@@ -391,7 +391,7 @@ export default function ClubsIndex({
                                                         onClick={() =>
                                                             reject(club.id)
                                                         }
-                                                        title={t('Afwijzen')}
+                                                        title={t('Decline')}
                                                     >
                                                         <X className="h-4 w-4" />
                                                     </Button>
@@ -407,7 +407,7 @@ export default function ClubsIndex({
                                                         locale,
                                                         club: club.id,
                                                     })}
-                                                    title={t('Bekijken')}
+                                                    title={t('View')}
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Link>
@@ -422,7 +422,7 @@ export default function ClubsIndex({
                                                         locale,
                                                         club: club.id,
                                                     })}
-                                                    title={t('Bewerken')}
+                                                    title={t('Edit')}
                                                 >
                                                     <Pencil className="h-4 w-4" />
                                                 </Link>
@@ -434,7 +434,7 @@ export default function ClubsIndex({
                                                 onClick={() =>
                                                     destroyClub(club)
                                                 }
-                                                title={t('Verwijderen')}
+                                                title={t('Remove')}
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>

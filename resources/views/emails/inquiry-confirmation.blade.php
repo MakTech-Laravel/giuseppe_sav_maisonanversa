@@ -2,19 +2,19 @@
     'title' => __($inquiry->type->confirmationSubject()),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
-    'ctaLabel' => __('Bezoek het huis'),
+    'ctaLabel' => __('Visit the house'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Beste :name,', ['name' => $inquiry->name]) }}
+        {{ __('Dear :name,', ['name' => $inquiry->name]) }}
     </p>
 
     <p style="margin:0 0 16px;">
-        {{ __('Wij hebben jouw bericht ontvangen en bevestigen persoonlijk zo snel mogelijk.') }}
+        {{ __('We have received your message and will confirm personally as soon as possible.') }}
     </p>
 
     @if (filled($inquiry->subject))
         <p style="margin:0 0 12px;">
-            <strong style="color:#291C18;">{{ __('Onderwerp') }}:</strong>
+            <strong style="color:#291C18;">{{ __('Subject') }}:</strong>
             {{ $inquiry->subject }}
         </p>
     @endif

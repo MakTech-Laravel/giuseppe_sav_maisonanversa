@@ -36,7 +36,7 @@ export default function DressingShow({
     const { openNewsletter } = useShellActions();
     const { locale } = useLocale();
     const statusLabel =
-        item.status === 'available' ? t('Beschikbaar') : t('Binnenkort');
+        item.status === 'available' ? t('Available') : t('Coming soon');
 
     return (
         <>
@@ -81,7 +81,7 @@ export default function DressingShow({
                                     onClick={openNewsletter}
                                     className="w-fit"
                                 >
-                                    {t('Schrijf in voor Heritage Letter')}
+                                    {t('Sign up for the Heritage Letter')}
                                 </MaisonButton>
                             ) : (
                                 <MaisonButton
@@ -90,7 +90,7 @@ export default function DressingShow({
                                     href={foundingProductUrl(locale)}
                                     className="w-fit"
                                 >
-                                    {t('Ontdek Heritage Nº 001 →')}
+                                    {t('Discover Heritage Nº 001 →')}
                                 </MaisonButton>
                             )}
 
@@ -98,7 +98,7 @@ export default function DressingShow({
                                 to="dressing"
                                 className="mt-8 inline-flex min-h-11 w-fit items-center font-sans text-[9px] tracking-[0.22em] text-gold uppercase transition-colors hover:text-gold2"
                             >
-                                {t('← Terug naar de Kleedkamer')}
+                                {t('← Back to the Dressing Room')}
                             </MaisonLink>
                         </Reveal>
                     </div>
@@ -109,7 +109,7 @@ export default function DressingShow({
                 <Section tone="dark">
                     <Wrap>
                         <Reveal className="mb-12 text-center">
-                            <Eyebrow>{t('Ook interessant')}</Eyebrow>
+                            <Eyebrow>{t('You might also like')}</Eyebrow>
                             <GoldRule center className="mx-auto" />
                         </Reveal>
 

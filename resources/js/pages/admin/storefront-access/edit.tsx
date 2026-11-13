@@ -42,19 +42,19 @@ export default function StorefrontAccessEdit({
 
     return (
         <>
-            <Head title={t('Storefront-toegang')} />
+            <Head title={t('Storefront access')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Storefront-toegang')}
+                    title={t('Storefront access')}
                     description={t(
-                        'Schakel aankopen en registratie in of uit. De .env-kill-switch moet ook aan staan.',
+                        'Turn purchases and registration on or off. The .env kill switch must also be on.',
                     )}
                     icon={Store}
                 />
                 <form onSubmit={submit} className="w-full space-y-6">
                     <AdminResourceShell
                         aside={
-                            <AdminPanel title={t('Opslaan')}>
+                            <AdminPanel title={t('Save')}>
                                 <Button
                                     type="submit"
                                     disabled={form.processing}
@@ -65,12 +65,12 @@ export default function StorefrontAccessEdit({
                                     ) : (
                                         <Settings2 className="size-4" />
                                     )}
-                                    {t('Instellingen opslaan')}
+                                    {t('Save settings')}
                                 </Button>
                             </AdminPanel>
                         }
                     >
-                        <AdminPanel title={t('Toegang')}>
+                        <AdminPanel title={t('Access')}>
                             <div className="space-y-5">
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export default function StorefrontAccessEdit({
                                             }
                                         />
                                         <Label htmlFor="purchases_enabled">
-                                            {t('Aankopen inschakelen')}
+                                            {t('Enable purchases')}
                                         </Label>
                                     </div>
                                     <InputError
@@ -98,7 +98,7 @@ export default function StorefrontAccessEdit({
                                     {!envPurchasesEnabled && (
                                         <p className="text-sm text-muted-foreground">
                                             {t(
-                                                'MAISON_CHECKOUT_ENABLED staat uit in .env — aankopen blijven gepauzeerd tot die weer aan staat.',
+                                                'MAISON_CHECKOUT_ENABLED is off in .env — purchases stay paused until it is turned back on.',
                                             )}
                                         </p>
                                     )}
@@ -119,7 +119,7 @@ export default function StorefrontAccessEdit({
                                             }
                                         />
                                         <Label htmlFor="registration_enabled">
-                                            {t('Registratie inschakelen')}
+                                            {t('Enable registration')}
                                         </Label>
                                     </div>
                                     <InputError
@@ -130,7 +130,7 @@ export default function StorefrontAccessEdit({
                                     {!envRegistrationEnabled && (
                                         <p className="text-sm text-muted-foreground">
                                             {t(
-                                                'MAISON_REGISTRATION_ENABLED staat uit in .env — registratie blijft gepauzeerd tot die weer aan staat.',
+                                                'MAISON_REGISTRATION_ENABLED is off in .env — registration stays paused until it is turned back on.',
                                             )}
                                         </p>
                                     )}

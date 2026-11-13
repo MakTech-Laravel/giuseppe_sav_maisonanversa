@@ -18,7 +18,7 @@ enum SessionLevel: string
             self::Beginner => 'Beginner',
             self::Intermediate => 'Gevorderd',
             self::Advanced => 'Ervaren',
-            self::OpenToAll => 'Open voor iedereen',
+            self::OpenToAll => 'Open to all',
         };
     }
 

@@ -42,12 +42,12 @@ export function showNotificationToast(
         : undefined;
     const actionLabel = payload.link_label?.trim()
         ? t(payload.link_label)
-        : t('Openen');
+        : t('Open');
 
     toast(
         <NotificationToastTitle
             payload={payload}
-            eyebrow={t('Nieuwe melding')}
+            eyebrow={t('New notification')}
             t={t}
         />,
         {

@@ -45,7 +45,7 @@ export function JournalCard({ entry }: { entry: JournalCardData }) {
                     {entry.meta}
                 </p>
                 <span className="font-sans text-[9px] tracking-[0.22em] text-gold uppercase">
-                    {t('Lees verder')} →
+                    {t('Read on')} →
                 </span>
             </MaisonLink>
         </Reveal>

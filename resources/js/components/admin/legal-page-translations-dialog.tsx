@@ -114,7 +114,7 @@ export function LegalPageTranslationsDialog({
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                     <Languages className="h-4 w-4" />
-                    {t('Vertalingen')}
+                    {t('Translations')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -122,10 +122,10 @@ export function LegalPageTranslationsDialog({
                 onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <DialogHeader>
-                    <DialogTitle>{t('Vertalingen')}</DialogTitle>
+                    <DialogTitle>{t('Translations')}</DialogTitle>
                     <DialogDescription className="text-muted-foreground">
                         {t(
-                            'Bewerk de Nederlandse bron en de EN/FR-vertalingen. DeepL vult ontbrekende talen; HTML-tags blijven ongewijzigd.',
+                            'Edit the Dutch source and the EN/FR translations. DeepL fills missing languages; HTML tags stay intact.',
                         )}
                     </DialogDescription>
                 </DialogHeader>
@@ -135,7 +135,7 @@ export function LegalPageTranslationsDialog({
                         <TriangleAlert className="h-4 w-4 text-primary" />
                         <AlertDescription className="text-muted-foreground">
                             {t(
-                                'Sommige vertalingen ontbreken nog. Sla de pagina opnieuw op of gebruik DeepL om ze te genereren.',
+                                'Some translations are still missing. Save the page again or use DeepL to generate them.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -160,7 +160,7 @@ export function LegalPageTranslationsDialog({
                 <form onSubmit={submit} className="space-y-4">
                     <div className="space-y-2">
                         <Label>
-                            {t('Inhoud')} ({LOCALE_LABELS[activeLocale]})
+                            {t('Content')} ({LOCALE_LABELS[activeLocale]})
                         </Label>
                         <LegalRichTextEditor
                             key={activeLocale}
@@ -197,7 +197,7 @@ export function LegalPageTranslationsDialog({
                                     ) : (
                                         <RefreshCw className="h-4 w-4" />
                                     )}
-                                    {t('Opnieuw vertalen ({{locale}})', {
+                                    {t('Retranslate ({{locale}})', {
                                         locale: LOCALE_LABELS[activeLocale],
                                     })}
                                 </Button>
@@ -213,14 +213,14 @@ export function LegalPageTranslationsDialog({
                                 ) : (
                                     <RefreshCw className="h-4 w-4" />
                                 )}
-                                {t('Alles opnieuw vertalen')}
+                                {t('Retranslate all')}
                             </Button>
                         </div>
                         <Button type="submit" disabled={form.processing}>
                             {form.processing ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : null}
-                            {t('Vertalingen opslaan')}
+                            {t('Save translations')}
                         </Button>
                     </DialogFooter>
                 </form>

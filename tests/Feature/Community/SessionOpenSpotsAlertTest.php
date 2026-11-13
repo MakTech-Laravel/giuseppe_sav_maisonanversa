@@ -74,9 +74,9 @@ test('the alert mail carries the share link and a cancel button', function () {
     $sessionUrl = route('community.sessions.show', ['locale' => 'nl', 'communitySession' => $this->session->id]);
 
     expect($html)->toContain('Jouw sessie heeft nog 2 vrije plaatsen. Deel ze, of annuleer ze.')
-        ->and($html)->toContain('Deel deze link')
+        ->and($html)->toContain('Share this link')
         ->and($html)->toContain($this->session->shareUrl('nl'))
-        ->and($html)->toContain('Sessie annuleren')
+        ->and($html)->toContain('Cancel session')
         ->and($html)->toContain(e($sessionUrl.'?cancel=1'));
 });
 
@@ -154,8 +154,8 @@ test('the alert follows the organiser\'s language, notification fallback when no
 
     expect($fallback->locale)->toBe($fallbackLocale)
         ->and($other->host->userNotifications()->with('notification')->first()->notification->title)
-        ->toBe('Jouw sessie heeft nog vrije plaatsen');
-    $fallback->assertHasSubject('Jouw sessie heeft nog vrije plaatsen');
+        ->toBe('Your session still has free places');
+    $fallback->assertHasSubject('Your session still has free places');
 });
 
 test('an organiser who switched session emails off still gets the in-app alert', function () {

@@ -25,7 +25,7 @@ export function EtchingBand() {
 
             <div className="relative z-2 flex h-full flex-col items-center justify-center gap-2.5 px-6 text-center">
                 <span className="font-sans text-[9px] tracking-[0.35em] text-gold uppercase">
-                    {t('Anversa · Antwerpen')}
+                    {t('Anversa · Antwerp')}
                 </span>
 
                 <span
@@ -39,8 +39,8 @@ export function EtchingBand() {
                  * is its own entry rather than markup inside one sentence.
                  */}
                 <p className="font-serif text-[clamp(22px,2.4vw,30px)] tracking-[0.06em] text-cream">
-                    {t('De stad die ons')}{' '}
-                    <em className="text-gold">{t('draagt')}</em>.
+                    {t('The city that')}{' '}
+                    <em className="text-gold">{t('carries us')}</em>.
                 </p>
             </div>
         </div>

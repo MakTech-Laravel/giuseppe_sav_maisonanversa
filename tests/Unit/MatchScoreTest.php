@@ -34,25 +34,25 @@ test('valid set scores are accepted', function (SessionMatchFormat $format, int 
 test('impossible set scores are rejected', function (SessionMatchFormat $format, int $index, array $set, string $message) {
     expect(MatchScore::setError($format, $index, $set))->toBe($message);
 })->with([
-    '6-5' => [SessionMatchFormat::BestOfThree, 0, matchSet(6, 5), 'Geen geldige setscore.'],
-    '6-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(6, 6), 'Geen geldige setscore.'],
-    '8-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(8, 6), 'Geen geldige setscore.'],
-    '5-3' => [SessionMatchFormat::BestOfThree, 0, matchSet(5, 3), 'Geen geldige setscore.'],
-    '0-0' => [SessionMatchFormat::BestOfThree, 0, matchSet(0, 0), 'Geen geldige setscore.'],
-    'short set 6-4' => [SessionMatchFormat::ShortSets, 0, matchSet(6, 4), 'Geen geldige setscore.'],
-    'tie-break on 6-4' => [SessionMatchFormat::BestOfThree, 0, matchSet(6, 4, 7, 5), 'Tie-breakpunten horen alleen bij een set die op een tie-break eindigde.'],
-    'tie-break 7-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 7, 6), 'Geen geldige tie-break.'],
-    'tie-break 9-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 9, 6), 'Geen geldige tie-break.'],
-    'tie-break won by the set loser' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 5, 7), 'Geen geldige tie-break.'],
-    'one tie-break side only' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 7), 'Geen geldige tie-break.'],
-    'super tie-break 10-9' => [SessionMatchFormat::SuperTiebreak, 2, matchSet(10, 9), 'Geen geldige super tie-break (tot 10, met 2 punten verschil).'],
-    'super tie-break 9-7' => [SessionMatchFormat::SuperTiebreak, 2, matchSet(9, 7), 'Geen geldige super tie-break (tot 10, met 2 punten verschil).'],
-    'super tie-break 13-10' => [SessionMatchFormat::SuperTiebreak, 2, matchSet(13, 10), 'Geen geldige super tie-break (tot 10, met 2 punten verschil).'],
+    '6-5' => [SessionMatchFormat::BestOfThree, 0, matchSet(6, 5), 'Not a valid set score.'],
+    '6-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(6, 6), 'Not a valid set score.'],
+    '8-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(8, 6), 'Not a valid set score.'],
+    '5-3' => [SessionMatchFormat::BestOfThree, 0, matchSet(5, 3), 'Not a valid set score.'],
+    '0-0' => [SessionMatchFormat::BestOfThree, 0, matchSet(0, 0), 'Not a valid set score.'],
+    'short set 6-4' => [SessionMatchFormat::ShortSets, 0, matchSet(6, 4), 'Not a valid set score.'],
+    'tie-break on 6-4' => [SessionMatchFormat::BestOfThree, 0, matchSet(6, 4, 7, 5), 'Tie-break points only belong to a set decided by a tie-break.'],
+    'tie-break 7-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 7, 6), 'Not a valid tie-break.'],
+    'tie-break 9-6' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 9, 6), 'Not a valid tie-break.'],
+    'tie-break won by the set loser' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 5, 7), 'Not a valid tie-break.'],
+    'one tie-break side only' => [SessionMatchFormat::BestOfThree, 0, matchSet(7, 6, 7), 'Not a valid tie-break.'],
+    'super tie-break 10-9' => [SessionMatchFormat::SuperTiebreak, 2, matchSet(10, 9), 'Not a valid super tie-break (to 10, won by 2 points).'],
+    'super tie-break 9-7' => [SessionMatchFormat::SuperTiebreak, 2, matchSet(9, 7), 'Not a valid super tie-break (to 10, won by 2 points).'],
+    'super tie-break 13-10' => [SessionMatchFormat::SuperTiebreak, 2, matchSet(13, 10), 'Not a valid super tie-break (to 10, won by 2 points).'],
 ]);
 
 test('only the third entry of the super tie-break format counts points', function () {
-    expect(MatchScore::setError(SessionMatchFormat::SuperTiebreak, 0, matchSet(10, 8)))->toBe('Geen geldige setscore.')
-        ->and(MatchScore::setError(SessionMatchFormat::BestOfThree, 2, matchSet(10, 8)))->toBe('Geen geldige setscore.');
+    expect(MatchScore::setError(SessionMatchFormat::SuperTiebreak, 0, matchSet(10, 8)))->toBe('Not a valid set score.')
+        ->and(MatchScore::setError(SessionMatchFormat::BestOfThree, 2, matchSet(10, 8)))->toBe('Not a valid set score.');
 });
 
 test('a match must be decided and nothing may follow the deciding set', function (SessionMatchFormat $format, array $sets, ?string $message) {
@@ -62,16 +62,16 @@ test('a match must be decided and nothing may follow the deciding set', function
     'three sets' => [SessionMatchFormat::BestOfThree, [matchSet(6, 4), matchSet(3, 6), matchSet(7, 5)], null],
     'super tie-break decides' => [SessionMatchFormat::SuperTiebreak, [matchSet(6, 4), matchSet(3, 6), matchSet(10, 7)], null],
     'one set' => [SessionMatchFormat::OneSet, [matchSet(7, 6, 7, 2)], null],
-    'no sets' => [SessionMatchFormat::BestOfThree, [], 'Vul minstens één set in.'],
-    'one set of three' => [SessionMatchFormat::BestOfThree, [matchSet(6, 4)], 'De wedstrijd is nog niet beslist.'],
-    'one set all' => [SessionMatchFormat::BestOfThree, [matchSet(6, 4), matchSet(3, 6)], 'De wedstrijd is nog niet beslist.'],
-    'set after the decider' => [SessionMatchFormat::BestOfThree, [matchSet(6, 4), matchSet(6, 3), matchSet(6, 2)], 'Na de beslissende set kan geen set meer volgen.'],
-    'second set in one set format' => [SessionMatchFormat::OneSet, [matchSet(6, 4), matchSet(6, 3)], 'Na de beslissende set kan geen set meer volgen.'],
+    'no sets' => [SessionMatchFormat::BestOfThree, [], 'Enter at least one set.'],
+    'one set of three' => [SessionMatchFormat::BestOfThree, [matchSet(6, 4)], 'The match has not been decided yet.'],
+    'one set all' => [SessionMatchFormat::BestOfThree, [matchSet(6, 4), matchSet(3, 6)], 'The match has not been decided yet.'],
+    'set after the decider' => [SessionMatchFormat::BestOfThree, [matchSet(6, 4), matchSet(6, 3), matchSet(6, 2)], 'No set can follow the deciding set.'],
+    'second set in one set format' => [SessionMatchFormat::OneSet, [matchSet(6, 4), matchSet(6, 3)], 'No set can follow the deciding set.'],
 ]);
 
 test('errors are keyed per set before the match as a whole is checked', function () {
-    expect(MatchScore::errors(SessionMatchFormat::BestOfThree, [matchSet(6, 5), matchSet(6, 3)]))->toBe(['sets.0' => 'Geen geldige setscore.'])
-        ->and(MatchScore::errors(SessionMatchFormat::BestOfThree, [matchSet(6, 4)]))->toBe(['sets' => 'De wedstrijd is nog niet beslist.'])
+    expect(MatchScore::errors(SessionMatchFormat::BestOfThree, [matchSet(6, 5), matchSet(6, 3)]))->toBe(['sets.0' => 'Not a valid set score.'])
+        ->and(MatchScore::errors(SessionMatchFormat::BestOfThree, [matchSet(6, 4)]))->toBe(['sets' => 'The match has not been decided yet.'])
         ->and(MatchScore::errors(SessionMatchFormat::BestOfThree, [matchSet(6, 4), matchSet(6, 3)]))->toBe([]);
 });
 

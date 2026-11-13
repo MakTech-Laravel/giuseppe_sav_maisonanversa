@@ -56,9 +56,9 @@ interface LetterFilters {
 const DEFAULT_PER_PAGE = 15;
 
 const STATUS_OPTIONS = [
-    { value: 'pending', label: 'In behandeling' },
+    { value: 'pending', label: 'Processing' },
     { value: 'subscribed', label: 'Actief' },
-    { value: 'unsubscribed', label: 'Uitgeschreven' },
+    { value: 'unsubscribed', label: 'Unsubscribed' },
 ] as const;
 
 const SOURCE_OPTIONS = [
@@ -118,10 +118,10 @@ function preferenceBadges(
             ? { key: 'heritageLetter', label: t('Heritage Letter') }
             : null,
         preferences.productUpdates
-            ? { key: 'productUpdates', label: t('Productupdates') }
+            ? { key: 'productUpdates', label: t('Product updates') }
             : null,
         preferences.events
-            ? { key: 'events', label: t('Sessies & events') }
+            ? { key: 'events', label: t('Sessions & events') }
             : null,
     ];
 
@@ -199,7 +199,7 @@ export default function LetterIndex({
                 <AdminPageHeader
                     title={t('Heritage Letter')}
                     description={t(
-                        'Bekijk nieuwsbriefabonnees en leveringsstatus.',
+                        'View newsletter subscribers and delivery status.',
                     )}
                     icon={Mail}
                 >
@@ -212,7 +212,7 @@ export default function LetterIndex({
                             }
                         >
                             <Download className="h-4 w-4" />
-                            {t('Exporteren')}
+                            {t('Export')}
                         </a>
                     </Button>
                 </AdminPageHeader>
@@ -220,11 +220,11 @@ export default function LetterIndex({
                     <Alert>
                         <TriangleAlert className="h-4 w-4" />
                         <AlertTitle>
-                            {t('Mailservice is niet gekoppeld')}
+                            {t('Mailing service is not connected')}
                         </AlertTitle>
                         <AlertDescription>
                             {t(
-                                'De abonnees hieronder zijn echt; Brevo-sync staat uit totdat de API-sleutel is geconfigureerd.',
+                                'The subscribers below are real; Brevo sync stays off until the API key is configured.',
                             )}
                         </AlertDescription>
                     </Alert>
@@ -232,7 +232,7 @@ export default function LetterIndex({
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                     <div className="relative sm:col-span-2">
                         <Label htmlFor="letter-search" className="sr-only">
-                            {t('Zoeken')}
+                            {t('Search')}
                         </Label>
                         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -240,8 +240,8 @@ export default function LetterIndex({
                             className="pl-9"
                             value={search}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder={t('Zoek op e-mail of naam…')}
-                            aria-label={t('Zoeken')}
+                            placeholder={t('Search by email or name...')}
+                            aria-label={t('Search')}
                         />
                     </div>
                     <Select value={status} onValueChange={setStatus}>
@@ -249,11 +249,11 @@ export default function LetterIndex({
                             className="w-full"
                             aria-label={t('Status')}
                         >
-                            <SelectValue placeholder={t('Alle statussen')} />
+                            <SelectValue placeholder={t('All statuses')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle statussen')}
+                                {t('All statuses')}
                             </SelectItem>
                             {STATUS_OPTIONS.map((option) => (
                                 <SelectItem
@@ -268,13 +268,13 @@ export default function LetterIndex({
                     <Select value={source} onValueChange={setSource}>
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Bron')}
+                            aria-label={t('Source')}
                         >
-                            <SelectValue placeholder={t('Alle bronnen')} />
+                            <SelectValue placeholder={t('All sources')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle bronnen')}
+                                {t('All sources')}
                             </SelectItem>
                             {SOURCE_OPTIONS.map((option) => (
                                 <SelectItem
@@ -292,13 +292,13 @@ export default function LetterIndex({
                     >
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Taal')}
+                            aria-label={t('Language')}
                         >
-                            <SelectValue placeholder={t('Alle talen')} />
+                            <SelectValue placeholder={t('All languages')} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">
-                                {t('Alle talen')}
+                                {t('All languages')}
                             </SelectItem>
                             {LOCALE_OPTIONS.map((option) => (
                                 <SelectItem
@@ -316,14 +316,14 @@ export default function LetterIndex({
                     >
                         <SelectTrigger
                             className="w-full"
-                            aria-label={t('Per pagina')}
+                            aria-label={t('Per page')}
                         >
-                            <SelectValue placeholder={t('Per pagina')} />
+                            <SelectValue placeholder={t('Per page')} />
                         </SelectTrigger>
                         <SelectContent>
                             {perPageOptions.map((option) => (
                                 <SelectItem key={option} value={String(option)}>
-                                    {t('{{count}} per pagina', {
+                                    {t('{{count}} per page', {
                                         count: option,
                                     })}
                                 </SelectItem>
@@ -343,7 +343,7 @@ export default function LetterIndex({
                             className="w-full sm:col-span-2 xl:col-span-5 xl:w-auto xl:justify-self-start"
                         >
                             <X className="h-4 w-4" />
-                            {t('Filters wissen')}
+                            {t('Clear filters')}
                         </Button>
                     ) : null}
                 </div>
@@ -351,22 +351,22 @@ export default function LetterIndex({
                     <Table>
                         <TableHeader>
                             <TableRow className="bg-muted/50 hover:bg-muted/50">
-                                <TableHead>{t('Abonnee')}</TableHead>
+                                <TableHead>{t('Subscriber')}</TableHead>
                                 <TableHead>{t('Status')}</TableHead>
                                 <TableHead className="hidden lg:table-cell">
-                                    {t('Onderwerpen')}
+                                    {t('Topics')}
                                 </TableHead>
                                 <TableHead className="hidden md:table-cell">
-                                    {t('Bron')}
+                                    {t('Source')}
                                 </TableHead>
                                 <TableHead className="hidden lg:table-cell">
-                                    {t('Taal')}
+                                    {t('Language')}
                                 </TableHead>
                                 <TableHead className="hidden sm:table-cell">
-                                    {t('Ingeschreven op')}
+                                    {t('Joined')}
                                 </TableHead>
                                 <TableHead className="hidden xl:table-cell">
-                                    {t('Gesynchroniseerd')}
+                                    {t('Synced')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -378,8 +378,8 @@ export default function LetterIndex({
                                         className="py-10 text-center text-sm text-muted-foreground"
                                     >
                                         {hasActiveFilters
-                                            ? t('Geen abonnees gevonden.')
-                                            : t('Nog geen abonnees.')}
+                                            ? t('No subscribers found.')
+                                            : t('No subscribers yet.')}
                                     </TableCell>
                                 </TableRow>
                             ) : (

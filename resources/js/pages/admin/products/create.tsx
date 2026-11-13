@@ -143,10 +143,10 @@ export default function CreateProduct({
 
     return (
         <>
-            <Head title={t('Product aanmaken')} />
+            <Head title={t('Create product')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Product aanmaken')}
+                    title={t('Create product')}
                     description={t(
                         'Voeg een catalogusproduct toe in zes stappen.',
                     )}
@@ -155,7 +155,7 @@ export default function CreateProduct({
                     <Button variant="outline" asChild>
                         <Link href={products.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar product')}
+                            {t('Back to product')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -206,7 +206,7 @@ export default function CreateProduct({
                             onClick={() => setStepIndex(stepIndex - 1)}
                         >
                             <ArrowLeft className="h-4 w-4" />
-                            {t('Vorige')}
+                            {t('Previous')}
                         </Button>
 
                         {isLastStep ? (
@@ -214,7 +214,7 @@ export default function CreateProduct({
                                 {form.processing && (
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                 )}
-                                {t('Product aanmaken')}
+                                {t('Create product')}
                             </Button>
                         ) : (
                             <Button
@@ -225,7 +225,7 @@ export default function CreateProduct({
                                 {form.validating && (
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                 )}
-                                {t('Volgende')}
+                                {t('Next')}
                                 <ArrowRight className="h-4 w-4" />
                             </Button>
                         )}

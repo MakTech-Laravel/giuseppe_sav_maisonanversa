@@ -158,20 +158,20 @@ test('the home sessions section matches the PDF placement copy and card', functi
 
     expect($homeSessions)
         ->toContain('HomeSessionCard')
-        ->toContain('Na de koffie, de baan.')
-        ->toContain('Community · Sessies')
-        ->toContain('+ Plan een sessie')
-        ->toContain('Bekijk alle sessies')
+        ->toContain('After the coffee, the court.')
+        ->toContain('Community · Sessions')
+        ->toContain('+ Plan a session')
+        ->toContain('View all sessions')
         ->toContain('useResumePendingSessionJoin')
         ->toContain('border-dashed')
-        ->toContain('Geen open sessies op dit moment')
-        ->toContain('Plan de eerste sessie van de week.')
+        ->toContain('No open sessions at the moment')
+        ->toContain('Plan the first session of the week.')
         ->not->toContain('max-w-[520px]')
         ->not->toContain("from '@/components/maison/community/sessions/session-card'");
 
     expect($homeCard)
         ->toContain('Doe mee')
-        ->toContain('Je speelt mee ✓')
+        ->toContain('You\'re in ✓')
         ->toContain('storePendingSessionJoin')
         ->toContain("openAuth('register')");
 

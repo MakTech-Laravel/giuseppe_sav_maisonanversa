@@ -24,11 +24,11 @@ export default function ProductsIndex({
                 eyebrow="Maison Anversa"
                 title={
                     <>
-                        {t('De')} <em>{t('Producten')}</em>
+                        {t('The')} <em>{t('Products')}</em>
                     </>
                 }
                 subtitle={t(
-                    'De volledige collectie van Maison Anversa — van Heritage Nº 001 tot de volgende hoofdstukken van het huis.',
+                    'The complete Maison Anversa collection — from Heritage Nº 001 to the house’s next chapters.',
                 )}
             />
 
@@ -47,7 +47,7 @@ export default function ProductsIndex({
                         </div>
                     ) : (
                         <p className="py-16 text-center text-[15px] text-choc3">
-                            {t('Geen producten gevonden.')}
+                            {t('No products found.')}
                         </p>
                     )}
 

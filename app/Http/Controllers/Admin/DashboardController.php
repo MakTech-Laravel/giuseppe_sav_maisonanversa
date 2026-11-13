@@ -32,17 +32,17 @@ class DashboardController extends Controller
                 [
                     'key' => 'Klanten',
                     'value' => (string) User::query()->where('type', UserType::Customer)->count(),
-                    'hintKey' => 'Lid-accounts',
+                    'hintKey' => 'Member accounts',
                 ],
                 [
                     'key' => 'Beheerders',
                     'value' => (string) User::query()->where('type', UserType::Admin)->count(),
-                    'hintKey' => 'Personeelsaccounts',
+                    'hintKey' => 'Staff accounts',
                 ],
                 [
                     'key' => 'Journal',
                     'value' => (string) JournalArticle::query()->count(),
-                    'hintKey' => 'Journalartikelen',
+                    'hintKey' => 'Journal articles',
                 ],
                 [
                     'key' => 'Openstaande bestellingen',

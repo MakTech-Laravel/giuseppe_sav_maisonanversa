@@ -166,7 +166,7 @@ export function ChatComposer({
                                     <AttachmentActions className="top-1.5 right-1.5">
                                         <AttachmentAction
                                             aria-label={t(
-                                                'Afbeelding verwijderen',
+                                                'Remove image',
                                             )}
                                             onClick={() =>
                                                 removeImage(image.id)
@@ -188,8 +188,8 @@ export function ChatComposer({
                     onKeyDown={handleKeyDown}
                     disabled={disabled}
                     rows={1}
-                    placeholder={placeholder ?? t('Schrijf een bericht...')}
-                    aria-label={t('Chatbericht')}
+                    placeholder={placeholder ?? t('Write a message...')}
+                    aria-label={t('Chat message')}
                     className="max-h-40 min-h-12 px-4 font-sans text-[14px] text-cream placeholder:text-sand"
                 />
 
@@ -199,8 +199,8 @@ export function ChatComposer({
                 >
                     <InputGroupButton
                         size="icon-sm"
-                        aria-label={t('Afbeelding toevoegen')}
-                        title={t('Afbeelding toevoegen')}
+                        aria-label={t('Add image')}
+                        title={t('Add image')}
                         disabled={!canAddImages}
                         onClick={() => fileInput.current?.click()}
                         className="rounded-none text-cream hover:bg-gold/10 hover:text-gold"
@@ -215,7 +215,7 @@ export function ChatComposer({
                         disabled={!canSend}
                         className="rounded-none bg-gold px-4 font-sans text-[10px] tracking-[0.2em] text-choc uppercase hover:bg-gold2"
                     >
-                        {t('Versturen')}
+                        {t('Send')}
                         <SendHorizontal aria-hidden="true" />
                     </InputGroupButton>
                 </InputGroupAddon>

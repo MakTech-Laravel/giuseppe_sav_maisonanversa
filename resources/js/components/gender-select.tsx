@@ -33,7 +33,7 @@ export function GenderSelect({
 }: GenderSelectProps) {
     const { t } = useTranslation();
     const [value, setValue] = useState(defaultValue);
-    const label = placeholder ?? t('Geslacht');
+    const label = placeholder ?? t('Gender');
 
     return (
         <>

@@ -46,60 +46,60 @@ final class MaisonSeo
      */
     private const PAGES = [
         'home' => [
-            'title' => 'Maison Anversa — Europees erfgoedhuis voor sport en lifestyle',
-            'description' => 'Een Europees erfgoedhuis, geworteld in Antwerpen. De Founding Edition is beperkt tot 100 genummerde stuks en wordt nooit opnieuw gemaakt.',
+            'title' => 'Maison Anversa — European heritage house for sport and lifestyle',
+            'description' => 'A European heritage house, rooted in Antwerp. The Founding Edition is limited to 100 numbered pieces and will never be made again.',
         ],
         'house' => [
-            'title' => 'Het Huis — Maison Anversa',
-            'description' => 'Ontdek het Huis van Maison Anversa — acht kamers, één erfgoedverhaal, geworteld in Antwerpen.',
+            'title' => 'The House — Maison Anversa',
+            'description' => 'Discover the House of Maison Anversa — eight rooms, one heritage story, rooted in Antwerp.',
         ],
         'products' => [
-            'title' => 'Producten — Maison Anversa',
+            'title' => 'Products — Maison Anversa',
             'description' => 'Ontdek de collectie van Maison Anversa — Heritage Nº 001 en de volgende hoofdstukken van het huis.',
         ],
         'story' => [
-            'title' => 'Ons Verhaal — Maison Anversa',
-            'description' => 'Het verhaal van Maison Anversa — van Antwerpen naar een Europees erfgoedhuis voor sport en lifestyle.',
+            'title' => 'Our Story — Maison Anversa',
+            'description' => 'The story of Maison Anversa — from Antwerp to a European heritage house for sport and lifestyle.',
         ],
         'circle' => [
             'title' => 'Founding Circle — Maison Anversa',
-            'description' => 'Word lid van de Founding Circle — exclusieve toegang, events en het erfgoed van Maison Anversa.',
+            'description' => 'Join the Founding Circle — exclusive access, events and the heritage of Maison Anversa.',
         ],
         'dressing' => [
-            'title' => 'Kleedkamer — Maison Anversa',
-            'description' => 'De Kleedkamer van Maison Anversa — curated sportswear en lifestyle, met dezelfde zorg als ons erfgoed.',
+            'title' => 'Dressing Room — Maison Anversa',
+            'description' => 'The Dressing Room of Maison Anversa — curated sportswear and lifestyle, with the same care as our heritage.',
         ],
         'journal' => [
             'title' => 'Journal — Maison Anversa',
-            'description' => 'Het Journal van Maison Anversa — verhalen over ambacht, Antwerpen en het erfgoed van sport.',
+            'description' => 'The Journal of Maison Anversa — stories about craft, Antwerp and the heritage of sport.',
         ],
         'community' => [
             'title' => 'Community — Maison Anversa',
-            'description' => 'De Community van Maison Anversa — sessies, evenementen en een netwerk van gelijkgestemde leden.',
+            'description' => 'The Community of Maison Anversa — sessions, events and a network of like-minded members.',
         ],
         'corner' => [
             'title' => 'Club Corner — Maison Anversa',
-            'description' => 'Club Corner — exclusieve voordelen en early access voor leden van Maison Anversa.',
+            'description' => 'Club Corner — exclusive benefits and early access for members of Maison Anversa.',
         ],
         'contact' => [
             'title' => 'Contact — Maison Anversa',
-            'description' => 'Neem contact op met Maison Anversa — vragen over Heritage Nº 001, bestellingen of pers.',
+            'description' => 'Contact Maison Anversa — questions about Heritage Nº 001, orders or press.',
         ],
         'privacy' => [
-            'title' => 'Privacybeleid — Maison Anversa',
-            'description' => 'Privacybeleid van Maison Anversa — hoe wij jouw gegevens verwerken en beschermen.',
+            'title' => 'Privacy Policy — Maison Anversa',
+            'description' => 'Maison Anversa privacy policy — how we process and protect your data.',
         ],
         'terms' => [
-            'title' => 'Algemene voorwaarden — Maison Anversa',
-            'description' => 'Algemene voorwaarden van Maison Anversa — bestellingen, levering en garantie.',
+            'title' => 'Terms and Conditions — Maison Anversa',
+            'description' => 'Maison Anversa terms and conditions — orders, delivery and warranty.',
         ],
         'shipping' => [
-            'title' => 'Verzending & Retour — Maison Anversa',
-            'description' => 'Verzending en retour bij Maison Anversa — leveringstijden, kosten en retourbeleid.',
+            'title' => 'Shipping & Returns — Maison Anversa',
+            'description' => 'Shipping and returns at Maison Anversa — delivery times, costs and return policy.',
         ],
         'care' => [
-            'title' => 'Zorg & Garantie — Maison Anversa',
-            'description' => 'Zorg en garantie voor Heritage Nº 001 — onderhoud, reparatie en klantenservice van Maison Anversa.',
+            'title' => 'Care & Warranty — Maison Anversa',
+            'description' => 'Care and warranty for Heritage Nº 001 — maintenance, repair and customer service from Maison Anversa.',
         ],
     ];
 
@@ -129,8 +129,8 @@ final class MaisonSeo
             $origin = self::origin();
 
             return [
-                'title' => __('Pagina niet gevonden'),
-                'description' => __('Deze pagina bestaat niet. Keer terug naar Maison Anversa.'),
+                'title' => __('Page not found'),
+                'description' => __('This page does not exist. Return to Maison Anversa.'),
                 'keywords' => null,
                 'canonical' => $origin.$request->getPathInfo(),
                 'robots' => 'noindex, nofollow',
@@ -354,16 +354,16 @@ final class MaisonSeo
      */
     private static function sharedSessionCopy(CommunitySession $session): array
     {
-        $club = (string) ($session->club?->name ?? __('Sessie'));
+        $club = (string) ($session->club?->name ?? __('Session'));
         $when = $session->starts_at->translatedFormat('l j F Y, H:i');
         $free = $session->openSlots();
 
         $places = $free === 1
-            ? __('1 plaats vrij')
+            ? __('1 spot left')
             : __(':count plaatsen vrij', ['count' => $free]);
 
         return [
-            'title' => __('Sessie').' · '.$session->sport->label().' — '.$club,
+            'title' => __('Session').' · '.$session->sport->label().' — '.$club,
             'description' => __(':club · :when · :places', [
                 'club' => $club,
                 'when' => $when,
@@ -435,24 +435,24 @@ final class MaisonSeo
 
         return match ($routeName) {
             'maison.checkout.success' => [
-                'title' => __('Betaling bevestigd — Maison Anversa'),
-                'description' => __('Jouw Founding Edition-reservering is ontvangen.'),
+                'title' => __('Payment confirmed — Maison Anversa'),
+                'description' => __('Your Founding Edition reservation has been received.'),
             ],
             'maison.checkout.cancel' => [
-                'title' => __('Betaling geannuleerd — Maison Anversa'),
-                'description' => __('Jouw betaling is geannuleerd. Er is niets in rekening gebracht.'),
+                'title' => __('Payment cancelled — Maison Anversa'),
+                'description' => __('Your payment was cancelled. Nothing was charged.'),
             ],
             'maison.verify' => [
-                'title' => __('Authenticiteit').' — Maison Anversa',
-                'description' => __('Geverifieerd Founding Edition-stuk'),
+                'title' => __('Authenticity').' — Maison Anversa',
+                'description' => __('Verified Founding Edition piece'),
             ],
             'maison.heritage-letter.unsubscribe' => [
-                'title' => __('Uitgeschreven').' — Maison Anversa',
-                'description' => __('Je ontvangt geen Heritage Letter meer. Je kunt zich altijd opnieuw inschrijven.'),
+                'title' => __('Unsubscribed').' — Maison Anversa',
+                'description' => __('You will no longer receive the Heritage Letter. You can subscribe again at any time.'),
             ],
             default => [
                 'title' => 'Maison Anversa',
-                'description' => __('Een Europees erfgoedhuis geworteld in Antwerpen. Wij bouwen producten voor mensen die begrijpen dat de mooiste dingen in het leven tijd kosten.'),
+                'description' => __('A European heritage house rooted in Antwerp. We build products for people who understand that the most beautiful things in life take time.'),
             ],
         };
     }

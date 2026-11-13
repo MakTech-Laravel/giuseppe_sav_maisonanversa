@@ -24,13 +24,13 @@ export function CookieConsentBanner() {
                     <p className="font-serif text-lg">{t('Cookies')}</p>
                     <p className="mt-1 text-sm text-sand">
                         {t(
-                            'Wij gebruiken noodzakelijke cookies voor de site. Analytics en marketing laden alleen na jouw toestemming.',
+                            'We use necessary cookies for the site. Analytics and marketing load only after your consent.',
                         )}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-4 text-sm">
                         <label className="flex items-center gap-2">
                             <input type="checkbox" checked disabled />
-                            {t('Noodzakelijk')}
+                            {t('Necessary')}
                         </label>
                         <label className="flex items-center gap-2">
                             <input
@@ -66,7 +66,7 @@ export function CookieConsentBanner() {
                     disabled={form.processing}
                     onClick={() => form.post(cookieConsentStore.url())}
                 >
-                    {t('Voorkeuren opslaan')}
+                    {t('Save preferences')}
                 </MaisonButton>
             </div>
         </div>

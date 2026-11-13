@@ -59,7 +59,7 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
 
                     <p className="max-w-65 text-[13px] leading-[1.7] text-stone">
                         {t(
-                            'Een Europees erfgoedhuis geworteld in Antwerpen. Wij bouwen producten voor mensen die begrijpen dat de mooiste dingen in het leven tijd kosten.',
+                            'A European heritage house rooted in Antwerp. We build products for people who understand that the most beautiful things in life take time.',
                         )}
                     </p>
                 </div>
@@ -140,11 +140,11 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
 
             <div className="relative flex flex-col items-start justify-between gap-2 pt-6 md:flex-row md:items-center md:pt-0">
                 <p className="font-sans text-[10px] font-light tracking-[0.12em] text-stone/50 md:text-[9px]">
-                    {t('© 2026 Maison Anversa. Alle rechten voorbehouden.')}
+                    {t('© 2026 Maison Anversa. All rights reserved.')}
                 </p>
 
                 <p className="font-sans text-[10px] font-light tracking-[0.12em] text-stone/50 md:text-[9px]">
-                    {t('Antwerpen, België · maisonanversa.com')}
+                    {t('Antwerp, Belgium · maisonanversa.com')}
                 </p>
             </div>
         </footer>

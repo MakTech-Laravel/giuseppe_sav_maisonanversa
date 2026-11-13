@@ -43,13 +43,13 @@ class ReturnService
     ): OrderReturn {
         if (! $confirmed) {
             throw ValidationException::withMessages([
-                'confirmed' => __('Ik bevestig dat ik deze artikelen wil retourneren.'),
+                'confirmed' => __('I confirm that I want to return these items.'),
             ]);
         }
 
         if (! $this->eligibility->canRequestReturn($order)) {
             throw ValidationException::withMessages([
-                'order' => __('De retourtermijn voor deze bestelling is voorbij.'),
+                'order' => __('The return window for this order has ended.'),
             ]);
         }
 
@@ -112,7 +112,7 @@ class ReturnService
             }
 
             // Store Dutch source keys; translate on display so locale switches stay correct.
-            $this->recordEvent($return, null, ReturnStatus::Requested, $actor, 'Retouraanvraag ingediend.');
+            $this->recordEvent($return, null, ReturnStatus::Requested, $actor, 'Return request submitted.');
 
             if ($return->includesFoundingRacket()) {
                 $this->registrar->markReturningForOrder($order);
@@ -125,8 +125,8 @@ class ReturnService
         SendReturnAdminRequestMail::dispatch($return);
         $this->notifyBuyer(
             $return,
-            'Retour aangevraagd',
-            'Jouw retouraanvraag is ingediend.',
+            'Return requested',
+            'Your return request has been submitted.',
         );
 
         return $return;
@@ -148,7 +148,7 @@ class ReturnService
             'status' => ReturnStatus::InTransit,
         ])->save();
 
-        $this->recordEvent($return, $from, ReturnStatus::InTransit, $actor, 'Trackingnummer toegevoegd.');
+        $this->recordEvent($return, $from, ReturnStatus::InTransit, $actor, 'Tracking number added.');
 
         return $return->refresh();
     }
@@ -165,7 +165,7 @@ class ReturnService
             $return,
             ReturnStatus::Cancelled,
             $actor,
-            $note ?? 'Retour geannuleerd.',
+            $note ?? 'Return cancelled.',
             restoreRegister: true,
         );
     }
@@ -184,7 +184,7 @@ class ReturnService
             'received_at' => now(),
         ])->save();
 
-        $this->recordEvent($return, $from, ReturnStatus::Received, $actor, 'Pakket ontvangen.');
+        $this->recordEvent($return, $from, ReturnStatus::Received, $actor, 'Package received.');
         SendReturnCustomerMail::dispatch($return->refresh(), 'r2');
 
         return $return->refresh();
@@ -208,9 +208,9 @@ class ReturnService
             'resolved_at' => now(),
         ])->save();
 
-        $this->recordEvent($return, $from, ReturnStatus::Refunded, $actor, 'Volledige terugbetaling uitgevoerd.');
+        $this->recordEvent($return, $from, ReturnStatus::Refunded, $actor, 'Full refund completed.');
         SendReturnCustomerMail::dispatch($return->refresh(), 'r3');
-        $this->notifyBuyer($return, 'Retour terugbetaald', 'Jouw retour is terugbetaald.');
+        $this->notifyBuyer($return, 'Return refunded', 'Your return has been refunded.');
 
         return $return->refresh();
     }
@@ -267,7 +267,7 @@ class ReturnService
 
         $this->recordEvent($return, $from, ReturnStatus::PartiallyRefunded, $actor, $reason);
         SendReturnCustomerMail::dispatch($return->refresh(), 'r4');
-        $this->notifyBuyer($return, 'Retour terugbetaald', 'Jouw retour is terugbetaald.');
+        $this->notifyBuyer($return, 'Return refunded', 'Your return has been refunded.');
 
         return $return->refresh();
     }
@@ -383,7 +383,7 @@ class ReturnService
                     'locale' => $locale,
                     'orderReturn' => $return->id,
                 ]),
-                'link_label' => 'Bekijk retour',
+                'link_label' => 'View return',
             ],
         );
     }

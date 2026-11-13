@@ -50,14 +50,14 @@ class CheckoutRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => __('Vul a.u.b. jouw naam en e-mailadres in.'),
-            'email.required' => __('Vul a.u.b. jouw naam en e-mailadres in.'),
-            'shipping_line1.required' => __('Vul a.u.b. jouw verzendadres in.'),
-            'shipping_city.required' => __('Vul a.u.b. jouw verzendadres in.'),
-            'shipping_postal_code.required' => __('Vul a.u.b. jouw verzendadres in.'),
-            'shipping_country.required' => __('Vul a.u.b. jouw verzendadres in.'),
-            'edition_piece_id.required' => __('Kies a.u.b. een beschikbaar editienummer.'),
-            'accept_terms.accepted' => __('Ik heb de Algemene voorwaarden en het Retourbeleid gelezen en ga ermee akkoord.'),
+            'name.required' => __('Please enter your name and email address.'),
+            'email.required' => __('Please enter your name and email address.'),
+            'shipping_line1.required' => __('Please enter your shipping address.'),
+            'shipping_city.required' => __('Please enter your shipping address.'),
+            'shipping_postal_code.required' => __('Please enter your shipping address.'),
+            'shipping_country.required' => __('Please enter your shipping address.'),
+            'edition_piece_id.required' => __('Please choose an available edition number.'),
+            'accept_terms.accepted' => __('I have read the Terms & Conditions and the Return Policy and agree to them.'),
         ];
     }
 
@@ -77,7 +77,7 @@ class CheckoutRequest extends FormRequest
             if (! $product->isVisibleTo($this->user())) {
                 $validator->errors()->add(
                     'product_id',
-                    __('Dit product is nog niet beschikbaar voor checkout.'),
+                    __('This product is not available for checkout yet.'),
                 );
 
                 return;
@@ -102,7 +102,7 @@ class CheckoutRequest extends FormRequest
             if ($available === 0 && ! $heldByBuyer) {
                 $validator->errors()->add(
                     'checkout',
-                    __(':product is uitverkocht.', [
+                    __(':product is sold out.', [
                         'product' => $product->translated('name'),
                     ]),
                 );
@@ -113,7 +113,7 @@ class CheckoutRequest extends FormRequest
             if ($editionPieceId === null) {
                 $validator->errors()->add(
                     'edition_piece_id',
-                    __('Kies a.u.b. een beschikbaar editienummer.'),
+                    __('Please choose an available edition number.'),
                 );
 
                 return;
@@ -122,7 +122,7 @@ class CheckoutRequest extends FormRequest
             if ($piece === null || ($piece->status !== EditionPieceStatus::Available && ! $heldByBuyer)) {
                 $validator->errors()->add(
                     'edition_piece_id',
-                    __('Dit editienummer is niet meer beschikbaar. Kies een ander nummer.'),
+                    __('This edition number is no longer available. Please choose another.'),
                 );
             }
         });

@@ -2,7 +2,7 @@
     'title' => __('Heritage Nº 001 is uitverkocht'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
-    'ctaLabel' => __('Bezoek het huis'),
+    'ctaLabel' => __('Visit the house'),
 ])
     <p style="margin:0 0 16px;">
         {{ __('De Founding Edition is volledig gereserveerd. Nº 001 blijft in het Maison Anversa-archief.') }}

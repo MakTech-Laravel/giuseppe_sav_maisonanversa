@@ -28,11 +28,11 @@ export default function AppointmentsIndex({
 
     return (
         <>
-            <Head title={t('Afspraken')} />
+            <Head title={t('Appointments')} />
             <InquiryInbox
-                title={t('Afspraken')}
+                title={t('Appointments')}
                 description={t(
-                    'Atelierbezoeken en privé consults, nieuwste eerst.',
+                    'Atelier visits and private consultations, newest first.',
                 )}
                 icon={CalendarCheck}
                 inquiries={inquiries}
@@ -40,7 +40,7 @@ export default function AppointmentsIndex({
                 perPageOptions={perPageOptions}
                 kinds={kinds}
                 routes={appointments as InquiryRouteHelpers}
-                emptyLabel={t('Geen aanvragen gevonden.')}
+                emptyLabel={t('No requests found.')}
             />
         </>
     );

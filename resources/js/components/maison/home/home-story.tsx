@@ -7,20 +7,20 @@ import { TextLink } from '@/components/maison/ui/text-link';
 
 const VALUES = [
     {
-        title: 'Europees Erfgoed',
-        desc: 'Geïnspireerd door eeuwen Europese cultuur en klassieke waarden.',
+        title: 'European Heritage',
+        desc: 'Inspired by centuries of European culture and classical values.',
     },
     {
         title: 'Vakmanschap',
-        desc: 'De meest verfijnde materialen. Minutieuze aandacht voor elk detail.',
+        desc: 'The finest materials. Meticulous attention to every detail.',
     },
     {
         title: 'Gemeenschap',
-        desc: 'Mensen samenbrengen die dezelfde waarden delen.',
+        desc: 'Bringing together people who share the same values.',
     },
     {
-        title: 'Gebouwd om te Blijven',
-        desc: 'Producten en ervaringen die de tand des tijds doorstaan.',
+        title: 'Built to Last',
+        desc: 'Products and experiences that stand the test of time.',
     },
 ] as const;
 
@@ -30,24 +30,24 @@ export function HomeStory() {
     return (
         <div className="grid min-h-120 grid-cols-1 bg-cream ma-md:grid-cols-2 ma-lg:grid-cols-[1fr_1.1fr_1fr]">
             <Reveal className="flex flex-col justify-center border-gold/15 px-8 py-16 ma-md:border-r ma-md:px-13">
-                <Eyebrow tone="gold2">{t('Ons Verhaal')}</Eyebrow>
+                <Eyebrow tone="gold2">{t('Our Story')}</Eyebrow>
                 <h2 className="mt-3 mb-5 font-serif text-[clamp(26px,3vw,38px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
-                    {t('Geworteld in')} {t('Antwerpen.')}
+                    {t('Rooted in')} {t('Antwerp.')}
                     <br />
-                    {t('Gebouwd voor')} {t('generaties.')}
+                    {t('Built for')} {t('generations.')}
                 </h2>
                 <p className="mb-4 text-[15px] leading-[1.85] text-choc3">
                     {t(
-                        'Maison Anversa is een Europees erfgoedhuis. Niet een sportmerk. Een huis — met waarden, met verhalen, met producten die mensen bewaren en niet weggooien.',
+                        'Maison Anversa is a European heritage house. Not a sports brand. A house — with values, with stories, with products that people keep and do not discard.',
                     )}
                 </p>
                 <p className="mb-4 text-[15px] leading-[1.85] text-choc3">
                     {t(
-                        'Wij begonnen met padel omdat het de perfecte samenkomst is van alles waarin wij geloven: gemeenschap, performance en de voldoening van iets goed gemaakt.',
+                        'We started with padel because it is the perfect convergence of everything we believe in: community, performance and the satisfaction of something well made.',
                     )}
                 </p>
                 <TextLink as={MaisonLink} to="story">
-                    {t('Lees ons verhaal →')}
+                    {t('Read our story →')}
                 </TextLink>
             </Reveal>
 

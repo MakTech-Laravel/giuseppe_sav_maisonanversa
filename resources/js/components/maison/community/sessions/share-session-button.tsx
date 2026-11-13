@@ -23,7 +23,7 @@ export function ShareSessionButton({
         if (typeof navigator.share === 'function') {
             try {
                 await navigator.share({
-                    title: title ?? t('Sessie'),
+                    title: title ?? t('Session'),
                     url,
                 });
 
@@ -47,7 +47,7 @@ export function ShareSessionButton({
                 className,
             )}
         >
-            {copiedText ? t('Link gekopieerd') : t('Deel')}
+            {copiedText ? t('Link copied') : t('Share')}
         </button>
     );
 }

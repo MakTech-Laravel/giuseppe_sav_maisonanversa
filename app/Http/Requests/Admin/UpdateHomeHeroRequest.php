@@ -71,21 +71,21 @@ class UpdateHomeHeroRequest extends FormRequest
                     if ($action !== HomeHeroAction::Hidden && $label === '') {
                         $validator->errors()->add(
                             "{$slot}_label",
-                            __('Een zichtbare knop heeft een label nodig.'),
+                            __('A visible button needs a label.'),
                         );
                     }
 
                     if ($action === HomeHeroAction::MaisonPage && ! array_key_exists($target, HomeHeroPresenter::PAGES)) {
                         $validator->errors()->add(
                             "{$slot}_target",
-                            __('Kies een Maison-pagina.'),
+                            __('Choose a Maison page.'),
                         );
                     }
 
                     if ($action === HomeHeroAction::External && ! $this->isHttpsUrl($target)) {
                         $validator->errors()->add(
                             "{$slot}_target",
-                            __('Een externe knop vereist een https-adres.'),
+                            __('An external button requires an https address.'),
                         );
                     }
                 }

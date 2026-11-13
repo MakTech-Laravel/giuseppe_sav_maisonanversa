@@ -38,17 +38,17 @@ export default function CreateEvent() {
 
     return (
         <>
-            <Head title={t('Evenement aanmaken')} />
+            <Head title={t('Create event')} />
             <div className="w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
                 <AdminPageHeader
-                    title={t('Evenement aanmaken')}
-                    description={t('Plan een nieuw Maison-evenement.')}
+                    title={t('Create event')}
+                    description={t('Plan a new Maison event.')}
                     icon={CalendarPlus}
                 >
                     <Button variant="outline" asChild>
                         <Link href={eventsRoutes.index(wayfinderLocale())}>
                             <ArrowLeft className="h-4 w-4" />{' '}
-                            {t('Terug naar evenementen')}
+                            {t('Back to events')}
                         </Link>
                     </Button>
                 </AdminPageHeader>
@@ -65,7 +65,7 @@ export default function CreateEvent() {
                         {form.processing && (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         )}
-                        {t('Evenement aanmaken')}
+                        {t('Create event')}
                     </Button>
                 </form>
             </div>

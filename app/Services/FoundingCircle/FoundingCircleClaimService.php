@@ -70,7 +70,7 @@ class FoundingCircleClaimService
 
             if ($product === null || ! $product->grants_founding_circle) {
                 throw ValidationException::withMessages([
-                    'serial' => __('Er is geen Founding Edition-product beschikbaar.'),
+                    'serial' => __('No Founding Edition product is available.'),
                 ]);
             }
 
@@ -78,7 +78,7 @@ class FoundingCircleClaimService
 
             if ($editionNumber < 1 || $editionNumber > (int) $product->edition_total) {
                 throw ValidationException::withMessages([
-                    'serial' => __('Ongeldig serienummer. Gebruik een nummer tussen 001 en :total.', [
+                    'serial' => __('Invalid serial number. Use a number between 001 and :total.', [
                         'total' => str_pad((string) $product->edition_total, 3, '0', STR_PAD_LEFT),
                     ]),
                 ]);
@@ -89,7 +89,7 @@ class FoundingCircleClaimService
                 ->pending()
                 ->exists()) {
                 throw ValidationException::withMessages([
-                    'serial' => __('Je hebt al een registratie in afwachting. Wacht op goedkeuring of neem contact op met het team.'),
+                    'serial' => __('Je hebt al een registratie in afwachting. Awaiting approval of neem contact op met het team.'),
                 ]);
             }
 
@@ -102,7 +102,7 @@ class FoundingCircleClaimService
 
             if ($activeClaim !== null) {
                 throw ValidationException::withMessages([
-                    'serial' => __('Dit serienummer is al geregistreerd.'),
+                    'serial' => __('This serial number is already registered.'),
                 ]);
             }
 
@@ -120,13 +120,13 @@ class FoundingCircleClaimService
 
             if ($piece === null) {
                 throw ValidationException::withMessages([
-                    'serial' => __('Dit serienummer bestaat niet.'),
+                    'serial' => __('This serial number does not exist.'),
                 ]);
             }
 
             if ($piece->status === EditionPieceStatus::Archive) {
                 throw ValidationException::withMessages([
-                    'serial' => __('Dit serienummer behoort tot het archief en kan niet worden geregistreerd.'),
+                    'serial' => __('This serial number belongs to the archive and cannot be registered.'),
                 ]);
             }
 
@@ -136,7 +136,7 @@ class FoundingCircleClaimService
 
                 if ($ownerId !== null && (int) $ownerId !== (int) $user->id) {
                     throw ValidationException::withMessages([
-                        'serial' => __('Dit serienummer is al gekoppeld aan een andere eigenaar.'),
+                        'serial' => __('This serial number is already linked to another owner.'),
                     ]);
                 }
             }
@@ -164,7 +164,7 @@ class FoundingCircleClaimService
 
             if (! $locked->isPending()) {
                 throw ValidationException::withMessages([
-                    'claim' => __('Deze registratie is al behandeld.'),
+                    'claim' => __('This registration has already been processed.'),
                 ]);
             }
 
@@ -209,7 +209,7 @@ class FoundingCircleClaimService
 
             if (! $locked->isPending()) {
                 throw ValidationException::withMessages([
-                    'claim' => __('Deze registratie is al behandeld.'),
+                    'claim' => __('This registration has already been processed.'),
                 ]);
             }
 
@@ -234,7 +234,7 @@ class FoundingCircleClaimService
             ->pending()
             ->update([
                 'status' => FoundingCircleClaimStatus::Rejected,
-                'admin_note' => __('Automatisch afgewezen na terugbetaling.'),
+                'admin_note' => __('Automatically rejected after refund.'),
                 'reviewed_at' => now(),
             ]);
     }

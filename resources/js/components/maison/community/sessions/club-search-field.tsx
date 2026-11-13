@@ -86,7 +86,7 @@ export function ClubSearchField({
                     onClick={() => onSelect(null)}
                     className="cursor-pointer font-sans text-[10px] tracking-[0.16em] text-stone uppercase underline underline-offset-4 hover:text-choc"
                 >
-                    {t('Andere club kiezen')}
+                    {t('Choose another club')}
                 </button>
             </div>
         );
@@ -110,8 +110,8 @@ export function ClubSearchField({
                     type="search"
                     value={term}
                     onChange={(event) => setTerm(event.target.value)}
-                    placeholder={t('Zoek club, stad of postcode...')}
-                    aria-label={t('Zoek club, stad of postcode...')}
+                    placeholder={t('Search club, city or postcode...')}
+                    aria-label={t('Search club, city or postcode...')}
                     className={cn(
                         'w-full border border-gold/20 bg-cream py-3.5 pr-4 pl-11 font-serif text-base text-choc transition-colors outline-none focus:border-gold2',
                         error && 'border-red-700/50',
@@ -125,7 +125,7 @@ export function ClubSearchField({
 
             {waitingForQuery && (
                 <p className="font-sans text-[11px] text-stone">
-                    {t('Typ minstens 2 letters om te zoeken.')}
+                    {t('Type at least 2 letters to search.')}
                 </p>
             )}
 
@@ -159,7 +159,7 @@ export function ClubSearchField({
 
             {showEmptyState && (
                 <p className="font-sans text-[11px] text-stone">
-                    {t('Geen club gevonden voor deze zoekopdracht.')}
+                    {t('No club found for this search.')}
                 </p>
             )}
 
