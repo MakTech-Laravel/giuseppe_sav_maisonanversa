@@ -30,9 +30,7 @@ export function CommunityLoginGate() {
                 </div>
 
                 <h2 className="mb-3 font-serif text-4xl font-medium text-choc [&_em]:text-gold2 [&_em]:italic">
-                    {t('Welcome')}
-                    <br />
-                    {t('back,')} <em>{t('member')}</em>
+                    {t('Welcome back,')} <em>{t('member')}</em>
                 </h2>
 
                 <p className="mb-9 text-base leading-[1.8] text-choc3">

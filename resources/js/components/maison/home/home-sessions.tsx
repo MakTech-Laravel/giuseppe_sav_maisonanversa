@@ -13,7 +13,7 @@ const INTRO_DESKTOP =
     'Find an open session at one of our partner clubs, or plan your own and invite your friends. You book the court with the club; we bring the players together.';
 
 const INTRO_MOBILE =
-    'Vind een open sessie bij een van onze partnerclubs, of plan er zelf een en nodig je vrienden uit.';
+    'Find an open session at one of our partner clubs, or plan your own and invite your friends.';
 
 const EMPTY_BODY =
     'Choose a club and a time, share the link with your friends, and other members can join.';
@@ -80,9 +80,11 @@ export function HomeSessions({
 
     const weekCounter = (
         <p className="font-sans text-[10px] tracking-[0.22em] text-[#6E5646] uppercase">
-            {t('{{count}} open sessions this week', {
-                count: openSessionsThisWeek,
-            })}
+            {openSessionsThisWeek === 1
+                ? t('1 open session this week')
+                : t('{{count}} open sessions this week', {
+                      count: openSessionsThisWeek,
+                  })}
         </p>
     );
 

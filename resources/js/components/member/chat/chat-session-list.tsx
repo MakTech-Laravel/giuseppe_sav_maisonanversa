@@ -81,7 +81,7 @@ export function ChatSessionList({
                                         <StatusPill
                                             label={t(
                                                 session.lifecycle_label ??
-                                                    'Afgelopen',
+                                                    'Past',
                                             )}
                                         />
                                     )}

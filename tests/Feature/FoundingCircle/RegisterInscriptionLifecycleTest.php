@@ -89,7 +89,7 @@ test('daily promotion after delivery window inscribes and mails the member', fun
         ->firstWhere('sequence', 15);
 
     expect($place['state'])->toBe('inscribed')
-        ->and($place['label_key'])->toBe('Privélid');
+        ->and($place['label_key'])->toBe('Private member');
 });
 
 test('promotion waits until the withdrawal deadline passes', function () {

@@ -11,11 +11,11 @@ const VALUES = [
         desc: 'Inspired by centuries of European culture and classical values.',
     },
     {
-        title: 'Vakmanschap',
+        title: 'Craftsmanship',
         desc: 'The finest materials. Meticulous attention to every detail.',
     },
     {
-        title: 'Gemeenschap',
+        title: 'Community spirit',
         desc: 'Bringing together people who share the same values.',
     },
     {
@@ -32,18 +32,11 @@ export function HomeStory() {
             <Reveal className="flex flex-col justify-center border-gold/15 px-8 py-16 ma-md:border-r ma-md:px-13">
                 <Eyebrow tone="gold2">{t('Our Story')}</Eyebrow>
                 <h2 className="mt-3 mb-5 font-serif text-[clamp(26px,3vw,38px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
-                    {t('Rooted in')} {t('Antwerp.')}
-                    <br />
-                    {t('Built for')} {t('generations.')}
+                    {t('Everything begins with a coffee.')}
                 </h2>
                 <p className="mb-4 text-[15px] leading-[1.85] text-choc3">
                     {t(
-                        'Maison Anversa is a European heritage house. Not a sports brand. A house — with values, with stories, with products that people keep and do not discard.',
-                    )}
-                </p>
-                <p className="mb-4 text-[15px] leading-[1.85] text-choc3">
-                    {t(
-                        'We started with padel because it is the perfect convergence of everything we believe in: community, performance and the satisfaction of something well made.',
+                        'Coffee. Style. The city. And then the court. Maison Anversa did not start from a business plan, but from a love of coffee, fashion, history and sport. One house where sport, style, culture and craftsmanship come together.',
                     )}
                 </p>
                 <TextLink as={MaisonLink} to="story">
@@ -81,7 +74,7 @@ export function HomeStory() {
                     <p className="font-sans text-[8px] leading-[1.6] tracking-[0.2em] text-sand uppercase">
                         European Heritage Sports and Lifestyle House
                         <br />
-                        Antwerp · Belgium · Est. 2026
+                        {t('Antwerp · Belgium · Est. 2026')}
                     </p>
                 </div>
             </div>

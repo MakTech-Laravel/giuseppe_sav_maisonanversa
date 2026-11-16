@@ -15,22 +15,11 @@ export function HomeAntwerp() {
                     <Eyebrow>{t('Rooted in Antwerp')}</Eyebrow>
                     <GoldRule />
                     <h2 className="mb-6 font-serif text-[clamp(32px,4vw,52px)] leading-[1.1] font-normal tracking-[0.04em] uppercase">
-                        {t('A city of')}
-                        <br />
-                        {t('masters.')}
-                        <br />
-                        {t('A house of')}
-                        <br />
-                        {t('heritage.')}
+                        {t('A city that always looked outward.')}
                     </h2>
-                    <p className="mb-4 text-[15px] leading-[1.85] text-sand">
-                        {t(
-                            'Antwerp is no accidental choice. For centuries a city of craftsmen, merchants and artists — from diamond cutters to master carpenters. A place where patience, precision and beauty go hand in hand.',
-                        )}
-                    </p>
                     <p className="mb-7 text-[15px] leading-[1.85] text-sand">
                         {t(
-                            'Maison Anversa carries that spirit. Each racket is designed with the same reverence for material and detail that defined this city for centuries. Antwerp is not our background — it is our conviction.',
+                            'Every day here begins the same way: a coffee while the city wakes up. Antwerp is a port city where trade, culture, fashion and ideas meet. Historic without standing still. Anversa is the Italian name for Antwerp: a house rooted in this city, looking out over Europe.',
                         )}
                     </p>
                     <div className="flex flex-wrap gap-12">
@@ -44,11 +33,7 @@ export function HomeAntwerp() {
                             line1={t('Pieces')}
                             line2="Founding Edition"
                         />
-                        <Figure
-                            value="1"
-                            line1={t('City that')}
-                            line2={t('carries us')}
-                        />
+                        <Figure value="1" line1={t('City that carries us')} />
                     </div>
                 </Reveal>
 
@@ -56,13 +41,13 @@ export function HomeAntwerp() {
                     <PlaceholderImage
                         asset="antwerp-cityscape"
                         ratio={null}
-                        alt="Antwerpen bij gouden uur"
+                        alt={t('Antwerp at golden hour')}
                         captioned={false}
                         overlay="linear-gradient(to top, rgba(41,28,24,0.5) 0%, transparent 50%)"
                         className="absolute inset-0 h-full w-full [&_img]:object-cover [&_img]:object-center"
                     />
                     <div className="absolute bottom-6 left-6 font-sans text-[9px] font-light tracking-[0.3em] text-gold uppercase">
-                        Antwerp · Belgium · Est. 2026
+                        {t('Antwerp · Belgium · Est. 2026')}
                     </div>
                 </Reveal>
             </Wrap>
@@ -77,7 +62,7 @@ function Figure({
 }: {
     value: string;
     line1: string;
-    line2: string;
+    line2?: string;
 }) {
     return (
         <div>
@@ -86,8 +71,12 @@ function Figure({
             </div>
             <div className="mt-1.5 font-sans text-[9px] font-light tracking-[0.2em] text-sand uppercase">
                 {line1}
-                <br />
-                {line2}
+                {line2 ? (
+                    <>
+                        <br />
+                        {line2}
+                    </>
+                ) : null}
             </div>
         </div>
     );

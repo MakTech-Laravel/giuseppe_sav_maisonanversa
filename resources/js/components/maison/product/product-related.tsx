@@ -33,9 +33,9 @@ type RelatedCard = {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-    active: 'Beschikbaar',
-    coming_soon: 'Binnenkort',
-    archived: 'Uitverkocht',
+    active: 'Available',
+    coming_soon: 'Coming soon',
+    archived: 'Sold out',
 };
 
 const RELATED_PRODUCT_TITLE_MAX = 40;

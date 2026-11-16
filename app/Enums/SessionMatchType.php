@@ -13,8 +13,8 @@ enum SessionMatchType: string
     public function label(): string
     {
         return match ($this) {
-            self::Singles => 'Enkel',
-            self::Doubles => 'Dubbel',
+            self::Singles => 'Singles',
+            self::Doubles => 'Doubles',
         };
     }
 

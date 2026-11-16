@@ -120,17 +120,17 @@ class ProductSeeder extends Seeder
             ProductSectionKey::Includes->value => [
                 'items' => [
                     ['title' => 'Heritage Nº 001 racket (individueel genummerd)'],
-                    ['title' => 'Heritage Certificaat met oprichterzegel'],
-                    ['title' => "Heritage Paspoort (24 pagina's)"],
-                    ['title' => 'Welkomstkaart & Oprichtersbrief'],
+                    ['title' => 'Heritage Certificate met zegel van de oprichter'],
+                    ['title' => 'Heritage Passport'],
+                    ['title' => 'Welkomstkaart & brief van de oprichter'],
                     ['title' => 'Founding Circle uitnodiging'],
-                    ['title' => 'Premium canvas stofdoek'],
+                    ['title' => 'Premium canvas stofzak'],
                 ],
             ],
             ProductSectionKey::Guarantees->value => [
                 'items' => [
                     ['icon' => '◇', 'title' => 'Veilige reservering'],
-                    ['icon' => '◆', 'title' => 'Verzending in Europa'],
+                    ['icon' => '◆', 'title' => 'Levering in de EU'],
                     ['icon' => '◈', 'title' => 'Authenticiteit gegarandeerd'],
                 ],
             ],
@@ -146,18 +146,18 @@ class ProductSeeder extends Seeder
                     ],
                     [
                         'number_label' => '02',
-                        'title' => 'Oprichtersbrief',
+                        'title' => 'Brief van de oprichter',
                         'body' => 'Het verhaal van Maison Anversa. Persoonlijk, authentiek.',
                     ],
                     [
                         'number_label' => '03',
-                        'title' => 'Heritage Paspoort',
-                        'body' => "A6 · 24 pagina's · Vegetaal gelooide lederen omslag",
+                        'title' => 'Heritage Passport',
+                        'body' => 'Vegetaal gelooide lederen omslag',
                     ],
                     [
                         'number_label' => '04',
-                        'title' => 'Heritage Certificaat',
-                        'body' => 'A5 · Letterpress + goudfolie · Oprichterzegel · Editienummer',
+                        'title' => 'Heritage Certificate',
+                        'body' => 'A5 · Letterpress + goudfolie · Zegel van de oprichter · Editienummer',
                     ],
                     [
                         'number_label' => '05',
@@ -167,7 +167,7 @@ class ProductSeeder extends Seeder
                     [
                         'number_label' => '06',
                         'title' => 'Heritage Nº 001',
-                        'body' => 'Premium canvas stofdoek · MA monogram · Individueel genummerd',
+                        'body' => 'Premium canvas stofzak · MA monogram · Individueel genummerd',
                     ],
                 ],
             ],
@@ -185,7 +185,7 @@ class ProductSeeder extends Seeder
                     ],
                     [
                         'number_label' => '02',
-                        'title' => 'Echt Lederen Greep',
+                        'title' => 'Echt lederen greep',
                         'body' => 'Handafgewerkt, vegetaal gelooid. Wordt mooier met gebruik — synthetisch kan dat niet.',
                     ],
                     [
@@ -205,18 +205,18 @@ class ProductSeeder extends Seeder
                     ['icon' => '◈', 'title' => 'Genummerd 001–100'],
                     ['icon' => '✓', 'title' => 'Echtheids-certificaat'],
                     ['icon' => '◆', 'title' => 'Ontworpen in Antwerpen'],
-                    ['icon' => '★', 'title' => 'Founding Circle lid'],
+                    ['icon' => '★', 'title' => 'Lid van de Founding Circle'],
                 ],
             ],
             ProductSectionKey::Service->value => [
                 'eyebrow' => 'Service & Veiligheid',
                 'heading' => 'Met zorg geleverd.',
-                'intro' => 'Elke zending is verzekerd en volgbaar. Retour binnen 14 dagen na levering.',
+                'intro' => 'Elke zending is verzekerd en traceerbaar. Retour binnen 14 dagen na levering.',
                 'items' => [
                     [
                         'icon' => '◆',
                         'title' => 'Verzending',
-                        'body' => 'Binnen Europa is verzending inbegrepen. Elke zending is verzekerd en volgbaar.',
+                        'body' => 'Levering binnen de EU is inbegrepen. Elke zending is verzekerd en traceerbaar.',
                     ],
                     [
                         'icon' => '↺',
@@ -226,7 +226,7 @@ class ProductSeeder extends Seeder
                     [
                         'icon' => '◇',
                         'title' => 'Veilig reserveren',
-                        'body' => 'Uw nummer wordt vastgelegd na bevestiging. De Founding Edition wordt in één beperkte productieronde vervaardigd — volledig transparant.',
+                        'body' => 'Je nummer wordt vastgelegd na bevestiging. De Founding Edition wordt in één beperkte productieronde vervaardigd — volledig transparant.',
                     ],
                 ],
             ],
@@ -253,11 +253,11 @@ class ProductSeeder extends Seeder
             ],
             [
                 'question' => 'Hoe weet ik dat mijn nummer uniek is?',
-                'answer' => 'Elk racket is individueel gestempeld (001–100) en vergezeld van een Heritage Certificaat met hetzelfde nummer en het oprichterzegel. Het nummer staat ook in ons register.',
+                'answer' => 'Elk racket is individueel gestempeld (001–100) en vergezeld van een Heritage Certificate met hetzelfde nummer en het zegel van de oprichter. Het nummer staat ook in ons register.',
             ],
             [
                 'question' => 'Kan ik mijn nummer kiezen?',
-                'answer' => 'Binnen de beschikbare nummers kunt u een voorkeur opgeven bij reservering. Leden van de Founding Circle hebben voorrang op lagere nummers.',
+                'answer' => 'Binnen de beschikbare nummers kun je een voorkeur opgeven bij reservering. Leden van de Founding Circle hebben voorrang op lagere nummers.',
             ],
             [
                 'question' => 'Wordt Heritage Nº 001 opnieuw gemaakt?',

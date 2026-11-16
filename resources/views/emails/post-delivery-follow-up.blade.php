@@ -1,11 +1,11 @@
 @component('emails.layouts.maison', [
-    'title' => __('Hoe bevalt Heritage Nº 001?'),
+    'title' => __('How do you like Heritage Nº 001?'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
     'ctaLabel' => __('Visit the house'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Het is ongeveer dertig dagen sinds jouw editie is geleverd. Wij horen graag hoe het huis voor je aanvoelt.') }}
+        {{ __('It has been about thirty days since your edition was delivered. We would love to hear how the house feels to you.') }}
     </p>
 
     <p style="margin:0;">

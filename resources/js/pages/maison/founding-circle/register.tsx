@@ -30,7 +30,7 @@ function placeText(place: Place, t: (key: string) => string): string {
         return place.name;
     }
 
-    return t(place.label_key ?? 'Beschikbaar');
+    return t(place.label_key ?? 'Available');
 }
 
 export default function OfficialRegister({ places }: { places: Place[] }) {

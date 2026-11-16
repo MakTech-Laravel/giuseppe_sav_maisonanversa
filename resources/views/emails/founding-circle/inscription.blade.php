@@ -1,18 +1,18 @@
 @component('emails.layouts.maison', [
-    'title' => __('Nº :number is nu van jou', ['number' => $number]),
+    'title' => __('Nº :number is now yours', ['number' => $number]),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $listingUrl,
-    'ctaLabel' => __('Beheer jouw registervermelding'),
+    'ctaLabel' => __('Manage your register listing'),
 ])
     <p style="margin:0 0 16px;">
         {{ __('Dear :name,', ['name' => $memberName]) }}
     </p>
 
     <p style="margin:0 0 16px;">
-        {{ __('De bedenktijd is verstreken. Nº :number is nu officieel van jou — jouw plaats in het Founding Circle-register is ingeschreven.', ['number' => $number]) }}
+        {{ __('The withdrawal period has passed. Nº :number is now officially yours — your place in the Founding Circle register is inscribed.', ['number' => $number]) }}
     </p>
 
     <p style="margin:0;">
-        {{ __('Je kunt nu kiezen hoe jouw naam in het openbare register verschijnt.') }}
+        {{ __('You can now choose how your name appears in the public register.') }}
     </p>
 @endcomponent

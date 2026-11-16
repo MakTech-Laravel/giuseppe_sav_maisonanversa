@@ -92,8 +92,8 @@ class SessionChatService
 
     public function report(CommunitySessionMessage $message, User $reporter): void
     {
-        abort_if($message->is_system, 422, __('Systeemberichten kun je niet melden.'));
-        abort_if($message->user_id === $reporter->id, 422, __('Je kunt je eigen bericht niet melden.'));
+        abort_if($message->is_system, 422, __('System messages cannot be reported.'));
+        abort_if($message->user_id === $reporter->id, 422, __('You cannot report your own message.'));
 
         if ($message->isReported()) {
             return;
@@ -196,7 +196,7 @@ class SessionChatService
     {
         if (! $this->isOpen($session)) {
             throw ValidationException::withMessages([
-                'body' => __('Deze chat is gesloten.'),
+                'body' => __('This chat is closed.'),
             ]);
         }
 
@@ -215,13 +215,13 @@ class SessionChatService
 
         if ($trimmed === null && $files === []) {
             throw ValidationException::withMessages([
-                'body' => __('Schrijf een bericht of voeg een afbeelding toe.'),
+                'body' => __('Write a message or add an image.'),
             ]);
         }
 
         if (! $this->isOpen($session)) {
             throw ValidationException::withMessages([
-                'body' => __('Deze chat is gesloten.'),
+                'body' => __('This chat is closed.'),
             ]);
         }
 

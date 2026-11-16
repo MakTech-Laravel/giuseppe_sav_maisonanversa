@@ -58,7 +58,7 @@ enum InquiryType: string
     public function label(): string
     {
         return match ($this) {
-            self::Appointment => 'Afspraak',
+            self::Appointment => 'Appointment',
             self::Consult => 'Private consultation',
             self::Feedback => 'Feedback',
             self::Corner => 'Club Corner',
@@ -72,8 +72,8 @@ enum InquiryType: string
             self::Appointment => 'We have received your appointment request',
             self::Consult => 'We have received your consultation request',
             self::Feedback => 'Thank you for your feedback',
-            self::Corner => 'Wij hebben jouw aanvraag ontvangen',
-            self::Contact => 'Wij hebben jouw bericht ontvangen',
+            self::Corner => 'We have received your request',
+            self::Contact => 'We have received your message',
         };
     }
 }

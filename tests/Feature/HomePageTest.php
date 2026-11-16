@@ -46,7 +46,7 @@ test('the home marquee sits on chocolate with cream type', function () {
         ->toContain('bg-choc')
         ->toContain('text-cream/85')
         ->toContain('border-gold/20')
-        ->toContain('Gebouwd voor generaties')
+        ->toContain('Built for generations')
         ->not->toContain('bg-cream')
         ->not->toContain('bg-gold/8')
         ->not->toContain('mask-image');
@@ -140,7 +140,7 @@ test('the home story section keeps a three-column layout with values always visi
     expect($source)
         ->toContain('ma-lg:grid-cols-[1fr_1.1fr_1fr]')
         ->toContain('ma-md:grid-cols-2')
-        ->toContain('Ons Verhaal')
+        ->toContain('Our Story')
         ->toContain('European Heritage')
         ->toContain('+')
         ->toContain('Maison Anversa')

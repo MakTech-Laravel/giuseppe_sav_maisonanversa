@@ -18,11 +18,11 @@ class FaqSeeder extends Seeder
             FaqContext::Contact->value => [
                 [
                     'question' => 'Wanneer levert Heritage Nº 001?',
-                    'answer' => 'Levering is gepland in Q1 2027. De Founding Edition levert in volgorde van reservering — hoe vroeger u reserveert, hoe lager uw nummer.',
+                    'answer' => 'Levering is gepland in Q1 2027. De Founding Edition levert in volgorde van reservering — hoe vroeger je reserveert, hoe lager jouw nummer.',
                 ],
                 [
                     'question' => 'Hoe wordt mijn racket geleverd?',
-                    'answer' => 'In een handgemaakte omslag, vergezeld van een certificaat van echtheid en uw genummerd editienummer.',
+                    'answer' => 'In een handgemaakte omslag, vergezeld van een certificaat van echtheid en je genummerde editienummer.',
                 ],
                 [
                     'question' => 'Kan ik mijn racket retourneren?',
@@ -30,7 +30,7 @@ class FaqSeeder extends Seeder
                 ],
                 [
                     'question' => 'Is de prijs inclusief verzending?',
-                    'answer' => 'Verzending binnen Europa is inbegrepen. Buiten Europa op aanvraag.',
+                    'answer' => 'Levering binnen de EU is inbegrepen.',
                 ],
                 [
                     'question' => 'Hoe onderhoud ik het leder?',

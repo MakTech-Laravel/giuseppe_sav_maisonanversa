@@ -88,7 +88,7 @@ class CommunityController extends Controller
             'community_post_id' => $communityPost->id,
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht verborgen op jouw muur.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Post hidden from your wall.')]);
 
         return back();
     }
@@ -106,7 +106,7 @@ class CommunityController extends Controller
             User::permission('community.moderate')->pluck('id'),
             NotificationType::Community,
             __('Community report'),
-            __('Een community-post is gemeld: :reason', ['reason' => $report->reason]),
+            __('A community post was reported: :reason', ['reason' => $report->reason]),
             [
                 'report_id' => $report->id,
                 'community_post_id' => $report->community_post_id,
@@ -116,7 +116,7 @@ class CommunityController extends Controller
             $request->user(),
         );
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Bericht gemeld.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Message reported.')]);
 
         return back();
     }
@@ -136,7 +136,7 @@ class CommunityController extends Controller
 
         $communityEvent->loadCount('rsvps');
 
-        abort_if($communityEvent->isFull(), 422, __('Dit evenement is vol.'));
+        abort_if($communityEvent->isFull(), 422, __('This event is full.'));
 
         EventRsvp::query()->create([
             'community_event_id' => $communityEvent->id,
@@ -145,7 +145,7 @@ class CommunityController extends Controller
 
         Mail::to($request->user())->queue(new RsvpConfirmation($communityEvent));
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Je bent aangemeld voor dit evenement.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('You are signed up for this event.')]);
 
         return back();
     }
@@ -159,7 +159,7 @@ class CommunityController extends Controller
             ->where('user_id', $request->user()->id)
             ->delete();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Jouw aanmelding is geannuleerd.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Your registration has been cancelled.')]);
 
         return back();
     }

@@ -251,7 +251,7 @@ class FoundingCircleRegistrar
 
         if (! $entry->isInscribed()) {
             throw ValidationException::withMessages([
-                'visibility' => __('Jouw plaats is nog gereserveerd. Na de bedenktijd kun je jouw vermelding beheren.'),
+                'visibility' => __('Your place is still reserved. After the withdrawal period you can manage your listing.'),
             ]);
         }
 
@@ -395,7 +395,7 @@ class FoundingCircleRegistrar
     {
         if ($number < 1 || $number > (int) $product->edition_total) {
             throw ValidationException::withMessages([
-                'edition_number' => __('Kies een nummer tussen 001 en :total.', [
+                'edition_number' => __('Choose a number between 001 and :total.', [
                     'total' => str_pad((string) $product->edition_total, 3, '0', STR_PAD_LEFT),
                 ]),
             ]);
@@ -403,7 +403,7 @@ class FoundingCircleRegistrar
 
         if (in_array($number, $product->archiveEditionNumberList(), true)) {
             throw ValidationException::withMessages([
-                'edition_number' => __('Dit nummer behoort tot het archief en is niet te koop.'),
+                'edition_number' => __('This number belongs to the archive and is not for sale.'),
             ]);
         }
 
@@ -414,7 +414,7 @@ class FoundingCircleRegistrar
 
         if ($taken) {
             throw ValidationException::withMessages([
-                'edition_number' => __('Dit nummer is al ingeschreven.'),
+                'edition_number' => __('This number is already inscribed.'),
             ]);
         }
 
@@ -422,13 +422,13 @@ class FoundingCircleRegistrar
 
         if ($piece === null) {
             throw ValidationException::withMessages([
-                'edition_number' => __('Dit nummer bestaat niet.'),
+                'edition_number' => __('This number does not exist.'),
             ]);
         }
 
         if ($piece->status === EditionPieceStatus::Archive) {
             throw ValidationException::withMessages([
-                'edition_number' => __('Dit nummer behoort tot het archief en is niet te koop.'),
+                'edition_number' => __('This number belongs to the archive and is not for sale.'),
             ]);
         }
 
@@ -438,13 +438,13 @@ class FoundingCircleRegistrar
 
             if ($ownerId !== null && $exceptUserId !== null && (int) $ownerId !== $exceptUserId) {
                 throw ValidationException::withMessages([
-                    'edition_number' => __('Dit nummer is al gekoppeld aan een andere eigenaar.'),
+                    'edition_number' => __('This number is already linked to another owner.'),
                 ]);
             }
 
             if ($ownerId !== null && $exceptUserId === null) {
                 throw ValidationException::withMessages([
-                    'edition_number' => __('Dit nummer is al gekoppeld aan een andere eigenaar.'),
+                    'edition_number' => __('This number is already linked to another owner.'),
                 ]);
             }
         }

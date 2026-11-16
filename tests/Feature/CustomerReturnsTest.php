@@ -315,7 +315,7 @@ test('order confirmation mail includes the returns link', function () {
 
     $html = (new OrderConfirmation($order))->render();
 
-    expect($html)->toContain(__('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.'))
+    expect($html)->toContain(__('Changed your mind? You can return within 14 days via your account.'))
         ->and($html)->toContain(route('maison.returns', ['locale' => 'nl']));
 });
 
@@ -351,7 +351,7 @@ test('shipping and delivered status mails include the returns CTA', function () 
 
     $shippingHtml = (new ShippingNotification($order))->render();
     expect($shippingHtml)
-        ->toContain(__('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.'))
+        ->toContain(__('Changed your mind? You can return within 14 days via your account.'))
         ->and($shippingHtml)->toContain(route('maison.returns', ['locale' => 'nl']));
 
     $event = OrderStatusEvent::factory()->forOrder($order)->create([
@@ -360,8 +360,8 @@ test('shipping and delivered status mails include the returns CTA', function () 
     $statusHtml = (new OrderStatusUpdated($order, $event))->render();
 
     expect($statusHtml)
-        ->toContain(__('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.'))
-        ->and($statusHtml)->toContain('Start a return');
+        ->toContain(__('Changed your mind? You can return within 14 days via your account.'))
+        ->and($statusHtml)->toContain('Start een retour');
 });
 
 test('guest signed return link creates a return without an account', function () {

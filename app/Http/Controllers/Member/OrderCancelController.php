@@ -19,7 +19,7 @@ class OrderCancelController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Bestelling geannuleerd. De terugbetaling is gestart.'),
+            'message' => __('Order cancelled. The refund has been started.'),
         ]);
 
         return redirect()->route('member.orders.show', [

@@ -6,6 +6,10 @@ use Tests\TestCase;
 
 uses(TestCase::class);
 
+beforeEach(function () {
+    app()->setLocale('en');
+});
+
 /**
  * @return array{a: int, b: int, tiebreak_a: int|null, tiebreak_b: int|null}
  */

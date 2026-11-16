@@ -41,6 +41,7 @@ final class Imagery
         'heritage-001-lifestyle-court' => 'images/product/heritage-001-lifestyle-court.png',
         'atelier-workshop' => 'images/product/atelier-workshop.png',
         'antwerp-ets-band' => 'images/editorial/antwerp-ets-band.png',
+        'club-corner-impressie' => 'images/corner/club-corner-impressie.png',
         'logo-icon' => 'images/logos/logo-icon.jpg',
         'logo-emblem' => 'images/logos/logo-emblem.jpg',
     ];

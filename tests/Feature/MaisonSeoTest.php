@@ -42,7 +42,7 @@ test('english house copy is translated in the seo document', function () {
 test('english home seo falls back to lang json when deepl is missing', function () {
     $this->get('/en')->assertOk()->assertInertia(fn ($page) => $page
         ->where('seo.title', 'Maison Anversa — European heritage house for sport and lifestyle')
-        ->where('seo.description', 'A European heritage house, rooted in Antwerp. Heritage Nº 001 — limited to 100 pieces. Each numbered. The Founding Edition is never repeated.')
+        ->where('seo.description', 'A European heritage house, rooted in Antwerp. The Founding Edition is limited to 100 numbered pieces and will never be made again.')
         ->where('seo.canonical', url('/en'))
     );
 });
@@ -85,7 +85,7 @@ test('maison seo can be resolved from the current request', function () {
 
 test('seo documents include known open graph image dimensions', function () {
     $this->get('/nl')->assertOk()->assertInertia(fn ($page) => $page
-        ->where('seo.ogImageWidth', 1024)
-        ->where('seo.ogImageHeight', 682)
+        ->where('seo.ogImageWidth', 1200)
+        ->where('seo.ogImageHeight', 630)
     );
 });

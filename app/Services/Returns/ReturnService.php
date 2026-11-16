@@ -55,13 +55,13 @@ class ReturnService
 
         if ($reason === ReturnReason::Damaged && count($photos) < 1) {
             throw ValidationException::withMessages([
-                'photos' => __('Upload minstens één foto van de schade.'),
+                'photos' => __('Upload at least one photo of the damage.'),
             ]);
         }
 
         if (count($photos) > (int) config('maison.returns.max_photos')) {
             throw ValidationException::withMessages([
-                'photos' => __('Je mag maximaal :count foto\'s uploaden.', [
+                'photos' => __('You may upload at most :count photos.', [
                     'count' => (int) config('maison.returns.max_photos'),
                 ]),
             ]);
@@ -136,7 +136,7 @@ class ReturnService
     {
         if (! in_array($return->status, [ReturnStatus::Requested, ReturnStatus::InTransit], true)) {
             throw ValidationException::withMessages([
-                'tracking' => __('Tracking kan niet meer worden toegevoegd.'),
+                'tracking' => __('Tracking can no longer be added.'),
             ]);
         }
 
@@ -157,7 +157,7 @@ class ReturnService
     {
         if ($return->status !== ReturnStatus::Requested) {
             throw ValidationException::withMessages([
-                'return' => __('Deze retour kan niet meer worden geannuleerd.'),
+                'return' => __('This return can no longer be cancelled.'),
             ]);
         }
 
@@ -174,7 +174,7 @@ class ReturnService
     {
         if (! in_array($return->status, [ReturnStatus::Requested, ReturnStatus::InTransit], true)) {
             throw ValidationException::withMessages([
-                'return' => __('Deze retour kan niet als ontvangen worden gemarkeerd.'),
+                'return' => __('This return cannot be marked as received.'),
             ]);
         }
 
@@ -223,7 +223,7 @@ class ReturnService
 
         if ($reason === '') {
             throw ValidationException::withMessages([
-                'refund_reason' => __('Geef een reden op voor de gedeeltelijke terugbetaling.'),
+                'refund_reason' => __('Give a reason for the partial refund.'),
             ]);
         }
 
@@ -232,7 +232,7 @@ class ReturnService
 
         if ($cents < 1 || $cents > $maxCents) {
             throw ValidationException::withMessages([
-                'refund_amount' => __('Het terugbetalingsbedrag is ongeldig.'),
+                'refund_amount' => __('The refund amount is invalid.'),
             ]);
         }
 
@@ -278,13 +278,13 @@ class ReturnService
 
         if ($reason === '') {
             throw ValidationException::withMessages([
-                'refund_reason' => __('Geef een reden op voor de afwijzing.'),
+                'refund_reason' => __('Give a reason for the rejection.'),
             ]);
         }
 
         if ($return->status->isTerminal()) {
             throw ValidationException::withMessages([
-                'return' => __('Deze retour is al afgerond.'),
+                'return' => __('This return is already completed.'),
             ]);
         }
 
@@ -312,7 +312,7 @@ class ReturnService
 
         if ($note === '') {
             throw ValidationException::withMessages([
-                'note' => __('Voeg een notitie toe.'),
+                'note' => __('Add a note.'),
             ]);
         }
 
@@ -325,7 +325,7 @@ class ReturnService
     {
         if (! $this->eligibility->canCancel($order)) {
             throw ValidationException::withMessages([
-                'order' => __('Deze bestelling kan niet meer worden geannuleerd.'),
+                'order' => __('This order can no longer be cancelled.'),
             ]);
         }
 
@@ -336,7 +336,7 @@ class ReturnService
     {
         if (! in_array($return->status, [ReturnStatus::InTransit, ReturnStatus::Received], true)) {
             throw ValidationException::withMessages([
-                'return' => __('Terugbetaling kan pas na tracking of ontvangst.'),
+                'return' => __('Refund is only possible after tracking or receipt.'),
             ]);
         }
     }

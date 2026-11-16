@@ -25,7 +25,7 @@ class GuestReturnLinkMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Start je retour · :reference', ['reference' => $this->order->reference()]),
+            subject: __('Start your return · :reference', ['reference' => $this->order->reference()]),
         );
     }
 
@@ -37,7 +37,7 @@ class GuestReturnLinkMail extends Mailable
                 ...$this->maisonBrandData($this->order->locale),
                 'returnUrl' => $this->returnUrl,
                 'orderReference' => $this->order->reference(),
-                'customerName' => $this->order->name ?: __('klant'),
+                'customerName' => $this->order->name ?: __('customer'),
             ],
         );
     }

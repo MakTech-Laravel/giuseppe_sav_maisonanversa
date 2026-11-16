@@ -820,7 +820,7 @@ final class Journal
                         'fr' => 'Est. 2026 est sur la façade parce que la maison est honnête sur son âge. Nous ne feignons pas un grenier du XVIIIe. Nous feignons un commencement.',
                     ],
                     [
-                        'nl' => 'Een belofte vanaf dag één is zwaarder dan een mythe. U kunt ons erop afrekenen. Honderd stuks. Q1 2027. Leder, 3K, Antwerpen. Als wij dat niet halen, is Est. 2026 een datum van falen. Als wij het halen, is het de steen waarop de rest rust.',
+                        'nl' => 'Een belofte vanaf dag één is zwaarder dan een mythe. Je kunt ons erop afrekenen. Honderd stuks. Q1 2027. Leder, 3K, Antwerpen. Als wij dat niet halen, is Est. 2026 een datum van falen. Als wij het halen, is het de steen waarop de rest rust.',
                         'en' => 'A promise from day one is heavier than a myth. You can hold us to it. One hundred pieces. Q1 2027. Leather, 3K, Antwerp. If we miss it, Est. 2026 is a date of failure. If we keep it, it is the stone the rest sits on.',
                         'fr' => 'Une promesse dès le premier jour pèse plus qu’un mythe. Cent pièces. T1 2027. Cuir, 3K, Anvers. Si nous tenons, c’est la pierre du reste.',
                     ],

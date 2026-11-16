@@ -30,14 +30,8 @@ lang/nl.json and lang/fr.json are keyed by the English source string (i18next fa
 ## No map APIs for club directory in V1
 Member club directory is list + profile + search filters only. Do not add Mapbox/Google Maps or geocoding to the storefront club UX until the client approves API/cost. `clubs.lat/lng` may exist in the database but are not rendered on member pages in V1.
 
-## Hero tagline is always English
-HomeHeroPresenter::toStorefront() always resolves tagline via translated('tagline', 'en'), never the page locale. Eyebrow, titles, counter lines, and button labels still follow the storefront locale. Keep English as the brand line even when nl/fr translations exist in admin.
-
-## Hero tagline is always English
-HomeHeroPresenter::toStorefront always resolves tagline via translated(tagline, en), never the page locale. Eyebrow, titles, counter lines, and button labels still follow the storefront locale.
-
-## Hero tagline is always English
-toStorefront always resolves tagline with locale en. Other hero copy still follows the page locale. Do not switch tagline back to the request locale.
+## Hero tagline is the stored brand line, never translated
+HomeHeroPresenter::toStorefront() returns `$hero->tagline` as stored (the source column), never a locale translation, even when en/fr rows exist. Eyebrow, titles, counter lines, and button labels follow the storefront locale (through translated() and then the lang dictionaries). Do not put Dutch words in the seeded tagline: the Dutch "Gebouwd voor generaties" is only a marquee item, which is translated per locale.
 
 ## SessionFeed cards accept guest viewers
 toCard and present take nullable User. Guests get can_join when the session is still open; player/host names and avatars are redacted (initials only). joinable() excludes full sessions for the homepage.

@@ -16,11 +16,7 @@ export function HomeIntro() {
                 <GoldRule center className="mx-auto" />
                 <Reveal>
                     <p className="mx-auto max-w-205 font-serif text-[clamp(24px,3vw,42px)] leading-[1.5] text-choc">
-                        {t('The world does not need more products.')}
-                        <br />
-                        {t('It needs more')}{' '}
-                        <em className="text-gold2 italic">{t('meaning')}</em>{' '}
-                        {t('.')}
+                        {t("Style doesn't stop where sport begins.")}
                     </p>
                 </Reveal>
             </Wrap>

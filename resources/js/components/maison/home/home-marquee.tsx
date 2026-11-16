@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 
 const ITEMS = [
-    'Gebouwd voor generaties',
+    'Built for generations',
     'Maison Anversa',
     'European Heritage Sports and Lifestyle House',
     'Heritage Nº 001',
     'Founding Edition',
-    'Antwerpen, België',
-    '100 stuks',
-    'Elk genummerd',
+    'Antwerp, Belgium',
+    '100 pieces',
+    'Each one numbered',
 ] as const;
 
 /** Brand names that stay untranslated in every locale. */

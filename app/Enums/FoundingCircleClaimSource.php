@@ -13,8 +13,8 @@ enum FoundingCircleClaimSource: string
     public function label(): string
     {
         return match ($this) {
-            self::Order => 'Bestelling',
-            self::Manual => 'Handmatig',
+            self::Order => 'Order',
+            self::Manual => 'Manual',
         };
     }
 }

@@ -43,7 +43,7 @@ class StoreContactInquiryRequest extends FormRequest
         return [
             'kind.required' => __('Choose a form.'),
             'kind.Illuminate\Validation\Rules\Enum' => __('Choose a form.'),
-            'name.required' => __('Vul jouw naam in.'),
+            'name.required' => __('Please enter your name.'),
             'email.required' => __('Please enter a valid email address.'),
             'email.email' => __('Please enter a valid email address.'),
             'website.prohibited' => __('Please enter a valid email address.'),

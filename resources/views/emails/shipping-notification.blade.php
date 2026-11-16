@@ -1,12 +1,12 @@
 @component('emails.layouts.maison', [
-    'title' => __('Jouw editie is onderweg'),
+    'title' => __('Your edition is on its way'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $homeUrl,
     'ctaLabel' => __('Visit the house'),
 ])
     <p style="margin:0 0 16px;">
         {{ __('Heritage Nº 001 — Nº :number', ['number' => str_pad((string) $order->edition_number, 3, '0', STR_PAD_LEFT)]) }}
-        {{ __('is verzonden.') }}
+        {{ __('has been shipped.') }}
     </p>
 
     <p style="margin:0 0 16px;">
@@ -15,7 +15,7 @@
     </p>
 
     <p style="margin:0;">
-        {{ __('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.') }}
+        {{ __('Changed your mind? You can return within 14 days via your account.') }}
         <a href="{{ $returnsUrl }}" style="color:#8A6A3B;">{{ __('Start a return') }}</a>
     </p>
 @endcomponent

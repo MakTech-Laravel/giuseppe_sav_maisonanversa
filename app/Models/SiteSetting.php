@@ -40,7 +40,7 @@ class SiteSetting extends Model
         }
 
         return static::query()->create([
-            'phone' => '+32400000000',
+            'phone' => null,
             'whatsapp' => '32400000000',
             'email_hello' => 'hello@maisonanversa.com',
             'email_press' => 'press@maisonanversa.com',
@@ -52,7 +52,7 @@ class SiteSetting extends Model
 
     /**
      * @return array{
-     *     phone: string,
+     *     phone: string|null,
      *     whatsapp: string,
      *     emailHello: string,
      *     emailPress: string,
@@ -61,7 +61,7 @@ class SiteSetting extends Model
      *     boutiqueLng: float,
      *     boutiqueMapSrc: string,
      *     whatsappHref: string,
-     *     phoneHref: string,
+     *     phoneHref: string|null,
      *     emailHelloHref: string,
      *     emailPressHref: string
      * }
@@ -85,7 +85,7 @@ class SiteSetting extends Model
             'boutiqueLng' => $lng,
             'boutiqueMapSrc' => "https://www.openstreetmap.org/export/embed.html?bbox={$bboxLngMin}%2C{$bboxLatMin}%2C{$bboxLngMax}%2C{$bboxLatMax}&layer=mapnik&marker={$lat}%2C{$lng}",
             'whatsappHref' => 'https://wa.me/'.$this->whatsapp,
-            'phoneHref' => 'tel:'.$this->phone,
+            'phoneHref' => filled($this->phone) ? 'tel:'.$this->phone : null,
             'emailHelloHref' => 'mailto:'.$this->email_hello,
             'emailPressHref' => 'mailto:'.$this->email_press,
         ];

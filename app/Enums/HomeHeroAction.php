@@ -21,13 +21,13 @@ enum HomeHeroAction: string
             self::FoundingProduct => 'Heritage Nº 001',
             self::FoundingCircle => 'Founding Circle',
             self::RegisterFoundingCircle => 'Register for Founding Circle',
-            self::Community => 'Gemeenschap',
+            self::Community => 'Community',
             self::ClubCorner => 'Club Corner',
             self::Journal => 'Journal',
             self::MaisonPage => 'Maison-pagina',
             self::Newsletter => 'Heritage Letter',
             self::External => 'External link',
-            self::Hidden => 'Verborgen',
+            self::Hidden => 'Hidden',
         };
     }
 

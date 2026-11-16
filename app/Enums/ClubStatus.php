@@ -16,9 +16,9 @@ enum ClubStatus: string
     {
         return match ($this) {
             self::Pending => 'Pending',
-            self::Approved => 'Goedgekeurd',
-            self::Rejected => 'Afgewezen',
-            self::Merged => 'Samengevoegd',
+            self::Approved => 'Approved',
+            self::Rejected => 'Declined',
+            self::Merged => 'Merged',
         };
     }
 

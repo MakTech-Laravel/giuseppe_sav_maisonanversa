@@ -11,7 +11,7 @@ export default function Privacy({
         <>
             <MaisonSeoHead />
 
-            <LegalPageLayout title="Privacybeleid" body={legalPage.body}>
+            <LegalPageLayout title="Privacy Policy" body={legalPage.body}>
                 <LegalPageLinks slug="privacy" />
             </LegalPageLayout>
         </>

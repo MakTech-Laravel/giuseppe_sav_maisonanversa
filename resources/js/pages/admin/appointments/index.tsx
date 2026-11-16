@@ -32,7 +32,7 @@ export default function AppointmentsIndex({
             <InquiryInbox
                 title={t('Appointments')}
                 description={t(
-                    'Atelier visits and private consultations, newest first.',
+                    'Appointment and consultation requests, newest first.',
                 )}
                 icon={CalendarCheck}
                 inquiries={inquiries}

@@ -8,7 +8,6 @@ test('the auth menu is wired into the public shell', function () {
         ->toContain('AuthMenu')
         ->toContain('Heritage Letter')
         ->toContain('onNewsletter')
-        ->not->toContain('isAuthenticated')
         ->not->toContain('MaisonLink');
 
     $nav = File::get(resource_path('js/components/maison/shell/site-nav.tsx'));

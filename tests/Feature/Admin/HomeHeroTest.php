@@ -51,7 +51,7 @@ test('the seeded hero renders on the homepage', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('maison/home')
-            ->where('hero.eyebrow', 'Antwerp, Belgium — Founding Edition 2026')
+            ->where('hero.eyebrow', 'Antwerpen, België — Founding Edition 2026')
             ->where('hero.title', 'Maison')
             ->where('hero.titleAccent', 'Anversa')
             ->where('hero.tagline', 'European Heritage Sports & Lifestyle House')
@@ -60,7 +60,7 @@ test('the seeded hero renders on the homepage', function () {
             ->where('hero.counterLines.1', 'beschikbaar')
             ->where('hero.imageUrl', null)
             ->has('hero.buttons', 3)
-            ->where('hero.buttons.0.label', 'Discover Heritage Nº 001 →')
+            ->where('hero.buttons.0.label', 'Ontdek Heritage Nº 001 →')
             ->where('hero.buttons.0.kind', 'link')
             ->where('hero.buttons.0.href', route('maison.products.show', [
                 'locale' => 'nl',
@@ -221,8 +221,9 @@ test('a hidden button slot is omitted from the homepage', function () {
         ->where('hero.buttons', function ($buttons) {
             $labels = collect($buttons)->pluck('label');
 
-            return $labels->doesntContain('Enter the House')
-                && $labels->contains('Discover Heritage Nº 001 →')
+            return $labels->doesntContain('Betreed het Huis')
+                && $labels->doesntContain('Enter the House')
+                && $labels->contains('Ontdek Heritage Nº 001 →')
                 && $labels->contains('Heritage Letter');
         })
     );
@@ -241,8 +242,8 @@ test('english home hero buttons fall back through lang files when DeepL rows are
 
             return $labels->contains('Discover Heritage Nº 001 →')
                 && $labels->contains('Enter the House')
-                && $labels->doesntContain('Discover Heritage Nº 001 →')
-                && $labels->doesntContain('Enter the House');
+                && $labels->doesntContain('Ontdek Heritage Nº 001 →')
+                && $labels->doesntContain('Betreed het Huis');
         })
     );
 });

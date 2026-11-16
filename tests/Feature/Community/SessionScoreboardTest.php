@@ -340,7 +340,7 @@ test('closing the session sends the result to both teams and the host, in-app an
         ->and($finishedMail($this->carol))->toHaveCount(0)
         ->and($finishedMail($this->alice)->first()->locale)->toBe('fr')
         ->and($finishedMail($this->bob)->first()->locale)->toBe('en')
-        ->and($finishedMail($this->host)->first()->locale)->toBe('en');
+        ->and($finishedMail($this->host)->first()->locale)->toBe(config('maison.notification_fallback_locale'));
 
     $notice = fn (User $user) => $user->userNotifications()
         ->with('notification')
@@ -351,7 +351,7 @@ test('closing the session sends the result to both teams and the host, in-app an
     expect($notice($this->alice)->title)->toBe('Session clôturée : le résultat')
         ->and($notice($this->alice)->message)->toContain('6-4, 6-3')
         ->and($notice($this->bob)->title)->toBe('Session closed: the result')
-        ->and($notice($this->host)->title)->toBe('Session closed: the result');
+        ->and($notice($this->host)->title)->toBe('Sessie afgesloten: de uitslag');
 
     $html = $finishedMail($this->bob)->first()->render();
 
@@ -430,10 +430,10 @@ function heldTennisSession(User ...$players): CommunitySession
 
 test('padel results are always doubles with two players per team', function () {
     submitScore($this->alice, $this->session, scorePayload([$this->alice], [$this->bob]))
-        ->assertSessionHasErrors(['match_type' => 'Padel is always played two against two.']);
+        ->assertSessionHasErrors(['match_type' => 'Padel wordt altijd met twee tegen twee gespeeld.']);
 
     submitScore($this->alice, $this->session, [...scorePayload([$this->alice], [$this->bob]), 'match_type' => 'doubles'])
-        ->assertSessionHasErrors(['team_a' => 'Choose two players per team.', 'team_b']);
+        ->assertSessionHasErrors(['team_a' => 'Kies twee spelers per team.', 'team_b']);
 
     expect($this->session->scores()->count())->toBe(0);
 });
@@ -489,16 +489,16 @@ test('a tennis singles match with a tie-break and a super tie-break is stored wi
 
 test('impossible set scores and undecided matches are rejected per set', function () {
     submitScore($this->alice, $this->session, doublesPayload([[6, 5], [6, 3]]))
-        ->assertSessionHasErrors(['sets.0' => 'Not a valid set score.']);
+        ->assertSessionHasErrors(['sets.0' => 'Geen geldige setscore.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4, 7, 5], [6, 3]]))
-        ->assertSessionHasErrors(['sets.0' => 'Tie-break points only belong to a set decided by a tie-break.']);
+        ->assertSessionHasErrors(['sets.0' => 'Tie-breakpunten horen alleen bij een set die op een tie-break eindigde.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4], [3, 6]]))
-        ->assertSessionHasErrors(['sets' => 'The match has not been decided yet.']);
+        ->assertSessionHasErrors(['sets' => 'De match is nog niet beslist.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4], [6, 3], [6, 2]]))
-        ->assertSessionHasErrors(['sets' => 'No set can follow the deciding set.']);
+        ->assertSessionHasErrors(['sets' => 'Na de beslissende set kan geen set meer volgen.']);
 
     submitScore($this->alice, $this->session, doublesPayload([[6, 4], [3, 6], [10, 9]], 'super_tiebreak'))
         ->assertSessionHasErrors(['sets.2']);

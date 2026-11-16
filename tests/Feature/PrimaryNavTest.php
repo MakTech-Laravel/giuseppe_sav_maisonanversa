@@ -19,11 +19,11 @@ test('the primary navigation connects all nine menu pages to live routes', funct
     );
 
     $expected = [
-        'house' => 'Het Huis',
-        'products' => 'Producten',
-        'story' => 'Ons Verhaal',
+        'house' => 'The House',
+        'products' => 'Products',
+        'story' => 'Our Story',
         'circle' => 'Founding Circle',
-        'dressing' => 'Kleedkamer',
+        'dressing' => 'Dressing Room',
         'journal' => 'Journal',
         'community' => 'Community',
         'corner' => 'Club Corner',

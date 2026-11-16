@@ -41,7 +41,7 @@ class StoreSessionChatMessageRequest extends FormRequest
                 if ($body === '' && $images === []) {
                     $validator->errors()->add(
                         'body',
-                        __('Schrijf een bericht of voeg een afbeelding toe.'),
+                        __('Write a message or add an image.'),
                     );
                 }
             },

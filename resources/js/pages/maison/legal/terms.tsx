@@ -11,7 +11,7 @@ export default function Terms({
         <>
             <MaisonSeoHead />
 
-            <LegalPageLayout title="Algemene voorwaarden" body={legalPage.body}>
+            <LegalPageLayout title="Terms & Conditions" body={legalPage.body}>
                 <LegalPageLinks slug="terms" />
             </LegalPageLayout>
         </>

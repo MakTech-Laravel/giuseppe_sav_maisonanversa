@@ -16,11 +16,11 @@ enum EditionPieceStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Archive => 'Gearchiveerd',
-            self::Available => 'Beschikbaar',
+            self::Archive => 'Archived',
+            self::Available => 'Available',
             self::Reserved => 'Reserved',
-            self::Allocated => 'Toegewezen',
-            self::Returning => 'Retour',
+            self::Allocated => 'Allocated',
+            self::Returning => 'Return',
         };
     }
 }

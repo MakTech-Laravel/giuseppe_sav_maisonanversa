@@ -236,7 +236,7 @@ class SessionController extends Controller
             abort_if($locked->isCancelled(), 422, __('This session has been cancelled.'));
             abort_if($locked->isPast(), 422, __('This session is already over.'));
             abort_if($locked->isRegistrationClosed(), 422, __('Registration for this session is closed.'));
-            abort_if($locked->isFull(), 422, __('Deze sessie is vol.'));
+            abort_if($locked->isFull(), 422, __('This session is full.'));
             abort_if(
                 $locked->reservedSeats() >= $locked->capacity,
                 422,
@@ -272,7 +272,7 @@ class SessionController extends Controller
                 'confirmed' => __('You\'re in.'),
                 default => $communitySession->requiresJoinRequests()
                     ? __('You have already requested this session.')
-                    : __('Je speelt al mee in deze sessie.'),
+                    : __('You are already playing in this session.'),
             },
         ]);
 
@@ -299,7 +299,7 @@ class SessionController extends Controller
                 return false;
             }
 
-            abort_if($locked->isFull(), 422, __('Deze sessie is vol.'));
+            abort_if($locked->isFull(), 422, __('This session is full.'));
 
             $row->update([
                 'status' => SessionParticipantStatus::Confirmed,

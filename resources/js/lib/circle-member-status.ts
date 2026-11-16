@@ -3,7 +3,7 @@
  * to their Dutch i18n source labels (passed to t()).
  */
 const CIRCLE_MEMBER_STATUS_LABELS: Record<string, string> = {
-    Active: 'Actief',
+    Active: 'Active',
     Reserved: 'Reserved',
 };
 

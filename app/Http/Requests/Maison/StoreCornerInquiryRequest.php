@@ -36,13 +36,13 @@ class StoreCornerInquiryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'club_name.required' => __('Vul de naam van jouw club in.'),
-            'name.required' => __('Vul de contactpersoon in.'),
+            'club_name.required' => __('Please enter your club name.'),
+            'name.required' => __('Please enter a contact person.'),
             'email.required' => __('Please enter a valid email address.'),
             'email.email' => __('Please enter a valid email address.'),
-            'location.required' => __('Vul stad en land in.'),
-            'courts.required' => __('Selecteer het aantal courts.'),
-            'format.required' => __('Selecteer een formaat.'),
+            'location.required' => __('Please enter city and country.'),
+            'courts.required' => __('Please select the number of courts.'),
+            'format.required' => __('Please select a format.'),
             'message.required' => __('Tell us about your club.'),
             'website.prohibited' => __('Please enter a valid email address.'),
         ];

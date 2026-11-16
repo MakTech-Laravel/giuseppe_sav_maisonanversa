@@ -24,7 +24,7 @@ class ReturnDecisionMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Over je retour · :rma', ['rma' => $this->orderReturn->number]),
+            subject: __('About your return · :rma', ['rma' => $this->orderReturn->number]),
         );
     }
 

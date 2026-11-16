@@ -150,7 +150,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                             <p className="font-sans text-[8px] leading-[1.6] tracking-[0.2em] text-sand uppercase">
                                 European Heritage Sports and Lifestyle House
                                 <br />
-                                Antwerp · Belgium · Est. 2026
+                                {t('Antwerp · Belgium · Est. 2026')}
                             </p>
                         </div>
                     </div>
@@ -216,7 +216,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                                             {item.name}
                                         </h3>
                                         <p className="text-[11px] tracking-[0.1em] text-sand uppercase">
-                                            {item.category}
+                                            {t(item.category)}
                                         </p>
                                     </div>
                                 </MaisonLink>

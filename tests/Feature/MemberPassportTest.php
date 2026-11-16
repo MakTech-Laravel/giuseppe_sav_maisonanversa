@@ -96,5 +96,5 @@ test('the member events page has no create call to action', function () {
     expect($source)
         ->not->toContain('Create event')
         ->not->toContain('events.create')
-        ->toContain('Mijn aanmeldingen');
+        ->toContain('My registrations');
 });

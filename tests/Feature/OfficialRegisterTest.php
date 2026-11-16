@@ -43,10 +43,10 @@ test('the public register always has one hundred places and hides a private name
             ->where('places.7.number', '008')
             ->where('places.7.state', 'inscribed')
             ->where('places.7.name', null)
-            ->where('places.7.label_key', 'Privélid')
+            ->where('places.7.label_key', 'Private member')
             ->where('places.7.you', false)
-            ->where('places.0.label_key', 'Niet te koop')
-            ->where('places.1.label_key', 'Beschikbaar')
+            ->where('places.0.label_key', 'Not for sale')
+            ->where('places.1.label_key', 'Available')
             ->where('foundingRegister.inscribed_count', 1)
             ->where('foundingRegister.places_total', 100)
         );
@@ -178,7 +178,7 @@ test('admin hide forces a private label and a duplicate or archived number is re
     $this->get(route('maison.register', ['locale' => 'nl']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('places.10.label_key', 'Privélid')
+            ->where('places.10.label_key', 'Private member')
             ->where('places.10.name', null)
         );
 

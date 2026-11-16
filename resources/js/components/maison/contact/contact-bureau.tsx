@@ -26,11 +26,9 @@ import { cn } from '@/lib/utils';
 const PANEL_TITLES: Record<BureauPanelId, string> = {
     bestel: 'Track your order',
     care: 'Maison Care',
-    afspraak: 'Book an appointment',
-    concierge: 'Privé consult',
-    atelier: 'Find our atelier',
-    faq: 'Veelgestelde vragen',
-    feedback: 'Jouw mening',
+    concierge: 'Private consultation',
+    faq: 'Frequently asked questions',
+    feedback: 'Your feedback',
 };
 
 function BureauBubbleButton({
@@ -143,11 +141,9 @@ function BureauNote({ children }: { children: string }) {
 
 function BureauPanelBody({
     id,
-    mapSrc,
     faqs,
 }: {
     id: BureauPanelId;
-    mapSrc: string;
     faqs: Array<{ question: string; answer: string }>;
 }) {
     const { t } = useTranslation();
@@ -172,63 +168,9 @@ function BureauPanelBody({
                 <>
                     <p className="text-sm leading-[1.8] text-sand">
                         {t(
-                            'Each Heritage racket is hand-finished and deserves ongoing care. We advise on leather maintenance, repairs and warranty. When in doubt, send the racket back to our atelier in Antwerp for inspection.',
+                            'Each Heritage racket is hand-finished and deserves ongoing care. We advise on leather maintenance, repairs and warranty. When in doubt, send the racket back to us for inspection.',
                         )}
                     </p>
-                    <BureauNote>
-                        Voorgenomen servicebeleid — definitief bij lancering
-                    </BureauNote>
-                </>
-            );
-        case 'afspraak':
-            return (
-                <>
-                    <p className="text-sm leading-[1.8] text-sand">
-                        {t(
-                            'Visit our atelier in Antwerp for a private experience: hold the racket, feel the leather, and discover your number. Request a moment — we will confirm personally.',
-                        )}
-                    </p>
-                    <BureauForm
-                        kind="appointment"
-                        submitLabel="Send request"
-                    >
-                        <BureauFieldRow>
-                            <BureauInput
-                                name="name"
-                                placeholder="Naam"
-                                required
-                                defaultValue={visitor.name}
-                            />
-                            <BureauInput
-                                name="email"
-                                type="email"
-                                placeholder="E-mailadres"
-                                required
-                                defaultValue={visitor.email}
-                            />
-                        </BureauFieldRow>
-                        <BureauFieldRow>
-                            <BureauInput
-                                name="datum"
-                                type="date"
-                                placeholder="Datum"
-                            />
-                            <BureauSelect
-                                name="moment"
-                                options={[
-                                    'Preferred time',
-                                    'Ochtend',
-                                    'Middag',
-                                    'Einde dag',
-                                ]}
-                            />
-                        </BureauFieldRow>
-                        <BureauTextarea
-                            name="message"
-                            placeholder="Brief note (optional)"
-                        />
-                    </BureauForm>
-                    <BureauNote>Request will be confirmed via email</BureauNote>
                 </>
             );
         case 'concierge':
@@ -243,65 +185,34 @@ function BureauPanelBody({
                         <BureauFieldRow>
                             <BureauInput
                                 name="name"
-                                placeholder="Naam"
+                                placeholder="Name"
                                 required
                                 defaultValue={visitor.name}
                             />
                             <BureauInput
                                 name="email"
                                 type="email"
-                                placeholder="E-mailadres"
+                                placeholder="Email address"
                                 required
                                 defaultValue={visitor.email}
                             />
                         </BureauFieldRow>
-                        <BureauFieldRow>
-                            <BureauSelect
-                                name="soort"
-                                options={[
-                                    'Video call',
-                                    'Phone call',
-                                    'Atelier visit Antwerp',
-                                ]}
-                            />
-                            <BureauSelect
-                                name="moment"
-                                options={[
-                                    'Preferred time',
-                                    'Ochtend',
-                                    'Middag',
-                                    'Einde dag',
-                                ]}
-                            />
-                        </BureauFieldRow>
+                        <BureauSelect
+                            name="moment"
+                            options={[
+                                'Preferred time',
+                                'Morning',
+                                'Afternoon',
+                                'End of day',
+                            ]}
+                            className="col-span-full"
+                        />
                         <BureauTextarea
                             name="message"
                             placeholder="What would you like to discuss? (optional)"
                         />
                     </BureauForm>
-                    <BureauNote>
-                        Wij bevestigen persoonlijk binnen 24 uur · voorgenomen
-                        service
-                    </BureauNote>
-                </>
-            );
-        case 'atelier':
-            return (
-                <>
-                    <p className="text-sm leading-[1.8] text-sand">
-                        {t(
-                            'Maison Anversa is located in the heart of Antwerp. Visit by appointment — we welcome you personally.',
-                        )}
-                    </p>
-                    <p className="mt-1.5 font-serif text-lg text-gold">
-                        {t('Central Antwerp · Belgium')}
-                    </p>
-                    <iframe
-                        title={t('Maison Anversa — Antwerp')}
-                        loading="lazy"
-                        src={mapSrc}
-                        className="mt-4 h-60 w-full rounded-md border border-gold/20 brightness-[0.85] grayscale-[0.3]"
-                    />
+                    <BureauNote>We confirm personally within 24 hours</BureauNote>
                 </>
             );
         case 'faq':
@@ -318,14 +229,14 @@ function BureauPanelBody({
                         <BureauFieldRow>
                             <BureauInput
                                 name="name"
-                                placeholder="Naam"
+                                placeholder="Name"
                                 required
                                 defaultValue={visitor.name}
                             />
                             <BureauInput
                                 name="email"
                                 type="email"
-                                placeholder="E-mailadres"
+                                placeholder="Email address"
                                 required
                                 defaultValue={visitor.email}
                             />
@@ -334,10 +245,10 @@ function BureauPanelBody({
                             name="ervaring"
                             options={[
                                 'Your experience',
-                                'Uitstekend',
-                                'Goed',
-                                'Neutraal',
-                                'Kan beter',
+                                'Excellent',
+                                'Good',
+                                'Neutral',
+                                'Could be better',
                             ]}
                             className="col-span-full"
                         />
@@ -356,7 +267,7 @@ function BureauPanelBody({
 
 function panelIdFromHash(hash: string): BureauPanelId | null {
     const raw = hash.replace(/^#/, '');
-    const id = (raw === 'boutique' ? 'atelier' : raw) as BureauPanelId;
+    const id = raw as BureauPanelId;
 
     return BUREAU_PANEL_IDS.includes(id) ? id : null;
 }
@@ -477,7 +388,6 @@ export function ContactBureau() {
                                 >
                                     <BureauPanelBody
                                         id={bubble.panel}
-                                        mapSrc={site.boutiqueMapSrc}
                                         faqs={faqs}
                                     />
                                 </BureauPanel>

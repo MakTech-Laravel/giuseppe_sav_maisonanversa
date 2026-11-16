@@ -1,11 +1,11 @@
 @component('emails.layouts.maison', [
-    'title' => __('We hebben je retour ontvangen'),
+    'title' => __('We have received your return'),
     'logoUrl' => $logoUrl,
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Dag :name,', ['name' => $orderReturn->user?->first_name ?: $orderReturn->order?->name ?: __('klant')]) }}
+        {{ __('Hello :name,', ['name' => $orderReturn->user?->first_name ?: $orderReturn->order?->name ?: __('customer')]) }}
     </p>
     <p style="margin:0;">
-        {{ __('Je pakket is aangekomen. We controleren het en bevestigen je terugbetaling binnen enkele dagen.') }}
+        {{ __('Your parcel has arrived. We are checking it and will confirm your refund within a few days.') }}
     </p>
 @endcomponent

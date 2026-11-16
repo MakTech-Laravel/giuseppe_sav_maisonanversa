@@ -14,7 +14,7 @@ export default function Contact() {
                 eyebrow="Bureau"
                 title={
                     <>
-                        {t('How can we')} <em>{t('help?')}</em>
+                        {t('How can we')} <em>{t('help you?')}</em>
                     </>
                 }
                 subtitle={t(

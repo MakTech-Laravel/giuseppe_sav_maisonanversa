@@ -10,7 +10,7 @@ class SiteSettingSeeder extends Seeder
     public function run(): void
     {
         SiteSetting::query()->firstOrCreate([], [
-            'phone' => '+32400000000',
+            'phone' => null,
             'whatsapp' => '32400000000',
             'email_hello' => 'hello@maisonanversa.com',
             'email_press' => 'press@maisonanversa.com',

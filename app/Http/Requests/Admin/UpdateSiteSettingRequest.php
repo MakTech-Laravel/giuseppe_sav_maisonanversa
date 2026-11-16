@@ -18,7 +18,7 @@ class UpdateSiteSettingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string', 'max:32'],
+            'phone' => ['nullable', 'string', 'max:32'],
             'whatsapp' => ['required', 'string', 'max:32'],
             'email_hello' => ['required', 'email', 'max:255'],
             'email_press' => ['required', 'email', 'max:255'],

@@ -13,7 +13,7 @@ export default function Shipping() {
             <MaisonSeoHead />
 
             <LegalPageLayout
-                title="Verzending & Retour"
+                title="Shipping & Returns"
                 body={legalPage.body}
             >
                 <LegalPageLinks slug="shipping" />

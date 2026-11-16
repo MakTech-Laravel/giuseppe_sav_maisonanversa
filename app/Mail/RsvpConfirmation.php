@@ -23,7 +23,7 @@ class RsvpConfirmation extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('RSVP bevestigd — :title', [
+            subject: __('RSVP confirmed — :title', [
                 'title' => $this->event->translated('title'),
             ]),
         );

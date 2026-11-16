@@ -18,7 +18,7 @@ const CARDS = [
         to: 'journal' as MaisonPage,
         asset: 'heritage-001-lifestyle-court' as ImageAssetName,
         eye: 'Journal',
-        title: 'Verhalen over sport, cultuur, design en het leven.',
+        title: 'Stories about sport, culture, design and life.',
         desc: 'The Maison Anversa Journal — stories that explain the world from our heritage perspective.',
         link: 'Explore the Journal →',
     },
@@ -33,10 +33,10 @@ const CARDS = [
     {
         to: 'story' as MaisonPage,
         asset: 'heritage-001-front' as ImageAssetName,
-        eye: 'The Founder',
+        eye: 'The founder',
         title: 'The vision. The story. The mission.',
-        desc: 'Yusuf Savran founded Maison Anversa from a conviction — not from a business plan.',
-        link: 'Meet Yusuf →',
+        desc: 'A house built from conviction, step by step.',
+        link: 'Read our story →',
     },
 ] as const;
 

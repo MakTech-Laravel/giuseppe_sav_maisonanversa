@@ -76,7 +76,7 @@ class PassportPresenter
                 ],
                 [
                     'title' => __('The House'),
-                    'body' => __('Maison Anversa is geworteld in Antwerpen. Dit huis bewaart Europese sport- en lifestyle-erfgoed, stuk voor stuk genummerd.'),
+                    'body' => __('Maison Anversa is rooted in Antwerp. This house preserves European sport and lifestyle heritage, every piece numbered.'),
                 ],
                 [
                     'title' => __('Product identity'),
@@ -133,7 +133,7 @@ class PassportPresenter
                 ],
                 [
                     'title' => __('The House'),
-                    'body' => __('Maison Anversa is geworteld in Antwerpen. Dit huis bewaart Europese sport- en lifestyle-erfgoed, stuk voor stuk genummerd.'),
+                    'body' => __('Maison Anversa is rooted in Antwerp. This house preserves European sport and lifestyle heritage, every piece numbered.'),
                 ],
                 [
                     'title' => __('Product identity'),

@@ -15,8 +15,8 @@ enum FoundingCircleClaimStatus: string
     {
         return match ($this) {
             self::Pending => 'Pending',
-            self::Approved => 'Goedgekeurd',
-            self::Rejected => 'Afgewezen',
+            self::Approved => 'Approved',
+            self::Rejected => 'Declined',
         };
     }
 

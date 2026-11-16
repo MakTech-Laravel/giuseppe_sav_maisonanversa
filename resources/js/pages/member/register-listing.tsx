@@ -33,7 +33,7 @@ const OPTIONS = [
     },
     {
         value: 'private',
-        title: 'Privé',
+        title: 'Private',
         description: 'Only your number is shown. This is the default.',
         preview: 'private',
     },

@@ -55,7 +55,7 @@ final class MaisonSeo
         ],
         'products' => [
             'title' => 'Products — Maison Anversa',
-            'description' => 'Ontdek de collectie van Maison Anversa — Heritage Nº 001 en de volgende hoofdstukken van het huis.',
+            'description' => 'Discover the Maison Anversa collection — Heritage Nº 001 and the next chapters of the house.',
         ],
         'story' => [
             'title' => 'Our Story — Maison Anversa',
@@ -360,7 +360,7 @@ final class MaisonSeo
 
         $places = $free === 1
             ? __('1 spot left')
-            : __(':count plaatsen vrij', ['count' => $free]);
+            : __(':count places available', ['count' => $free]);
 
         return [
             'title' => __('Session').' · '.$session->sport->label().' — '.$club,
