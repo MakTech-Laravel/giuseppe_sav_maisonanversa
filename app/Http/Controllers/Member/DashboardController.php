@@ -112,7 +112,7 @@ class DashboardController extends Controller implements HasMiddleware
                     ?? $order->shipped_at?->toDateString()
                     ?? __('In production'),
                 'certificate' => __('Linked to Nº :number', ['number' => $number]),
-                'passport' => __('Vier pagina\'s · gekoppeld aan Nº :number', ['number' => $number]),
+                'passport' => __('Four pages · linked to Nº :number', ['number' => $number]),
             ],
         ]);
     }

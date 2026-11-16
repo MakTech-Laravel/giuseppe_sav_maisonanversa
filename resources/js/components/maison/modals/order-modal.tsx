@@ -166,12 +166,12 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
 
     return (
         <MaisonModal
-            label={t(isLimitedEdition ? 'Reserveer Jouw Nummer' : 'Bestel nu')}
+            label={t(isLimitedEdition ? 'Reserve Your Number' : 'Order now')}
             onClose={onClose}
             panelClassName="max-w-[640px]"
         >
             <h2 className="mb-1.5 font-serif text-[32px] font-medium text-choc">
-                {t(isLimitedEdition ? 'Reserveer Jouw Nummer' : 'Bestel nu')}
+                {t(isLimitedEdition ? 'Reserve Your Number' : 'Order now')}
             </h2>
             <span className="mb-4 block font-sans text-[9px] tracking-[0.25em] text-gold2 uppercase">
                 {`${productName} · ${priceLabel}`}

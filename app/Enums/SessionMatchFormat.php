@@ -20,10 +20,10 @@ enum SessionMatchFormat: string
     public function label(): string
     {
         return match ($this) {
-            self::BestOfThree => 'Beste van 3 sets',
+            self::BestOfThree => 'Best of 3 sets',
             self::SuperTiebreak => '2 sets + super tie-break',
-            self::OneSet => 'Eén set',
-            self::ShortSets => 'Korte sets',
+            self::OneSet => 'One set',
+            self::ShortSets => 'Short sets',
         };
     }
 

@@ -25,7 +25,7 @@ export type CheckoutShared = {
 };
 
 export type SiteShared = {
-    phone: string;
+    phone: string | null;
     whatsapp: string;
     emailHello: string;
     emailPress: string;
@@ -34,7 +34,7 @@ export type SiteShared = {
     boutiqueLng: number;
     boutiqueMapSrc: string;
     whatsappHref: string;
-    phoneHref: string;
+    phoneHref: string | null;
     emailHelloHref: string;
     emailPressHref: string;
 };

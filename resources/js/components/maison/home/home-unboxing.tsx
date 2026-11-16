@@ -10,22 +10,22 @@ import { foundingProductUrl } from '@/lib/maison-navigation';
 const STEPS = [
     {
         num: '01',
-        title: 'Welkomstkaart',
+        title: 'Welcome Card',
         desc: 'The first thing you see. Personal, warm, hand-drawn.',
     },
     {
         num: '02',
-        title: 'Oprichtersbrief',
-        desc: 'The story of Maison Anversa. Written by Yusuf.',
+        title: "Founder's Letter",
+        desc: 'The story of Maison Anversa. Written by the founder.',
     },
     {
         num: '03',
-        title: 'Heritage Paspoort',
-        desc: "24 pages. Leather cover. Your place in the story.",
+        title: 'Heritage Passport',
+        desc: 'Leather cover. Your place in the story.',
     },
     {
         num: '04',
-        title: 'Heritage Certificaat',
+        title: 'Heritage Certificate',
         desc: "Founder's seal. Signature. Your edition number.",
     },
     {
@@ -39,6 +39,14 @@ const STEPS = [
         desc: 'In a premium canvas dust cover. Last. As it should be.',
     },
 ] as const;
+
+/** Brand names that stay English in every locale. */
+const LITERAL_TITLES = new Set<string>([
+    'Founding Circle',
+    'Heritage Passport',
+    'Heritage Certificate',
+    'Heritage Nº 001',
+]);
 
 export function HomeUnboxing() {
     const { t } = useTranslation();
@@ -82,8 +90,7 @@ export function HomeUnboxing() {
                                 {step.num}
                             </div>
                             <div className="mb-2 font-sans text-[9px] font-medium tracking-[0.2em] text-gold uppercase">
-                                {step.title === 'Founding Circle' ||
-                                step.title === 'Heritage Nº 001'
+                                {LITERAL_TITLES.has(step.title)
                                     ? step.title
                                     : t(step.title)}
                             </div>

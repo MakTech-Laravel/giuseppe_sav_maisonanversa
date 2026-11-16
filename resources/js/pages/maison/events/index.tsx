@@ -25,7 +25,7 @@ export default function EventsIndex({ events, tab, counts }: EventsIndexProps) {
 
     const tabs: TabDefinition<SessionTab>[] = [
         { id: 'open', label: 'Open events', count: counts.open },
-        { id: 'mine', label: 'Mijn aanmeldingen', count: counts.mine },
+        { id: 'mine', label: 'My registrations', count: counts.mine },
         { id: 'past', label: 'Past events', count: counts.past },
     ];
 

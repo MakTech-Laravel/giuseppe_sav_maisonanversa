@@ -15,8 +15,8 @@ test('the circle portal points members to the authenticated card', function () {
     $source = file_get_contents(resource_path('js/components/maison/circle/circle-portal.tsx'));
 
     expect($source)
-        ->toContain('openAuth')
         ->toContain('/member/circle')
+        ->toContain('/founding-circle/register')
         ->not->toContain('onclick=')
         ->not->toContain('alert(')
         ->not->toContain('localStorage');
@@ -64,12 +64,17 @@ test('the dressing page keeps the philosophy values and six collection pieces vi
             ->where('items.5.name', 'Padel Grip'));
 });
 
-test('the dressing founding-circle heading translates ziet into English', function () {
-    $english = json_decode((string) file_get_contents(lang_path('en.json')), true);
+test('the dressing founding-circle heading uses English source keys with Dutch translations', function () {
+    $source = file_get_contents(resource_path('js/pages/maison/dressing.tsx'));
+    $dutch = json_decode((string) file_get_contents(lang_path('nl.json')), true);
 
-    expect($english['die het'])->toBe('to')
-        ->and($english['ziet'])->toBe('see it')
-        ->and($english['Be the first'])->toBe('Be the first');
+    expect($source)
+        ->toContain("t('Be the first')")
+        ->toContain("t('to')")
+        ->toContain("t('see it')")
+        ->and($dutch['Be the first'])->toBe('Wees de eerste')
+        ->and($dutch['see it'])->toBe('het te zien')
+        ->and($dutch)->not->toHaveKey('ziet');
 });
 
 test('the circle benefits grid matches the prototype hairline layout', function () {

@@ -19,7 +19,7 @@ enum ReturnReason: string
             self::NotExpected => 'Not what I expected',
             self::WrongItem => 'Ordered wrong item',
             self::Damaged => 'Arrived damaged or defective',
-            self::Other => 'Andere',
+            self::Other => 'Other',
             self::PreferNotToSay => 'Prefer not to say',
         };
     }

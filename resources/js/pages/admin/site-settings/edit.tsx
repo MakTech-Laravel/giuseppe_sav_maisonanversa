@@ -34,7 +34,7 @@ export default function SiteSettingsEdit({
 }) {
     const { t } = useTranslation();
     const form = useForm(siteSettings.update(wayfinderLocale()), {
-        phone: settings.phone,
+        phone: settings.phone ?? '',
         whatsapp: settings.whatsapp,
         email_hello: settings.email_hello,
         email_press: settings.email_press,
@@ -56,7 +56,7 @@ export default function SiteSettingsEdit({
                 <AdminPageHeader
                     title={t('Site settings')}
                     description={t(
-                        'Phone, email, Instagram, and the atelier map used across the site.',
+                        'Email, Instagram, and optional phone for the house. Map coordinates are unused on the storefront.',
                     )}
                     icon={Globe}
                 />

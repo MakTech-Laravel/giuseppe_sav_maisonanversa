@@ -1,5 +1,5 @@
 @component('emails.layouts.maison', [
-    'title' => __('Nieuwe aanvraag'),
+    'title' => __('New request'),
     'logoUrl' => $logoUrl,
 ])
     <p style="margin:0 0 12px;">

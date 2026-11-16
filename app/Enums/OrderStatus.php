@@ -19,13 +19,13 @@ enum OrderStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Incomplete => 'Onvoltooid',
-            self::Paid => 'Betaald',
+            self::Incomplete => 'Incomplete',
+            self::Paid => 'Paid',
             self::Processing => 'Processing',
-            self::Canceled => 'Geannuleerd',
-            self::Failed => 'Mislukt',
-            self::Shipped => 'Verzonden',
-            self::Delivered => 'Afgeleverd',
+            self::Canceled => 'Canceled',
+            self::Failed => 'Failed',
+            self::Shipped => 'Shipped',
+            self::Delivered => 'Delivered',
             self::Refunded => 'Refunded',
         };
     }

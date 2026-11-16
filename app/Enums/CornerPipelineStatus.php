@@ -9,14 +9,15 @@ enum CornerPipelineStatus: string
     case Active = 'active';
 
     /**
-     * Dutch source label — the i18n key the frontend passes to t().
+     * English i18n key the frontend passes to t().
+     * OPEN is distinct from the button key "Open" (FR verb "Ouvrir").
      */
     public function label(): string
     {
         return match ($this) {
-            self::InDiscussion => 'In gesprek',
-            self::Open => 'Open',
-            self::Active => 'Actief',
+            self::InDiscussion => 'In discussion',
+            self::Open => 'OPEN',
+            self::Active => 'Active',
         };
     }
 

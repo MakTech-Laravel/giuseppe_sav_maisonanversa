@@ -15,10 +15,10 @@ enum SessionGender: string
     public function label(): string
     {
         return match ($this) {
-            self::Everyone => 'Iedereen',
-            self::Mixed => 'Gemengd',
-            self::Men => 'Mannen',
-            self::Women => 'Vrouwen',
+            self::Everyone => 'Everyone',
+            self::Mixed => 'Mixed',
+            self::Men => 'Men',
+            self::Women => 'Women',
         };
     }
 

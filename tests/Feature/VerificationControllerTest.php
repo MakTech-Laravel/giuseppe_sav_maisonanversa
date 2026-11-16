@@ -47,7 +47,7 @@ test('a valid verification token shows the piece details with order holder', fun
             ->component('maison/verify')
             ->where('piece.editionNumber', $piece->formattedNumber())
             ->where('piece.status', EditionPieceStatus::Allocated->value)
-            ->where('piece.statusLabel', 'Toegewezen')
+            ->where('piece.statusLabel', 'Allocated')
             ->where('piece.holder.name', 'Yusuf Savran')
             ->where('piece.holder.username', 'yusuf_savran')
             ->where('piece.holder.isFoundingCircle', true)
@@ -109,7 +109,7 @@ test('an archive-status piece is shown as not for sale', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('maison/verify')
             ->where('piece.status', EditionPieceStatus::Archive->value)
-            ->where('piece.statusLabel', 'Gearchiveerd')
+            ->where('piece.statusLabel', 'Archived')
             ->where('piece.holder', null)
         );
 });

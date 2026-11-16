@@ -2,13 +2,13 @@
     'title' => __('Your return request'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $returnUrl,
-    'ctaLabel' => __('Bekijk mijn retour'),
+    'ctaLabel' => __('View my return'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Dag :name,', ['name' => $orderReturn->user?->first_name ?: $orderReturn->order?->name ?: __('klant')]) }}
+        {{ __('Hello :name,', ['name' => $orderReturn->user?->first_name ?: $orderReturn->order?->name ?: __('customer')]) }}
     </p>
     <p style="margin:0 0 16px;">
-        {{ __('We hebben je retouraanvraag voor bestelling :order ontvangen. Je retournummer is :rma.', [
+        {{ __('We have received your return request for order :order. Your return number is :rma.', [
             'order' => $orderReturn->order?->reference() ?? '',
             'rma' => $orderReturn->number,
         ]) }}
@@ -19,9 +19,9 @@
         <strong style="color:#291C18;">{{ $returnAddress }}</strong>
     </p>
     <p style="margin:0 0 16px;">
-        {{ __('Include everything that came with it: box, Heritage Passport, cards and accessories. Zet je retournummer op het pakket. De kosten van de retourzending zijn voor jou; we raden een verzekerde zending met tracking aan. Je trackingnummer kun je toevoegen in je account.') }}
+        {{ __('Include everything that came with it: box, Heritage Passport, cards and accessories. Put your return number on the parcel. The cost of return shipping is yours; we recommend an insured shipment with tracking. You can add your tracking number in your account.') }}
     </p>
     <p style="margin:0;">
-        {{ __('Zodra we je retour ontvangen en gecontroleerd hebben, betalen we je binnen 14 dagen terug.') }}
+        {{ __('Once we have received and checked your return, we refund you within 14 days.') }}
     </p>
 @endcomponent

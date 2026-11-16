@@ -21,16 +21,16 @@ type Subscription = {
 
 const SOURCE_LABELS: Record<string, string> = {
     home: 'Home',
-    story: 'Verhaal',
+    story: 'Story',
     modal: 'Modal',
     waitlist: 'Wachtlijst',
-    sold_out: 'Uitverkocht',
-    member: 'Lid',
+    sold_out: 'Sold out',
+    member: 'Member',
 };
 
 const STATUS_LABELS: Record<string, string> = {
     pending: 'Processing',
-    subscribed: 'Actief',
+    subscribed: 'Active',
     unsubscribed: 'Unsubscribed',
 };
 

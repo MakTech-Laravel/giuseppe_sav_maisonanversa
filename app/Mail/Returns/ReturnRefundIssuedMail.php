@@ -23,7 +23,7 @@ class ReturnRefundIssuedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Je terugbetaling · :rma', ['rma' => $this->orderReturn->number]),
+            subject: __('Your refund · :rma', ['rma' => $this->orderReturn->number]),
         );
     }
 

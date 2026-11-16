@@ -12,7 +12,7 @@ export default function Care() {
         <>
             <MaisonSeoHead />
 
-            <LegalPageLayout title="Zorg & Garantie" body={legalPage.body}>
+            <LegalPageLayout title="Care & Warranty" body={legalPage.body}>
                 <LegalPageLinks slug="care" />
             </LegalPageLayout>
         </>

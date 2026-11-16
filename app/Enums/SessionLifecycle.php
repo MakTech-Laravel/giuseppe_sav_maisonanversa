@@ -19,10 +19,10 @@ enum SessionLifecycle: string
     public function label(): string
     {
         return match ($this) {
-            self::Scheduled => 'Gepland',
-            self::Held => 'Gespeeld',
-            self::Finished => 'Afgesloten',
-            self::Cancelled => 'Geannuleerd',
+            self::Scheduled => 'Scheduled',
+            self::Held => 'Played',
+            self::Finished => 'Closed',
+            self::Cancelled => 'Canceled',
         };
     }
 

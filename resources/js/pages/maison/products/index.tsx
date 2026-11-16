@@ -24,7 +24,8 @@ export default function ProductsIndex({
                 eyebrow="Maison Anversa"
                 title={
                     <>
-                        {t('The')} <em>{t('Products')}</em>
+                        {t('The', { context: 'plural' })}{' '}
+                        <em>{t('Products')}</em>
                     </>
                 }
                 subtitle={t(

@@ -29,7 +29,7 @@
 
     @if (! empty($returnsUrl))
         <p style="margin:0;">
-            {{ __('Van gedachten veranderd? Je kunt binnen 14 dagen retourneren via je account.') }}
+            {{ __('Changed your mind? You can return within 14 days via your account.') }}
             <a href="{{ $returnsUrl }}" style="color:#8A6A3B;">{{ __('Start a return') }}</a>
         </p>
     @endif

@@ -87,7 +87,7 @@ class SessionChatController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Bericht gemeld. Ons team bekijkt het.'),
+            'message' => __('Message reported. Our team will review it.'),
         ]);
 
         return back();

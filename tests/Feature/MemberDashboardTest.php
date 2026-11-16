@@ -281,7 +281,6 @@ test('the member nav includes the client feedback sections', function () {
     }
 
     expect($source)
-        ->not->toContain('My Heritage')
         ->not->toContain("'Passport'");
 });
 

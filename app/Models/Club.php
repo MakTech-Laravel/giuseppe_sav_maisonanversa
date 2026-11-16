@@ -219,10 +219,10 @@ class Club extends Model
     public function countryLabel(): string
     {
         return match (mb_strtoupper((string) $this->country)) {
-            'BE' => 'België',
-            'NL' => 'Nederland',
-            'DE' => 'Duitsland',
-            'FR' => 'Frankrijk',
+            'BE' => 'Belgium',
+            'NL' => 'Netherlands',
+            'DE' => 'Germany',
+            'FR' => 'France',
             default => (string) $this->country,
         };
     }

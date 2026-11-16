@@ -16,9 +16,9 @@ enum SessionScoreStatus: string
     {
         return match ($this) {
             self::Pending => 'Awaiting approval',
-            self::Approved => 'Goedgekeurd',
-            self::Rejected => 'Geweigerd',
-            self::Superseded => 'Vervangen',
+            self::Approved => 'Approved',
+            self::Rejected => 'Declined',
+            self::Superseded => 'Replaced',
         };
     }
 

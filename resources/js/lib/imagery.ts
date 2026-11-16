@@ -56,7 +56,7 @@ export const IMAGE_ASSETS = {
     'room-dressing': {
         path: 'images/rooms/room-dressing.png',
         ratio: '16 / 9',
-        label: 'Kleedkamer',
+        label: 'Dressing Room',
         gradient: `linear-gradient(120deg, ${CHOC2} 0%, ${CHOC3} 100%)`,
     },
     'room-coffee': {
@@ -97,7 +97,7 @@ export const IMAGE_ASSETS = {
     'antwerp-cityscape': {
         path: 'images/brand/antwerp-cityscape.png',
         ratio: '4 / 5',
-        label: 'Antwerpen',
+        label: 'Antwerp',
         gradient: `linear-gradient(200deg, ${GOLD} 0%, ${CHOC2} 65%, ${CHOC} 100%)`,
     },
 
@@ -117,7 +117,7 @@ export const IMAGE_ASSETS = {
     'heritage-001-lifestyle-court': {
         path: 'images/product/heritage-001-lifestyle-court.png',
         ratio: '3 / 2',
-        label: 'Op het veld',
+        label: 'On the court',
         gradient: `linear-gradient(155deg, ${GOLD2} 0%, ${CHOC2} 70%, ${CHOC} 100%)`,
     },
     'atelier-workshop': {
@@ -131,8 +131,16 @@ export const IMAGE_ASSETS = {
     'antwerp-ets-band': {
         path: 'images/editorial/antwerp-ets-band.png',
         ratio: '32 / 9',
-        label: 'Antwerpen, ets',
+        label: 'Antwerp, etching',
         gradient: `linear-gradient(90deg, ${CHOC} 0%, ${CHOC3} 50%, ${CHOC} 100%)`,
+    },
+
+    /* Club Corner marketing illustration (temporary until real photos). */
+    'club-corner-impressie': {
+        path: 'images/corner/club-corner-impressie.png',
+        ratio: '8 / 5',
+        label: 'Club Corner',
+        gradient: `linear-gradient(140deg, ${CHOC2} 0%, ${CHOC} 100%)`,
     },
 
     /* The wordmark and emblem. */

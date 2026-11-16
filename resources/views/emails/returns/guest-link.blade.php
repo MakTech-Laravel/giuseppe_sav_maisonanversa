@@ -1,18 +1,18 @@
 @component('emails.layouts.maison', [
-    'title' => __('Start je retour'),
+    'title' => __('Start your return'),
     'logoUrl' => $logoUrl,
     'ctaUrl' => $returnUrl,
-    'ctaLabel' => __('Open retourlink'),
+    'ctaLabel' => __('Open return link'),
 ])
     <p style="margin:0 0 16px;">
-        {{ __('Dag :name,', ['name' => $customerName]) }}
+        {{ __('Hello :name,', ['name' => $customerName]) }}
     </p>
     <p style="margin:0 0 16px;">
-        {{ __('Je vroeg een retourlink voor bestelling :reference. Deze link is eenmalig en tijdelijk geldig.', [
+        {{ __('You requested a return link for order :reference. This link works once and expires soon.', [
             'reference' => $orderReference,
         ]) }}
     </p>
     <p style="margin:0;">
-        {{ __('Heb je deze mail niet aangevraagd? Dan kun je hem veilig negeren.') }}
+        {{ __('Did you not request this email? Then you can safely ignore it.') }}
     </p>
 @endcomponent

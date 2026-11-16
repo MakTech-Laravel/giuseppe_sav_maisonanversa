@@ -10,11 +10,11 @@ export type ConnectionStatus =
 export const CONNECTION_STATUS_LABELS: Record<ConnectionStatus, string> = {
     disabled: 'Disabled',
     idle: 'Inactief',
-    connecting: 'Verbinden…',
-    connected: 'Verbonden',
+    connecting: 'Connecting…',
+    connected: 'Connected',
     unavailable: 'Unavailable',
     disconnected: 'Verbroken',
-    failed: 'Mislukt',
+    failed: 'Failed',
 };
 
 export const REVERB_PING_CHANNEL = 'reverb-ping';

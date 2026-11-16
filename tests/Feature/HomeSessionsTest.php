@@ -170,8 +170,8 @@ test('the home sessions section matches the PDF placement copy and card', functi
         ->not->toContain("from '@/components/maison/community/sessions/session-card'");
 
     expect($homeCard)
-        ->toContain('Doe mee')
-        ->toContain('You\'re in ✓')
+        ->toContain("t('Join')")
+        ->toContain('in ✓')
         ->toContain('storePendingSessionJoin')
         ->toContain("openAuth('register')");
 
@@ -179,6 +179,6 @@ test('the home sessions section matches the PDF placement copy and card', functi
         ->toContain('storePendingSessionJoin')
         ->toContain('useOptionalShellActions')
         ->toContain('ShareSessionButton')
-        ->toContain('Doe mee')
-        ->toContain('Georganiseerd door');
+        ->toContain("t('Join')")
+        ->toContain('Organised by');
 });

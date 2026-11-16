@@ -36,19 +36,19 @@ test('the contact bureau opens one panel under the chosen bubble rather than sta
         ->not->toContain('openPanels');
 });
 
-test('the contact bureau exposes seven collapsible panels including a map embed', function () {
+test('the contact bureau exposes five collapsible panels and no atelier, appointment, phone or map entry points', function () {
     $source = file_get_contents(resource_path('js/components/maison/contact/contact-bureau.tsx'));
     $dataSource = file_get_contents(resource_path('js/components/maison/contact/contact-data.ts'));
 
     expect($dataSource)->toContain("'bestel'")
         ->and($dataSource)->toContain("'care'")
-        ->and($dataSource)->toContain("'afspraak'")
         ->and($dataSource)->toContain("'concierge'")
-        ->and($dataSource)->toContain("'atelier'")
         ->and($dataSource)->toContain("'faq'")
         ->and($dataSource)->toContain("'feedback'")
-        ->and($source)->toContain('<iframe')
-        ->and($source)->toContain('mapSrc');
+        ->and($dataSource)->not->toContain("'afspraak'")
+        ->and($dataSource)->not->toContain("'atelier'")
+        ->and($source)->not->toContain('<iframe')
+        ->and($source)->not->toContain('mapSrc');
 });
 
 test('the contact faq uses native details elements', function () {
@@ -60,14 +60,13 @@ test('the contact faq uses native details elements', function () {
         ->not->toContain('MaisonAccordion');
 });
 
-test('three bureau forms post contact inquiries through inertia', function () {
+test('the bureau forms post contact inquiries through inertia', function () {
     $formSource = file_get_contents(resource_path('js/components/maison/contact/bureau-form.tsx'));
     $bureauSource = file_get_contents(resource_path('js/components/maison/contact/contact-bureau.tsx'));
 
     expect($formSource)->toContain('storeContact')
         ->and($formSource)->toContain("from '@/routes/maison/contact'")
         ->and($formSource)->not->toContain('submitBureauMailto')
-        ->and($bureauSource)->toContain('kind="appointment"')
         ->and($bureauSource)->toContain('kind="consult"')
         ->and($bureauSource)->toContain('kind="feedback"');
 });

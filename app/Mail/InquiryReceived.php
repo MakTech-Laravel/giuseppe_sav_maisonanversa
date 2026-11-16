@@ -23,7 +23,7 @@ class InquiryReceived extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         $subject = $this->inquiry->subject
-            ?: __('Nieuwe :type aanvraag', [
+            ?: __('New :type request', [
                 'type' => $this->inquiry->type->value,
             ]);
 

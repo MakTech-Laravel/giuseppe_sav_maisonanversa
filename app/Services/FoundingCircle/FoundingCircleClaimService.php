@@ -89,7 +89,7 @@ class FoundingCircleClaimService
                 ->pending()
                 ->exists()) {
                 throw ValidationException::withMessages([
-                    'serial' => __('Je hebt al een registratie in afwachting. Awaiting approval of neem contact op met het team.'),
+                    'serial' => __('You already have a pending registration. Wait for approval or contact the team.'),
                 ]);
             }
 

@@ -18,13 +18,13 @@ enum ReturnStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Requested => 'Aangevraagd',
-            self::InTransit => 'Onderweg',
-            self::Received => 'Ontvangen',
+            self::Requested => 'Requested',
+            self::InTransit => 'In transit',
+            self::Received => 'Received',
             self::Refunded => 'Refunded',
             self::PartiallyRefunded => 'Partially refunded',
-            self::Declined => 'Afgewezen',
-            self::Cancelled => 'Geannuleerd',
+            self::Declined => 'Declined',
+            self::Cancelled => 'Canceled',
         };
     }
 

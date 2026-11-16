@@ -19,7 +19,7 @@ enum RegisterVisibility: string
     public function label(): string
     {
         return match ($this) {
-            self::Private => 'Privé',
+            self::Private => 'Private',
             self::Initial => 'First name and initial',
             self::Full => 'Full name',
         };

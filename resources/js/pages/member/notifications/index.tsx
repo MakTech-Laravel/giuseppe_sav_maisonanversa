@@ -23,9 +23,9 @@ interface MemberNotificationsIndexProps {
 }
 
 const STATUS_TABS: { value: NotificationStatusFilter; labelKey: string }[] = [
-    { value: 'all', labelKey: 'Alle' },
-    { value: 'unread', labelKey: 'Ongelezen' },
-    { value: 'read', labelKey: 'Gelezen' },
+    { value: 'all', labelKey: 'All' },
+    { value: 'unread', labelKey: 'Unread' },
+    { value: 'read', labelKey: 'Read' },
 ];
 
 const pagerClassName =

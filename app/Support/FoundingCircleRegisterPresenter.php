@@ -65,7 +65,7 @@ class FoundingCircleRegisterPresenter
 
         return [
             'number' => $place['number'],
-            'label' => $place['name'] ?? __($place['label_key'] ?? 'Privélid'),
+            'label' => $place['name'] ?? __($place['label_key'] ?? 'Private member'),
         ];
     }
 
@@ -212,7 +212,7 @@ class FoundingCircleRegisterPresenter
                 'number' => $number,
                 'sequence' => $sequence,
                 'state' => $archived ? 'archive' : 'available',
-                'label_key' => $archived ? 'Niet te koop' : 'Beschikbaar',
+                'label_key' => $archived ? 'Not for sale' : 'Available',
                 'name' => null,
                 'year' => null,
                 'italic' => false,
@@ -243,7 +243,7 @@ class FoundingCircleRegisterPresenter
                 'number' => $number,
                 'sequence' => $sequence,
                 'state' => 'inscribed',
-                'label_key' => 'Privélid',
+                'label_key' => 'Private member',
                 'name' => null,
                 'year' => $year,
                 'italic' => true,

@@ -40,9 +40,8 @@ HTML,
 <h1>Verzending &amp; Retour</h1>
 <p>Elk Heritage Nº 001-racket wordt met de hand gecontroleerd, verpakt en verzekerd verzonden.</p>
 <h2>Verzending</h2>
-<p>Binnen Europa is verzending inbegrepen.</p>
+<p>Binnen de EU is verzending inbegrepen.</p>
 <p>Elke zending is verzekerd en volgbaar. Zodra je racket vertrekt, ontvang je een e-mail met je trackinglink.</p>
-<p>Buiten Europa verzenden we op aanvraag. Eventuele invoerrechten en lokale taksen zijn dan voor de koper.</p>
 <h2>Bij ontvangst</h2>
 <p>Controleer je pakket bij levering. Is de verpakking beschadigd of ontbreekt er iets? Laat het ons binnen 48 uur weten, met foto's, via de <a href="/nl/contact">contactpagina</a>.</p>
 <h2>Retour</h2>

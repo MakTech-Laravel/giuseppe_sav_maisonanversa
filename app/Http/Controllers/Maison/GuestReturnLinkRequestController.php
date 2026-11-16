@@ -39,7 +39,7 @@ class GuestReturnLinkRequestController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('Als we een gastbestelling vinden die bij deze gegevens past, sturen we je zo een retourlink.'),
+            'message' => __('If we find a guest order matching these details, we will send you a return link shortly.'),
         ]);
 
         return back();

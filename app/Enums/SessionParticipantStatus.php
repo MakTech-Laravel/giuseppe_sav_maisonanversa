@@ -19,8 +19,8 @@ enum SessionParticipantStatus: string
     {
         return match ($this) {
             self::Pending => 'Request pending',
-            self::Confirmed => 'Bevestigd',
-            self::Rejected => 'Aanvraag geweigerd',
+            self::Confirmed => 'Confirmed',
+            self::Rejected => 'Request declined',
         };
     }
 

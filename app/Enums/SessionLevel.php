@@ -16,8 +16,8 @@ enum SessionLevel: string
     {
         return match ($this) {
             self::Beginner => 'Beginner',
-            self::Intermediate => 'Gevorderd',
-            self::Advanced => 'Ervaren',
+            self::Intermediate => 'Intermediate',
+            self::Advanced => 'Advanced',
             self::OpenToAll => 'Open to all',
         };
     }

@@ -60,13 +60,13 @@ type EditionPickerModalProps = {
 function statusLabelKey(status: EditionOption['status']): string {
     switch (status) {
         case 'archive':
-            return 'Niet te koop';
+            return 'Not for sale';
         case 'allocated':
-            return 'Verkocht';
+            return 'Sold';
         case 'reserved':
             return 'Reserved';
         default:
-            return 'Beschikbaar';
+            return 'Available';
     }
 }
 

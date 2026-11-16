@@ -15,13 +15,13 @@ enum NotificationType: string
     public function label(): string
     {
         return match ($this) {
-            self::Info => 'Informatie',
-            self::Success => 'Succes',
+            self::Info => 'Information',
+            self::Success => 'Success',
             self::Warning => 'Warning',
-            self::Alert => 'Melding',
-            self::Order => 'Bestelling',
-            self::Community => 'Gemeenschap',
-            self::System => 'Systeem',
+            self::Alert => 'Notification',
+            self::Order => 'Order',
+            self::Community => 'Community',
+            self::System => 'System',
         };
     }
 

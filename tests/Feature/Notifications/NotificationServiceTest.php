@@ -83,7 +83,7 @@ test('the realtime event targets the private user channel with the inbox payload
         ->and($event->broadcastWith())->toMatchArray([
             'id' => $row->id,
             'type' => 'order',
-            'title' => 'Order paid',
+            'title' => 'Bestelling betaald',
             'message' => 'Order #12',
             'href' => 'https://maison.test/orders/12',
             'link_label' => 'Bekijk',

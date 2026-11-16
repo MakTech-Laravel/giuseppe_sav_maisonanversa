@@ -54,7 +54,7 @@ test('every modal uses the shared scroll lock', function () {
 test('the modal shell is accessible and dismissible with Escape', function () {
     expect(modalSource('maison-modal.tsx'))
         ->toContain('aria-modal="true"')
-        ->toContain("event.key === 'Escape'");
+        ->toContain("event.key !== 'Escape'");
 });
 
 test('the layout wires real modals instead of placeholders', function () {

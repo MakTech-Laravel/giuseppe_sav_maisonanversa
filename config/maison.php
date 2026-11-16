@@ -33,6 +33,9 @@ return [
         'Heritage Nº 001',
         'Founding Edition',
         'Founding Circle',
+        'Heritage Passport',
+        'Heritage Certificate',
+        'Heritage Letter',
         'Maison Archive',
         'Salon',
         'Bureau',
@@ -218,9 +221,9 @@ return [
     'corner_form_options' => [
         'court_options' => ['4-6 courts', '7-10 courts', '10+ courts'],
         'format_options' => [
-            'Formaat A — Heritage Corner',
-            'Formaat B — Founding Club Corner',
-            'Nog niet beslist',
+            'Format A — Heritage Corner',
+            'Format B — Founding Club Corner',
+            'Not yet decided',
         ],
     ],
 

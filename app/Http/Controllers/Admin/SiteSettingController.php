@@ -18,7 +18,7 @@ class SiteSettingController extends Controller
 
         return Inertia::render('admin/site-settings/edit', [
             'settings' => [
-                'phone' => $settings->phone,
+                'phone' => (string) ($settings->phone ?? ''),
                 'whatsapp' => $settings->whatsapp,
                 'email_hello' => $settings->email_hello,
                 'email_press' => $settings->email_press,

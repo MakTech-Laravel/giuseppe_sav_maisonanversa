@@ -46,4 +46,4 @@ Editable /story copy lives on the StoryPage singleton, not SiteSetting and not i
 Editable story copy lives on the StoryPage singleton. Dutch columns are the DeepL source. name_title, name_pronunciation, make_title, founder_name, and founder_signature stay untranslated. Each visible flag hides that band. Uploaded photographs are optional and are not translated. Ritual step count, product cards, and the Heritage button href stay fixed.
 
 ## Site settings include editable return address
-Site settings store contact, Instagram, atelier map coords, and an optional return_address. Resolve customer-facing return address via App\Support\ReturnAddress::resolve() (SiteSetting first, then config('maison.returns.return_address')). Do not add TranslatesWithDeepL or CMS announcements on SiteSetting; atelier is not a boutique.
+Site settings store contact, Instagram, and an optional return_address. Resolve customer-facing return address via App\Support\ReturnAddress::resolve() (SiteSetting first, then config('maison.returns.return_address')). There is no public atelier visit or phone contact for now. Do not add TranslatesWithDeepL or CMS announcements on SiteSetting.
