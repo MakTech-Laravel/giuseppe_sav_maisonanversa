@@ -37,11 +37,12 @@ test('staff can open the legal pages index', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $inertia) => $inertia
             ->component('admin/legal-pages/index')
-            ->has('pages', 4)
-            ->where('pages.0.slug', 'privacy')
-            ->where('pages.1.slug', 'terms')
-            ->where('pages.2.slug', 'shipping')
-            ->where('pages.3.slug', 'care'));
+            ->has('pages', 5)
+            ->where('pages.0.slug', 'terms')
+            ->where('pages.1.slug', 'withdrawal')
+            ->where('pages.2.slug', 'privacy')
+            ->where('pages.3.slug', 'shipping')
+            ->where('pages.4.slug', 'care'));
 });
 
 test('staff can update legal page translations without overwriting source via deepl', function () {

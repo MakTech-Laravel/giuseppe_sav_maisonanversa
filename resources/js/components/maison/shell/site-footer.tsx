@@ -1,6 +1,7 @@
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import type { SiteShared } from '@/components/maison/contact/contact-data';
+import { openCookieSettings } from '@/components/maison/cookie-consent-banner';
 import { MaisonLink } from '@/components/maison/maison-link';
 import { PlaceholderImage } from '@/components/maison/placeholder-image';
 import { FOOTER_COLUMNS, isNavItem } from '@/lib/maison-navigation';
@@ -143,9 +144,19 @@ export function SiteFooter({ onNewsletter }: { onNewsletter: () => void }) {
                     {t('© 2026 Maison Anversa. All rights reserved.')}
                 </p>
 
-                <p className="font-sans text-[10px] font-light tracking-[0.12em] text-stone/50 md:text-[9px]">
-                    {t('Antwerp, Belgium · maisonanversa.com')}
-                </p>
+                <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-6">
+                    <button
+                        type="button"
+                        onClick={() => openCookieSettings()}
+                        className="font-sans text-[10px] font-light tracking-[0.12em] text-stone/50 underline decoration-gold/40 underline-offset-[0.18em] transition-colors hover:text-cream md:text-[9px]"
+                    >
+                        {t('Cookie settings')}
+                    </button>
+
+                    <p className="font-sans text-[10px] font-light tracking-[0.12em] text-stone/50 md:text-[9px]">
+                        {t('Antwerp, Belgium · maisonanversa.com')}
+                    </p>
+                </div>
             </div>
         </footer>
     );

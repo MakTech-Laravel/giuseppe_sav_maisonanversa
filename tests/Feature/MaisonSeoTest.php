@@ -21,7 +21,7 @@ test('public maison pages receive unique titles and indexable robots', function 
             });
     }
 
-    expect($titles)->toHaveCount(14)
+    expect($titles)->toHaveCount(15)
         ->and($titles)->toHaveCount(count(array_unique($titles)));
 });
 

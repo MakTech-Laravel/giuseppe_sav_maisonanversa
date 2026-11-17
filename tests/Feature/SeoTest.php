@@ -11,7 +11,7 @@ test('the sitemap lists every public page in every locale', function () {
     $locales = config('maison.locales');
     $pages = config('maison.pages');
 
-    expect($pages)->toHaveCount(14);
+    expect($pages)->toHaveCount(15);
 
     $response = $this->get('/sitemap.xml');
 
@@ -32,7 +32,7 @@ test('the sitemap lists every public page in every locale', function () {
     }
 
     expect(substr_count($body, '<loc>'))->toBe(
-        (14 + count(Journal::slugs())) * count($locales),
+        (15 + count(Journal::slugs())) * count($locales),
     );
 });
 
@@ -87,6 +87,7 @@ test('every public page mounts the shared SEO head component', function (string 
     'contact',
     'legal/privacy',
     'legal/terms',
+    'legal/withdrawal',
     'legal/shipping',
     'legal/care',
     'checkout-success',
@@ -197,8 +198,8 @@ test('public pages share unique indexable seo documents', function () {
         });
     }
 
-    expect($titles)->toHaveCount(14)
-        ->and(count(array_unique($titles)))->toBe(14);
+    expect($titles)->toHaveCount(15)
+        ->and(count(array_unique($titles)))->toBe(15);
 });
 
 test('the home seo document uses the canonical locale url', function () {

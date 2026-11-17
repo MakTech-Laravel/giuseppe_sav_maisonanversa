@@ -186,7 +186,24 @@ test('shared checkout prop stays enabled by default', function () {
     $this->get(localized('maison.home'))
         ->assertInertia(fn ($page) => $page
             ->where('checkout.enabled', true)
-            ->where('registration.enabled', true));
+            ->where('registration.enabled', true)
+            ->where('checkout.shippingCountries.BE', 'Belgium')
+            ->missing('checkout.shippingCountries.GB')
+            ->missing('checkout.shippingCountries.US')
+            ->missing('checkout.shippingCountries.CH')
+            ->missing('checkout.shippingCountries.NO'));
+});
+
+test('checkout rejects shipping countries outside the european union', function () {
+    actingAsCheckoutUser();
+
+    $this->post(localized('maison.checkout.store'), checkoutPayload([
+        'shipping_country' => 'GB',
+    ]))->assertSessionHasErrors('shipping_country');
+
+    $this->post(localized('maison.checkout.store'), checkoutPayload([
+        'shipping_country' => 'US',
+    ]))->assertSessionHasErrors('shipping_country');
 });
 
 test('checkout requires reservation details', function () {

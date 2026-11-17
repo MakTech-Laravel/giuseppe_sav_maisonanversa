@@ -14,12 +14,11 @@ class CookieConsentController extends Controller
         $data = $request->validate([
             'necessary' => ['required', 'boolean'],
             'analytics' => ['required', 'boolean'],
-            'marketing' => ['required', 'boolean'],
         ]);
 
         $payload = json_encode([
-            ...$data,
             'necessary' => true,
+            'analytics' => (bool) $data['analytics'],
             'at' => now()->toIso8601String(),
         ]);
 

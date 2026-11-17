@@ -49,7 +49,16 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                   number: String(product.editionNumber).padStart(3, '0'),
               })
             : null);
-    const { auth } = usePage().props;
+    const { auth, checkout } = usePage<{
+        auth?: { user?: { name?: string; email?: string } | null };
+        checkout?: { shippingCountries?: Record<string, string> };
+    }>().props;
+    const shippingCountries = checkout?.shippingCountries ?? {
+        BE: 'Belgium',
+        NL: 'Netherlands',
+        FR: 'France',
+        DE: 'Germany',
+    };
     const [step, setStep] = useState<Step>(1);
     const [name, setName] = useState(auth?.user?.name ?? '');
     const [email, setEmail] = useState(auth?.user?.email ?? '');
@@ -287,31 +296,13 @@ export function OrderModal({ onClose, product }: OrderModalProps) {
                         <option value="" disabled>
                             {t('Country')}
                         </option>
-                        {[
-                            ['BE', 'Belgium'],
-                            ['NL', 'Netherlands'],
-                            ['FR', 'France'],
-                            ['DE', 'Germany'],
-                            ['LU', 'Luxembourg'],
-                            ['AT', 'Austria'],
-                            ['IT', 'Italy'],
-                            ['ES', 'Spain'],
-                            ['PT', 'Portugal'],
-                            ['IE', 'Ireland'],
-                            ['GB', 'United Kingdom'],
-                            ['CH', 'Switzerland'],
-                            ['SE', 'Sweden'],
-                            ['DK', 'Denmark'],
-                            ['FI', 'Finland'],
-                            ['NO', 'Norway'],
-                            ['PL', 'Poland'],
-                            ['CZ', 'Czechia'],
-                            ['US', 'United States'],
-                        ].map(([code, label]) => (
-                            <option key={code} value={code}>
-                                {label} ({code})
-                            </option>
-                        ))}
+                        {Object.entries(shippingCountries).map(
+                            ([code, label]) => (
+                                <option key={code} value={code}>
+                                    {label} ({code})
+                                </option>
+                            ),
+                        )}
                     </select>
 
                     {error && (
