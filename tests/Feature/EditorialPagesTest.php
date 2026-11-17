@@ -77,6 +77,25 @@ test('the dressing founding-circle heading uses English source keys with Dutch t
         ->and($dutch)->not->toHaveKey('ziet');
 });
 
+test('dressing journal and terms translation-review fixes stay locked', function () {
+    $dressing = file_get_contents(resource_path('js/pages/maison/dressing.tsx'));
+    $journal = file_get_contents(resource_path('js/pages/maison/journal.tsx'));
+    $legal = file_get_contents(resource_path('js/components/maison/legal/legal-page-links.tsx'));
+    $nl = json_decode((string) file_get_contents(lang_path('nl.json')), true);
+    $fr = json_decode((string) file_get_contents(lang_path('fr.json')), true);
+
+    expect($dressing)
+        ->toContain("t('the journey')")
+        ->not->toContain("t('on the way')")
+        ->and($nl['the journey'])->toBe('het traject')
+        ->and($fr['the journey'])->toBe('le trajet')
+        ->and($journal)->toContain("t('The Journal')")
+        ->and($nl['The Journal'])->toBe('Het Journal')
+        ->and($fr['The Journal'])->toBe('Le Journal')
+        ->and($legal)->toContain("t('and the')")
+        ->and($nl['and the'])->toBe('en het');
+});
+
 test('the circle benefits grid matches the prototype hairline layout', function () {
     $source = file_get_contents(resource_path('js/pages/maison/circle.tsx'));
 

@@ -188,7 +188,7 @@ export default function Dressing({ items = [] }: { items?: DressingItem[] }) {
                         <Eyebrow>{t('The First Collection')}</Eyebrow>
                         <GoldRule center className="mx-auto" />
                         <h2 className="font-serif text-[clamp(28px,3.5vw,42px)] font-medium [&_em]:text-gold [&_em]:italic">
-                            {t('For')} <em>{t('on the way')}</em>{' '}
+                            {t('For')} <em>{t('the journey')}</em>{' '}
                             {t('to the court')}
                         </h2>
                     </Reveal>
