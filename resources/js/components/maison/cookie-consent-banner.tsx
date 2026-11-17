@@ -1,18 +1,60 @@
 import { useForm, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MaisonButton } from '@/components/maison/ui/maison-button';
 import { store as cookieConsentStore } from '@/routes/cookie-consent';
+
+export const COOKIE_SETTINGS_EVENT = 'maison:open-cookie-settings';
+
+function parseConsent(raw: string | null | undefined): {
+    necessary: boolean;
+    analytics: boolean;
+} | null {
+    if (!raw) {
+        return null;
+    }
+
+    try {
+        const parsed = JSON.parse(raw) as {
+            necessary?: boolean;
+            analytics?: boolean;
+        };
+
+        return {
+            necessary: true,
+            analytics: Boolean(parsed.analytics),
+        };
+    } catch {
+        return null;
+    }
+}
 
 export function CookieConsentBanner() {
     const { t } = useTranslation();
     const { cookieConsent } = usePage<{ cookieConsent?: string | null }>()
         .props;
+    const saved = parseConsent(cookieConsent);
+    const [forceOpen, setForceOpen] = useState(false);
     const form = useForm({
         necessary: true,
-        analytics: false,
+        analytics: saved?.analytics ?? false,
     });
 
-    if (cookieConsent) {
+    useEffect(() => {
+        const open = () => {
+            const current = parseConsent(cookieConsent);
+            form.setData('analytics', current?.analytics ?? false);
+            setForceOpen(true);
+        };
+
+        window.addEventListener(COOKIE_SETTINGS_EVENT, open);
+
+        return () => window.removeEventListener(COOKIE_SETTINGS_EVENT, open);
+        // form.setData is stable enough for this reopen handler; re-bind when consent cookie changes.
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- avoid re-subscribing on every form render
+    }, [cookieConsent]);
+
+    if (cookieConsent && !forceOpen) {
         return null;
     }
 
@@ -50,11 +92,19 @@ export function CookieConsentBanner() {
                     type="button"
                     variant="gold"
                     disabled={form.processing}
-                    onClick={() => form.post(cookieConsentStore.url())}
+                    onClick={() =>
+                        form.post(cookieConsentStore.url(), {
+                            onSuccess: () => setForceOpen(false),
+                        })
+                    }
                 >
                     {t('Save preferences')}
                 </MaisonButton>
             </div>
         </div>
     );
+}
+
+export function openCookieSettings(): void {
+    window.dispatchEvent(new Event(COOKIE_SETTINGS_EVENT));
 }

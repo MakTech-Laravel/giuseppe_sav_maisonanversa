@@ -2,7 +2,7 @@ import * as maison from '@/routes/maison';
 import type { Locale } from '@/types/locale';
 
 /**
- * The fourteen public pages, named as their routes are. Labels are the Dutch
+ * The fifteen public pages, named as their routes are. Labels are the Dutch
  * source copy, so `t(label)` resolves the translation and falls back to this
  * exact text when there is none.
  */
@@ -19,6 +19,7 @@ export const MAISON_PAGES = [
     'contact',
     'privacy',
     'terms',
+    'withdrawal',
     'shipping',
     'care',
 ] as const;
@@ -93,6 +94,7 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
             { page: 'contact', label: 'FAQ', hash: 'faq' },
             { page: 'privacy', label: 'Privacy Policy' },
             { page: 'terms', label: 'Terms & Conditions' },
+            { page: 'withdrawal', label: 'Model withdrawal form' },
         ],
     },
     {

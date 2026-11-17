@@ -99,7 +99,7 @@ final class SeoUrlRegistry
 
     private function lastmodForPage(string $page): ?string
     {
-        $relative = in_array($page, ['privacy', 'terms', 'shipping', 'care'], true)
+        $relative = in_array($page, ['privacy', 'terms', 'withdrawal', 'shipping', 'care'], true)
             ? "legal/{$page}.tsx"
             : "{$page}.tsx";
 
