@@ -10,7 +10,6 @@ export function CookieConsentBanner() {
     const form = useForm({
         necessary: true,
         analytics: false,
-        marketing: false,
     });
 
     if (cookieConsent) {
@@ -24,7 +23,7 @@ export function CookieConsentBanner() {
                     <p className="font-serif text-lg">{t('Cookies')}</p>
                     <p className="mt-1 text-sm text-sand">
                         {t(
-                            'We use necessary cookies for the site. Analytics and marketing load only after your consent.',
+                            'We use necessary cookies for the site. Analytics load only after your consent.',
                         )}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-4 text-sm">
@@ -44,19 +43,6 @@ export function CookieConsentBanner() {
                                 }
                             />
                             {t('Analytics')}
-                        </label>
-                        <label className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                checked={form.data.marketing}
-                                onChange={(event) =>
-                                    form.setData(
-                                        'marketing',
-                                        event.target.checked,
-                                    )
-                                }
-                            />
-                            {t('Marketing')}
                         </label>
                     </div>
                 </div>
