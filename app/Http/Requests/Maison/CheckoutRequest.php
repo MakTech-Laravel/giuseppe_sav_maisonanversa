@@ -37,7 +37,12 @@ class CheckoutRequest extends FormRequest
             'shipping_line2' => ['nullable', 'string', 'max:255'],
             'shipping_city' => ['required', 'string', 'max:120'],
             'shipping_postal_code' => ['required', 'string', 'max:32'],
-            'shipping_country' => ['required', 'string', 'size:2'],
+            'shipping_country' => [
+                'required',
+                'string',
+                'size:2',
+                Rule::in(array_keys(config('maison.checkout.shipping_countries', []))),
+            ],
             'gift_wrap' => ['sometimes', 'boolean'],
             'gift_message' => ['nullable', 'string', 'max:500'],
             'accept_terms' => ['accepted'],
@@ -56,6 +61,7 @@ class CheckoutRequest extends FormRequest
             'shipping_city.required' => __('Please enter your shipping address.'),
             'shipping_postal_code.required' => __('Please enter your shipping address.'),
             'shipping_country.required' => __('Please enter your shipping address.'),
+            'shipping_country.in' => __('We only deliver within the European Union.'),
             'edition_piece_id.required' => __('Please choose an available edition number.'),
             'accept_terms.accepted' => __('I have read the Terms & Conditions and the Return Policy and agree to them.'),
         ];

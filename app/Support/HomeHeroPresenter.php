@@ -28,6 +28,7 @@ class HomeHeroPresenter
         'contact' => 'maison.contact',
         'privacy' => 'maison.privacy',
         'terms' => 'maison.terms',
+        'withdrawal' => 'maison.withdrawal',
         'shipping' => 'maison.shipping',
         'care' => 'maison.care',
     ];
@@ -51,6 +52,7 @@ class HomeHeroPresenter
         'contact' => 'Contact',
         'privacy' => 'Privacy',
         'terms' => 'Voorwaarden',
+        'withdrawal' => 'Herroeping',
         'shipping' => 'Verzending',
         'care' => 'Verzorging',
     ];

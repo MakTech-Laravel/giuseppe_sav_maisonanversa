@@ -94,7 +94,10 @@ class HandleInertiaRequests extends Middleware
             'seoImage' => config('maison.seo.image'),
             'seo' => Inertia::always(fn (): array => MaisonSeo::document($request)),
             'cookieConsent' => fn () => $request->cookie('maison_consent'),
-            'checkout' => fn (): array => Product::checkoutShare(),
+            'checkout' => fn (): array => [
+                ...Product::checkoutShare(),
+                'shippingCountries' => config('maison.checkout.shipping_countries', []),
+            ],
             'registration' => fn (): array => [
                 'enabled' => StorefrontGates::registrationEnabled(),
             ],

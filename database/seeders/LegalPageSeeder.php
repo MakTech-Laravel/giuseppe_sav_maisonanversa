@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\LegalPage;
 use App\Support\Html\LegalHtml;
+use App\Support\Legal\AlignedShippingLegalCopy;
+use App\Support\Legal\ClientApprovedLegalCopy;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class LegalPageSeeder extends Seeder
 {
@@ -13,51 +16,59 @@ class LegalPageSeeder extends Seeder
      */
     public function run(): void
     {
-        $pages = [
-            'privacy' => <<<'HTML'
-<h2>Privacybeleid</h2>
-<p>Maison Anversa hecht waarde aan uw vertrouwen. Wij verwerken persoonsgegevens voor bestellingen, ondersteuning en nieuwsbriefcommunicatie.</p>
-<h2>Welke gegevens</h2>
-<ul>
-<li>Naam, e-mail, telefoon en leveringsadres voor bestellingen.</li>
-<li>Betalingsstatus via onze betaalpartner.</li>
-<li>Nieuwsbriefvoorkeuren wanneer u zich inschrijft.</li>
-</ul>
-<h2>Uw rechten</h2>
-<p>U heeft recht op inzage, correctie, verwijdering en bezwaar.</p>
-<h2>Publiek register</h2>
-<p>Als u Heritage Nº 001 koopt, wordt u ingeschreven in het officiële Founding Circle-register. Standaard verschijnt alleen uw nummer als Privélid. U kiest in uw account of uw volledige naam, uw voornaam en initiaal, of alleen uw nummer publiek zichtbaar is. U kunt die keuze op elk moment wijzigen of intrekken.</p>
-HTML,
-            'terms' => <<<'HTML'
-<h2>Algemene voorwaarden</h2>
-<p>Bestellingen via maisonanversa.com vallen onder Belgisch recht. Een bestelling is definitief na bevestiging.</p>
-<h2>Levering</h2>
-<p>Founding Edition leveringen volgen reserveringsvolgorde en geplande productie.</p>
-<h2>Klachten</h2>
-<p>Meld problemen binnen 14 dagen na levering zodat we een passende oplossing kunnen bieden.</p>
-HTML,
-            'shipping' => <<<'HTML'
-<h1>Verzending &amp; Retour</h1>
-<p>Elk Heritage Nº 001-racket wordt met de hand gecontroleerd, verpakt en verzekerd verzonden.</p>
-<h2>Verzending</h2>
-<p>Binnen de EU is verzending inbegrepen.</p>
-<p>Elke zending is verzekerd en volgbaar. Zodra je racket vertrekt, ontvang je een e-mail met je trackinglink.</p>
-<h2>Bij ontvangst</h2>
-<p>Controleer je pakket bij levering. Is de verpakking beschadigd of ontbreekt er iets? Laat het ons binnen 48 uur weten, met foto's, via de <a href="/nl/contact">contactpagina</a>.</p>
-<h2>Retour</h2>
-<p>Je hebt 14 dagen na levering om je aankoop te herroepen, zonder opgave van reden. Laat het ons binnen die termijn weten via de <a href="/nl/contact">contactpagina</a>, met je bestelnummer. Daarna heb je nog 14 dagen om het racket terug te sturen.</p>
-<p>Het racket moet ongebruikt zijn: niet bespeeld, en de beschermfolie en labels zijn intact. Het moet ook volledig zijn, met het Heritage Passport, de dust bag, de rackettas en de originele verpakking.</p>
-<p>De kosten van de retourzending zijn voor jou. We raden een verzekerde zending met tracking aan, want tot het racket bij ons is aangekomen, ligt het risico bij de afzender.</p>
-<p>Annuleer je vóór verzending? Dan betalen we het volledige bedrag terug.</p>
-<h2>De Founding Circle</h2>
-<p>Je nummer wordt voor je gereserveerd zodra je bestelling betaald is. 14 dagen na levering is je inschrijving in het register definitief.</p>
-<p>Stuur je het racket terug, dan komt je nummer opnieuw vrij en wordt je naam uit het register verwijderd.</p>
-<h2>Terugbetaling</h2>
-<p>Zodra we het racket ontvangen en gecontroleerd hebben, betalen we je terug, binnen 14 dagen, via het oorspronkelijke betaalmiddel. De oorspronkelijke standaard verzendkosten zitten daar ook in.</p>
-<p>Komt het racket gebruikt, beschadigd of onvolledig terug? Dan kunnen we een vergoeding inhouden voor de waardevermindering.</p>
-<p>Vragen? Neem contact met ons op via de <a href="/nl/contact">contactpagina</a>.</p>
-HTML,
-            'care' => <<<'HTML'
+        foreach (ClientApprovedLegalCopy::slugs() as $slug) {
+            $this->seedLocalizedPage($slug, ClientApprovedLegalCopy::bodiesFor($slug));
+        }
+
+        $this->seedLocalizedPage('shipping', AlignedShippingLegalCopy::bodies());
+
+        LegalPage::query()->updateOrCreate(
+            ['slug' => 'care'],
+            [
+                'body' => LegalHtml::sanitize($this->careNl()),
+                'is_published' => true,
+            ],
+        );
+    }
+
+    /**
+     * @param  array{nl: string, en: string, fr: string}  $bodies
+     */
+    private function seedLocalizedPage(string $slug, array $bodies): void
+    {
+        $nl = LegalHtml::sanitize($bodies['nl']);
+
+        $page = LegalPage::query()->firstOrNew(['slug' => $slug]);
+        $page->fill([
+            'body' => $nl,
+            'is_published' => true,
+        ])->saveQuietly();
+
+        $this->upsertTranslation($page, 'en', LegalHtml::sanitize($bodies['en']), $nl);
+        $this->upsertTranslation($page, 'fr', LegalHtml::sanitize($bodies['fr']), $nl);
+    }
+
+    private function upsertTranslation(LegalPage $page, string $locale, string $value, string $source): void
+    {
+        DB::table('translations')->updateOrInsert(
+            [
+                'translatable_type' => LegalPage::class,
+                'translatable_id' => $page->id,
+                'locale' => $locale,
+                'column' => 'body',
+            ],
+            [
+                'value' => $value,
+                'source_hash' => hash('sha256', $source),
+                'updated_at' => now(),
+                'created_at' => now(),
+            ],
+        );
+    }
+
+    private function careNl(): string
+    {
+        return <<<'HTML'
 <h1>Zorg &amp; Garantie</h1>
 <p>Heritage Nº 001 is gebouwd om lang mee te gaan. Met de juiste zorg blijft het jaren mooi en speelklaar.</p>
 <h2>Het slagvlak</h2>
@@ -76,17 +87,6 @@ HTML,
 <p>Een garantievraag? Stuur ons via de <a href="/nl/contact">contactpagina</a> je bestelnummer, het serienummer uit je Heritage Passport (Nº 001–100) en duidelijke foto's. We bekijken elke vraag persoonlijk en zoeken een oplossing: herstelling, vervanging of terugbetaling, zoals de wet voorziet.</p>
 <p>Bewaar je Heritage Passport goed. Het is je bewijs van echtheid en van aankoop.</p>
 <p>Vragen? Neem contact met ons op via de <a href="/nl/contact">contactpagina</a>.</p>
-HTML,
-        ];
-
-        foreach ($pages as $slug => $body) {
-            LegalPage::query()->updateOrCreate(
-                ['slug' => $slug],
-                [
-                    'body' => LegalHtml::sanitize($body),
-                    'is_published' => true,
-                ],
-            );
-        }
+HTML;
     }
 }

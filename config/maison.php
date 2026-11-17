@@ -92,6 +92,7 @@ return [
         'contact' => 'contact',
         'privacy' => 'privacy',
         'terms' => 'terms',
+        'withdrawal' => 'withdrawal',
         'shipping' => 'shipping',
         'care' => 'care',
     ],
@@ -141,6 +142,41 @@ return [
         'enabled' => (bool) env('MAISON_CHECKOUT_ENABLED', true),
         'currency' => 'eur',
         'hold_minutes' => 15,
+        /*
+         * ISO 3166-1 alpha-2 codes we ship to. Must stay inside the EU — the
+         * approved Terms (Nov 2026) say delivery is within the European Union only.
+         *
+         * @var array<string, string>
+         */
+        'shipping_countries' => [
+            'AT' => 'Austria',
+            'BE' => 'Belgium',
+            'BG' => 'Bulgaria',
+            'HR' => 'Croatia',
+            'CY' => 'Cyprus',
+            'CZ' => 'Czechia',
+            'DK' => 'Denmark',
+            'EE' => 'Estonia',
+            'FI' => 'Finland',
+            'FR' => 'France',
+            'DE' => 'Germany',
+            'GR' => 'Greece',
+            'HU' => 'Hungary',
+            'IE' => 'Ireland',
+            'IT' => 'Italy',
+            'LV' => 'Latvia',
+            'LT' => 'Lithuania',
+            'LU' => 'Luxembourg',
+            'MT' => 'Malta',
+            'NL' => 'Netherlands',
+            'PL' => 'Poland',
+            'PT' => 'Portugal',
+            'RO' => 'Romania',
+            'SK' => 'Slovakia',
+            'SI' => 'Slovenia',
+            'ES' => 'Spain',
+            'SE' => 'Sweden',
+        ],
     ],
 
     /*

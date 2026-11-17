@@ -47,8 +47,28 @@ export function LegalPageLinks({ slug, preview = false }: LegalPageLinksProps) {
         return (
             <p>
                 {t('See also the')}{' '}
+                <LegalChromeLink to="withdrawal" preview={preview}>
+                    {t('Model withdrawal form')}
+                </LegalChromeLink>
+                {', '}
                 <LegalChromeLink to="care" preview={preview}>
                     {t('care and warranty policy')}
+                </LegalChromeLink>{' '}
+                {t('and the')}{' '}
+                <LegalChromeLink to="shipping" preview={preview}>
+                    {t('shipping and return policy')}
+                </LegalChromeLink>
+                .
+            </p>
+        );
+    }
+
+    if (slug === 'withdrawal') {
+        return (
+            <p>
+                {t('See also the')}{' '}
+                <LegalChromeLink to="terms" preview={preview}>
+                    {t('Terms & Conditions')}
                 </LegalChromeLink>{' '}
                 {t('and the')}{' '}
                 <LegalChromeLink to="shipping" preview={preview}>
