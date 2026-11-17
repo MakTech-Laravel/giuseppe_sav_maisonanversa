@@ -79,7 +79,7 @@ final class MaisonSeo
         ],
         'corner' => [
             'title' => 'Club Corner — Maison Anversa',
-            'description' => 'Club Corner — exclusive benefits and early access for members of Maison Anversa.',
+            'description' => 'Club Corner — Maison Anversa\'s partner programme for padel clubs.',
         ],
         'contact' => [
             'title' => 'Contact — Maison Anversa',

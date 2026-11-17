@@ -30,7 +30,7 @@ export function HomeStory() {
     return (
         <div className="grid min-h-120 grid-cols-1 bg-cream ma-md:grid-cols-2 ma-lg:grid-cols-[1fr_1.1fr_1fr]">
             <Reveal className="flex flex-col justify-center border-gold/15 px-8 py-16 ma-md:border-r ma-md:px-13">
-                <Eyebrow tone="gold2">{t('Our Story')}</Eyebrow>
+                <Eyebrow tone="gold2">{t('Our story')}</Eyebrow>
                 <h2 className="mt-3 mb-5 font-serif text-[clamp(26px,3vw,38px)] leading-[1.2] font-medium tracking-[0.06em] uppercase">
                     {t('Everything begins with a coffee.')}
                 </h2>

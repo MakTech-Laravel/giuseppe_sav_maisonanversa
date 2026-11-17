@@ -121,6 +121,7 @@ export default function Corner({
     cornerFormOptions: CornerFormOptions;
 }) {
     const { t } = useTranslation();
+    const { locale } = useLocale();
     const contactRef = useRef<HTMLDivElement>(null);
 
     function scrollToForm() {
@@ -413,7 +414,9 @@ export default function Corner({
                                 </Eyebrow>
                                 <GoldRule />
                                 <h2 className="mb-5 font-serif text-4xl font-medium [&_em]:text-gold2 [&_em]:italic">
-                                    {t("Let's")} <em>{t('talk')}</em>
+                                    {t("Let's")}
+                                    {locale === 'fr' ? '' : ' '}
+                                    <em>{t('talk')}</em>
                                 </h2>
                                 <p className="mb-8 text-base leading-[1.85] text-choc3">
                                     {t(
