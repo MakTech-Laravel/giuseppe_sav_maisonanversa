@@ -7,6 +7,7 @@ test('the legal pages render their Inertia components', function (string $path, 
 })->with([
     ['/nl/privacy', 'maison/legal/privacy'],
     ['/nl/terms', 'maison/legal/terms'],
+    ['/nl/withdrawal', 'maison/legal/withdrawal'],
     ['/nl/shipping', 'maison/legal/shipping'],
     ['/nl/care', 'maison/legal/care'],
 ]);
@@ -23,7 +24,7 @@ test('the legal pages share a layout component and avoid onclick navigation', fu
         ->not->toContain('whitespace-pre-line')
         ->not->toContain('onclick=');
 
-    foreach (['privacy', 'terms', 'shipping', 'care'] as $page) {
+    foreach (['privacy', 'terms', 'withdrawal', 'shipping', 'care'] as $page) {
         $source = file_get_contents(resource_path("js/pages/maison/legal/{$page}.tsx"));
 
         expect($source)
@@ -70,7 +71,9 @@ test('legal cross-links use maison links instead of hash onclick handlers', func
         ->toContain('MaisonLink')
         ->toContain('to="contact"')
         ->toContain('to="care"')
-        ->toContain('to="shipping"');
+        ->toContain('to="shipping"')
+        ->toContain('to="withdrawal"')
+        ->toContain('to="terms"');
 });
 
 test('the legal editor rebinds tailwind color tokens for the cream surface in admin', function () {
@@ -92,8 +95,9 @@ test('the legal pages admin index shows translated titles instead of slugs', fun
         ->not->toContain('{page.slug}');
 
     expect($titles)
-        ->toContain("'Privacybeleid'")
-        ->toContain("'Algemene voorwaarden'")
-        ->toContain("'Verzending & Retour'")
-        ->toContain("'Zorg & Garantie'");
+        ->toContain("'Privacy Policy'")
+        ->toContain("'Terms & Conditions'")
+        ->toContain("'Model withdrawal form'")
+        ->toContain("'Shipping & Returns'")
+        ->toContain("'Care & Warranty'");
 });

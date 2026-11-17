@@ -25,6 +25,7 @@ function maisonPages(): array
         'maison.contact' => ['contact', 'maison/contact'],
         'maison.privacy' => ['privacy', 'maison/legal/privacy'],
         'maison.terms' => ['terms', 'maison/legal/terms'],
+        'maison.withdrawal' => ['withdrawal', 'maison/legal/withdrawal'],
         'maison.shipping' => ['shipping', 'maison/legal/shipping'],
         'maison.care' => ['care', 'maison/legal/care'],
     ];
@@ -53,8 +54,8 @@ function maisonPagesAcrossLocales(): array
     return $cases;
 }
 
-test('the site publishes exactly fourteen pages', function () {
-    expect(maisonPages())->toHaveCount(14);
+test('the site publishes exactly fifteen pages', function () {
+    expect(maisonPages())->toHaveCount(15);
 });
 
 test('the locales under test are the configured locales', function () {

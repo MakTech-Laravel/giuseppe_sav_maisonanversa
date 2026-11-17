@@ -93,6 +93,10 @@ final class MaisonSeo
             'title' => 'Terms and Conditions — Maison Anversa',
             'description' => 'Maison Anversa terms and conditions — orders, delivery and warranty.',
         ],
+        'withdrawal' => [
+            'title' => 'Model withdrawal form — Maison Anversa',
+            'description' => 'Maison Anversa model withdrawal form — cancel your purchase within 14 days.',
+        ],
         'shipping' => [
             'title' => 'Shipping & Returns — Maison Anversa',
             'description' => 'Shipping and returns at Maison Anversa — delivery times, costs and return policy.',
