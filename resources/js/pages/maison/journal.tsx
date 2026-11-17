@@ -8,6 +8,9 @@ import type { JournalPaginator } from '@/types/journal';
 
 export default function Journal({ articles }: { articles: JournalPaginator }) {
     const { t } = useTranslation();
+    const journalArticle = t('The Journal')
+        .replace(/\s*Journal$/u, '')
+        .trim();
 
     return (
         <>
@@ -17,7 +20,7 @@ export default function Journal({ articles }: { articles: JournalPaginator }) {
                 eyebrow="Maison Anversa"
                 title={
                     <>
-                        {t('The')} <em>Journal</em>
+                        {journalArticle} <em>Journal</em>
                     </>
                 }
                 subtitle={t(

@@ -1,6 +1,7 @@
 <?php
 
 use App\Support\Imagery;
+use Illuminate\Support\Facades\File;
 
 test('the home page receives the edition figures from inventory', function () {
     $this->get('/nl')->assertOk()->assertInertia(fn ($page) => $page
@@ -140,7 +141,7 @@ test('the home story section keeps a three-column layout with values always visi
     expect($source)
         ->toContain('ma-lg:grid-cols-[1fr_1.1fr_1fr]')
         ->toContain('ma-md:grid-cols-2')
-        ->toContain('Our Story')
+        ->toContain('Our story')
         ->toContain('European Heritage')
         ->toContain('+')
         ->toContain('Maison Anversa')
@@ -149,6 +150,127 @@ test('the home story section keeps a three-column layout with values always visi
         ->toContain('bg-choc2')
         ->toContain('rounded-full border border-gold')
         ->not->toContain('hidden flex-col');
+});
+
+test('homepage verhaalteksten match the revision_2 PDF in all locales', function () {
+    $expected = [
+        'Why we exist' => [
+            'nl' => 'Waarom we bestaan',
+            'fr' => 'Pourquoi nous existons',
+        ],
+        "Style doesn't stop where sport begins." => [
+            'nl' => 'Stijl stopt niet waar sport begint.',
+            'fr' => "Le style ne s'arrête pas là où commence le sport.",
+        ],
+        'Our story' => [
+            'nl' => 'Ons verhaal',
+            'fr' => 'Notre histoire',
+        ],
+        'Everything begins with a coffee.' => [
+            'nl' => 'Alles begint bij een koffie.',
+            'fr' => 'Tout commence par un café.',
+        ],
+        'Coffee. Style. The city. And then the court. Maison Anversa did not start from a business plan, but from a love of coffee, fashion, history and sport. One house where sport, style, culture and craftsmanship come together.' => [
+            'nl' => 'Koffie. Stijl. De stad. En dan de baan. Maison Anversa ontstond niet uit een businessplan, maar uit een liefde voor koffie, mode, geschiedenis en sport. Eén huis waarin sport, stijl, cultuur en vakmanschap samenkomen.',
+            'fr' => "Un café. Le style. La ville. Puis le terrain. Maison Anversa n'est pas née d'un business plan, mais d'un amour pour le café, la mode, l'histoire et le sport. Une maison où se rencontrent sport, style, culture et savoir-faire.",
+        ],
+        'Read our story →' => [
+            'nl' => 'Lees ons verhaal →',
+            'fr' => 'Lire notre histoire →',
+        ],
+        'Rooted in Antwerp' => [
+            'nl' => 'Geworteld in Antwerpen',
+            'fr' => 'Enracinée à Anvers',
+        ],
+        'A city that always looked outward.' => [
+            'nl' => 'Een stad die altijd naar buiten keek.',
+            'fr' => 'Une ville tournée vers le monde.',
+        ],
+        'Every day here begins the same way: a coffee while the city wakes up. Antwerp is a port city where trade, culture, fashion and ideas meet. Historic without standing still. Anversa is the Italian name for Antwerp: a house rooted in this city, looking out over Europe.' => [
+            'nl' => 'Elke dag begint hier op dezelfde manier: een koffie terwijl de stad wakker wordt. Antwerpen is een havenstad waar handel, cultuur, mode en ideeën samenkomen. Historisch zonder stil te staan. Anversa is de Italiaanse naam voor Antwerpen: een huis met wortels in deze stad en een blik op Europa.',
+            'fr' => "Ici, chaque journée commence de la même façon : un café pendant que la ville s'éveille. Anvers est une ville portuaire où se croisent commerce, culture, mode et idées. Historique sans jamais rester immobile. Anversa est le nom italien d'Anvers : une maison enracinée dans cette ville, le regard tourné vers l'Europe.",
+        ],
+        'City that carries us' => [
+            'nl' => 'Stad die ons draagt',
+            'fr' => 'Ville qui nous porte',
+        ],
+        "Founder's Letter" => [
+            'nl' => 'Oprichtersbrief',
+            'fr' => 'Lettre du fondateur',
+        ],
+        'The story of Maison Anversa. Written by the founder.' => [
+            'nl' => 'Het verhaal van Maison Anversa. Geschreven door de oprichter.',
+            'fr' => "L'histoire de Maison Anversa. Écrite par le fondateur.",
+        ],
+        'The founder' => [
+            'nl' => 'De oprichter',
+            'fr' => 'Le fondateur',
+        ],
+        'The vision. The story. The mission.' => [
+            'nl' => 'De visie. Het verhaal. De missie.',
+            'fr' => "La vision. L'histoire. La mission.",
+        ],
+        'A house built from conviction, step by step.' => [
+            'nl' => 'Een huis gebouwd vanuit overtuiging, stap voor stap.',
+            'fr' => 'Une maison bâtie par conviction, pas à pas.',
+        ],
+    ];
+
+    $bySection = [
+        'home-intro.tsx' => [
+            'Why we exist',
+            "Style doesn't stop where sport begins.",
+        ],
+        'home-story.tsx' => [
+            'Our story',
+            'Everything begins with a coffee.',
+            'Coffee. Style. The city. And then the court. Maison Anversa did not start from a business plan, but from a love of coffee, fashion, history and sport. One house where sport, style, culture and craftsmanship come together.',
+            'Read our story →',
+        ],
+        'home-antwerp.tsx' => [
+            'Rooted in Antwerp',
+            'A city that always looked outward.',
+            'Every day here begins the same way: a coffee while the city wakes up. Antwerp is a port city where trade, culture, fashion and ideas meet. Historic without standing still. Anversa is the Italian name for Antwerp: a house rooted in this city, looking out over Europe.',
+            'City that carries us',
+        ],
+        'home-unboxing.tsx' => [
+            "Founder's Letter",
+            'The story of Maison Anversa. Written by the founder.',
+        ],
+        'home-content-grid.tsx' => [
+            'The founder',
+            'The vision. The story. The mission.',
+            'A house built from conviction, step by step.',
+            'Read our story →',
+        ],
+    ];
+
+    $nl = json_decode(File::get(lang_path('nl.json')), true, flags: JSON_THROW_ON_ERROR);
+    $fr = json_decode(File::get(lang_path('fr.json')), true, flags: JSON_THROW_ON_ERROR);
+
+    foreach ($bySection as $file => $keys) {
+        $source = File::get(resource_path("js/components/maison/home/{$file}"));
+
+        foreach ($keys as $key) {
+            expect($source)->toContain($key);
+            expect($nl[$key] ?? null)->toBe($expected[$key]['nl']);
+            expect($fr[$key] ?? null)->toBe($expected[$key]['fr']);
+        }
+    }
+
+    $manifesto = File::get(resource_path('js/components/maison/home/home-manifesto.tsx'));
+
+    expect($manifesto)
+        ->toContain('Every legacy begins with a first chapter.')
+        ->not->toContain('t(');
+
+    foreach (File::files(resource_path('js/components/maison/home')) as $file) {
+        if (! in_array($file->getExtension(), ['ts', 'tsx'], true)) {
+            continue;
+        }
+
+        expect($file->getContents())->not->toContain('Yusuf');
+    }
 });
 
 test('the document sets the right light and the once-per-session flag before the first paint', function () {
