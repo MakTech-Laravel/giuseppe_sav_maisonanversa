@@ -29,8 +29,8 @@ class LegalPageController extends Controller
     public function index(Request $request, string $locale): Response
     {
         $pages = LegalPage::query()
-            ->whereIn('slug', ['privacy', 'terms', 'shipping', 'care'])
-            ->orderByRaw("CASE slug WHEN 'privacy' THEN 1 WHEN 'terms' THEN 2 WHEN 'shipping' THEN 3 WHEN 'care' THEN 4 ELSE 5 END")
+            ->whereIn('slug', ['terms', 'withdrawal', 'privacy', 'shipping', 'care'])
+            ->orderByRaw("CASE slug WHEN 'terms' THEN 1 WHEN 'withdrawal' THEN 2 WHEN 'privacy' THEN 3 WHEN 'shipping' THEN 4 WHEN 'care' THEN 5 ELSE 6 END")
             ->get();
 
         return Inertia::render('admin/legal-pages/index', [

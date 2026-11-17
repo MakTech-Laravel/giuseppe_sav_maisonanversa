@@ -28,7 +28,7 @@ export function LegalPageLayout({
                 title={<em>{t(title)}</em>}
                 subtitle={
                     <p className="font-sans text-[12px] tracking-[0.1em] text-sand uppercase">
-                        {t('Last updated: July 2026')}
+                        {t('Last updated: November 2026')}
                     </p>
                 }
             />

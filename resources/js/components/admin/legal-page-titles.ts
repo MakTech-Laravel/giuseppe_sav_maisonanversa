@@ -1,13 +1,15 @@
 export function legalPageTitleKey(slug: string): string {
     switch (slug) {
         case 'privacy':
-            return 'Privacybeleid';
+            return 'Privacy Policy';
         case 'terms':
-            return 'Algemene voorwaarden';
+            return 'Terms & Conditions';
+        case 'withdrawal':
+            return 'Model withdrawal form';
         case 'shipping':
-            return 'Verzending & Retour';
+            return 'Shipping & Returns';
         case 'care':
-            return 'Zorg & Garantie';
+            return 'Care & Warranty';
         default:
             return slug;
     }

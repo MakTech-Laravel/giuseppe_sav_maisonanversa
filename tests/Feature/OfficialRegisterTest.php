@@ -270,5 +270,5 @@ test('the founding order email points members at their listing and privacy menti
 
     $privacy = LegalPage::query()->where('slug', 'privacy')->firstOrFail();
 
-    expect($privacy->body)->toContain('Publiek register');
+    expect($privacy->body)->toContain('Founding Circle Register');
 });

@@ -138,6 +138,7 @@ Route::prefix('{locale}')
             Route::get('contact', 'contact')->name('contact');
             Route::get('privacy', 'privacy')->name('privacy');
             Route::get('terms', 'terms')->name('terms');
+            Route::get('withdrawal', 'withdrawal')->name('withdrawal');
             Route::get('shipping', 'shipping')->name('shipping');
             Route::get('care', 'care')->name('care');
         });

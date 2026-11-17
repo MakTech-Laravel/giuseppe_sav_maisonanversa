@@ -410,6 +410,11 @@ class MaisonController extends Controller
         return $this->legalPage('terms');
     }
 
+    public function withdrawal(): Response
+    {
+        return $this->legalPage('withdrawal');
+    }
+
     public function shipping(): Response
     {
         return $this->legalPage('shipping');
@@ -536,6 +541,7 @@ class MaisonController extends Controller
         $body = match ($slug) {
             'privacy' => '<p>Privacybeleid van Maison Anversa.</p>',
             'terms' => '<p>Algemene voorwaarden van Maison Anversa.</p>',
+            'withdrawal' => '<p>Modelformulier voor herroeping van Maison Anversa.</p>',
             'shipping' => '<p>Verzending en retourinformatie van Maison Anversa.</p>',
             'care' => '<p>Zorg- en garantiebeleid van Maison Anversa.</p>',
             default => '',
